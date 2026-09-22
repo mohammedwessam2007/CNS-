@@ -1,0 +1,13 @@
+[auth]
+enabled = true
+providers = ["email"]
+signup = "open"
+
+[db.tables.intellectuality_learning_state]
+read = "own"
+write = "own"
+
+[ai]
+required = false
+providers = ["openai"]
+description = "Optional: powers Professor Vision image analysis. The normal course works without it."

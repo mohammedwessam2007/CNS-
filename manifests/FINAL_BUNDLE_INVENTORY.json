@@ -1,0 +1,301 @@
+{
+  "file_count": 59,
+  "total_uncompressed_bytes": 9415178,
+  "files": [
+    {
+      "path": "OPUS_55_ULTRA_CODE_MONSTER_PROMPT.md",
+      "size": 35954,
+      "sha256": "8967ab3f7f7fa45266d54cf21d34901f36ff99ab80eae10c7ef243ed02f00df0"
+    },
+    {
+      "path": "OPUS_55_ULTRA_CODE_MONSTER_PROMPT.txt",
+      "size": 35954,
+      "sha256": "8967ab3f7f7fa45266d54cf21d34901f36ff99ab80eae10c7ef243ed02f00df0"
+    },
+    {
+      "path": "PASTE_THIS_FIRST.txt",
+      "size": 583,
+      "sha256": "73163c9104f9116256bceb74e901188b09800176e6506b25b30b7c4ddc0a9b1b"
+    },
+    {
+      "path": "README_START_HERE.md",
+      "size": 2123,
+      "sha256": "5f60d73eb7d9bf29d064d2da4b4b215fd9189ace22d6da9bc5142168df33be0e"
+    },
+    {
+      "path": "archive/INTELLECTUALITY_V14_CLAUDE_OPUS_HANDOFF.zip",
+      "size": 18491,
+      "sha256": "49b3ee8169470ae4c5c0a12d12de96839659072c3db332a2a2852a84a9611790"
+    },
+    {
+      "path": "docs/ARCHITECTURE_LAW.md",
+      "size": 1159,
+      "sha256": "8c90ce01cb34e797f2f572bfa4009a86cd135bd0fda090ad21f5b237a2a42e55"
+    },
+    {
+      "path": "docs/CERTIFICATION_MATRIX.md",
+      "size": 3830,
+      "sha256": "f2d1ac0a9f7436c7d8efd141f9f85cae2ebf5c3b1fd0846540e7090ae1a638c6"
+    },
+    {
+      "path": "docs/CURRENT_FRONTIER.md",
+      "size": 1997,
+      "sha256": "1aca7dca698566a6bc2a5106478af1fd88e8345564820e36ac85259bd8a2b408"
+    },
+    {
+      "path": "docs/EGYPTIAN_MICRO_COMMANDS.md",
+      "size": 2109,
+      "sha256": "5043e5b9c0fa0051caee495105b77f5608ffdbddf951b52baff8404beca19708"
+    },
+    {
+      "path": "docs/HATCHABLE_PLATFORM_LAW.md",
+      "size": 982,
+      "sha256": "48c85306b77f94e1ecc6c30e674e4597e5328e473b5fc0a39f70a254868c1be8"
+    },
+    {
+      "path": "docs/LEARNING_SCIENCE_DOCTRINE.md",
+      "size": 1867,
+      "sha256": "caabcd84c8f43a1b9cc78ac355ed669ceceff6eaeb6d01c02341516fcd097204"
+    },
+    {
+      "path": "docs/OPUS_BRAINSTORM_RESEARCH_MANDATE.md",
+      "size": 2773,
+      "sha256": "1be2a115ba5a1c72eaebad1fc633e43b4ee02ce674a802e397607816ed056876"
+    },
+    {
+      "path": "docs/RESEARCH_SEED_WORLD_CLASS_VISUALS.md",
+      "size": 5630,
+      "sha256": "76c6cec350603cd0b964b8c816d6c844c0940ee79b9411cb0a7f54c778deff05"
+    },
+    {
+      "path": "docs/SOURCE_STATUS.md",
+      "size": 1222,
+      "sha256": "5ef9a7e018ebfbeefb0e004b98da32da69e2e4bc41c8499e05cd38a8bc46f819"
+    },
+    {
+      "path": "docs/USER_OBJECTIVE_PROFILE.md",
+      "size": 1745,
+      "sha256": "47fe860c569e9a8dac6a6abcbbeb0b0e1a14d11f8f1affc438826e5c55b088ed"
+    },
+    {
+      "path": "docs/VISUAL_CURATION_DOCTRINE.md",
+      "size": 2271,
+      "sha256": "6e3e1ecda74fb0d2b497f2e5a14023df1319a90dd9bb0bfee974e61982fc065f"
+    },
+    {
+      "path": "frontier/pre53_v14_draft/CLAUDE_OPUS_ULTRA_HANDOFF.md",
+      "size": 10680,
+      "sha256": "88404f1b0980cb39a33c3f1d9d1f2c2fa0b8b4558c21a1045aa52d328b69b537"
+    },
+    {
+      "path": "frontier/pre53_v14_draft/intellectuality-v14-current.css",
+      "size": 4201,
+      "sha256": "381100c9f0c6fd1478dce20b8b6c5e14881430c650d05a9c122371b51de14985"
+    },
+    {
+      "path": "frontier/pre53_v14_draft/intellectuality-v14-current.js",
+      "size": 32564,
+      "sha256": "f7b9e404b03a8259ecddee39643091ee95b5ca1157b7df2031c68d2caa623e35"
+    },
+    {
+      "path": "manifests/BUNDLE_INVENTORY.json",
+      "size": 3324,
+      "sha256": "bfb1645fb69c8560c3bfa0846038ef7c86d27811d4eda1b8f41d4e1081099462"
+    },
+    {
+      "path": "manifests/CURRENT_EXACT_SOURCE_MANIFEST.json",
+      "size": 4245,
+      "sha256": "48a34c73d32ca64d8b0df8d25f5a9ca7133d0f93c1a8eb14f8f7f38ee4934675"
+    },
+    {
+      "path": "manifests/CURRENT_EXACT_SOURCE_SHA256SUMS.txt",
+      "size": 2314,
+      "sha256": "41c5ccb90720ab4876d197ed1b44ecf4bfb8ce34789927b42f32047049710b3f"
+    },
+    {
+      "path": "manifests/V53_DEPLOYMENT_MANIFEST.json",
+      "size": 4543,
+      "sha256": "8488bf8dbc5929d0b5124355377c14bb10791499340b90353fe7b1df7fd00c80"
+    },
+    {
+      "path": "manifests/V53_SHA256SUMS.txt",
+      "size": 2314,
+      "sha256": "1d3672408513183ed691eb5a32527600f5d2b0ff214393f4ff424ac2cc9d5657"
+    },
+    {
+      "path": "public/INTELLECTUALITY_CNS_v5_ONE_BUTTON_PROFESSOR.html",
+      "size": 2919703,
+      "sha256": "8fbfeb958982db2af7e2e9fb2c84a17a480295a41605956e4f1eafef1975c9b5"
+    },
+    {
+      "path": "receipts/HASH_VERIFICATION.md",
+      "size": 756,
+      "sha256": "8726e39f9244cb9e0398158d253ed96c9548eed44e24573c9af9cfbe7e25bc35"
+    },
+    {
+      "path": "reference/INTELLECTUALITY_CNS_PATTERN_ENGINE_FINAL.html",
+      "size": 2887688,
+      "sha256": "29f35d37dab44120975ba3b3357a0f7af8b0ee254d1bc2856776bb9738b80b11"
+    },
+    {
+      "path": "reference/INTELLECTUALITY_CNS_v4.2_SHA256.txt",
+      "size": 431,
+      "sha256": "4dff5bede5d1629532a96b12cc5027563bda2d26c52190b0e212dfafd0fef1d9"
+    },
+    {
+      "path": "reference/INTELLECTUALITY_V5_FINAL_RECEIPT_2026-09-21.md",
+      "size": 2876,
+      "sha256": "3083adc85b96464c2c31ec1cbf83a22a23dae069f68b83ab216970b5f684fead"
+    },
+    {
+      "path": "reference/INTELLECTUALITY_V5_ONE_BUTTON_PROFESSOR_STATE_2026-09-21.md",
+      "size": 2294,
+      "sha256": "ed7ad03809cef77e0a0b5ca2478ffde4b4a69ff84de753e3cf1a4a246660b4b8"
+    },
+    {
+      "path": "scripts/FETCH_CURRENT_LIVE_SOURCE.sh",
+      "size": 4174,
+      "sha256": "c1d32d63ccd3fd70fc4912313f8229ad16004e97a822765169840494e5dd5838"
+    },
+    {
+      "path": "scripts/verify_exact_source.py",
+      "size": 738,
+      "sha256": "a99d02e32b7d0a7e5815e462a1a4dfe60cfa4c0c0c6b1b4a9a2517e1f1178274"
+    },
+    {
+      "path": "source/AGENTS.md",
+      "size": 36403,
+      "sha256": "53bb30c7f6636f306b7e56748ce14be80d37124c1b1ba864d5805b832fc6baf6"
+    },
+    {
+      "path": "source/api/state.js",
+      "size": 2727,
+      "sha256": "a9144cf9aa998ec8c9de7df8e40d09a4673e8d8cd39951678ec0bd5eed41f255"
+    },
+    {
+      "path": "source/api/vision.js",
+      "size": 3216,
+      "sha256": "b136a93eac4c628861db072289e74ae221684ff1edc8ebda164aeb767e20c381"
+    },
+    {
+      "path": "source/hatchable.toml",
+      "size": 278,
+      "sha256": "76789bdb064ef07164992ba75bf8daf413b1ddd2dbcc57b092238f97d8a2431c"
+    },
+    {
+      "path": "source/migrations/0001_intellectuality_learning_state.sql",
+      "size": 246,
+      "sha256": "84867a43d7d8ca03dd0cb4b0df2c3fb127f667f26e1789be994b25b36f7442c2"
+    },
+    {
+      "path": "source/public/context-visuals-v10.js",
+      "size": 18063,
+      "sha256": "1006f79819bc08b51e22d3fca23ad378399bd3ce9a6d1f1b832d583ee02cab73"
+    },
+    {
+      "path": "source/public/course-ui-v11.css",
+      "size": 9843,
+      "sha256": "8afd12ebd6f83cbbe2e597f336348a81a43b2dd17a77ef65de5b1c810b935ecb"
+    },
+    {
+      "path": "source/public/course-ui-v11.js",
+      "size": 5113,
+      "sha256": "5ad42e2f8b2427dce302f5fce62bad38a027752d1502997a24e356113bccbbef"
+    },
+    {
+      "path": "source/public/deep-01.js",
+      "size": 22139,
+      "sha256": "c4ac9d9ac0647e966dfd124edc687cf97b6082826fbf2e83df2290cc4bb9f629"
+    },
+    {
+      "path": "source/public/deep-02.js",
+      "size": 18286,
+      "sha256": "8d06584ff356366de6ddd0402d43f767f7b99bec21854da942fa3f42890a4190"
+    },
+    {
+      "path": "source/public/deep-03.js",
+      "size": 17383,
+      "sha256": "ab3b9c273e2f054c082369f05af4e32c74196a12a6a5b9d075ad79ed50c64813"
+    },
+    {
+      "path": "source/public/deep-04.js",
+      "size": 17508,
+      "sha256": "5f657d749305cb6fe8c4c2f0216dfd1ee363a822a5835db021ad3a08a91f836f"
+    },
+    {
+      "path": "source/public/deep-05.js",
+      "size": 17681,
+      "sha256": "932727ba22957656d2647189dfb22095f8c3bb42d1cda44250915aec2e7f8b72"
+    },
+    {
+      "path": "source/public/deep-06.js",
+      "size": 16763,
+      "sha256": "fd73005ef6da3ec0488cb3db62c4fb2eba8afa0e39134d3fac326c7e3b074633"
+    },
+    {
+      "path": "source/public/index.html",
+      "size": 2929450,
+      "sha256": "5795333440b0d4a2a325a1613e8a218d42f66bdd9caceee8ee91211c5559683f"
+    },
+    {
+      "path": "source/public/intellectuality-v12.css",
+      "size": 2622,
+      "sha256": "42783295c7c936801eeb63bccc02f8e0d53be68710e6605e5237565283410a39"
+    },
+    {
+      "path": "source/public/intellectuality-v12.js",
+      "size": 24432,
+      "sha256": "46832457424b51904e99c7a22bba7edb528d0441b9f1c191ae5ceb144e896e63"
+    },
+    {
+      "path": "source/public/intellectuality-v14.css",
+      "size": 6972,
+      "sha256": "c4662019d4edd222c273870223e2722a2971dabe960fdda59487759d5db3cf67"
+    },
+    {
+      "path": "source/public/intellectuality-v14.js",
+      "size": 37127,
+      "sha256": "06cfcb0d529390f4fb78ff06ae141338929e91831203af12779f536062038ea9"
+    },
+    {
+      "path": "source/public/login.html",
+      "size": 4207,
+      "sha256": "0b1d5c73705f28c295f508fb0d5e9aed2a6975aea2369ee3ec8d286f280dbe2b"
+    },
+    {
+      "path": "source/public/professor.js",
+      "size": 180078,
+      "sha256": "243b879eb5828cd640b9a6980935841ed6478d7d43d722901383b9772e339345"
+    },
+    {
+      "path": "source/public/real-visuals-v9.js",
+      "size": 10537,
+      "sha256": "5489a642779c9e9e853b1894523c4098e7be1239181270796d635c8dd3a48be1"
+    },
+    {
+      "path": "source/public/twin-core-v13.js",
+      "size": 8007,
+      "sha256": "629703b4fdf0fc21dade91169b2211e8a336ff38e058c26cfa3f5327e2545602"
+    },
+    {
+      "path": "source/public/twin-runtime-v13.js",
+      "size": 10281,
+      "sha256": "9165e0ebb4df19b1a14a96144b1c04408fe13be0a3174ee12323a7c4f7e2a45d"
+    },
+    {
+      "path": "source/public/twin-ui-v13.js",
+      "size": 2622,
+      "sha256": "ac29e4252c3d38cfa7ac59a191ca22c1b616af45191918cc3ab1775728fa07e7"
+    },
+    {
+      "path": "source/public/twin-v13.css",
+      "size": 839,
+      "sha256": "c23be41bfbc8dc8f245b167b12f20b9b3ba9e2f87950fea2572d5d7fac18d993"
+    },
+    {
+      "path": "source/public/visuals-v5.js",
+      "size": 10820,
+      "sha256": "3599a5894953622b0a59118b7e1ef000bcb617eb83ee02fa3767d3460e29b62f"
+    }
+  ]
+}

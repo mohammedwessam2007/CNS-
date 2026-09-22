@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>INTELLECTUALITY · Secure Progress</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#070a0f;color:#f5f7fb;font-family:Inter,system-ui,-apple-system,sans-serif;padding:20px}.card{width:min(480px,100%);background:#101722;border:1px solid #2b394d;border-radius:24px;padding:24px;box-shadow:0 25px 80px #0008}.brand{font-weight:950;letter-spacing:.08em}.brand span{color:#d9ff43}h1{font-size:30px;margin:16px 0 8px}.muted{color:#9ba9bc;line-height:1.5}.box{margin-top:18px;padding:14px;border:1px solid #315272;border-radius:16px;background:#0b1422}input{width:100%;margin-top:10px;padding:14px;border-radius:12px;border:1px solid #334158;background:#0b1017;color:white;font:inherit}button{width:100%;margin-top:10px;padding:14px;border-radius:12px;border:0;background:#d9ff43;color:#0b0d10;font:inherit;font-weight:900;cursor:pointer}.secondary{background:#151d29;color:white;border:1px solid #334158}.tiny{font-size:12px;color:#9ba9bc;margin-top:12px}.error{color:#ffadc0;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">INTELLECTUALITY <span>CNS</span></div>
+  <h1>Secure your learning genome ☁</h1>
+  <div class="muted">One sign-in gives your course state a durable cloud home. Your local copy still works immediately; cloud sync protects progress across browser loss and devices.</div>
+  <div class="box">
+    <div id="emailStep">
+      <b>Email</b>
+      <input id="email" type="email" autocomplete="username webauthn" placeholder="you@example.com">
+      <button id="send">SEND SECURE CODE</button>
+    </div>
+    <div id="codeStep" hidden>
+      <b>6-digit code</b>
+      <input id="code" inputmode="numeric" autocomplete="one-time-code" placeholder="123456">
+      <button id="verify">VERIFY & RESTORE COURSE</button>
+      <button id="back" class="secondary">USE ANOTHER EMAIL</button>
+    </div>
+    <div id="passkeyStep" hidden>
+      <b>Make future recovery one-tap</b>
+      <div class="muted">Add a passkey to this device, or skip it. Your course is already secured.</div>
+      <button id="passkey">ADD PASSKEY</button>
+      <button id="skip" class="secondary">NOT NOW</button>
+    </div>
+    <div id="err" class="error"></div>
+  </div>
+  <div class="tiny">No study data is sent to advertisers. This sign-in exists only to protect your INTELLECTUALITY progress.</div>
+</div>
+<script>
+const A=window.hatchable?.auth;
+const $=s=>document.querySelector(s);
+const next=(()=>{const n=new URLSearchParams(location.search).get('next')||'/';return n.startsWith('/')?n:'/';})();
+let email='',hasPasskey=false;
+async function finish(){location.href=next}
+$('#send').onclick=async()=>{
+  $('#err').textContent='';
+  email=$('#email').value.trim();
+  if(!email)return $('#err').textContent='Enter your email.';
+  try{
+    const r=await A.startLogin({email});
+    hasPasskey=!!r.has_passkey;
+    if(hasPasskey&&A.supportsPasskeys()){
+      try{await A.signInWithPasskey({email});return finish()}catch(_){}
+    }
+    $('#emailStep').hidden=true;$('#codeStep').hidden=false;$('#code').focus();
+  }catch(e){$('#err').textContent=e?.message||'Could not send the code.'}
+};
+$('#verify').onclick=async()=>{
+  $('#err').textContent='';
+  try{
+    await A.verifyCode({email,code:$('#code').value.trim()});
+    if(!hasPasskey&&A.supportsPasskeys()&&localStorage.getItem('intellectuality_passkey_declined')!=='1'){
+      $('#codeStep').hidden=true;$('#passkeyStep').hidden=false;
+    }else finish();
+  }catch(e){$('#err').textContent=e?.message||'That code did not work.'}
+};
+$('#passkey').onclick=async()=>{
+  const saved=await A.registerPasskey({name:'INTELLECTUALITY iPad'}).catch(()=>null);
+  if(!saved)localStorage.setItem('intellectuality_passkey_declined','1');
+  finish();
+};
+$('#skip').onclick=()=>{localStorage.setItem('intellectuality_passkey_declined','1');finish()};
+$('#back').onclick=()=>{$('#codeStep').hidden=true;$('#emailStep').hidden=false};
+(async()=>{try{const s=await A.getSession();if(s?.user)finish()}catch(_){}})();
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+[
+  {
+    "path": "OPUS_55_ULTRA_CODE_MONSTER_PROMPT.md",
+    "bytes": 24230,
+    "sha256": "79c46be71ec80717bf501d439903546b1ff150f11c8a6cecdab118ddd48a70ec"
+  },
+  {
+    "path": "README_START_HERE.md",
+    "bytes": 1043,
+    "sha256": "09b696a46d9af9d129d08b87b725f49899112904efdbb70b7c1e33f121e1b221"
+  },
+  {
+    "path": "archive/INTELLECTUALITY_V14_CLAUDE_OPUS_HANDOFF.zip",
+    "bytes": 18491,
+    "sha256": "49b3ee8169470ae4c5c0a12d12de96839659072c3db332a2a2852a84a9611790"
+  },
+  {
+    "path": "docs/ARCHITECTURE_LAW.md",
+    "bytes": 1159,
+    "sha256": "8c90ce01cb34e797f2f572bfa4009a86cd135bd0fda090ad21f5b237a2a42e55"
+  },
+  {
+    "path": "docs/CERTIFICATION_MATRIX.md",
+    "bytes": 3830,
+    "sha256": "f2d1ac0a9f7436c7d8efd141f9f85cae2ebf5c3b1fd0846540e7090ae1a638c6"
+  },
+  {
+    "path": "docs/CURRENT_FRONTIER.md",
+    "bytes": 1997,
+    "sha256": "1aca7dca698566a6bc2a5106478af1fd88e8345564820e36ac85259bd8a2b408"
+  },
+  {
+    "path": "docs/EGYPTIAN_MICRO_COMMANDS.md",
+    "bytes": 2109,
+    "sha256": "5043e5b9c0fa0051caee495105b77f5608ffdbddf951b52baff8404beca19708"
+  },
+  {
+    "path": "docs/SOURCE_STATUS.md",
+    "bytes": 1273,
+    "sha256": "d884451e77f31aed06da7821abb3980c08ce3ed5304f8b2c3e5a1f6baeba25de"
+  },
+  {
+    "path": "docs/VISUAL_CURATION_DOCTRINE.md",
+    "bytes": 2271,
+    "sha256": "6e3e1ecda74fb0d2b497f2e5a14023df1319a90dd9bb0bfee974e61982fc065f"
+  },
+  {
+    "path": "frontier/pre53_v14_draft/CLAUDE_OPUS_ULTRA_HANDOFF.md",
+    "bytes": 10680,
+    "sha256": "88404f1b0980cb39a33c3f1d9d1f2c2fa0b8b4558c21a1045aa52d328b69b537"
+  },
+  {
+    "path": "frontier/pre53_v14_draft/intellectuality-v14-current.css",
+    "bytes": 4201,
+    "sha256": "381100c9f0c6fd1478dce20b8b6c5e14881430c650d05a9c122371b51de14985"
+  },
+  {
+    "path": "frontier/pre53_v14_draft/intellectuality-v14-current.js",
+    "bytes": 32564,
+    "sha256": "f7b9e404b03a8259ecddee39643091ee95b5ca1157b7df2031c68d2caa623e35"
+  },
+  {
+    "path": "manifests/V53_DEPLOYMENT_MANIFEST.json",
+    "bytes": 4543,
+    "sha256": "8488bf8dbc5929d0b5124355377c14bb10791499340b90353fe7b1df7fd00c80"
+  },
+  {
+    "path": "manifests/V53_SHA256SUMS.txt",
+    "bytes": 2314,
+    "sha256": "1d3672408513183ed691eb5a32527600f5d2b0ff214393f4ff424ac2cc9d5657"
+  },
+  {
+    "path": "public/INTELLECTUALITY_CNS_v5_ONE_BUTTON_PROFESSOR.html",
+    "bytes": 2919703,
+    "sha256": "8fbfeb958982db2af7e2e9fb2c84a17a480295a41605956e4f1eafef1975c9b5"
+  },
+  {
+    "path": "reference/INTELLECTUALITY_CNS_PATTERN_ENGINE_FINAL.html",
+    "bytes": 2887688,
+    "sha256": "29f35d37dab44120975ba3b3357a0f7af8b0ee254d1bc2856776bb9738b80b11"
+  },
+  {
+    "path": "reference/INTELLECTUALITY_CNS_v4.2_SHA256.txt",
+    "bytes": 431,
+    "sha256": "4dff5bede5d1629532a96b12cc5027563bda2d26c52190b0e212dfafd0fef1d9"
+  },
+  {
+    "path": "reference/INTELLECTUALITY_V5_FINAL_RECEIPT_2026-09-21.md",
+    "bytes": 2876,
+    "sha256": "3083adc85b96464c2c31ec1cbf83a22a23dae069f68b83ab216970b5f684fead"
+  },
+  {
+    "path": "reference/INTELLECTUALITY_V5_ONE_BUTTON_PROFESSOR_STATE_2026-09-21.md",
+    "bytes": 2294,
+    "sha256": "ed7ad03809cef77e0a0b5ca2478ffde4b4a69ff84de753e3cf1a4a246660b4b8"
+  },
+  {
+    "path": "scripts/FETCH_CURRENT_LIVE_SOURCE.sh",
+    "bytes": 4174,
+    "sha256": "c1d32d63ccd3fd70fc4912313f8229ad16004e97a822765169840494e5dd5838"
+  }
+]
