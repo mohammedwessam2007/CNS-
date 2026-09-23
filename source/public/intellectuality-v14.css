@@ -43,6 +43,32 @@
 .v14Teacher img{width:96px;height:54px;object-fit:cover;display:block}
 .v14Teacher span{display:grid;gap:2px;font-size:12px;padding-right:8px}
 .v14Teacher b{font-size:9px;color:#ffb35c;letter-spacing:.07em}
+.v14Teacher img:not([src]){display:none}
+.v14Teacher.thumbUnavailable{grid-template-columns:1fr;padding:10px 12px}
+.v14Teacher.thumbUnavailable img{display:none}
+.ytPoster.thumbUnavailable{display:grid;place-items:center;min-height:170px;aspect-ratio:16/9;background:linear-gradient(135deg,#142237,#0d1520)}
+.ytPoster.thumbUnavailable img{display:none}
+.ytPoster.thumbUnavailable span{position:static;transform:none}
+.v14ProgressTruth{padding:6px 9px;margin-bottom:8px;border-radius:8px;background:#13202c;color:#a9bed0;font-size:11px;line-height:1.35}
+.v14MeningesHero{grid-column:1/-1;margin:0;border:1px solid #b7c7da;border-radius:14px;overflow:hidden;background:#fff;color:#233044}
+.v14MeningesHero img{display:block;width:100%;height:auto;max-height:360px;object-fit:contain}
+.v14MeningesHero figcaption{display:flex;flex-wrap:wrap;gap:5px 12px;padding:8px 12px;font-size:12px;line-height:1.4}
+.v14MeningesHero figcaption span{font-weight:800;color:#234f69}.v14MeningesHero figcaption small{flex-basis:100%;font-size:11px;color:#657184}.v14MeningesHero figcaption a{color:#3157d5}
+.v14ExactOption{display:grid;gap:7px;padding:14px;border:1px solid #91a9be;border-radius:10px;background:#f1f8fc;color:#163049;font-size:12px;line-height:1.4}.v14ExactOption b{font-size:10px;letter-spacing:.06em;color:#315574}.v14ExactOption span{padding:7px 9px;border-left:3px solid #4d80a7;background:#fff;border-radius:4px}.v14ExactOption small{color:#6b3340;font-weight:700}
+.v14ConusPair{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(220px,.8fr);gap:9px;align-items:stretch}
+.v14ConusHero{margin:0;min-width:0;overflow:hidden;border:1px solid #b7c7da;border-radius:14px;background:#fff;color:#233044}.v14ConusHero img{display:block;width:100%;height:300px;object-fit:contain}.v14ConusHero figcaption{display:grid;gap:3px;padding:9px 11px;font-size:11px;line-height:1.4}.v14ConusHero figcaption b{color:#234f69;letter-spacing:.04em}.v14ConusHero figcaption span{color:#56687a}.v14ConusHero figcaption a{color:#3157d5}
+.v14ConusMap{display:grid;gap:8px;align-content:center;padding:12px;border:1px solid #536c89;border-radius:14px;background:#0e1a29;color:#ecf5ff;min-width:0}.v14ConusRow{display:grid;grid-template-columns:78px 1fr;gap:1px 8px;align-items:center;padding:9px;border:1px solid #344c63;border-radius:9px;background:#17283b}.v14ConusRow b{grid-row:span 2;color:#bcecff;font-size:13px}.v14ConusRow span{font-size:11px;font-weight:850;letter-spacing:.02em}.v14ConusRow small{font-size:10px;line-height:1.35;color:#c0d1df}.v14ConusRow.target{border-color:#49a5b0;background:#12363c}.v14ConusMap p{margin:0;font-size:10px;line-height:1.45;color:#d3e1ea}.v14ConusMap.compact{padding:8px;gap:5px}.v14ConusMap.compact .v14ConusRow{grid-template-columns:62px 1fr;gap:5px;padding:6px}.v14ConusMap.compact .v14ConusRow b{font-size:10px}.v14ConusMap.compact .v14ConusRow span{font-size:9px}.v14ConusMap.compact p{font-size:9px}
+@media (max-width:700px){.v14ConusPair{grid-template-columns:1fr}.v14ConusHero img{height:250px}}
+.v14MeningesMap{grid-column:1/-1;display:grid;gap:8px;padding:12px;border:1px solid #536c89;border-radius:14px;background:#0e1a29;color:#ecf5ff}
+.v14LayerLine{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.v14LayerLine span{display:grid;place-items:center;min-height:48px;padding:5px 2px;text-align:center;border-radius:8px;font-size:10px;font-weight:900;overflow-wrap:anywhere}
+.v14LayerLine span:nth-child(1){background:#6f7f91}.v14LayerLine span:nth-child(2){background:#c97883;color:#1c0b12}.v14LayerLine span:nth-child(3){background:#156b91}.v14LayerLine span:nth-child(4){background:#87b9ca;color:#092a39}.v14LayerLine span:nth-child(5){background:#dfcaa6;color:#322411}
+.v14LigamentLine{display:flex;flex-wrap:wrap;gap:7px 12px;align-items:center;justify-content:space-between;border:1px solid #65817c;border-radius:9px;background:#102c2b;padding:8px 10px}
+.v14LigamentLine b{font:800 16px/1.3 "Noto Naskh Arabic","Geeza Pro",sans-serif;color:#a6f1d2}
+.v14LigamentLine span{font-size:12px;font-weight:900;color:#d3ffe7}
+.v14MeningesClue{display:flex;flex-wrap:wrap;gap:4px 15px;font-size:11px;line-height:1.4}.v14MeningesClue span:first-child{color:#ffbdc9}.v14MeningesClue span:last-child{color:#abf6d0}
+.v14MeningesMap.compact{padding:8px;gap:6px}.v14MeningesMap.compact .v14LayerLine span{min-height:37px;font-size:9px}.v14MeningesMap.compact .v14LigamentLine span{font-size:10px}
+@media (max-width:520px){.v14LayerLine span{font-size:8px;min-height:42px}.v14MeningesHero img{max-height:320px}.v14MeningesClue{font-size:10px}}
 .v14AcademicRef{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 10px;align-items:center;padding:8px 10px;border:1px solid #2d3d52;background:#0b131d;border-radius:10px;color:#b9c7d8;text-decoration:none}
 .v14AcademicRef b{font-size:9px;color:#66e9ff;letter-spacing:.07em}
 .v14AcademicRef span{font-size:10px}

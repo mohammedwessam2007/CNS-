@@ -1,9 +1,9 @@
 PASS A1    Fresh state on Sep 22: real date + first-run catch-up label, no fake date  · {"chip":"TODAY · TUE 22 SEP · FIRST-RUN CATCH-UP","ey":"DAY 1/148 · FOUNDATION · WORK MON 21 SEP · TODAY TUE 22 SEP","banner":"FIRST-RUN CATCH-UP · REAL DATE KEPT\nToday is Tue 22 Sep. The course plan began Mon 21 Sep; y
 PASS A0    Sep 21 (course day 1): chip is plain real date  · TODAY · MON 21 SEP
-PASS A2    Sep 22 00:01 with Day-1 partial: "1 DAY CARRYOVER" + deliberate carryover banner, work kept  · {"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER","banner":"CARRYOVER · REAL DATE KEPT\nToday is Tue 22 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately. ~133 min of Day 1 left.","day":1,"segs":1,"ey":"
+PASS A2    Sep 22 00:01 with Day-1 partial: "1 DAY CARRYOVER" + deliberate carryover banner, work kept  · {"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER","banner":"CARRYOVER · REAL DATE KEPT\nToday is Tue 22 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately. ~133 planned min in unfinished Day 1 steps.","da
 PASS A3    Midnight rollover re-evaluates without reload (23:59 → 00:01)  · {"before":"TODAY · MON 21 SEP","after":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"}
 PASS A4    Sep 22 with Day-1 complete: auto-advance to Day 2, plain real date  · {"chip":"TODAY · TUE 22 SEP","day":2,"done":[1],"banner":false}
-PASS A5    Sep 23 after Day-2 partial: "TODAY · WED 23 SEP · 1 DAY CARRYOVER" (Tue 22 Sep work)  · {"chip":"TODAY · WED 23 SEP · 1 DAY CARRYOVER","day":2,"banner":"CARRYOVER · REAL DATE KEPT\nToday is Wed 23 Sep. This is unfinished Tue 22 Sep work, carried forward deliberately. ~130 min of Day 2 left."}
+PASS A5    Sep 23 after Day-2 partial: "TODAY · WED 23 SEP · 1 DAY CARRYOVER" (Tue 22 Sep work)  · {"chip":"TODAY · WED 23 SEP · 1 DAY CARRYOVER","day":2,"banner":"CARRYOVER · REAL DATE KEPT\nToday is Wed 23 Sep. This is unfinished Tue 22 Sep work, carried forward deliberately. ~130 planned min in unfinished Day 2 ste
 PASS A6    Ahead state: labeled AHEAD, never regresses  · {"chip":"TODAY · TUE 22 SEP · 1 DAY AHEAD","day":3}
 PASS A7    Cairo date is used even when the device timezone is UTC  · TODAY · TUE 22 SEP · 1 DAY CARRYOVER
 PASS B1    Fresh learner: fast lane absent and ineligible on the teach step  · {"fast":false,"learn":true,"sections":4,"pics":2,"recall":true,"mcq":0,"canFast":false}
@@ -54,7 +54,7 @@ PASS N4    v9 real visual bank, v11 shell, v12 brain, v13 twin, content integrit
 PASS N5    Autopilot brain drawer (v12 + v13 addon) still opens  · true
 PASS N6    Written wave, practical wave, weekly mock, retention bridge and commute views render  · {"WRITTEN_WAVE":true,"PRACTICAL_WAVE":true,"WEEKLY_MOCK":true,"RETENTION_BRIDGE":true,"commute":true}
 PASS N7    No page errors on cold load + drawers  · []
-PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":1,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.483Z"},"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"}
+PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":1,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.437Z"},"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"}
 PASS N8    No page errors on legacy migration  · []
 PASS L6    Remote image host down: primer text + gate still work, honest no-visual state  · {"primer":true,"model":188,"missing":true,"gate":true}
 PASS N9    No page errors when Commons is unreachable  · []

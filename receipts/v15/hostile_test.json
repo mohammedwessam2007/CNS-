@@ -6,7 +6,7 @@
    "id": "X1",
    "name": "Five days missed: real date (SAT 26 SEP) + \"5 DAYS CARRYOVER\", Day-1 work kept, never relabelled as today",
    "ok": true,
-   "detail": "{\"chip\":\"TODAY · SAT 26 SEP · 5 DAYS CARRYOVER\",\"day\":1,\"banner\":\"CARRYOVER · REAL DATE KEPT\\nToday is Sat 26 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately (5 days behind plan). ~133 min of Day 1 left.\"}"
+   "detail": "{\"chip\":\"TODAY · SAT 26 SEP · 5 DAYS CARRYOVER\",\"day\":1,\"banner\":\"CARRYOVER · REAL DATE KEPT\\nToday is Sat 26 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately (5 days behind plan). ~133 planned min in unfinished Day 1 steps.\"}"
   },
   {
    "id": "X1b",
@@ -96,7 +96,7 @@
    "id": "W1",
    "name": "Image search hanging 9 s: primer text and gate are usable immediately (not blocked on images)",
    "ok": true,
-   "detail": "{\"primer\":true,\"gate\":true,\"text\":1250,\"ms\":1406}"
+   "detail": "{\"primer\":true,\"gate\":true,\"text\":1250,\"ms\":1438}"
   },
   {
    "id": "W2",

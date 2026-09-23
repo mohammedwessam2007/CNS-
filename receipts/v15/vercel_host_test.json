@@ -7,7 +7,7 @@
    "name": "Fresh device gets a private 26-char sync code and a session",
    "ok": true,
    "ev": {
-    "code": "ZEYTUXZQQHBW7KRTQKIP4N4KQO",
+    "code": "W2JCWYUS32YZJVBGWT3KCFTO4H",
     "btn": "☁ SYNCING…",
     "link": true,
     "title": "INTELLECTUALITY CNS v15.0 · LEARN FIRST"
@@ -63,7 +63,7 @@
    "name": "Second device via link restores the same progress; code removed from the URL",
    "ok": true,
    "ev": {
-    "code": "ZEYTUXZQQHBW7KRTQKIP4N4KQO",
+    "code": "W2JCWYUS32YZJVBGWT3KCFTO4H",
     "marker": "A-hide",
     "hash": ""
    }
@@ -117,7 +117,7 @@
    "name": "Sync page shows the code formatted and rejects an invalid code",
    "ok": true,
    "ev": {
-    "shown": "ZEYT-UXZQ-QHBW-7KRT-QKIP-4N4K-QO",
+    "shown": "W2JC-WYUS-32YZ-JVBG-WT3K-CFTO-4H",
     "perr": "That is not a valid sync code (26 letters/digits 2–7)."
    }
   },
