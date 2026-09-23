@@ -1,6 +1,6 @@
 # Known Limitations (v14.3)
 
-v14.2 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+v14.3 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
 
 ## 1. Deployment and live verification
 
@@ -48,7 +48,7 @@ v14.2 is **not** "100% perfect". This file lists what is unproven, what is heuri
 
 - **Only Chromium was used** (Playwright device emulation at 390×844, 820×1180, 1024×1366, 1180×820). No WebKit/Safari engine is installed here. The code avoids regex lookbehind and uses only features available on iPadOS ≥ 13.4 (optional chaining, `Intl` time zones, IntersectionObserver), but real Safari performance, memory and touch feel are unmeasured.
 - **The date comes from the device clock** (converted to Africa/Cairo). A wrong device clock gives a wrong day; there is no server time source.
-- **Cloud state** was exercised only against the in-memory `/api/state` emulator. The payload-size bound passed (27 KB total, v14 slice ≈ 1.4 KB), but the real Postgres round trip is untested.
+- **Cloud state** was exercised against local stand-ins only: the Hatchable `/api/state` emulator, and the real Vercel `api/state.js` handler on an in-memory store. The payload-size bound passed (27 KB total, v14 slice ≈ 1.4 KB). No real Postgres or Blob round trip has run yet: there is no Hatchable access, and no Blob store is connected.
 - **Professor Vision** (`/api/vision`) is unchanged from v53 and was not called.
 - **`index.html` is 2.9 MB**, with course content inlined as in v53. v14 added only a `<script>` tag, the title, the feed predict-reveal wrapper and the fast-lane guard.
 
@@ -58,4 +58,5 @@ v14.2 is **not** "100% perfect". This file lists what is unproven, what is heuri
 
 ## Rollback
 
-Live v53 is untouched. The exact v53 files are commit `6e3ebec` (`python3 scripts/verify_exact_source.py`). `tests/rollback_probe.js` shows that v53 loads v14.2 state without errors, and that returning to v14.2 keeps progress.
+- **Vercel:** promote a previous deployment, or delete the project (`docs/DEPLOYMENT_VERCEL.md`).
+- **Hatchable:** v53 is untouched. The exact v53 files are commit `6e3ebec` (`python3 scripts/verify_exact_source.py`). `tests/rollback_probe.js` shows that v53 loads v14.x state without errors, and that returning to v14.x keeps progress.
