@@ -399,28 +399,42 @@
     for (const c of REG().concepts) {
       c.reg = new RegExp(c.re.source, "g");
       c.tok = liteSet(tokens(c.label + " " + (c.kw || []).join(" "), false));
+      // Optional triggers: a curated file or category can name the stems it is for ([name, mod, trigger] / [name, trigger]).
+      c._files = (c.files || []).map((f) => ({ f: f[0], m: f[1], re: f[2] ? new RegExp(f[2]) : null }));
+      c._cats = (c.cats || []).map((x) => (Array.isArray(x) ? { name: x[0], re: new RegExp(x[1]) } : { name: x, re: null }));
+      c._not = c.not ? new RegExp(c.not) : null; // stems that share a word but belong elsewhere (e.g. micturition "reflex")
     }
     conceptsPrepared = true;
   }
-  function detectConcepts(text, subject) {
+  function detectConcepts(text, subject, chapter = "") {
+    // Stem hits count double over chapter hits; longer (more specific) phrase matches weigh more.
     prepConcepts();
     const t = norm(text),
+      ch = norm(chapter),
       out = [];
+    const score = (m, w) => (m || []).reduce((z, x) => z + w * (1 + Math.min(20, x.length) / 20), 0);
     for (const c of REG().concepts) {
       if (c.subj && subject && !c.subj.includes(subject)) continue;
-      const m = t.match(c.reg);
-      if (m) out.push({ c, s: m.length * (c.w || 1) });
+      const s = 2 * score(t.match(c.reg), c.w || 1) + (ch ? score(ch.match(c.reg), c.w || 1) : 0);
+      if (s) out.push({ c, s });
     }
     return out.sort((a, b) => b.s - a.s).map((x) => x.c);
   }
-  function conceptsForQ(q, l) {
+  function conceptsForQ(q, l, strict = false) {
     // Pre-answer and post-answer both start answer-blind (stem + chapter → lesson topic → lesson visual type).
-    const sub = q?.subject || l?.subject;
-    let list = detectConcepts((q?.stem || "") + " " + (q?.chapter || ""), sub);
-    if (!list.length && l) list = detectConcepts(l.topic, sub);
-    if (!list.length && l?.visualType) {
+    // strict (question visuals): a multi-topic lesson title is only used when it names ONE concept, and the
+    // coarse lesson visual type is not used — no question-specific concept means no question visual.
+    const sub = q?.subject || l?.subject,
+      ns = norm(q?.stem || ""),
+      ok = (c) => !c._not || !c._not.test(ns);
+    let list = detectConcepts(q?.stem || "", sub, q?.chapter || "").filter(ok);
+    if (!list.length && l) {
+      const tl = detectConcepts(l.topic, sub).filter(ok);
+      if (!strict || tl.length === 1) list = tl;
+    }
+    if (!list.length && l?.visualType && !strict) {
       const c = REG().concepts.find((x) => x.k === VISUALTYPE_CONCEPT[l.visualType]);
-      if (c) list = [c];
+      if (c && ok(c)) list = [c];
     }
     return list;
   }
@@ -777,9 +791,15 @@
     return s;
   }
   const FLOOR = { file: 14, cat: 12, kw: 14, side: 12 };
-  async function candidatesFor(concept, subject) {
-    const out = [];
-    const files = (concept.files || []).map((f) => ({ f: f[0], m: f[1] }));
+  async function candidatesFor(concept, subject, text = "") {
+    prepConcepts();
+    const out = [],
+      t = norm(text);
+    // With stem text, a triggered file/category is used only when its trigger fires (answer-blind: stem + chapter).
+    const files = (concept._files || []).filter((x) => !t || !x.re || x.re.test(t));
+    const catScore = (x) => (x.re ? (x.re.test(t) ? 3 : 0) : 1);
+    const ranked = t ? [...(concept._cats || [])].sort((a, b) => catScore(b) - catScore(a)) : concept._cats || [];
+    const cats = (t && ranked.some((x) => catScore(x) > 0) ? ranked.filter((x) => catScore(x) > 0) : ranked).slice(0, 2).map((x) => x.name);
     if (files.length) {
       try {
         const rows = await netData(urlFiles(files.map((x) => x.f)), commonsRows);
@@ -790,7 +810,7 @@
         }
       } catch (_) {}
     }
-    for (const cat of (concept.cats || []).slice(0, 2)) {
+    for (const cat of cats) {
       try {
         const rows = await netData(urlSearch('incategory:"' + String(cat).replace(/"/g, "") + '"', 12), commonsRows);
         rows.forEach((r) => !r.missing && out.push({ ...r, key: gkey(r.title), origin: "cat", modality: guessMod(r), concept: concept.k }));
@@ -811,7 +831,7 @@
     const l = lessonForQ(q, opts.lesson || null),
       subject = q.subject || l?.subject,
       intent = classifyIntent(q, l),
-      list = conceptsForQ(q, l),
+      list = conceptsForQ(q, l, true),
       concept = list[0] || null,
       g = guardModel(q);
     const plan = {
@@ -834,8 +854,9 @@
       plan.reason = plan.source ? "Exact source-bank figure." : "No registry concept matched this stem; an answer-derived search is not allowed, so no visual is invented.";
       return plan;
     }
-    let cands = await candidatesFor(concept, subject);
-    if (list[1] && cands.length < 4) cands = cands.concat((await candidatesFor(list[1], subject)).filter((c) => !cands.some((x) => x.key === c.key)));
+    const qText = (q.stem || "") + " " + (q.chapter || "");
+    let cands = await candidatesFor(concept, subject, qText);
+    if (list[1] && cands.length < 4) cands = cands.concat((await candidatesFor(list[1], subject, qText)).filter((c) => !cands.some((x) => x.key === c.key)));
     const ctx = { phase, intent, subject, concept: concept.k, conceptTok: concept.tok || new Set(), stemTok: g.stemT, guard: g };
     cands.forEach((c) => (c.score = rubric(c, ctx)));
     const ok = cands.filter((c) => c.score >= (FLOOR[c.origin] || 14)).sort((a, b) => b.score - a.score);
@@ -871,7 +892,15 @@
     const concept = REG().concepts.find((c) => c.k === conceptKey);
     if (!concept) return null;
     prepConcepts();
-    const cands = await candidatesFor(concept, q.subject);
+    let cands = await candidatesFor(concept, q.subject);
+    if (!cands.some((c) => sideRe.test(norm(c.title)))) {
+      const cat = (concept._cats || []).map((x) => x.name).find((x) => sideRe.test(norm(x)));
+      if (cat)
+        try {
+          const rows = await netData(urlSearch('incategory:"' + String(cat).replace(/"/g, "") + '"', 12), commonsRows);
+          cands = cands.concat(rows.filter((r) => !r.missing).map((r) => ({ ...r, key: gkey(r.title), origin: "side", modality: guessMod(r), concept: concept.k })));
+        } catch (_) {}
+    }
     const ctx = { ...ctxBase, phase: "post", concept: concept.k, conceptTok: concept.tok };
     return (
       cands
@@ -1068,7 +1097,9 @@
       s = norm((q?.stem || "") + " " + (q?.chapter || "")),
       qc = conceptsForQ(q, lessonForQ(q))[0]?.k;
     let best = null;
+    const ctxText = norm((q?.stem || "") + " " + keyT + " " + chosenT);
     for (const c of REG().contrasts) {
+      if (c.frame && !c.frame.test(ctxText)) continue; // context gate: generic side words alone never fire a contrast
       const ka = c.a.re.test(nk),
         kb = c.b.re.test(nk),
         ca = c.a.re.test(nc),
@@ -1141,7 +1172,7 @@
       opp = /\b(opposite|contralateral|other side|crossed)\b/;
     const hint = corpusSentence(l, q, tokens(key, false).concat([...g.stemT]), null);
     if ((same.test(nk) && opp.test(nc)) || (opp.test(nk) && same.test(nc)))
-      return { cls: "laterality", cmd: command("side"), d: "Side decides this one: the key says " + (same.test(nk) ? "SAME side (ipsilateral)" : "OPPOSITE side (contralateral)") + ", you chose the other. Find where the pathway crosses, then read the side off the map." + (hint ? " " + short(hint, 170) : ""), felt: FELT.laterality };
+      return { cls: "laterality", cmd: command("side"), d: "Side decides this one: the key says " + (same.test(nk) ? "SAME side (ipsilateral)" : "OPPOSITE side (contralateral)") + ", you chose the other. " + (/\b(tract|lesion|pathway|lemnisc|decussat|hemi\w*|cortex|capsule|nucleus|nuclei|cord)\b/.test(norm(q.stem + " " + key + " " + chosen)) ? "Find where the pathway crosses, then read the side off the map." : "Picture the structure from its attachments and watch which way it pulls or points.") + (hint ? " " + short(hint, 170) : ""), felt: FELT.laterality };
     const nums = (s) => (s.match(/\b([ctls]\d{1,2}|\d+(st|nd|rd|th)?)\b/g) || []).join("/");
     if (nums(nk) && nums(nc) && nums(nk) !== nums(nc))
       return { cls: "number", cmd: command("orient"), d: "The level/number decides it: key " + nums(nk).toUpperCase() + " vs your " + nums(nc).toUpperCase() + "." + (hint ? " " + short(hint, 170) : ""), felt: FELT.number };
@@ -1149,7 +1180,22 @@
       down = /decreas|\bfall|reduc|lower|\bless\b|inhibit|suppress|hyperpolari|relax|constrict|\bclos/;
     if ((up.test(nk) && down.test(nc)) || (down.test(nk) && up.test(nc)))
       return { cls: "direction", cmd: command("perturb"), d: "Direction decides it: the key goes " + (up.test(nk) ? "UP / excitatory" : "DOWN / inhibitory") + "; your choice runs the other way. Run the chain forward once." + (hint ? " " + short(hint, 170) : ""), felt: FELT.direction };
-    const fr = REG().contrasts.filter((c) => c.frame && c.frame.test(norm(q.stem))).sort((a, b) => (norm(q.stem).match(new RegExp(b.frame.source, "g")) || []).join("").length - (norm(q.stem).match(new RegExp(a.frame.source, "g")) || []).join("").length)[0];
+    // Frame fallback. Evidence from the CHOSEN option dominates (both poles named = the confusion itself;
+    // the frame firing on the option = its topic); stem/key hits give context; longer matches break ties.
+    const ns = norm(q.stem),
+      len = (c, t) => (t.match(new RegExp(c.frame.source, "g")) || []).join("").length;
+    const fr =
+      REG()
+        .contrasts.filter((c) => c.frame && (c.frame.test(nc) || c.frame.test(nk) || c.frame.test(ns)))
+        .map((c) => {
+          const inC = c.frame.test(nc),
+            inS = c.frame.test(ns),
+            inK = c.frame.test(nk),
+            poles = inC || inS || inK ? (c.a.re.test(nc) ? 1 : 0) + (c.b.re.test(nc) ? 1 : 0) : 0,
+            chosenEv = (inC ? 3 : 0) + (poles === 2 ? 8 : poles ? 1.5 : 0);
+          return { c, s: 1.6 * chosenEv + Math.min(3, (inS ? 2.5 : 0) + (inK ? 2.5 : 0)) + Math.min(1, (2 * len(c, nc) + len(c, ns) + len(c, nk)) / 30) };
+        })
+        .sort((a, b) => b.s - a.s)[0]?.c || null;
     if (fr) return { cls: "sibling", cmd: command(fr.cmd || "diff"), d: fr.d + " Check each word of your option against this map: one detail is swapped.", felt: "A true-sounding statement about a neighbouring structure with one detail swapped.", frame: fr };
     const keyT = tokens(key, false).filter((w) => !GENERIC.has(w)),
       ks = corpusSentence(l, q, keyT, null, Math.max(2, Math.ceil(keyT.length * 0.5))),
@@ -1238,13 +1284,9 @@
       else if (an.contrast) {
         const correctKey = box.closest(".v14Compare")?.querySelector('[data-v14-side="correct"]')?.dataset.v14Key || pre?.primary?.key || "";
         c = await sideVisual(an.contrast.other.re, an.contrast.other.concept || conceptKey, correctKey, q, ctx).catch(() => null);
-      } else {
-        const nc = detectConcepts(optText(q, sel), q.subject).find((x) => x.k !== conceptKey);
-        if (nc) {
-          const chosenTok = tokens(optText(q, sel), false).filter((w) => !GENERIC.has(w));
-          if (chosenTok.length) c = await sideVisual(new RegExp(chosenTok.slice(0, 4).map((w) => w.replace(/[^a-z0-9]/g, "")).join("|")), nc.k, pre?.primary?.key || "", q, ctx).catch(() => null);
-        }
       }
+      // Without a matched look-alike contrast the distractor is not a distinct depictable structure;
+      // an honest note beats a keyword-similar picture.
       box.innerHTML = c ? visualCardHTML(c, "YOUR CHOICE · LOOK-ALIKE", "post", "wrong") : '<div class="v14VisualMissing"><b>No trustworthy distinct visual exists for this distractor.</b> ' + E(why || "Use the decisive reasoning difference below.") + "</div>";
       if (c) G.note(c.key, { concept: c.concept, modality: c.modality });
     }

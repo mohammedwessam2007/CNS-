@@ -1,0 +1,12 @@
+{
+ "n": 921,
+ "textLeaks": 0,
+ "queryLeaks": [],
+ "noModel": 0,
+ "frames": 352,
+ "gaps": 123,
+ "errors": 0,
+ "queriesIssued": 74,
+ "plannedSample": 154,
+ "textLeakExamples": []
+}

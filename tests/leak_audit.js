@@ -13,13 +13,14 @@ const { open } = require('./harness');
     const chunk = ids.slice(i, i + 60);
     const res = await page.evaluate(async (chunk) => {
       const V = window.INTELLECTUALITY_V14, out = [];
-      const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+      const GR = { α: 'alpha', β: 'beta', γ: 'gamma', δ: 'delta', κ: 'kappa', μ: 'mu', θ: 'theta', ε: 'epsilon' };
+      const norm = s => String(s || '').replace(/[αβγδκμθε]/g, c => ' ' + GR[c] + ' ').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
       for (const id of chunk) {
         try {
           const q = EHSAN_QBANK.questions.find(x => x.id === id), g = V.guard(id), pc = V.primerContent(id);
           const texts = [pc.model, ...(pc.steps || []).filter(x => x.filled).map(x => x.text), pc.frame ? pc.frame.d + ' ' + pc.frame.la + ' ' + pc.frame.lb : ''].filter(Boolean);
           const keyN = norm(q.options.find(o => q.answerKeys.includes(o.key))?.text || q.answerText);
-          const bad = texts.filter(t => (keyN.split(' ').length >= 2 && norm(t).includes(keyN)) || V.leaks(t, id));
+          const bad = texts.filter(t => (keyN.split(' ').length >= 2 && (' ' + norm(t) + ' ').includes(' ' + keyN + ' ')) || V.leaks(t, id));
           out.push({ id, bad: bad.map(x => x.slice(0, 160)), A: [...g.A], model: !!pc.model, frame: !!pc.frame, gaps: pc.gaps || 0 });
         } catch (e) { out.push({ id, err: String(e) }); }
       }
