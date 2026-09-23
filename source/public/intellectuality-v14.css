@@ -43,6 +43,27 @@
 .v14Teacher img{width:96px;height:54px;object-fit:cover;display:block}
 .v14Teacher span{display:grid;gap:2px;font-size:12px;padding-right:8px}
 .v14Teacher b{font-size:9px;color:#ffb35c;letter-spacing:.07em}
+.v14Teacher img:not([src]){display:none}
+.v14Teacher.thumbUnavailable{grid-template-columns:1fr;padding:10px 12px}
+.v14Teacher.thumbUnavailable img{display:none}
+.ytPoster.thumbUnavailable{display:grid;place-items:center;min-height:170px;aspect-ratio:16/9;background:linear-gradient(135deg,#142237,#0d1520)}
+.ytPoster.thumbUnavailable img{display:none}
+.ytPoster.thumbUnavailable span{position:static;transform:none}
+.v14ProgressTruth{padding:6px 9px;margin-bottom:8px;border-radius:8px;background:#13202c;color:#a9bed0;font-size:11px;line-height:1.35}
+.v14MeningesHero{grid-column:1/-1;margin:0;border:1px solid #b7c7da;border-radius:14px;overflow:hidden;background:#fff;color:#233044}
+.v14MeningesHero img{display:block;width:100%;height:auto;max-height:480px;object-fit:contain}
+.v14MeningesHero figcaption{display:flex;flex-wrap:wrap;gap:5px 12px;padding:8px 12px;font-size:11px;line-height:1.4}
+.v14MeningesHero figcaption span{font-weight:800;color:#234f69}.v14MeningesHero figcaption small{flex-basis:100%;font-size:10px;color:#657184}.v14MeningesHero figcaption a{color:#3157d5}
+.v14MeningesMap{grid-column:1/-1;display:grid;gap:8px;padding:12px;border:1px solid #536c89;border-radius:14px;background:#0e1a29;color:#ecf5ff}
+.v14LayerLine{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.v14LayerLine span{display:grid;place-items:center;min-height:48px;padding:5px 2px;text-align:center;border-radius:8px;font-size:10px;font-weight:900;overflow-wrap:anywhere}
+.v14LayerLine span:nth-child(1){background:#6f7f91}.v14LayerLine span:nth-child(2){background:#c97883;color:#1c0b12}.v14LayerLine span:nth-child(3){background:#156b91}.v14LayerLine span:nth-child(4){background:#87b9ca;color:#092a39}.v14LayerLine span:nth-child(5){background:#dfcaa6;color:#322411}
+.v14LigamentLine{display:flex;flex-wrap:wrap;gap:7px 12px;align-items:center;justify-content:space-between;border:1px solid #65817c;border-radius:9px;background:#102c2b;padding:8px 10px}
+.v14LigamentLine b{font:800 16px/1.3 "Noto Naskh Arabic","Geeza Pro",sans-serif;color:#a6f1d2}
+.v14LigamentLine span{font-size:12px;font-weight:900;color:#d3ffe7}
+.v14MeningesClue{display:flex;flex-wrap:wrap;gap:4px 15px;font-size:11px;line-height:1.4}.v14MeningesClue span:first-child{color:#ffbdc9}.v14MeningesClue span:last-child{color:#abf6d0}
+.v14MeningesMap.compact{padding:8px;gap:6px}.v14MeningesMap.compact .v14LayerLine span{min-height:37px;font-size:9px}.v14MeningesMap.compact .v14LigamentLine span{font-size:10px}
+@media (max-width:520px){.v14LayerLine span{font-size:8px;min-height:42px}.v14MeningesHero img{max-height:320px}.v14MeningesClue{font-size:10px}}
 .v14AcademicRef{grid-column:1/-1;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 10px;align-items:center;padding:8px 10px;border:1px solid #2d3d52;background:#0b131d;border-radius:10px;color:#b9c7d8;text-decoration:none}
 .v14AcademicRef b{font-size:9px;color:#66e9ff;letter-spacing:.07em}
 .v14AcademicRef span{font-size:10px}

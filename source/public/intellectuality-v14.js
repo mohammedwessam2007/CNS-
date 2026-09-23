@@ -14,7 +14,7 @@
   if (window.INTELLECTUALITY_V14_LOADED) return;
   window.INTELLECTUALITY_V14_LOADED = true;
 
-  const VERSION = "14.4";
+  const VERSION = "14.5";
   const TZ = "Africa/Cairo";
   const REG = () => window.INTELLECTUALITY_V14_REGISTRY || { commands: {}, concepts: [], contrasts: [], atlas: {} };
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
@@ -249,7 +249,7 @@
       (cal.mode === "catchup" ? "FIRST-RUN CATCH-UP · REAL DATE KEPT" : "CARRYOVER · REAL DATE KEPT") +
       "</b><span>" +
       E(txt) +
-      (Number.isFinite(mins) ? " <em>~" + mins + " min of Day " + d.day + " left.</em>" : "") +
+      (Number.isFinite(mins) ? " <em>~" + mins + " planned min in unfinished Day " + d.day + " steps.</em>" : "") +
       "</span></div>"
     );
   }
@@ -961,10 +961,20 @@
   function sourceFigureHTML(src) {
     return '<figure class="v14Visual v14Src"><span class="v14Img"><img src="' + E(src.src) + '" alt="Actual source-bank figure" loading="lazy"></span><span class="v14Cap"><b>ACTUAL SOURCE-BANK FIGURE</b><small>' + E(src.file || "Ketab al Qesm") + " · p." + E(src.page || "—") + "</small></span></figure>";
   }
+  const MENINGES_Q = new Set(["EHSAN-ANAT-SPINAL-CORD-MCQ-20", "EHSAN-ANAT-SPINAL-CORD-MCQ-24"]);
+  function meningesMapHTML(compact = false) {
+    return '<div class="v14MeningesMap' + (compact ? ' compact' : '') + '" role="img" aria-label="From spinal cord outward: pia, CSF-filled subarachnoid space, arachnoid, dura. The denticulate ligament begins in pia, crosses the arachnoid and attaches to dura. Dura also sleeves the exiting spinal nerve root.">' +
+      '<div class="v14LayerLine"><span>CORD</span><span>PIA</span><span>CSF SPACE</span><span>ARACHNOID</span><span>DURA</span></div>' +
+      '<div class="v14LigamentLine"><b>دَوّر عالطرف</b><span>DENTICULATE LIGAMENT · PIA → DURA</span></div>' +
+      '<div class="v14MeningesClue"><span>✕ Arachnoid is crossed; it is not the final attachment.</span><span>✓ Dura forms a sleeve around a spinal nerve root.</span></div></div>';
+  }
+  function meningesHeroHTML() {
+    return '<figure class="v14MeningesHero"><img src="/assets/spinal-meninges-axial-ai-v2.webp" alt="Illustrative transverse view: dorsal sensory root and ganglion above, ventral motor root below, pia on cord, blue subarachnoid CSF space, arachnoid, dura and lateral denticulate attachment" loading="lazy" decoding="async"><figcaption><span>↑ POSTERIOR · dorsal root + ganglion</span><span>BLUE · CSF-filled subarachnoid space</span><span>↓ ANTERIOR · ventral root</span><small>AI-assisted schematic, not to scale. Use the relationship map below for exact attachments. <a href="https://www.ncbi.nlm.nih.gov/books/NBK547755/" target="_blank" rel="noopener">Anatomy reference ↗</a></small></figcaption></figure>';
+  }
   function teacherHTML(v) {
     return (
       '<a class="v14Teacher" href="https://www.youtube.com/watch?v=' + E(v.id) + "&t=" + (v.start || 0) + 's" data-ctx-video="' + E(v.id) + '" data-ctx-start="' + (v.start || 0) + '" data-ctx-end="' + (v.end || 0) + '" data-ctx-title="' + E(v.title) + '">' +
-      '<img src="https://i.ytimg.com/vi/' + E(v.id) + '/mqdefault.jpg" alt="" loading="lazy"><span><b>TEACHER CLIP · ROUTED WINDOW</b>' + E(v.title) + "</span></a>"
+      '<img src="https://i.ytimg.com/vi/' + E(v.id) + '/mqdefault.jpg" alt="" loading="lazy"><span><b>▶ TEACHER CLIP · ROUTED WINDOW</b>' + E(v.title) + "</span></a>"
     );
   }
   function atlasHTML(subject) {
@@ -1394,7 +1404,9 @@
       }
       // Without a matched look-alike contrast the distractor is not a distinct depictable structure;
       // an honest note beats a keyword-similar picture.
-      box.innerHTML = c ? visualCardHTML(c, "YOUR CHOICE · LOOK-ALIKE", "post", "wrong") : '<div class="v14VisualMissing"><b>No trustworthy distinct visual exists for this distractor.</b> ' + E(why || "Use the decisive reasoning difference below.") + "</div>";
+      box.innerHTML = q.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-24" && sel.toLowerCase() === "a"
+        ? meningesMapHTML(true)
+        : c ? visualCardHTML(c, "YOUR CHOICE · LOOK-ALIKE", "post", "wrong") : '<div class="v14VisualMissing"><b>No trustworthy distinct visual exists for this distractor.</b> ' + E(why || "Use the decisive reasoning difference below.") + "</div>";
       if (c) G.note(c.key, { concept: c.concept, modality: c.modality });
     }
     attachImgFallback(box);
@@ -1549,12 +1561,15 @@
     const intentLabel = (INTENTS[plan.intent] || INTENTS.identify).label;
     let h = "";
     if (plan.source) h += sourceFigureHTML(plan.source);
+    const meningeal = MENINGES_Q.has(q.id);
+    if (meningeal && !mini) h += meningesHeroHTML() + meningesMapHTML();
     const onScreen = (k) => [...document.querySelectorAll(".v14Visual[data-v14-vkey]")].some((a) => a.dataset.v14Vkey === k && !box.contains(a));
-    if (plan.primary && !(mini && onScreen(plan.primary.key))) {
+    if (meningeal && mini) h += meningesMapHTML(true);
+    if (!meningeal && plan.primary && !(mini && onScreen(plan.primary.key))) {
       h += visualCardHTML(plan.primary, mini ? "SAME ANCHOR" : "SEE IT · " + intentLabel, phase, "v14Main");
       G.note(plan.primary.key, { concept: plan.concept, modality: plan.primary.modality });
     }
-    if (!mini && plan.secondary && !plan.source) {
+    if (!meningeal && !mini && plan.secondary && !plan.source) {
       h += visualCardHTML(plan.secondary, "SECOND ANGLE", phase);
       G.note(plan.secondary.key, { concept: plan.concept, modality: plan.secondary.modality });
     }
@@ -1674,7 +1689,9 @@
       chip.classList.toggle("behind", cal.debt > 0);
     }
     const stage = document.querySelector("#player .stage");
+    // A completed step is a navigation event, not proof of mastery or elapsed study time.
     const kind = safe(() => nextAction()?.kind, "");
+    if (stage && kind !== "MOCK" && !stage.querySelector(".v14ProgressTruth")) stage.insertAdjacentHTML("afterbegin", '<div class="v14ProgressTruth">Progress counts planned steps; it is not study time or proven mastery. The minute figures are estimates.</div>');
     if (stage && kind !== "MOCK" && !stage.querySelector(".v14Carryover")) {
       const b = calendarBannerHTML(cal);
       const bs = cal.banner && cal.banner.date === cal.today ? cal.banner : (cal.banner = { date: cal.today, seqs: [] });
@@ -1700,7 +1717,26 @@
       }
     });
     companions();
+    wireThumbnailFallback();
     wireV14();
+  }
+  let thumbnailErrorsWired = false;
+  function wireThumbnailFallback() {
+    const fail = (img) => {
+      const parent = img.closest(".v14Teacher,.ytPoster");
+      if (parent) parent.classList.add("thumbUnavailable");
+      img.hidden = true;
+    };
+    if (!thumbnailErrorsWired) {
+      thumbnailErrorsWired = true;
+      document.addEventListener("error", (event) => {
+        const img = event.target;
+        if (img instanceof HTMLImageElement && img.src.includes("i.ytimg.com/")) fail(img);
+      }, true);
+    }
+    document.querySelectorAll('img[src*="i.ytimg.com/"]').forEach((img) => {
+      if (img.complete && !img.naturalWidth) fail(img);
+    });
   }
   function assessmentContext(node) {
     const st = node.closest(".stage,.mockQ");
