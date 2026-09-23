@@ -1,0 +1,10 @@
+{
+  "name": "intellectuality-cns-vercel-host",
+  "private": true,
+  "type": "module",
+  "description": "Vercel host adapter: serves source/public unchanged plus host-sync.js, and /api/state on a private Vercel Blob store.",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@vercel/blob": "2.8.0"
+  }
+}

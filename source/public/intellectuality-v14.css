@@ -1,4 +1,4 @@
-/* v14.2 · understanding-first qbank, calendar truth, visual genome, autopsy */
+/* v14.3 · understanding-first qbank, calendar truth, visual genome, autopsy */
 .v14Calendar{font-size:10px;font-weight:900;letter-spacing:.06em;color:#9bb0c7;white-space:nowrap;padding:4px 8px;border:1px solid #2b3a4e;border-radius:999px;background:#0e1520}
 .v14Calendar.behind{color:#ffd983;border-color:#6a5732;background:#1a1609}
 .courseCrumb .v14Calendar{flex:0 1 auto;min-width:0;max-width:64%;overflow:hidden;text-overflow:ellipsis;margin-left:4px}
@@ -138,3 +138,22 @@ details.v14Predict{margin-top:5px}
 details.v14Predict>summary{cursor:pointer;font-size:12px;font-weight:800;color:#d9ff43;min-height:32px;display:flex;align-items:center}
 
 @media (prefers-reduced-motion:reduce){.v14Skeleton span{animation:none}.v14MovieStep{transition:none}}
+
+/* every option, pictured (post-answer) */
+.v14OptGallery{margin-top:12px;padding:10px;border:1px solid #e3e8ef;border-radius:14px;background:#f8fafc}
+.v14OptHead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.v14OptHead b{font-family:"Noto Naskh Arabic","Geeza Pro",serif;font-size:15px;color:#1f2937}
+.v14OptHead span{font-size:10px;letter-spacing:.08em;color:#6b7686;font-weight:800}
+.v14OptGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:560px){.v14OptGrid{grid-template-columns:1fr}}
+.v14OptCell{display:grid;gap:6px;min-width:0;padding:8px;border:1px solid #e3e8ef;border-radius:12px;background:#fff}
+.v14OptCell.key{border-color:#9fd8b4}
+.v14OptCell.pick{border-color:#ecc4cd}
+.v14OptTop{font-size:12px;line-height:1.35;color:#1f2937;overflow-wrap:anywhere}
+.v14OptTag{display:inline-block;margin-right:6px;padding:1px 6px;border-radius:999px;font-size:9px;font-weight:900;letter-spacing:.05em;background:#eef2f6;color:#475467}
+.v14OptCell.key .v14OptTag{background:#e3f6ea;color:#1f7a44}
+.v14OptCell.pick .v14OptTag{background:#fbe9ed;color:#8f243c}
+.v14OptPic .v14Img{aspect-ratio:16/10}
+.v14OptPic .v14VisualMissing.opt{background:#fff;border-color:#dfe5ec;color:#6b7686;font-size:11px;padding:10px}
+details.v14OptMore{margin-top:8px}
+details.v14OptMore>summary{cursor:pointer;font-size:12px;color:#3157d5;min-height:32px;display:flex;align-items:center}

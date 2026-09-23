@@ -1,4 +1,4 @@
-/* INTELLECTUALITY v14.2 · UNDERSTAND FIRST
+/* INTELLECTUALITY v14.3 · UNDERSTAND FIRST
  *
  * Understanding-first practice MCQs, calendar truth (Africa/Cairo), the question visual genome
  * (answer-blind pre-answer routing, answer-aware post-answer routing), one anti-repeat governor
@@ -14,7 +14,7 @@
   if (window.INTELLECTUALITY_V14_LOADED) return;
   window.INTELLECTUALITY_V14_LOADED = true;
 
-  const VERSION = "14.2";
+  const VERSION = "14.3";
   const TZ = "Africa/Cairo";
   const REG = () => window.INTELLECTUALITY_V14_REGISTRY || { commands: {}, concepts: [], contrasts: [], atlas: {} };
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
@@ -912,7 +912,7 @@
     const ctx = { ...ctxBase, phase: "post", concept: concept.k, conceptTok: concept.tok };
     return (
       cands
-        .filter((c) => c.key !== excludeKey && sideRe.test(norm(c.title)))
+        .filter((c) => !(excludeKey instanceof Set ? excludeKey.has(c.key) : c.key === excludeKey) && sideRe.test(norm(c.title)))
         .map((c) => ({ ...c, origin: c.origin === "file" ? "file" : "side", score: rubric({ ...c, origin: c.origin === "file" ? "file" : "side" }, ctx) }))
         .filter((c) => c.score >= FLOOR.side)
         .sort((a, b) => b.score - a.score - (G.penalty(b.key, {}) - G.penalty(a.key, {})) * 0.2)[0] || null
@@ -1222,7 +1222,7 @@
       fast = Number.isFinite(lat) && lat < 20000;
     const reason = corpusSentence(l, q, tokens(key, false).concat([...guardModel(q).stemT]), null) || prof(l).mental || l?.mental || "";
     if (t === "owned" && conf === "confident" && fast)
-      return '<div class="v14Why compact" data-v14-why="' + E(q.id) + '"><b>✓ OWNED</b> ' + E(key) + " — " + E(short(reason, 120)) + "</div>";
+      return '<div class="v14Why compact" data-v14-why="' + E(q.id) + '"><b>✓ OWNED</b> ' + E(key) + " — " + E(short(reason, 120)) + '<details class="v14OptMore"><summary>See every option pictured</summary>' + optionsGalleryHTML(q, a?.selected || "", "all") + "</details></div>";
     const near = nearestLookalike(q),
       guess = conf === "guess";
     return (
@@ -1231,6 +1231,7 @@
       (near ? '<p class="v14Near"><b>vs ' + E(near.option.text) + ":</b> " + E(short(near.c.d, guess ? 320 : 200)) + "</p>" : "") +
       (guess ? '<p class="v14Guess"><b>Guess-correct = weak evidence.</b> Say why the nearest look-alike is wrong before moving on; this concept stays on the spaced list.</p>' : "") +
       '<div class="v14Visuals mini" data-v14-plan="' + E(q.id) + '" data-v14-phase="post"></div>' +
+      optionsGalleryHTML(q, a?.selected || "", "all") +
       '<div class="v14Tiny">Tutor explanation, separate from the preserved source key.</div></div>'
     );
   }
@@ -1252,6 +1253,7 @@
       '<div class="v14CompareSide wrong"><b lang="ar" dir="rtl">إنت خدت شبيهها / البديل الغلط</b><div class="v14AutopsyVisual" data-v14-side="wrong" data-v14-qid="' + E(q.id) + '" data-v14-sel="' + E(sel) + '"><div class="v14Skeleton"><span></span></div></div><strong>' + E(chosen) + "</strong></div>" +
       "</div>" +
       '<div class="v14Difference"><b lang="ar" dir="rtl">الفرق الفاصل</b><p class="v14ModelLine">' + E(an.d) + "</p><small>Why it felt right: " + E(an.felt) + "</small></div>" +
+      optionsGalleryHTML(q, sel, "others") +
       (opts.inlineGate ? gate : "") +
       "</div>"
     );
@@ -1301,6 +1303,102 @@
     attachImgFallback(box);
   }
 
+  /* ───────────────────────── every option, pictured (post-answer only) ───────────────────────── */
+  // After the answer every option gets its own picture. An image counts only if its title names that
+  // option (or a matched look-alike contrast pole does); otherwise the card says so. No image is reused
+  // across options. Never rendered before the answer, so it cannot leak the key.
+  function optionsGalleryHTML(q, sel, which) {
+    const keys = q.answerKeys || [],
+      list = (q.options || []).filter((o) => which !== "others" || (!keys.includes(o.key) && o.key !== sel));
+    if (list.length < (which === "others" ? 1 : 2)) return "";
+    const cells = list
+      .map((o) => {
+        const isKey = keys.includes(o.key),
+          role = isKey ? "key" : o.key === sel ? "pick" : "other",
+          tag = isKey ? "✓ CORRECT" : o.key === sel ? "✗ YOUR PICK" : "✗";
+        return '<div class="v14OptCell ' + role + '" data-v14-opt="' + E(o.key) + '"><div class="v14OptTop"><span class="v14OptTag">' + tag + "</span><b>" + E(String(o.key).toUpperCase()) + ".</b> " + E(o.text) + '</div><div class="v14OptPic"><div class="v14Skeleton"><span></span></div></div></div>';
+      })
+      .join("");
+    return (
+      '<div class="v14OptGallery" data-v14-opts="' + E(q.id) + '" data-v14-sel="' + E(sel) + '" data-v14-which="' + which + '">' +
+      '<div class="v14OptHead"><b lang="ar" dir="rtl">شوف كل اختيار</b><span>' + (which === "others" ? "THE OTHER OPTIONS, PICTURED" : "EVERY OPTION, PICTURED") + "</span></div>" +
+      '<div class="v14OptGrid">' + cells + "</div></div>"
+    );
+  }
+  const CLASS_NOUN = /^(neurons?|neurones?|nerves?|arter(y|ies)|veins?|muscles?|cells?|fib(er|re)s?|nucle(us|i)|sinus(es)?|areas?|tracts?|layers?|glands?|bones?|gangli(on|a)|membranes?|lobes?|gyr(us|i)|sulc(us|i)|receptors?|sensations?|organs?|system|parts?|regions?|sides?|branch(es)?|groups?|fossa|surface|border|ends?|body|bodies|type|types|corpuscles?|endings?|roots?)$/;
+  const POSITION = /^(anterior|posterior|middle|superior|inferior|medial|lateral|left|right|upper|lower|deep|superficial|internal|external|same|opposite|greater|lesser|major|minor|first|second|third|fourth|primary|secondary|main|common|proper|central|peripheral|dorsal|ventral|rostral|caudal|outer|inner|small|large|long|short)$/;
+  function optionSideRe(q, o) {
+    const stemT = guardModel(q).stemT;
+    let toks = tokens(o.text, false).filter((w) => w.length >= 4 && !GENERIC.has(w) && !stemT.has(lite(w)) && !/^\d+$/.test(w));
+    // A picture must name what is distinctive about the option, not just its class ("neurons", "sinuses").
+    const specific = toks.filter((w) => !CLASS_NOUN.test(w) && !POSITION.test(w)),
+      named = toks.filter((w) => !POSITION.test(w));
+    toks = specific.length ? specific : named.length ? named : toks;
+    if (!toks.length) return null;
+    const esc = (w) => w.slice(0, Math.max(5, w.length - 2)).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp("\\b(" + toks.slice(0, 4).map(esc).join("|") + ")");
+  }
+  async function optionVisual(q, o, used, pre, ctx) {
+    const no = norm(o.text),
+      nq = norm(q.stem + " " + (q.chapter || ""));
+    // 1) a look-alike contrast pole that this option names (and not its opposite pole); the contrast must
+    //    fit the QUESTION ("crista galli" must not pull in the inner-ear crista contrast)
+    let tried = 0;
+    for (const c of REG().contrasts) {
+      if (tried >= 2) break;
+      if (!c.frame || !c.frame.test(nq)) continue;
+      const pa = c.a.re.test(no),
+        pb = c.b.re.test(no);
+      if (pa === pb) continue;
+      tried++;
+      const pole = pa ? c.a : c.b;
+      const hit = await sideVisual(pole.re, pole.concept || pre?.concept, used, q, ctx).catch(() => null);
+      if (hit) return { c: hit, how: pole.label };
+    }
+    // 2) the option's own concept, or the question's concept, with a title that names the option
+    const re = optionSideRe(q, o);
+    if (!re) return null;
+    const qConcepts = conceptsForQ(q, lessonForQ(q)).slice(0, 4).map((c) => c.k),
+      oc = detectConcepts(o.text, q.subject)[0],
+      ocHits = oc ? no.match(new RegExp(oc.re.source, "g")) || [] : [],
+      ocOk = oc && (qConcepts.includes(oc.k) || new Set(ocHits).size >= 2 || ocHits.some((h) => h.includes(" ")));
+    const concepts = [...new Set([ocOk ? oc.k : null, pre?.concept, ...qConcepts.slice(0, 2)].filter(Boolean))];
+    for (const k of concepts) {
+      const hit = await sideVisual(re, k, used, q, ctx).catch(() => null);
+      if (hit) return { c: hit, how: "" };
+    }
+    return null;
+  }
+  async function hydrateOptions(box) {
+    if (box.dataset.v14Done) return;
+    box.dataset.v14Done = "1";
+    const q = findQ(box.dataset.v14Opts);
+    if (!q) return;
+    let pre = null;
+    try {
+      pre = await planVisuals(q, "pre");
+    } catch (_) {}
+    const ctx = { intent: pre?.intent || "identify", guard: null, stemTok: guardModel(q).stemT },
+      used = new Set([pre?.primary?.key].filter(Boolean));
+    // images already on screen in this autopsy (correct anchor / look-alike) are not repeated
+    const aut = box.closest(".v14Autopsy");
+    for (let i = 0; aut && i < 40 && aut.querySelector(".v14AutopsyVisual .v14Skeleton"); i++) await new Promise((r) => setTimeout(r, 100));
+    aut?.querySelectorAll(".v14AutopsyVisual [data-v14-vkey]").forEach((a) => used.add(a.dataset.v14Vkey));
+    for (const cell of box.querySelectorAll("[data-v14-opt]")) {
+      const o = (q.options || []).find((x) => x.key === cell.dataset.v14Opt),
+        pic = cell.querySelector(".v14OptPic");
+      if (!o || !pic) continue;
+      const r = await optionVisual(q, o, used, pre, ctx).catch(() => null);
+      if (!box.isConnected) return;
+      if (r && r.c) {
+        used.add(r.c.key);
+        pic.innerHTML = visualCardHTML(r.c, r.how ? r.how.toUpperCase() : "THIS OPTION", "post", "opt");
+        G.note(r.c.key, { concept: r.c.concept, modality: r.c.modality });
+      } else pic.innerHTML = '<div class="v14VisualMissing opt">No trustworthy picture of this exact option. It is a word/number choice, or no licensed image names it.</div>';
+    }
+    attachImgFallback(box);
+  }
+
   /* ───────────────────────── visual hydration (lazy, near viewport) ───────────────────────── */
   let io = null;
   function schedule(el, fn) {
@@ -1342,7 +1440,8 @@
     const intentLabel = (INTENTS[plan.intent] || INTENTS.identify).label;
     let h = "";
     if (plan.source) h += sourceFigureHTML(plan.source);
-    if (plan.primary) {
+    const onScreen = (k) => [...document.querySelectorAll(".v14Visual[data-v14-vkey]")].some((a) => a.dataset.v14Vkey === k && !box.contains(a));
+    if (plan.primary && !(mini && onScreen(plan.primary.key))) {
       h += visualCardHTML(plan.primary, mini ? "SAME ANCHOR" : "SEE IT · " + intentLabel, phase, "v14Main");
       G.note(plan.primary.key, { concept: plan.concept, modality: plan.primary.modality });
     }
@@ -1584,6 +1683,7 @@
     });
     document.querySelectorAll("[data-v14-plan]").forEach((el) => schedule(el, hydratePlan));
     document.querySelectorAll(".v14AutopsyVisual").forEach((el) => schedule(el, hydrateAutopsySide));
+    document.querySelectorAll("[data-v14-opts]").forEach((el) => schedule(el, hydrateOptions));
   }
   function unlockRepair(id) {
     document.querySelectorAll('[data-act="repair"][data-v14-gate="' + CSS.escape(id) + '"]').forEach((b) => {
@@ -1842,6 +1942,8 @@
       audit,
       governor: G,
       visualPlanCount: () => (QB.questions || []).length,
+      optionsGallery: (id, sel, which) => (findQ(id) ? optionsGalleryHTML(findQ(id), sel || "", which || "all") : ""),
+      hydrateOptions: (el) => (el ? hydrateOptions(el) : Promise.resolve()),
     };
 
     document.addEventListener("visibilitychange", () => {

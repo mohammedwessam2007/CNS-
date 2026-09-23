@@ -370,5 +370,5 @@
     PHYSIOLOGY: [{ href: "https://neuroanatomy.ca/", label: "UBC · Functional Neuroanatomy (pathways & lesions)", terms: "CC BY-NC-SA · link only" }],
   };
 
-  window.INTELLECTUALITY_V14_REGISTRY = { version: "14.2", commands, concepts, contrasts, atlas };
+  window.INTELLECTUALITY_V14_REGISTRY = { version: "14.3", commands, concepts, contrasts, atlas };
 })();
