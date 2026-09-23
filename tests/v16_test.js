@@ -161,18 +161,44 @@ function rng(seed) { let x = seed >>> 0; return () => { x ^= x << 13; x >>>= 0; 
     const sealed = await page.evaluate(() => ({ kind: nextAction().kind, pics: document.querySelectorAll('#player figure, #player .v14Visual, #player img').length, explain: document.querySelectorAll('#player .v16Explain, #player .v16Row, #player .v15Note').length, clock: document.querySelector('[data-v16-clock]')?.textContent || '', held: S.v16.mock.ids.every((id) => QB.questions.find((q) => q.id === id).split === 'heldout'), taught: S.v16.mock.ids.every((id) => { const l = INTELLECTUALITY_V16.owner(id); return !l || S.segments && Object.keys(S.segments).some((k) => k.includes(':' + l + ':') && S.segments[k]); }) }));
     check('M6', 'Weekend mock: a sealed, timed exam of held-out past papers from lessons already learned — no pictures, notes or explanations before submission', start.kind === 'V16_MOCK_START' && start.ct === 'WEEKLY_MOCK' && start.n >= 10 && start.n <= 40 && sealed.kind === 'V16_MOCK' && sealed.pics === 0 && sealed.explain === 0 && /⏱ \d+:\d\d left/.test(sealed.clock) && sealed.held && sealed.taught, { start, sealed });
     const R = rng(3);
+    const fw = { asked: 0, leaks: [] };
     for (let i = 0; i < 60; i++) {
       const k = await page.evaluate(() => nextAction().kind);
       if (k !== 'V16_MOCK') break;
+      // firewall: before the answer, nothing from the item's hand-written explanation is on screen
+      const leak = await page.evaluate(() => {
+        const id = document.querySelector('#player [data-v16="mock-pick"]')?.dataset.qid, x = INTELLECTUALITY_V16.explain(id);
+        const txt = document.querySelector('#player')?.innerText || '', clean = (t) => String(t || '').replace(/\*\*/g, '').replace(/\s+/g, ' ').trim();
+        const q = QB.questions.find((z) => z.id === id), own = clean([q?.stem, ...(q?.options || []).map((o) => o.text)].join(' '));
+        const bits = [x?.key, ...Object.values(x?.opt || {})].map(clean).filter((b) => b.length > 25).map((b) => b.slice(0, 40)).filter((b) => !own.includes(b));
+        return { id, has: !!x, hit: bits.filter((b) => txt.replace(/\s+/g, ' ').includes(b)), dom: document.querySelectorAll('#player .v16Why, #player .v16Explain, #player .v16Flag').length };
+      });
+      fw.asked++;
+      if (!leak.has || leak.hit.length || leak.dom) fw.leaks.push(leak);
       const ok = R() < 0.6;
       await page.evaluate((ok) => { const bs = [...document.querySelectorAll('#player [data-v16="mock-pick"]')]; const acc = INTELLECTUALITY_V16.accepted(bs[0].dataset.qid); (bs.find((b) => acc.includes(b.dataset.choice) === ok) || bs[0]).click(); }, ok);
       await page.waitForTimeout(60);
     }
-    const res = await page.evaluate(() => ({ kind: nextAction().kind, revs: document.querySelectorAll('#player .v16Rev').length, rows: document.querySelectorAll('#player .v16Rev .v16Row').length, n: S.v16.mock?.ids.length, pct: document.querySelector('.doneMark')?.textContent }));
+    const res = await page.evaluate(() => ({ kind: nextAction().kind, revs: document.querySelectorAll('#player .v16Rev').length, rows: document.querySelectorAll('#player .v16Rev .v16Row').length, whys: [...document.querySelectorAll('#player .v16Rev')].filter((r) => r.querySelector('.v16Why')).length, n: S.v16.mock?.ids.length, pct: document.querySelector('.doneMark')?.textContent }));
+    check('M6d', 'Held-out firewall: while a mock question is open none of its hand-written explanation is on screen; after submission every mock item shows its own written reason', fw.asked === res.n && fw.leaks.length === 0 && res.whys === res.n, { fw, whys: res.whys, n: res.n });
     await page.evaluate(() => document.querySelector('#player [data-v16="mock-done"]')?.click()); await page.waitForTimeout(300);
     const after = await page.evaluate(() => ({ kind: nextAction().kind, hist: S.mockHistory.filter((m) => m.v16).length, misses: Object.values(S.v16.q).filter((s) => s.x).length, mocks: S.v16.mocks.length }));
     check('M6b', 'After the last answer: score, and every question explained; saving sends every miss into tomorrow\'s changed-question retests and continues to today\'s round', res.kind === 'V16_MOCK_RESULT' && res.revs === res.n && res.rows >= res.n * 3 && after.hist === 1 && after.mocks === 1 && after.misses >= 1 && ['V16_ROUND', 'STOP'].includes(after.kind), { res, after });
     check('M6c', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
+    await s.close();
+  }
+
+  // ── M10: every usable past paper has a written explanation; options the source PDF glued together are shown apart ──
+  {
+    const s = await open({ v16: true, time: '2026-09-23T10:00:00+03:00', state: null, settle: 1500 });
+    const r = await s.page.evaluate(() => {
+      const c = INTELLECTUALITY_V16.counts(), V = INTELLECTUALITY_V16;
+      const glued = ['EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-2', 'EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-7', 'EHSAN-ANAT-CRANIAL-CAVITY-MCQ-18', 'EHSAN-ANAT-ORBIT-MCQ-6'].map((id) => ({ id, n: V.options(id).length, keys: V.options(id).map((o) => o.key).join(''), glue: V.options(id).some((o) => /(^|\s)[a-f]\u00b7\s/.test(o.text)), bank: QB.questions.find((q) => q.id === id).options.length }));
+      const plain = V.options('EHSAN-ANAT-SPINAL-CORD-MCQ-3');
+      return { c, glued, plainSame: JSON.stringify(plain) === JSON.stringify(QB.questions.find((q) => q.id === 'EHSAN-ANAT-SPINAL-CORD-MCQ-3').options.map((o) => ({ key: o.key, text: o.text }))) };
+    });
+    check('M10', 'Every usable past paper (practice and held-out) has a hand-written explanation; the 4 options the source PDF glued together are shown as separate a–d options (bank unchanged); ordinary items are untouched', r.c.explained === r.c.practice && r.c.heldExplained === r.c.heldout && r.c.heldout >= 399 && r.glued.every((g) => g.n === 4 && g.keys === 'abcd' && !g.glue && g.bank === 3) && r.plainSame, r);
+    check('M10b', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
     await s.close();
   }
 

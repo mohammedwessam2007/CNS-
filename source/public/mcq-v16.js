@@ -172,11 +172,31 @@
   function accepted(q) {
     const s = new Set(q.answerKeys || []),
       x = explain(q);
-    if (x?.flag && q.options.some((o) => o.key === x.flag.k)) s.add(x.flag.k);
-    for (const a of x?.also || []) if (q.options.some((o) => o.key === a.k)) s.add(a.k);
+    if (x?.flag && opts(q).some((o) => o.key === x.flag.k)) s.add(x.flag.k);
+    for (const a of x?.also || []) if (opts(q).some((o) => o.key === a.k)) s.add(a.k);
     return s;
   }
-  const optText = (q, k) => q.options.find((o) => o.key === k)?.text || k;
+  // The source PDF glued a few options together ("c) Lacerum. d· rotundum."). Show them as separate
+  // options here; the bank itself is not changed. Only a "letter·" that continues the a-b-c-d order splits.
+  const OPX = new Map();
+  function opts(q) {
+    if (OPX.has(q.id)) return OPX.get(q.id);
+    const out = [];
+    for (const o of q.options || []) {
+      const parts = String(o.text).split(/\s+(?=[a-f]\u00b7\s)/);
+      out.push({ key: o.key, text: parts[0] });
+      for (const extra of parts.slice(1)) {
+        const k = extra[0],
+          next = String.fromCharCode(out[out.length - 1].key.charCodeAt(0) + 1);
+        if (k === next && !(q.options || []).some((x) => x.key === k)) out.push({ key: k, text: extra.slice(2).trim() });
+        else out[out.length - 1].text += " " + extra;
+      }
+    }
+    out.sort((a, b) => a.key.localeCompare(b.key));
+    OPX.set(q.id, out);
+    return out;
+  }
+  const optText = (q, k) => opts(q).find((o) => o.key === k)?.text || k;
 
   /* ───────────────────────── spaced repetition ───────────────────────── */
   // res: "c" correct and sure, "u" correct but unsure, "w" wrong
@@ -648,7 +668,7 @@
     const x = explain(q),
       keys = new Set(q.answerKeys || []),
       acc = accepted(q),
-      rows = q.options
+      rows = opts(q)
         .map((o) => {
           const isKey = keys.has(o.key),
             isStd = !isKey && acc.has(o.key),
@@ -690,7 +710,7 @@
     const vis = q.visualData && typeof sourceVisual === "function" ? safe(() => sourceVisual(q), "") : "";
     let h = sourceBits(q) + vis + '<h3 class="v16Stem">' + E(q.stem) + "</h3>";
     if (!c) {
-      h += '<div class="v16Opts">' + q.options.map((o) => '<button class="v16Opt" data-v16="pick" data-qid="' + E(q.id) + '" data-choice="' + E(o.key) + '"><span class="v16L">' + E(o.key.toUpperCase()) + "</span><span>" + E(o.text) + "</span></button>").join("") + "</div>";
+      h += '<div class="v16Opts">' + opts(q).map((o) => '<button class="v16Opt" data-v16="pick" data-qid="' + E(q.id) + '" data-choice="' + E(o.key) + '"><span class="v16L">' + E(o.key.toUpperCase()) + "</span><span>" + E(o.text) + "</span></button>").join("") + "</div>";
     } else {
       h += '<div class="v16Verdict ' + (c.ok ? "good" : "bad") + '">' + (c.ok ? '✓ <span lang="ar" dir="rtl">صح</span> Correct' : '✗ <span lang="ar" dir="rtl">غلط</span> Not this one') + "</div>";
       h += explainHTML(q, c.sel);
@@ -762,7 +782,7 @@
       '<div class="v16Src"><span>' + E(q.subject) + "</span><span>" + E(q.chapter) + "</span></div>" +
       (q.visualData && typeof sourceVisual === "function" ? safe(() => sourceVisual(q), "") : "") +
       '<h3 class="v16Stem">' + E(q.stem) + "</h3>" +
-      '<div class="v16Opts">' + q.options.map((o) => '<button class="v16Opt" data-v16="mock-pick" data-qid="' + E(q.id) + '" data-choice="' + E(o.key) + '"><span class="v16L">' + E(o.key.toUpperCase()) + "</span><span>" + E(o.text) + "</span></button>").join("") + "</div></div>"
+      '<div class="v16Opts">' + opts(q).map((o) => '<button class="v16Opt" data-v16="mock-pick" data-qid="' + E(q.id) + '" data-choice="' + E(o.key) + '"><span class="v16L">' + E(o.key.toUpperCase()) + "</span><span>" + E(o.text) + "</span></button>").join("") + "</div></div>"
     );
   }
   function mockResultView() {
@@ -810,7 +830,7 @@
       a = safe(() => nextAction(), null);
     if (!a || (a.kind !== "V16_BLOCK" && a.kind !== "V16_ROUND") || v.cur) return false;
     const q = qget(a.kind === "V16_BLOCK" ? a.b.ids[a.b.i] : a.r.ids[a.r.i]);
-    if (!q || !q.options.some((o) => o.key === choice)) return false;
+    if (!q || !opts(q).some((o) => o.key === choice)) return false;
     const ctx = a.kind === "V16_BLOCK" ? "b" : "r",
       res = answer(q, choice, ctx);
     v.cur = { id: q.id, sel: choice, ok: res.ok, prev: res.prev, t: res.t, ctx, block: ctx === "b" ? lkey(a.d, a.l) : null, day: a.d.day };
@@ -824,7 +844,7 @@
     const m = V().mock;
     if (!m || m.done) return false;
     const q = qget(m.ids[m.i]);
-    if (!q || !q.options.some((o) => o.key === choice)) return false;
+    if (!q || !opts(q).some((o) => o.key === choice)) return false;
     const res = answer(q, choice, "m");
     m.ans[q.id] = { sel: choice, ok: res.ok };
     m.i++;
@@ -990,6 +1010,7 @@
       },
       explain: (id) => (qget(id) ? explain(qget(id)) : null),
       accepted: (id) => (qget(id) ? [...accepted(qget(id))] : []),
+      options: (id) => (qget(id) ? opts(qget(id)).map((o) => ({ ...o })) : null),
       owner: (id) => (qget(id) ? owner(qget(id)) : null),
       state: (id) => V().q[id] || null,
       stats,
