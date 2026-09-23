@@ -33,7 +33,8 @@ if (process.env.PICS !== "0") {
       registrySources: await Promise.all(["visual-registry-v14.js", "real-visuals-v9.js"].map((n) => readFile(new URL(n, SRC), "utf8"))),
       bases: { wp: process.env.PICS_WP, wrest: process.env.PICS_WREST, commons: process.env.PICS_COMMONS },
       cacheDir: here("./node_modules/.cache/intellectuality-pics/"),
-      maxMinutes: +(process.env.PICS_MINUTES || 9),
+      maxMinutes: +(process.env.PICS_MINUTES || 7),
+      graceMs: +(process.env.PICS_GRACE_S || 60) * 1000,
     });
   } catch (e) {
     console.log("[pics] skipped:", e.message);
@@ -57,3 +58,5 @@ const info = {
 };
 await writeFile(new URL("build-info.json", OUT), JSON.stringify(info, null, 1));
 console.log("[build] dist ready", info);
+// requests the picture watchdog left behind must not keep the build open
+process.exit(0);

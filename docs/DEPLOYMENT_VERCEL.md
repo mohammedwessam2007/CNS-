@@ -1,8 +1,8 @@
-# Deployment: Vercel host (v15.0)
+# Deployment: Vercel host (v15.1)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.0 · LEARN FIRST") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.1 · LEARN FIRST") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
 | Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, commit `5f9288b`; root directory `deploy/vercel` |
 | Deployment | `dpl_5VVHU6ySd6Ureg2WweAe9d3h3Uqf`: **READY**, production, functions in `fra1` (Frankfurt) |
@@ -15,6 +15,15 @@
 
 - `api/state.js`: the same contract as the Hatchable `/api/state` (GET, POST, `baseVersion`, 409 conflict, 413 size cap). Progress is stored in **one private Vercel Blob per learner** at `learners/<sha256(code)>.json`, with `ifMatch` concurrency. Without a store it answers `503 cloud_not_configured`.
 - `api/vision.js`: `503 vision_unavailable_on_this_host`. Professor Vision needs the Hatchable AI connection; everything else works.
+
+## Pictures bundled at build time (v15.1)
+
+`build.mjs` runs `pics.mjs`, which downloads a real, freely licensed Wikimedia picture for every exact note term, plus every fixed v9/v14 registry file, into `dist/pics/`. It writes `dist/pics/manifest.json` and `manifest.js` and injects one `<script defer src="/pics/manifest.js">` tag before `learn-v15.js`. The app then shows those pictures from its own domain, with no links. The build log prints every `[pics] term → File · licence · via · score` choice and a summary line. `build-info.json` carries the same counts under `pictures`.
+
+- Fail-soft: without network, or when every request is refused, the build still succeeds, no tag is injected, and the app uses the live lookup.
+- Limits: 7 minutes (`PICS_MINUTES`) plus a 45 s hard stop and 160 MB. Six requests run in parallel with a descriptive User-Agent. 429 and 5xx responses are retried with backoff.
+- `PICS=0` turns bundling off. `PICS_WP`, `PICS_WREST` and `PICS_COMMONS` point the build at another endpoint; the tests use `tests/pics_mock_server.js`, started by `IX_PICS_MOCK=1 bash tests/host_ctl.sh start`.
+- Cache: `node_modules/.cache/intellectuality-pics/` (kept by Vercel between builds).
 
 ## Saving progress
 

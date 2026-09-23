@@ -1,0 +1,61 @@
+PASS A1    Fresh state on Sep 22: real date + first-run catch-up label, no fake date  · {"chip":"TODAY · TUE 22 SEP · FIRST-RUN CATCH-UP","ey":"DAY 1/148 · FOUNDATION · WORK MON 21 SEP · TODAY TUE 22 SEP","banner":"FIRST-RUN CATCH-UP · REAL DATE KEPT\nToday is Tue 22 Sep. The course plan began Mon 21 Sep; y
+PASS A0    Sep 21 (course day 1): chip is plain real date  · TODAY · MON 21 SEP
+PASS A2    Sep 22 00:01 with Day-1 partial: "1 DAY CARRYOVER" + deliberate carryover banner, work kept  · {"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER","banner":"CARRYOVER · REAL DATE KEPT\nToday is Tue 22 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately. ~133 planned min in unfinished Day 1 steps.","da
+PASS A3    Midnight rollover re-evaluates without reload (23:59 → 00:01)  · {"before":"TODAY · MON 21 SEP","after":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"}
+PASS A4    Sep 22 with Day-1 complete: auto-advance to Day 2, plain real date  · {"chip":"TODAY · TUE 22 SEP","day":2,"done":[1],"banner":false}
+PASS A5    Sep 23 after Day-2 partial: "TODAY · WED 23 SEP · 1 DAY CARRYOVER" (Tue 22 Sep work)  · {"chip":"TODAY · WED 23 SEP · 1 DAY CARRYOVER","day":2,"banner":"CARRYOVER · REAL DATE KEPT\nToday is Wed 23 Sep. This is unfinished Tue 22 Sep work, carried forward deliberately. ~130 planned min in unfinished Day 2 ste
+PASS A6    Ahead state: labeled AHEAD, never regresses  · {"chip":"TODAY · TUE 22 SEP · 1 DAY AHEAD","day":3}
+PASS A7    Cairo date is used even when the device timezone is UTC  · TODAY · TUE 22 SEP · 1 DAY CARRYOVER
+PASS B1    Fresh learner: fast lane absent and ineligible on the teach step  · {"fast":false,"learn":true,"sections":4,"pics":2,"recall":true,"mcq":0,"canFast":false}
+PASS B2    Teach step is the LEARN lecture (notes + exact-term pictures + no-options recall), with no MCQ options on it  · {"fast":false,"learn":true,"sections":4,"pics":2,"recall":true,"mcq":0,"canFast":false}
+PASS K1    Teach screen: v10 companions capped (≤3 images), no duplicate image or teacher card  · {"n":0,"uniq":0,"vids":[]}
+PASS B3    Practice MCQ: options locked behind the understanding primer  · {"primer":true,"opts":0,"gate":"أنا شايفها → هات السؤالI CAN PICTURE IT → ASK ME THE MCQ","cmd":"كوّن الصورة","vis":2,"caption":0,"steps":["1 · SEE IT · كوّن الصورة","2 · UNDERSTAND IT","3 · BUILD THE MOVIE","4 · EXAM CO
+PASS B4    Primer structure: SEE IT → UNDERSTAND IT → BUILD THE MOVIE → EXAM CONVERSION + one Egyptian command  · {"primer":true,"opts":0,"gate":"أنا شايفها → هات السؤالI CAN PICTURE IT → ASK ME THE MCQ","cmd":"كوّن الصورة","vis":2,"caption":0,"steps":["1 · SEE IT · كوّن الصورة","2 · UNDERSTAND IT","3 · BUILD THE MOVIE","4 · EXAM CO
+PASS B5    Primer shows ≥1 real visual with neutral (title-hidden) caption pre-answer  · {"primer":true,"opts":0,"gate":"أنا شايفها → هات السؤالI CAN PICTURE IT → ASK ME THE MCQ","cmd":"كوّن الصورة","vis":2,"caption":0,"steps":["1 · SEE IT · كوّن الصورة","2 · UNDERSTAND IT","3 · BUILD THE MOVIE","4 · EXAM CO
+PASS B6    No pre-answer Commons query contains key-distinctive words  · {"guard":["filum","terminale","lower","back","coccyx"],"leakQ":[]}
+PASS B7    Gate reveals the exact source stem/options/keys (byte-for-byte) with confidence capture  · {"stemOk":true,"optsOk":true,"conf":3}
+PASS C1    Correct answer: same item stays with "why it makes sense" (no silent swap to a new question)  · {"sameQ":true,"why":true,"key":["d"],"pinned":true,"ev":1,"pred":"Your prediction: my guess"}
+PASS C2    v12 evidence increments on a source answer  · {"before":0,"after":1}
+PASS C2b   Learner prediction is echoed after answering  · Your prediction: my guess
+PASS C3    NEXT completes the segment and moves to the other question slot (no loop)  · {"q1":"EHSAN-ANAT-SPINAL-CORD-MCQ-14","q2":{"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-6","keys":["c"],"opts":["a","b","c","d"],"stem":"In newborns, conus medullaris lies opposite the","subject":"ANATOMY","lesson":"T001","slot":1,
+PASS C4    Guess-correct is treated as weak evidence (extra explanation)  · {"guess":true,"why":true}
+PASS C5    v13 Learning Twin ingests the evidence; v14 ledger attributes visual/command/depth  · {"twinEv":2,"ledger":2,"mod":{"sec":{"n":1,"ok":1},"spe":{"n":1,"ok":1}},"cmd":{"build":{"n":2,"ok":2}}}
+PASS N0    No page errors during fresh + correct flow  · []
+PASS D1    Confident wrong → REPAIR with error genome "confident misconception"  · {"kind":"REPAIR","autopsy":true,"choice":"a","head":"ليه إجابتك غلط بصريًا؟","diff":"Picture the cord tip, then what hangs below it. Filum terminale: the pial thread continuing from the conus down to the coccyx. Conus me
+PASS D2    Visual autopsy maps the selected option (data + text) and shows الفرق الفاصل + command  · {"kind":"REPAIR","autopsy":true,"choice":"a","head":"ليه إجابتك غلط بصريًا؟","diff":"Picture the cord tip, then what hangs below it. Filum terminale: the pial thread continuing from the conus down to the coccyx. Conus me
+PASS D3    Repair is gated behind a no-options reconstruction; topic wallpaper suppressed  · {"kind":"REPAIR","autopsy":true,"choice":"a","head":"ليه إجابتك غلط بصريًا؟","diff":"Picture the cord tip, then what hangs below it. Filum terminale: the pial thread continuing from the conus down to the coccyx. Conus me
+PASS D3b   Autopsy sides hydrate (visual or honest note), no wallpaper companions; autopsy → reconstruction → button order  · {"skeletons":0,"companions":0,"order":true,"wrongSide":"YOUR CHOICE · CONUS MEDULLARIS · LABELED DIAGRAM\nConus medullaris labeled diagram\nCC BY-SA 4.0 · Mock Author · Wikipedia"}
+PASS D4    Blocked until reconstruction typed; typing unlocks  · {"still":"REPAIR","unlocked":true}
+PASS D5    Changed source retest: practice split, different stem, not a near-duplicate, stable across renders  · {"rt":{"kind":"RETEST","qid":"EHSAN-ANAT-SPINAL-CORD-MCQ-10","chip":"CHANGED SOURCE RETEST"},"rtq":{"split":"practice","sameStem":false,"near":false,"chapter":true}}
+PASS E1    Second miss → another targeted visual repair on the retest item; gate re-armed  · {"kind":"REPAIR","autopsyQ":"EHSAN-ANAT-SPINAL-CORD-MCQ-10","disabled":true}
+PASS E2    Repair loop guard: after 3 changed misses the error is parked to spaced repair (no infinite loop)  · {"kind":"FATIGUE_RESET","parked":1,"notice":"PARKED FOR SPACED REPAIR\nSpinal cord I: three changed items in a row still missed. More drilling now has low yield — it returns as spaced repair tomorrow.","unresolved":0}
+PASS N1    No page errors during wrong/autopsy/retest flow  · []
+PASS J1    Held-out mock item: no primer, no cue, no companion/answer image, confidence kept  · {"primer":false,"cmd":false,"comp":0,"vis":0,"conf":3,"opts":4,"banner":false}
+PASS J2    Mock uses held-out split only and excludes the 60 leak-audited items  · {"items":5,"leaked":[]}
+PASS J3    No Commons query built from the held-out key  · []
+PASS J4    Post-submission: visual autopsy for the consumed miss only  · {"autopsies":1,"result":true}
+PASS J5    Mock miss repair retests on a practice item, never a future held-out item  · {"e":{"src":"EHSAN-ANAT-SPINAL-CORD-MCQ-21","kind":"REPAIR"},"rq":{"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-20","split":"practice"}}
+PASS N2    No page errors during mock flow  · []
+PASS F1    Histology items route to طلّع شبيهه برّه / فرّق النسيج  · ["طلّع شبيهه برّه · Regarding the peripheral nerve","طلّع شبيهه برّه · Regarding degeneration of nerves, which answer is correct?","طلّع شبيهه برّه · Unmyelinated nerve fibers with Schwann cells are found in","طلّع شبيهه
+PASS G1    Tract items route to امشي المسار  · ["امشي المسار · Axons of the lateral corticospinal tract synapse mainly with","امشي المسار · Decussation of internal arcuate fibres takes place in","امشي المسار · Trigeminal lemniscus is present in"]
+PASS H1    Lesion items route to حدّد الإصابة  · ["حدّد الإصابة · Patient came to ER with LMNL of the hypoglossal nerve on the right sid","حدّد الإصابة · In case of right corticonuclear tract injury above the level of the mo","حدّد الإصابة · Lesion of the internal caps
+PASS I1    Physiology mechanism items route to شغّل الميكانيزم / perturb / receptor start  · ["شغّل الميكانيزم · The Release of neurotransmitters at a chemical synapse in the CNS is d","مين بدأ؟ · Action potentials recorded after stimulation of thermal receptors show","مين بدأ؟ · Which of the following is correc
+PASS K2    Visual-diversity engine (mocked Commons, 60 items): exact repeat <10%, adjacent 0  · {"n":60,"primaryCoveragePct":98.3,"uniqueVisualPct":100,"exactRepeatPct":0,"adjacentRepeatPct":0,"noVisualPct":1.7,"irrelevantPct":"requires human review of rows[].primary"}
+PASS L1    Network concurrency cap: ≤2 Commons requests in flight (all layers share one queue)  · {"maxInFlight":1,"requests":56}
+PASS L2    Re-running INTELLECTUALITY_V14_INIT does not double-wrap  · true
+PASS L3    Cloud payload bounded (S < 1.5 MB API cap, v14 slice small)  · {"S":27150,"v14":1411}
+PASS N3    No page errors in engine/perf probes  · []
+PASS L4    Cold load does not prefetch the question bank visuals (Commons requests on first screen ≤ 12)  · {"commonsOnLoad":0}
+PASS M-iphoneResponsive 390×844: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":390,"iw":390,"ok":true},"o2":{"sw":390,"iw":390,"ok":true},"o3":{"sw":390,"iw":390,"ok":true},"tap":67.296875}
+PASS M-ipad-portraitResponsive 820×1180: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":820,"iw":820,"ok":true},"o2":{"sw":820,"iw":820,"ok":true},"o3":{"sw":820,"iw":820,"ok":true},"tap":67.296875}
+PASS M-ipad-pro-portraitResponsive 1024×1366: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":1024,"iw":1024,"ok":true},"o2":{"sw":1024,"iw":1024,"ok":true},"o3":{"sw":1024,"iw":1024,"ok":true},"tap":67.296875}
+PASS M-ipad-landscapeResponsive 1180×820: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":1180,"iw":1180,"ok":true},"o2":{"sw":1180,"iw":1180,"ok":true},"o3":{"sw":1180,"iw":1180,"ok":true},"tap":67.296875}
+PASS N4    v9 real visual bank, v11 shell, v12 brain, v13 twin, content integrity gate, Resume learning  · {"v9":true,"v11":true,"v12":true,"v13":true,"integrity":true,"resume":"Resume learning"}
+PASS N5    Autopilot brain drawer (v12 + v13 addon) still opens  · true
+PASS N6    Written wave, practical wave, weekly mock, retention bridge and commute views render  · {"WRITTEN_WAVE":true,"PRACTICAL_WAVE":true,"WEEKLY_MOCK":true,"RETENTION_BRIDGE":true,"commute":true}
+PASS N7    No page errors on cold load + drawers  · []
+PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":1,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.507Z"},"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"}
+PASS N8    No page errors on legacy migration  · []
+PASS L6    Remote image host down: primer text + gate still work; pictures bundled in the app still show, otherwise an honest no-visual state  · {"primer":true,"model":188,"missing":false,"gate":true,"bundled":1,"remote":0}
+PASS N9    No page errors when Commons is unreachable  · []
+60/60 checks passed (89s)

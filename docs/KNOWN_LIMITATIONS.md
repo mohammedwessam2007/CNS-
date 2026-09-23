@@ -1,12 +1,13 @@
-# Known Limitations (v15.0)
+# Known Limitations (v15.1)
 
-v15.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+v15.1 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
 
 ## 0. v15 LEARN notes and exact-words pictures
 
 - **Notes are author-written and unreviewed by a clinician.** The 240 sections follow standard teaching (Snell/Guyton/Junqueira level) and were checked against the practice answer keys (90.8% of practice answers are taught). They cover 65.3% of held-out answers by the same lexical rule.
 - **About 15 bank keys look wrong or contradict each other.** The notes teach the correct fact and name the key with ⚠; the bank itself is unchanged, so the app still scores those items by the bank's key.
-- **Live pictures are unverified.** The build sandbox's network policy blocks en.wikipedia.org, commons.wikimedia.org and upload.wikimedia.org, so the exact-term engine was tested only against mocks. On the iPad, pictures load live from Wikipedia/Commons. Where an article's image is off, the "search everywhere" links give the owner Google Images, Radiopaedia and Kenhub for the same words.
+- **Picture choices were made by rules, not by eye.** Since v15.1 the pictures are downloaded into the app at build time on Vercel, so they show on the iPad with no links and no live lookup. The development sandbox's network policy blocks en.wikipedia.org, commons.wikimedia.org and upload.wikimedia.org, so I could not look at the real images. The rules were tested against a local stand-in, and every choice is listed in `/pics/manifest.json` and in the build log. The search-everywhere links were removed at the owner's request, so a poor choice is fixed by changing the term in the notes, not by a link.
+- **No offline cache.** Bundled pictures come from the app's own domain. A page never opened before still needs a connection (there is no service worker).
 - **Pictures for options exist only for curated terms** (425 terms from the notes). About a third of options have one; the rest use the v14 look-alike logic or say that no trustworthy picture exists.
 - **Longer lessons.** Each teach step is now a real lecture (about 3–15 min).
 

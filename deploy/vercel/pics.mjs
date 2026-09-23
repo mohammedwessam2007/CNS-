@@ -69,26 +69,43 @@ function scoreFile(file, caption, lead, want, subject, clinical) {
   return s;
 }
 
-export async function bundlePictures({ outDir, noteSources, registrySources = [], cacheDir = null, fetchImpl = fetch, bases = {}, maxMinutes = 9, maxMB = 160, concurrency = 6, log = console.log }) {
+export async function bundlePictures({ outDir, noteSources, registrySources = [], cacheDir = null, fetchImpl = fetch, bases = {}, maxMinutes = 7, graceMs = 60e3, maxMB = 160, concurrency = 6, log = console.log }) {
   const WP = (bases.wp || "https://en.wikipedia.org/w/api.php") + "?format=json&formatversion=2&";
   const WREST = (bases.wrest || "https://en.wikipedia.org/api/rest_v1/page/media-list/");
   const CAPI = (bases.commons || "https://commons.wikimedia.org/w/api.php") + "?format=json&";
-  const deadline = Date.now() + maxMinutes * 60e3;
+  const t0 = Date.now(),
+    deadline = t0 + maxMinutes * 60e3;
   const terms = collectTerms(noteSources);
   const picsDir = new URL("pics/", outDir);
   await mkdir(picsDir, { recursive: true });
+  // Decision cache (kept by Vercel between builds): a term whose notes context is unchanged reuses
+  // its chosen file for 14 days, so repeat builds ask Wikimedia almost nothing.
+  const DEC_TTL = 14 * 864e5;
+  let decisions = {};
+  if (cacheDir)
+    try {
+      decisions = JSON.parse(await readFile(new URL("decisions.json", cacheDir), "utf8")) || {};
+    } catch (_) {}
+  const fkey = (e) => e.subject + "|" + [...e.focus].sort().join(" ");
+  const decide = (k, fk, x) => (decisions[k] = { at: Date.now(), fk, ...(x || {}) });
+  const freshDecision = (k, fk) => {
+    const d = decisions[k];
+    return d && d.meta && d.fk === fk && Date.now() - d.at < DEC_TTL ? d : null;
+  };
+  let fromCache = 0;
   let netFails = 0,
     netOk = 0,
     tripped = false;
   async function get(url, as = "json") {
     if (tripped) throw new Error("breaker");
-    for (let attempt = 0; attempt < 3; attempt++) {
+    if (Date.now() > deadline + Math.min(45e3, graceMs)) throw new Error("deadline");
+    for (let attempt = 0; attempt < 2; attempt++) {
       const ac = new AbortController(),
-        t = setTimeout(() => ac.abort(), 15000);
+        t = setTimeout(() => ac.abort(), 12000);
       try {
         const r = await fetchImpl(url, { headers: { "User-Agent": UA, "Api-User-Agent": UA }, signal: ac.signal });
         if (r.status === 429 || r.status >= 500) {
-          const ra = Math.min(20, +r.headers.get("retry-after") || 0);
+          const ra = Math.min(8, +r.headers.get("retry-after") || 0);
           if (ra) await new Promise((res) => setTimeout(res, ra * 1000));
           throw new Error("http_" + r.status);
         }
@@ -172,11 +189,14 @@ export async function bundlePictures({ outDir, noteSources, registrySources = []
         chosen = ranked.find((c) => info[c.file] && OKMIME.test(info[c.file].mime) && Math.min(info[c.file].w, info[c.file].h) >= 180);
       }
     }
-    if (!chosen) return null;
+    if (!chosen) return null; // "nothing found" is not cached: it is re-asked next build
     const meta = info[chosen.file];
-    const f = await download(meta);
+    return finish(decide(e.term, fkey(e), { meta, cap: String(chosen.cap || meta.desc || "").slice(0, 200), via: chosen.via, score: +chosen.s.toFixed(1) }));
+  }
+  async function finish(d) {
+    const f = await download(d.meta);
     if (!f) return null;
-    return { src: f.src, title: meta.title, license: meta.license, artist: meta.artist, caption: String(chosen.cap || meta.desc || "").slice(0, 200), via: chosen.via, score: +chosen.s.toFixed(1) };
+    return { src: f.src, title: d.meta.title, license: d.meta.license, artist: d.meta.artist, caption: d.cap, via: d.via, score: d.score };
   }
   // One download per Commons file, shared by every term/registry entry that uses it.
   const files = {},
@@ -208,7 +228,6 @@ export async function bundlePictures({ outDir, noteSources, registrySources = []
   const out = {},
     missing = [];
   let i = 0;
-  const t0 = Date.now();
   async function worker() {
     while (i < terms.length) {
       const e = terms[i++];
@@ -217,7 +236,10 @@ export async function bundlePictures({ outDir, noteSources, registrySources = []
         continue;
       }
       try {
-        const r = await pick(e);
+        const d = freshDecision(e.term, fkey(e));
+        if (d) fromCache++;
+        const r = d ? await finish(d) : await pick(e);
+        if (i % 50 === 0) log("[pics] progress " + i + "/" + terms.length + " · " + Object.keys(out).length + " bundled · " + Math.round((Date.now() - t0) / 1000) + " s");
         if (r) {
           out[e.term] = r;
           log("[pics] " + e.term + " → " + r.title + " · " + (r.license || "?") + " · " + r.via + " · s=" + r.score);
@@ -230,22 +252,44 @@ export async function bundlePictures({ outDir, noteSources, registrySources = []
       }
     }
   }
-  await Promise.all(Array.from({ length: concurrency }, worker));
+  // Watchdog: whatever is still in flight at the hard stop is left out; the build never waits longer.
+  let stopped = false;
+  const hardStop = (ms) =>
+    new Promise((res) => {
+      const t = setTimeout(() => ((stopped = true), res()), Math.max(0, ms));
+      t.unref?.();
+    });
+  const stopAt = t0 + maxMinutes * 60e3 + graceMs;
+  await Promise.race([Promise.all(Array.from({ length: concurrency }, worker)), hardStop(stopAt - Date.now())]);
   // Registry files (the fixed topic pictures of v9/v14): same Commons check, 40 titles per request.
   const reg = collectRegistryFiles(registrySources);
   let regOk = 0;
-  for (let k = 0; k < reg.length && !tripped && Date.now() < deadline; k += 40) {
+  await Promise.race([bundleRegistry(), hardStop(stopAt - Date.now())]);
+  async function bundleRegistry() {
+  const regCached = reg.map((t) => freshDecision("file:" + t, "registry")).filter(Boolean);
+  for (let j = 0; j < regCached.length; j += concurrency) regOk += (await Promise.all(regCached.slice(j, j + concurrency).map((d) => download(d.meta)))).filter(Boolean).length;
+  const regTodo = reg.filter((t) => !freshDecision("file:" + t, "registry"));
+  for (let k = 0; k < regTodo.length && !tripped && Date.now() < deadline; k += 40) {
     try {
-      const info = await commonsInfo(reg.slice(k, k + 40));
+      const batch = regTodo.slice(k, k + 40),
+        info = await commonsInfo(batch);
+      for (const t of batch) if (info[t] && OKMIME.test(info[t].mime)) decide("file:" + t, "registry", { meta: info[t] });
       const metas = [...new Set(Object.values(info))].filter((m) => OKMIME.test(m.mime));
       for (let j = 0; j < metas.length; j += concurrency) regOk += (await Promise.all(metas.slice(j, j + concurrency).map(download))).filter(Boolean).length;
     } catch (_) {}
   }
-  const manifest = { version: "15.1", builtAt: new Date().toISOString(), terms: out, files, missing, stats: { terms: terms.length, bundled: Object.keys(out).length, missing: missing.length, registryFiles: reg.length, registryBundled: regOk, images: Object.keys(files).length, megabytes: +(bytes / 1048576).toFixed(1), seconds: Math.round((Date.now() - t0) / 1000), networkTripped: tripped } };
+  }
+  if (cacheDir)
+    try {
+      await mkdir(cacheDir, { recursive: true });
+      await writeFile(new URL("decisions.json", cacheDir), JSON.stringify(decisions));
+    } catch (_) {}
+  missing.splice(0, missing.length, ...terms.filter((e) => !out[e.term]).map((e) => e.term));
+  const manifest = { version: "15.1", builtAt: new Date().toISOString(), terms: out, files, missing, stats: { terms: terms.length, bundled: Object.keys(out).length, fromCache, missing: missing.length, registryFiles: reg.length, registryBundled: regOk, images: Object.keys(files).length, megabytes: +(bytes / 1048576).toFixed(1), seconds: Math.round((Date.now() - t0) / 1000), networkTripped: tripped, watchdogStopped: stopped } };
   await writeFile(new URL("manifest.json", picsDir), JSON.stringify(manifest));
   await writeFile(new URL("manifest.js", picsDir), "window.INTELLECTUALITY_PICS=" + JSON.stringify({ terms: out, files, stats: manifest.stats }) + ";\n");
   log("[pics] bundled " + manifest.stats.bundled + "/" + terms.length + " terms + " + regOk + "/" + reg.length + " registry files = " + manifest.stats.images + " images, " + manifest.stats.megabytes + " MB, " + manifest.stats.seconds + " s" + (tripped ? " (network unreachable: app falls back to live lookup)" : ""));
-  if (missing.length) log("[pics] missing: " + missing.join(" | "));
+  if (missing.length) log("[pics] missing " + missing.length + ": " + missing.slice(0, 40).join(" | ") + (missing.length > 40 ? " | …" : ""));
   return manifest;
 }
 
