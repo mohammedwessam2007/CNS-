@@ -1,11 +1,11 @@
-/* INTELLECTUALITY service worker (v15.3): the app keeps working without internet.
+/* INTELLECTUALITY service worker (v15.3; cache name bumped for v16): the app keeps working without internet.
  * - Pages, scripts, styles, notes: NETWORK FIRST, so a new deploy is always picked up; the last
  *   good copy is served when offline.
  * - Bundled pictures (/pics/<hash>.<ext>, content-addressed, never change): CACHE FIRST.
  * - The page can ask for the next days' pictures to be fetched ahead ({type: "precache", urls}).
  * - /api/* (cloud save) and every other origin are never touched.
  */
-const SHELL = "ix-shell-15.3";
+const SHELL = "ix-shell-16.0";
 const PICS = "ix-pics";
 const IMMUTABLE = /^\/pics\/[0-9a-f]{14}\.(png|jpe?g|svg|webp|gif)$/;
 
