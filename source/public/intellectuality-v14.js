@@ -962,16 +962,20 @@
     return '<figure class="v14Visual v14Src"><span class="v14Img"><img src="' + E(src.src) + '" alt="Actual source-bank figure" loading="lazy"></span><span class="v14Cap"><b>ACTUAL SOURCE-BANK FIGURE</b><small>' + E(src.file || "Ketab al Qesm") + " · p." + E(src.page || "—") + "</small></span></figure>";
   }
   const MENINGES_Q = new Set(["EHSAN-ANAT-SPINAL-CORD-MCQ-20", "EHSAN-ANAT-SPINAL-CORD-MCQ-24"]);
-  const CONUS_Q = new Set([1, 2, 3, 5, 9, 10, 12, 17, 26].map((n) => "EHSAN-ANAT-SPINAL-CORD-MCQ-" + n));
-  function conusMapHTML(compact = false) {
+  const CONUS_Q = new Set([1, 2, 3, 5, 6, 9, 10, 12, 17, 26].map((n) => "EHSAN-ANAT-SPINAL-CORD-MCQ-" + n));
+  function conusMapHTML(compact = false, q = null) {
+    if (q?.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-6") return '<div class="v14ConusMap' + (compact ? ' compact' : '') + '" role="img" aria-label="Source-bank age comparison: in adults the conus usually ends around L1 to L2; for the newborn question the historical source key is L3. Neonatal levels vary across studies, so this is an exam-key comparison, not a clinical landmark.">' +
+      '<div class="v14ConusRow"><b>ADULT</b><span>CONUS · AROUND L1–L2</span><small>The source bank often names lower L1.</small></div>' +
+      '<div class="v14ConusRow target"><b>NEWBORN</b><span>SOURCE KEY · L3</span><small>For this exact historical MCQ.</small></div>' +
+      '<p>Neonatal conus position varies in modern studies. The illustration shows the cord taper and roots, not an exact age-specific vertebral level.</p></div>';
     return '<div class="v14ConusMap' + (compact ? ' compact' : '') + '" role="img" aria-label="Adult vertebral levels: spinal cord tapers to the conus near L1 to L2. Below it the cauda equina is a bundle of nerve roots in the CSF-filled lumbar cistern. L3 to L4 is below the usual adult conus and is a site used for lumbar puncture into the subarachnoid space. The dural and arachnoid sac ends near S2.">' +
       '<div class="v14ConusRow"><b>L1–L2</b><span>CORD → CONUS MEDULLARIS</span><small>Source bank often specifies lower L1.</small></div>' +
       '<div class="v14ConusRow target"><b>L3–L4</b><span>CAUDA EQUINA ROOTS + CSF</span><small>Lumbar puncture samples the subarachnoid space here.</small></div>' +
       '<div class="v14ConusRow"><b>S2</b><span>DURAL + ARACHNOID SAC ENDS</span><small>The cord has already ended above.</small></div>' +
       '<p>Conus = tapered cord end. Cauda equina = descending nerve roots. Vertebral levels vary; use the source key for the exact MCQ wording.</p></div>';
   }
-  function conusHeroHTML() {
-    return '<figure class="v14ConusHero"><img src="/assets/conus-cauda-lumbar-ai-v4.webp" alt="Conceptual lumbar cutaway: a single spinal cord tapers into a conus; separate golden cauda equina roots descend through a blue CSF space, with some exiting laterally" loading="lazy" decoding="async"><figcaption><b>CORD → CONUS → DESCENDING ROOTS</b><span>AI-assisted conceptual illustration. The bone levels are deliberately unlabeled; use the exact level map beside it.</span><a href="https://www.ncbi.nlm.nih.gov/books/NBK526133/" target="_blank" rel="noopener">Anatomy reference ↗</a></figcaption></figure>';
+  function conusHeroHTML(q) {
+    return '<figure class="v14ConusHero"><img src="/assets/conus-cauda-lumbar-ai-v4.webp" alt="Conceptual lumbar cutaway: a single spinal cord tapers into a conus; separate golden cauda equina roots descend through a blue CSF space, with some exiting laterally" loading="lazy" decoding="async"><figcaption><b>CORD → CONUS → DESCENDING ROOTS</b><span>AI-assisted conceptual illustration. The bone levels are deliberately unlabeled; use the exact level map beside it.</span><a href="' + (q?.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-6" ? 'https://www.ncbi.nlm.nih.gov/books/NBK542219/' : 'https://www.ncbi.nlm.nih.gov/books/NBK526133/') + '" target="_blank" rel="noopener">Anatomy reference ↗</a></figcaption></figure>';
   }
   function meningesMapHTML(compact = false) {
     return '<div class="v14MeningesMap' + (compact ? ' compact' : '') + '" role="img" aria-label="From spinal cord outward: pia, CSF-filled subarachnoid space, arachnoid, dura. The denticulate ligament begins in pia, crosses the arachnoid and attaches to dura. Dura also sleeves the exiting spinal nerve root.">' +
@@ -1582,10 +1586,10 @@
     if (plan.source) h += sourceFigureHTML(plan.source);
     const meningeal = MENINGES_Q.has(q.id), conus = CONUS_Q.has(q.id);
     if (meningeal && !mini) h += meningesHeroHTML() + meningesMapHTML();
-    if (conus && !mini) h += '<div class="v14ConusPair">' + conusHeroHTML() + conusMapHTML() + '</div>';
+    if (conus && !mini) h += '<div class="v14ConusPair">' + conusHeroHTML(q) + conusMapHTML(false, q) + '</div>';
     const onScreen = (k) => [...document.querySelectorAll(".v14Visual[data-v14-vkey]")].some((a) => a.dataset.v14Vkey === k && !box.contains(a));
     if (meningeal && mini) h += meningesMapHTML(true);
-    if (conus && mini) h += conusMapHTML(true);
+    if (conus && mini) h += conusMapHTML(true, q);
     if (!meningeal && !conus && plan.primary && !(mini && onScreen(plan.primary.key))) {
       h += visualCardHTML(plan.primary, mini ? "SAME ANCHOR" : "SEE IT · " + intentLabel, phase, "v14Main");
       G.note(plan.primary.key, { concept: plan.concept, modality: plan.primary.modality });
