@@ -112,7 +112,8 @@
   /* ───────── code ───────── */
   var code = clean(ls(CODE_KEY)),
     linkedFromUrl = false,
-    restoring = false;
+    restoring = false,
+    cloudOff = false; // the host has no cloud store connected: device-only saving, no retries
   function adoptCode(c) {
     // Linking this device to an existing code: that code's cloud copy loads on the next read.
     // What is on this device now is kept as a local backup first.
@@ -214,7 +215,7 @@
       timer = null;
     }
     if (reason !== "timer" && reason !== "conflict" && localAhead()) dirty = true; // e.g. hidden before the app's own save debounce
-    if (restoring || !dirty || inflight || ls(ADOPT_KEY) === "1") return Promise.resolve(false);
+    if (cloudOff || restoring || !dirty || inflight || ls(ADOPT_KEY) === "1") return Promise.resolve(false);
     var state = localState();
     if (!state) return Promise.resolve(false);
     var bodyText = JSON.stringify({ state: state, baseVersion: meta.version, clientUpdatedAt: state._clientUpdatedAt || new Date().toISOString(), force: force }),
@@ -270,6 +271,12 @@
       label("☁ TOO LARGE FOR CLOUD · SAVED ON DEVICE");
       return false;
     }
+    if (j && j.error === "cloud_not_configured") {
+      cloudOff = true;
+      dirty = false;
+      label("☁ SAVED ON THIS DEVICE");
+      return false;
+    }
     dirty = true;
     label("☁ SAVED ON DEVICE · CLOUD RETRY");
     return false;
@@ -293,6 +300,15 @@
             return null;
           })
           .then(function (j) {
+            if (j && j.error === "cloud_not_configured") {
+              cloudOff = true;
+              [60, 400].forEach(function (ms) {
+                setTimeout(function () {
+                  label("☁ SAVED ON THIS DEVICE");
+                }, ms);
+              });
+              return r;
+            }
             if (!r.ok || !j) return r;
             var adopting = ls(ADOPT_KEY) === "1";
             if (adopting) ls(ADOPT_KEY, null);
@@ -310,15 +326,20 @@
           });
       });
     }
-    // POST from the app: queue it and answer at once with the agreed version.
+    // POST from the app: queue it and answer at once with the agreed version. The app labels the button
+    // after reading this answer, so the honest label is applied a moment later.
+    function relabel() {
+      if (cloudOff) label("☁ SAVED ON THIS DEVICE");
+      else if (dirty && !inflight && !restoring) label("☁ SAVED ON DEVICE · CLOUD ≤" + Math.max(1, Math.round(MIN_GAP / 60000)) + " MIN");
+    }
+    setTimeout(relabel, 60);
+    setTimeout(relabel, 400);
+    if (cloudOff) return Promise.resolve(jsonResponse({ error: "cloud_not_configured" }, 503));
     try {
       if (JSON.parse(init.body || "{}").force) force = true;
     } catch (_) {}
     dirty = true;
     schedule();
-    setTimeout(function () {
-      if (dirty && !inflight && !restoring) label("☁ SAVED ON DEVICE · CLOUD ≤" + Math.max(1, Math.round(MIN_GAP / 60000)) + " MIN");
-    }, 0);
     return Promise.resolve(jsonResponse({ ok: true, queued: true, stateVersion: meta.version }, 200));
   };
 
@@ -380,7 +401,7 @@
       return flush("manual");
     },
     status: function () {
-      return { text: status.text, pending: dirty, inflight: inflight, stateVersion: meta.version, lastSync: meta.lastSync, gapMs: MIN_GAP };
+      return { text: status.text, pending: dirty, inflight: inflight, stateVersion: meta.version, lastSync: meta.lastSync, gapMs: MIN_GAP, cloud: cloudOff ? "not-configured" : "on" };
     },
     backup: function () {
       return jget(BACKUP_KEY);

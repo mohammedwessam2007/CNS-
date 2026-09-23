@@ -1,7 +1,7 @@
 // Local stand-in for the Vercel host: serves deploy/vercel/dist with cleanUrls and runs the real
 // api/*.js handlers (Node req/res helpers emulated) on the in-memory learner store.
 // Usage: IX_MEMORY_STORE=1 node tests/vercel_host_serve.js 8790
-process.env.IX_MEMORY_STORE = "1";
+if (process.env.IX_STANDIN_NO_CLOUD !== "1") process.env.IX_MEMORY_STORE = "1";
 const http = require("http"), fs = require("fs"), path = require("path");
 const ROOT = path.resolve(__dirname, "../deploy/vercel");
 const DIST = path.join(ROOT, "dist"), PORT = Number(process.argv[2] || 8790);

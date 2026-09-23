@@ -50,10 +50,12 @@ button{width:100%;min-height:44px;margin-top:10px;padding:12px;border-radius:12p
 (function(){
   var S=window.INTELLECTUALITY_SYNC,$=function(s){return document.querySelector(s)};
   var next=(function(){var n=new URLSearchParams(location.search).get('next')||'/';return n.charAt(0)==='/'&&n.charAt(1)!=='/'?n:'/'})();
-  function show(){
+  function show(cloud){
     $('#code').textContent=S.formatted();
     var st=S.status();
-    $('#status').innerHTML=st.lastSync?'<span class="ok">Last cloud backup: '+new Date(st.lastSync).toLocaleString()+'</span>':'Cloud backup starts after your first answer.';
+    if(cloud&&cloud.error==='cloud_not_configured'){$('#status').innerHTML='<span class="error">Cloud backup is not connected on this site yet.</span> Your progress is saved on this device; it will back up automatically once the site owner connects storage.';$('#syncNow').hidden=true;return}
+    if(cloud&&cloud.exists)$('#status').innerHTML='<span class="ok">Cloud copy saved '+new Date(cloud.updatedAt).toLocaleString()+' (version '+cloud.stateVersion+').</span>';
+    else $('#status').innerHTML=st.lastSync?'<span class="ok">Last cloud backup: '+new Date(st.lastSync).toLocaleString()+'</span>':'Cloud backup starts after your first answer.';
   }
   function copy(text,btn){
     var done=function(){var t=btn.textContent;btn.textContent='Copied ✓';setTimeout(function(){btn.textContent=t},1500)};
@@ -61,7 +63,8 @@ button{width:100%;min-height:44px;margin-top:10px;padding:12px;border-radius:12p
   }
   $('#copyCode').onclick=function(){copy(S.formatted(),this)};
   $('#copyLink').onclick=function(){copy(S.link(),this)};
-  $('#syncNow').onclick=function(){var b=this;b.textContent='Saving…';S.flush().then(function(ok){b.textContent=ok?'Saved to cloud ✓':'Nothing new to save';show();setTimeout(function(){b.textContent='Save to cloud now'},2000)})};
+  function check(){return fetch('/api/state').then(function(r){return r.json()}).then(show,function(){show(null)})}
+  $('#syncNow').onclick=function(){var b=this;b.textContent='Saving…';S.flush().then(function(ok){b.textContent=ok?'Saved to cloud ✓':'Nothing new to save';check();setTimeout(function(){b.textContent='Save to cloud now'},2000)})};
   $('#use').onclick=function(){
     $('#err').textContent='';
     var v=$('#other').value;
@@ -69,7 +72,7 @@ button{width:100%;min-height:44px;margin-top:10px;padding:12px;border-radius:12p
     location.href=next;
   };
   $('#back').onclick=function(){location.href=next};
-  show();
+  show(null);check();
 })();
 </script>
 </body>
