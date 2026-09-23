@@ -13,7 +13,7 @@ In v15.0 the app fetched every picture live from Wikipedia and Commons while it 
 | **No links to press** | The search-everywhere links are gone. Picture cards (v9, v10, v14, v15) no longer open Commons pages. The "academic atlas · link only" card is off. |
 | **In-app zoom** | Tap any picture: it opens full screen inside the app. Tap it again for 2×, which you can pan. Tap outside or ✕ to close. The caption and credit come along. A pre-answer picture keeps its title hidden. |
 | **Fail-soft** | If the build cannot reach Wikimedia, it still succeeds with no bundle and the app uses the live lookup as in v15.0. If a bundled file fails to load on the device, the app tries the live lookup, then an honest one-line note (with no links). |
-| **Build cache** | Downloaded bytes are kept in `node_modules/.cache/intellectuality-pics/`, which Vercel keeps between builds. Later builds re-check the choices but do not re-download unchanged files. |
+| **Build cache and time cap** | Downloaded bytes and each term's chosen file (for 14 days) are kept in `node_modules/.cache/intellectuality-pics/`, which Vercel keeps between builds. A later build reuses them without asking Wikimedia again and finishes what an earlier build left out. The picture step has a 7-minute budget and a hard stop 1 minute later, so a slow Wikimedia can never hold a deploy. |
 
 ## Evidence (`receipts/v15_1/`)
 
@@ -36,8 +36,24 @@ In v15.0 the app fetched every picture live from Wikipedia and Commons while it 
 
 See **Live build result** below. It records what the Vercel build actually bundled from Wikimedia.
 
+Correction: the message of commit `5f80973` says the first bundling build "ran past 40 minutes". That is wrong. Deployment timestamps show it had been building for **about 6 minutes** when `5f80973` was pushed; I misjudged the elapsed time. The watchdog and decision cache in that commit are still in place (they bound and speed up every later build), but they were not a response to a real 40-minute build.
+
 ## Not proven here
 
 - **Which real image each term received** was chosen by the rules above on Vercel's build machine. I could not view the images from the sandbox. The build log lists every `term → Commons file · licence` choice, and `/pics/manifest.json` on the live site lists them too.
 - **Offline use.** The bundled pictures come from the app's own domain, not from a device cache. Pictures seen once are cached by the browser as usual. There is no service worker, so a never-opened page still needs a connection.
 - **Options without a curated term** (about two thirds of options) still use the v14 look-alike logic. That logic uses a bundled copy when the file is bundled, and a live Commons search otherwise.
+
+## Live build result
+
+| Deployment | Commit | Build time | State |
+|---|---|---|---|
+| `dpl_EAk1WETkRatdUuBaUU62HAD3ttk3` (v15.0, no bundling) | `01dffab` | 13 s | READY |
+| `dpl_Hdy7u2atEP87taekxLX6AAY956Hr` (first bundling build) | `a70023d` | **415 s** | READY |
+| `dpl_6M339GKZPac1GUpgURYMwT31XjRe` (time cap + decision cache) | `5f80973` | **365 s** | READY, production |
+
+The jump from 13 s to 6–7 minutes is the picture step downloading from Wikimedia. The first build had no decision cache to start from, and neither did the second (the cache format arrived with it). The next build starts from the second build's saved choices, so it should take well under a minute. In the sandbox, with no network, that step gives up in under 1 s. **I could not read the build log or the deployed `build-info.json` from this session:** the Vercel connection returns 404/401 for build events and for fetching this deployment. So the exact count of bundled pictures is not confirmed here. It is visible in two places:
+
+- the Vercel dashboard → the deployment → **Build Logs**, lines starting with `[pics]` (one per term, then `[pics] bundled N/457 terms + M/70 registry files`);
+- `https://intellectuality-cns.vercel.app/build-info.json` → `pictures`, and `/pics/manifest.json` for every term → file choice.
+
