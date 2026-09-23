@@ -22,12 +22,13 @@
 .v16Row.key { border-color: var(--good); background: #0d1f16 }
 .v16Row.std { border-color: var(--warn); background: #211b0b }
 .v16Row.mine { border-color: var(--bad); background: #230d14 }
-.v16RowTop { display: flex; gap: 8px; align-items: baseline; font-weight: 750; font-size: 15px; line-height: 1.35; flex-wrap: wrap }
+.v16RowTop { display: flex; gap: 8px; align-items: baseline; font-weight: 750; font-size: 15px; line-height: 1.35 }
+.v16T { flex: 1; min-width: 0 }
 .v16Mark { flex: 0 0 auto; width: 18px; font-weight: 900 }
 .v16Row.key .v16Mark { color: var(--good) }
 .v16Row.mine .v16Mark { color: var(--bad) }
 .v16Row.std .v16Mark { color: var(--warn) }
-.v16You { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 99px; padding: 2px 6px; color: var(--muted) }
+.v16You { display: inline-block; vertical-align: 2px; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 99px; padding: 2px 6px; color: var(--muted) }
 .v16Why { margin: 6px 0 0 26px; font-size: 14px; line-height: 1.45; color: #d7e0ec }
 .v16Row.key .v16Why { color: #eafff1 }
 .v16Flag { border: 1px solid var(--warn); background: #231c08; color: #ffe9a8; border-radius: 12px; padding: 10px 12px; font-size: 14px; line-height: 1.45 }

@@ -657,8 +657,8 @@
             mark = isKey || isStd ? "✓" : mine ? "✗" : "·",
             why = isKey ? x?.key || "" : isStd ? (x?.flag?.k === o.key ? x.flag.why : (x?.also || []).find((a) => a.k === o.key)?.why || "") : x?.opt?.[o.key] || "";
           return (
-            '<div class="v16Row ' + cls + '"><div class="v16RowTop"><span class="v16Mark">' + mark + '</span><span class="v16L">' + E(o.key.toUpperCase()) + ".</span><span>" + E(o.text) + "</span>" +
-            (mine ? '<span class="v16You">your answer</span>' : "") + (isStd ? '<span class="v16You">' + (x?.flag?.k === o.key ? "standard answer" : "also accepted") + "</span>" : "") + "</div>" +
+            '<div class="v16Row ' + cls + '"><div class="v16RowTop"><span class="v16Mark">' + mark + '</span><span class="v16L">' + E(o.key.toUpperCase()) + '.</span><span class="v16T">' + E(o.text) +
+            (mine ? ' <span class="v16You">your answer</span>' : "") + (isStd ? ' <span class="v16You">' + (x?.flag?.k === o.key ? "standard answer" : "also accepted") + "</span>" : "") + "</span></div>" +
             (why ? '<div class="v16Why">' + md(why) + "</div>" : "") + "</div>"
           );
         })
@@ -906,6 +906,11 @@
     if (db) db.style.width = pct + "%";
     if (dt) dt.textContent = dt.textContent.replace(/^\d+% today/, pct + "% today");
   }
+  function hudCount() {
+    const dt = document.querySelector("#dayText"),
+      s = stats();
+    if (dt) dt.textContent = dt.textContent.replace(/\d+\/\d+ sourced MCQs sampled/, s.done + "/" + s.total.toLocaleString("en") + " past-paper MCQs done");
+  }
   function install() {
     V();
     baseNext = nextAction;
@@ -937,7 +942,10 @@
     const baseHUD = renderHUD;
     renderHUD = function () {
       const out = baseHUD.apply(this, arguments);
-      if (focusOn()) safe(hudRound);
+      if (focusOn()) {
+        safe(hudRound);
+        safe(hudCount);
+      }
       return out;
     };
     const baseRender = render;
