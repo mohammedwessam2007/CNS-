@@ -44,6 +44,17 @@ button{width:100%;min-height:44px;margin-top:10px;padding:12px;border-radius:12p
     <div class="error" id="err"></div>
   </div>
 
+  <div class="box">
+    <b>Backup file</b>
+    <div class="tiny">One file with everything this device has saved (progress, errors, reviews, your learning profile). Keep it in Files or iCloud Drive. Restoring replaces this device's copy; the current copy is kept as a local backup first.</div>
+    <div class="row">
+      <button id="exportBtn" class="secondary">⬇ Download backup</button>
+      <button id="importBtn" class="secondary">⬆ Restore from backup</button>
+    </div>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+    <div class="tiny" id="bkMsg"></div>
+  </div>
+
   <button id="back" style="margin-top:16px">▶ Back to the course</button>
 </div>
 <script>
@@ -72,6 +83,33 @@ button{width:100%;min-height:44px;margin-top:10px;padding:12px;border-radius:12p
     location.href=next;
   };
   $('#back').onclick=function(){location.href=next};
+  var KEYS=/^intellectuality_/;
+  $('#exportBtn').onclick=function(){
+    var data={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(KEYS.test(k)&&k!=='intellectuality_sync_gap_ms')data[k]=localStorage.getItem(k)}
+    var st=null;try{st=JSON.parse(data.intellectuality_v41_launch_state||'null')}catch(_){}
+    var file={app:'INTELLECTUALITY CNS',kind:'device-backup',version:1,savedAt:new Date().toISOString(),day:st&&st.day||null,keys:data};
+    var blob=new Blob([JSON.stringify(file)],{type:'application/json'}),a=document.createElement('a');
+    var d=new Date(),stamp=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    a.href=URL.createObjectURL(blob);a.download='intellectuality-backup-'+stamp+'.json';document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1000);
+    $('#bkMsg').innerHTML='<span class="ok">Backup file created ('+Math.round(blob.size/1024)+' KB).</span>';
+  };
+  $('#importBtn').onclick=function(){$('#importFile').click()};
+  $('#importFile').onchange=function(){
+    var f=this.files&&this.files[0];if(!f)return;
+    var r=new FileReader();r.onload=function(){
+      try{
+        var j=JSON.parse(r.result);
+        if(!j||j.kind!=='device-backup'||!j.keys||!j.keys.intellectuality_v41_launch_state)throw new Error('not an INTELLECTUALITY backup');
+        JSON.parse(j.keys.intellectuality_v41_launch_state);
+        var cur=localStorage.getItem('intellectuality_v41_launch_state');
+        if(cur)localStorage.setItem('intellectuality_state_backup_before_link',JSON.stringify({savedAt:new Date().toISOString(),reason:'restored-from-file',state:cur}));
+        Object.keys(j.keys).forEach(function(k){if(KEYS.test(k))localStorage.setItem(k,j.keys[k])});
+        $('#bkMsg').innerHTML='<span class="ok">Restored progress saved '+new Date(j.savedAt).toLocaleString()+'. Opening the course…</span>';
+        setTimeout(function(){location.href=next},900);
+      }catch(e){$('#bkMsg').innerHTML='<span class="error">That file could not be restored: '+String(e.message||e)+'</span>'}
+    };r.readAsText(f);
+  };
   show(null);check();
 })();
 </script>

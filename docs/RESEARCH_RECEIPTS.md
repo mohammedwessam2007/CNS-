@@ -82,3 +82,14 @@ dropped in favour of `Neuropathic pain` for neuropathic stems; `Nasal conchae` a
 
 Files inherited from v9/v10/v14 (previously shown in production) are kept, and they
 now pass through the same runtime license and relevance checks.
+
+## v14.4 addendum (2026-09-23)
+
+| # | Claim used | Grade | Source | Applied as |
+|---|---|---|---|---|
+| A | Comparisons triggered by errors (showing the confused category next to the correct one after a miss) improve perceptual category learning more than fixed schedules | MODERATE (one controlled study, faces; transfer to anatomy assumed) | Adaptively triggered comparisons, *Scientific Reports* 2024, https://www.nature.com/articles/s41598-024-70163-6 | Contrast families: the chosen distractor and the key side by side after a miss |
+| B | Discriminative contrast is a main reason interleaving helps; learners with lower working memory rely on seeing similar categories juxtaposed | MODERATE | Birnbaum et al., *Memory & Cognition* 2013, https://link.springer.com/article/10.3758/s13421-012-0272-7; adaptive interleaving, *Learning and Individual Differences* 2025, https://www.sciencedirect.com/science/article/pii/S1041608025001803 | "امسك الفرق" discriminator per member pair; the families cover the bank's most frequent confusion sets |
+| C | Errors made with high confidence followed by immediate corrective feedback are corrected best (hypercorrection); pretesting with feedback beats no pretest | STRONG (replicated) | Metcalfe, *Annual Review of Psychology* 2017, https://www.annualreviews.org/content/journals/10.1146/annurev-psych-010416-044022; *Journal of Cognition* 2025, https://journalofcognition.org/articles/10.5334/joc.455 | Unchanged v14 loop (predict → answer → immediate autopsy); confident-wrong gets priority repair |
+| D | Commons search supports `intitle:` (title-restricted) queries through CirrusSearch | STRONG (official docs) | https://www.mediawiki.org/wiki/Help:CirrusSearch, https://commons.wikimedia.org/wiki/Help:Search | Exact-name distractor search. `filetype:` alternation was **not** relied on (unverified); the MIME type is filtered client-side instead |
+
+Egress still blocks fetching Commons and the production site, so live image quality for the new title searches is unmeasured (see KNOWN_LIMITATIONS).

@@ -56,7 +56,7 @@ const PICKS = [
     }, r);
     Object.assign(r, res);
   }
-  fs.writeFileSync(process.argv[2] || 'autopsy_bench.json', JSON.stringify(rows, null, 1));
+  fs.writeFileSync(process.argv[2] || require('path').join(__dirname, 'out', 'autopsy_bench.json'), JSON.stringify(rows, null, 1));
   for (const r of rows) console.log(JSON.stringify(r, null, 1));
   console.log('ERRORS', JSON.stringify(s.log.errors));
   await s.close();

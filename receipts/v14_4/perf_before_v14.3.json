@@ -1,0 +1,75 @@
+{
+ "label": "v14.3",
+ "url": "http://127.0.0.1:8788/",
+ "viewports": {},
+ "perf": {
+  "coldLoad": {
+   "domContentLoaded": 344,
+   "load": 345,
+   "fcp": 176,
+   "transferKB": 3445,
+   "requests": 33,
+   "heapMB": 3.3,
+   "nodes": 470,
+   "listeners": 29,
+   "layouts": 0,
+   "styleRecalcs": 0,
+   "commonsOnLoad": 4
+  },
+  "transitionsMs": {
+   "revealOptions": 2.7,
+   "wrongAnswerToAutopsy": 8.9
+  },
+  "session30": {
+   "answered": 30,
+   "steps": 140,
+   "wallS": 11.2,
+   "stepP50ms": 6,
+   "stepP95ms": 20,
+   "before": {
+    "heapMB": 4.3,
+    "nodes": 501,
+    "listeners": 31,
+    "layouts": 4,
+    "styleRecalcs": 4
+   },
+   "after": {
+    "heapMB": 6,
+    "nodes": 449,
+    "listeners": 32,
+    "layouts": 0,
+    "styleRecalcs": 0
+   },
+   "heapGrowthMB": 1.7,
+   "listenerGrowth": 1,
+   "maxCommonsInflight": 2,
+   "commonsCalls": 87,
+   "stateKB": 138,
+   "actions": {
+    "repair": 6,
+    "retest": 6,
+    "reveal": 24,
+    "answer": 18,
+    "next": 18,
+    "SEGMENT:[data-act=\"visual-hide\"]": 12,
+    "SEGMENT:[data-act=\"finish-segment\"]": 40,
+    "answer-wrong": 6,
+    "DAY_VISUAL_BOSS:button.primary": 3,
+    "DAY_WRITTEN_BOSS:.bigAction": 3,
+    "DAY_WRITTEN_BOSS:button.primary": 3,
+    "STOP:[data-act=\"certify\"]": 1
+   },
+   "errors": []
+  },
+  "duplicateRenders": {
+   "nodes": [
+    449,
+    449
+   ],
+   "listeners": [
+    32,
+    32
+   ]
+  }
+ }
+}

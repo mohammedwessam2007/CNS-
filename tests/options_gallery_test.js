@@ -88,7 +88,7 @@ const gallery = (page) => page.evaluate(() => {
   check("O6", "40-item sample: no item repeats an image across its options", dupInItem === 0, { items: sample.length, options: all.length, pictured: pictured.length, pct: +(100 * pictured.length / all.length).toFixed(1), dupInItem });
   check("O7", "No page errors", err1.length === 0 && err2.length === 0 && log.errors.length === 0, { err1, err2, err3: log.errors });
   await s.close();
-  fs.writeFileSync(process.argv[2] || "out/options_gallery.json", JSON.stringify({ results, sample }, null, 1));
+  fs.writeFileSync(process.argv[2] || require("path").join(__dirname, "out", "options_gallery.json"), JSON.stringify({ results, sample }, null, 1));
   const pass = results.filter((r) => r.ok).length;
   console.log(`\n${pass}/${results.length} option-gallery checks passed · pictured ${pictured.length}/${all.length} options in the 40-item sample`);
   process.exit(pass === results.length ? 0 : 1);

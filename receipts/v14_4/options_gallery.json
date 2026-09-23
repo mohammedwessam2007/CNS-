@@ -1,0 +1,1372 @@
+{
+ "results": [
+  {
+   "id": "O1",
+   "name": "Before answering (primer, and options shown): no option pictures at all",
+   "ok": true,
+   "ev": {
+    "pre1": 0,
+    "pre2": {
+     "gal": 0,
+     "opts": 4
+    }
+   }
+  },
+  {
+   "id": "O2",
+   "name": "Correct answer: every option has its own card (✓ correct marked)",
+   "ok": true,
+   "ev": {
+    "which": "all",
+    "cells": [
+     {
+      "opt": "a",
+      "pic": null,
+      "missing": true,
+      "skeleton": false,
+      "tag": "✗"
+     },
+     {
+      "opt": "b",
+      "pic": "intitle: pia mater intitle: diagram 1.jpg",
+      "missing": false,
+      "skeleton": false,
+      "tag": "✗"
+     },
+     {
+      "opt": "c",
+      "pic": "intitle: dura intitle: dura diagram 1.jpg",
+      "missing": false,
+      "skeleton": false,
+      "tag": "✗"
+     },
+     {
+      "opt": "d",
+      "pic": "dura intitle: dura labeled 6.jpg",
+      "missing": false,
+      "skeleton": false,
+      "tag": "✓ CORRECT"
+     }
+    ],
+    "dupOnScreen": 0
+   }
+  },
+  {
+   "id": "O3",
+   "name": "Each option card shows a picture or an honest 'no trustworthy picture' note; none repeated on screen",
+   "ok": true,
+   "ev": {
+    "cells": [
+     "note",
+     "pic",
+     "pic",
+     "pic"
+    ],
+    "dup": 0
+   }
+  },
+  {
+   "id": "O4",
+   "name": "Wrong answer: the autopsy pictures the OTHER options (key + your pick are already side by side)",
+   "ok": true,
+   "ev": {
+    "g2": {
+     "which": "others",
+     "cells": [
+      {
+       "opt": "b",
+       "pic": "intitle: pia mater intitle: diagram 1.jpg",
+       "missing": false,
+       "skeleton": false,
+       "tag": "✗"
+      },
+      {
+       "opt": "c",
+       "pic": "intitle: dura intitle: dura diagram 1.jpg",
+       "missing": false,
+       "skeleton": false,
+       "tag": "✗"
+      }
+     ],
+     "dupOnScreen": 0
+    },
+    "expected": [
+     "b",
+     "c"
+    ]
+   }
+  },
+  {
+   "id": "O5",
+   "name": "Autopsy option cards hydrate; no image repeats across compare panel and option cards",
+   "ok": true,
+   "ev": {
+    "dup": 0
+   }
+  },
+  {
+   "id": "O6",
+   "name": "40-item sample: no item repeats an image across its options",
+   "ok": true,
+   "ev": {
+    "items": 40,
+    "options": 160,
+    "pictured": 121,
+    "pct": 75.6,
+    "dupInItem": 0
+   }
+  },
+  {
+   "id": "O7",
+   "name": "No page errors",
+   "ok": true,
+   "ev": {
+    "err1": [],
+    "err2": [],
+    "err3": []
+   }
+  }
+ ],
+ "sample": [
+  {
+   "id": "EHSAN-ANAT-SPINAL-CORD-MCQ-1",
+   "subject": "ANATOMY",
+   "stem": "In adults, the spinal cord ends at",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Lower border of L1.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "Lower border of L3.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "Lower border of S1.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "Lower border of L3.",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-BRAIN-STEM-MCQ-7",
+   "subject": "ANATOMY",
+   "stem": "In case of right corticonuclear tract injury above the level of the motor nucleus of. faci",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Upper ½ right side.",
+     "title": "intitle: Upper right side diagram 1",
+     "key": "intitle: upper right side diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Lower ½ right side.",
+     "title": "intitle: Lower right side diagram 1",
+     "key": "intitle: lower right side diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Upper½ left side.",
+     "title": "intitle: Upper left side diagram 1",
+     "key": "intitle: upper left side diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Lower ½ left side.",
+     "title": "intitle: Lower left side diagram 1",
+     "key": "intitle: lower left side diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-BRAIN-STEM-MCQ-40",
+   "subject": "ANATOMY",
+   "stem": "The superior brachium connects the superior colliculus with",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Hypothalamus.",
+     "title": "Thalamus Thalamus diagram 1",
+     "key": "thalamus thalamus diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Lateral geniculate body.",
+     "title": "intitle: Lateral geniculate body diagram 1",
+     "key": "intitle: lateral geniculate body diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Uncus.",
+     "title": "intitle: Uncus intitle: Uncus diagram 1",
+     "key": "intitle: uncus intitle: uncus diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Mammillary body.",
+     "title": "intitle: Mammillary body intitle: diagram 1",
+     "key": "intitle: mammillary body intitle: diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-SULCI-GYRI-MCQ-3",
+   "subject": "ANATOMY",
+   "stem": "Insula is a part of the cerebral cortex hidden within the depth of",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Posterior ramus of lateral sulcus.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "Central sulcus.",
+     "title": "(neuroanatomy) Sulcus (neuroanatomy) labeled 6",
+     "key": "(neuroanatomy) sulcus (neuroanatomy) labeled 6.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Superior temporal sulcus.",
+     "title": "Superior temporal sulcus intitle: labeled 6",
+     "key": "superior temporal sulcus intitle: labeled 6.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Intraparietal sulcus.",
+     "title": "sulcus intitle: Intraparietal sulcus labeled 6",
+     "key": "sulcus intitle: intraparietal sulcus labeled 6.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-CEREBRAL-HEMISPHERE-WHITE-MATTER-MCQ-21",
+   "subject": "ANATOMY",
+   "stem": "The pyramidal tract fibers pass through the following parts of internal capsule",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Anterior and posterior limbs.",
+     "title": "limbs intitle: Anterior and illustration 5",
+     "key": "limbs intitle: anterior and illustration 5.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Anterior limb and genu.",
+     "title": "intitle: Anterior limb and diagram 1",
+     "key": "intitle: anterior limb and diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Posterior limb and genu.",
+     "title": "limb and genu intitle: schema 8",
+     "key": "limb and genu intitle: schema 8.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Retrolenticular and genu.",
+     "title": "intitle: Genu intitle: Genu diagram 1",
+     "key": "intitle: genu intitle: genu diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-THIRD-VENTRICLE-MCQ-7",
+   "subject": "ANATOMY",
+   "stem": "The following are recesses of 3rd ventricle except",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Pineal recess.",
+     "title": "intitle: Pineal recess intitle: diagram 1",
+     "key": "intitle: pineal recess intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Optic recess.",
+     "title": "intitle: Optic recess intitle: diagram 1",
+     "key": "intitle: optic recess intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Infundibular recess.",
+     "title": "intitle: Infundibular recess intitle: diagram 1",
+     "key": "intitle: infundibular recess intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Lateral recess.",
+     "title": "intitle: Lateral recess intitle: diagram 1",
+     "key": "intitle: lateral recess intitle: diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-ARTERIAL-AND-VENOUS-SUPPLY-OF-BRAIN-MCQ-9",
+   "subject": "ANATOMY",
+   "stem": "What is the major vessel lateral to optic chiasma",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Anterior cerebral artery.",
+     "title": "Anterior cerebral artery intitle: labeled 6",
+     "key": "anterior cerebral artery intitle: labeled 6.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Posterior cerebral.",
+     "title": "arteries Cerebral arteries labeled 6",
+     "key": "arteries cerebral arteries labeled 6.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Posterior communicating.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "Posterior inferior cerebellar artery.",
+     "title": "inferior cerebellar artery intitle: schema 8",
+     "key": "inferior cerebellar artery intitle: schema 8.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-SCALP-MCQ-6",
+   "subject": "ANATOMY",
+   "stem": "The auriculotemporal nerve supplying one of following areas: 192",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Nose and nasal septum.",
+     "title": "Nasal cavity Nasal cavity diagram 1",
+     "key": "nasal cavity nasal cavity diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Inner surface of ear drum.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "External auditory meatus and outer surface of ear drum.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "Chin and lower lip.",
+     "title": "intitle: Chin and lower diagram 1",
+     "key": "intitle: chin and lower diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-PAROTID-GLAND-MCQ-12",
+   "subject": "ANATOMY",
+   "stem": "The parasympathetic supply of the parotid gland is from the following nerve: 2016",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Lesser petrosal.",
+     "title": "Parotid gland Parotid gland diagram 1",
+     "key": "parotid gland parotid gland diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Deep petrosal.",
+     "title": "intitle: Deep petrosal nerve diagram 1",
+     "key": "intitle: deep petrosal nerve diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Greater petrosal.",
+     "title": "intitle: Greater petrosal nerve diagram 1",
+     "key": "intitle: greater petrosal nerve diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "External petrosal.",
+     "title": "intitle: External petrosal intitle: diagram 1",
+     "key": "intitle: external petrosal intitle: diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-TRIGEMINAL-5TH-CRANIAL-NERVE-MCQ-11",
+   "subject": "ANATOMY",
+   "stem": "Regarding the petrosal nerves, one of the following statements is true",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Greater petrosal nerve contains preganglionic parasympathetic fibers from the vagus nerve.",
+     "title": "Greater petrosal nerve intitle: labeled 6",
+     "key": "greater petrosal nerve intitle: labeled 6.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Greater and deep petrosal nerves unite to form vidian nerve.",
+     "title": "Deep petrosal nerve intitle: labeled 6",
+     "key": "deep petrosal nerve intitle: labeled 6.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Lesser petrosal nerve carries preganglionic parasympathetic fibers for the lacrimal gland.",
+     "title": "intitle: Lesser petrosal nerve diagram 1",
+     "key": "intitle: lesser petrosal nerve diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Lesser petrosal nerve passes through foramen spinosum.",
+     "title": "Lesser petrosal nerve intitle: labeled 6",
+     "key": "lesser petrosal nerve intitle: labeled 6.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-CRANIAL-CAVITY-MCQ-3",
+   "subject": "ANATOMY",
+   "stem": "Regarding the falx cerebri, one of the following statements is correct",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "It is attached posteriorly to the lower surface of the tentorium cerebelli.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "It contains superior sagittal sinus in its free border.",
+     "title": "intitle: Superior sagittal sinus diagram 1",
+     "key": "intitle: superior sagittal sinus diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "It contains straight sinus in its inferior free concave border.",
+     "title": "intitle: Straight sinus intitle: diagram 1",
+     "key": "intitle: straight sinus intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Its anterior end is attached to the crista galli.",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-ORBIT-MCQ-8",
+   "subject": "ANATOMY",
+   "stem": "The superior oblique muscle of the eye is supplied by",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Abducent nerve.",
+     "title": "intitle: Abducent nerve intitle: diagram 1",
+     "key": "intitle: abducent nerve intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Oculomotor nerve.",
+     "title": "intitle: Oculomotor intitle: Oculomotor diagram 1",
+     "key": "intitle: oculomotor intitle: oculomotor diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Lacrimal nerve.",
+     "title": "intitle: Lacrimal nerve intitle: diagram 1",
+     "key": "intitle: lacrimal nerve intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Trochlear nerve.",
+     "title": "intitle: Trochlear intitle: Trochlear diagram 1",
+     "key": "intitle: trochlear intitle: trochlear diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-SUBMANDIBULAR-REGION-MCQ-8",
+   "subject": "ANATOMY",
+   "stem": "Which of the following muscles has a dual nerve supply",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Lateral pterygoid.",
+     "title": "intitle: Lateral pterygoid intitle: diagram 1",
+     "key": "intitle: lateral pterygoid intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Digastric.",
+     "title": "intitle: Digastric intitle: Digastric diagram 1",
+     "key": "intitle: digastric intitle: digastric diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Temporalis.",
+     "title": "intitle: Temporalis intitle: Temporalis diagram 1",
+     "key": "intitle: temporalis intitle: temporalis diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Mylohyoid.",
+     "title": "intitle: Mylohyoid intitle: Mylohyoid diagram 1",
+     "key": "intitle: mylohyoid intitle: mylohyoid diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-CAROTID-TRIANGLE-MCQ-15",
+   "subject": "ANATOMY",
+   "stem": "Regarding the internal jugular vein choose the correct statement",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "It begins near the angle of mandible below the parotid gland.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "It begins at the jugular foramen as continuation of sigmoid sinus.",
+     "title": "Skull foramina labeled",
+     "key": "skull foramina labeled.svg"
+    },
+    {
+     "opt": "c",
+     "text": "It ends in the subclavian vein.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "It descends inside the carotid sheath medial to the internal carotid artery.",
+     "title": "Musculi coli base, my edits for tringles, Carotid T",
+     "key": "musculi coli base, my edits for tringles, carotid t.svg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-CRANIAL-NERVES-MCQ-26",
+   "subject": "ANATOMY",
+   "stem": "One of the following muscles is supplied by the facial nerve",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Posterior belly of digastric",
+     "title": "belly of digastric intitle: schema 8",
+     "key": "belly of digastric intitle: schema 8.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Anterior belly of digastric",
+     "title": "intitle: Anterior belly of diagram 1",
+     "key": "intitle: anterior belly of diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Medial pterygoid",
+     "title": "intitle: Medial pterygoid intitle: diagram 1",
+     "key": "intitle: medial pterygoid intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Masseter",
+     "title": "intitle: Masseter intitle: Masseter diagram 1",
+     "key": "intitle: masseter intitle: masseter diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-NOSE-MCQ-2",
+   "subject": "ANATOMY",
+   "stem": "Which sinus opens into superior nasal meatus",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Frontal sinuses",
+     "title": "intitle: Frontal sinus intitle: diagram 1",
+     "key": "intitle: frontal sinus intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Maxillary sinuses",
+     "title": "intitle: Maxillary sinus intitle: diagram 1",
+     "key": "intitle: maxillary sinus intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Anterior and middle groups of ethmoidal sinuses",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "Posterior group of ethmoidal sinuses",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-ANAT-NOSE-MCQ-31",
+   "subject": "ANATOMY",
+   "stem": "The superficial cervical lymph nodes are located alongside the ……. vein",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Subclavian",
+     "title": "intitle: Subclavian intitle: Subclavian diagram 1",
+     "key": "intitle: subclavian intitle: subclavian diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Internal jugular",
+     "title": "intitle: Internal jugular intitle: diagram 1",
+     "key": "intitle: internal jugular intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "External jugular",
+     "title": "intitle: External jugular intitle: diagram 1",
+     "key": "intitle: external jugular intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Anterior jugular",
+     "title": "intitle: Anterior jugular intitle: diagram 1",
+     "key": "intitle: anterior jugular intitle: diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding synapses",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Synaptic cleft contains high K+ Concentration",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "Ca2+ voltage gated channels of the presynaptic knobs open during repolarization",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "Extracellular Ca2+ concentration equals that of intracellular",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "Presynaptic knobs contain vesicles with V-Snare proteins in their membranes",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-SENSORY-CODE-MECHANORECEPTIVE-THERMAL-SENSATIONS-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "40-year-old man loses his right hand in a farm accident. Four years later, he has episodes",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "expansion of the right hand area in his right primary somatosensory cortex.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "expansion of the right-hand area in his left primary somatosensory cortex.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "projection of fibers from neighboring sensory areas into the right-hand area of his right primary somatosensory cortex.",
+     "title": "Sensory Homunculus-en",
+     "key": "sensory homunculus-en.svg"
+    },
+    {
+     "opt": "d",
+     "text": "projection of fibers from neighboring sensory areas into the right-hand area of his left primary somatosensory cortex.",
+     "title": "1421 Sensory Homunculus",
+     "key": "1421 sensory homunculus.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-SENSORY-RECEPTORS-MCQ-16",
+   "subject": "PHYSIOLOGY",
+   "stem": "Slowly adapting (tonic) receptors include all the following except",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Baroreceptors",
+     "title": "intitle: Slowly adapting intitle: diagram 1",
+     "key": "intitle: slowly adapting intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Auditory receptors",
+     "title": "intitle: Auditory receptors intitle: diagram 1",
+     "key": "intitle: auditory receptors intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Pacinian corpuscles",
+     "title": "intitle: Rapidly adapting intitle: diagram 1",
+     "key": "intitle: rapidly adapting intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Nociceptors",
+     "title": "adapting intitle: Slowly adapting labeled 6",
+     "key": "adapting intitle: slowly adapting labeled 6.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-TYPES-OF-SYNAPTIC-POTENTIALS-MCQ-8",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding presynaptic inhibition",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "The post synaptic neurone membrane is Hyperpolarized",
+     "title": "IPSPsummation",
+     "key": "ipspsummation.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "There's a decrease in the release of chemical transmitters from the presynaptic neurone",
+     "title": "Chemical synapse schema",
+     "key": "chemical synapse schema.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "There is increased Ca2+ Influx into presynaptic neurone",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "There is closure of K+ channels of the presynaptic neurone",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-LESIONS-OF-THE-SENSORY-SYSTEM-MCQ-8",
+   "subject": "PHYSIOLOGY",
+   "stem": "A lesion of the dorsal column pathway is most likely to effect",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Fine touch",
+     "title": "Medial lemniscus Medial lemniscus diagram 1",
+     "key": "medial lemniscus medial lemniscus diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Hearing",
+     "title": "intitle: Hearing intitle: Hearing diagram 1",
+     "key": "intitle: hearing intitle: hearing diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Pain sensation",
+     "title": "Spinothalamic tract Spinothalamic tract diagram 1",
+     "key": "spinothalamic tract spinothalamic tract diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Temperature sensation A 19-year-old man has an automobile accident that completely eliminates all nerve traffic in the right half of the spinal cord at C2. Use this information to answer next 2 Questions (194) (193) (192) .",
+     "title": "tract Spinothalamic tract labeled 6",
+     "key": "tract spinothalamic tract labeled 6.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-17",
+   "subject": "PHYSIOLOGY",
+   "stem": "EXCEPT",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "the dura lining the brain",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "the brain tissue",
+     "title": "intitle: the brain tissue diagram 1",
+     "key": "intitle: the brain tissue diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "wall of the big intracranial veins",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "middle meningeal artery",
+     "title": "Meninges Meninges diagram 1",
+     "key": "meninges meninges diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-SPINAL-REFLEXES-AND-SPINAL-CORD-TRANSECTION-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "The stretch reflex in skeletal muscles",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "depends on muscle spindles sensitive to muscle tension.",
+     "title": "intitle: Stretch reflex intitle: diagram 1",
+     "key": "intitle: stretch reflex intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "involves a slowly conducting sensory afferent.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "is exaggerated in individuals suffering from cerebellar ataxia.",
+     "title": "Human cerebellum anterior view",
+     "key": "human cerebellum anterior view.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "is promoted by stimulation of gamma motor neurons",
+     "title": "intitle: A gamma motor diagram 1",
+     "key": "intitle: a gamma motor diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-SPINAL-REFLEXES-AND-SPINAL-CORD-TRANSECTION-MCQ-45",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which of the following best describes the type of reflex arc and sensory receptor for this",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Monosynaptic Pacinian corpuscle.",
+     "title": "Pacinian corpuscles Pacinian corpuscles diagram 1",
+     "key": "pacinian corpuscles pacinian corpuscles diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Monosynaptic Golgi tendon organ.",
+     "title": "Slowly adapting intitle: Slowly schema 8",
+     "key": "slowly adapting intitle: slowly schema 8.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Polysynaptic Nociceptor.",
+     "title": "Slowly adapting intitle: Slowly specimen 2",
+     "key": "slowly adapting intitle: slowly specimen 2.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Polysynaptic Muscle spindle.",
+     "title": "intitle: Slowly adapting intitle: photo 7",
+     "key": "intitle: slowly adapting intitle: photo 7.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-SPINAL-REFLEXES-AND-SPINAL-CORD-TRANSECTION-MCQ-73",
+   "subject": "PHYSIOLOGY",
+   "stem": "The shortest reflex time is recorded with",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "A flexor withdrawal reflex",
+     "title": "flexor withdrawal reflex intitle: schema 8",
+     "key": "flexor withdrawal reflex intitle: schema 8.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "An inverse stretch reflex",
+     "title": "inverse stretch reflex intitle: schema 8",
+     "key": "inverse stretch reflex intitle: schema 8.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "A stretch reflex",
+     "title": "reflex intitle: Stretch reflex labeled 6",
+     "key": "reflex intitle: stretch reflex labeled 6.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "A scratch reflex",
+     "title": "intitle: A scratch reflex diagram 1",
+     "key": "intitle: a scratch reflex diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-EQUILIBRIUM-AND-VESTIBULAR-APPARATUS-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "Maculae of vestibular apparatus are",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "stimulated by movement of endolymph over their surface",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "stimulated during standing upright but inhibited in the recumbent posture",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "alter the pattern of their discharge by head tilting",
+     "title": "intitle: Maculae intitle: Maculae diagram 1",
+     "key": "intitle: maculae intitle: maculae diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "stimulated by angular acceleration",
+     "title": "Semicircular canals Semicircular canals diagram 1",
+     "key": "semicircular canals semicircular canals diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-MOTOR-CORTEX-MCQ-3",
+   "subject": "PHYSIOLOGY",
+   "stem": "The premotor area includes all the following, except",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Broca’s area",
+     "title": "intitle: Broca s area diagram 1",
+     "key": "intitle: broca s area diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "head rotation area",
+     "title": "intitle: head rotation area diagram 1",
+     "key": "intitle: head rotation area diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "supplemental motor area",
+     "title": "intitle: supplemental motor area diagram 1",
+     "key": "intitle: supplemental motor area diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "hand skills area1",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-BASAL-GANGLIA-MCQ-7",
+   "subject": "PHYSIOLOGY",
+   "stem": "Chorea",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "is due to lesion in the substantia nigra.",
+     "title": "intitle: Parkinson intitle: Parkinson diagram 1",
+     "key": "intitle: parkinson intitle: parkinson diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "may be due to lesion in the internal capsule.",
+     "title": "Internal capsule Internal capsule diagram 1",
+     "key": "internal capsule internal capsule diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "is associated with hypotonia.",
+     "title": "intitle: is associated with diagram 1",
+     "key": "intitle: is associated with diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "is associated with exaggerated tendon jerk.",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-THE-CEREBELLUM-MCQ-22",
+   "subject": "PHYSIOLOGY",
+   "stem": "Cerebellar ataxia is manifested by all the following, except",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "dysdiadochokinesia",
+     "title": "intitle: dysdiadochokinesia intitle: dysdiadochokinesia diagram 1",
+     "key": "intitle: dysdiadochokinesia intitle: dysdiadochokinesia diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "static tremors",
+     "title": "intitle: static tremors intitle: diagram 1",
+     "key": "intitle: static tremors intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "dysmetria",
+     "title": "Human cerebellum Human cerebellum diagram 1",
+     "key": "human cerebellum human cerebellum diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Staccato speech",
+     "title": "intitle: Staccato speech intitle: diagram 1",
+     "key": "intitle: staccato speech intitle: diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-SPEECH-AND-LANGUAGE-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "Damage of the general interpretative area causes all the following effects, except",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "failure of articulate speech",
+     "title": "of articulate speech intitle: schema 8",
+     "key": "of articulate speech intitle: schema 8.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "failure to understand written words",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "failure to understand spoken words",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "sensory aphasia",
+     "title": "Wernicke s area Wernicke diagram 1",
+     "key": "wernicke s area wernicke diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-COLOR-VISION-AND-VISUAL-PATHWAY-MCQ-1",
+   "subject": "PHYSIOLOGY",
+   "stem": "Concerning color vision",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "It is mediated by rods",
+     "title": "intitle: Rods intitle: Rods diagram 1",
+     "key": "intitle: rods intitle: rods diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "The stimulation ratio of the 3 types of cones allows specific color perception",
+     "title": "intitle: Cones intitle: Cones diagram 1",
+     "key": "intitle: cones intitle: cones diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "It is maximal in peripheral retina",
+     "title": "Retina layers",
+     "key": "retina layers.svg"
+    },
+    {
+     "opt": "d",
+     "text": "It does not require visual cortex",
+     "title": "Diagram of the visual pathway",
+     "key": "diagram of the visual pathway.png"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-20",
+   "subject": "PHYSIOLOGY",
+   "stem": "All about miosis of the pupil is correct, EXCEPT",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "reduces visual field",
+     "title": "Visual system Visual system diagram 1",
+     "key": "visual system visual system diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "increases depth of field",
+     "title": "intitle: increases depth of diagram 1",
+     "key": "intitle: increases depth of diagram 1.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "reduced spherical aberration",
+     "title": "intitle: reduced spherical aberration diagram 1",
+     "key": "intitle: reduced spherical aberration diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "increases chromatic aberration",
+     "title": "intitle: increases chromatic aberration diagram 1",
+     "key": "intitle: increases chromatic aberration diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-21",
+   "subject": "PHYSIOLOGY",
+   "stem": "Stimulation of photoreceptors by light produces which of the following",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Increase in cGMP",
+     "title": "intitle: Dark photoreceptor depolarized diagram 1",
+     "key": "intitle: dark photoreceptor depolarized diagram 1.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Formation of metarhodopsin II increases",
+     "title": "Rods intitle: Rods labeled 6",
+     "key": "rods intitle: rods labeled 6.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Opening of Na+ channels",
+     "title": "Dark photoreceptor depolarized intitle: labeled 6",
+     "key": "dark photoreceptor depolarized intitle: labeled 6.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Depolarization of membrane",
+     "title": "depolarized intitle: Dark photoreceptor schema 8",
+     "key": "depolarized intitle: dark photoreceptor schema 8.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-PHYS-INNER-EAR-LABYRINTH-MCQ-8",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding hair cells",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Hair cells depolarize when their hairs are bent toward the modiolus",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "Nerve fibers stimulated by hair cells have their cell bodies in the cochlear nuclei of the brain stem",
+     "title": "Structure of the cochlea and organ of Corti",
+     "key": "structure of the cochlea and organ of corti.png"
+    },
+    {
+     "opt": "c",
+     "text": "There are more inner hair cells than outer hair cells in the organ of corti",
+     "title": "Organ of corti",
+     "key": "organ of corti.png"
+    },
+    {
+     "opt": "d",
+     "text": "Transmission of auditory signals is performed mainly by inner hair cells than outer hair",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-HIST-NERVOUS-TISSUE-SOURCE-BASED-10",
+   "subject": "HISTOLOGY",
+   "stem": "Cochlear and Vestibular ganglia in the ear are examples of",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Multipolar stellate neurons.",
+     "title": "intitle: Autonomic ganglion intitle: micrograph 4",
+     "key": "intitle: autonomic ganglion intitle: micrograph 4.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Bipolar neurons.",
+     "title": "intitle: Bipolar neurons intitle: micrograph 4",
+     "key": "intitle: bipolar neurons intitle: micrograph 4.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Multipolar pyriform neurons.",
+     "title": "intitle: Autonomic ganglion intitle: diagram 1",
+     "key": "intitle: autonomic ganglion intitle: diagram 1.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Multipolar pyramidal neurons.",
+     "title": "ganglion intitle: Autonomic ganglion labeled 6",
+     "key": "ganglion intitle: autonomic ganglion labeled 6.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-SOURCE-BASED-3",
+   "subject": "HISTOLOGY",
+   "stem": "Regarding the cerebellar cortex, which of the following statements is true?",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Granular cells have many long dendrites.",
+     "title": "intitle: Granule cells intitle: micrograph 4",
+     "key": "intitle: granule cells intitle: micrograph 4.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Each Purkinje cell receives an inhibitory signal from a single climbing fiber.",
+     "title": "intitle: Cerebellar cortex intitle: micrograph 4",
+     "key": "intitle: cerebellar cortex intitle: micrograph 4.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "The dendrites of Golgi cells extend in all layers of the grey matter.",
+     "title": "Purkinje intitle: Purkinje micrograph 4",
+     "key": "purkinje intitle: purkinje micrograph 4.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Purkinje cells are unipolar cells arranged in one row. (197)",
+     "title": "intitle: Cerebellar cortex intitle: diagram 1",
+     "key": "intitle: cerebellar cortex intitle: diagram 1.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-DEPARTMENT-14",
+   "subject": "HISTOLOGY",
+   "stem": "Second order neuron in proprioception from lower half of body is in",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Gracile nucleus on same side.",
+     "title": "lemniscus Medial lemniscus micrograph 4",
+     "key": "lemniscus medial lemniscus micrograph 4.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "Cuneate nucleus on same side.",
+     "title": "lemniscus Medial lemniscus labeled 6",
+     "key": "lemniscus medial lemniscus labeled 6.jpg"
+    },
+    {
+     "opt": "c",
+     "text": "Gracile nucleus on opposite side.",
+     "title": "lemniscus Medial lemniscus schema 8",
+     "key": "lemniscus medial lemniscus schema 8.jpg"
+    },
+    {
+     "opt": "d",
+     "text": "Cuneate nucleus on opposite side.",
+     "title": "Medial lemniscus Medial lemniscus illustration 5",
+     "key": "medial lemniscus medial lemniscus illustration 5.jpg"
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-HIST-EYE-SOURCE-BASED-17",
+   "subject": "HISTOLOGY",
+   "stem": "Concerning Müller cells",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "Are considered as nerve cells.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "b",
+     "text": "Their bodies are present in the outer nuclear layer.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "Outer limiting membrane is formed of gap junctions between Müller & amacrine cells.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "d",
+     "text": "Inner limiting membrane is formed by tight junctions between their processes.",
+     "title": null,
+     "key": null
+    }
+   ]
+  },
+  {
+   "id": "EHSAN-HIST-EAR-SOURCE-BASED-3",
+   "subject": "HISTOLOGY",
+   "stem": "Choose the correct statement about the cochlear duct",
+   "cells": [
+    {
+     "opt": "a",
+     "text": "It contains perilymph.",
+     "title": "perilymph intitle: It contains micrograph 4",
+     "key": "perilymph intitle: it contains micrograph 4.jpg"
+    },
+    {
+     "opt": "b",
+     "text": "It contains the neuroreceptor for balance & equilibrium.",
+     "title": null,
+     "key": null
+    },
+    {
+     "opt": "c",
+     "text": "The organ of Corti lies on the vestibular membrane.",
+     "title": "Organ of corti in cross section",
+     "key": "organ of corti in cross section.svg"
+    },
+    {
+     "opt": "d",
+     "text": "Its outer wall is formed of stria vascularis.",
+     "title": null,
+     "key": null
+    }
+   ]
+  }
+ ]
+}

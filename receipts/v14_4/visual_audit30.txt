@@ -1,0 +1,58 @@
+{
+ "n": 30,
+ "subjects": {
+  "ANATOMY": 16,
+  "PHYSIOLOGY": 8,
+  "HISTOLOGY": 6
+ },
+ "uniquePrimary": 30,
+ "exactRepeat": 0,
+ "adjacentRepeat": 0,
+ "sourceBankImage": 0,
+ "curatedAtlasImage": 10,
+ "categorySearchImage": 20,
+ "genericFallback": 0,
+ "noTrustworthyVisual": 0,
+ "brokenImage": "not measurable offline (Commons mocked); live check: INTELLECTUALITY_V14.audit({n:60}) on the site",
+ "irrelevant": "human review of rows below",
+ "metrics": {
+  "n": 30,
+  "primaryCoveragePct": 100,
+  "uniqueVisualPct": 100,
+  "exactRepeatPct": 0,
+  "adjacentRepeatPct": 0,
+  "noVisualPct": 0,
+  "irrelevantPct": "requires human review of rows[].primary"
+ }
+}
+0 ANAT spinal_meninges file spe Spinal cord and roots and dural tube which covers them. Well  | Regarding the meninges of the spinal cord, one of the following is true → The pia mater forms ligamentum denticulatum.
+1 ANAT spinal_meninges cat dia Spinal meninges Spinal meninges diagram 1  | If we need to insert a needle into the subarachnoid space to sample CSF, where i → Between L-3 and L-4.
+2 ANAT spinal_xs cat dia Human spinal cord cross diagram 1  | Regarding the spinal cord, select the true statement → The filum terminale attach the lower end of spinal cord with
+3 ANAT spinal_roots cat dia Dorsal root ganglion Dorsal diagram 1  | Concerning spinal nerve C-8, which of the following is true? → C-8 enters/exits between vertebrae C7 and T1.
+4 PHYS synapse file dia Chemical synapse schema  | Synaptic Transmission is terminated by which of the following? → Degradation of neurotransmitters by specific enzymes
+5 PHYS synapse cat dia Chemical synapses Chemical synapses diagram 1  | Which of the following is correct regarding the synapse ? → The synaptic cleft contains fluid rich in Na+
+6 HIST neuron cat mic Neurons Neurons micrograph 4  | Which of the following is true for Nissl bodies? → Undergo chromatolysis after injury to the axon.
+7 HIST spindle_gto cat mic Golgi tendon organs Golgi micrograph 4  | Golgi tendon organs are considered as → Proprioceptors.
+8 HIST glia cat mic Neuroglia Neuroglia micrograph 4  | Which statement best applies on neuroglia? → Fibrous astrocytes have few long processes.
+9 HIST spindle_gto cat dia Muscle spindles Muscle spindles diagram 1  | Regarding muscle spindle → Efferent endings surrounding striated portion of intrafusal 
+10 PHYS synaptic_potentials file gra Schematic of spatial summation curve  | Regarding presynaptic inhibition → There's a decrease in the release of chemical transmitters f
+11 PHYS synaptic_potentials cat dia Postsynaptic potentials Postsynaptic potentials diagram 1  | The Inhibitory postsynaptic potential (IPSP) is → A state of Hyperpolarization of postsynaptic membrane
+12 ANAT brainstem file spe Human brainstem anterior view 2 description  | Regarding medulla oblongata, one of the following is true → Decussation of pyramids represents the crossing of the corti
+13 ANAT brainstem file dia Brain stem sagittal section  | The posterior surface of mid brain is represented by → Corpora quadrigemina.
+14 ANAT brainstem cat dia Human brainstem Human brainstem diagram 1  | About the medulla oblongata, choose the correct answer → The pyramid is an elongated elevation produced by corticospi
+15 ANAT brainstem cat dia brainstem Human brainstem labeled 6  | Concerning the olive, select the correct statement → Is related posteriorly to the rootlets of 9, 10 and 11 crani
+16 PHYS receptors cat dia Sensory receptors Sensory receptors diagram 1  | The receptor potential → Its duration is longer than action potential duration
+17 PHYS receptors cat sec Sensory receptors Sensory receptors section 3  | Slowly adapting (tonic) receptors include all the following except → Pacinian corpuscles
+18 ANAT ventricles_csf file dia Blausen 0896 Ventricles Brain  | Regarding the fourth ventricle, mark ONE true statement → Its choroid plexus hangs from its roof.
+19 ANAT ventricles_csf cat dia Ventricular system Ventricular system diagram 1  | Concerning the 4th ventricle, select the correct statement → Communicates with the subarachnoid space through one median 
+20 HIST nerve_sheaths cat mic nerves Histology of nerves section 3  | Unmyelinated nerve fibers with Schwann cells are found in → Post ganglionic sympathetic fibers.
+21 HIST nerve_endings file dia Blausen 0809 Skin TactileReceptors  | One of the following is classified as unencapsulated → Free nerve endings.
+22 ANAT diencephalon file dia Brain human sagittal section  | The following statements concern the third ventricle, one of them is correct → The choroid plexus is located in the roof .
+23 ANAT diencephalon cat dia Hypothalamus Hypothalamus diagram 1  | Which of the following is a part of the hypothalamus → Infundibulum.
+24 ANAT cortex_surface cat spe lobes Brain lobes specimen 2  | Regarding the cingulate sulcus; choose one best answer → Ends by dividing into two branches; submarginal and parietal
+25 ANAT cortex_surface cat dia lobes Brain lobes labeled 6  | Concerning the orbital surface of the cerebral hemisphere, one of the following  → Is the anterior 1/3 of the inferior surface of the hemispher
+26 PHYS tract_sensory file dia 1417 Ascending Pathways of Spinal Cord  | Which of the following sensations is carried by dorsal (posterior) column? → Stereognosis
+27 PHYS cortex_maps file dia Sensory Homunculus-en  | In somatosensory area I, the area of body representation depends on → Density of receptors
+28 ANAT brainstem cat spe brainstem Human brainstem specimen 2  | One of the following structures is a content of interpeduncular fossa → Mammillary bodies.
+29 ANAT diencephalon cat dia Hypothalamus Hypothalamus labeled 6  | Which of the following is a part of the hypothalamus? → Mamillary bodies.
+ERRORS []

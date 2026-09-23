@@ -1,0 +1,14 @@
+{
+  "version": "14.4",
+  "retrieved": "2026-09-23",
+  "policy": "Wikimedia Commons files and categories are fetched live with license and author from extmetadata, and nothing is rehosted. Teacher videos are official YouTube links/embeds only. Academic atlases are links only. No generated anatomy.",
+  "providers": [
+    {"name": "Wikimedia Commons (curated files)", "count": 86, "verified": "48 search-verified, 38 inherited from production v53", "license": "per file, shown next to the image", "role": "primary visual, second angle, distractor side"},
+    {"name": "Wikimedia Commons (categories)", "count": 108, "verified": "32 search-verified, 76 inherited", "role": "category-scoped search"},
+    {"name": "Wikimedia Commons (intitle exact-name search)", "role": "last-resort distractor/option picture; pathology titles refused; images only", "added": "14.4"},
+    {"name": "University of Michigan SecondLook / Neuroanatomy", "license": "CC BY-NC-SA", "role": "link only"},
+    {"name": "Ninja Nerd, Dr Matt & Dr Mike, Armando, AnatomyZone (YouTube)", "role": "official links/embeds at routed windows; no frames extracted"}
+  ],
+  "registry_doc": "docs/VISUAL_SOURCE_REGISTRY.md",
+  "evidence": "docs/RESEARCH_RECEIPTS.md"
+}

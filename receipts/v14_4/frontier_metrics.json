@@ -1,0 +1,839 @@
+{
+ "questions": 921,
+ "pairs": 2799,
+ "pairwise": 390,
+ "frame": 1205,
+ "cls": {
+  "number": 48,
+  "sibling": 1355,
+  "lookalike": 160,
+  "retrieval": 617,
+  "laterality": 13,
+  "lesion": 43,
+  "territory": 18,
+  "polarity": 342,
+  "direction": 103,
+  "route": 83,
+  "crossing": 17
+ },
+ "byCat": {
+  "ANATOMY": {
+   "pairs": 1186,
+   "pairwise": 236
+  },
+  "PHYSIOLOGY": {
+   "pairs": 1248,
+   "pairwise": 121
+  },
+  "HISTOLOGY": {
+   "pairs": 365,
+   "pairwise": 33
+  }
+ },
+ "model": {
+  "n": 921,
+  "noModel": 0,
+  "conceptAgree": 0,
+  "stemHit0": 114
+ },
+ "lowRel": [
+  {
+   "id": "EHSAN-ANAT-SPINAL-CORD-MCQ-3",
+   "subject": "ANATOMY",
+   "stem": "Cauda equina is",
+   "concept": "spinal_level",
+   "model": "Start with the whole spinal cord as a long CNS cylinder continuous with the medulla at the foramen magnum. In adults it usually ends around the L1–L2 vertebral level as the conus medullaris. Below that level the vertebra"
+  },
+  {
+   "id": "EHSAN-ANAT-SPINAL-CORD-MCQ-8",
+   "subject": "ANATOMY",
+   "stem": "The true statement about the spinal cord is",
+   "concept": "spinal_xs",
+   "model": "Anchor the meninges around that map. Pia is stuck to the cord and forms denticulate ligaments and the filum terminale. Arachnoid is separated from pia by the CSF-filled subarachnoid space."
+  },
+  {
+   "id": "EHSAN-ANAT-SPINAL-CORD-MCQ-14",
+   "subject": "ANATOMY",
+   "stem": "Regarding the spinal cord, select the true statement",
+   "concept": "spinal_xs",
+   "model": "Anchor the meninges around that map. Pia is stuck to the cord and forms denticulate ligaments and the filum terminale. Arachnoid is separated from pia by the CSF-filled subarachnoid space."
+  },
+  {
+   "id": "EHSAN-ANAT-SPINAL-CORD-MCQ-26",
+   "subject": "ANATOMY",
+   "stem": "In performing a lumbar puncture for CSF collection, the needle Is Inserted Into",
+   "concept": "spinal_level",
+   "model": "Anchor the meninges around that map. Pia is stuck to the cord and forms denticulate ligaments and the filum terminale. Arachnoid is separated from pia by the CSF-filled ▢▢▢."
+  },
+  {
+   "id": "EHSAN-ANAT-BRAIN-STEM-MCQ-8",
+   "subject": "ANATOMY",
+   "stem": "Facial colliculus overlies",
+   "concept": "brainstem",
+   "model": "A brainstem cross-section becomes manageable if you first identify level, then the ventricular landmark, then cranial nerve nuclei, then long tracts."
+  },
+  {
+   "id": "EHSAN-ANAT-BRAIN-STEM-MCQ-14",
+   "subject": "ANATOMY",
+   "stem": "Facial colliculus is seen in",
+   "concept": "brainstem",
+   "model": "The brainstem is three stacked regions: midbrain, ▢▢▢ and medulla. Every cross-section can be solved by three questions: which level am I at, which ventricular space is behind it, and which landmark nuclei or tracts belo"
+  },
+  {
+   "id": "EHSAN-ANAT-ARTERIAL-AND-VENOUS-SUPPLY-OF-BRAIN-MCQ-13",
+   "subject": "ANATOMY",
+   "stem": "One of the following arteries is not part of the circulus arteriosus",
+   "concept": "cerebral_arteries",
+   "model": "The anterior choroidal artery also contributes to deep structures including parts of the internal capsule and visual pathway. The thalamus receives branches predominantly from posterior circulation."
+  },
+  {
+   "id": "EHSAN-ANAT-EMBRYOLOGY-DEVELOPMENT-OF-CNS-MCQ-2",
+   "subject": "ANATOMY",
+   "stem": "Infundibulum is a downward extension of the",
+   "concept": "embryo_neural",
+   "model": "Neural tube = CNS; neural crest = much of PNS."
+  },
+  {
+   "id": "EHSAN-ANAT-STERNOMASTOID-MUSCLE-MCQ-6",
+   "subject": "ANATOMY",
+   "stem": "Regarding sternomastoid muscle, mark one correct statement",
+   "concept": "neck",
+   "model": "Sternocleidomastoid divides the side of neck into anterior and posterior triangles and is supplied motorly by accessory nerve with cervical contributions for proprioception. Its action depends on unilateral versus bilate"
+  },
+  {
+   "id": "EHSAN-ANAT-STERNOMASTOID-MUSCLE-MCQ-7",
+   "subject": "ANATOMY",
+   "stem": "G- Regarding sternomastoid, one of the following statements is true",
+   "concept": "neck",
+   "model": "Sternocleidomastoid divides the side of neck into anterior and posterior triangles and is ▢▢▢ motorly by ▢▢▢ nerve with cervical contributions for proprioception. Its action depends on unilateral versus bilateral contrac"
+  },
+  {
+   "id": "EHSAN-ANAT-CAROTID-TRIANGLE-MCQ-1",
+   "subject": "ANATOMY",
+   "stem": "The following branch arises from the facial artery in the neck",
+   "concept": "face_glands",
+   "model": "The carotid triangle contains the common carotid bifurcation region, internal and external carotid arteries, internal jugular vein, vagus nerve and related deep cervical structures. Think of it as the major neurovascular"
+  },
+  {
+   "id": "EHSAN-ANAT-CAROTID-TRIANGLE-MCQ-2",
+   "subject": "ANATOMY",
+   "stem": "One of the following is a branch of the facial artery in the neck",
+   "concept": "face_glands",
+   "model": "The carotid triangle contains the common carotid bifurcation region, internal and external carotid arteries, internal jugular vein, vagus nerve and related deep cervical structures. Think of it as the major neurovascular"
+  },
+  {
+   "id": "EHSAN-ANAT-CRANIAL-NERVES-MCQ-14",
+   "subject": "ANATOMY",
+   "stem": "Which statement is correct?",
+   "concept": "cranial_nerves",
+   "model": "CN VII carries branchial motor fibers to facial-expression muscles and parasympathetic/taste fibers through distinct branches. Chorda tympani joins lingual nerve to carry taste from anterior tongue and preganglionic secr"
+  },
+  {
+   "id": "EHSAN-ANAT-CRANIAL-NERVES-MCQ-21",
+   "subject": "ANATOMY",
+   "stem": "A 34-year-old patient complains of sensitivity to loud sounds. Injury to which of the following cranial nerves",
+   "concept": "cranial_nerves",
+   "model": "VIII is two sensors sharing one nerve: sound and head motion."
+  },
+  {
+   "id": "EHSAN-ANAT-PHARYNX-MCQ-12",
+   "subject": "ANATOMY",
+   "stem": "Regarding palatine tonsils, mark one correct statement",
+   "concept": "oral_pharynx",
+   "model": "Exception pair: tensor palate = V3; stylopharyngeus = IX; most remaining palate/pharynx motor = X."
+  },
+  {
+   "id": "EHSAN-ANAT-NOSE-MCQ-17",
+   "subject": "ANATOMY",
+   "stem": "Abduction of the vocal cords is produced by",
+   "concept": "oral_pharynx",
+   "model": "The nasal cavity has septal/lateral walls and conchae that create meatuses receiving sinus/duct drainage. Paranasal sinuses are frontal, maxillary, ethmoidal and sphenoidal; innervation is mainly trigeminal and olfaction"
+  },
+  {
+   "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding synapses",
+   "concept": "synapse",
+   "model": "A chemical synapse is a direction-changing machine: an electrical action potential arrives, is converted into chemical transmitter release, then becomes a new electrical change in the postsynaptic cell. Keep that sequenc"
+  },
+  {
+   "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-9",
+   "subject": "PHYSIOLOGY",
+   "stem": "Neuronal membrane at rest is characterized by",
+   "concept": "synapse",
+   "model": "A chemical synapse is a direction-changing machine: an electrical action potential arrives, is converted into chemical transmitter release, then becomes a new electrical change in the postsynaptic cell. Keep that sequenc"
+  },
+  {
+   "id": "EHSAN-PHYS-PROPERTIES-AND-FACTORS-AFFECTING-SYNAPTIC-TRANSMISSION-MCQ-4",
+   "subject": "PHYSIOLOGY",
+   "stem": "Tetanus toxin leads to",
+   "concept": "synapse",
+   "model": "Presynaptic inhibition usually acts before transmitter reaches the postsynaptic neuron. An axoaxonic synapse reduces calcium entry or otherwise decreases transmitter release from a terminal. This can selectively weaken o"
+  },
+  {
+   "id": "EHSAN-PHYS-PROPERTIES-AND-FACTORS-AFFECTING-SYNAPTIC-TRANSMISSION-MCQ-8",
+   "subject": "PHYSIOLOGY",
+   "stem": "Tetanus toxin leads to",
+   "concept": "synapse",
+   "model": "Temporal summation adds repeated inputs from one synapse; spatial summation adds simultaneous inputs from multiple synapses."
+  },
+  {
+   "id": "EHSAN-PHYS-SENSORY-CODE-MECHANORECEPTIVE-THERMAL-SENSATIONS-MCQ-11",
+   "subject": "PHYSIOLOGY",
+   "stem": "Proprioceptive sensations include all the following, EXCEPT",
+   "concept": "receptors",
+   "model": "Temperature uses warm and cold receptors over physiological ranges, while potentially damaging extremes increasingly activate nociceptive pathways. When a question changes receptor type, adaptation speed or receptive-fie"
+  },
+  {
+   "id": "EHSAN-PHYS-SENSORY-CODE-MECHANORECEPTIVE-THERMAL-SENSATIONS-MCQ-14",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding proprioceptive sensations, all the followings are correct Except",
+   "concept": "receptors",
+   "model": "Temperature uses warm and cold receptors over physiological ranges, while potentially damaging extremes increasingly activate nociceptive pathways. When a question changes receptor type, adaptation speed or receptive-fie"
+  },
+  {
+   "id": "EHSAN-PHYS-SENSORY-CODE-MECHANORECEPTIVE-THERMAL-SENSATIONS-MCQ-21",
+   "subject": "PHYSIOLOGY",
+   "stem": "Thermal sensations",
+   "concept": "receptors",
+   "model": "Temperature uses warm and cold receptors over physiological ranges, while potentially damaging extremes increasingly activate nociceptive pathways. When a question changes receptor type, adaptation speed or receptive-fie"
+  },
+  {
+   "id": "EHSAN-PHYS-SOMATIC-SENSORY-PATHWAYS-SOMATIC-SENSORY-CORTEX-MCQ-19",
+   "subject": "PHYSIOLOGY",
+   "stem": "Main final destination of signals that carry kinesthetic sensations is",
+   "concept": "cortex_maps",
+   "model": "A sensory pathway starts with a receptor transducing a stimulus into electrical activity. The first-order neuron carries that signal into the CNS, where it synapses and joins an ascending pathway."
+  },
+  {
+   "id": "EHSAN-PHYS-SOMATIC-SENSORY-PATHWAYS-SOMATIC-SENSORY-CORTEX-MCQ-23",
+   "subject": "PHYSIOLOGY",
+   "stem": "Astereognosis",
+   "concept": "tract_sensory",
+   "model": "Two major body pathways dominate exam logic: dorsal column–medial lemniscus for fine touch, vibration and conscious proprioception, and the anterolateral system for pain, temperature and crude touch."
+  },
+  {
+   "id": "EHSAN-PHYS-TYPES-OF-SYNAPTIC-POTENTIALS-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "The micturition reflex is influenced by all of the following signals except",
+   "concept": null,
+   "model": "Temporal summation means repeated input from the same synaptic source arrives close enough in time that the potentials overlap. Spatial summation means inputs from different synapses occur together. The axon initial segm"
+  },
+  {
+   "id": "EHSAN-PHYS-TYPES-OF-SYNAPTIC-POTENTIALS-MCQ-21",
+   "subject": "PHYSIOLOGY",
+   "stem": "IPSP differs from EPSP in",
+   "concept": "synaptic_potentials",
+   "model": "A postsynaptic potential is different from an action potential. EPSPs and IPSPs decay with time and distance and vary in amplitude. If their combined effect brings the trigger zone to threshold, voltage-gated channels ge"
+  },
+  {
+   "id": "EHSAN-PHYS-TYPES-OF-SYNAPTIC-POTENTIALS-MCQ-29",
+   "subject": "PHYSIOLOGY",
+   "stem": "EPSP",
+   "concept": "synaptic_potentials",
+   "model": "A postsynaptic potential is different from an action potential. EPSPs and IPSPs decay with time and distance and vary in amplitude. If their combined effect brings the trigger zone to threshold, voltage-gated channels ge"
+  },
+  {
+   "id": "EHSAN-PHYS-LESIONS-OF-THE-SENSORY-SYSTEM-MCQ-2",
+   "subject": "PHYSIOLOGY",
+   "stem": "Except",
+   "concept": "brainstem",
+   "model": "Neurological localization is pattern matching across systems, not memorizing diagnoses. Start with motor findings, sensory modalities, cranial nerves, coordination and cortical signs, then ask which single anatomical lev"
+  },
+  {
+   "id": "EHSAN-PHYS-LESIONS-OF-THE-SENSORY-SYSTEM-MCQ-5",
+   "subject": "PHYSIOLOGY",
+   "stem": "Brown-Sequard syndrome is characterized by all the following, except",
+   "concept": "tract_motor",
+   "model": "A spinal-cord lesion can combine ipsilateral corticospinal and dorsal-column deficits with contralateral pain-temperature loss below the lesion because those pathways cross at different levels."
+  },
+  {
+   "id": "EHSAN-PHYS-LESIONS-OF-THE-SENSORY-SYSTEM-MCQ-7",
+   "subject": "PHYSIOLOGY",
+   "stem": "Tabes dorsalis is",
+   "concept": "brainstem",
+   "model": "Brainstem lesions are famous for crossed findings: an ipsilateral cranial nerve deficit with a contralateral body deficit can point to a specific level."
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-CONTROL-SYSTEM-MCQ-1",
+   "subject": "PHYSIOLOGY",
+   "stem": "following neurotransmitter",
+   "concept": "synapse",
+   "model": "When the presynaptic action potential depolarizes the terminal, voltage-gated calcium channels open. Calcium enters down a steep electrochemical gradient. The calcium signal triggers vesicle docking and fusion through th"
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-7",
+   "subject": "PHYSIOLOGY",
+   "stem": "due to",
+   "concept": "pain",
+   "model": "Pain pathway: nociceptor → DRG → dorsal horn → cross in cord → anterolateral tract → thalamus/cortex."
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-9",
+   "subject": "PHYSIOLOGY",
+   "stem": "Pain receptors are",
+   "concept": "pain",
+   "model": "For an exam stem, separate receptor activation, peripheral fiber type, spinal crossing and central perception. A drug or lesion acting at one of those points should change the next steps in the chain, not every part of s"
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-11",
+   "subject": "PHYSIOLOGY",
+   "stem": "Cutaneous pain is",
+   "concept": "pain",
+   "model": "Pain pathway: nociceptor → DRG → dorsal horn → cross in cord → anterolateral tract → thalamus/cortex."
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-12",
+   "subject": "PHYSIOLOGY",
+   "stem": "Cutaneous pain is",
+   "concept": "pain",
+   "model": "Pain pathway: nociceptor → DRG → dorsal horn → cross in cord → anterolateral tract → thalamus/cortex."
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-13",
+   "subject": "PHYSIOLOGY",
+   "stem": "Intermittent Claudications evoke",
+   "concept": "pain",
+   "model": "Pain pathway: nociceptor → DRG → dorsal horn → cross in cord → anterolateral tract → thalamus/cortex."
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-17",
+   "subject": "PHYSIOLOGY",
+   "stem": "EXCEPT",
+   "concept": "pain",
+   "model": "Pain pathway: nociceptor → DRG → dorsal horn → cross in cord → anterolateral tract → thalamus/cortex."
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-21",
+   "subject": "PHYSIOLOGY",
+   "stem": "Pain receptors are",
+   "concept": "pain",
+   "model": "For an exam stem, separate receptor activation, peripheral fiber type, spinal crossing and central perception. A drug or lesion acting at one of those points should change the next steps in the chain, not every part of s"
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-25",
+   "subject": "PHYSIOLOGY",
+   "stem": "Pain receptors :-",
+   "concept": "pain",
+   "model": "For an exam stem, separate receptor activation, peripheral fiber type, spinal crossing and central perception. A drug or lesion acting at one of those points should change the next steps in the chain, not every part of s"
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-26",
+   "subject": "PHYSIOLOGY",
+   "stem": "Pain threshold :-",
+   "concept": "pain",
+   "model": "Pain begins with nociceptors activated by potentially damaging mechanical, thermal or chemical stimuli. The first useful distinction is fast versus slow pain, which differs in fiber type, sensation quality and central pr"
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-30",
+   "subject": "PHYSIOLOGY",
+   "stem": "Cutaneous pain",
+   "concept": "pain",
+   "model": "Pain begins with nociceptors activated by potentially damaging mechanical, thermal or chemical stimuli. The first useful distinction is fast versus slow pain, which differs in fiber type, sensation quality and central pr"
+  },
+  {
+   "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-43",
+   "subject": "PHYSIOLOGY",
+   "stem": "Ischemic pain is associated with which of the following",
+   "concept": "pain",
+   "model": "Pain pathway: nociceptor → DRG → dorsal horn → cross in cord → anterolateral tract → thalamus/cortex."
+  },
+  {
+   "id": "EHSAN-PHYS-SPINAL-REFLEXES-AND-SPINAL-CORD-TRANSECTION-MCQ-2",
+   "subject": "PHYSIOLOGY",
+   "stem": "The nuclear-chain fibers of spindles are innervated by",
+   "concept": "spindle_gto",
+   "model": "Withdrawal is a polysynaptic, often multisegmental reflex using interneurons to activate flexors and inhibit extensors; crossed extension can stabilize the opposite limb. Acute severe cord transection initially removes d"
+  },
+  {
+   "id": "EHSAN-PHYS-SPINAL-REFLEXES-AND-SPINAL-CORD-TRANSECTION-MCQ-55",
+   "subject": "PHYSIOLOGY",
+   "stem": "45- Which cells receive direct synaptic input from Golgi tendon organs",
+   "concept": "spindle_gto",
+   "model": "Peripheral sensory endings range from free nerve endings for pain/temperature to encapsulated receptors. Pacinian corpuscles are lamellated and detect vibration/rapid pressure changes; Meissner corpuscles are superficial"
+  },
+  {
+   "id": "EHSAN-PHYS-SPINAL-REFLEXES-AND-SPINAL-CORD-TRANSECTION-MCQ-101",
+   "subject": "PHYSIOLOGY",
+   "stem": "Decerebrate rigidity is due to",
+   "concept": "reflexes",
+   "model": "Acute severe cord transection can cause spinal shock: transient loss of reflexes and flaccidity below lesion, followed later by return/exaggeration of reflexes as supraspinal influence is lost."
+  },
+  {
+   "id": "EHSAN-PHYS-EQUILIBRIUM-AND-VESTIBULAR-APPARATUS-MCQ-7",
+   "subject": "PHYSIOLOGY",
+   "stem": "Asymmetrical bilateral discharge from the SCCs occurs :-",
+   "concept": "vestibular",
+   "model": "Semicircular canals detect angular acceleration. Head rotation moves endolymph relative to the canal wall, deflecting the cupula in the ampulla and bending hair-cell stereocilia. Direction of bending determines whether v"
+  },
+  {
+   "id": "EHSAN-PHYS-EQUILIBRIUM-AND-VESTIBULAR-APPARATUS-MCQ-13",
+   "subject": "PHYSIOLOGY",
+   "stem": "Asymmetrical bilateral discharge from the SCCs occurs in all of the following Except",
+   "concept": "vestibular",
+   "model": "Semicircular canals detect angular acceleration. Head rotation moves endolymph relative to the canal wall, deflecting the cupula in the ampulla and bending hair-cell stereocilia. Direction of bending determines whether v"
+  },
+  {
+   "id": "EHSAN-PHYS-EQUILIBRIUM-AND-VESTIBULAR-APPARATUS-MCQ-14",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which of the following is correct as regards the caloric method of stimulation of SCCs?",
+   "concept": "vestibular",
+   "model": "Semicircular canals detect angular acceleration. Head rotation moves endolymph relative to the canal wall, deflecting the cupula in the ampulla and bending hair-cell stereocilia. Direction of bending determines whether v"
+  },
+  {
+   "id": "EHSAN-PHYS-EQUILIBRIUM-AND-VESTIBULAR-APPARATUS-MCQ-33",
+   "subject": "PHYSIOLOGY",
+   "stem": "Post-rotating effects",
+   "concept": "vestibular",
+   "model": "Postural control combines vestibular, visual and proprioceptive signals with cerebellar and brainstem motor outputs. Semicircular canals emphasize angular acceleration, while utricle and saccule encode linear acceleratio"
+  },
+  {
+   "id": "EHSAN-PHYS-UPPER-AND-LOWER-MOTOR-NEURON-LESION-MCQ-8",
+   "subject": "PHYSIOLOGY",
+   "stem": "A patient with long standing LMNL will have",
+   "concept": "tract_motor",
+   "model": "Brainstem lesions often produce 'crossed' findings because a cranial-nerve nucleus or fascicle may be damaged on the same side as the lesion while a long tract has already crossed or will affect the opposite side of the "
+  },
+  {
+   "id": "EHSAN-PHYS-UPPER-AND-LOWER-MOTOR-NEURON-LESION-MCQ-13",
+   "subject": "PHYSIOLOGY",
+   "stem": "Features of pyramidal tract lesion are all Except",
+   "concept": "tract_motor",
+   "model": "Do not diagnose UMN versus LMN from weakness alone. Use tone, reflexes, plantar response, atrophy and fasciculations as a bundle of evidence. The examiner often gives one misleading feature but the pattern wins."
+  },
+  {
+   "id": "EHSAN-PHYS-UPPER-AND-LOWER-MOTOR-NEURON-LESION-MCQ-16",
+   "subject": "PHYSIOLOGY",
+   "stem": "Hemiplegia affecting the right side of the body, all the following statements are true EXCEPT",
+   "concept": "tract_motor",
+   "model": "Upper motor neurons are descending neurons whose cell bodies lie in cortex or brainstem and whose axons influence lower motor neurons. Lower motor neurons are the final motor neurons in anterior horn or cranial motor nuc"
+  },
+  {
+   "id": "EHSAN-PHYS-BASAL-GANGLIA-MCQ-4",
+   "subject": "PHYSIOLOGY",
+   "stem": "The affected area involved in Parkinsonism is",
+   "concept": "basal_ganglia",
+   "model": "The basal ganglia help select desired movements and suppress competing motor programs. They do not directly drive lower motor neurons; instead they influence cortex through thalamic loops."
+  },
+  {
+   "id": "EHSAN-PHYS-BASAL-GANGLIA-MCQ-5",
+   "subject": "PHYSIOLOGY",
+   "stem": "Parkinsonism is associated with",
+   "concept": "basal_ganglia",
+   "model": "Neuron shape is a recognition shortcut only when linked to location and function. Multipolar neurons dominate motor and interneuronal circuits. Pseudounipolar neurons are the classic sensory-ganglion cells."
+  },
+  {
+   "id": "EHSAN-PHYS-BASAL-GANGLIA-MCQ-7",
+   "subject": "PHYSIOLOGY",
+   "stem": "Chorea",
+   "concept": "basal_ganglia",
+   "model": "The basal ganglia form cortico-striato-pallido-thalamo-cortical loops that select and scale actions. Simplified direct-pathway activity facilitates selected movement, while indirect-pathway activity suppresses competing "
+  },
+  {
+   "id": "EHSAN-PHYS-THE-CEREBELLUM-MCQ-18",
+   "subject": "PHYSIOLOGY",
+   "stem": "Archi-cecebellum",
+   "concept": "cerebellum",
+   "model": "The cerebellum coordinates timing, force and accuracy of movement by comparing intended motor command with sensory feedback about what actually happened. It corrects error rather than initiating voluntary movement itself"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-CEREBELLUM-MCQ-19",
+   "subject": "PHYSIOLOGY",
+   "stem": "Paleo-cercbellum",
+   "concept": "cerebellum",
+   "model": "The cerebellum coordinates timing, force and accuracy of movement by comparing intended motor command with sensory feedback about what actually happened. It corrects error rather than initiating voluntary movement itself"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-CEREBELLUM-MCQ-21",
+   "subject": "PHYSIOLOGY",
+   "stem": "Neocerebellum",
+   "concept": "cerebellum",
+   "model": "The cerebellum coordinates timing, force and accuracy of movement by comparing intended motor command with sensory feedback about what actually happened. It corrects error rather than initiating voluntary movement itself"
+  },
+  {
+   "id": "EHSAN-PHYS-SLEEP-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "β – waves of the EEG",
+   "concept": "sleep_eeg",
+   "model": "▢▢▢ contributes to memory consolidation and synaptic regulation. Do not treat EEG, ▢▢▢ and memory as unrelated lists; they are linked through changes in network state and plasticity."
+  },
+  {
+   "id": "EHSAN-PHYS-SLEEP-MCQ-9",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding the electroencephalogram EEG",
+   "concept": "sleep_eeg",
+   "model": "EEG reflects synchronized cortical electrical activity. Wakefulness, NREM stages and REM have characteristic patterns; normal sleep cycles repeatedly through NREM and REM, while sleep contributes to memory processing and"
+  },
+  {
+   "id": "EHSAN-PHYS-SLEEP-MCQ-11",
+   "subject": "PHYSIOLOGY",
+   "stem": "Delta waves 0.54 Hz) are scenin",
+   "concept": "sleep_eeg",
+   "model": "EEG reflects synchronized cortical electrical activity. Wakefulness, NREM stages and REM have characteristic patterns; normal sleep cycles repeatedly through NREM and REM, while sleep contributes to memory processing and"
+  },
+  {
+   "id": "EHSAN-PHYS-MEMORY-LEARNING-MCQ-2",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which statement regarding the NMDA receptor is incorrect",
+   "concept": "memory",
+   "model": "Long-term potentiation is a durable increase in synaptic efficacy and is a major cellular model for memory; NMDA-dependent Ca2+ signaling is important in many hippocampal circuits."
+  },
+  {
+   "id": "EHSAN-PHYS-MEMORY-LEARNING-MCQ-3",
+   "subject": "PHYSIOLOGY",
+   "stem": "Habituation of synapses is due to",
+   "concept": "memory",
+   "model": "For the dorsal-column–medial-lemniscus system, fine touch, vibration and conscious proprioception enter the cord and ascend ipsilaterally in the posterior columns. Lower-body fibers travel in fasciculus gracilis and uppe"
+  },
+  {
+   "id": "EHSAN-PHYS-MEMORY-LEARNING-MCQ-5",
+   "subject": "PHYSIOLOGY",
+   "stem": "As regards sensitization of synapses",
+   "concept": "memory",
+   "model": "Sleep supports memory consolidation; deprivation impairs attention, working memory and learning efficiency."
+  },
+  {
+   "id": "EHSAN-PHYS-MEMORY-LEARNING-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "Habituation of synapses",
+   "concept": "memory",
+   "model": "For the dorsal-column–medial-lemniscus system, fine touch, vibration and conscious proprioception enter the cord and ascend ipsilaterally in the posterior columns. Lower-body fibers travel in fasciculus gracilis and uppe"
+  },
+  {
+   "id": "EHSAN-PHYS-MEMORY-LEARNING-MCQ-15",
+   "subject": "PHYSIOLOGY",
+   "stem": "lonotropic receptors",
+   "concept": "memory",
+   "model": "Short-term changes can rely more on transient transmitter/receptor effects, while durable memory increasingly depends on protein synthesis and structural remodeling. This is why blocking gene expression has different eff"
+  },
+  {
+   "id": "EHSAN-PHYS-PHYSIOLOGIC-OPTICS-MCQ-3",
+   "subject": "PHYSIOLOGY",
+   "stem": "Concerning the eye all the following is correct, except",
+   "concept": "eye_globe",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-PHYSIOLOGIC-OPTICS-MCQ-4",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding the Eye, all are true EXCEPT",
+   "concept": "eye_globe",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-COLOR-VISION-AND-VISUAL-PATHWAY-MCQ-11",
+   "subject": "PHYSIOLOGY",
+   "stem": "Cutting which structure on the left side causes total blindness in the left eye",
+   "concept": "visual_path",
+   "model": "The ▢▢▢s meet at the optic chiasm, where fibers from nasal retinal halves cross while temporal retinal fibers remain uncrossed. This arrangement sends the right visual field from both eyes to the left hemisphere and the "
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-1",
+   "subject": "PHYSIOLOGY",
+   "stem": "The human Eye",
+   "concept": "eye_optics",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-3",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which of the following is most likely to occur when a student changes his view from his book to his friend's b",
+   "concept": "eye_optics",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-5",
+   "subject": "PHYSIOLOGY",
+   "stem": "Cataract occurs due to",
+   "concept": "eye_globe",
+   "model": "Temporal summation means repeated input from the same synaptic source arrives close enough in time that the potentials overlap. Spatial summation means inputs from different synapses occur together. The axon initial segm"
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-6",
+   "subject": "PHYSIOLOGY",
+   "stem": "Cataract",
+   "concept": "eye_globe",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-11",
+   "subject": "PHYSIOLOGY",
+   "stem": "In the Purkinje Sanson's image experiment",
+   "concept": "cortex_histo",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-13",
+   "subject": "PHYSIOLOGY",
+   "stem": "Concerning the near response",
+   "concept": "eye_optics",
+   "model": "Accommodation for near vision requires increased lens curvature. Parasympathetic contraction of ciliary muscle reduces tension on zonular fibers, allowing the elastic lens to become more convex. For distance vision, cili"
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-24",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which of the following statements concerning myopia is correct",
+   "concept": "eye_optics",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-25",
+   "subject": "PHYSIOLOGY",
+   "stem": "Myopia is characterized by",
+   "concept": "eye_optics",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-26",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding the hypermetropic eye all are true EXCEPT",
+   "concept": "eye_optics",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-28",
+   "subject": "PHYSIOLOGY",
+   "stem": "Total loss of accommodation in persons over 70 years of age is called",
+   "concept": "eye_optics",
+   "model": "Pain and temperature use the anterolateral system. Primary afferents enter the cord, synapse relatively early in the dorsal horn, and second-order neurons cross within the spinal cord over nearby segments. That is why a "
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-29",
+   "subject": "PHYSIOLOGY",
+   "stem": "Concerning hypermetropia",
+   "concept": "eye_optics",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-32",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which of the following is not a component of the near response",
+   "concept": "eye_optics",
+   "model": "Accommodation for near vision requires increased lens curvature. Parasympathetic contraction of ▢▢▢ reduces tension on zonular fibers, allowing the elastic lens to become more convex. For distance vision, ▢▢▢ relaxes, zo"
+  },
+  {
+   "id": "EHSAN-PHYS-REFRACTIVE-MEDIA-OF-THE-EYE-MCQ-34",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding the eye",
+   "concept": "eye_optics",
+   "model": "Refraction bends incoming light so it can focus on the retina. The cornea provides most of the eye's fixed refractive power because of the air-cornea interface, while the lens provides adjustable fine focusing."
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-2",
+   "subject": "PHYSIOLOGY",
+   "stem": "The fovea contains an increased proportion of",
+   "concept": "retina",
+   "model": "Retinal circuits contain bipolar, horizontal, amacrine and ganglion cells that shape contrast, temporal responses and receptive fields before signals ever leave the eye. The retina therefore performs computation, not jus"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-5",
+   "subject": "PHYSIOLOGY",
+   "stem": "All about photoreceptors is correct, except",
+   "concept": "retina",
+   "model": "In darkness photoreceptor cGMP-gated channels support a depolarized state and continuous transmitter release. Light activates opsin/transducin/PDE signaling, lowers cGMP, closes channels and hyperpolarizes the photorecep"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-10",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which of the following pairs of molecules combine to form rhodopsin",
+   "concept": "retina",
+   "model": "Retinal circuits contain bipolar, horizontal, amacrine and ganglion cells that shape contrast, temporal responses and receptive fields before signals ever leave the eye. The retina therefore performs computation, not jus"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-14",
+   "subject": "PHYSIOLOGY",
+   "stem": "Rhodopsin",
+   "concept": "retina",
+   "model": "Retinal circuits contain bipolar, horizontal, amacrine and ganglion cells that shape contrast, temporal responses and receptive fields before signals ever leave the eye. The retina therefore performs computation, not jus"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-20",
+   "subject": "PHYSIOLOGY",
+   "stem": "When rods are stimulated, the following occurs",
+   "concept": "retina",
+   "model": "Rods are highly light-sensitive but low acuity/color; cones support daylight, color and high acuity."
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-24",
+   "subject": "PHYSIOLOGY",
+   "stem": "Rod cell excitation by photons results in the conversion of",
+   "concept": "retina",
+   "model": "Retinal circuits contain bipolar, horizontal, amacrine and ganglion cells that shape contrast, temporal responses and receptive fields before signals ever leave the eye. The retina therefore performs computation, not jus"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-30",
+   "subject": "PHYSIOLOGY",
+   "stem": "Dark adaptation is nearly maximal in about",
+   "concept": "retina",
+   "model": "Retinal circuits contain bipolar, horizontal, amacrine and ganglion cells that shape contrast, temporal responses and receptive fields before signals ever leave the eye. The retina therefore performs computation, not jus"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-RETINA-MCQ-32",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which statement best describes the underlying basis of the dark current in the outer segment of the photorecep",
+   "concept": "retina",
+   "model": "In darkness photoreceptor cGMP-gated channels support a depolarized state and continuous transmitter release. Light activates opsin/transducin/PDE signaling, lowers cGMP, closes channels and hyperpolarizes the photorecep"
+  },
+  {
+   "id": "EHSAN-PHYS-THE-UVEAL-TRACT-MCQ-8",
+   "subject": "PHYSIOLOGY",
+   "stem": "Which of the following statements about Argyll-Robertson pupil is incorrect",
+   "concept": "eye_optics",
+   "model": "Retinal circuits contain bipolar, horizontal, amacrine and ganglion cells that shape contrast, temporal responses and receptive fields before signals ever leave the eye. The retina therefore performs computation, not jus"
+  },
+  {
+   "id": "EHSAN-PHYS-INNER-EAR-LABYRINTH-MCQ-8",
+   "subject": "PHYSIOLOGY",
+   "stem": "Regarding hair cells",
+   "concept": "cochlea",
+   "model": "Semicircular canals detect angular acceleration. Head rotation moves endolymph relative to the canal wall, deflecting the cupula in the ampulla and bending hair-cell stereocilia. Direction of bending determines whether v"
+  },
+  {
+   "id": "EHSAN-PHYS-INNER-EAR-LABYRINTH-MCQ-12",
+   "subject": "PHYSIOLOGY",
+   "stem": "Concerning hair cells",
+   "concept": "cochlea",
+   "model": "Semicircular canals detect angular acceleration. Head rotation moves endolymph relative to the canal wall, deflecting the cupula in the ampulla and bending hair-cell stereocilia. Direction of bending determines whether v"
+  },
+  {
+   "id": "EHSAN-PHYS-SOUND-FUNCTION-OF-MIDDLE-EAR-MCQ-4",
+   "subject": "PHYSIOLOGY",
+   "stem": "Concerning the decibel (diB)",
+   "concept": "hearing",
+   "model": "Frequency is encoded tonotopically from cochlea through central pathways; binaural timing/intensity comparisons aid sound localization."
+  },
+  {
+   "id": "EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-18",
+   "subject": "HISTOLOGY",
+   "stem": "One of the following is classified as unencapsulated",
+   "concept": "nerve_endings",
+   "model": "Peripheral sensory ▢▢▢ range from ▢▢▢ for pain/temperature to encapsulated receptors. Pacinian corpuscles are lamellated and detect vibration/rapid pressure changes; Meissner corpuscles are superficial touch receptors; m"
+  },
+  {
+   "id": "EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-21",
+   "subject": "HISTOLOGY",
+   "stem": "Silver stain demonstrates",
+   "concept": "neuron",
+   "model": "Neuroglia are supporting cells of nervous tissue, but each type has a different job. Astrocytes support the extracellular environment, contact vessels, contribute to barrier and metabolic functions, and react to injury. "
+  },
+  {
+   "id": "EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-24",
+   "subject": "HISTOLOGY",
+   "stem": "Golgi tendon organs are considered as",
+   "concept": "spindle_gto",
+   "model": "Peripheral sensory endings range from free nerve endings for pain/temperature to encapsulated receptors. Pacinian corpuscles are lamellated and detect vibration/rapid pressure changes; Meissner corpuscles are superficial"
+  },
+  {
+   "id": "EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-25",
+   "subject": "HISTOLOGY",
+   "stem": "One of the following is considered as proprioceptor",
+   "concept": "nerve_endings",
+   "model": "Peripheral sensory endings range from free nerve endings for pain/temperature to encapsulated receptors. ▢▢▢s are lamellated and detect vibration/rapid pressure changes; Meissner corpuscles are superficial touch receptor"
+  },
+  {
+   "id": "EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-SOURCE-BASED-4",
+   "subject": "HISTOLOGY",
+   "stem": "Regarding structure pointed out by number (1), choose the correct answer",
+   "concept": "bbb",
+   "model": "The blood-brain barrier is produced primarily by tight junctions between CNS capillary endothelial cells, supported by basement membrane, pericytes and astrocytic end-feet. Astrocytes support the barrier but do not form "
+  },
+  {
+   "id": "EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-SOURCE-BASED-6",
+   "subject": "HISTOLOGY",
+   "stem": "As regards the structure pointed out by number (1), find the correct answer",
+   "concept": "bbb",
+   "model": "The blood-brain barrier is produced primarily by tight junctions between CNS capillary endothelial cells, supported by basement membrane, pericytes and astrocytic end-feet. Astrocytes support the barrier but do not form "
+  },
+  {
+   "id": "EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-SOURCE-BASED-22",
+   "subject": "HISTOLOGY",
+   "stem": "Choose the correct statement",
+   "concept": "bbb",
+   "model": "The blood-brain barrier is produced mainly by tight junctions between CNS capillary endothelial cells, supported functionally by basement membrane, pericytes and astrocytic end-feet. Astrocytes support the barrier but do"
+  },
+  {
+   "id": "EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-DEPARTMENT-18",
+   "subject": "HISTOLOGY",
+   "stem": "Internal arcuate fibres",
+   "concept": "bbb",
+   "model": "For dorsal columns, the first-order neuron enters the cord and ascends on the same side to the medulla. Lower-body fibers occupy fasciculus gracilis and upper-body fibers fasciculus cuneatus. They synapse in gracile/cune"
+  },
+  {
+   "id": "EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-DEPARTMENT-32",
+   "subject": "HISTOLOGY",
+   "stem": "One of the following is true about climbing fibre",
+   "concept": "cortex_histo",
+   "model": "Cerebral cortex has a layered organization, while white matter lies deeper and contains myelinated axons. Neurons, glia, neuropil and vessels together create the microscopic background of gray matter."
+  },
+  {
+   "id": "EHSAN-HIST-EYE-SOURCE-BASED-7",
+   "subject": "HISTOLOGY",
+   "stem": "Concerning the Iris, the following is correct",
+   "concept": "eye_globe",
+   "model": "The vascular tunic of the eye includes choroid, ciliary body and iris. The choroid is highly vascular and pigmented, lying between sclera and retina and supporting outer retinal layers while absorbing stray light."
+  },
+  {
+   "id": "EHSAN-HIST-EYE-SOURCE-BASED-9",
+   "subject": "HISTOLOGY",
+   "stem": "About the layers of the tear film",
+   "concept": "eye_globe",
+   "model": "Accessory structures include eyelids, conjunctiva and lacrimal apparatus. Meibomian glands in eyelids contribute lipid to the tear film, while lacrimal glands provide aqueous secretion."
+  },
+  {
+   "id": "EHSAN-HIST-EYE-SOURCE-BASED-10",
+   "subject": "HISTOLOGY",
+   "stem": "At view of the eye lens, which choice is correct?",
+   "concept": "eye_globe",
+   "model": "The eye has fibrous, vascular and neural layers. Choroid is vascular/pigmented; retina is laminated nervous tissue with photoreceptors, bipolar/interneuronal layers and ganglion-cell axons. Accessory structures include c"
+  },
+  {
+   "id": "EHSAN-HIST-EYE-SOURCE-BASED-13",
+   "subject": "HISTOLOGY",
+   "stem": "Cataract results from",
+   "concept": "eye_globe",
+   "model": "Temporal summation means repeated input from the same synaptic source arrives close enough in time that the potentials overlap. Spatial summation means inputs from different synapses occur together. The axon initial segm"
+  },
+  {
+   "id": "EHSAN-HIST-EYE-SOURCE-BASED-17",
+   "subject": "HISTOLOGY",
+   "stem": "Concerning Müller cells",
+   "concept": "retina",
+   "model": "The eye has fibrous, vascular and neural layers. Choroid is vascular/pigmented; retina is laminated nervous tissue with photoreceptors, bipolar/interneuronal layers and ganglion-cell axons. Accessory structures include c"
+  },
+  {
+   "id": "EHSAN-HIST-EYE-DEPARTMENT-3",
+   "subject": "HISTOLOGY",
+   "stem": "Following trauma, a person with corneal opacity caused by injury of",
+   "concept": "eye_globe",
+   "model": "The eye has fibrous, vascular and neural layers. Choroid is vascular/pigmented; retina is laminated nervous tissue with photoreceptors, bipolar/interneuronal layers and ganglion-cell axons. Accessory structures include c"
+  },
+  {
+   "id": "EHSAN-HIST-EYE-DEPARTMENT-7",
+   "subject": "HISTOLOGY",
+   "stem": "Which of the following shares in the formation of the tear film",
+   "concept": "eye_globe",
+   "model": "Accessory structures include eyelids, ▢▢▢ and lacrimal apparatus. Meibomian glands in eyelids contribute lipid to the tear film, while lacrimal glands provide aqueous secretion."
+  },
+  {
+   "id": "EHSAN-HIST-EYE-DEPARTMENT-19",
+   "subject": "HISTOLOGY",
+   "stem": "Concerning Muller cells",
+   "concept": "retina",
+   "model": "The eye has fibrous, vascular and neural layers. Choroid is vascular/pigmented; retina is laminated nervous tissue with photoreceptors, bipolar/interneuronal layers and ganglion-cell axons. Accessory structures include c"
+  },
+  {
+   "id": "EHSAN-HIST-EAR-DEPARTMENT-8",
+   "subject": "HISTOLOGY",
+   "stem": "As regards the Eustachian tube",
+   "concept": "middle_ear",
+   "model": "The middle ear is an air-filled cavity lined mainly by low cuboidal to columnar mucosa that becomes more respiratory-like toward the auditory tube. The ossicles are small bones covered by mucosa and linked by tiny synovi"
+  },
+  {
+   "id": "EHSAN-HIST-EAR-DEPARTMENT-23",
+   "subject": "HISTOLOGY",
+   "stem": "Neural deafness diagnosed can be caused by drugs which damage",
+   "concept": "nose",
+   "model": "The middle ear is an air-filled cavity lined mainly by low cuboidal to columnar mucosa that becomes more respiratory-like toward the auditory tube. The ossicles are small bones covered by mucosa and linked by tiny synovi"
+  }
+ ]
+}

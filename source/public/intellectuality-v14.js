@@ -1,4 +1,4 @@
-/* INTELLECTUALITY v14.3 · UNDERSTAND FIRST
+/* INTELLECTUALITY v14.4 · UNDERSTAND FIRST
  *
  * Understanding-first practice MCQs, calendar truth (Africa/Cairo), the question visual genome
  * (answer-blind pre-answer routing, answer-aware post-answer routing), one anti-repeat governor
@@ -14,7 +14,7 @@
   if (window.INTELLECTUALITY_V14_LOADED) return;
   window.INTELLECTUALITY_V14_LOADED = true;
 
-  const VERSION = "14.3";
+  const VERSION = "14.4";
   const TZ = "Africa/Cairo";
   const REG = () => window.INTELLECTUALITY_V14_REGISTRY || { commands: {}, concepts: [], contrasts: [], atlas: {} };
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
@@ -82,8 +82,21 @@
     clearTimeout(saveTimer);
     saveTimer = setTimeout(() => safe(() => save()), 450);
   }
+  const isObj = (x) => !!x && typeof x === "object" && !Array.isArray(x);
+  const SHAPE = { primed: {}, pins: {}, qa: {}, vh: [], vc: {}, feed: {}, calendar: {}, ledger: [], vstats: {}, preds: {}, parked: [], auto: [] };
+  const checked = new WeakSet();
+  function sanitize(v) {
+    // A hand-edited, truncated or foreign-version slice must never crash teaching: reset only the
+    // fields whose type is wrong, keep everything that is well-formed.
+    for (const [k, d] of Object.entries(SHAPE)) if (Array.isArray(d) ? !Array.isArray(v[k]) : !isObj(v[k])) v[k] = Array.isArray(d) ? [] : {};
+    if (!isObj(v.stats)) v.stats = {};
+    for (const k of ["mod", "cmd", "depth", "teacher", "repairCmd"]) if (!isObj(v.stats[k])) v.stats[k] = {};
+    if (!Number.isFinite(v.seq)) v.seq = 1;
+    checked.add(v);
+  }
   function V() {
-    const v = S.v14 || (S.v14 = {});
+    if (!isObj(S.v14)) S.v14 = {};
+    const v = S.v14;
     if (v.schema !== 2) migrate(v);
     else if (v.visualAssignments) {
       // A rollback to v53 and back re-adds its answer-derived assignment fields; drop them again.
@@ -92,6 +105,7 @@
       delete v.visualRecent;
       v.version = VERSION;
     }
+    if (!checked.has(v)) sanitize(v);
     return v;
   }
   function migrate(v) {
@@ -99,14 +113,14 @@
     // assignments were answer-derived (pre-answer leakage) and bulky, so they are dropped; recent-use
     // signals are carried into the governor so anti-repeat has continuity.
     const primed = {};
-    for (const [k, x] of Object.entries(v.primed || {})) primed[k] = typeof x === "number" ? x : 0;
+    for (const [k, x] of Object.entries(isObj(v.primed) ? v.primed : {})) primed[k] = typeof x === "number" ? x : 0;
     const vc = {};
-    Object.entries(v.visualUsed || {})
+    Object.entries(isObj(v.visualUsed) ? v.visualUsed : {})
       .sort((a, b) => b[1] - a[1])
       .slice(0, 150)
       .forEach(([t, n]) => (vc[gkey(t)] = { n: Math.min(10, Number(n) || 1), cs: [], l: 0 }));
-    const vh = (v.visualRecent || []).slice(-14).map((t) => [gkey(t), 0, "legacy", "", "", ""]);
-    const legacy = { from: v.version || "14.0", droppedAssignments: Object.keys(v.visualAssignments || {}).length, primersSeen: v.stats?.primersSeen || 0, migratedAt: new Date().toISOString() };
+    const vh = (Array.isArray(v.visualRecent) ? v.visualRecent : []).slice(-14).map((t) => [gkey(t), 0, "legacy", "", "", ""]);
+    const legacy = { from: v.version || "14.0", droppedAssignments: Object.keys(isObj(v.visualAssignments) ? v.visualAssignments : {}).length, primersSeen: v.stats?.primersSeen || 0, migratedAt: new Date().toISOString() };
     for (const k of Object.keys(v)) delete v[k];
     Object.assign(v, {
       version: VERSION,
@@ -895,7 +909,13 @@
     if (!plan.primary && !plan.reason) plan.reason = "No candidate passed the relevance, license, human-anatomy and answer-leak checks. No substitute shown.";
     return plan;
   }
-  async function sideVisual(sideRe, conceptKey, excludeKey, q, ctxBase) {
+  // Structure pictures found by exact name must show normal human anatomy, not a disease or a scan.
+  const PATHO_T = /\b(\w{3,}omas?|carcinoma|tumou?rs?|cancer|metasta\w*|patient|palsy|paralysis|surgery|surgical|operation|injur\w*|lesion|syndrome|disease|\bmri\b|\bct\b|x ?ray|radiograph\w*|angiogra\w*|ultrasound|sonograph\w*|endoscop\w*|pathology|infect\w*)\b/;
+  function termOf(label) {
+    const t = String(label || "").replace(/\([^)]*\)/g, " ").split(/[\/·;:]/)[0].replace(/[^A-Za-z' -]/g, " ").replace(/\s+/g, " ").trim();
+    return t.length >= 4 && t.length <= 40 && t.split(" ").length <= 5 ? t : "";
+  }
+  async function sideVisual(sideRe, conceptKey, excludeKey, q, ctxBase, term) {
     // Post-answer look-alike visual: only a candidate whose title names this side counts as trustworthy.
     const concept = REG().concepts.find((c) => c.k === conceptKey);
     if (!concept) return null;
@@ -909,6 +929,13 @@
           cands = cands.concat(rows.filter((r) => !r.missing).map((r) => ({ ...r, key: gkey(r.title), origin: "side", modality: guessMod(r), concept: concept.k })));
         } catch (_) {}
     }
+    // Last resort: files whose TITLE carries the structure's exact name (e.g. "Cavernous sinus"), healthy anatomy only.
+    term = termOf(term);
+    if (term && !cands.some((c) => sideRe.test(norm(c.title)) && !(excludeKey instanceof Set ? excludeKey.has(c.key) : c.key === excludeKey)))
+      try {
+        const rows = await netData(urlSearch('intitle:"' + term.replace(/"/g, "") + '"', 10), commonsRows);
+        cands = cands.concat(rows.filter((r) => !r.missing && /^image\/(jpeg|png|svg|webp)/.test(r.mime) && !PATHO_T.test(norm(r.title))).map((r) => ({ ...r, key: gkey(r.title), origin: "side", modality: guessMod(r), concept: concept.k })));
+      } catch (_) {}
     const ctx = { ...ctxBase, phase: "post", concept: concept.k, conceptTok: concept.tok };
     return (
       cands
@@ -964,6 +991,39 @@
 
   /* ───────────────────────── primer (pre-answer, answer-blind) ───────────────────────── */
   const shownCtx = new Map();
+  let GP = null;
+  function globalCorpus() {
+    if (GP) return GP;
+    const paras = [],
+      seen = new Set();
+    for (const d of C.days || [])
+      for (const l of d.lessons || []) {
+        if (seen.has(l.id)) continue;
+        seen.add(l.id);
+        const p = prof(l);
+        [p.mental || l.mental, p.seed?.minimumModel, ...(p.teach || []), ...deep(l)].filter((x) => typeof x === "string" && x.length > 60).forEach((text) => paras.push({ text, lid: l.id, t: liteSet(tokens(text)) }));
+      }
+    const df = new Map();
+    paras.forEach((x) => x.t.forEach((w) => df.set(w, (df.get(w) || 0) + 1)));
+    GP = { paras, df, N: paras.length || 1 };
+    return GP;
+  }
+  function globalParagraphs(q, sig, need, lid) {
+    const { paras, df, N } = globalCorpus(),
+      want = sig.map(lite),
+      chapT = liteSet(tokens(q.chapter || ""));
+    return paras
+      .filter((x) => x.lid !== lid)
+      .map((x) => {
+        const hit = want.filter((w) => x.t.has(w));
+        const sc = hit.reduce((z, w) => z + Math.log((N + 1) / ((df.get(w) || 0) + 1)), 0) + [...chapT].filter((w) => x.t.has(w)).length * 0.3;
+        return { x, n: hit.length, sc };
+      })
+      .filter((r) => r.n >= need && !leaks(r.x.text, guardModel(q))) // never import a paragraph that carries the key
+      .sort((a, b) => b.sc - a.sc)
+      .slice(0, 3)
+      .map((r) => r.x.text);
+  }
   function sentencePool(l, q) {
     // Lesson corpus sentences scored answer-blind: IDF-weighted stem/concept relevance (a word used in
     // every lesson sentence, like "spinal", says little), paragraph context, and distractor coverage
@@ -982,7 +1042,19 @@
     add(p.teach, "teach", 1);
     add(deep(l), "deep", 1);
     add((l?.facts || []).map((f) => f[1]), "fact", 0.5);
-    const g = guardModel(q),
+    // Bank-wide fallback: when no lesson paragraph addresses the stem's distinctive words (e.g. a vocal-cord
+    // item routed to a nose lesson), bring in the best-matching paragraphs from the whole professor corpus.
+    const g0 = guardModel(q),
+      sig = [...g0.stemT].filter((w) => w.length >= 4 && !GENERIC.has(w)),
+      need = sig.length >= 3 ? 2 : 1,
+      localBest = Math.max(0, ...[...new Set(pool.map((x) => x.pi))].map((pi) => { const x = pool.find((y) => y.pi === pi); return overlapN(x.pt, new Set(sig)); }));
+    if (sig.length && localBest < need)
+      globalParagraphs(q, sig, need, l?.id).forEach((para) => {
+        const pt = tokens(para),
+          pi = pid++;
+        sentences(para).forEach((x, si) => pool.push({ s: x, src: "global", w: 1.5, pt, pi, si }));
+      });
+    const g = g0,
       chapT = liteSet(tokens(q.chapter || "")),
       conT = conceptsForQ(q, l)[0]?.tok || new Set();
     const seen = new Set(),
@@ -1088,8 +1160,8 @@
       "<li><b>2 · UNDERSTAND IT</b>" + understand + "</li>" +
       (full ? "<li><b>3 · BUILD THE MOVIE</b>" + movie + "</li><li><b>4 · EXAM CONVERSION</b><p>" + E(pc.exam) + "</p></li>" : "") +
       "</ol>" +
-      '<label class="v14Predict"><span>توقّعها · predict it in your own words (optional)</span><input type="text" data-v14-pred="' + E(q.id) + '" maxlength="140" autocomplete="off" placeholder="e.g. the structure, the side, the direction…" value="' + E(V().preds[q.id] || "") + '"></label>' +
-      '<button class="primary bigAction v14Gate" data-v14-reveal="' + E(q.id) + '">I CAN PICTURE IT → ASK ME THE MCQ</button>' +
+      '<label class="v14Predict"><span><b lang="ar" dir="rtl">توقّع قبل الاختيارات</b> · predict it in your own words before the options</span><input type="text" data-v14-pred="' + E(q.id) + '" maxlength="140" autocomplete="off" placeholder="e.g. the structure, the side, the direction…" value="' + E(V().preds[q.id] || "") + '"></label>' +
+      '<button class="primary bigAction v14Gate" data-v14-reveal="' + E(q.id) + '"><span class="v14GateAr" lang="ar" dir="rtl">أنا شايفها → هات السؤال</span><span class="v14GateEn">I CAN PICTURE IT → ASK ME THE MCQ</span></button>' +
       '<div class="v14Tiny">Tutor synthesis from the mapped lesson corpus. The exact source stem, options and key are untouched and stay hidden until you ask.' + (generated ? " This lesson has no mapped source item; the check below is tutor-generated." : "") + "</div>" +
       "</div>"
     );
@@ -1118,6 +1190,29 @@
       if (!keySide) continue;
       const score = 3 + (c.frame && c.frame.test(s) ? 2 : 0) + (qc && (c.a.concept === qc || c.b.concept === qc) ? 1 : 0);
       if (!best || score > best.score) best = { c, keySide, score };
+    }
+    // Families: the key and the chosen option each name exactly one (different) member.
+    const nstem = norm(q?.stem || "");
+    for (const f of REG().families || []) {
+      if (f.frame && !f.frame.test(f.stemFrame ? s : ctxText)) continue;
+      if (f.subj && q?.subject && !f.subj.includes(q.subject)) continue;
+      const one = (t) => {
+        if (f.exclude && f.exclude.test(t)) return -1;
+        const hits = f.members.map((m, i) => (m.re.test(t) ? i : -1)).filter((i) => i >= 0);
+        return hits.length === 1 ? hits[0] : -1;
+      };
+      const mk = one(nk),
+        mc = one(nc);
+      if (mk < 0 || mc < 0 || mk === mc) continue;
+      // If the stem names members, the key must be one of them ("which is a COMMISSURAL fibre?" → corpus callosum);
+      // otherwise the question is ABOUT one member and the options are statements, not rivals.
+      const inStem = f.members.map((m, i) => (m.re.test(nstem) ? i : -1)).filter((i) => i >= 0);
+      if (inStem.length && !inStem.includes(mk)) continue;
+      const km = f.members[mk],
+        cm = f.members[mc];
+      const c = { id: f.id + ":" + mk + "-" + mc, family: f.id, type: f.type, cmd: f.cmd, frame: f.frame, a: km, b: cm, d: f.intro + " " + km.label + ": " + km.line + " " + cm.label + ": " + cm.line };
+      const score = 2.5 + (f.frame.test(s) ? 2 : 0) + (qc && (km.concept === qc || cm.concept === qc) ? 1 : 0);
+      if (!best || score > best.score) best = { c, keySide: "a", score };
     }
     if (!best) return null;
     const k = best.keySide === "a" ? best.c.a : best.c.b,
@@ -1229,7 +1324,7 @@
       '<div class="v14Why" data-v14-why="' + E(q.id) + '"><b>WHY THIS MAKES SENSE</b><div class="v14WhyAnswer">' + E(key) + "</div>" +
       "<p>" + E(short(reason, 260)) + "</p>" +
       (near ? '<p class="v14Near"><b>vs ' + E(near.option.text) + ":</b> " + E(short(near.c.d, guess ? 320 : 200)) + "</p>" : "") +
-      (guess ? '<p class="v14Guess"><b>Guess-correct = weak evidence.</b> Say why the nearest look-alike is wrong before moving on; this concept stays on the spaced list.</p>' : "") +
+      (guess ? '<p class="v14Guess"><b lang="ar" dir="rtl">ما تحفظش الاختيار</b> <b>Guess-correct = weak evidence.</b> Say why the nearest look-alike is wrong before moving on; this concept stays on the spaced list.</p>' : "") +
       '<div class="v14Visuals mini" data-v14-plan="' + E(q.id) + '" data-v14-phase="post"></div>' +
       optionsGalleryHTML(q, a?.selected || "", "all") +
       '<div class="v14Tiny">Tutor explanation, separate from the preserved source key.</div></div>'
@@ -1248,7 +1343,7 @@
     return (
       '<div class="v14Autopsy" data-v14-autopsy="' + E(q.id) + '" data-v14-choice="' + E(sel) + '">' +
       '<div class="v14AutopsyHead"><div><b lang="ar" dir="rtl">ليه إجابتك غلط بصريًا؟</b><span>VISUAL WRONG-ANSWER AUTOPSY</span></div>' + commandHTML(an.cmd, "post") + "</div>" +
-      '<div class="v14Compare">' +
+      '<div class="v14CompareHead" lang="ar" dir="rtl">حطّهم جنب بعض</div><div class="v14Compare">' +
       '<div class="v14CompareSide correct"><b lang="ar" dir="rtl">اللقطة الصح</b><div class="v14AutopsyVisual" data-v14-side="correct" data-v14-qid="' + E(q.id) + '" data-v14-sel="' + E(sel) + '"><div class="v14Skeleton"><span></span></div></div><strong>' + E(key) + "</strong></div>" +
       '<div class="v14CompareSide wrong"><b lang="ar" dir="rtl">إنت خدت شبيهها / البديل الغلط</b><div class="v14AutopsyVisual" data-v14-side="wrong" data-v14-qid="' + E(q.id) + '" data-v14-sel="' + E(sel) + '"><div class="v14Skeleton"><span></span></div></div><strong>' + E(chosen) + "</strong></div>" +
       "</div>" +
@@ -1261,7 +1356,7 @@
   function reconGateHTML(q, e, errorId) {
     const done = !!e?.v14Recon;
     return (
-      '<div class="v14Recall" data-v14-recall="' + E(errorId) + '"><b lang="ar" dir="rtl">من غير اختيارات دلوقتي</b><span>' + E(q.stem) + "</span>" +
+      '<div class="v14Recall" data-v14-recall="' + E(errorId) + '"><b lang="ar" dir="rtl">رجّعها من دماغك · من غير اختيارات</b><span>' + E(q.stem) + "</span>" +
         '<textarea data-v14-recon="' + E(errorId) + '" rows="2" maxlength="200" placeholder="One line: the answer + the one reason (no options).">' + E(e?.v14Recon?.t || "") + "</textarea>" +
         '<div class="v14RecallRow"><button type="button" class="v14Aloud' + (done ? " done" : "") + '" data-v14-aloud="' + E(errorId) + '"><span lang="ar" dir="rtl">قلتها بصوتي</span> ' + (done ? "✓" : "") + '</button><small lang="ar" dir="rtl">قول الإجابة والمنطق من غير ما تبص للاختيارات، وبعدين كمّل.</small></div></div>'
     );
@@ -1274,6 +1369,7 @@
       side = box.dataset.v14Side;
     if (!q) return;
     const an = autopsyAnalysis(q, sel);
+    if (an.contrast?.c?.family && (REG().families || []).find((f) => f.id === an.contrast.c.family)?.novis) an.novis = true;
     let pre = null;
     try {
       pre = await planVisuals(q, "pre");
@@ -1282,7 +1378,7 @@
       ctx = { intent: pre?.intent || "identify", guard: null, stemTok: guardModel(q).stemT };
     if (side === "correct") {
       let c = null;
-      if (an.contrast) c = await sideVisual(an.contrast.key.re, an.contrast.key.concept || conceptKey, "", q, ctx).catch(() => null);
+      if (an.contrast && !an.novis) c = await sideVisual(an.contrast.key.re, an.contrast.key.concept || conceptKey, "", q, ctx, an.contrast.key.label).catch(() => null);
       c = c || pre?.primary || null;
       box.innerHTML = c ? visualCardHTML(c, "CORRECT ANCHOR", "post") : pre?.source ? sourceFigureHTML(pre.source) : '<div class="v14VisualMissing">Use the model text: no trustworthy image for the key concept.</div>';
       if (c) G.note(c.key, { concept: conceptKey, modality: c.modality });
@@ -1291,9 +1387,10 @@
       let c = null,
         why = "";
       if (an.cls === "polarity") why = "Your choice was a TRUE statement — the trap was polarity, not a look-alike, so no distractor image is shown.";
+      else if (an.novis) why = "This confusion is about chemistry/physiology, not a structure, so there is no honest picture of your choice; the difference below is the fix.";
       else if (an.contrast) {
         const correctKey = box.closest(".v14Compare")?.querySelector('[data-v14-side="correct"]')?.dataset.v14Key || pre?.primary?.key || "";
-        c = await sideVisual(an.contrast.other.re, an.contrast.other.concept || conceptKey, correctKey, q, ctx).catch(() => null);
+        c = await sideVisual(an.contrast.other.re, an.contrast.other.concept || conceptKey, correctKey, q, ctx, an.contrast.other.label).catch(() => null);
       }
       // Without a matched look-alike contrast the distractor is not a distinct depictable structure;
       // an honest note beats a keyword-similar picture.
@@ -1352,8 +1449,18 @@
       if (pa === pb) continue;
       tried++;
       const pole = pa ? c.a : c.b;
-      const hit = await sideVisual(pole.re, pole.concept || pre?.concept, used, q, ctx).catch(() => null);
+      const hit = await sideVisual(pole.re, pole.concept || pre?.concept, used, q, ctx, pole.label).catch(() => null);
       if (hit) return { c: hit, how: pole.label };
+    }
+    // 1b) a contrast-family member that this option names (family frame must fit the question)
+    for (const f of REG().families || []) {
+      if (f.novis || !f.frame.test(nq)) continue;
+      const hits = f.members.filter((m) => m.re.test(no));
+      if (hits.length !== 1) continue;
+      const m = hits[0];
+      const hit = await sideVisual(m.re, m.concept || pre?.concept, used, q, ctx, m.label).catch(() => null);
+      if (hit) return { c: hit, how: termOf(m.label) || m.label };
+      break;
     }
     // 2) the option's own concept, or the question's concept, with a title that names the option
     const re = optionSideRe(q, o);
@@ -1363,8 +1470,10 @@
       ocHits = oc ? no.match(new RegExp(oc.re.source, "g")) || [] : [],
       ocOk = oc && (qConcepts.includes(oc.k) || new Set(ocHits).size >= 2 || ocHits.some((h) => h.includes(" ")));
     const concepts = [...new Set([ocOk ? oc.k : null, pre?.concept, ...qConcepts.slice(0, 2)].filter(Boolean))];
+    // a short option that names a structure ("Trochlear nerve.") may be searched by its own name
+    const phrase = o.text.split(/\s+/).length <= 4 && !/\d/.test(o.text) ? o.text : "";
     for (const k of concepts) {
-      const hit = await sideVisual(re, k, used, q, ctx).catch(() => null);
+      const hit = await sideVisual(re, k, used, q, ctx, k === concepts[0] ? phrase : "").catch(() => null);
       if (hit) return { c: hit, how: "" };
     }
     return null;
@@ -1970,8 +2079,10 @@
       bySub[s] = [];
       for (let i = opts.offset || 0; i < arr.length && bySub[s].length < per[s]; i += step) bySub[s].push(arr[i]);
     }
-    const sample = [];
+    let sample = [];
     for (let i = 0; sample.length < n && i < n; i++) for (const s of ["ANATOMY", "PHYSIOLOGY", "HISTOLOGY"]) if (bySub[s][i]) sample.push(bySub[s][i]);
+    // an explicit id list (e.g. consecutive items in course order) replaces the systematic sample
+    if (Array.isArray(opts.ids)) sample = opts.ids.map((id) => pool.find((q) => q.id === id)).filter(Boolean);
     const snap = G.snapshot(),
       rows = [],
       firstSeen = new Map();

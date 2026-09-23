@@ -58,7 +58,7 @@
       files: [["Spinal_Cord_Segments_and_body_representation.png", "dia"], ["Human caudal spinal cord anterior view description.jpg", "spe"], ["Spinal cord and roots and dural tube which covers them. Wellcome L0002010.jpg", "spe"], ["Gray663.png", "dia"]],
       cats: ["Cauda equina", "Conus medullaris", "Human spinal cord"], kw: ["conus medullaris cauda equina anatomy"] },
     { k: "spinal_meninges", label: "Spinal meninges & spaces", w: 3,
-      re: R("mening|dura|arachnoid|pia mater|denticulat|epidural|subdural|subarachnoid|dural sac|ligamentum denticulat"),
+      re: R("meninges of the spinal cord|spinal meninges|mening|dura|arachnoid|pia mater|denticulat|epidural|subdural|subarachnoid|dural sac|ligamentum denticulat"),
       files: [["Spinal cord and roots and dural tube which covers them. Wellcome L0002010.jpg", "spe"], ["Spinal_Cord_Sectional_Anatomy.png", "dia"]],
       cats: ["Spinal meninges", "Meninges"], kw: ["spinal meninges dura arachnoid pia anatomy"] },
     { k: "spinal_roots", label: "Roots, spinal nerve & dorsal root ganglion", w: 3,
@@ -83,7 +83,7 @@
       cats: ["Corticospinal tract", "Pyramidal tracts"], kw: ["corticospinal tract pathway diagram"] },
     // ── brainstem & cranial nerves ──
     { k: "brainstem", label: "Brainstem surface & levels", w: 2,
-      re: R("brain ?stem|medulla|pons|pontine|midbrain|mesencephal|olive|olivary|cerebral peduncle|collicul|tegmentum|tectum|pyramid"),
+      re: R("brain ?stem|medulla|pons|pontine|midbrain|mesencephal|olive|olivary|cerebral peduncle|interpeduncular|crus cerebri|collicul|tegmentum|tectum|pyramid"),
       files: [["Human_brainstem_anterior_view_2_description.JPG", "spe"], ["Human_caudal_brainstem_posterior_view_description.JPG", "spe"], ["Brain_stem_sagittal_section.svg", "dia"]],
       cats: ["Human brainstem", "Medulla oblongata", "Pons"], kw: ["human brainstem anatomy"] },
     { k: "cn_trigeminal", label: "Trigeminal nerve & divisions", w: 4,
@@ -99,7 +99,7 @@
       files: [["Brain_human_normal_inferior_view_with_labels_en.svg", "dia", "jugular foramen|emerg\\w*|\\bexits?\\b|leaves?|superficial origin|attach\\w*|nucle\\w*|brain ?stem|medulla|rootlets|olive|pyramid"]],
       cats: [["Vagus nerve", "vagus|vagal|recurrent laryngeal|superior laryngeal|pharyngeal plexus|jugular foramen"], ["Glossopharyngeal nerve", "glossopharyn|carotid sinus|stylopharyng|otic ganglion|gag reflex|jugular foramen"], ["Hypoglossal nerve", "hypoglossal|tongue"]], kw: ["glossopharyngeal vagus hypoglossal nerve anatomy"] },
     { k: "cn_eye_muscles", label: "Orbit, extraocular muscles, III/IV/VI", w: 4,
-      re: R("orbit|extraocular|rectus|oblique|levator palpebrae|oculomotor|trochlear|abducens|ciliary ganglion|lacrimal|ptosis|squint|diplopia"),
+      re: R("orbit|extraocular|rectus|oblique|levator palpebrae|oculomotor|trochlear|abducens|ciliary ganglion|lacrimal|ptosis|squint|diplopia"), not: "orbital (surface|gyr|sulc|part of the (inferior )?frontal)|orbitofrontal|surfaces? of the (cerebral )?hemisphere",
       files: [], cats: ["Extraocular muscles", "Human orbit"], kw: ["extraocular muscles orbit nerves anatomy"] },
     { k: "cranial_nerves", label: "Cranial nerves at the base of the brain", w: 1,
       re: R("cranial nerve|olfactory|optic nerve|vestibulocochlear|nuclei of cranial"),
@@ -135,7 +135,7 @@
       files: [["Brain_human_sagittal_section.svg", "dia"]],
       cats: ["Thalamus", "Hypothalamus"], kw: ["thalamus hypothalamus sagittal brain"] },
     { k: "cortex_surface", label: "Lobes, sulci & gyri", w: 2,
-      re: R("sulc|gyr[ui]|lobe|central sulcus|lateral sulcus|precentral|postcentral|insula|brodmann|calcarine|parieto occipital|cingulate"),
+      re: R("surfaces? of the (cerebral )?hemisphere|orbital surface|sulc|gyr[ui]|lobe|central sulcus|lateral sulcus|precentral|postcentral|insula|brodmann|calcarine|parieto occipital|cingulate"),
       files: [["Brain_human_sagittal_section.svg", "dia"]],
       cats: ["Brain lobes", "Sulcus (neuroanatomy)"], kw: ["lateral surface brain lobes sulci gyri labeled"] },
     { k: "cortex_maps", label: "Motor & sensory cortex maps", w: 4,
@@ -168,7 +168,7 @@
       files: [], cats: [["Pharynx", "pharyn|tonsil|swallow|palat"], ["Human tongue", "tongue|lingual|oral cavity"], ["Larynx", "laryn|vocal|epiglott|glottis"]], kw: ["pharynx tongue sagittal anatomy"] },
     // ── histology ──
     { k: "glia", label: "Neuroglia & myelinating cells", w: 4,
-      re: R("\\bglia\\w*|neuroglia|astrocyt|oligodendro|microglia|ependym|schwann|satellite cell|myelin|neurilemma|tanycyte|radial glia"),
+      re: R("\\bglia\\w*|neuroglia|astrocyt|oligodendro|microglia|ependym|schwann|satellite cell|myelin|neurilemma|tanycyte|radial glia"), not: "(un)?myelinated (nerve )?fib|nerve fib\\w* (with|in|of)|peripheral nerve",
       files: [["Blausen_0870_TypesofNeuroglia.png", "dia"], ["Neuron_with_oligodendrocyte_and_myelin_sheath.svg", "dia"]],
       cats: ["Neuroglia", "Astrocytes", "Oligodendrocytes", "Schwann cells"], kw: ["neuroglia types astrocyte oligodendrocyte microglia"] },
     { k: "neuron", label: "Neuron structure & types", w: 2,
@@ -176,7 +176,7 @@
       files: [["Blausen_0657_MultipolarNeuron.png", "dia"]],
       cats: ["Neurons"], kw: ["neuron structure nissl histology"] },
     { k: "nerve_sheaths", label: "Peripheral nerve & connective sheaths", w: 4,
-      re: R("endoneur|perineur|epineur|fascic|peripheral nerve|nerve fib|node of ranvier|ranvier|remak|sheath of henle|schmidt lanterman|internode|blood nerve barrier"),
+      re: R("(un)?myelinated (nerve )?fib\\w*|endoneur|perineur|epineur|fascic|peripheral nerve|nerve fib|node of ranvier|ranvier|remak|sheath of henle|schmidt lanterman|internode|blood nerve barrier"),
       files: [["1319 Nerve StructureN EU.jpg", "dia"], ["Epineuro, Perineuro, Endoneuro..png", "dia"]],
       cats: ["Histology of nerves", "Peripheral nerves"], kw: ["peripheral nerve cross section histology micrograph"] },
     { k: "ganglia", label: "Sensory vs autonomic ganglia", w: 4,
@@ -370,5 +370,182 @@
     PHYSIOLOGY: [{ href: "https://neuroanatomy.ca/", label: "UBC · Functional Neuroanatomy (pathways & lesions)", terms: "CC BY-NC-SA · link only" }],
   };
 
-  window.INTELLECTUALITY_V14_REGISTRY = { version: "14.3", commands, concepts, contrasts, atlas };
+
+  // Contrast FAMILIES (v14.4): mined from the real bank's most frequent key-vs-distractor confusions.
+  // A family fires post-answer when its frame fits the question and the key and the chosen option each name
+  // exactly one (different) member; the autopsy then states both identities side by side.
+  // F(id, type, cmd, frame, intro, [[memberRe, label, concept, one-line identity], ...])
+  const F = (id, type, cmd, frame, intro, members) => ({ id, type, cmd, frame: R(frame), intro, members: members.map((m) => ({ re: R(m[0]), label: m[1], concept: m[2] || null, line: m[3] })) });
+  const families = [
+    F("meningeal_spaces", "lookalike", "relations", "\\bspace\\b|punctur\\w*|ha?emorrhag\\w*|haematoma|hematoma|needle|\\bcsf\\b|meninges", "Name the two layers that bound each space.", [
+      ["\\bepidural|\\bextradural", "Epidural / extradural space", "spinal_meninges", "between dura and bone: fat and the venous plexus in the vertebral canal; in the skull a middle-meningeal artery tear bleeds here (extradural haematoma)."],
+      ["\\bsubdural", "Subdural space", "spinal_meninges", "a potential space between dura and arachnoid; torn bridging veins bleed here."],
+      ["\\bsubarachnoid", "Subarachnoid space", "spinal_meninges", "between arachnoid and pia, full of CSF: the lumbar-puncture target and the site of berry-aneurysm bleeding."]]),
+    F("cord_end", "lookalike", "orient", "conus|cauda|filum|lumbar cistern|lower end|termina", "Picture the cord tip, then what hangs below it.", [
+      ["conus", "Conus medullaris", "spinal_level", "the tapering lower end of the cord itself (adult: lower border of L1; newborn: about L3)."],
+      ["cauda", "Cauda equina", "spinal_roots", "the bundle of lumbar and sacral nerve roots running below the conus."],
+      ["filum", "Filum terminale", "spinal_meninges", "the pial thread continuing from the conus down to the coccyx."],
+      ["lumbar cistern", "Lumbar cistern", "spinal_meninges", "the enlarged subarachnoid space below the conus (L2 to S2) holding CSF and the cauda equina."]]),
+    F("cerebellar_peduncles", "route", "route", "peduncle", "Each peduncle joins the cerebellum to one brainstem level.", [
+      ["superior cerebellar peduncle|superior (brachium|peduncle)", "Superior cerebellar peduncle", "cerebellum", "joins the midbrain; mainly OUTPUT (dentate → red nucleus / thalamus); ventral spinocerebellar tract enters here."],
+      ["middle cerebellar peduncle|middle peduncle|brachium pontis", "Middle cerebellar peduncle", "cerebellum", "joins the pons; the largest, carrying crossed pontocerebellar fibres from cortex via pontine nuclei."],
+      ["inferior cerebellar peduncle|inferior peduncle|restiform", "Inferior cerebellar peduncle", "cerebellum", "joins the medulla; brings dorsal spinocerebellar, olivocerebellar and vestibular input."],
+      ["cerebral peduncle", "Cerebral peduncle", "brainstem", "not cerebellar at all: the ventral midbrain carrying corticospinal and corticobulbar fibres."]]),
+    F("cerebellar_divisions", "lookalike", "core", "cerebell|archi|paleo|neo|vestibulo|spino|equilibri|planning|servo", "Three functional cerebella, three jobs.", [
+      ["archi\\w*|vestibulocerebell\\w*|flocculonodular", "Archicerebellum (vestibulocerebellum)", "cerebellum", "flocculonodular lobe: equilibrium and eye movements."],
+      ["paleo\\w*|spinocerebell\\w*|vermis", "Paleocerebellum (spinocerebellum)", "cerebellum", "vermis and paravermis: tone, posture and on-line servo-correction of ongoing movement."],
+      ["neo\\w*|cerebrocerebell\\w*|pontocerebell\\w*", "Neocerebellum (cerebrocerebellum)", "cerebellum", "lateral hemispheres: planning, timing and coordination of skilled movement (lesion → ataxia, intention tremor)."]]),
+    F("brainstem_levels", "lesion", "orient", "brain ?stem|midbrain|\\bpons\\b|medulla|collicul\\w*|tectum|tubercle|olive|nucle(us|i)|cranial nerves? (related|attached|emerg)", "Place the landmark at its level first.", [
+      ["mid ?brain|mesenceph\\w*|tectum|collicul\\w* (superior|inferior)|superior collicul|inferior collicul|corpora quadrigemina", "Midbrain", "brainstem", "III and IV nuclei, tectum (colliculi), cerebral peduncles, substantia nigra, red nucleus."],
+      ["\\bpons\\b|pontine|facial collicul\\w*", "Pons", "brainstem", "V, VI, VII (and VIII at the junction); the facial colliculus lies on its dorsal surface."],
+      ["medulla|\\bolive\\b|gracile|cuneate|pyramid", "Medulla", "brainstem", "IX, X, XI, XII; olive, pyramid, and gracile/cuneate tubercles on the closed part."],
+      ["diencephal\\w*|thalam\\w*|hypothalam\\w*", "Diencephalon", "diencephalon", "above the brainstem: thalamus, hypothalamus (mammillary bodies, infundibulum), epithalamus."]]),
+    F("internal_capsule_parts", "route", "route", "internal capsule|lenti\\w+|\\bgenu\\b|\\blimb\\b|radiation", "Five parts, each with its signature fibres.", [
+      ["anterior limb", "Anterior limb", "white_matter", "frontopontine fibres and the anterior thalamic radiation."],
+      ["\\bgenu\\b", "Genu", "white_matter", "corticobulbar (corticonuclear) fibres."],
+      ["posterior limb", "Posterior limb", "white_matter", "corticospinal fibres and thalamocortical (sensory) radiations."],
+      ["retro ?lent\\w*", "Retrolenticular part", "white_matter", "the optic radiation."],
+      ["sub ?lent\\w*", "Sublenticular part", "white_matter", "the auditory radiation (medial geniculate → auditory cortex)."]]),
+    F("fibre_systems", "lookalike", "route", "fib(er|re)s?|commissur\\w*|association|projection|corpus callosum|cingulum|fasciculus", "Ask where the two ends of the fibre are.", [
+      ["commissur\\w*|corpus callosum|anterior commissure", "Commissural fibres", "white_matter", "connect the two hemispheres (corpus callosum, anterior commissure)."],
+      ["association|cingulum|uncinate|longitudinal|arcuate", "Association fibres", "white_matter", "link areas within one hemisphere (cingulum, uncinate, superior/inferior longitudinal, arcuate)."],
+      ["projection|internal capsule|corona radiata|cortico ?(spinal|bulbar|nuclear)", "Projection fibres", "white_matter", "join cortex with lower centres (corona radiata → internal capsule; corticospinal, corticobulbar)."]]),
+    F("cerebral_arteries", "territory", "supply", "cerebral arter\\w*|supplies|supply|vascul\\w*|circle|circulus|territor\\w*", "Map each artery to its surface.", [
+      ["anterior cerebral", "Anterior cerebral artery", "cerebral_arteries", "medial surface of frontal and parietal lobes, including the paracentral lobule (leg area)."],
+      ["middle cerebral", "Middle cerebral artery", "cerebral_arteries", "most of the lateral surface: motor and sensory face/arm areas, Broca, Wernicke, auditory area, insula; its lenticulostriate branches supply much of the internal capsule. Not part of the circle of Willis."],
+      ["posterior cerebral", "Posterior cerebral artery", "cerebral_arteries", "occipital lobe with the visual cortex, inferior temporal lobe, splenium of the corpus callosum and the thalamus."],
+      ["anterior communicating", "Anterior communicating artery", "cerebral_arteries", "links the two anterior cerebrals: part of the circle of Willis."],
+      ["posterior communicating", "Posterior communicating artery", "cerebral_arteries", "links the internal carotid to the posterior cerebral: part of the circle of Willis."]]),
+    F("vertebrobasilar", "territory", "supply", "cerebellar arter\\w*|basilar|vertebral|medull\\w*|wallenberg|choroid plexus|branch", "Vertebral gives one, basilar gives two.", [
+      ["posterior inferior cerebellar|\\bpica\\b", "PICA", "cerebral_arteries", "branch of the VERTEBRAL artery: lateral medulla (Wallenberg), inferior cerebellum, choroid plexus of the 4th ventricle."],
+      ["anterior inferior cerebellar|\\baica\\b", "AICA", "cerebral_arteries", "branch of the BASILAR artery: anterior-inferior cerebellum and lower pons; often gives the labyrinthine artery."],
+      ["superior cerebellar", "Superior cerebellar artery", "cerebral_arteries", "branch near the END of the basilar: superior cerebellum and upper pons/midbrain."],
+      ["anterior spinal", "Anterior spinal artery", "spinal_blood", "from both vertebrals: anterior 2/3 of the cord and the medial medulla."]]),
+    F("dural_sinuses", "route", "route", "sinus(es)?\\b|falx|tentorium|venous", "Place each sinus on the dural folds.", [
+      ["superior sagittal", "Superior sagittal sinus", "brain_meninges", "attached (upper) border of the falx cerebri; receives superior cerebral veins and CSF via arachnoid granulations."],
+      ["inferior sagittal", "Inferior sagittal sinus", "brain_meninges", "free (lower) border of the falx cerebri; joins the great cerebral vein to form the straight sinus."],
+      ["straight", "Straight sinus", "brain_meninges", "along the junction of falx cerebri and tentorium cerebelli."],
+      ["transverse", "Transverse sinus", "brain_meninges", "attached margin of the tentorium, from the confluence to become the sigmoid sinus."],
+      ["sigmoid", "Sigmoid sinus", "brain_meninges", "S-shaped groove on the mastoid; drains into the internal jugular vein at the jugular foramen."],
+      ["cavernous", "Cavernous sinus", "brain_meninges", "either side of the sella: III, IV, V1, V2 in its lateral wall; ICA and VI inside; face 'danger area' veins drain here via ophthalmic veins."],
+      ["petrosal", "Petrosal sinuses", "brain_meninges", "link the cavernous sinus to the transverse/sigmoid (superior) and to the internal jugular vein (inferior)."]]),
+    F("eom_actions", "direction", "orient", "oblique|rectus|eye ?ball|gaze|depress\\w*|abduct\\w*", "Pull direction follows the muscle's line relative to the visual axis.", [
+      ["superior oblique", "Superior oblique", "cn_eye_muscles", "depresses, abducts and intorts (IV); tests: looking down and in."],
+      ["inferior oblique", "Inferior oblique", "cn_eye_muscles", "elevates, abducts and extorts (III)."],
+      ["superior rectus", "Superior rectus", "cn_eye_muscles", "elevates, adducts and intorts (III)."],
+      ["inferior rectus", "Inferior rectus", "cn_eye_muscles", "depresses, adducts and extorts (III)."],
+      ["lateral rectus", "Lateral rectus", "cn_eye_muscles", "pure abduction (VI)."],
+      ["medial rectus", "Medial rectus", "cn_eye_muscles", "pure adduction (III)."],
+      ["levator palpebrae", "Levator palpebrae superioris", "cn_eye_muscles", "raises the upper lid (III, plus the sympathetic superior tarsal part); divides the lacrimal gland into orbital and palpebral parts."]]),
+    F("mastication", "direction", "mech", "mastication|mandible|\\bjaw\\b|temporomandibular|retract\\w*|protru\\w*|zygomatic arch|coronoid", "Each muscle's line of pull gives its action.", [
+      ["temporalis", "Temporalis", "face_glands", "fan from the temporal fossa to the coronoid process; elevates, posterior fibres RETRACT the mandible."],
+      ["masseter", "Masseter", "face_glands", "zygomatic arch to the ramus and angle; powerful elevator."],
+      ["medial pterygoid", "Medial pterygoid", "face_glands", "medial ramus/angle; elevates and protrudes."],
+      ["lateral pterygoid", "Lateral pterygoid", "face_glands", "to the neck of the mandible and the TMJ disc; the one that OPENS (depresses) and protrudes the jaw."]]),
+    F("petrosal_nerves", "route", "nerve", "petrosal|lacrima\\w*|parotid|secretomotor|parasympathetic|chorda|taste", "Follow the parasympathetic fibres from nucleus to gland.", [
+      ["greater (superficial )?petrosal", "Greater petrosal nerve", "cn_facial", "VII: preganglionic parasympathetic → pterygopalatine ganglion → lacrimal, nasal and palatal glands."],
+      ["lesser (superficial )?petrosal|tympanic branch", "Lesser petrosal nerve", "cn_lower", "IX (via the tympanic branch): → otic ganglion → parotid gland."],
+      ["deep petrosal", "Deep petrosal nerve", "cn_facial", "postganglionic SYMPATHETIC fibres from the internal carotid plexus; joins the greater petrosal as the nerve of the pterygoid canal."],
+      ["chorda tympani", "Chorda tympani", "cn_facial", "VII: taste from the anterior 2/3 of the tongue + secretomotor to submandibular and sublingual glands (via the submandibular ganglion)."]]),
+    F("para_ganglia", "route", "nerve", "ganglion|ganglia|parasympathetic|secretomotor|lacrima\\w*|dryness|pupil", "Four head ganglia, four targets.", [
+      ["ciliary", "Ciliary ganglion", "cn_eye_muscles", "III (Edinger–Westphal) → sphincter pupillae and ciliary muscle."],
+      ["pterygopalatine|sphenopalatine", "Pterygopalatine ganglion", "cn_facial", "VII (greater petrosal) → lacrimal gland and nasal/palatal glands."],
+      ["submandibular", "Submandibular ganglion", "cn_facial", "VII (chorda tympani) → submandibular and sublingual glands."],
+      ["\\botic\\b", "Otic ganglion", "cn_lower", "IX (lesser petrosal) → parotid gland."],
+      ["superior cervical", "Superior cervical ganglion", "ganglia", "sympathetic, not parasympathetic: supplies head structures via the carotid plexuses."]]),
+    F("larynx_muscles", "direction", "mech", "vocal|laryn\\w*|glott\\w*|arytenoid|cricothyroid|abduct\\w*|adduct\\w*", "Open, close, tense or relax the cords?", [
+      ["posterior crico ?arytenoid", "Posterior cricoarytenoid", "oral_pharynx", "the ONLY abductor (opens the glottis)."],
+      ["lateral crico ?arytenoid", "Lateral cricoarytenoid", "oral_pharynx", "adducts (closes) the cords."],
+      ["(transverse|oblique) arytenoid", "Arytenoid (transverse/oblique)", "oral_pharynx", "adducts: closes the posterior glottis."],
+      ["thyro ?arytenoid|vocalis", "Thyroarytenoid / vocalis", "oral_pharynx", "relaxes (shortens) the cords."],
+      ["crico ?thyroid", "Cricothyroid", "oral_pharynx", "TENSES the cords; the only intrinsic muscle supplied by the external laryngeal nerve."]]),
+    F("larynx_nerves", "route", "nerve", "laryn\\w*|vocal|hoarse\\w*|thyroidectomy|mucous membrane", "Above the cords, below the cords, and the one tensor.", [
+      ["recurrent laryngeal", "Recurrent laryngeal nerve", "cn_lower", "all intrinsic laryngeal muscles except cricothyroid + sensation BELOW the vocal cords; at risk in thyroidectomy."],
+      ["internal laryngeal", "Internal laryngeal nerve", "cn_lower", "sensation ABOVE the vocal cords (pierces the thyrohyoid membrane)."],
+      ["external laryngeal", "External laryngeal nerve", "cn_lower", "motor to cricothyroid only."],
+      ["superior laryngeal", "Superior laryngeal nerve", "cn_lower", "vagal trunk that splits into internal (sensory above the cords) and external (cricothyroid) branches."]]),
+    F("sinus_drainage", "route", "route", "meatus|sinus|recess|drain\\w*|opens?|bulla", "Where each sinus opens.", [
+      ["frontal", "Frontal sinus", "nose", "middle meatus (via the frontonasal duct / hiatus semilunaris)."],
+      ["maxillary", "Maxillary sinus", "nose", "middle meatus (hiatus semilunaris); maxillary tooth pain can be maxillary sinusitis."],
+      ["anterior ethmoidal", "Anterior ethmoidal cells", "nose", "middle meatus (hiatus semilunaris / infundibulum)."],
+      ["middle ethmoidal", "Middle ethmoidal cells", "nose", "middle meatus, on the bulla ethmoidalis."],
+      ["posterior ethmoidal", "Posterior ethmoidal cells", "nose", "superior meatus."],
+      ["sphenoid\\w*", "Sphenoidal sinus", "nose", "sphenoethmoidal recess."],
+      ["nasolacrimal", "Nasolacrimal duct", "nose", "inferior meatus."]]),
+    F("pharyngeal_arches", "lookalike", "core", "\\barch(es)?\\b", "Every arch has its own nerve, muscles and skeleton.", [
+      ["first|1st|mandibular|meckel", "1st arch", "embryo_neural", "nerve V3; muscles of mastication, mylohyoid, anterior digastric, tensor tympani/palati; Meckel's cartilage, malleus, incus."],
+      ["second|2nd|hyoid arch|reichert", "2nd arch", "embryo_neural", "nerve VII; muscles of facial expression (incl. occipitofrontalis), stapedius, stylohyoid, posterior digastric; stapes, styloid, lesser horn of hyoid."],
+      ["third|3rd", "3rd arch", "embryo_neural", "nerve IX; stylopharyngeus; greater horn of hyoid."],
+      ["fourth|4th|sixth|6th", "4th / 6th arches", "embryo_neural", "vagus (superior / recurrent laryngeal); pharyngeal constrictors, cricothyroid, intrinsic laryngeal muscles; laryngeal cartilages."]]),
+    F("pharyngeal_pouches", "lookalike", "core", "pouch\\w*|thymus|parathyroid|tonsil\\w*|middle ear|tympanic cavity|auditory tube", "Pouches line; arches build.", [
+      ["first|1st", "1st pouch", "embryo_neural", "middle-ear cavity and auditory tube."],
+      ["second|2nd", "2nd pouch", "embryo_neural", "palatine tonsil (tonsillar fossa)."],
+      ["third|3rd", "3rd pouch", "embryo_neural", "thymus and INFERIOR parathyroid."],
+      ["fourth|4th", "4th pouch", "embryo_neural", "SUPERIOR parathyroid and the ultimobranchial body."]]),
+    F("fibre_types", "lookalike", "sidebyside", "fib(er|re)s?|afferent|efferent|spindle|tendon|stretch|innervat\\w*", "Match the fibre class to its receptor or target.", [
+      ["\\bia\\b|\\bi a\\b|annulospiral|primary ending", "Ia afferent", "spindle_gto", "primary (annulospiral) spindle endings on bag and chain fibres: velocity + length; drives the stretch reflex."],
+      ["\\bii\\b|secondary ending|flower ?spray", "Group II afferent", "spindle_gto", "secondary (flower-spray) endings, mainly on chain fibres: static length."],
+      ["\\bib\\b|\\blb\\b|\\bi b\\b", "Ib afferent", "spindle_gto", "from the Golgi tendon organ: tension; excites inhibitory interneurons (autogenic inhibition)."],
+      ["gamma|\\by motor|\\bay\\b", "A-gamma (γ) motor", "spindle_gto", "efferents to the INTRAFUSAL fibres: keep the spindle sensitive."],
+      ["a ?alpha|alpha motor|\\baa\\b", "A-alpha (α) motor", "reflexes", "efferents to EXTRAFUSAL muscle fibres (the spindle's own afferents are also of Aα size, so read the direction the question means)."],
+      ["a ?delta|\\bad\\b", "A-delta", "pain", "thin myelinated: fast, sharp pain and cold."],
+      ["\\bc (nerve )?fib|\\bc fibers?|unmyelinated", "C fibre", "pain", "unmyelinated: slow, burning pain, warmth, itch; postganglionic autonomic."],
+      ["a ?beta|\\bab\\b", "A-beta", "receptors", "large myelinated: touch, pressure, vibration."]]),
+    F("movement_disorders", "lesion", "lesion", "parkinson\\w*|chorea|huntington\\w*|ballism\\w*|athetosis|tremor|rigidity|ataxia|dysmetria|basal gangli\\w*", "Match the sign to the nucleus.", [
+      ["substantia nigra|nigro", "Substantia nigra", "basal_ganglia", "dopamine loss → Parkinsonism: resting tremor, cogwheel rigidity, bradykinesia, shuffling gait, monotonous speech."],
+      ["subthalam\\w*", "Subthalamic nucleus", "basal_ganglia", "lesion → contralateral hemiballismus (violent flinging)."],
+      ["caudate|neostriatum|striatum|putamen", "Caudate / striatum", "basal_ganglia", "loss of striatal GABA/ACh neurons → chorea (Huntington's)."],
+      ["globus pallidus|pallid\\w*", "Globus pallidus", "basal_ganglia", "classically linked with athetosis (slow writhing)."],
+      ["cerebell\\w*", "Cerebellum", "cerebellum", "ataxia, intention tremor, dysmetria, hypotonia, drunken gait; no rigidity."],
+      ["red nucleus|rubr\\w*", "Red nucleus", "brainstem", "midbrain relay of cerebellar output (rubrospinal); lesions give tremor with a crossed III palsy (Benedikt)."],
+      ["motor cortex|precentral|area 4", "Primary motor cortex", "cortex_maps", "UMN weakness with spasticity and Babinski, not a basal-ganglia movement disorder."]]),
+    F("eeg_waves", "lookalike", "sidebyside", "wave|eeg|sleep|\\brem\\b|hz|rhythm", "Frequency first, then the state.", [
+      ["\\balpha\\b", "Alpha waves", "sleep_eeg", "8–13 Hz, awake and relaxed with eyes closed, over the occipital cortex; block with eye opening."],
+      ["\\bbeta\\b", "Beta waves", "sleep_eeg", ">13 Hz low-voltage: alert attention, and the desynchronised pattern of REM sleep."],
+      ["\\btheta\\b", "Theta waves", "sleep_eeg", "4–7 Hz: drowsiness and light sleep; normal in children."],
+      ["\\bdelta\\b", "Delta waves", "sleep_eeg", "<4 Hz high-voltage: deep slow-wave (stage 3) sleep."]]),
+    F("receptor_adaptation", "lookalike", "sidebyside", "adapt\\w*|tonic|phasic|receptors?", "Does it keep firing to a maintained stimulus?", [
+      ["pacini\\w*|meissner\\w*|hair (follicle|receptor)|rapidly adapting|phasic|touch receptors?", "Rapidly adapting (phasic)", "nerve_endings", "Pacinian and Meissner corpuscles, hair receptors: signal change and vibration, then fall silent."],
+      ["tonic|slowly adapting|merkel|ruffini|stretch receptors?|spindle|tendon organ|baroreceptor|nocicept\\w*|pain receptor", "Slowly adapting (tonic)", "receptors", "Merkel, Ruffini, spindles, tendon organs, alveolar stretch receptors, baroreceptors and pain receptors keep firing."],
+      ["moderately adapting|therm\\w*", "Thermoreceptors", "receptors", "moderately adapting: a strong response to change, then a lower steady rate."]]),
+    F("brainstem_nuclei", "lookalike", "nerve", "nucle(us|i)|salivat\\w*|ambigu\\w*|solitar\\w*|edinger|visceromotor|parasympathetic", "Name the nerve and what the nucleus does.", [
+      ["ambigu\\w*", "Nucleus ambiguus", "cn_lower", "branchial motor for IX, X and cranial XI: pharynx, larynx, soft palate."],
+      ["solitar\\w*", "Nucleus of the tractus solitarius", "cn_lower", "visceral sensory and TASTE from VII, IX and X."],
+      ["dorsal (motor )?nucleus( of (the )?vagus| of x)?|dorsal vagal", "Dorsal motor nucleus of vagus", "cn_lower", "parasympathetic to thoracic and abdominal viscera."],
+      ["inferior salivat\\w*", "Inferior salivatory nucleus", "cn_lower", "IX parasympathetic → otic ganglion → parotid."],
+      ["superior salivat\\w*", "Superior salivatory nucleus", "cn_facial", "VII parasympathetic → pterygopalatine and submandibular ganglia."],
+      ["edinger", "Edinger–Westphal nucleus", "cn_eye_muscles", "III parasympathetic → ciliary ganglion → pupil constriction and accommodation."],
+      ["intermediolateral", "Intermediolateral cell column", "spinal_xs", "sympathetic preganglionic neurons, T1–L2 (not a brainstem nucleus)."]]),
+    F("cervical_cutaneous", "route", "nerve", "cutaneous|skin|sensory (nerve )?supply|auricular|occipital|supraclavicular|transverse cervical|angle of the (mandible|jaw)", "Loop around the posterior border of sternomastoid.", [
+      ["great auricular", "Great auricular nerve (C2–C3)", "neck", "skin over the angle of the mandible, the parotid and the lower auricle."],
+      ["lesser occipital", "Lesser occipital nerve (C2)", "neck", "skin behind the auricle."],
+      ["transverse cervical|transverse cutaneous", "Transverse cervical nerve (C2–C3)", "neck", "skin of the front of the neck."],
+      ["supraclavicular", "Supraclavicular nerves (C3–C4)", "neck", "skin over the clavicle and shoulder."],
+      ["greater occipital", "Greater occipital nerve (C2 dorsal ramus)", "neck", "back of the scalp; a DORSAL ramus, not the cervical plexus."]]),
+    F("vestibular_receptors", "lookalike", "sidebyside", "macula|utricle|saccule|semicircular|\\bscc\\b|crista|acceleration|rotation|vertigo", "Linear or angular?", [
+      ["utricle", "Utricular macula", "vestibular", "horizontal linear acceleration and static head tilt."],
+      ["saccule", "Saccular macula", "vestibular", "vertical linear acceleration (e.g. a lift)."],
+      ["semicircular|\\bscc\\b|crista|ampull\\w*", "Semicircular canal crista", "vestibular", "ANGULAR acceleration: endolymph lag bends the cupula."]]),
+    F("pain_chemistry", "lookalike", "mech", "pain|analges\\w*|transmitter|nocicep\\w*", "Fast vs slow pathway, and who switches it off.", [
+      ["glutamate", "Glutamate", "pain", "fast (Aδ) pain transmitter in the dorsal horn."],
+      ["substance p", "Substance P", "pain", "slow (C-fibre) pain transmitter, alongside glutamate."],
+      ["enkephalin|endorphin|opioid", "Enkephalin / endorphin", "pain", "opioid analgesia: presynaptic and postsynaptic inhibition of pain transmission."],
+      ["serotonin|5 ?ht", "Serotonin", "pain", "released by raphe-magnus descending fibres; drives enkephalin interneurons in the dorsal horn."],
+      ["bradykinin|prostaglandin|histamine|potassium", "Tissue mediators", "pain", "released by damage; activate or sensitise nociceptors (bradykinin most painful; prostaglandins sensitise)."]]),
+    F("synaptic_modifiers", "direction", "perturb", "synaptic transmission|excitab\\w*|neuronal", "Which way does each factor push excitability?", [
+      ["alkalosis", "Alkalosis", "synapse", "INCREASES neuronal excitability (can trigger seizures)."],
+      ["acidosis", "Acidosis", "synapse", "DEPRESSES neuronal activity (can cause coma)."],
+      ["hypoxia", "Hypoxia", "synapse", "DEPRESSES transmission within seconds."],
+      ["hypocalc\\w*", "Hypocalcaemia", "synapse", "INCREASES excitability (lowers firing threshold → tetany)."],
+      ["hypercalc\\w*", "Hypercalcaemia", "synapse", "DECREASES excitability (stabilises membranes)."],
+      ["botul\\w*", "Botulinum toxin", "synapse", "blocks acetylcholine release."],
+      ["caffeine|theophylline", "Caffeine", "synapse", "increases excitability."]]),
+  ];
+  // chemistry/physiology families have no honest structure picture: text discriminator only
+  families.forEach((f) => (f.novis = /^(pain_chemistry|synaptic_modifiers|eeg_waves)$/.test(f.id)));
+  families.find((f) => f.id === "brainstem_levels").subj = ["ANATOMY", "HISTOLOGY"];
+  families.find((f) => f.id === "receptor_adaptation").stemFrame = true; // only when the stem asks about adaptation
+  families.find((f) => f.id === "pharyngeal_pouches").exclude = R("cleft|\\barch"); // a cleft or arch is not a pouch
+
+  window.INTELLECTUALITY_V14_REGISTRY = { version: "14.4", commands, concepts, contrasts, families, atlas };
 })();

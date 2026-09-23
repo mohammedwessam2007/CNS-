@@ -1,4 +1,4 @@
-// INTELLECTUALITY v14.3 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
+// INTELLECTUALITY v14.4 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
 // Usage: node tests/certify.js [outDir]   (server: node tests/serve.js source/public 8787)
 const fs = require('fs');
 const path = require('path');
@@ -120,7 +120,7 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     const q = await currentQ(page);
     await page.waitForTimeout(700);
     const pre = await page.evaluate(() => ({ primer: !!document.querySelector('.v14Primer'), opts: document.querySelectorAll('[data-act="qbank-choice"]').length, gate: document.querySelector('[data-v14-reveal]')?.textContent, cmd: document.querySelector('.v14Primer .v14Command .v14Ar')?.textContent, vis: document.querySelectorAll('.v14Primer .v14Visual').length, caption: [...document.querySelectorAll('.v14Primer .v14Visual .v14Cap i')].length, steps: [...document.querySelectorAll('.v14Steps > li > b')].map(b => b.textContent) }));
-    check('B3', 'Practice MCQ: options locked behind the understanding primer', reached && pre.primer && pre.opts === 0 && pre.gate === 'I CAN PICTURE IT → ASK ME THE MCQ', pre);
+    check('B3', 'Practice MCQ: options locked behind the understanding primer', reached && pre.primer && pre.opts === 0 && /أنا شايفها → هات السؤال/.test(pre.gate) && /I CAN PICTURE IT → ASK ME THE MCQ/.test(pre.gate), pre);
     check('B4', 'Primer structure: SEE IT → UNDERSTAND IT → BUILD THE MOVIE → EXAM CONVERSION + one Egyptian command', pre.steps.length === 4 && /SEE IT/.test(pre.steps[0]) && /UNDERSTAND/.test(pre.steps[1]) && /MOVIE/.test(pre.steps[2]) && /EXAM/.test(pre.steps[3]) && !!pre.cmd, pre);
     check('B5', 'Primer shows ≥1 real visual with neutral (title-hidden) caption pre-answer', pre.vis >= 1 && pre.caption === 0, pre);
     const preQueries = log.commons.map(x => x.gsrsearch).filter(Boolean);

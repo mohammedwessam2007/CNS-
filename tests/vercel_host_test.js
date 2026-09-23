@@ -114,6 +114,6 @@ const T = "2026-09-22T10:00:00+03:00";
   await A.close(); await B.close(); await P.close(); await browser.close();
   const pass = results.filter((r) => r.ok).length;
   console.log(`\n${pass}/${results.length} host checks passed`);
-  fs.writeFileSync(process.argv[2] || "out/vercel_host_test.json", JSON.stringify({ pass, total: results.length, results }, null, 1));
+  fs.writeFileSync(process.argv[2] || require("path").join(__dirname, "out", "vercel_host_test.json"), JSON.stringify({ pass, total: results.length, results }, null, 1));
   process.exit(pass === results.length ? 0 : 1);
 })();

@@ -1,0 +1,27 @@
+PASS X1   Five days missed: real date (SAT 26 SEP) + "5 DAYS CARRYOVER", Day-1 work kept, never relabelled as today  · {"chip":"TODAY · SAT 26 SEP · 5 DAYS CARRYOVER","day":1,"banner":"CARRYOVER · REAL DATE KEPT\nToday is Sat 26 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately (5 days behind plan). ~123 min of Day 1 
+PASS X1b  No page errors after a multi-day gap  · []
+PASS X2   Far ahead (Day 6 on Tue 22 Sep): "4 DAYS AHEAD", day never regresses  · {"chip":"TODAY · TUE 22 SEP · 4 DAYS AHEAD","day":6}
+PASS X3   Device set to New York (still Mon evening there): Cairo date (Tue 22 Sep) is used  · TODAY · TUE 22 SEP · 1 DAY CARRYOVER
+PASS X4   Overnight resume: chip rolls to Tue 22 Sep carryover without yanking the open question; answer recorded  · {"before":"TODAY · MON 21 SEP","mid":{"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER","stillQ":4},"after":{"rec":true,"same":true}}
+PASS X4b  No page errors across midnight  · []
+PASS Y1   Malformed state (corrupt JSON): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · FIRST-RUN CATCH-UP"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-24","recorded":true},"saved":true,"errors":[]}
+PASS Y2   Malformed state (v14 is a string): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-20","recorded":true},"saved":true,"errors":[]}
+PASS Y3   Malformed state (v14 fields wrong types): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-20","recorded":true},"saved":true,"errors":[]}
+PASS Y4   Malformed state (no v12/v13/v14 (v4.1 era)): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-20","recorded":true},"saved":true,"errors":[]}
+PASS Y5   Malformed state (v13 null, v12 evidence not an array): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-24","recorded":true},"saved":true,"errors":[]}
+PASS Y6   Malformed state (future schema v14): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-20","recorded":true},"saved":true,"errors":[]}
+PASS Z1   Twelve taps on the gate and twelve alternating option taps count as ONE answer (the first)  · {"ev0":0,"ev":1,"ledger":1,"result":true}
+PASS Z2   Double-tap on NEXT advances exactly one step  · {"seg0":"d1:T001:s4","seg1":"d1:T002:s0"}
+PASS Z3   No page errors under rapid taps  · []
+PASS W1   Image search hanging 9 s: primer text and gate are usable immediately (not blocked on images)  · {"primer":true,"gate":true,"text":1714,"ms":871}
+PASS W2   Offline mid-session: a wrong answer still opens repair and is saved on the device  · {"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-24","recorded":true},"persisted":1,"errors":[]}
+PASS W3-390Huge 6000×6000 image at 390px: rendered inside the viewport, no horizontal scroll  · {"big":2,"maxW":338,"sw":390,"iw":390}
+PASS W3-820Huge 6000×6000 image at 820px: rendered inside the viewport, no horizontal scroll  · {"big":2,"maxW":222,"sw":820,"iw":820}
+PASS S1   Day evidence green: explicit STOP view with stop-study intelligence and a single next button  · {"kind":"STOP","stop":true,"intel":true,"text":"STOP-STUDY INTELLIGENCE: Marginal mark-gain is now low. Stop studying.","buttons":1}
+PASS M1   No held-out item was ever pinned to a primer/practice slot  · {"heldOut":400,"pinned":0,"primersOnHeld":0}
+PASS B1   Backup download: one dated JSON with all progress keys (not the gap probe)  · {"name":"intellectuality-backup-2026-09-23.json","day":1,"keys":2}
+PASS B2   Restore: progress replaced from the file, previous copy kept as a local backup, back to the course  · {"day":1,"segs":2,"prev":"other","url":"/"}
+PASS B3   A file that is not a backup is refused with a message; nothing overwritten  · {"same":true,"msg":"That file could not be restored: not an INTELLECTUALITY backup"}
+PASS B4   No page errors on the sync/backup page  · []
+
+25/25 hostile checks passed (54s)
