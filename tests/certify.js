@@ -1,4 +1,4 @@
-// INTELLECTUALITY v14.4 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
+// INTELLECTUALITY v15.0 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
 // Usage: node tests/certify.js [outDir]   (server: node tests/serve.js source/public 8787)
 const fs = require('fs');
 const path = require('path');
@@ -16,7 +16,7 @@ async function toQuestion(page, max = 14) {
   for (let i = 0; i < max; i++) {
     const k = await page.evaluate(() => { const a = nextAction(); return a.kind + ':' + (a.seg?.type || ''); });
     if (k === 'SEGMENT:question') return true;
-    const clicked = await page.evaluate(() => { const b = document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"], #player [data-act="finish-qbank"]'); if (b) { b.click(); return true; } return false; });
+    const clicked = await page.evaluate(() => { const b = document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"], #player [data-act="finish-qbank"]'); if (b) { b.click(); return true; } return false; });
     await page.waitForTimeout(160);
     if (!clicked) return false;
   }
@@ -47,7 +47,7 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     const s = await open({ time: T('2026-09-21T18:00:00+03:00'), state: null, settle: 1200 });
     const chip21 = await s.page.evaluate(() => document.querySelector('#v14Calendar')?.textContent);
     check('A0', 'Sep 21 (course day 1): chip is plain real date', chip21 === 'TODAY · MON 21 SEP', chip21);
-    for (let i = 0; i < 3; i++) { await s.page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"]')?.click()); await s.page.waitForTimeout(150); }
+    for (let i = 0; i < 3; i++) { await s.page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"]')?.click()); await s.page.waitForTimeout(150); }
     partialDay1 = await stateOf(s.page);
     await s.close();
   }
@@ -79,7 +79,7 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     await s.close();
     // Sep 23 after Day-2 partial
     const s2 = await open({ time: T('2026-09-22T12:00:00+03:00'), state: complete, settle: 1000 });
-    for (let i = 0; i < 2; i++) { await s2.page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"]')?.click()); await s2.page.waitForTimeout(150); }
+    for (let i = 0; i < 2; i++) { await s2.page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"]')?.click()); await s2.page.waitForTimeout(150); }
     const day2partial = await stateOf(s2.page); await s2.close();
     const s3 = await open({ time: T('2026-09-23T08:00:00+03:00'), state: day2partial, settle: 1200 });
     const r3 = await s3.page.evaluate(() => ({ chip: document.querySelector('#v14Calendar')?.textContent, day: S.day, banner: document.querySelector('.v14Carryover')?.innerText || '' }));
@@ -110,9 +110,9 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     await page.waitForTimeout(150);
     await page.evaluate(() => { document.querySelector('#player [data-act="finish-segment"]')?.click(); });
     await page.waitForTimeout(400);
-    const teach = await page.evaluate(() => ({ fast: !!document.querySelector('[data-act="elite-fastlane"]'), predict: document.querySelectorAll('details.v14Predict').length, sayVisible: [...document.querySelectorAll('.kasrMove .answer')].filter(x => !x.closest('details:not([open])')).length, canFast: INTELLECTUALITY_V14.canFastLane(nextAction().l) }));
+    const teach = await page.evaluate(() => ({ fast: !!document.querySelector('[data-act="elite-fastlane"]'), learn: !!document.querySelector('#player .v15Learn'), sections: INTELLECTUALITY_V15.sectionsForLesson(nextAction().l.id).length, pics: document.querySelectorAll('#player .v15Pic').length, recall: !!document.querySelector('#player .v15Recall'), mcq: document.querySelectorAll('#player [data-act="qbank-choice"]').length, canFast: INTELLECTUALITY_V14.canFastLane(nextAction().l) }));
     check('B1', 'Fresh learner: fast lane absent and ineligible on the teach step', !teach.fast && !teach.canFast, teach);
-    check('B2', 'Professor feed hides source answers behind predict-then-reveal', teach.predict >= 1 && teach.sayVisible === 0, teach);
+    check('B2', 'Teach step is the LEARN lecture (notes + exact-term pictures + no-options recall), with no MCQ options on it', teach.learn && teach.sections >= 2 && teach.pics >= 1 && teach.recall && teach.mcq === 0, teach);
     await page.waitForTimeout(600);
     const imgs = await page.evaluate(() => { const srcs = [...document.querySelectorAll('#player .ctxImage img')].map(i => i.getAttribute('src')); return { n: srcs.length, uniq: new Set(srcs).size, vids: [...document.querySelectorAll('#player .ctxVideo')].map(v => v.dataset.ctxVideo) }; });
     check('K1', 'Teach screen: v10 companions capped (≤3 images), no duplicate image or teacher card', imgs.n <= 3 && imgs.uniq === imgs.n && new Set(imgs.vids).size === imgs.vids.length, imgs);

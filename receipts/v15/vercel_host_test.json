@@ -1,0 +1,141 @@
+{
+ "pass": 14,
+ "total": 14,
+ "results": [
+  {
+   "id": "H1",
+   "name": "Fresh device gets a private 26-char sync code and a session",
+   "ok": true,
+   "ev": {
+    "code": "ZEYTUXZQQHBW7KRTQKIP4N4KQO",
+    "btn": "☁ SYNCING…",
+    "link": true,
+    "title": "INTELLECTUALITY CNS v15.0 · LEARN FIRST"
+   }
+  },
+  {
+   "id": "H2",
+   "name": "First cloud save happens automatically (no sign-in step)",
+   "ok": true,
+   "ev": {
+    "status": 200,
+    "v": 1,
+    "btn": "☁ SYNCING…"
+   }
+  },
+  {
+   "id": "H3",
+   "name": "Cloud button shows sync state; sync-code link is offered under it",
+   "ok": true,
+   "ev": {
+    "btn": "☁ SYNCING…",
+    "link": true
+   }
+  },
+  {
+   "id": "H4",
+   "name": "Every action saves on the device immediately",
+   "ok": true,
+   "ev": {
+    "local1": "A-1"
+   }
+  },
+  {
+   "id": "H5",
+   "name": "Cloud writes are batched, then land (≤ gap)",
+   "ok": true,
+   "ev": {
+    "beforeGap": null,
+    "afterGap": "A-1",
+    "v": 2
+   }
+  },
+  {
+   "id": "H6",
+   "name": "Hiding the app saves to the cloud immediately",
+   "ok": true,
+   "ev": {
+    "v": 3
+   }
+  },
+  {
+   "id": "H7",
+   "name": "Second device via link restores the same progress; code removed from the URL",
+   "ok": true,
+   "ev": {
+    "code": "ZEYTUXZQQHBW7KRTQKIP4N4KQO",
+    "marker": "A-hide",
+    "hash": ""
+   }
+  },
+  {
+   "id": "H8",
+   "name": "Device B studies; its progress reaches the cloud",
+   "ok": true,
+   "ev": {
+    "v": 5,
+    "xp": 30
+   }
+  },
+  {
+   "id": "H9",
+   "name": "An idle device reopening later loads the newer progress and never overwrites it",
+   "ok": true,
+   "ev": {
+    "aNow": {
+     "marker": "B-learned",
+     "xp": 30,
+     "v": 6
+    },
+    "cloud": "B-learned",
+    "cloudXp": 30
+   }
+  },
+  {
+   "id": "H10",
+   "name": "A device that studied keeps its progress over a housekeeping-only cloud change",
+   "ok": true,
+   "ev": {
+    "v": 8,
+    "xp": 50
+   }
+  },
+  {
+   "id": "H14",
+   "name": "Both studied: the copy with more learning wins, the other is kept as a backup",
+   "ok": true,
+   "ev": {
+    "aAfter": {
+     "marker": "B-learned-2",
+     "backup": "newer-cloud-copy"
+    },
+    "cloud": "B-learned-2"
+   }
+  },
+  {
+   "id": "H11",
+   "name": "Sync page shows the code formatted and rejects an invalid code",
+   "ok": true,
+   "ev": {
+    "shown": "ZEYT-UXZQ-QHBW-7KRT-QKIP-4N4K-QO",
+    "perr": "That is not a valid sync code (26 letters/digits 2–7)."
+   }
+  },
+  {
+   "id": "H12",
+   "name": "Server: no code → 401, oversize → 413, vision → graceful 503",
+   "ok": true,
+   "ev": {
+    "bad": 401,
+    "big": 413,
+    "vis": 503
+   }
+  },
+  {
+   "id": "H13",
+   "name": "No page errors on either device or the sync page",
+   "ok": true,
+   "ev": []
+  }
+ ]
+}

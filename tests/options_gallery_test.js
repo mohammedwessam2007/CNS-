@@ -12,7 +12,7 @@ async function toQuestion(page, max = 14) {
   for (let i = 0; i < max; i++) {
     const k = await page.evaluate(() => { const a = nextAction(); return a.kind + ":" + (a.seg?.type || ""); });
     if (k === "SEGMENT:question") return true;
-    const clicked = await page.evaluate(() => { const b = document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"], #player [data-act="finish-qbank"]'); if (b) { b.click(); return true; } return false; });
+    const clicked = await page.evaluate(() => { const b = document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"], #player [data-act="finish-qbank"]'); if (b) { b.click(); return true; } return false; });
     await page.waitForTimeout(160);
     if (!clicked) return false;
   }

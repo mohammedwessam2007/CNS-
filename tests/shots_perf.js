@@ -37,7 +37,7 @@ async function step(page) {
     }
     if (a.kind === 'REPAIR') { const r = q('[data-v14-recon]'); if (r && !r.value) { r.value = 'the decisive difference, rebuilt from memory'; r.dispatchEvent(new Event('input', { bubbles: true })); } return click('[data-act="repair"]') ? 'repair' : 'stuck-repair'; }
     if (a.kind === 'RETEST') { const b = q('[data-act="retest-qbank"]'); if (b) { const qq = EHSAN_QBANK.questions.find(x => x.id === b.dataset.qid); q('[data-act="retest-qbank"][data-choice="' + qq.answerKeys[0] + '"]').click(); return 'retest'; } return 'stuck-retest'; }
-    for (const s of ['[data-act="visual-hide"]', '[data-act="finish-segment"]', '[data-act="finish-qbank"]', '[data-act="certify"]', '.bigAction', 'button.primary']) if (click(s)) return a.kind + ':' + s;
+    for (const s of ['[data-act="visual-hide"]', '[data-act="v15-next"]', '[data-act="finish-segment"]', '[data-act="finish-qbank"]', '[data-act="certify"]', '.bigAction', 'button.primary']) if (click(s)) return a.kind + ':' + s;
     return 'stuck-' + a.kind;
   });
 }
@@ -51,7 +51,13 @@ async function step(page) {
     await s.page.reload({ waitUntil: 'load' }); await s.page.waitForTimeout(1200);
     const shot = async (name) => { await s.page.waitForTimeout(900); await s.page.screenshot({ path: path.join(OUT, vp.n + '_' + name + '.png'), fullPage: name !== '1_home' }); };
     await shot('1_home');
-    for (let i = 0; i < 14; i++) { const k = await s.page.evaluate(() => nextAction().seg?.type || ''); if (k === 'question') break; await s.page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"]')?.click()); await s.page.waitForTimeout(200); }
+    let learnShot = false;
+    for (let i = 0; i < 20; i++) {
+      const k = await s.page.evaluate(() => nextAction().seg?.type || '');
+      if (k === 'question') break;
+      if (k === 'teach' && !learnShot) { learnShot = true; await s.page.waitForTimeout(600); await shot('2a_learn'); }
+      await s.page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"]')?.click()); await s.page.waitForTimeout(200);
+    }
     await shot('2_primer');
     await s.page.evaluate(() => document.querySelector('[data-v14-reveal]')?.click());
     await shot('3_options');

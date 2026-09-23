@@ -15,13 +15,13 @@ function check(id, name, ok, detail = '') {
 }
 const chipOf = (p) => p.evaluate(() => document.querySelector('#v14Calendar')?.textContent);
 async function clickNext(page, n) {
-  for (let i = 0; i < n; i++) { await page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"]')?.click()); await page.waitForTimeout(150); }
+  for (let i = 0; i < n; i++) { await page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"]')?.click()); await page.waitForTimeout(150); }
 }
 async function toQuestion(page, max = 14) {
   for (let i = 0; i < max; i++) {
     const k = await page.evaluate(() => { const a = nextAction(); return a.kind + ':' + (a.seg?.type || ''); });
     if (k === 'SEGMENT:question') return true;
-    const c = await page.evaluate(() => { const b = document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"], #player [data-act="finish-qbank"]'); if (b) { b.click(); return true; } return false; });
+    const c = await page.evaluate(() => { const b = document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"], #player [data-act="finish-qbank"]'); if (b) { b.click(); return true; } return false; });
     await page.waitForTimeout(160);
     if (!c) return false;
   }

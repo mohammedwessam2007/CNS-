@@ -1,8 +1,8 @@
-# Deployment: Vercel host (v14.4)
+# Deployment: Vercel host (v15.0)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v14.4 · UNDERSTAND FIRST") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.0 · LEARN FIRST") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
 | Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, commit `5f9288b`; root directory `deploy/vercel` |
 | Deployment | `dpl_5VVHU6ySd6Ureg2WweAe9d3h3Uqf`: **READY**, production, functions in `fra1` (Frankfurt) |
@@ -51,7 +51,7 @@ After that, the ☁ button shows **SYNCED hh:mm**, and the sync page shows "Clou
 | Opening the live URL from the build session | sandbox curl / WebFetch / Vercel fetch tool | **Not possible**: the session's egress policy blocks `*.vercel.app`, and the connector's fetch and log tools return 403/404. Not routed around |
 
 **On the iPad, open the URL and check:**
-- the tab title reads v14.4 and the date chip shows today's Cairo date;
+- the tab title reads v15.0 and the date chip shows today's Cairo date;
 - answer a question: options appear after "I CAN PICTURE IT", and after answering you see *EVERY OPTION, PICTURED*;
 - the ☁ button reads "SAVED ON THIS DEVICE" (no store yet) or "SYNCED …" (store connected).
 

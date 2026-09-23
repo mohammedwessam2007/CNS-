@@ -50,6 +50,33 @@ async function open(opts = {}) {
     await route.fulfill({ contentType: 'application/json', body: JSON.stringify({ query: { pages } }) });
     } finally { log.inflight--; }
   });
+  // Wikipedia (v15 exact-words pictures): the article for a title exists unless it contains "Nosuch";
+  // its media list holds a lead diagram and a micrograph whose captions echo the title.
+  await context.route(/en\.wikipedia\.org\//, async (route) => {
+    const u = new URL(route.request().url());
+    log.wiki = log.wiki || [];
+    log.wiki.push(u.pathname + '?' + (u.searchParams.get('titles') || u.searchParams.get('srsearch') || ''));
+    if (opts.wikiFail) return route.abort('failed');
+    const cap = (t) => t.replace(/_/g, ' ');
+    if (/\/page\/media-list\//.test(u.pathname)) {
+      const t = cap(decodeURIComponent(u.pathname.split('/media-list/')[1]));
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ items: [
+        { title: 'File:' + t + ' labeled diagram.svg', type: 'image', leadImage: true, caption: { text: t + ', labeled diagram' } },
+        { title: 'File:' + t + ' histology micrograph.jpg', type: 'image', leadImage: false, caption: { text: 'Micrograph of ' + t } },
+        { title: 'File:Commons-logo.svg', type: 'image', leadImage: false, caption: { text: '' } } ] }) });
+    }
+    const titles = u.searchParams.get('titles'), sr = u.searchParams.get('srsearch');
+    if (titles) {
+      const miss = /nosuch/i.test(titles);
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ query: { pages: [miss ? { title: titles, missing: true } : { title: titles, pageimage: titles.replace(/ /g, '_') + '_labeled_diagram.svg' }] } }) });
+    }
+    if (sr) {
+      const words = sr.replace(/[^A-Za-z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 3).slice(0, 2);
+      const t = words.map((w, i) => (i ? w.toLowerCase() : w[0].toUpperCase() + w.slice(1).toLowerCase())).join(' ');
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ query: { search: t ? [{ title: t }] : [] } }) });
+    }
+    return route.fulfill({ contentType: 'application/json', body: '{}' });
+  });
   await context.route(/(upload\.wikimedia\.org|i\.ytimg\.com)/, (route) => route.fulfill({ contentType: 'image/png', body: PNG }));
   await context.route(/(youtube\.com|youtube-nocookie\.com)/, (route) => route.fulfill({ contentType: 'text/html', body: '<html><body>video</body></html>' }));
   if (opts.state !== undefined || opts.localStorage) {

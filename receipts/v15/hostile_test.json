@@ -1,0 +1,156 @@
+{
+ "pass": 25,
+ "total": 25,
+ "results": [
+  {
+   "id": "X1",
+   "name": "Five days missed: real date (SAT 26 SEP) + \"5 DAYS CARRYOVER\", Day-1 work kept, never relabelled as today",
+   "ok": true,
+   "detail": "{\"chip\":\"TODAY · SAT 26 SEP · 5 DAYS CARRYOVER\",\"day\":1,\"banner\":\"CARRYOVER · REAL DATE KEPT\\nToday is Sat 26 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately (5 days behind plan). ~133 min of Day 1 left.\"}"
+  },
+  {
+   "id": "X1b",
+   "name": "No page errors after a multi-day gap",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "X2",
+   "name": "Far ahead (Day 6 on Tue 22 Sep): \"4 DAYS AHEAD\", day never regresses",
+   "ok": true,
+   "detail": "{\"chip\":\"TODAY · TUE 22 SEP · 4 DAYS AHEAD\",\"day\":6}"
+  },
+  {
+   "id": "X3",
+   "name": "Device set to New York (still Mon evening there): Cairo date (Tue 22 Sep) is used",
+   "ok": true,
+   "detail": "TODAY · TUE 22 SEP · 1 DAY CARRYOVER"
+  },
+  {
+   "id": "X4",
+   "name": "Overnight resume: chip rolls to Tue 22 Sep carryover without yanking the open question; answer recorded",
+   "ok": true,
+   "detail": "{\"before\":\"TODAY · MON 21 SEP\",\"mid\":{\"chip\":\"TODAY · TUE 22 SEP · 1 DAY CARRYOVER\",\"stillQ\":4},\"after\":{\"rec\":true,\"same\":true}}"
+  },
+  {
+   "id": "X4b",
+   "name": "No page errors across midnight",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "Y1",
+   "name": "Malformed state (corrupt JSON): app loads, a question can be answered and saved, no page errors",
+   "ok": true,
+   "detail": "{\"shell\":{\"player\":true,\"chip\":\"TODAY · TUE 22 SEP · FIRST-RUN CATCH-UP\"},\"a\":{\"reached\":true,\"id\":\"EHSAN-ANAT-SPINAL-CORD-MCQ-14\",\"recorded\":true},\"saved\":true,\"errors\":[]}"
+  },
+  {
+   "id": "Y2",
+   "name": "Malformed state (v14 is a string): app loads, a question can be answered and saved, no page errors",
+   "ok": true,
+   "detail": "{\"shell\":{\"player\":true,\"chip\":\"TODAY · TUE 22 SEP · 1 DAY CARRYOVER\"},\"a\":{\"reached\":true,\"id\":\"EHSAN-ANAT-SPINAL-CORD-MCQ-14\",\"recorded\":true},\"saved\":true,\"errors\":[]}"
+  },
+  {
+   "id": "Y3",
+   "name": "Malformed state (v14 fields wrong types): app loads, a question can be answered and saved, no page errors",
+   "ok": true,
+   "detail": "{\"shell\":{\"player\":true,\"chip\":\"TODAY · TUE 22 SEP · 1 DAY CARRYOVER\"},\"a\":{\"reached\":true,\"id\":\"EHSAN-ANAT-SPINAL-CORD-MCQ-14\",\"recorded\":true},\"saved\":true,\"errors\":[]}"
+  },
+  {
+   "id": "Y4",
+   "name": "Malformed state (no v12/v13/v14 (v4.1 era)): app loads, a question can be answered and saved, no page errors",
+   "ok": true,
+   "detail": "{\"shell\":{\"player\":true,\"chip\":\"TODAY · TUE 22 SEP · 1 DAY CARRYOVER\"},\"a\":{\"reached\":true,\"id\":\"EHSAN-ANAT-SPINAL-CORD-MCQ-14\",\"recorded\":true},\"saved\":true,\"errors\":[]}"
+  },
+  {
+   "id": "Y5",
+   "name": "Malformed state (v13 null, v12 evidence not an array): app loads, a question can be answered and saved, no page errors",
+   "ok": true,
+   "detail": "{\"shell\":{\"player\":true,\"chip\":\"TODAY · TUE 22 SEP · 1 DAY CARRYOVER\"},\"a\":{\"reached\":true,\"id\":\"EHSAN-ANAT-SPINAL-CORD-MCQ-14\",\"recorded\":true},\"saved\":true,\"errors\":[]}"
+  },
+  {
+   "id": "Y6",
+   "name": "Malformed state (future schema v14): app loads, a question can be answered and saved, no page errors",
+   "ok": true,
+   "detail": "{\"shell\":{\"player\":true,\"chip\":\"TODAY · TUE 22 SEP · 1 DAY CARRYOVER\"},\"a\":{\"reached\":true,\"id\":\"EHSAN-ANAT-SPINAL-CORD-MCQ-14\",\"recorded\":true},\"saved\":true,\"errors\":[]}"
+  },
+  {
+   "id": "Z1",
+   "name": "Twelve taps on the gate and twelve alternating option taps count as ONE answer (the first)",
+   "ok": true,
+   "detail": "{\"ev0\":0,\"ev\":1,\"ledger\":1,\"result\":true}"
+  },
+  {
+   "id": "Z2",
+   "name": "Double-tap on NEXT advances exactly one step",
+   "ok": true,
+   "detail": "{\"seg0\":\"d1:T001:s4\",\"seg1\":\"d1:T002:s0\"}"
+  },
+  {
+   "id": "Z3",
+   "name": "No page errors under rapid taps",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "W1",
+   "name": "Image search hanging 9 s: primer text and gate are usable immediately (not blocked on images)",
+   "ok": true,
+   "detail": "{\"primer\":true,\"gate\":true,\"text\":1250,\"ms\":1406}"
+  },
+  {
+   "id": "W2",
+   "name": "Offline mid-session: a wrong answer still opens repair and is saved on the device",
+   "ok": true,
+   "detail": "{\"a\":{\"reached\":true,\"id\":\"EHSAN-ANAT-SPINAL-CORD-MCQ-14\",\"recorded\":true},\"persisted\":1,\"errors\":[]}"
+  },
+  {
+   "id": "W3-390",
+   "name": "Huge 6000×6000 image at 390px: rendered inside the viewport, no horizontal scroll",
+   "ok": true,
+   "detail": "{\"big\":2,\"maxW\":338,\"sw\":390,\"iw\":390}"
+  },
+  {
+   "id": "W3-820",
+   "name": "Huge 6000×6000 image at 820px: rendered inside the viewport, no horizontal scroll",
+   "ok": true,
+   "detail": "{\"big\":2,\"maxW\":222,\"sw\":820,\"iw\":820}"
+  },
+  {
+   "id": "S1",
+   "name": "Day evidence green: explicit STOP view with stop-study intelligence and a single next button",
+   "ok": true,
+   "detail": "{\"kind\":\"STOP\",\"stop\":true,\"intel\":true,\"text\":\"STOP-STUDY INTELLIGENCE: Marginal mark-gain is now low. Stop studying.\",\"buttons\":1}"
+  },
+  {
+   "id": "M1",
+   "name": "No held-out item was ever pinned to a primer/practice slot",
+   "ok": true,
+   "detail": "{\"heldOut\":400,\"pinned\":0,\"primersOnHeld\":0}"
+  },
+  {
+   "id": "B1",
+   "name": "Backup download: one dated JSON with all progress keys (not the gap probe)",
+   "ok": true,
+   "detail": "{\"name\":\"intellectuality-backup-2026-09-23.json\",\"day\":1,\"keys\":2}"
+  },
+  {
+   "id": "B2",
+   "name": "Restore: progress replaced from the file, previous copy kept as a local backup, back to the course",
+   "ok": true,
+   "detail": "{\"day\":1,\"segs\":1,\"prev\":\"other\",\"url\":\"/\"}"
+  },
+  {
+   "id": "B3",
+   "name": "A file that is not a backup is refused with a message; nothing overwritten",
+   "ok": true,
+   "detail": "{\"same\":true,\"msg\":\"That file could not be restored: not an INTELLECTUALITY backup\"}"
+  },
+  {
+   "id": "B4",
+   "name": "No page errors on the sync/backup page",
+   "ok": true,
+   "detail": "[]"
+  }
+ ]
+}

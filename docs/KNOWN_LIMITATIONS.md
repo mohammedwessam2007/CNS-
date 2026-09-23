@@ -1,6 +1,14 @@
-# Known Limitations (v14.4)
+# Known Limitations (v15.0)
 
-v14.4 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+v15.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## 0. v15 LEARN notes and exact-words pictures
+
+- **Notes are author-written and unreviewed by a clinician.** The 240 sections follow standard teaching (Snell/Guyton/Junqueira level) and were checked against the practice answer keys (90.8% of practice answers are taught). They cover 65.3% of held-out answers by the same lexical rule.
+- **About 15 bank keys look wrong or contradict each other.** The notes teach the correct fact and name the key with ⚠; the bank itself is unchanged, so the app still scores those items by the bank's key.
+- **Live pictures are unverified.** The build sandbox's network policy blocks en.wikipedia.org, commons.wikimedia.org and upload.wikimedia.org, so the exact-term engine was tested only against mocks. On the iPad, pictures load live from Wikipedia/Commons. Where an article's image is off, the "search everywhere" links give the owner Google Images, Radiopaedia and Kenhub for the same words.
+- **Pictures for options exist only for curated terms** (425 terms from the notes). About a third of options have one; the rest use the v14 look-alike logic or say that no trustworthy picture exists.
+- **Longer lessons.** Each teach step is now a real lecture (about 3–15 min).
 
 ## 1. Deployment and live verification
 
@@ -11,7 +19,7 @@ v14.4 is **not** "100% perfect". This file lists what is unproven, what is heuri
 | **The live site was not opened from the build session.** Its egress policy blocks `*.vercel.app`; the connector's fetch and log tools returned 403/404. | Proof is limited to: the READY build from the tested commit, 60/60 certification plus 14/14 host checks against the identical local build, and the build step's fail-fast checks. No live screenshot, and no production logs read. | Open the URL on the iPad (checklist in the deployment doc); Vercel → project → Logs. |
 | **Sync code = the key.** No email or password. | Anyone with the code or link can read and write that progress. If every device loses it (e.g. Safari clears site data) and it was not saved, the cloud copy cannot be found. | Screenshot the code from the sync page. The code is 128-bit random and only its hash is stored. |
 | **Professor Vision is off on Vercel.** It needs the Hatchable AI connection. | The Vision drawer reports it as unavailable; nothing else is affected. | Add an AI key and a Vercel `api/vision` implementation if wanted. |
-| **No cache-busting on script URLs** (same as v53). | An iPad may keep old JS briefly after a new deploy. | Confirm the tab title reads **v14.4**; reload if not. |
+| **No cache-busting on script URLs** (same as v53). | An iPad may keep old JS briefly after a new deploy. | Confirm the tab title reads **v15.0**; reload if not. |
 
 ## 2. Visuals
 

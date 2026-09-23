@@ -13,7 +13,7 @@ const { open } = require('./harness');
   for (let i = 0; i < 12; i++) {
     const k = await page.evaluate(() => nextAction().seg?.type || '');
     if (k === 'question') break;
-    await page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="finish-segment"]')?.click());
+    await page.evaluate(() => document.querySelector('#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"]')?.click());
     await page.waitForTimeout(250);
   }
   await page.waitForTimeout(1200);

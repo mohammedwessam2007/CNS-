@@ -656,7 +656,7 @@
       .filter((x) => x.title);
   }
   // Shared adapter so v9/v10 lookups join the same queue and cache.
-  window.INTELLECTUALITY_V14_NET = { json: (url) => netData(url), rows: (url) => netData(url, commonsRows) };
+  window.INTELLECTUALITY_V14_NET = { json: (url, tf) => netData(url, tf), rows: (url) => netData(url, commonsRows) };
 
   /* ───────────────────────── anti-repeat governor (v9 + v10 + v14) ───────────────────────── */
   const G = (function () {
@@ -954,8 +954,8 @@
       '<a class="v14Visual ' + extra + '" href="' + E(c.page) + '" target="_blank" rel="noopener" data-v14-vkey="' + E(c.key) + '">' +
       '<span class="v14Img"><img src="' + E(c.thumb) + '" alt="' + (phase === "pre" ? "Question visual — title hidden until you answer" : E(title)) + '" loading="lazy" decoding="async"></span>' +
       '<span class="v14Cap"><b>' + E(label) + (c.modality ? " · " + E(MOD_LABEL[c.modality] || "") : "") + "</b>" +
-      (phase === "pre" ? "" : "<i>" + E(title) + "</i>") +
-      "<small>" + E(c.license || "license on file page") + (c.artist ? " · " + E(c.artist) : "") + " · Wikimedia Commons ↗</small></span></a>"
+      (phase === "pre" ? "" : "<i>" + E(c.caption || title) + "</i>") +
+      "<small>" + E(c.license || "license on file page") + (c.artist ? " · " + E(c.artist) : "") + " · " + E(c.via || "Wikimedia Commons") + " ↗</small></span></a>"
     );
   }
   function sourceFigureHTML(src) {
@@ -1376,11 +1376,14 @@
     } catch (_) {}
     const conceptKey = pre?.concept,
       ctx = { intent: pre?.intent || "identify", guard: null, stemTok: guardModel(q).stemT };
+    const X = window.INTELLECTUALITY_EXACT,
+      optText = (k) => (q.options || []).find((o) => o.key === k)?.text || "";
     if (side === "correct") {
       let c = null;
-      if (an.contrast && !an.novis) c = await sideVisual(an.contrast.key.re, an.contrast.key.concept || conceptKey, "", q, ctx, an.contrast.key.label).catch(() => null);
+      if (X) c = await X.pic(optText((q.answerKeys || [])[0]), { stem: q.stem, subject: q.subject }).catch(() => null);
+      if (!c && an.contrast && !an.novis) c = await sideVisual(an.contrast.key.re, an.contrast.key.concept || conceptKey, "", q, ctx, an.contrast.key.label).catch(() => null);
       c = c || pre?.primary || null;
-      box.innerHTML = c ? visualCardHTML(c, "CORRECT ANCHOR", "post") : pre?.source ? sourceFigureHTML(pre.source) : '<div class="v14VisualMissing">Use the model text: no trustworthy image for the key concept.</div>';
+      box.innerHTML = c ? visualCardHTML(c, c.origin === "exact" ? "CORRECT · " + String(c.term).toUpperCase() : "CORRECT ANCHOR", "post") : pre?.source ? sourceFigureHTML(pre.source) : '<div class="v14VisualMissing">Use the model text: no trustworthy image for the key concept.</div>';
       if (c) G.note(c.key, { concept: conceptKey, modality: c.modality });
       box.dataset.v14Key = c?.key || "";
     } else {
@@ -1388,13 +1391,17 @@
         why = "";
       if (an.cls === "polarity") why = "Your choice was a TRUE statement — the trap was polarity, not a look-alike, so no distractor image is shown.";
       else if (an.novis) why = "This confusion is about chemistry/physiology, not a structure, so there is no honest picture of your choice; the difference below is the fix.";
-      else if (an.contrast) {
+      else if (X) {
+        const correctFile = (box.closest(".v14Compare")?.querySelector('[data-v14-side="correct"]')?.dataset.v14Key || "").replace(/^exact:/, "");
+        c = await X.pic(optText(sel), { stem: q.stem, subject: q.subject, avoid: new Set([correctFile]) }).catch(() => null);
+      }
+      if (!c && !why && an.contrast) {
         const correctKey = box.closest(".v14Compare")?.querySelector('[data-v14-side="correct"]')?.dataset.v14Key || pre?.primary?.key || "";
         c = await sideVisual(an.contrast.other.re, an.contrast.other.concept || conceptKey, correctKey, q, ctx, an.contrast.other.label).catch(() => null);
       }
       // Without a matched look-alike contrast the distractor is not a distinct depictable structure;
       // an honest note beats a keyword-similar picture.
-      box.innerHTML = c ? visualCardHTML(c, "YOUR CHOICE · LOOK-ALIKE", "post", "wrong") : '<div class="v14VisualMissing"><b>No trustworthy distinct visual exists for this distractor.</b> ' + E(why || "Use the decisive reasoning difference below.") + "</div>";
+      box.innerHTML = c ? visualCardHTML(c, c.origin === "exact" ? "YOUR CHOICE · " + String(c.term).toUpperCase() : "YOUR CHOICE · LOOK-ALIKE", "post", "wrong") : '<div class="v14VisualMissing"><b>No trustworthy distinct visual exists for this distractor.</b> ' + E(why || "Use the decisive reasoning difference below.") + "</div>";
       if (c) G.note(c.key, { concept: c.concept, modality: c.modality });
     }
     attachImgFallback(box);
@@ -1436,6 +1443,12 @@
     return new RegExp("\\b(" + toks.slice(0, 4).map(esc).join("|") + ")");
   }
   async function optionVisual(q, o, used, pre, ctx) {
+    // 0) the exact structure this option names (v15 exact-words search)
+    const X = window.INTELLECTUALITY_EXACT;
+    if (X) {
+      const r = await X.pic(o.text, { stem: q.stem, avoid: new Set([...used].map((k) => String(k).replace(/^exact:/, ""))), subject: q.subject }).catch(() => null);
+      if (r && !used.has(r.key)) return { c: r, how: r.term };
+    }
     const no = norm(o.text),
       nq = norm(q.stem + " " + (q.chapter || ""));
     // 1) a look-alike contrast pole that this option names (and not its opposite pole); the contrast must
