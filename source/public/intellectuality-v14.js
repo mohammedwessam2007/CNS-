@@ -964,6 +964,13 @@
   const MENINGES_Q = new Set(["EHSAN-ANAT-SPINAL-CORD-MCQ-20", "EHSAN-ANAT-SPINAL-CORD-MCQ-24"]);
   const CONUS_Q = new Set([1, 2, 3, 5, 6, 9, 10, 12, 17, 26].map((n) => "EHSAN-ANAT-SPINAL-CORD-MCQ-" + n));
   function conusMapHTML(compact = false, q = null) {
+    if (compact) {
+      const newborn = q?.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-6";
+      return '<div class="v14ConusMap compact" role="img" aria-label="' + (newborn ? 'Source-bank age comparison: adult conus near L1 to L2; this newborn question uses L3 as its historical source key; neonatal levels vary.' : 'Adult conus around L1 to L2; at L3 to L4 there are cauda equina roots in CSF, a lumbar puncture site; dural and arachnoid sac ends near S2.') + '">' +
+        '<div class="v14ConusRow"><b>' + (newborn ? 'ADULT' : 'L1–L2') + '</b><span>' + (newborn ? 'L1–L2' : 'CORD END') + '</span></div>' +
+        '<div class="v14ConusRow target"><b>' + (newborn ? 'NEWBORN' : 'L3–L4') + '</b><span>' + (newborn ? 'L3 · SOURCE KEY' : 'ROOTS + CSF') + '</span></div>' +
+        (newborn ? '<p>Neonatal levels vary.</p>' : '<div class="v14ConusRow"><b>S2</b><span>SAC END</span></div>') + '</div>';
+    }
     if (q?.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-6") return '<div class="v14ConusMap' + (compact ? ' compact' : '') + '" role="img" aria-label="Source-bank age comparison: in adults the conus usually ends around L1 to L2; for the newborn question the historical source key is L3. Neonatal levels vary across studies, so this is an exam-key comparison, not a clinical landmark.">' +
       '<div class="v14ConusRow"><b>ADULT</b><span>CONUS · AROUND L1–L2</span><small>The source bank often names lower L1.</small></div>' +
       '<div class="v14ConusRow target"><b>NEWBORN</b><span>SOURCE KEY · L3</span><small>For this exact historical MCQ.</small></div>' +
@@ -1524,6 +1531,10 @@
       const o = (q.options || []).find((x) => x.key === cell.dataset.v14Opt),
         pic = cell.querySelector(".v14OptPic");
       if (!o || !pic) continue;
+      if (q.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-24" && o.key.toLowerCase() === "a") {
+        pic.innerHTML = meningesMapHTML(true);
+        continue;
+      }
       if (q.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-24" && o.key.toLowerCase() === "b") {
         pic.innerHTML = '<div class="v14ExactOption"><b>FORAMEN MAGNUM</b><span>Dura is anchored here; pia closely invests the spinal cord.</span><small>Check the layer named in the option.</small></div>';
         continue;
