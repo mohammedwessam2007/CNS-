@@ -30,7 +30,7 @@ In v15.0 the app fetched every picture live from Wikipedia and Commons while it 
 | Cold load, iPad size (bundled build, local) | FCP 172 ms. `pics/manifest.js` is 207 KB raw / 31 KB gzip, loaded with `defer` |
 | Overflow and tap targets at 390/820/1024/1180 px | 0 / 0 |
 
-`receipts/v15_1/screens/*_2a_learn.png` and `*_4_autopsy.png` show the lecture and the autopsy with bundled pictures in place. **In those screenshots the pictures are labelled test stand-ins ("BUNDLED IN THE APP · <file name>").** The sandbox cannot reach Wikimedia, so the stand-in server returned labelled images in place of the real files.
+`receipts/v15_1/screens/*_2a_learn.png`, `*_4_autopsy.png` and `ipad_5_zoom.png` (a touch tap opened the zoom) show the lecture and the autopsy with bundled pictures in place. **In those screenshots the pictures are labelled test stand-ins ("BUNDLED IN THE APP · <file name>").** The sandbox cannot reach Wikimedia, so the stand-in server returned labelled images in place of the real files.
 
 ## Live build
 
@@ -50,9 +50,10 @@ Correction: the message of commit `5f80973` says the first bundling build "ran p
 |---|---|---|---|
 | `dpl_EAk1WETkRatdUuBaUU62HAD3ttk3` (v15.0, no bundling) | `01dffab` | 13 s | READY |
 | `dpl_Hdy7u2atEP87taekxLX6AAY956Hr` (first bundling build) | `a70023d` | **415 s** | READY |
-| `dpl_6M339GKZPac1GUpgURYMwT31XjRe` (time cap + decision cache) | `5f80973` | **365 s** | READY, production |
+| `dpl_6M339GKZPac1GUpgURYMwT31XjRe` (time cap + decision cache) | `5f80973` | **365 s** | READY |
+| `dpl_CL2Qg2X3mkaeWneuLoVXk7ozTe74` (first build that starts from saved choices) | `4475d06` | **81 s** | READY, production |
 
-The jump from 13 s to 6–7 minutes is the picture step downloading from Wikimedia. The first build had no decision cache to start from, and neither did the second (the cache format arrived with it). The next build starts from the second build's saved choices, so it should take well under a minute. In the sandbox, with no network, that step gives up in under 1 s. **I could not read the build log or the deployed `build-info.json` from this session:** the Vercel connection returns 404/401 for build events and for fetching this deployment. So the exact count of bundled pictures is not confirmed here. It is visible in two places:
+The jump from 13 s to 6–7 minutes is the picture step downloading from Wikimedia. The first build had no decision cache to start from, and neither did the second (the cache format arrived with it). The third build started from the second build's saved choices and took **81 s**. Only terms that *had* a picture are saved ("nothing found" is asked again every build), so a large drop is only possible if most terms were bundled by the second build. This is indirect evidence, not a count. In the sandbox, with no network, that step gives up in under 1 s. **I could not read the build log or the deployed `build-info.json` from this session:** the Vercel connection returns 404/401 for build events and for fetching this deployment. So the exact count of bundled pictures is not confirmed here. It is visible in two places:
 
 - the Vercel dashboard → the deployment → **Build Logs**, lines starting with `[pics]` (one per term, then `[pics] bundled N/457 terms + M/70 registry files`);
 - `https://intellectuality-cns.vercel.app/build-info.json` → `pictures`, and `/pics/manifest.json` for every term → file choice.

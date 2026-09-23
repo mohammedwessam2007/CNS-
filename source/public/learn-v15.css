@@ -31,7 +31,7 @@
 /* iOS Safari only delivers taps on plain elements to a document listener when cursor is pointer */
 .v14Visual[role=button],.realImg,.v15Zoomable,.ctxImage a,.v15Zoom,.v15Zoom *{cursor:pointer}
 .v15Fig,.v14Visual[role=button],.v15Zoomable{-webkit-tap-highlight-color:rgba(62,123,255,.18)}
-.v15Zoom{position:fixed;inset:0;z-index:9999;background:rgba(5,9,16,.95);display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:8px;padding:max(10px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
+.v15Zoom{position:fixed;inset:0;z-index:9999;background:#05090f;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:8px;padding:max(10px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
 .v15ZoomX{justify-self:end;min-width:48px;min-height:48px;border-radius:24px;border:1px solid #3a4f6b;background:#101a28;color:#fff;font-size:20px;font-weight:900;cursor:pointer}
 .v15ZoomImg{overflow:auto;display:flex;align-items:center;justify-content:center;min-height:0;background:#fff;border-radius:12px;-webkit-overflow-scrolling:touch}
 .v15ZoomImg img{display:block;max-width:100%;max-height:calc(100vh - 200px);object-fit:contain}
