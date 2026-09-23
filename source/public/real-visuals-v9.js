@@ -90,8 +90,17 @@ function yt(l){
  const href='https://www.youtube.com/watch?v='+E(v.id)+'&t='+(v.start||0)+'s';
  return '<a class="realHero ytHero" href="'+href+'" target="_blank" rel="noopener"><div class="realBadge">YOUTUBE · ACTUAL TEACHING VISUAL</div><div class="ytPoster"><img src="'+img+'" alt="'+E(v.title||l.topic)+'" loading="lazy"><span>▶ PLAY ROUTED CLIP</span></div><div class="realCap">'+E(v.title||'Routed teaching clip')+' · starts at '+Math.floor((v.start||0)/60)+':'+String((v.start||0)%60).padStart(2,'0')+'</div></a>';
 }
+const v9cache=new Map();
+function fetchJSON(u){
+ if(v9cache.has(u))return v9cache.get(u);
+ const NET=window.INTELLECTUALITY_V14_NET;
+ const p=(NET?NET.json(u):fetch(u).then(r=>r.json())).catch(e=>{v9cache.delete(u);throw e});
+ v9cache.set(u,p);return p;
+}
 function curated(l){
- const arr=CURATED[l.id]||[];
+ let arr=CURATED[l.id]||[];
+ const G=window.INTELLECTUALITY_VISUAL_GOVERNOR;
+ if(G&&arr.length>1){const order=G.order(arr.map(x=>x[0]),{surface:'v9'});arr=order.map(f=>arr.find(x=>x[0]===f))}
  return arr.map((x,i)=>'<div class="realCuratedSlot '+(i===0?'primary':'')+'" data-commons-file="'+E(x[0])+'" data-label="'+E(x[1])+'" data-credit="'+E(x[2])+'"><div class="realLoading">Loading curated real visual…</div></div>').join('');
 }
 function sourceFigures(l){
@@ -137,9 +146,12 @@ async function hydrateOne(el){
   let rows=[];
   for(const q of raw.split('|||')){
    const u='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+enc(q)+'&gsrnamespace=6&gsrlimit=10&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1000&format=json&origin=*';
-   const r=await fetch(u),j=await r.json();
+   const j=await fetchJSON(u);
    rows=Object.values(j.query?.pages||{}).map(p=>{const ii=p.imageinfo?.[0]||{};return{title:p.title||'',thumb:ii.thumburl,url:ii.descriptionurl||('https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title)),license:ii.extmetadata?.LicenseShortName?.value||'Commons',mime:ii.mime||'',score:scoreTitle(p.title||'',l)}})
-    .filter(x=>x.thumb&&/^image\/(jpeg|png|webp|svg\+xml)/.test(x.mime)).sort((a,b)=>b.score-a.score).slice(0,3);
+    .filter(x=>x.thumb&&/^image\/(jpeg|png|webp|svg\+xml)/.test(x.mime)&&!/logo|flag|coat of arms|icon|portrait|statue|stamp/i.test(x.title));
+   const G=window.INTELLECTUALITY_VISUAL_GOVERNOR;
+   rows=(G?rows.filter(x=>!G.isShown(G.gkey(x.title))).map(x=>({...x,score:x.score-G.penalty(G.gkey(x.title),{surface:'v9'})*0.1})):rows).sort((a,b)=>b.score-a.score).slice(0,3);
+   if(G)rows.forEach(x=>G.note(G.gkey(x.title),{surface:'v9',concept:lid||'',modality:'dia'}));
    if(rows.length)break;
   }
   if(!rows.length)throw new Error('no_visuals');
@@ -151,8 +163,9 @@ async function hydrateCurated(el){
  const file=el.dataset.commonsFile,label=el.dataset.label||file,credit=el.dataset.credit||'Wikimedia Commons';
  try{
   const u='https://commons.wikimedia.org/w/api.php?action=query&titles='+enc('File:'+file)+'&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=1200&format=json&origin=*';
-  const r=await fetch(u),j=await r.json(),p=Object.values(j.query?.pages||{})[0],ii=p?.imageinfo?.[0];
+  const j=await fetchJSON(u),p=Object.values(j.query?.pages||{})[0],ii=p?.imageinfo?.[0];
   if(!ii?.thumburl)throw new Error('missing');
+  window.INTELLECTUALITY_VISUAL_GOVERNOR?.note(window.INTELLECTUALITY_VISUAL_GOVERNOR.gkey(file),{surface:'v9',concept:el.closest('.realVisualBank')?.dataset.realId||'',modality:'dia'});
   el.outerHTML='<a class="realImg '+(el.classList.contains('primary')?'primary':'')+'" href="'+E(ii.descriptionurl||commonsPage(file))+'" target="_blank" rel="noopener"><img src="'+E(ii.thumburl)+'" alt="'+E(label)+'" loading="lazy"><div class="realCap"><b>'+E(label)+'</b><span>'+E(credit)+'</span></div></a>';
  }catch(e){el.innerHTML='<div class="realUnavailable">Curated visual temporarily unavailable.</div>'}
 }

@@ -1,413 +1,1867 @@
-(function(){
-'use strict';
-const VERSION='14.0';
-const E=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const norm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim();
-const safe=(fn,f=null)=>{try{return fn()}catch(e){console.warn('[v14]',e);return f}};
-const STOP=new Set(('what which where when why how whose whom is are was were be been being a an the of in on at by for from to with without and or not except following true false incorrect correct best most least regarding about into through during between among as than this that these those it its their his her can could would should may might do does did has have had all any each one two three four five patient patients nerve nerves artery arteries muscle muscles').split(' '));
-let visualObserver=null;const exactVisualCache=new Map(),searchVisualCache=new Map();
-function V(){
- S.v14=S.v14||{version:VERSION,primed:{},visualAssignments:{},visualUsed:{},visualRecent:[],calendar:{},stats:{primersSeen:0,visualsAssigned:0}};
- const v=S.v14;v.version=VERSION;v.primed=v.primed||{};v.visualAssignments=v.visualAssignments||{};v.visualUsed=v.visualUsed||{};v.visualRecent=v.visualRecent||[];v.calendar=v.calendar||{};v.stats=v.stats||{primersSeen:0,visualsAssigned:0};return v
-}
-function localYMD(d=new Date()){const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
-function fmtDate(d=new Date()){return new Intl.DateTimeFormat('en-GB',{weekday:'short',day:'numeric',month:'short'}).format(d)}
-function planDayForDate(ymd=localYMD()){
- const exact=(C.days||[]).find(d=>d.date===ymd);if(exact)return exact.day;
- const start=C.protocol?.start||C.days?.[0]?.date,end=C.protocol?.end||C.days?.at(-1)?.date;
- if(ymd<start)return 1;if(ymd>end)return C.days.length;
- let best=1;for(const d of C.days||[]){if(d.date<=ymd)best=d.day;else break}return best
-}
-function trulyFresh(){
- const seg=Object.keys(S.segments||{}).filter(k=>S.segments[k]).length,q=Object.keys(S.qbank?.results||{}).length;
- return !(S.doneDays||[]).length&&seg===0&&q===0&&(S.xp||0)===0
-}
-function syncCalendar(){
- const v=V(),today=localYMD(),target=planDayForDate(today),before=S.day;
- v.calendar={today,targetDay:target,currentDay:S.day,planDate:C.days?.[target-1]?.date||'',syncedAt:new Date().toISOString(),autoAligned:false};
- // The clock may advance freely; required teaching may not. Move only across days already certified.
- if(target>S.day){
-   let next=S.day;while(next<target&&(S.doneDays||[]).includes(next))next++;
-   if(next>S.day){S.day=next;v.calendar.currentDay=S.day;v.calendar.autoAligned=true;safe(()=>save())}
- }
- v.calendar.debt=Math.max(0,target-S.day);v.calendar.ahead=Math.max(0,S.day-target);
- return {before,after:S.day,...v.calendar}
-}
-function decorateCalendar(){
- const c=syncCalendar(),d=safe(()=>day(),null),top=document.querySelector('.courseTopbar');if(!top)return;
- let chip=document.querySelector('#v14Calendar');if(!chip){chip=document.createElement('div');chip.id='v14Calendar';chip.className='v14Calendar';const crumb=top.querySelector('.courseCrumb');crumb?.insertAdjacentElement('afterend',chip)}
- const actual=fmtDate(new Date()),scheduled=d?.date?new Date(d.date+'T12:00:00'):null;
- let status='TODAY · '+actual.toUpperCase();
- if(c.debt>0)status+=' · '+c.debt+' DAY'+(c.debt===1?'':'S')+' CARRYOVER';
- else if(c.ahead>0)status+=' · AHEAD';
- chip.textContent=status;
- chip.classList.toggle('behind',c.debt>0);
- const ey=document.querySelector('#eyebrow');
- if(ey&&d?.date){const plan=new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short'}).format(scheduled);ey.textContent='REAL DATE '+actual.toUpperCase()+(c.debt>0?' · FINISHING '+plan.toUpperCase()+' CARRYOVER':' · PLAN DAY '+d.day)}
- const stage=document.querySelector('#player .stage');
- if(stage&&c.debt>0&&!stage.querySelector('.v14Carryover')){
-   const b=document.createElement('div');b.className='v14Carryover';b.innerHTML='<b>CALENDAR AWARE</b><span>Today is '+E(actual)+'. This is unfinished '+E(new Intl.DateTimeFormat('en-GB',{weekday:'short',day:'numeric',month:'short'}).format(scheduled))+' work, carried forward deliberately. It will not pretend today is yesterday.</span>';stage.prepend(b)
- }
-}
-function qAnswer(q){return q?.answerText||safe(()=>correctOptionText(q),'')||q?.options?.find(o=>q.answerKeys?.includes(o.key))?.text||''}
-function lessonById14(id){for(const d of C.days||[]){const l=(d.lessons||[]).find(x=>x.id===id);if(l)return l}return null}
-function lessonFit(l,q){
- const target=(q?.stem||'')+' '+qAnswer(q)+' '+(q?.chapter||''),p=professor(l),text=(l?.topic||'')+' '+(l?.mental||'')+' '+(l?.facts||[]).flat().join(' ')+' '+(p.teach||[]).join(' ')+' '+(p.mental||'');
- return overlap(text,target)*4+overlap(l?.topic||'',target)*6
-}
-function bestLessonForQ(q,fallback=null){
- const ls=(q?.lessonIds||[]).map(lessonById14).filter(Boolean);if(!ls.length)return fallback;
- return ls.sort((a,b)=>lessonFit(b,q)-lessonFit(a,q))[0]||fallback
-}
-function tokens(s){return [...new Set(norm(s).split(' ').filter(w=>w.length>3&&!STOP.has(w)&&!/^[a-d]$/.test(w)))].slice(0,24)}
-function overlap(text,target){const set=new Set(tokens(target));return tokens(text).reduce((n,w)=>n+(set.has(w)?1:0),0)}
-function professor(l){return window.INTELLECTUALITY_PROFESSOR?.[l?.id]||{}}
-function deep(l){return window.INTELLECTUALITY_DEEP?.[l?.id]?.deep||[]}
-function relevantFact(l,q){
- const target=(q?.stem||'')+' '+qAnswer(q);const rows=(l?.facts||[]).map(x=>({q:x[0],a:x[1],s:overlap(x[0]+' '+x[1],target)})).sort((a,b)=>b.s-a.s);return rows[0]||null
-}
-function relevantDeep(l,q){
- const target=(q?.stem||'')+' '+qAnswer(q);return deep(l).map(x=>({text:x,s:overlap(x,target)})).sort((a,b)=>b.s-a.s)[0]?.text||''
-}
-function mentalModel(l,q){
- l=bestLessonForQ(q,l);const p=professor(l),f=relevantFact(l,q),d=relevantDeep(l,q);
- const model=p.mental||l?.mental||p.seed?.minimumModel||'';
- return {fact:f,deep:d,model,draw:l?.draw||p.draw||'',exam:l?.exam||p.examGrammar||'',subject:l?.subject||q?.subject||''}
-}
-function cleanQueryWords(q,l){
- const ans=qAnswer(q),base=tokens((q?.stem||'')+' '+ans).slice(0,8),topic=tokens(l?.topic||q?.chapter||'').slice(0,5);
- return [...new Set([...base,...topic])].slice(0,10).join(' ')
-}
-function conceptAlias(q,l){
- if(q?._visualAlias)return String(q._visualAlias).trim();
- const qtext=norm((q?.stem||'')+' '+qAnswer(q)+' '+(q?.chapter||'')),context=norm(qtext+' '+(l?.topic||''));
- const rules=[
-  [/\bionotropic\b|\bmetabotropic\b|ligand gated|synaptic cleft|v snare|t snare/,'chemical synapse ionotropic receptor'],
-  [/wallerian|degeneration of nerves|nerve degeneration|nerve regeneration|degeneration.*nerve/,'wallerian degeneration peripheral nerve'],
-  [/peripheral nerve|perineur|epineur|endoneur|sheath of henle/,'peripheral nerve histology'],
-  [/tendon spindle|golgi tendon/,'golgi tendon organ muscle spindle'],
-  [/muscle spindle|intrafusal/,'muscle spindle histology'],
-  [/ruffini|pacinian|meissner|free nerve ending/,'cutaneous sensory receptor histology'],
-  [/conus medullaris|cauda equina|adult.*spinal cord ends|newborn.*conus|spinal cord ends at/,'conus medullaris cauda equina lumbar spine anatomy'],
-  [/lumbar puncture|subarachnoid space to sample csf|spinal tap/,'lumbar puncture cauda equina spinal meninges anatomy'],
-  [/anterior spinal artery|posterior spinal arter|arteries.*supplying spinal cord|blood supply.*spinal cord/,'spinal cord blood supply anterior posterior spinal arteries'],
-  [/mening|\bdura\b|arachnoid|pia mater|denticulate/,'spinal cord meninges pia arachnoid dura'],
-  [/dorsal root ganglion|ventral root|spinal nerve|nerve root/,'spinal nerve dorsal root ganglion'],
-  [/spinal cord|gray matter|grey matter|dorsal horn|ventral horn|funicul/,'spinal cord cross section anatomy'],
-  [/spinothalam|pain pathway|anterolateral/,'spinothalamic tract pathway'],
-  [/dorsal column|medial lemnisc/,'dorsal column medial lemniscus pathway'],
-  [/corticospinal|pyramidal tract/,'corticospinal tract pathway'],
-  [/brainstem|midbrain|\bpons\b|medulla/,'human brainstem anatomy'],
-  [/cerebell/,'human cerebellum anatomy'],
-  [/basal gangl|caudate|putamen|globus pallidus/,'basal ganglia anatomy'],
-  [/internal capsule/,'internal capsule neuroanatomy'],
-  [/thalam|hypothalam/,'thalamus hypothalamus anatomy'],
-  [/ventric|\bcsf\b|cerebrospinal/,'ventricular system cerebrospinal fluid anatomy'],
-  [/circle of willis|cerebral arter|blood supply|middle cerebral|anterior cerebral|posterior cerebral/,'circle of Willis cerebral arteries'],
-  [/\bretina\b|photoreceptor|\brods?\b|\bcones?\b/,'retina histology photoreceptors'],
-  [/optic|visual pathway|hemianop|visual field/,'visual pathway optic chiasm'],
-  [/cochlea|organ of corti|hair cell/,'organ of Corti cochlea anatomy'],
-  [/vestibul|semicircular|utricle|saccule/,'vestibular apparatus anatomy'],
-  [/facial nerve|cranial nerve vii/,'facial nerve anatomy'],
-  [/trigeminal|mandibular nerve|\bv3\b|maxillary nerve|\bv2\b/,'trigeminal nerve anatomy'],
-  [/glossopharyngeal|vagus|hypoglossal|accessory nerve/,'cranial nerves anatomy'],
-  [/parotid|submandibular|salivary/,'salivary glands anatomy'],
-  [/orbit|extraocular|oculomotor|trochlear|abducens/,'orbit extraocular muscles anatomy'],
-  [/larynx|vocal cord|recurrent laryngeal/,'larynx anatomy'],
-  [/pharynx|soft palate/,'pharynx anatomy'],
-  [/tongue|lingual/,'tongue anatomy'],
-  [/thyroid/,'thyroid gland anatomy'],
-  [/synap|neurotransmitter|\bepsp\b|\bipsp\b/,'chemical synapse diagram'],
-  [/reflex|muscle spindle|golgi tendon/,'stretch reflex muscle spindle diagram'],
-  [/neuron|neuroglia|astrocyte|oligodendrocyte|microglia/,'nervous tissue histology'],
-  [/embry|neural tube|neural crest/,'neural tube embryology'],
-  [/sleep|\beeg\b/,'sleep EEG stages diagram'],
-  [/memory|hippocamp/,'hippocampus memory anatomy']
- ];
- for(const [re,x] of rules)if(re.test(qtext))return x;
- for(const [re,x] of rules)if(re.test(context))return x;
- return''
-}
-const CONCEPT_FILES={
- 'spinal cord cross section anatomy':['Spinal_Cord_Sectional_Anatomy.png','Cross-section_through_the_spinal_cord.jpg','Spinal_cord_tracts_-_English.svg'],
- 'conus medullaris cauda equina lumbar spine anatomy':['Spinal cord details.jpg','Spinal cord and roots and dural tube which covers them. Wellcome L0002010.jpg','Human caudal spinal cord anterior view description.jpg','CES Anatomy1.jpg'],
- 'lumbar puncture cauda equina spinal meninges anatomy':['Spinal cord details.jpg','Spinal cord and roots and dural tube which covers them. Wellcome L0002010.jpg','Human caudal spinal cord anterior view description.jpg'],
- 'spinal cord meninges pia arachnoid dura':['Spinal cord and roots and dural tube which covers them. Wellcome L0002010.jpg','Spinal_Cord_Sectional_Anatomy.png'],
- 'chemical synapse ionotropic receptor':['Chemical synapse schema.jpg','Synapse diag1.svg','Synapse Illustration2 tweaked.svg','Synapse figure.png'],
- 'chemical synapse diagram':['Chemical synapse schema.jpg','Synapse diag1.svg','Synapse Illustration2 tweaked.svg','Synapse figure.png'],
- 'wallerian degeneration peripheral nerve':['Wallerian degeneration of a nerve. Wellcome L0002019.jpg','Schematic overview of the orchestrated response to a peripheral nerve injury.png','Wallerian degeneration in cut and crushed PNS nerve.jpg','EB1911 Nueropathology Fig. 17.png'],
- 'peripheral nerve histology':['1319 Nerve StructureN EU.jpg','Epineuro, Perineuro, Endoneuro..png','Поперечний нерв.jpg','Diagrammatic representation of uninjured and injured nerve.jpg'],
- 'golgi tendon organ muscle spindle':['Gray938.png','Tendon organ model.jpg','Muscle spindle model.jpg','Muscle Spindle LM HE stain.jpg'],
- 'muscle spindle histology':['Muscle Spindle LM HE stain.jpg','Muscle spindle (01).jpg','Muscle spindle model without labels.jpg','Muscle spindle Diagrammatic-representation-of-muscle-spindle.png'],
- 'human brainstem anatomy':['Human_brainstem_anterior_view_2_description.JPG','Human_caudal_brainstem_posterior_view_description.JPG'],
- 'human cerebellum anatomy':['Human_cerebellum_anterior_view.JPG','Sobo_1909_658.png','Human_cerebellum_under_a_microscope.jpg'],
- 'basal ganglia anatomy':['Basal-ganglia-coronal-sections-large.png','Anatomy_of_the_basal_ganglia.jpg','Basal_ganglia_circuits.svg'],
- 'circle of Willis cerebral arteries':['Circle_of_Willis_en.svg'],
- 'visual pathway optic chiasm':['Diagram_of_the_visual_pathway.png','Optic_pathway.png','Hemianopsia_en.jpg'],
- 'organ of Corti cochlea anatomy':['Structure_of_the_cochlea_and_organ_of_Corti.png','Organ_of_corti.png','Organ_of_corti_in_cross_section.svg','Organ_of_Corti_unlabeled.svg'],
- 'facial nerve anatomy':['Schematic_drawing_of_the_facial_nerve.png','VIIth_Nerve.jpg'],
- 'salivary glands anatomy':['Salivary_glands_numbered.svg','Schematic_drawing_of_the_facial_nerve.png']
-};
-function curatedFilesFor(q,l){return CONCEPT_FILES[conceptAlias(q,bestLessonForQ(q,l))]||[]}
-function queriesFor(q,l){
- l=bestLessonForQ(q,l);const full=cleanQueryWords(q,l)||norm(l?.topic||q?.chapter||'human nervous system'),words=full.split(' '),short=words.slice(0,5).join(' '),tiny=words.slice(0,3).join(' ');
- const sub=l?.subject||q?.subject||'',topic=String(l?.topic||q?.chapter||'').replace(/\b(I|II|and|with|of|the|from|to|versus)\b/gi,' ').replace(/\s+/g,' ').trim(),alias=conceptAlias(q,l);
- let qs=[];
- if(sub==='HISTOLOGY')qs=[alias&&(alias+' histology micrograph'),topic+' histology micrograph',short+' histology',tiny+' microscopy'];
- else if(sub==='PHYSIOLOGY')qs=[alias&&(alias+' physiology diagram'),topic+' physiology diagram',short+' neurophysiology',tiny+' neuroscience diagram'];
- else qs=[alias,topic+' anatomy',short+' anatomy',tiny+' anatomy diagram',topic+' dissection'];
- return [...new Set(qs.map(x=>x.trim()).filter(x=>x&&x.length>5))].slice(0,6)
-}
-function visualRole(q,l){
- const s=norm((q?.stem||'')+' '+(q?.failureType||'')+' '+(q?.dimension||'')),sub=l?.subject||q?.subject||'';
- if(sub==='HISTOLOGY')return'MICROGRAPH → 3 DISCRIMINATORS → REJECT LOOK-ALIKE';
- if(/lesion|injury|deficit|syndrome|damage/.test(s))return'LOCALIZE → DAMAGED STRUCTURE → PREDICT DEFICIT';
- if(/arter|vein|supply|blood/.test(s))return'TRACE THE VESSEL → TERRITORY → CONSEQUENCE';
- if(/tract|pathway|cross|decussat/.test(s))return'TRACE → SYNAPSE → CROSSING → DESTINATION';
- if(sub==='PHYSIOLOGY')return'INPUT → MECHANISM → OUTPUT → PERTURBATION';
- return'ORIENT → RELATIONS → ROUTE / SUPPLY / INNERVATION → APPLY'
-}
-function egyptianCommand(q,l,wrong=false){
- const s=norm((q?.stem||'')+' '+qAnswer(q)+' '+(q?.failureType||'')+' '+(q?.dimension||'')),sub=l?.subject||q?.subject||'';
- if(sub==='HISTOLOGY'||/look alike|differentiat|distinguish|identify|microscop|histolog/.test(s))return{ar:'طلّع شبيهه برّه',en:'Kill the look-alike',cue:'امسك العلامة الفاصلة قبل ما تبص للاختيارات.'};
- if(/lesion|injury|deficit|syndrome|damage|paralysis/.test(s))return{ar:'حدّد الإصابة',en:'Localize the lesion',cue:'مكان الإصابة الأول، وبعدها توقّع اللي هيبوظ.'};
- if(/tract|pathway|cross|decussat|course|passes through/.test(s))return{ar:'امشي المسار',en:'Trace the route',cue:'ابدأ من الأول وامشي محطة محطة، وفين بيكروس؟'};
- if(/arter|vein|blood supply|vascular|territory/.test(s))return{ar:'مين بيغذّيه؟',en:'Trace the supply',cue:'الشريان → المنطقة → لو اتسد هيحصل إيه؟'};
- if(/innerv|cranial nerve|motor nerve|sensory nerve/.test(s))return{ar:'مين معصّبه؟',en:'Find the nerve',cue:'العصب جاي منين، ماشي فين، وبيعمل إيه؟'};
- if(sub==='PHYSIOLOGY'||/increase|decrease|mechanism|receptor|reflex|stimulat|inhibit|excite/.test(s))return{ar:'شغّل الميكانيزم',en:'Run the mechanism',cue:'مين بدأ؟ مين رد؟ ولو غيّرنا خطوة، الباقي يحصل له إيه؟'};
- if(/relation|anterior|posterior|medial|lateral|superior|inferior|foramen|triangle/.test(s))return{ar:'شوف علاقته بإيه',en:'Map the relations',cue:'ظبّط الاتجاه، وبعدها حطّ اللي حواليه في الصورة.'};
- return{ar:wrong?'امسك الفرق':'كوّن الصورة',en:wrong?'Catch the difference':'Build the picture',cue:wrong?'حط الصح والغلط جنب بعض وامسك فرق واحد قاطع.':'ما تحفظش الجملة. شوفها في دماغك الأول.'}
-}
-function commandChip(q,l,wrong=false){
- const c=egyptianCommand(q,l,wrong);return '<div class="v14Command"><span>'+E(c.ar)+'</span><b>'+E(c.en)+'</b><small>'+E(c.cue)+'</small></div>'
-}
-function academicReference(l){
- const sub=l?.subject||'';
- if(sub==='HISTOLOGY')return '<a class="v14AcademicRef" href="https://secondlook.med.umich.edu/histology" target="_blank" rel="noopener"><b>ACADEMIC VISUAL ATLAS</b><span>University of Michigan Medical School · Histology SecondLook</span></a>';
- if(sub==='ANATOMY')return '<a class="v14AcademicRef" href="https://secondlook.med.umich.edu/neuroanatomy" target="_blank" rel="noopener"><b>ACADEMIC VISUAL ATLAS</b><span>University of Michigan Medical School · Neuroanatomy SecondLook</span></a>';
- return''
-}
-function sourceVisualHTML(q){
- if(!q?.visualData)return'';
- return '<div class="v14SourceVisual"><img src="'+E(q.visualData)+'" alt="Actual source-bank figure" loading="lazy"><span>ACTUAL SOURCE-BANK FIGURE · p.'+E(q.page||'—')+'</span></div>'
-}
-function visualBankHTML(q,l,mode='learning'){
- l=bestLessonForQ(q,l);const source=sourceVisualHTML(q),qs=queriesFor(q,l).join('|||');
- return '<div class="v14VisualGenome" data-v14-qid="'+E(q.id)+'" data-v14-queries="'+E(qs)+'" data-v14-subject="'+E(l?.subject||q.subject||'')+'">'+
-   '<div class="v14VisualHead"><b>VISUAL MEMORY ANCHOR</b><span>'+E(visualRole(q,l))+'</span></div>'+
-   commandChip(q,l,false)+
-   source+
-   '<div class="v14VisualGrid" data-v14-dynamic><div class="v14VisualLoading">Finding the clearest real medical visual for this exact question…</div></div>'+
-   (l?.video?.id?'<a class="v14Teacher" href="https://www.youtube.com/watch?v='+E(l.video.id)+'&t='+(l.video.start||0)+'s" data-ctx-video="'+E(l.video.id)+'" data-ctx-start="'+(l.video.start||0)+'" data-ctx-end="'+(l.video.end||0)+'" data-ctx-title="'+E(l.video.title||l.topic)+'"><img src="https://i.ytimg.com/vi/'+E(l.video.id)+'/hqdefault.jpg" alt="'+E(l.video.title||l.topic)+'" loading="lazy"><span><b>REAL TEACHER CLIP</b>'+E(l.video.title||l.topic)+'</span></a>':'')+
-   academicReference(l)+
-   '<div class="v14SourceLaw">No generated anatomy. Source figure first; otherwise open-license real diagrams/specimens/micrographs. Every question gets its own stable visual assignment when the library can support it.</div>'+
- '</div>'
-}
-function primerHTML(d,l,q,k,conf){
- l=bestLessonForQ(q,l);const m=mentalModel(l,q),f=m.fact,dv=m.deep,p=professor(l),subject=m.subject,answer=qAnswer(q);
- const look=subject==='HISTOLOGY'?'Before reading any option, identify the tissue pattern and the three features that separate it from its nearest look-alike.':subject==='PHYSIOLOGY'?'Run the mechanism forward once, then perturb one variable and predict what moves next.':'Orient the structure first. Do not memorize the sentence. Place it in space, trace its relations/course, then predict the clinical effect.';
- const conceptLabel=subject==='HISTOLOGY'?'The visual feature this item is testing':subject==='PHYSIOLOGY'?'The mechanism / relationship this item is testing':'The anatomical relationship this item is testing';
- const why='<b>'+E(conceptLabel)+'</b><span>'+E(m.model||p.teach?.[0]||l?.objective||'Build the concept from the visual before seeing answer choices.')+'</span>'+(f&&norm(f.a)!==norm(answer)?'<small>Connect it to the broader rule: '+E(f.q)+'</small>':'');
- const detail=dv?E(dv):E((p.teach||[]).join(' '));
- return '<div class="v14Primer" data-v14-primer="'+E(q.id)+'">'+
-   '<div class="v14PrimerFlag">UNDERSTAND FIRST · OPTIONS LOCKED</div>'+
-   '<h3>'+E(q.chapter||l.topic)+'</h3>'+
-   visualBankHTML(q,l,'learning')+
-   '<div class="v14TeachGrid">'+
-    '<div class="v14TeachCard"><b>1 · SEE IT</b><p>'+E(look)+'</p><strong>'+E(m.model)+'</strong></div>'+
-    '<div class="v14TeachCard"><b>2 · UNDERSTAND IT</b><p>'+why+'</p></div>'+
-    '<div class="v14TeachCard"><b>3 · BUILD THE MOVIE</b><p>'+detail+'</p></div>'+
-    '<div class="v14TeachCard"><b>4 · EXAM CONVERSION</b><p>'+E(m.exam||visualRole(q,l))+'</p><small>Predict the answer in your own words before seeing choices.</small></div>'+
-   '</div>'+
-   '<button class="primary bigAction" data-v14-reveal="'+E(q.id)+'">I CAN PICTURE IT → ASK ME THE MCQ</button>'+
-   '<div class="v14Tiny">This teaching card is tutor synthesis from the mapped lesson/professor corpus. It does not alter the source-bank stem or key.</div>'+
- '</div>'
-}
-function selectedOption(q,a){return q?.options?.find(o=>o.key===a?.selected)||null}
-function wrongPseudo(q,a){
- const o=selectedOption(q,a),txt=o?.text||String(a?.selected||'wrong option');
- return {...q,id:q.id+'__wrong__'+String(a?.selected||'x'),stem:txt,answerText:txt,chapter:txt,_visualAlias:tokens(txt).slice(0,7).join(' ')}
-}
-function wrongAutopsyHTML(l,q,a){
- l=bestLessonForQ(q,l);const m=mentalModel(l,q),correct=qAnswer(q),chosen=selectedOption(q,a)?.text||String(a?.selected||'Your choice'),cmd=egyptianCommand(q,l,true),wrong=wrongPseudo(q,a);
- return '<div class="v14Autopsy" data-v14-autopsy="'+E(q.id)+'" data-v14-choice="'+E(a?.selected||'')+'">'+
-   '<div class="v14AutopsyHead"><div><b>ليه إجابتك غلط بصريًا؟</b><span>Visual wrong-answer autopsy</span></div>'+commandChip(q,l,true)+'</div>'+
-   '<div class="v14Compare">'+
-     '<div class="v14CompareSide correct"><b>اللقطة الصح</b><div class="v14AutopsyVisual" data-v14-correct="'+E(q.id)+'"><div class="v14VisualLoading">Loading the correct visual anchor…</div></div><strong>'+E(correct)+'</strong></div>'+
-     '<div class="v14CompareSide wrong"><b>إنت خدت شبيهها / البديل الغلط</b><div class="v14AutopsyVisual" data-v14-wrong="'+E(wrong.id)+'" data-v14-parent="'+E(q.id)+'"><div class="v14VisualLoading">Finding a real visual for your chosen alternative…</div></div><strong>'+E(chosen)+'</strong></div>'+
-   '</div>'+
-   '<div class="v14Difference"><b>الفرق الفاصل</b><p>'+E(cmd.cue)+' '+E(m.model||m.fact?.a||'Rebuild the concept before looking at options again.')+'</p></div>'+
-   '<div class="v14Recall"><b>من غير اختيارات دلوقتي:</b><span>'+E(q.stem||'Say the correct concept aloud and explain why your old choice cannot fit.')+'</span><small>قول الإجابة والمنطق بصوتك قبل ما تدوس Repair.</small></div>'+
- '</div>'
-}
-function feedbackHTML(l,q,a){
- l=bestLessonForQ(q,l);const m=mentalModel(l,q),ans=qAnswer(q),f=m.fact;
- return '<div class="v14Why">'+
-   '<b>WHY THIS ANSWER MAKES SENSE</b>'+
-   '<div class="v14WhyAnswer">'+E(ans)+'</div>'+
-   '<p>'+(f?E(f.a):E(m.model))+'</p>'+
-   (m.deep?'<details><summary>Rebuild the full picture</summary><p>'+E(m.deep)+'</p></details>':'')+
-   '<div class="v14Tiny">Tutor explanation, separate from the preserved source answer key.</div>'+
- '</div>'+(a?.ok===false?wrongAutopsyHTML(l,q,a):'')
-}
-function canFastLane(l){
- const r=S.v12?.mastery?.[l?.topic],p=window.INTELLECTUALITY_V12?.posterior?.(l?.topic)||0,mem=S.memory?.[l?.topic];
- return !!(r&&r.n>=4&&p>=.82&&mem&&mem.n>=3)
-}
-function medicalTerms(q,l){
- const alias=conceptAlias(q,l),topic=l?.topic||q?.chapter||'',generic=new Set(['human','anatomy','physiology','diagram','medical','nervous','system','tissue','labeled','micrograph','histology']);
- return [...new Set(tokens(alias||topic).filter(w=>!generic.has(w)))].slice(0,10)
-}
-function candidateRelevant(x,q,l){
- const t=norm(x.title),terms=medicalTerms(q,l),s=norm((q?.stem||'')+' '+qAnswer(q)+' '+(q?.chapter||''));
- if(/logo|flag|portrait|statue|coat of arms|icon|malacolog|chiton|insect|mollusc|mollusk|veterinary|horse|canine|dog |cat |fish |avian|botan|plant /.test(t))return false;
- if(!/retina|visual|eye|optic|photoreceptor/.test(s)&&/retina| eye |ocular/.test(' '+t+' '))return false;
- if(!/cochlea|auditory|ear|vestibul/.test(s)&&/cochlea|organ of corti| inner ear /.test(' '+t+' '))return false;
- if(/synap|neurotransmitter|epsp|ipsp/.test(s)&&!/synap|neuron|neurotrans|junction|vesicle|receptor/.test(t))return false;
- if((l?.subject||q?.subject)==='HISTOLOGY'&&!/histolog|micrograph|microscop|neuron|nerve|brain|spinal|ganglion|retina|cerebell|cortex/.test(t))return false;
- return !terms.length||terms.some(w=>t.includes(w))||overlap(t,(q?.stem||'')+' '+qAnswer(q))>=1
-}
-function rankCandidate(x,q,l){
- const target=tokens(cleanQueryWords(q,l)),strong=medicalTerms(q,l),t=norm(x.title);let s=0;
- for(const w of target)if(t.includes(w))s+=3;for(const w of strong)if(t.includes(w))s+=6;
- if(l?.subject==='HISTOLOGY'&&/histolog|micrograph|microscop|section/.test(t))s+=7;
- if(l?.subject==='ANATOMY'&&/anatom|dissect|section|nerve|arter|brain|cord|skull|orbit|ear|eye|mening|ganglion/.test(t))s+=4;
- if(l?.subject==='PHYSIOLOGY'&&/diagram|pathway|circuit|reflex|receptor|synap|tract|neuron/.test(t))s+=5;
- if((x.width||0)>=900&&(x.height||0)>=600)s+=2;if((x.width||0)&&Math.min(x.width,x.height)<240)s-=8;
- const v=V(),used=v.visualUsed[x.title]||0,recent=(v.visualRecent||[]).includes(x.title);s-=used*4;if(recent)s-=18;return s
-}
-async function fetchCommons(q){
- if(searchVisualCache.has(q))return searchVisualCache.get(q);
- const task=(async()=>{const u='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(q)+'&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=900&format=json&origin=*';
- const r=await fetch(u),j=await r.json();
- return Object.values(j.query?.pages||{}).map(p=>{const ii=p.imageinfo?.[0]||{};return{title:p.title||'',thumb:ii.thumburl||'',page:ii.descriptionurl||'',license:ii.extmetadata?.LicenseShortName?.value||'Wikimedia Commons',mime:ii.mime||'',width:ii.width||0,height:ii.height||0}}).filter(x=>x.thumb&&/^image\/(jpeg|png|webp|svg\+xml)/.test(x.mime))})();searchVisualCache.set(q,task);return task
-}
-async function fetchExactFile(file){
- if(exactVisualCache.has(file))return exactVisualCache.get(file);
- const task=(async()=>{const u='https://commons.wikimedia.org/w/api.php?action=query&titles='+encodeURIComponent('File:'+file)+'&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=900&format=json&origin=*';
- const r=await fetch(u),j=await r.json(),p=Object.values(j.query?.pages||{})[0],ii=p?.imageinfo?.[0];
- if(!ii?.thumburl||!/^image\/(jpeg|png|webp|svg\+xml)/.test(ii.mime||''))return null;
- return{title:p.title||('File:'+file),thumb:ii.thumburl,page:ii.descriptionurl||'',license:ii.extmetadata?.LicenseShortName?.value||'Wikimedia Commons',mime:ii.mime||'',width:ii.width||0,height:ii.height||0,curated:true}})();exactVisualCache.set(file,task);return task
-}
-async function assignVisuals(q,l,key=q.id){
- l=bestLessonForQ(q,l);const v=V(),existing=v.visualAssignments[key];if(existing?.length&&existing.every(x=>x.curated||candidateRelevant(x,q,l)))return existing;
- if(existing?.length)delete v.visualAssignments[key];
- const recent=new Set(v.visualRecent||[]),qidHash=[...String(key)].reduce((n,c)=>(Math.imul(n,33)+c.charCodeAt(0))>>>0,5381);
- const curated=(await Promise.all(curatedFilesFor(q,l).map(file=>fetchExactFile(file).catch(()=>null)))).filter(Boolean).sort((a,b)=>{
-   const ar=recent.has(a.title)?20:0,br=recent.has(b.title)?20:0,au=v.visualUsed[a.title]||0,bu=v.visualUsed[b.title]||0;
-   const aq=Math.min(a.width||0,a.height||0)<400?24:0,bq=Math.min(b.width||0,b.height||0)<400?24:0;
-   return (aq+ar+au*4+((qidHash+a.title.length)%7)/20)-(bq+br+bu*4+((qidHash+b.title.length)%7)/20)
- });
- const queryRows=await Promise.all(queriesFor(q,l).slice(0,5).map(query=>fetchCommons(query).catch(()=>[])));
- const all=queryRows.flat(),map=new Map();for(const x of all)if(!map.has(x.title))map.set(x.title,x);
- const ranked=[...map.values()].filter(x=>candidateRelevant(x,q,l)).sort((a,b)=>rankCandidate(b,q,l)-rankCandidate(a,q,l));
- const chosen=[];
- // One canonical anchor is useful; the second slot should be question-specific whenever possible.
- if(curated[0])chosen.push(curated[0]);
- for(const x of ranked){if(chosen.length>=2)break;if(chosen.some(y=>y.title===x.title))continue;chosen.push(x)}
- for(const x of curated.slice(1)){if(chosen.length>=2)break;if(chosen.some(y=>y.title===x.title))continue;chosen.push(x)}
- if(!chosen.length)for(const x of ranked.slice(0,2))chosen.push(x);
- if(chosen.length){
-   v.visualAssignments[key]=chosen;
-   for(const x of chosen){v.visualUsed[x.title]=(v.visualUsed[x.title]||0)+1;v.visualRecent.push(x.title)}
-   v.visualRecent=v.visualRecent.slice(-14);v.stats.visualsAssigned=(v.stats.visualsAssigned||0)+1;safe(()=>save())
- }
- return chosen
-}
-function findAnyQuestion(id){
- const sourced=(QB.questions||[]).find(q=>q.id===id);if(sourced)return sourced;
- for(const d of C.days||[])for(const l of d.lessons||[]){const q=(l.questions||[]).find(x=>x.id===id);if(q)return{...q,stem:q.prompt,answerText:q.answer,lessonIds:[l.id],subject:l.subject,chapter:l.topic,courseTopic:l.topic,options:(q.choices||[]).map((text,i)=>({key:String.fromCharCode(97+i),text}))}}
- return null
-}
-function lessonForQ(q){return bestLessonForQ(q,null)}
-function qFromVisual(el){
- const stage=el.closest('.stage,.mockQ')||document;const id=stage.querySelector?.('[data-qid]')?.dataset.qid||el.dataset.v14Qid;
- return findAnyQuestion(id)
-}
-async function hydrateVisual(el){
- if(el.dataset.v14Loaded)return;el.dataset.v14Loaded='1';const qid=el.dataset.v14Qid,q=findAnyQuestion(qid);if(!q)return;
- const l=lessonForQ(q),box=el.querySelector('[data-v14-dynamic]');if(!box)return;
- const rows=await assignVisuals(q,l);
- if(!rows.length){
-   const canonical=safe(()=>window.INTELLECTUALITY_TOPIC_VISUAL?.(l,professor(l)),'');
-   if(canonical){box.innerHTML='<div class="v14CanonicalNote"><b>CANONICAL FALLBACK</b> Exact-question atlas image unavailable, so this uses the best real topic visual instead of fake filler.</div>'+canonical;setTimeout(()=>window.INTELLECTUALITY_REAL_VISUAL_HYDRATE?.(box),0)}
-   else box.innerHTML='<div class="v14VisualMissing">No trustworthy real image found for this exact question. No generated substitute shown.</div>';
-   return
- }
- box.innerHTML=rows.map((x,i)=>'<a class="v14Visual '+(i===0?'primary':'')+'" href="'+E(x.page)+'" target="_blank" rel="noopener"><img src="'+E(x.thumb)+'" alt="'+E(x.title.replace(/^File:/,''))+'" loading="'+(i===0?'eager':'lazy')+'"><span><b>'+(x.curated?'CURATED ATLAS':(i===0?'QUESTION-SPECIFIC':'SECOND ANGLE'))+'</b>'+E(x.title.replace(/^File:/,'').replace(/_/g,' '))+'<small>'+E(x.license)+'</small></span></a>').join('')
-}
-function visualCard(x,label){
- return '<a class="v14Visual primary" href="'+E(x.page)+'" target="_blank" rel="noopener"><img src="'+E(x.thumb)+'" alt="'+E(x.title.replace(/^File:/,''))+'" loading="eager"><span><b>'+E(label)+'</b>'+E(x.title.replace(/^File:/,'').replace(/_/g,' '))+'<small>'+E(x.license)+'</small></span></a>'
-}
-async function hydrateAutopsy(box){
- if(box.dataset.v14AutopsyLoaded)return;box.dataset.v14AutopsyLoaded='1';
- const qid=box.dataset.v14Correct||box.dataset.v14Parent,q=findAnyQuestion(qid);if(!q)return;
- const l=lessonForQ(q),isWrong=!!box.dataset.v14Wrong;
- if(!isWrong){
-   const rows=await assignVisuals(q,l);const x=rows[0];
-   box.innerHTML=x?visualCard(x,'CORRECT ANCHOR'):'<div class="v14VisualMissing">Use the source/topic visual above. No fake substitute.</div>';return
- }
- const parent=box.closest('.v14Autopsy'),choice=parent?.dataset.choice||'',a={selected:choice},pseudo=wrongPseudo(q,a),key='wrong::'+q.id+'::'+choice;
- let rows=await assignVisuals(pseudo,l,key),correct=V().visualAssignments[q.id]?.[0];
- if(correct)rows=rows.filter(x=>x.title!==correct.title);
- const x=rows[0];
- box.innerHTML=x?visualCard(x,'YOUR CHOICE / LOOK-ALIKE'):'<div class="v14VisualMissing">No trustworthy distinct visual exists for this distractor. Use the decisive difference below, not a fabricated picture.</div>'
-}
-function scheduleVisual(el){
- if(el.dataset.v14Scheduled)return;el.dataset.v14Scheduled='1';
- const fn=el.classList.contains('v14AutopsyVisual')?hydrateAutopsy:hydrateVisual;
- if(!('IntersectionObserver'in window)){fn(el);return}
- if(!visualObserver)visualObserver=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){visualObserver.unobserve(e.target);(e.target.classList.contains('v14AutopsyVisual')?hydrateAutopsy:hydrateVisual)(e.target)}}),{rootMargin:'500px 0px'});
- visualObserver.observe(el)
-}
-function enhanceQuestionCompanions(){
- document.querySelectorAll('.ctxCompanion[data-ctx-kind="question"]').forEach(c=>{
-   if(c.dataset.v14Upgraded)return;c.dataset.v14Upgraded='1';const row=c.closest('.ctxRow'),node=row?.children?.[0],stage=row?.closest('.stage,.mockQ'),qid=stage?.querySelector?.('[data-qid]')?.dataset.qid;
-   const q=(QB.questions||[]).find(x=>x.id===qid);if(!q)return;const l=lessonForQ(q);
-   c.innerHTML=visualBankHTML(q,l,'question');c.classList.add('v14Companion');c.querySelectorAll('.v14VisualGenome').forEach(scheduleVisual)
- })
-}
-function wrapQbank(){
- if(qbankQuestionView.__v14)return;const old=qbankQuestionView;
- qbankQuestionView=function(d,l,q,k,conf){
-   const a=S.answers[k];
-   if(!a?.answered&&!V().primed[q.id])return primerHTML(d,l,q,k,conf);
-   let h=old(d,l,q,k,conf);
-   if(a?.answered)h+=feedbackHTML(l,q,a);
-   return h
- };qbankQuestionView.__v14=true
-}
-function wrapQuestionView(){
- if(questionView.__v14)return;const old=questionView;
- questionView=function(d,l,q,k,conf){
-   const a=S.answers[k],fakeQ={...q,stem:q.prompt,answerText:q.answer,answerKeys:[],options:[]};
-   if(!a?.ok&&!a?.revealed&&!V().primed[q.id])return primerHTML(d,l,fakeQ,k,conf);
-   let h=old(d,l,q,k,conf);if(a?.ok!==undefined)h+=feedbackHTML(l,fakeQ,a);return h
- };questionView.__v14=true
-}
-function wireV14(){
- document.querySelectorAll('[data-v14-reveal]').forEach(b=>{if(b.dataset.v14Wired)return;b.dataset.v14Wired='1';b.onclick=()=>{V().primed[b.dataset.v14Reveal]=true;V().stats.primersSeen=(V().stats.primersSeen||0)+1;save();render()}})
- document.querySelectorAll('.v14VisualGenome,.v14AutopsyVisual').forEach(scheduleVisual)
-}
-function decorate(){decorateCalendar();enhanceQuestionCompanions();wireV14()}
-function install(){
- V();syncCalendar();wrapQbank();wrapQuestionView();
- const oldRepair=repairView;repairView=function(e){let h=oldRepair(e),qid=e?.v14LastMissQuestionId||e?.sourceQuestionId,q=findAnyQuestion(qid),sel=e?.v14LastMissSelected||e?.selected;if(q&&sel){const l=bestLessonForQ(q,lessonById14(e.lessonId)),card=wrongAutopsyHTML(l,q,{ok:false,selected:sel});h=h.replace('<button class="primary bigAction" data-act="repair"',card+'<button class="primary bigAction" data-act="repair"')}return h};
- const oldMockResult=mockResultView;mockResultView=function(m){let h=oldMockResult(m),cards=m.items.map((q,i)=>({q,a:m.answers[i]})).filter(x=>x.a?.ok===false&&x.q?.answerKeys).map((x,i)=>{const l=bestLessonForQ(x.q,null);return '<details class="v14MockAutopsy" '+(i===0?'open':'')+'><summary>Wrong '+(i+1)+' · '+E(x.q.chapter||x.q.courseTopic||'MCQ')+'</summary>'+wrongAutopsyHTML(l,x.q,{...x.a,selected:x.a.selected})+'</details>'}).join('');if(cards)h=h.replace('<button class="primary bigAction" data-act="finish-mock"', '<h3>Visual autopsies · every miss</h3>'+cards+'<button class="primary bigAction" data-act="finish-mock"');return h};
- const oldNext=nextAction;nextAction=function(){if(S.mock?.active)return{kind:'MOCK'};return oldNext()};
- const oldAct=act;act=function(b){
-   const kind=b?.dataset?.act,qid=b?.dataset?.qid,id=b?.dataset?.id,choice=b?.dataset?.choice,cur=safe(()=>currentLessonSegment(),null),curKey=cur?.key;
-   const out=oldAct(b);
-   if(kind==='qbank-choice'&&qid&&curKey){const r=S.qbank?.results?.[qid];if(r?.ok===true){S.segments[curKey]=false;save();render()}}
-   if(kind==='retest-qbank'&&id&&qid){const r=S.qbank?.results?.[qid],e=S.errors?.[id];if(e&&r?.ok===false){e.v14LastMissQuestionId=qid;e.v14LastMissSelected=choice;save();render()}}
-   return out
- };
- const oldRender=render;render=function(...args){const out=oldRender(...args);setTimeout(()=>safe(()=>decorate()),20);return out};
- const oldWire=wire;wire=function(){oldWire();wireV14()};
- window.INTELLECTUALITY_V14={version:VERSION,canFastLane,syncCalendar,queriesFor,visualRole,mentalModel,assignVisuals,egyptianCommand,wrongAutopsyHTML,visualPlanCount:()=>QB.questions?.length||0};
- document.addEventListener('visibilitychange',()=>{if(!document.hidden){syncCalendar();decorateCalendar()}});
- setInterval(()=>{if(localYMD()!==V().calendar.today){syncCalendar();safe(()=>render())}},600000);
- decorate();save()
-}
-window.INTELLECTUALITY_V14_INIT=function(){try{install()}catch(e){console.error('[v14 init fail-safe]',e)}};
+/* INTELLECTUALITY v14.1 · UNDERSTAND FIRST
+ *
+ * Understanding-first practice MCQs, calendar truth (Africa/Cairo), the question visual genome
+ * (answer-blind pre-answer routing, answer-aware post-answer routing), one anti-repeat governor
+ * shared by v9/v10/v14, Egyptian micro-commands, the visual wrong-answer autopsy with a
+ * reconstruction gate, the retest law, fast-lane hardening and Learning-Twin attribution.
+ *
+ * Architecture law: wraps backbone functions (no second calendar, mastery model or render loop).
+ * All new state is namespaced in S.v14, bounded, and migrated from the v53 v14 schema without
+ * reset. Held-out mocks get no primer, cue, companion or answer-derived query before submission.
+ */
+(function () {
+  "use strict";
+  if (window.INTELLECTUALITY_V14_LOADED) return;
+  window.INTELLECTUALITY_V14_LOADED = true;
+
+  const VERSION = "14.1";
+  const TZ = "Africa/Cairo";
+  const REG = () => window.INTELLECTUALITY_V14_REGISTRY || { commands: {}, concepts: [], contrasts: [], atlas: {} };
+  const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
+  const GREEK = { "α": " alpha ", "β": " beta ", "γ": " gamma ", "δ": " delta ", "κ": " kappa ", "μ": " mu ", "θ": " theta ", "ε": " epsilon " };
+  const norm = (s) =>
+    String(s || "")
+      .replace(/[αβγδκμθε]/g, (c) => GREEK[c])
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  const safe = (fn, f = null) => {
+    try {
+      return fn();
+    } catch (e) {
+      console.warn("[v14]", e);
+      return f;
+    }
+  };
+  const STOP = new Set(
+    "what which where when why how whose whom is are was were be been being a an the of in on at by for from to with without and or not except following true false incorrect correct best most least regarding about into through during between among as than this that these those it its their his her can could would should may might do does did has have had all any each one two three four five statement statements select choose concerning show shows also its".split(" "),
+  );
+  const GENERIC = new Set("cell cells fiber fibers fibre fibres structure structures part parts area areas region regions tissue type types form forms formed called known found present located lies contain contains containing human body nerve nerves level".split(" "));
+  const SHORT_OK = /^(i[ab]|ii|iv|vi|v[123]|[ctls]\d{1,2}|\d+)$/;
+  // Verbs/prepositions that almost never carry the answer; excluded from the leak/mask token sets.
+  const MASK_STOP = new Set("around send give take form forme formed attach attache attached pass passe passing lie run reach end begin carry carrie make lead contain include arise arising between through within along near into onto upon over under via only both either same other than then also well very more less".split(" "));
+  const lite = (w) => (w.length > 4 ? w.replace(/ies$/, "y").replace(/([^s])s$/, "$1") : w);
+  function tokens(s, keepGeneric = true) {
+    return [...new Set(norm(s).split(" ").filter((w) => w && (w.length > 2 || SHORT_OK.test(w)) && !STOP.has(w) && (keepGeneric || !GENERIC.has(w))))];
+  }
+  const liteSet = (arr) => new Set(arr.map(lite));
+  function overlapN(arr, set) {
+    let n = 0;
+    for (const w of arr) if (set.has(w) || set.has(lite(w))) n++;
+    return n;
+  }
+  function sentences(text) {
+    return String(text || "")
+      .replace(/\s+/g, " ")
+      .replace(/([.!?])\s+(?=[A-Z0-9(“"'])/g, "$1\u0001")
+      .split("\u0001")
+      .map((x) => x.trim())
+      .filter((x) => x.length >= 25);
+  }
+  function short(s, n = 170) {
+    s = String(s || "").replace(/\s+/g, " ").trim();
+    if (s.length <= n) return s;
+    const cut = s.slice(0, n);
+    const i = Math.max(cut.lastIndexOf("; "), cut.lastIndexOf(", "), cut.lastIndexOf(" — "));
+    return (i > n * 0.55 ? cut.slice(0, i) : cut.replace(/\s+\S*$/, "")) + "…";
+  }
+  function capMap(m, n, by) {
+    const ks = Object.keys(m || {});
+    if (ks.length <= n) return;
+    ks.sort((a, b) => by(m[a]) - by(m[b]))
+      .slice(0, ks.length - n)
+      .forEach((k) => delete m[k]);
+  }
+  const gkey = (t) => String(t || "").replace(/^File:/i, "").replace(/_/g, " ").trim().toLowerCase();
+  const cleanTitle = (t) => String(t || "").replace(/^File:/i, "").replace(/_/g, " ").replace(/\.(png|jpe?g|svg|gif|webp|tiff?)$/i, "");
+
+  /* ───────────────────────── state ───────────────────────── */
+  let saveTimer = null;
+  function persistSoon() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => safe(() => save()), 450);
+  }
+  function V() {
+    const v = S.v14 || (S.v14 = {});
+    if (v.schema !== 2) migrate(v);
+    return v;
+  }
+  function migrate(v) {
+    // v53 frontier schema → schema 2. Evidence lives in v12/v13 and is untouched. Legacy visual
+    // assignments were answer-derived (pre-answer leakage) and bulky, so they are dropped; recent-use
+    // signals are carried into the governor so anti-repeat has continuity.
+    const primed = {};
+    for (const [k, x] of Object.entries(v.primed || {})) primed[k] = typeof x === "number" ? x : 0;
+    const vc = {};
+    Object.entries(v.visualUsed || {})
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 150)
+      .forEach(([t, n]) => (vc[gkey(t)] = { n: Math.min(10, Number(n) || 1), cs: [], l: 0 }));
+    const vh = (v.visualRecent || []).slice(-14).map((t) => [gkey(t), 0, "legacy", "", "", ""]);
+    const legacy = { from: v.version || "14.0", droppedAssignments: Object.keys(v.visualAssignments || {}).length, primersSeen: v.stats?.primersSeen || 0, migratedAt: new Date().toISOString() };
+    for (const k of Object.keys(v)) delete v[k];
+    Object.assign(v, {
+      version: VERSION,
+      schema: 2,
+      primed,
+      pins: {},
+      qa: {},
+      vh,
+      vc,
+      seq: 1,
+      feed: {},
+      calendar: {},
+      ledger: [],
+      stats: { mod: {}, cmd: {}, depth: {}, teacher: {}, repairCmd: {} },
+      vstats: {},
+      preds: {},
+      parked: [],
+      auto: [],
+      legacy,
+    });
+  }
+
+  /* ───────────────────────── calendar truth ───────────────────────── */
+  const MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const WD = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  function cairoYMD(d = new Date()) {
+    try {
+      const p = {};
+      for (const x of new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(d)) p[x.type] = x.value;
+      if (p.year && p.month && p.day) return p.year + "-" + p.month + "-" + p.day;
+    } catch (_) {}
+    const z = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate());
+  }
+  function fmtDay(ymd, title = false) {
+    const [y, m, d] = String(ymd).split("-").map(Number);
+    if (!y || !m || !d) return String(ymd || "");
+    const wd = WD[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+    const cap = (s) => s.charAt(0) + s.slice(1).toLowerCase();
+    return title ? cap(wd) + " " + d + " " + cap(MON[m - 1]) : wd + " " + d + " " + MON[m - 1];
+  }
+  function planDayFor(ymd) {
+    const days = C.days || [];
+    if (!days.length) return 1;
+    if (ymd < days[0].date) return 0;
+    let best = 1;
+    for (const d of days) {
+      if (d.date <= ymd) best = d.day;
+      else break;
+    }
+    return best;
+  }
+  function trulyFresh() {
+    const segs = Object.values(S.segments || {}).filter(Boolean).length;
+    return !(S.doneDays || []).length && !segs && !Object.keys(S.qbank?.results || {}).length && !(S.xp > 0) && !Object.keys(S.errors || {}).length;
+  }
+  function dayGreen(d) {
+    return !!d && safe(() => dayProgress(d), 0) >= 100 && !(safe(() => unresolved(), []) || []).some((e) => e.day <= d.day);
+  }
+  function syncCalendar() {
+    const v = V(),
+      cal = v.calendar || (v.calendar = {}),
+      today = cairoYMD(),
+      plan = planDayFor(today);
+    if (!cal.firstRun && trulyFresh()) cal.firstRun = { date: today, planDay: Math.max(1, plan), atDay: S.day };
+    // The clock may move the plan; it may never delete teaching. Advance only through days that are
+    // already certified or whose required evidence is fully green (the same gate as CERTIFY).
+    let moved = false,
+      guard = 0;
+    while (plan > S.day && S.day < C.days.length && guard++ < 200) {
+      const d = C.days[S.day - 1];
+      if ((S.doneDays || []).includes(S.day)) {
+        S.day++;
+        moved = true;
+        continue;
+      }
+      if (dayGreen(d)) {
+        S.doneDays.push(S.day);
+        S.day++;
+        S.xp = (S.xp || 0) + 20;
+        S.blockStart = Date.now();
+        (v.auto || (v.auto = [])).push({ day: d.day, at: new Date().toISOString() });
+        v.auto = v.auto.slice(-30);
+        moved = true;
+        continue;
+      }
+      break;
+    }
+    const debt = plan > 0 ? Math.max(0, plan - S.day) : 0,
+      ahead = plan > 0 ? Math.max(0, S.day - plan) : 0,
+      fr = cal.firstRun,
+      catchUp = !!(fr && debt > 0 && fr.planDay > (fr.atDay || 1) && S.day < fr.planDay);
+    Object.assign(cal, {
+      today,
+      planDay: plan,
+      workDay: S.day,
+      debt,
+      ahead,
+      mode: plan === 0 ? "precourse" : debt > 0 ? (catchUp ? "catchup" : "carryover") : ahead > 0 ? "ahead" : "today",
+      syncedAt: new Date().toISOString(),
+    });
+    if (moved) persistSoon();
+    return cal;
+  }
+  function chipText(cal) {
+    const base = "TODAY · " + fmtDay(cal.today),
+      s = (n) => (n === 1 ? "" : "S");
+    if (cal.mode === "carryover") return base + " · " + cal.debt + " DAY" + s(cal.debt) + " CARRYOVER";
+    if (cal.mode === "catchup") return base + " · FIRST-RUN CATCH-UP";
+    if (cal.mode === "ahead") return base + " · " + cal.ahead + " DAY" + s(cal.ahead) + " AHEAD";
+    if (cal.mode === "precourse") return base + " · COURSE STARTS " + fmtDay(C.days[0].date);
+    return base;
+  }
+  function calendarBannerHTML(cal) {
+    const d = safe(() => day(), null);
+    if (!d || !(cal.mode === "carryover" || cal.mode === "catchup")) return "";
+    const mins = safe(() => remainingMinutes(d), null),
+      work = fmtDay(d.date, true),
+      today = fmtDay(cal.today, true);
+    const txt =
+      cal.mode === "catchup"
+        ? "Today is " + today + ". The course plan began " + fmtDay(C.days[0].date, true) + "; you are starting today, so Day " + d.day + " (" + work + ") runs first as deliberate catch-up — nothing is skipped — and Day " + cal.planDay + " follows."
+        : "Today is " + today + ". This is unfinished " + work + " work, carried forward deliberately" + (cal.debt > 1 ? " (" + cal.debt + " days behind plan)" : "") + ".";
+    return (
+      '<div class="v14Carryover" role="status"><b>' +
+      (cal.mode === "catchup" ? "FIRST-RUN CATCH-UP · REAL DATE KEPT" : "CARRYOVER · REAL DATE KEPT") +
+      "</b><span>" +
+      E(txt) +
+      (Number.isFinite(mins) ? " <em>~" + mins + " min of Day " + d.day + " left.</em>" : "") +
+      "</span></div>"
+    );
+  }
+  function dateTick() {
+    if (cairoYMD() !== V().calendar?.today) {
+      syncCalendar();
+      safe(() => render());
+    }
+  }
+
+  /* ───────────────────────── corpus & question model ───────────────────────── */
+  const qCache = new Map();
+  function lessonById(id) {
+    for (const d of C.days || []) for (const l of d.lessons || []) if (l.id === id) return l;
+    return null;
+  }
+  const prof = (l) => window.INTELLECTUALITY_PROFESSOR?.[l?.id] || {};
+  const deep = (l) => window.INTELLECTUALITY_DEEP?.[l?.id]?.deep || [];
+  const lessonTok = new Map();
+  function lessonTokens(l) {
+    if (!l) return new Set();
+    if (!lessonTok.has(l.id)) {
+      const p = prof(l);
+      lessonTok.set(l.id, liteSet(tokens([l.topic, l.mental, (l.facts || []).map((f) => f.join(" ")).join(" "), (p.teach || []).join(" "), p.mental, deep(l).join(" ")].join(" "))));
+    }
+    return lessonTok.get(l.id);
+  }
+  function lessonForQ(q, fallback = null) {
+    // Answer-blind: stem + chapter only.
+    const ls = [...new Set(q?.lessonIds || [])].map(lessonById).filter(Boolean);
+    if (!ls.length) return fallback;
+    if (ls.length === 1) return ls[0];
+    const t = tokens((q.stem || "") + " " + (q.chapter || ""));
+    return ls.map((l) => ({ l, s: overlapN(t, lessonTokens(l)) * 3 + overlapN(tokens(l.topic), liteSet(t)) * 5 })).sort((a, b) => b.s - a.s)[0].l;
+  }
+  function findQ(id) {
+    if (!id) return null;
+    if (qCache.has(id)) return qCache.get(id);
+    let q = (QB.questions || []).find((x) => x.id === id) || null;
+    if (!q)
+      for (const d of C.days || [])
+        for (const l of d.lessons || []) {
+          const g = (l.questions || []).find((x) => x.id === id);
+          if (g) q = genQ(g, l);
+        }
+    qCache.set(id, q);
+    return q;
+  }
+  function genQ(g, l) {
+    const opts = (g.choices || []).map((t, i) => ({ key: "abcdefgh"[i], text: t }));
+    const k = opts.find((o) => o.text === g.answer)?.key;
+    return { id: g.id, stem: g.prompt, subject: l.subject, chapter: l.topic, courseTopic: l.topic, lessonIds: [l.id], options: opts, answerKeys: k ? [k] : [], answerText: g.answer, dimension: g.dimension, failureType: g.failureType, generated: true, split: g.heldOut ? "heldout" : "practice" };
+  }
+  const keyText = (q) => (q?.answerKeys || []).map((k) => q.options?.find((o) => o.key === k)?.text || "").join(" ").trim() || q?.answerText || "";
+  const optText = (q, k) => q?.options?.find((o) => o.key === k)?.text || "";
+  const peMeta = (q) => window.NEU205_PATTERN?.questionMeta?.[q?.id] || {};
+  function isNegation(q) {
+    const m = peMeta(q);
+    if (typeof m.negation === "boolean" && !q?.generated) return m.negation;
+    return /\bexcept\b|\ball (of )?the following\b.*\bexcept\b|\bfalse\b|\bincorrect\b|\bnot (true|correct)\b|\bwrong\b/i.test(q?.stem || "");
+  }
+  function guardModel(q) {
+    // The key is used ONLY as a negative filter (mask/demote), never to query, select or rank up.
+    const stemT = liteSet(tokens(q?.stem || ""));
+    const keyT = tokens(keyText(q), false).map(lite);
+    const dist = (q?.options || []).filter((o) => !(q.answerKeys || []).includes(o.key)).map((o) => o.text);
+    const distT = liteSet(dist.flatMap((t) => tokens(t, false)));
+    const A = new Set(keyT.filter((w) => !stemT.has(w) && !distT.has(w) && !MASK_STOP.has(w)));
+    return {
+      A,
+      aNeed: Math.max(1, Math.ceil(A.size * 0.5)),
+      D: new Set([...distT].filter((w) => !stemT.has(w) && !keyT.includes(w) && !MASK_STOP.has(w))),
+      stemT,
+      keyNorm: norm(keyText(q)),
+      negation: isNegation(q),
+    };
+  }
+  function aHits(text, g) {
+    let n = 0;
+    for (const w of new Set(tokens(text).map(lite))) if (g.A.has(w)) n++;
+    return n;
+  }
+  function leaks(text, g) {
+    // A text leaks when it carries at least half of the key's distinctive words, or the exact key phrase.
+    if (!g || !text) return false;
+    if (g.A.size && aHits(text, g) >= g.aNeed) return true;
+    return g.keyNorm.split(" ").length >= 2 && norm(text).includes(g.keyNorm);
+  }
+  function maskPhrase(text, g) {
+    const words = g.keyNorm.split(" ").filter(Boolean);
+    if (words.length < 2 || !norm(text).includes(g.keyNorm)) return null;
+    const re = new RegExp(words.map((w) => w.replace(/[^a-z0-9]/g, "")).join("[^A-Za-z0-9]+"), "i");
+    const out = String(text).replace(re, "▢▢▢");
+    return out === text ? null : { text: out, masked: 1 };
+  }
+  function maskText(text, g, label = false) {
+    // Cloze: answer-distinctive words become a prediction gap. Returns null when too little is left.
+    if (!g) return { text, masked: 0 };
+    const ph = maskPhrase(text, g);
+    if (ph) text = ph.text;
+    if (!g.A.size) return { text, masked: ph ? 1 : 0 };
+    let masked = 0,
+      content = 0;
+    const out = String(text)
+      .split(/(\s+)/)
+      .map((w) => {
+        const parts = norm(w).split(" ").filter(Boolean);
+        if (!parts.length) return w;
+        if (parts.some((x) => g.A.has(lite(x)) && !MASK_STOP.has(lite(x)))) {
+          masked++;
+          const m = w.match(/^([^A-Za-z0-9αβγδκμθε]*)[\s\S]*?([^A-Za-z0-9αβγδκμθε]*)$/);
+          return (m ? m[1] : "") + "▢▢▢" + (m ? m[2] : "");
+        }
+        if (parts.some((x) => x.length > 2)) content++;
+        return w;
+      })
+      .join("")
+      .replace(/▢▢▢(\s+▢▢▢)+/g, "▢▢▢");
+    if (!label && masked && content < masked * 1.5) return null;
+    return { text: out, masked: masked + (ph ? 1 : 0) };
+  }
+
+  /* ───────────────────────── intents, concepts, commands ───────────────────────── */
+  const INTENTS = {
+    identify: { label: "IDENTIFY THE STRUCTURE", look: "Find the structure first, then name the one feature that makes it unmistakable.", cmd: "build", fam: "ana" },
+    orient: { label: "ORIENT · LEVEL · SURFACE", look: "Orient before naming: anterior/posterior, superior/inferior, which level.", cmd: "orient", fam: "ana" },
+    relation: { label: "RELATIONS", look: "Trace what surrounds it: in front, behind, medial, lateral.", cmd: "relations", fam: "ana" },
+    route: { label: "ROUTE · COURSE", look: "Follow the course: origin → opening or passage → destination.", cmd: "route", fam: "ana" },
+    blood: { label: "BLOOD SUPPLY", look: "Trace the vessel: trunk → branch → territory.", cmd: "supply", fam: "ana" },
+    innervation: { label: "INNERVATION", look: "Trace the nerve: nucleus/root → course → target.", cmd: "nerve", fam: "ana" },
+    tract: { label: "TRACT · CROSSING", look: "Walk the pathway: first neuron → synapse → crossing → destination.", cmd: "path", fam: "tract" },
+    lesion: { label: "LESION LOCALIZATION", look: "Mark the damaged spot, then shade what it disconnects.", cmd: "lesion", fam: "ana" },
+    territory: { label: "TERRITORY · DEFICIT", look: "Shade the territory this vessel feeds, then predict what goes dark.", cmd: "deficit", fam: "ana" },
+    histo: { label: "HISTOLOGIC RECOGNITION", look: "Silhouette → architecture → the three features you would point at.", cmd: "tissue", fam: "histo" },
+    histo_lookalike: { label: "HISTOLOGIC LOOK-ALIKE", look: "Put it beside its nearest mimic: which single feature separates them?", cmd: "lookalike", fam: "histo" },
+    mechanism: { label: "PHYSIOLOGY MECHANISM", look: "Run it: what starts it, what carries it, what comes out.", cmd: "mech", fam: "phys" },
+    graph: { label: "VARIABLE CHANGE", look: "Read the variables: what rises, what falls, and what flips the direction.", cmd: "perturb", fam: "phys" },
+    receptor: { label: "RECEPTOR · TRANSDUCTION", look: "Stimulus → receptor → signal: where is energy converted?", cmd: "start", fam: "phys" },
+    embryo: { label: "EMBRYOLOGIC SEQUENCE", look: "Sequence first: what forms, from what, and in which order.", cmd: "build", fam: "ana" },
+    spotter: { label: "PRACTICAL SPOTTER", look: "Orient the image, then decide from one visible structure.", cmd: "giveaway", fam: "ana" },
+  };
+  function classifyIntent(q, l) {
+    const s = norm((q?.stem || "") + " " + (q?.chapter || "")),
+      sub = q?.subject || l?.subject,
+      m = peMeta(q);
+    if (q?.visualData || q?.requiresVisual) return "spotter";
+    if (/embryo|\bdevelopment(al)?\b|neural tube|neural crest|derived from|derivative|embryologic(al)? origin|\balar\b|basal plate|brain vesicle|primary vesicle|secondary vesicle/.test(s)) return "embryo";
+    if (/lesion|injur|damage|\bcut\b|transect|hemisect|syndrome|paraly|palsy|deficit|loss of|hemipleg|parapleg|ataxia|aphasi|blindness|hemianop|deaf|anosmia|compress|tumou?r|infarct|occlu|thromb|haemorrh|hemorrh/.test(s))
+      return /arter|infarct|occlu|thromb|haemorrh|hemorrh|supply/.test(s) ? "territory" : "lesion";
+    if (/tract|pathway|lemnisc|decussat|\bcross|fascicul|column|ascend|descend|relay/.test(s)) return "tract";
+    if (sub === "HISTOLOGY") return /differ|distinguish|versus|\bvs\b|unlike|compared|except|characteri[sz]ed|all of the following/.test(s) || m.archetype === "structural-discrimination" ? "histo_lookalike" : "histo";
+    if (/arter|\bvein|venous|blood supply|supplied by|drain|sinus|capillar/.test(s)) return "blood";
+    if (/innervat|nerve supply|supplied by .*nerve|motor supply|sensory supply|branch of|secretomotor/.test(s)) return "innervation";
+    if (sub === "PHYSIOLOGY") {
+      if (/receptor|transduc|adapt|stimulus|generator|receptor potential/.test(s)) return "receptor";
+      if (/increase|decrease|\brise|\bfall|curve|graph|amplitude|frequenc|velocity|\brate\b|summation|potential|wave|\beeg\b/.test(s)) return "graph";
+      return "mechanism";
+    }
+    if (/course|passes|pass through|travers|exit|enter|foram|leaves|emerg|pierc|runs|opens into|through/.test(s)) return "route";
+    if (/relation|related|anterior to|posterior to|medial to|lateral to|deep to|superficial to|between|separat|content|boundar|contain|bounded/.test(s)) return "relation";
+    if (/surface|section|aspect|level|border|situated|position|extend|ends? at|terminat|lies at/.test(s)) return "orient";
+    return "identify";
+  }
+  const VISUALTYPE_CONCEPT = { spinal: "spinal_xs", synapse: "synapse", brainstem: "brainstem", pathway: "tract_sensory", reflex: "reflexes", vision: "visual_path", eye: "eye_globe", ear: "cochlea", cerebellum: "cerebellum", ventricle: "ventricles_csf", brain: "cortex_surface", cranialnerve: "cranial_nerves", skull: "cranial_base", headneck: "neck", vessel: "cerebral_arteries", embryo: "embryo_neural" };
+  let conceptsPrepared = false;
+  function prepConcepts() {
+    if (conceptsPrepared) return;
+    for (const c of REG().concepts) {
+      c.reg = new RegExp(c.re.source, "g");
+      c.tok = liteSet(tokens(c.label + " " + (c.kw || []).join(" "), false));
+    }
+    conceptsPrepared = true;
+  }
+  function detectConcepts(text, subject) {
+    prepConcepts();
+    const t = norm(text),
+      out = [];
+    for (const c of REG().concepts) {
+      if (c.subj && subject && !c.subj.includes(subject)) continue;
+      const m = t.match(c.reg);
+      if (m) out.push({ c, s: m.length * (c.w || 1) });
+    }
+    return out.sort((a, b) => b.s - a.s).map((x) => x.c);
+  }
+  function conceptsForQ(q, l) {
+    // Pre-answer and post-answer both start answer-blind (stem + chapter → lesson topic → lesson visual type).
+    const sub = q?.subject || l?.subject;
+    let list = detectConcepts((q?.stem || "") + " " + (q?.chapter || ""), sub);
+    if (!list.length && l) list = detectConcepts(l.topic, sub);
+    if (!list.length && l?.visualType) {
+      const c = REG().concepts.find((x) => x.k === VISUALTYPE_CONCEPT[l.visualType]);
+      if (c) list = [c];
+    }
+    return list;
+  }
+  function command(id, overrideCue) {
+    const c = REG().commands[id] || REG().commands.build || { ar: "كوّن الصورة", en: "Build the picture", cue: "" };
+    return { id, ar: c.ar, en: c.en, cue: overrideCue || c.cue };
+  }
+  function preCommand(q, l) {
+    if (isNegation(q)) return command("core", "السؤال بيقول EXCEPT/NOT: اختبر كل اختيار عالموديل، واللي مايمشيش هو الإجابة.");
+    return command(INTENTS[classifyIntent(q, l)]?.cmd || "build");
+  }
+  function commandHTML(c, extra = "") {
+    return '<div class="v14Command ' + extra + '" data-v14-cmd="' + E(c.id) + '"><span class="v14Ar" lang="ar" dir="rtl">' + E(c.ar) + "</span><b>" + E(c.en) + '</b><small class="v14Cue" lang="ar" dir="rtl">' + E(c.cue) + "</small></div>";
+  }
+  const EXAM_MOVES = {
+    "polarity-exception": "Kasr flips polarity here: lock the EXCEPT/NOT first, then test every option against the model — the one that breaks it is the answer.",
+    "supply-innervation-branch": "They swap sibling branches: name the parent trunk → the branch → its territory, then reject the siblings.",
+    "clinical-localization": "They give a deficit: localize first (side → level → structure), then predict the whole picture.",
+    "clinical-perturbation": "They perturb one step: translate the vignette into the mechanism, then follow the chain to the sign.",
+    "relations-contents-route": "They test position: orient, then place each option relative to the landmark.",
+    "structural-discrimination": "They offer look-alikes: hold the one decisive discriminator before you read the options.",
+    "mechanism-causality": "They test direction: input → mechanism → output; watch increase/decrease and excite/inhibit.",
+    "direct-function-property": "One function or property: derive it from what the structure is built to do, not from sentence memory.",
+    "direct-structure-fact": "One anatomical fact: place it on the map (level, side, relation) before answering.",
+    "layer-lining-relation": "Layers and linings: build them in order from outside in, then name the one asked.",
+    "visual-identification": "Identify from the image: orient, then use the decisive visible feature.",
+    "structure-function": "Structure ↔ function: say what the structure is built to do.",
+  };
+  function examMove(q) {
+    const m = peMeta(q);
+    if (isNegation(q)) return EXAM_MOVES["polarity-exception"];
+    return EXAM_MOVES[m.archetype] || (q?.subject === "PHYSIOLOGY" ? EXAM_MOVES["mechanism-causality"] : q?.subject === "HISTOLOGY" ? EXAM_MOVES["structural-discrimination"] : EXAM_MOVES["direct-structure-fact"]);
+  }
+  const MOVIES = {
+    ANATOMY: [
+      ["ORIENT", /orient|posterior|anterior|surface|level|lies|located|position|extend|section|vertebra|cross section|foramen magnum/i, "Place it: anterior/posterior, superior/inferior, which level."],
+      ["RELATIONS", /relat|between|surround|contain|bound|medial|lateral|adjacent|deep|superficial|continuous|around/i, "Name what surrounds it on each side."],
+      ["ROUTE · SUPPLY · NERVE", /arter|suppl|nerve|innervat|drain|branch|pass|course|foram|root|vein|sinus/i, "Trace its supply and nerve, or what passes through it."],
+      ["LESION", /lesion|injur|damage|deficit|loss|palsy|syndrome|paraly|weak|clinical|puncture|block|compress/i, "Cut one link: what fails, on which side?"],
+    ],
+    PHYSIOLOGY: [
+      ["INPUT → SENSOR", /stimul|receptor|input|sensor|detect|afferent|transduc|signal|arriv/i, "What starts it, and what senses it?"],
+      ["MECHANISM", /channel|\bion|release|bind|depolari|mechanism|conduct|synap|messenger|calcium|potential|current/i, "Which step converts the input into a response?"],
+      ["OUTPUT → FEEDBACK", /output|response|effect|feedback|inhibit|contract|result|efferent|motor/i, "What comes out, and what switches it off?"],
+      ["PERTURB IT", /\bif\b|\bwhen\b|lesion|block|drug|increase|decrease|loss|disease|damage|without/i, "Change one variable: what moves next?"],
+    ],
+    HISTOLOGY: [
+      ["SILHOUETTE", /shape|large|small|round|star|flask|pseudounipolar|multipolar|appear|look|size/i, "Overall shape and size at low power."],
+      ["ARCHITECTURE", /layer|arrang|surround|sheath|capsule|fascic|cluster|\brow|lamina|lined|wrap/i, "How the cells are arranged and wrapped."],
+      ["3 DISCRIMINATORS", /unlike|whereas|versus|distinguish|contrast|while|\bbut\b|instead|characteristic|\bonly\b|each/i, "Three features you would point at."],
+      ["LOOK-ALIKE → FUNCTION", /function|role|serve|support|produc|secret|myelinat|barrier|protect|guide|remov/i, "Reject the nearest mimic, then state the function."],
+    ],
+    TRACT: [
+      ["START", /receptor|origin|arise|cell bod|first order|ganglion|cortex|afferent/i, "Where does the first neuron start?"],
+      ["SYNAPSE", /synap|relay|nucle|second order|third order|dorsal horn|thalam/i, "Where is the first synapse?"],
+      ["CROSSING", /cross|decussat|commissure|contralateral|ipsilateral|arcuate/i, "Where does it cross?"],
+      ["DESTINATION → LESION", /cortex|terminat|destination|lesion|loss|deficit|ends/i, "Where does it end, and which side fails after a lesion?"],
+    ],
+  };
+
+  /* ───────────────────────── mastery tier, fast lane ───────────────────────── */
+  function topicOf(l, q) {
+    return l?.topic || q?.courseTopic || "";
+  }
+  function posterior(topic) {
+    return safe(() => window.INTELLECTUALITY_V12?.posterior?.(topic), 0) || 0;
+  }
+  function highPriorityOpen(topic) {
+    return (safe(() => unresolved(), []) || []).some((e) => e.topic === topic && (e.confidence === "confident" || (e.priority || 0) >= 2));
+  }
+  function tier(l, q) {
+    const topic = topicOf(l, q),
+      r = S.v12?.mastery?.[topic],
+      p = posterior(topic),
+      mem = S.memory?.[topic];
+    if (r && r.n >= 4 && p >= 0.82 && mem && mem.n >= 3 && !highPriorityOpen(topic)) return "owned";
+    if (r && r.n >= 2 && p >= 0.6) return "developing";
+    return "fresh";
+  }
+  function primerDepth(l, q) {
+    const t = tier(l, q);
+    if (t === "owned") return "T";
+    if (t === "developing") {
+      const st = V().stats.depth,
+        F = st.F,
+        Cc = st.C;
+      // Evidence-gated: only reverse the default when this learner's own data says deeper helps.
+      if (F && Cc && F.n >= 8 && Cc.n >= 8 && (F.ok + 1) / (F.n + 2) - (Cc.ok + 1) / (Cc.n + 2) >= 0.15) return "F";
+      return "C";
+    }
+    return "F";
+  }
+  function lessonSeenBefore(l) {
+    if (!l) return false;
+    const re = new RegExp("^d(\\d+):" + l.id + ":s\\d+$");
+    for (const [k, v] of Object.entries(S.segments || {})) {
+      const m = v && k.match(re);
+      if (m && Number(m[1]) !== S.day) return true;
+    }
+    const today = cairoYMD();
+    return (S.v12?.evidence || []).some((ev) => ev.topic === l.topic && ev.at && cairoYMD(new Date(ev.at)) < today);
+  }
+  function canFastLane(l) {
+    if (!l) return false;
+    const r = S.v12?.mastery?.[l.topic],
+      mem = S.memory?.[l.topic];
+    return !!(r && r.n >= 4 && posterior(l.topic) >= 0.82 && mem && mem.n >= 3 && !highPriorityOpen(l.topic) && lessonSeenBefore(l) && !S.mock?.active);
+  }
+
+  /* ───────────────────────── network: queue, timeouts, caches ───────────────────────── */
+  const NET = { active: 0, max: 2, wait: [], mem: new Map() };
+  const LS_KEY = "intellectuality_v14_vcache_v1",
+    LS_TTL = 14 * 864e5,
+    LS_MAX = 160;
+  let lsCache = null,
+    lsTimer = null;
+  function lsLoad() {
+    if (lsCache) return lsCache;
+    try {
+      lsCache = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+    } catch (_) {}
+    if (!lsCache || typeof lsCache !== "object") lsCache = {};
+    return lsCache;
+  }
+  function lsGet(k) {
+    const c = lsLoad(),
+      x = c[k];
+    if (!x) return null;
+    if (Date.now() - x.t > LS_TTL) {
+      delete c[k];
+      return null;
+    }
+    return x.d;
+  }
+  function lsPut(k, d) {
+    const c = lsLoad();
+    c[k] = { t: Date.now(), d };
+    const ks = Object.keys(c);
+    if (ks.length > LS_MAX)
+      ks.sort((a, b) => c[a].t - c[b].t)
+        .slice(0, ks.length - LS_MAX)
+        .forEach((x) => delete c[x]);
+    clearTimeout(lsTimer);
+    lsTimer = setTimeout(() => {
+      try {
+        localStorage.setItem(LS_KEY, JSON.stringify(c));
+      } catch (_) {}
+    }, 800);
+  }
+  function netData(url, transform = (x) => x) {
+    // Global concurrency cap (2), 7 s abort, in-memory promise cache, compact local cache.
+    if (NET.mem.has(url)) return NET.mem.get(url);
+    const hit = lsGet(url);
+    if (hit) {
+      const p = Promise.resolve(hit);
+      NET.mem.set(url, p);
+      return p;
+    }
+    const p = new Promise((resolve, reject) => {
+      const run = async () => {
+        NET.active++;
+        const ac = typeof AbortController !== "undefined" ? new AbortController() : null,
+          t = setTimeout(() => ac && ac.abort(), 7000);
+        try {
+          const r = await fetch(url, ac ? { signal: ac.signal } : undefined);
+          if (!r.ok) throw new Error("http_" + r.status);
+          const d = transform(await r.json());
+          lsPut(url, d);
+          resolve(d);
+        } catch (e) {
+          NET.mem.delete(url);
+          reject(e);
+        } finally {
+          clearTimeout(t);
+          NET.active--;
+          const n = NET.wait.shift();
+          if (n) n();
+        }
+      };
+      if (NET.active < NET.max) run();
+      else NET.wait.push(run);
+    });
+    NET.mem.set(url, p);
+    return p;
+  }
+  const API = "https://commons.wikimedia.org/w/api.php?";
+  const II = "&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiextmetadatafilter=LicenseShortName|Artist&iiurlwidth=900&format=json&origin=*";
+  const urlFiles = (files) => API + "action=query&titles=" + encodeURIComponent(files.map((f) => "File:" + f).join("|")) + II;
+  const urlSearch = (q, n = 12) => API + "action=query&generator=search&gsrsearch=" + encodeURIComponent(q) + "&gsrnamespace=6&gsrlimit=" + n + II;
+  const stripTags = (s) => String(s || "").replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+  function commonsRows(j) {
+    return Object.values(j?.query?.pages || {})
+      .map((p) => {
+        const ii = p.imageinfo?.[0] || {},
+          em = ii.extmetadata || {};
+        return { title: p.title || "", thumb: ii.thumburl || "", page: ii.descriptionurl || "", license: stripTags(em.LicenseShortName?.value), artist: stripTags(em.Artist?.value).slice(0, 70), mime: ii.mime || "", w: ii.width || 0, h: ii.height || 0, missing: "missing" in p || !ii.thumburl };
+      })
+      .filter((x) => x.title);
+  }
+  // Shared adapter so v9/v10 lookups join the same queue and cache.
+  window.INTELLECTUALITY_V14_NET = { json: (url) => netData(url), rows: (url) => netData(url, commonsRows) };
+
+  /* ───────────────────────── anti-repeat governor (v9 + v10 + v14) ───────────────────────── */
+  const G = (function () {
+    let screenKey = "",
+      seq = 0,
+      shown = new Set(),
+      v10count = 0,
+      v10fetch = 0,
+      videos = new Set();
+    const session = Date.now().toString(36);
+    const hist = () => V().vh || (V().vh = []);
+    function beginRender(key) {
+      shown = new Set();
+      v10count = 0;
+      v10fetch = 0;
+      videos = new Set();
+      const v = V();
+      if (key !== screenKey) {
+        screenKey = key;
+        v.seq = (v.seq || 0) + 1;
+      }
+      seq = v.seq || 1;
+    }
+    function penalty(k, ctx = {}) {
+      if (!k || ctx.source) return 0;
+      if (shown.has(k)) return 1e4;
+      let p = 0;
+      const today = cairoYMD();
+      for (const e of hist()) {
+        if (e[0] !== k) continue;
+        const ds = seq - e[1];
+        if (ds === 0) continue;
+        if (ds === 1) p += 100;
+        else if (ds <= 5) p += 40;
+        if (e[2] === session) p += 25;
+        else if (e[3] === today) p += 12;
+      }
+      const vc = V().vc?.[k];
+      if (vc) {
+        if ((vc.cs || []).filter((c) => c && c !== ctx.concept).length >= 2) p += 30;
+        p += Math.min(10, vc.n || 0);
+      }
+      const last = hist().slice(-3).map((e) => e[4]);
+      if (ctx.modality && last.length === 3 && last.every((m) => m === ctx.modality)) p += 10;
+      return p;
+    }
+    function prevOther(k, concept) {
+      return hist().some((e) => e[0] === k && seq - e[1] === 1 && e[5] && e[5] !== concept);
+    }
+    function note(k, ctx = {}) {
+      if (!k) return;
+      shown.add(k);
+      const h = hist();
+      if (h.some((e) => e[0] === k && e[1] === seq)) return;
+      h.push([k, seq, session, cairoYMD(), ctx.modality || "", ctx.concept || ""]);
+      if (h.length > 80) h.splice(0, h.length - 80);
+      const vc = V().vc || (V().vc = {}),
+        x = vc[k] || (vc[k] = { n: 0, cs: [], l: 0 });
+      x.n++;
+      x.l = seq;
+      if (ctx.concept && !x.cs.includes(ctx.concept)) x.cs = x.cs.concat(ctx.concept).slice(-4);
+      capMap(vc, 300, (y) => y.l || 0);
+      persistSoon();
+    }
+    function pick(rows, ctx = {}) {
+      let best = null,
+        bestS = -Infinity;
+      rows.forEach((r, i) => {
+        const k = r.key || gkey(r.title);
+        if (shown.has(k)) return;
+        const s = (r.score != null ? r.score : 10 - i * 2) - penalty(k, ctx);
+        if (s > bestS) {
+          best = r;
+          bestS = s;
+        }
+      });
+      return best && bestS > 0 ? best : null;
+    }
+    function order(keys, ctx = {}) {
+      return keys
+        .map((k, i) => ({ k, i, p: penalty(gkey(k), ctx) }))
+        .sort((a, b) => a.p - b.p || a.i - b.i)
+        .map((x) => x.k);
+    }
+    const allowV10 = () => v10count < 3;
+    const claimV10 = () => v10count++;
+    const allowFetch = () => v10fetch++ < 5;
+    function allowVideo(id) {
+      if (!id || videos.has(id)) return false;
+      videos.add(id);
+      return true;
+    }
+    function snapshot() {
+      return { vh: JSON.stringify(V().vh || []), vc: JSON.stringify(V().vc || {}), seq: V().seq, shown: new Set(shown), screenKey };
+    }
+    function restore(s) {
+      V().vh = JSON.parse(s.vh);
+      V().vc = JSON.parse(s.vc);
+      V().seq = s.seq;
+      seq = s.seq;
+      shown = s.shown;
+      screenKey = s.screenKey;
+    }
+    return { beginRender, penalty, prevOther, note, pick, order, allowV10, claimV10, allowFetch, allowVideo, snapshot, restore, gkey, session, get seq() { return seq; }, isShown: (k) => shown.has(k) };
+  })();
+  window.INTELLECTUALITY_VISUAL_GOVERNOR = G;
+
+  /* ───────────────────────── visual genome: candidates, rubric, plans ───────────────────────── */
+  const REJECT_T = /\blogo\b|\bflag\b|coat of arms|\bicon\b|portrait|\bstamp\b|statue|sculpture|poster|book ?cover|signature|\bmap of\b|locator|\bbuilding\b|museum|church|painting|cartoon|emoji|tattoo|costume|\btoy\b|mug shot|selfie|wikipedia screenshot/;
+  const ANIMAL_T = /\b(rat|rats|mouse|mice|murine|cat|dog|canine|feline|monkey|macaque|pig|porcine|bovine|cow|sheep|ovine|horse|equine|rabbit|chicken|chick|avian|bird|fish|zebrafish|frog|xenopus|drosophila|insect|worm|elegans|squid|octopus|lamprey|shark|reptile|lizard|snake|turtle|mollus\w*|chiton|bat|bats|veterinar\w*)\b/;
+  const FIT = {
+    ana: { spe: 6, dia: 5, sec: 5, unl: 2, mic: -1, gra: -4, ani: 1 },
+    tract: { dia: 7, sec: 4, spe: 1, ani: 3, unl: 1, mic: -3, gra: -3 },
+    histo: { mic: 9, dia: 4, sec: 2, unl: 2, spe: -3, gra: -5, ani: -2 },
+    phys: { dia: 6, gra: 6, ani: 6, sec: 0, spe: -6, mic: -2, unl: 0 },
+  };
+  function guessMod(r) {
+    const t = norm(r.title),
+      mime = r.mime || "";
+    if (/gif/.test(mime) || /\.gif$/i.test(r.title)) return "ani";
+    if (/unlabel|without label|no label|blank/.test(t)) return "unl";
+    if (/micrograph|histolog|\bh e\b|\bhe\b stain|stain|high mag|low mag|microscop|\blm\b|\bx\d{2,3}\b|nissl|silver/.test(t)) return "mic";
+    if (/graph|curve|\beeg\b|hypnogram|plot|chart|wave/.test(t)) return "gra";
+    if (/cross section|coronal|sagittal|axial|transverse|\bsection\b/.test(t)) return /svg|diagram|gray\d/.test(t + " " + mime) ? "dia" : "sec";
+    if (/svg/.test(mime) || /diagram|schema|illustration|label|drawing|gray\d|blausen|openstax|^\d{4} /.test(t)) return "dia";
+    if (/jpe?g/.test(mime)) return "spe";
+    return "dia";
+  }
+  function personalModalityBonus(mod) {
+    const st = V().stats.mod,
+      arms = Object.entries(st).filter(([, x]) => x.n >= 6);
+    if (arms.length < 2) return 0;
+    const acc = (x) => (x.ok + 1) / (x.n + 2);
+    arms.sort((a, b) => acc(b[1]) - acc(a[1]));
+    return arms[0][0] === mod && acc(arms[0][1]) - acc(arms[arms.length - 1][1]) >= 0.15 ? 3 : 0;
+  }
+  function rubric(c, ctx) {
+    const t = norm(c.title);
+    if (c.missing || !c.thumb || REJECT_T.test(t) || ANIMAL_T.test(t) || !c.license) return -999;
+    const mn = Math.min(c.w || 0, c.h || 0);
+    if (mn && mn < (/svg/.test(c.mime) ? 180 : 250)) return -999;
+    let s = c.origin === "file" ? 12 : c.origin === "cat" ? 7 : c.origin === "side" ? 6 : 2;
+    const tt = tokens(c.title);
+    s += Math.min(12, overlapN(tt, ctx.conceptTok || new Set()) * 3) + Math.min(8, overlapN(tt, ctx.stemTok || new Set()) * 2);
+    s += (FIT[INTENTS[ctx.intent]?.fam || "ana"] || FIT.ana)[c.modality] || 0;
+    if (/\bhuman\b/.test(t)) s += 2;
+    if ((c.w >= 900 && c.h >= 600) || /svg/.test(c.mime)) s += 2;
+    if (/label|description|\ben\b|diagram|schema/.test(t)) s += 2;
+    if (/gray\d|blausen|openstax|^\d{4} |sobo|wellcome|lynch|beal/.test(t)) s += 2;
+    if (c.modality === "ani" && INTENTS[ctx.intent]?.fam !== "phys") s -= 3;
+    s += personalModalityBonus(c.modality);
+    if (ctx.phase === "pre" && ctx.guard && leaks(cleanTitle(c.title), ctx.guard) && !tt.some((w) => ctx.guard.D.has(lite(w)))) s -= 25;
+    return s;
+  }
+  const FLOOR = { file: 14, cat: 12, kw: 14, side: 12 };
+  async function candidatesFor(concept, subject) {
+    const out = [];
+    const files = (concept.files || []).map((f) => ({ f: f[0], m: f[1] }));
+    if (files.length) {
+      try {
+        const rows = await netData(urlFiles(files.map((x) => x.f)), commonsRows);
+        for (const r of rows) {
+          if (r.missing) continue;
+          const hit = files.find((x) => gkey(x.f) === gkey(r.title));
+          out.push({ ...r, key: gkey(r.title), origin: "file", modality: hit?.m || guessMod(r), concept: concept.k });
+        }
+      } catch (_) {}
+    }
+    for (const cat of (concept.cats || []).slice(0, 2)) {
+      try {
+        const rows = await netData(urlSearch('incategory:"' + String(cat).replace(/"/g, "") + '"', 12), commonsRows);
+        rows.forEach((r) => !r.missing && out.push({ ...r, key: gkey(r.title), origin: "cat", modality: guessMod(r), concept: concept.k }));
+      } catch (_) {}
+    }
+    if (out.length < 3)
+      for (const kw of (concept.kw || []).slice(0, 1)) {
+        try {
+          const rows = await netData(urlSearch(kw + (subject === "HISTOLOGY" && !/histolog/.test(kw) ? " histology" : ""), 10), commonsRows);
+          rows.forEach((r) => !r.missing && out.push({ ...r, key: gkey(r.title), origin: "kw", modality: guessMod(r), concept: concept.k }));
+        } catch (_) {}
+      }
+    const seen = new Set();
+    return out.filter((x) => x.thumb && !seen.has(x.key) && seen.add(x.key));
+  }
+  const planMem = new Map();
+  async function planVisuals(q, phase = "pre", opts = {}) {
+    const l = lessonForQ(q, opts.lesson || null),
+      subject = q.subject || l?.subject,
+      intent = classifyIntent(q, l),
+      list = conceptsForQ(q, l),
+      concept = list[0] || null,
+      g = guardModel(q);
+    const plan = {
+      qid: q.id,
+      lessonId: l?.id || "",
+      topic: topicOf(l, q),
+      intent,
+      concept: concept?.k || "",
+      conceptLabel: concept?.label || "",
+      phase,
+      source: q.visualData ? { src: q.visualData, page: q.page, file: q.sourceFile } : null,
+      primary: null,
+      secondary: null,
+      recall: null,
+      video: l?.video?.id ? { id: l.video.id, start: l.video.start || 0, end: l.video.end || 0, title: l.video.title || l.topic } : null,
+      reason: "",
+      provenance: [],
+    };
+    if (!concept) {
+      plan.reason = plan.source ? "Exact source-bank figure." : "No registry concept matched this stem; an answer-derived search is not allowed, so no visual is invented.";
+      return plan;
+    }
+    let cands = await candidatesFor(concept, subject);
+    if (list[1] && cands.length < 4) cands = cands.concat((await candidatesFor(list[1], subject)).filter((c) => !cands.some((x) => x.key === c.key)));
+    const ctx = { phase, intent, subject, concept: concept.k, conceptTok: concept.tok || new Set(), stemTok: g.stemT, guard: g };
+    cands.forEach((c) => (c.score = rubric(c, ctx)));
+    const ok = cands.filter((c) => c.score >= (FLOOR[c.origin] || 14)).sort((a, b) => b.score - a.score);
+    const qa = !opts.sandbox && V().qa[q.id];
+    if (qa?.p) {
+      plan.primary = ok.find((c) => c.key === qa.p) || null;
+      if (plan.primary && qa.s) plan.secondary = ok.find((c) => c.key === qa.s) || null;
+      if (plan.primary) plan.reason = "Stable assignment for this question (same visual each time you meet it).";
+    }
+    if (!plan.primary) {
+      const ranked = ok.map((c) => ({ c, f: c.score - G.penalty(c.key, { concept: concept.k, modality: c.modality }) })).sort((a, b) => b.f - a.f);
+      let best = ranked.find((x) => x.f >= 0) || null;
+      if (!best && ranked.length && !G.prevOther(ranked[0].c.key, concept.k)) best = ranked[0]; // canonical exception
+      if (best) {
+        plan.primary = best.c;
+        plan.reason = (best.f < 0 ? "Canonical plate (no legitimate alternative); " : "") + "best " + ({ file: "verified registry file", cat: "Commons category match", kw: "keyword match" }[best.c.origin] || "match") + " for " + concept.label + " · " + best.c.modality + " fits intent " + intent + ".";
+        const sec = ranked.find((x) => x.c !== best.c && x.c.modality !== best.c.modality && x.f >= 0);
+        if (sec) plan.secondary = sec.c;
+      }
+      if (plan.primary && !opts.sandbox) {
+        V().qa[q.id] = { p: plan.primary.key, s: plan.secondary?.key || "", c: concept.k, i: intent, t: Date.now() };
+        capMap(V().qa, 600, (x) => x.t || 0);
+        persistSoon();
+      }
+    }
+    plan.recall = ok.find((c) => c.modality === "unl" && c !== plan.primary) || null;
+    plan.provenance = [plan.primary, plan.secondary].filter(Boolean).map((c) => ({ title: cleanTitle(c.title), license: c.license, artist: c.artist, page: c.page, origin: c.origin }));
+    if (!plan.primary && !plan.reason) plan.reason = "No candidate passed the relevance, license, human-anatomy and answer-leak checks. No substitute shown.";
+    return plan;
+  }
+  async function sideVisual(sideRe, conceptKey, excludeKey, q, ctxBase) {
+    // Post-answer look-alike visual: only a candidate whose title names this side counts as trustworthy.
+    const concept = REG().concepts.find((c) => c.k === conceptKey);
+    if (!concept) return null;
+    prepConcepts();
+    const cands = await candidatesFor(concept, q.subject);
+    const ctx = { ...ctxBase, phase: "post", concept: concept.k, conceptTok: concept.tok };
+    return (
+      cands
+        .filter((c) => c.key !== excludeKey && sideRe.test(norm(c.title)))
+        .map((c) => ({ ...c, origin: c.origin === "file" ? "file" : "side", score: rubric({ ...c, origin: c.origin === "file" ? "file" : "side" }, ctx) }))
+        .filter((c) => c.score >= FLOOR.side)
+        .sort((a, b) => b.score - a.score - (G.penalty(b.key, {}) - G.penalty(a.key, {})) * 0.2)[0] || null
+    );
+  }
+
+  /* ───────────────────────── rendering helpers ───────────────────────── */
+  const MOD_LABEL = { spe: "REAL SPECIMEN", mic: "MICROGRAPH", dia: "LABELED DIAGRAM", sec: "SECTION", ani: "ANIMATION", gra: "GRAPH", unl: "UNLABELED RECALL" };
+  function visualCardHTML(c, label, phase, extra = "") {
+    const title = cleanTitle(c.title);
+    return (
+      '<a class="v14Visual ' + extra + '" href="' + E(c.page) + '" target="_blank" rel="noopener" data-v14-vkey="' + E(c.key) + '">' +
+      '<span class="v14Img"><img src="' + E(c.thumb) + '" alt="' + (phase === "pre" ? "Question visual — title hidden until you answer" : E(title)) + '" loading="lazy" decoding="async"></span>' +
+      '<span class="v14Cap"><b>' + E(label) + (c.modality ? " · " + E(MOD_LABEL[c.modality] || "") : "") + "</b>" +
+      (phase === "pre" ? "" : "<i>" + E(title) + "</i>") +
+      "<small>" + E(c.license || "license on file page") + (c.artist ? " · " + E(c.artist) : "") + " · Wikimedia Commons ↗</small></span></a>"
+    );
+  }
+  function sourceFigureHTML(src) {
+    return '<figure class="v14Visual v14Src"><span class="v14Img"><img src="' + E(src.src) + '" alt="Actual source-bank figure" loading="lazy"></span><span class="v14Cap"><b>ACTUAL SOURCE-BANK FIGURE</b><small>' + E(src.file || "Ketab al Qesm") + " · p." + E(src.page || "—") + "</small></span></figure>";
+  }
+  function teacherHTML(v) {
+    return (
+      '<a class="v14Teacher" href="https://www.youtube.com/watch?v=' + E(v.id) + "&t=" + (v.start || 0) + 's" data-ctx-video="' + E(v.id) + '" data-ctx-start="' + (v.start || 0) + '" data-ctx-end="' + (v.end || 0) + '" data-ctx-title="' + E(v.title) + '">' +
+      '<img src="https://i.ytimg.com/vi/' + E(v.id) + '/mqdefault.jpg" alt="" loading="lazy"><span><b>TEACHER CLIP · ROUTED WINDOW</b>' + E(v.title) + "</span></a>"
+    );
+  }
+  function atlasHTML(subject) {
+    const a = (REG().atlas?.[subject] || [])[0];
+    return a ? '<a class="v14AcademicRef" href="' + E(a.href) + '" target="_blank" rel="noopener"><b>ACADEMIC ATLAS · LINK ONLY</b><span>' + E(a.label) + " · " + E(a.terms) + "</span></a>" : "";
+  }
+  function noVisualHTML(plan) {
+    return '<div class="v14VisualMissing"><b>No trustworthy real image for this exact concept yet.</b> The model below carries it — no generated substitute is shown.' + (plan?.reason ? '<small>' + E(plan.reason) + "</small>" : "") + "</div>";
+  }
+  function attachImgFallback(root) {
+    root.querySelectorAll(".v14Visual img").forEach((img) => {
+      if (img.dataset.v14Err) return;
+      img.dataset.v14Err = "1";
+      img.addEventListener(
+        "error",
+        () => {
+          const a = img.closest(".v14Visual");
+          if (a) a.outerHTML = '<div class="v14VisualMissing"><b>Image host unavailable right now.</b> The text model carries this step.</div>';
+        },
+        { once: true },
+      );
+    });
+  }
+
+  /* ───────────────────────── primer (pre-answer, answer-blind) ───────────────────────── */
+  const shownCtx = new Map();
+  function sentencePool(l, q) {
+    // Lesson corpus sentences scored answer-blind: IDF-weighted stem/concept relevance (a word used in
+    // every lesson sentence, like "spinal", says little), paragraph context, and distractor coverage
+    // (true facts about the look-alikes are exactly what the learner needs to discriminate).
+    const p = prof(l),
+      pool = [];
+    let pid = 0;
+    const add = (arr, src, w) =>
+      (arr || []).filter(Boolean).forEach((para) => {
+        const pt = tokens(para),
+          pi = pid++;
+        sentences(para).forEach((x, si) => pool.push({ s: x, src, w, pt, pi, si }));
+      });
+    add([p.mental || l?.mental], "model", 2);
+    add([p.seed?.minimumModel], "model", 2);
+    add(p.teach, "teach", 1);
+    add(deep(l), "deep", 1);
+    add((l?.facts || []).map((f) => f[1]), "fact", 0.5);
+    const g = guardModel(q),
+      chapT = liteSet(tokens(q.chapter || "")),
+      conT = conceptsForQ(q, l)[0]?.tok || new Set();
+    const seen = new Set(),
+      uniq = pool.filter((x) => !seen.has(norm(x.s)) && seen.add(norm(x.s)));
+    uniq.forEach((x) => (x.t = tokens(x.s)));
+    const df = new Map();
+    uniq.forEach((x) => new Set(x.t.map(lite)).forEach((w) => df.set(w, (df.get(w) || 0) + 1)));
+    const N = uniq.length || 1,
+      idf = (w) => Math.log((N + 1) / ((df.get(lite(w)) || 0) + 1)) + 0.3;
+    const wsum = (arr, set) => arr.reduce((z, w) => z + (set.has(w) || set.has(lite(w)) ? idf(w) : 0), 0);
+    return {
+      g,
+      pool: uniq
+        .map((x) => {
+          const dh = x.t.filter((w) => g.D.has(lite(w))).length;
+          const score = wsum(x.t, g.stemT) * 3 + wsum(x.pt, g.stemT) * 0.8 + wsum(x.t, conT) * 1.2 + wsum(x.t, chapT) * 0.8 + Math.min(3, dh) * 0.9 + x.w;
+          return { ...x, score, stemHit: overlapN(x.t, g.stemT) + (overlapN(x.pt, g.stemT) ? 0.5 : 0), leak: leaks(x.s, g), contrast: dh > 0 };
+        })
+        .sort((a, b) => b.score - a.score),
+    };
+  }
+  function contrastFrame(q, g) {
+    const s = norm(q.stem);
+    const hits = REG()
+      .contrasts.filter((c) => c.frame && c.frame.test(s))
+      .map((c) => ({ c, n: (s.match(new RegExp(c.frame.source, "g")) || []).reduce((z, m) => z + m.length, 0) }))
+      .sort((a, b) => b.n - a.n);
+    for (const { c } of hits) {
+      const d = maskText(c.d, g),
+        la = maskText(c.a.label, g, true),
+        lb = maskText(c.b.label, g, true);
+      if (d && la && lb) return { c, d: d.text, la: la.text, lb: lb.text, masked: d.masked + la.masked + lb.masked };
+    }
+    return null;
+  }
+  function primerContent(q, l) {
+    const { g, pool } = sentencePool(l, q),
+      used = new Set();
+    // UNDERSTAND IT = the most relevant coherent paragraph (answer-blind scoring). Sentences that carry
+    // the key are masked inline as the prediction gap; anything unmaskable is dropped.
+    const byPara = new Map();
+    for (const x of pool) (byPara.get(x.pi) || byPara.set(x.pi, []).get(x.pi)).push(x);
+    let best = null,
+      bestS = -1;
+    for (const arr of byPara.values()) {
+      const sc = arr.map((x) => x.score).sort((a, b) => b - a);
+      const s = sc[0] + 0.3 * sc.slice(1, 4).reduce((z, v) => z + v, 0) + (arr.some((x) => x.stemHit >= 1) ? 2 : 0);
+      if (s > bestS) {
+        bestS = s;
+        best = arr;
+      }
+    }
+    const lines = [];
+    let gaps = 0,
+      len = 0;
+    for (const x of (best || []).slice().sort((a, b) => a.si - b.si)) {
+      if (lines.length >= 3 || len > 240) break;
+      let t = x.s;
+      if (x.leak) {
+        const m = maskText(t, g);
+        if (!m || !m.masked) continue;
+        t = m.text;
+        gaps++;
+      }
+      used.add(x.s);
+      lines.push(t);
+      len += t.length;
+    }
+    const clean = pool.filter((x) => !x.leak);
+    const model = lines.length ? short(lines.join(" "), 300) : short((clean[0] || {}).s || "", 220);
+    const subject = q.subject || l?.subject || "ANATOMY",
+      intent = classifyIntent(q, l),
+      tpl = INTENTS[intent]?.fam === "tract" ? MOVIES.TRACT : MOVIES[subject] || MOVIES.ANATOMY;
+    const steps = tpl.map(([label, re, fb]) => {
+      const hit = clean.find((x) => !used.has(x.s) && re.test(x.s));
+      if (hit) used.add(hit.s);
+      return { label, text: hit ? short(hit.s, 115) : fb, filled: !!hit };
+    });
+    return { g, model, gaps, steps, frame: contrastFrame(q, g), intent, look: INTENTS[intent]?.look || "", exam: examMove(q), cmd: preCommand(q, l) };
+  }
+  function primerHTML(d, l, q, k, depth, generated = false) {
+    l = lessonForQ(q, l) || l;
+    const pc = primerContent(q, l),
+      it = INTENTS[pc.intent] || INTENTS.identify;
+    shownCtx.set(q.id, { depth, cmd: pc.cmd.id, intent: pc.intent, at: Date.now() });
+    const vis = '<div class="v14Visuals" data-v14-plan="' + E(q.id) + '" data-v14-phase="pre"><div class="v14Skeleton"><span></span><span></span></div></div>';
+    const frame = pc.frame
+      ? '<div class="v14Frame"><div class="v14FrameSides"><span>' + E(pc.frame.la) + "</span><em>vs</em><span>" + E(pc.frame.lb) + "</span></div><p>" + E(pc.frame.d) + "</p>" + (pc.frame.masked ? "<small>▢▢▢ = your prediction gap. Fill it in your head before the options.</small>" : "") + "</div>"
+      : "";
+    const understand =
+      '<p class="v14ModelLine">' + E(pc.model || l?.mental || "Build the model from the visual before the options.") + "</p>" + (pc.gaps && !pc.frame ? '<p class="v14Cloze"><b>▢▢▢ = your prediction gap.</b> Fill it in your head before the options.</p>' : "") + frame;
+    const movie =
+      '<div class="v14Movie" data-v14-movie>' +
+      pc.steps.map((s, i) => '<button type="button" class="v14MovieStep' + (i === 0 ? " on" : "") + (s.filled ? "" : " prompt") + '" data-v14-step="' + i + '"><b>' + (i + 1) + " · " + E(s.label) + "</b><span>" + E(s.text) + "</span></button>").join("") +
+      "</div>";
+    const full = depth === "F";
+    return (
+      '<div class="v14Primer" data-v14-primer="' + E(q.id) + '" data-depth="' + depth + '">' +
+      '<div class="v14PrimerTop"><span class="v14PrimerFlag">UNDERSTAND FIRST · OPTIONS LOCKED</span><span class="v14Intent">' + E(it.label) + (full ? "" : " · COMPACT") + "</span></div>" +
+      '<div class="v14Hero">' + vis + commandHTML(pc.cmd) + "</div>" +
+      '<ol class="v14Steps">' +
+      '<li><b>1 · SEE IT · كوّن الصورة</b><p>' + E(pc.look) + "</p></li>" +
+      "<li><b>2 · UNDERSTAND IT</b>" + understand + "</li>" +
+      (full ? "<li><b>3 · BUILD THE MOVIE</b>" + movie + "</li><li><b>4 · EXAM CONVERSION</b><p>" + E(pc.exam) + "</p></li>" : "") +
+      "</ol>" +
+      '<label class="v14Predict"><span>توقّعها · predict it in your own words (optional)</span><input type="text" data-v14-pred="' + E(q.id) + '" maxlength="140" autocomplete="off" placeholder="e.g. the structure, the side, the direction…" value="' + E(V().preds[q.id] || "") + '"></label>' +
+      '<button class="primary bigAction v14Gate" data-v14-reveal="' + E(q.id) + '">I CAN PICTURE IT → ASK ME THE MCQ</button>' +
+      '<div class="v14Tiny">Tutor synthesis from the mapped lesson corpus. The exact source stem, options and key are untouched and stay hidden until you ask.' + (generated ? " This lesson has no mapped source item; the check below is tutor-generated." : "") + "</div>" +
+      "</div>"
+    );
+  }
+  function testFirstNote() {
+    return '<div class="v14TestFirst"><b>OWNED CONCEPT · TEST FIRST</b><span lang="ar" dir="rtl">رجّعها من دماغك</span> Answer from memory — the explanation compresses when you prove it.</div>';
+  }
+
+  /* ───────────────────────── post-answer: why, autopsy, discriminator ───────────────────────── */
+  function findContrast(q, keyT, chosenT) {
+    const nk = norm(keyT),
+      nc = norm(chosenT),
+      s = norm((q?.stem || "") + " " + (q?.chapter || "")),
+      qc = conceptsForQ(q, lessonForQ(q))[0]?.k;
+    let best = null;
+    for (const c of REG().contrasts) {
+      const ka = c.a.re.test(nk),
+        kb = c.b.re.test(nk),
+        ca = c.a.re.test(nc),
+        cb = c.b.re.test(nc);
+      let keySide = null;
+      if (ka && !kb && cb && !ca) keySide = "a";
+      else if (kb && !ka && ca && !cb) keySide = "b";
+      if (!keySide) continue;
+      const score = 3 + (c.frame && c.frame.test(s) ? 2 : 0) + (qc && (c.a.concept === qc || c.b.concept === qc) ? 1 : 0);
+      if (!best || score > best.score) best = { c, keySide, score };
+    }
+    if (!best) return null;
+    const k = best.keySide === "a" ? best.c.a : best.c.b,
+      o = best.keySide === "a" ? best.c.b : best.c.a;
+    return { ...best, key: k, other: o };
+  }
+  function nearestLookalike(q) {
+    const keyT = keyText(q);
+    for (const o of q.options || []) {
+      if ((q.answerKeys || []).includes(o.key)) continue;
+      const m = findContrast(q, keyT, o.text);
+      if (m) return { ...m, option: o };
+    }
+    return null;
+  }
+  function corpusSentence(l, q, wantTokens, avoidSet, minHit = 1) {
+    const { pool } = sentencePool(l, q);
+    const want = liteSet(wantTokens);
+    let best = null,
+      bestS = 0;
+    for (const x of pool) {
+      if (avoidSet && avoidSet.has(x.s)) continue;
+      const hit = overlapN(x.t, want);
+      if (hit < minHit) continue;
+      const s = hit * 3 + overlapN(x.t, guardModel(q).stemT);
+      if (s > bestS) {
+        best = x.s;
+        bestS = s;
+      }
+    }
+    return best;
+  }
+  const FELT = {
+    lookalike: "It is the nearest look-alike: same family, one different feature.",
+    crossing: "Right pathway family, wrong crossing point.",
+    laterality: "Right structure, wrong side.",
+    lesion: "The deficit pattern overlaps; the localization decides.",
+    number: "Right structure, neighbouring level.",
+    direction: "Right variable, reversed direction.",
+    route: "Right region, wrong route or opening.",
+    territory: "A neighbouring vascular territory.",
+  };
+  function autopsyAnalysis(q, sel) {
+    const l = lessonForQ(q),
+      key = keyText(q),
+      chosen = optText(q, sel),
+      nk = norm(key),
+      nc = norm(chosen),
+      g = guardModel(q);
+    if (g.negation)
+      return {
+        cls: "polarity",
+        cmd: command("core"),
+        d: "This item asked for the statement that is NOT true. “" + chosen + "” is a true statement, so it cannot be the exception; the false one is “" + key + "”. Read the polarity word first, then test each option against the model.",
+        felt: "You answered the topic, not the question's polarity.",
+      };
+    const c = findContrast(q, key, chosen);
+    if (c) return { cls: c.c.type, cmd: command(c.c.cmd), d: c.c.d, contrast: c, felt: FELT[c.c.type] || FELT.lookalike };
+    const same = /\b(same|ipsilateral|homolateral)\b/,
+      opp = /\b(opposite|contralateral|other side|crossed)\b/;
+    const hint = corpusSentence(l, q, tokens(key, false).concat([...g.stemT]), null);
+    if ((same.test(nk) && opp.test(nc)) || (opp.test(nk) && same.test(nc)))
+      return { cls: "laterality", cmd: command("side"), d: "Side decides this one: the key says " + (same.test(nk) ? "SAME side (ipsilateral)" : "OPPOSITE side (contralateral)") + ", you chose the other. Find where the pathway crosses, then read the side off the map." + (hint ? " " + short(hint, 170) : ""), felt: FELT.laterality };
+    const nums = (s) => (s.match(/\b([ctls]\d{1,2}|\d+(st|nd|rd|th)?)\b/g) || []).join("/");
+    if (nums(nk) && nums(nc) && nums(nk) !== nums(nc))
+      return { cls: "number", cmd: command("orient"), d: "The level/number decides it: key " + nums(nk).toUpperCase() + " vs your " + nums(nc).toUpperCase() + "." + (hint ? " " + short(hint, 170) : ""), felt: FELT.number };
+    const up = /increas|\brise|elevat|higher|\bmore\b|enhanc|facilitat|stimulat|excit|depolari|contract|dilat|\bopen/,
+      down = /decreas|\bfall|reduc|lower|\bless\b|inhibit|suppress|hyperpolari|relax|constrict|\bclos/;
+    if ((up.test(nk) && down.test(nc)) || (down.test(nk) && up.test(nc)))
+      return { cls: "direction", cmd: command("perturb"), d: "Direction decides it: the key goes " + (up.test(nk) ? "UP / excitatory" : "DOWN / inhibitory") + "; your choice runs the other way. Run the chain forward once." + (hint ? " " + short(hint, 170) : ""), felt: FELT.direction };
+    const fr = REG().contrasts.filter((c) => c.frame && c.frame.test(norm(q.stem))).sort((a, b) => (norm(q.stem).match(new RegExp(b.frame.source, "g")) || []).join("").length - (norm(q.stem).match(new RegExp(a.frame.source, "g")) || []).join("").length)[0];
+    if (fr) return { cls: "sibling", cmd: command(fr.cmd || "diff"), d: fr.d + " Check each word of your option against this map: one detail is swapped.", felt: "A true-sounding statement about a neighbouring structure with one detail swapped.", frame: fr };
+    const keyT = tokens(key, false).filter((w) => !GENERIC.has(w)),
+      ks = corpusSentence(l, q, keyT, null, Math.max(2, Math.ceil(keyT.length * 0.5))),
+      cs = ks ? corpusSentence(l, q, tokens(chosen, false).filter((w) => !g.stemT.has(lite(w)) && !GENERIC.has(w)), new Set([ks]), 2) : null;
+    if (ks) return { cls: "sibling", cmd: command("diff"), d: "Key: " + short(ks, 200) + (cs ? " — your option belongs to a different fact: " + short(cs, 150) : ""), felt: "A neighbouring fact from the same topic." };
+    const kd = [...g.A].slice(0, 4).join(", "),
+      cd = tokens(chosen, false).filter((w) => !g.stemT.has(lite(w)) && !g.A.has(lite(w))).slice(0, 4).join(", ");
+    return { cls: "retrieval", cmd: command("diff"), d: "The words that decide it — key: " + (kd || short(key, 60)) + "; yours: " + (cd || short(chosen, 60)) + ". Rebuild the model: " + short(prof(l).mental || l?.mental || "", 170), felt: "Retrieval gap: the model was not there yet." };
+  }
+  function whyHTML(l, q, a) {
+    l = lessonForQ(q, l) || l;
+    const key = keyText(q),
+      t = tier(l, q),
+      conf = a?.confidence || "unsure",
+      lat = latencyFor(q.id),
+      fast = Number.isFinite(lat) && lat < 20000;
+    const reason = corpusSentence(l, q, tokens(key, false).concat([...guardModel(q).stemT]), null) || prof(l).mental || l?.mental || "";
+    if (t === "owned" && conf === "confident" && fast)
+      return '<div class="v14Why compact" data-v14-why="' + E(q.id) + '"><b>✓ OWNED</b> ' + E(key) + " — " + E(short(reason, 120)) + "</div>";
+    const near = nearestLookalike(q),
+      guess = conf === "guess";
+    return (
+      '<div class="v14Why" data-v14-why="' + E(q.id) + '"><b>WHY THIS MAKES SENSE</b><div class="v14WhyAnswer">' + E(key) + "</div>" +
+      "<p>" + E(short(reason, 260)) + "</p>" +
+      (near ? '<p class="v14Near"><b>vs ' + E(near.option.text) + ":</b> " + E(short(near.c.d, guess ? 320 : 200)) + "</p>" : "") +
+      (guess ? '<p class="v14Guess"><b>Guess-correct = weak evidence.</b> Say why the nearest look-alike is wrong before moving on; this concept stays on the spaced list.</p>' : "") +
+      '<div class="v14Visuals mini" data-v14-plan="' + E(q.id) + '" data-v14-phase="post"></div>' +
+      '<div class="v14Tiny">Tutor explanation, separate from the preserved source key.</div></div>'
+    );
+  }
+  function autopsyHTML(l, q, a, opts = {}) {
+    l = lessonForQ(q, l) || l;
+    const sel = a?.selected || "",
+      an = autopsyAnalysis(q, sel),
+      key = keyText(q),
+      chosen = optText(q, sel) || String(sel || "your choice");
+    if (opts.errorId && S.errors?.[opts.errorId]) S.errors[opts.errorId].v14Cmd = an.cmd.id;
+    const e = opts.errorId ? S.errors?.[opts.errorId] : null,
+      done = !!e?.v14Recon;
+    const gate = opts.gate ? reconGateHTML(q, e, opts.errorId) : "";
+    return (
+      '<div class="v14Autopsy" data-v14-autopsy="' + E(q.id) + '" data-v14-choice="' + E(sel) + '">' +
+      '<div class="v14AutopsyHead"><div><b lang="ar" dir="rtl">ليه إجابتك غلط بصريًا؟</b><span>VISUAL WRONG-ANSWER AUTOPSY</span></div>' + commandHTML(an.cmd, "post") + "</div>" +
+      '<div class="v14Compare">' +
+      '<div class="v14CompareSide correct"><b lang="ar" dir="rtl">اللقطة الصح</b><div class="v14AutopsyVisual" data-v14-side="correct" data-v14-qid="' + E(q.id) + '" data-v14-sel="' + E(sel) + '"><div class="v14Skeleton"><span></span></div></div><strong>' + E(key) + "</strong></div>" +
+      '<div class="v14CompareSide wrong"><b lang="ar" dir="rtl">إنت خدت شبيهها / البديل الغلط</b><div class="v14AutopsyVisual" data-v14-side="wrong" data-v14-qid="' + E(q.id) + '" data-v14-sel="' + E(sel) + '"><div class="v14Skeleton"><span></span></div></div><strong>' + E(chosen) + "</strong></div>" +
+      "</div>" +
+      '<div class="v14Difference"><b lang="ar" dir="rtl">الفرق الفاصل</b><p class="v14ModelLine">' + E(an.d) + "</p><small>Why it felt right: " + E(an.felt) + "</small></div>" +
+      (opts.inlineGate ? gate : "") +
+      "</div>"
+    );
+  }
+  function reconGateHTML(q, e, errorId) {
+    const done = !!e?.v14Recon;
+    return (
+      '<div class="v14Recall" data-v14-recall="' + E(errorId) + '"><b lang="ar" dir="rtl">من غير اختيارات دلوقتي</b><span>' + E(q.stem) + "</span>" +
+        '<textarea data-v14-recon="' + E(errorId) + '" rows="2" maxlength="200" placeholder="One line: the answer + the one reason (no options).">' + E(e?.v14Recon?.t || "") + "</textarea>" +
+        '<div class="v14RecallRow"><button type="button" class="v14Aloud' + (done ? " done" : "") + '" data-v14-aloud="' + E(errorId) + '"><span lang="ar" dir="rtl">قلتها بصوتي</span> ' + (done ? "✓" : "") + '</button><small lang="ar" dir="rtl">قول الإجابة والمنطق من غير ما تبص للاختيارات، وبعدين كمّل.</small></div></div>'
+    );
+  }
+  async function hydrateAutopsySide(box) {
+    if (box.dataset.v14Done) return;
+    box.dataset.v14Done = "1";
+    const q = findQ(box.dataset.v14Qid),
+      sel = box.dataset.v14Sel,
+      side = box.dataset.v14Side;
+    if (!q) return;
+    const an = autopsyAnalysis(q, sel);
+    let pre = null;
+    try {
+      pre = await planVisuals(q, "pre");
+    } catch (_) {}
+    const conceptKey = pre?.concept,
+      ctx = { intent: pre?.intent || "identify", guard: null, stemTok: guardModel(q).stemT };
+    if (side === "correct") {
+      let c = null;
+      if (an.contrast) c = await sideVisual(an.contrast.key.re, an.contrast.key.concept || conceptKey, "", q, ctx).catch(() => null);
+      c = c || pre?.primary || null;
+      box.innerHTML = c ? visualCardHTML(c, "CORRECT ANCHOR", "post") : pre?.source ? sourceFigureHTML(pre.source) : '<div class="v14VisualMissing">Use the model text: no trustworthy image for the key concept.</div>';
+      if (c) G.note(c.key, { concept: conceptKey, modality: c.modality });
+      box.dataset.v14Key = c?.key || "";
+    } else {
+      let c = null,
+        why = "";
+      if (an.cls === "polarity") why = "Your choice was a TRUE statement — the trap was polarity, not a look-alike, so no distractor image is shown.";
+      else if (an.contrast) {
+        const correctKey = box.closest(".v14Compare")?.querySelector('[data-v14-side="correct"]')?.dataset.v14Key || pre?.primary?.key || "";
+        c = await sideVisual(an.contrast.other.re, an.contrast.other.concept || conceptKey, correctKey, q, ctx).catch(() => null);
+      } else {
+        const nc = detectConcepts(optText(q, sel), q.subject).find((x) => x.k !== conceptKey);
+        if (nc) {
+          const chosenTok = tokens(optText(q, sel), false).filter((w) => !GENERIC.has(w));
+          if (chosenTok.length) c = await sideVisual(new RegExp(chosenTok.slice(0, 4).map((w) => w.replace(/[^a-z0-9]/g, "")).join("|")), nc.k, pre?.primary?.key || "", q, ctx).catch(() => null);
+        }
+      }
+      box.innerHTML = c ? visualCardHTML(c, "YOUR CHOICE · LOOK-ALIKE", "post", "wrong") : '<div class="v14VisualMissing"><b>No trustworthy distinct visual exists for this distractor.</b> ' + E(why || "Use the decisive reasoning difference below.") + "</div>";
+      if (c) G.note(c.key, { concept: c.concept, modality: c.modality });
+    }
+    attachImgFallback(box);
+  }
+
+  /* ───────────────────────── visual hydration (lazy, near viewport) ───────────────────────── */
+  let io = null;
+  function schedule(el, fn) {
+    if (el.dataset.v14Sched) return;
+    el.dataset.v14Sched = "1";
+    if (!("IntersectionObserver" in window)) return void fn(el);
+    if (!io)
+      io = new IntersectionObserver(
+        (es) =>
+          es.forEach((e) => {
+            if (!e.isIntersecting) return;
+            io.unobserve(e.target);
+            const f = e.target.__v14fn;
+            if (f) f(e.target);
+          }),
+        { rootMargin: "450px 0px" },
+      );
+    el.__v14fn = fn;
+    io.observe(el);
+  }
+  async function hydratePlan(box) {
+    if (box.dataset.v14Done) return;
+    box.dataset.v14Done = "1";
+    const q = findQ(box.dataset.v14Plan),
+      phase = box.dataset.v14Phase || "pre";
+    if (!q) return;
+    let plan = null;
+    try {
+      plan = await planVisuals(q, "pre");
+    } catch (e) {
+      console.warn("[v14 visual]", e);
+    }
+    if (!box.isConnected) return;
+    const mini = box.classList.contains("mini") || box.dataset.v14Compact;
+    if (!plan) {
+      box.innerHTML = mini ? "" : noVisualHTML(null);
+      return;
+    }
+    const intentLabel = (INTENTS[plan.intent] || INTENTS.identify).label;
+    let h = "";
+    if (plan.source) h += sourceFigureHTML(plan.source);
+    if (plan.primary) {
+      h += visualCardHTML(plan.primary, mini ? "SAME ANCHOR" : "SEE IT · " + intentLabel, phase, "v14Main");
+      G.note(plan.primary.key, { concept: plan.concept, modality: plan.primary.modality });
+    }
+    if (!mini && plan.secondary && !plan.source) {
+      h += visualCardHTML(plan.secondary, "SECOND ANGLE", phase);
+      G.note(plan.secondary.key, { concept: plan.concept, modality: plan.secondary.modality });
+    }
+    if (!h) h = mini ? "" : noVisualHTML(plan);
+    if (!mini) {
+      if (plan.video && G.allowVideo(plan.video.id)) h += teacherHTML(plan.video);
+      h += atlasHTML(q.subject);
+    }
+    box.innerHTML = h;
+    box.classList.toggle("empty", !h);
+    const ctx = shownCtx.get(q.id);
+    if (ctx) Object.assign(ctx, { vk: plan.primary?.key || (plan.source ? "source" : ""), mod: plan.source ? "src" : plan.primary?.modality || "none", tv: plan.video?.id || "" });
+    attachImgFallback(box);
+    safe(() => wireCtxVideos(box));
+  }
+  function wireCtxVideos(root) {
+    root.querySelectorAll(".v14Teacher[data-ctx-video]").forEach((a) => {
+      if (a.dataset.v14Wired) return;
+      a.dataset.v14Wired = "1";
+      a.addEventListener("click", (e) => {
+        const modalOpen = window.INTELLECTUALITY_CONTEXT_VISUALS && document.querySelector("#ctxVideoModal");
+        if (!modalOpen) return;
+        e.preventDefault();
+        const m = document.querySelector("#ctxVideoModal"),
+          s = Number(a.dataset.ctxStart) || 0,
+          en = Number(a.dataset.ctxEnd) || 0;
+        m.querySelector(".ctxModalTitle").textContent = a.dataset.ctxTitle || "Teacher clip";
+        m.querySelector(".ctxModalFrame").innerHTML = '<iframe src="https://www.youtube.com/embed/' + E(a.dataset.ctxVideo) + "?start=" + s + (en > s ? "&end=" + en : "") + '&rel=0&playsinline=1&autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+        m.classList.add("open");
+        document.body.style.overflow = "hidden";
+      });
+    });
+  }
+
+  /* ───────────────────────── ledger & personal learning (feeds v13, never bypasses it) ───────────────────────── */
+  function latencyFor(qid) {
+    const ev = (S.v12?.evidence || []).slice(-12).reverse().find((x) => x.qid === qid);
+    return ev && Number.isFinite(ev.latencyMs) ? ev.latencyMs : null;
+  }
+  function bump(map, k, ok) {
+    if (!k) return;
+    const x = map[k] || (map[k] = { n: 0, ok: 0 });
+    x.n++;
+    if (ok) x.ok++;
+  }
+  function recordOutcome(qid, mode, extra = {}) {
+    const q = findQ(qid),
+      r = S.qbank?.results?.[qid];
+    if (!q || !r) return;
+    const ctx = shownCtx.get(qid) || {},
+      v = V(),
+      ok = !!r.ok;
+    const row = { q: qid, t: q.courseTopic || "", s: q.subject || "", i: ctx.intent || "", d: ctx.depth || "", m: ctx.mod || "", vk: (ctx.vk || "").slice(0, 60), cmd: extra.cmd || ctx.cmd || "", tv: ctx.tv || "", c: r.confidence || "", ok, lat: latencyFor(qid), mode, at: new Date().toISOString() };
+    v.ledger.push(row);
+    if (v.ledger.length > 150) v.ledger.splice(0, v.ledger.length - 150);
+    if (mode === "p") {
+      bump(v.stats.mod, row.m, ok);
+      bump(v.stats.cmd, row.cmd, ok);
+      bump(v.stats.depth, row.d, ok);
+      bump(v.stats.teacher, row.tv, ok);
+      if (ctx.vk) {
+        bump(v.vstats, ctx.vk, ok);
+        capMap(v.vstats, 300, (x) => x.n);
+      }
+    }
+    if (mode === "r") bump(v.stats.repairCmd, row.cmd, ok);
+    persistSoon();
+  }
+
+  /* ───────────────────────── retest law ───────────────────────── */
+  function retestPick(e, src) {
+    const PE = window.NEU205_PATTERN || {},
+      near = new Set([...(PE.nearAvoid?.[src.id] || [])]);
+    const srcStem = liteSet(tokens(src.stem)),
+      srcAll = liteSet(tokens(src.stem + " " + keyText(src))),
+      srcConcept = conceptsForQ(src, lessonForQ(src))[0]?.k;
+    const retestList = new Set(PE.retest?.[src.id] || []);
+    const pool = (QB.questions || []).filter(
+      (q) => q.split === "practice" && q.autoScore && !q.requiresVisual && q.id !== src.id && !S.qbank.used[q.id] && !near.has(q.id) && !(PE.nearAvoid?.[q.id] || []).includes(src.id) && (q.subject === src.subject || (q.lessonIds || []).some((id) => (src.lessonIds || []).includes(id))),
+    );
+    let best = null,
+      bestS = 0;
+    for (const q of pool) {
+      const st = tokens(q.stem),
+        jac = overlapN(st, srcStem) / Math.max(1, new Set([...st.map(lite), ...srcStem]).size);
+      if (jac > 0.7 || norm(q.stem) === norm(src.stem)) continue; // trivial wording mutation
+      let s = overlapN(tokens(q.stem + " " + (q.options || []).map((o) => o.text).join(" ")), srcAll) * 2;
+      if (q.chapter === src.chapter) s += 3;
+      if ((q.lessonIds || []).some((id) => (src.lessonIds || []).includes(id))) s += 2;
+      if (retestList.has(q.id)) s += 3;
+      if (srcConcept && conceptsForQ(q, lessonForQ(q))[0]?.k === srcConcept) s += 4;
+      s += (PE.qScore?.[q.id] || 0) / 60;
+      if (s > bestS) {
+        best = q;
+        bestS = s;
+      }
+    }
+    return bestS >= 5 ? best : null;
+  }
+
+  /* ───────────────────────── decorate after each render ───────────────────────── */
+  let parkedShown = 0;
+  function decorate() {
+    const cal = V().calendar?.today ? V().calendar : syncCalendar();
+    const top = document.querySelector(".courseTopbar");
+    if (top) {
+      let chip = document.querySelector("#v14Calendar");
+      if (!chip) {
+        chip = document.createElement("div");
+        chip.id = "v14Calendar";
+        chip.className = "v14Calendar";
+        const crumb = top.querySelector(".courseCrumb");
+        if (crumb) crumb.appendChild(chip);
+        else top.appendChild(chip);
+      }
+      chip.textContent = chipText(cal);
+      chip.classList.toggle("behind", cal.debt > 0);
+    }
+    const stage = document.querySelector("#player .stage");
+    const kind = safe(() => nextAction()?.kind, "");
+    if (stage && kind !== "MOCK" && !stage.querySelector(".v14Carryover")) {
+      const b = calendarBannerHTML(cal);
+      const bs = cal.banner && cal.banner.date === cal.today ? cal.banner : (cal.banner = { date: cal.today, seqs: [] });
+      if (b && (bs.seqs.includes(G.seq) || bs.seqs.length < 3)) {
+        if (!bs.seqs.includes(G.seq)) bs.seqs.push(G.seq);
+        stage.insertAdjacentHTML("afterbegin", b);
+      }
+    }
+    const note = V().notice;
+    if (stage && note && note.kind === "parked" && parkedShown !== note.at) {
+      parkedShown = note.at;
+      stage.insertAdjacentHTML("afterbegin", '<div class="v14Carryover parked"><b>PARKED FOR SPACED REPAIR</b><span>' + E(note.topic) + ": three changed items in a row still missed. More drilling now has low yield — it returns as spaced repair tomorrow.</span></div>");
+      delete V().notice;
+      persistSoon();
+    }
+    document.querySelectorAll("[data-v14-feed]").forEach((el) => {
+      const id = el.dataset.v14Feed,
+        v = V();
+      if (id && v.feed[id] !== S.day) {
+        v.feed[id] = S.day;
+        capMap(v.feed, 200, (x) => x);
+        persistSoon();
+      }
+    });
+    companions();
+    wireV14();
+  }
+  function assessmentContext(node) {
+    const st = node.closest(".stage,.mockQ");
+    return !!(node.closest(".mockQ") || st?.querySelector('[data-act="mock-qbank"],[data-act="mock-choice"],[data-act="mock-reveal"],[data-act="retest-qbank"],[data-act="retest-mcq"],[data-act="retest-reveal"],[data-act="practical-source-choice"],[data-fast-choice]'));
+  }
+  function companions() {
+    document.querySelectorAll('#player .ctxCompanion[data-ctx-kind="question"]').forEach((c) => {
+      if (c.dataset.v14Handled) return;
+      c.dataset.v14Handled = "1";
+      const row = c.closest(".ctxRow");
+      if (assessmentContext(c)) {
+        c.remove();
+        row?.classList.add("v14Solo");
+        return;
+      }
+      const stage = c.closest(".stage"),
+        qid = stage?.querySelector('[data-act="qbank-choice"]')?.dataset.qid || stage?.querySelector('[data-act="finish-qbank"]') && stage.querySelector("[data-v14-why]")?.dataset.v14Why;
+      const q = findQ(qid);
+      if (!q || tier(lessonForQ(q), q) === "owned") {
+        c.remove();
+        row?.classList.add("v14Solo");
+        return;
+      }
+      c.className = "ctxCompanion v14Anchor";
+      c.innerHTML = '<div class="v14Visuals mini" data-v14-plan="' + E(q.id) + '" data-v14-phase="' + (S.answers && Object.values(S.answers).some((a) => a?.sourceQuestionId === q.id && a.answered) ? "post" : "pre") + '" data-v14-compact="1"></div>';
+    });
+  }
+  function wireV14() {
+    document.querySelectorAll("[data-v14-reveal]").forEach((b) => {
+      if (b.dataset.v14Wired) return;
+      b.dataset.v14Wired = "1";
+      b.onclick = () => {
+        const id = b.dataset.v14Reveal,
+          v = V(),
+          inp = document.querySelector('[data-v14-pred="' + CSS.escape(id) + '"]');
+        v.primed[id] = S.day;
+        capMap(v.primed, 400, (x) => x);
+        const t = (inp?.value || "").trim().slice(0, 140);
+        if (t) {
+          v.preds[id] = t;
+          capMap(v.preds, 100, () => 0);
+        }
+        safe(() => save());
+        render();
+      };
+    });
+    document.querySelectorAll("[data-v14-pred]").forEach((inp) => {
+      if (inp.dataset.v14Wired) return;
+      inp.dataset.v14Wired = "1";
+      inp.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") document.querySelector('[data-v14-reveal="' + CSS.escape(inp.dataset.v14Pred) + '"]')?.click();
+      });
+    });
+    document.querySelectorAll("[data-v14-recon]").forEach((ta) => {
+      if (ta.dataset.v14Wired) return;
+      ta.dataset.v14Wired = "1";
+      ta.addEventListener("input", () => {
+        const e = S.errors?.[ta.dataset.v14Recon],
+          val = ta.value.trim();
+        if (!e) return;
+        if (val.length >= 3) {
+          e.v14Recon = { m: "typed", t: val.slice(0, 160), at: new Date().toISOString() };
+          unlockRepair(e.id);
+          persistSoon();
+        }
+      });
+    });
+    document.querySelectorAll("[data-v14-aloud]").forEach((b) => {
+      if (b.dataset.v14Wired) return;
+      b.dataset.v14Wired = "1";
+      b.onclick = () => {
+        const e = S.errors?.[b.dataset.v14Aloud];
+        if (!e) return;
+        e.v14Recon = e.v14Recon?.t ? e.v14Recon : { m: "aloud", at: new Date().toISOString() };
+        b.classList.add("done");
+        if (!/✓/.test(b.textContent)) b.insertAdjacentText("beforeend", " ✓");
+        unlockRepair(e.id);
+        persistSoon();
+      };
+    });
+    document.querySelectorAll("[data-v14-movie]").forEach((m) => {
+      if (m.dataset.v14Wired) return;
+      m.dataset.v14Wired = "1";
+      m.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-v14-step]");
+        if (!b) return;
+        m.querySelectorAll("[data-v14-step]").forEach((x) => x.classList.toggle("on", x === b));
+      });
+    });
+    document.querySelectorAll("[data-v14-plan]").forEach((el) => schedule(el, hydratePlan));
+    document.querySelectorAll(".v14AutopsyVisual").forEach((el) => schedule(el, hydrateAutopsySide));
+  }
+  function unlockRepair(id) {
+    document.querySelectorAll('[data-act="repair"][data-v14-gate="' + CSS.escape(id) + '"]').forEach((b) => {
+      b.disabled = false;
+      b.classList.remove("v14Locked");
+    });
+  }
+
+  /* ───────────────────────── wrappers ───────────────────────── */
+  function screenKey() {
+    const a = safe(() => nextAction(), {}) || {};
+    return [S.day, a.kind, a.l?.id, a.si, a.e?.id, a.e?.retestIndex, S.mock?.active ? S.mock.i : "", a.kind === "MOCK" ? "m" : ""].join(":");
+  }
+  function install() {
+    V();
+    prepConcepts();
+    syncCalendar();
+
+    // Pin the served question per (day, lesson, slot) so answering never swaps the item underneath
+    // the learner; avoid same-day recognition of items shown in the professor feed.
+    const oldQFor = qbankForLesson;
+    qbankForLesson = function (l, d, slot = 0) {
+      const v = V(),
+        pk = d.day + ":" + l.id + ":" + slot,
+        pinned = v.pins[pk] ? findQ(v.pins[pk]) : null;
+      if (pinned && pinned.split === "practice" && !pinned.generated) return pinned;
+      let q = oldQFor(l, d, slot);
+      if (q && v.feed[q.id] === d.day) {
+        const others = new Set(Object.values(v.pins)),
+          PE = window.NEU205_PATTERN || {};
+        let pool = qbankPoolForLesson(l, d, "practice").filter((x) => x.id !== q.id && !S.qbank.used[x.id] && v.feed[x.id] !== d.day && !others.has(x.id));
+        const fresh = pool.filter((x) => !(PE.nearAvoid?.[x.id] || []).some((id) => S.qbank.used[id]));
+        if (fresh.length) pool = fresh;
+        pool.sort((a, b) => (PE.qScore?.[b.id] || 0) - (PE.qScore?.[a.id] || 0) + (hash01(pk + ":" + a.id) - hash01(pk + ":" + b.id)) * 7);
+        if (pool[0]) q = pool[0];
+      }
+      if (q) {
+        v.pins[pk] = q.id;
+        for (const k of Object.keys(v.pins)) {
+          const dd = Number(k.split(":")[0]);
+          if (dd < S.day - 2 || dd > S.day + 2) delete v.pins[k];
+        }
+        persistSoon();
+      }
+      return q;
+    };
+
+    const oldQV = qbankQuestionView;
+    qbankQuestionView = function (d, l, q, k, conf) {
+      const a = S.answers[k],
+        depth = primerDepth(lessonForQ(q, l), q);
+      if (!a?.answered && depth !== "T" && V().primed[q.id] !== S.day) return primerHTML(d, l, q, k, depth);
+      if (!shownCtx.has(q.id)) shownCtx.set(q.id, { depth, cmd: preCommand(q, lessonForQ(q, l)).id, intent: classifyIntent(q, l), at: Date.now() });
+      let h = oldQV(d, l, q, k, conf);
+      if (!a?.answered && depth === "T") h = testFirstNote() + h;
+      if (a?.answered && a.ok) {
+        const marker = '<button class="primary bigAction" data-act="finish-qbank"';
+        const why = whyHTML(l, q, a);
+        h = h.indexOf(marker) >= 0 ? h.replace(marker, why + marker) : h + why;
+      }
+      if (V().preds[q.id] && a?.answered) h = h.replace('<div class="sourceFeedback', '<div class="v14YourPred"><b>Your prediction:</b> ' + E(V().preds[q.id]) + '</div><div class="sourceFeedback');
+      return h;
+    };
+
+    const oldQuestionView = questionView;
+    questionView = function (d, l, q, k, conf) {
+      const a = S.answers[k],
+        gq = findQ(q.id) || genQ(q, l),
+        depth = primerDepth(l, gq);
+      if (!a?.revealed && a?.ok === undefined && depth !== "T" && V().primed[q.id] !== S.day) return primerHTML(d, l, gq, k, depth, true);
+      let h = oldQuestionView(d, l, q, k, conf);
+      if (a?.ok === true) h += whyHTML(l, gq, { confidence: a.confidence });
+      return h;
+    };
+
+    const oldRepair = repairView;
+    repairView = function (e) {
+      const qid = e?.v14LastMissQuestionId || e?.sourceQuestionId,
+        q = findQ(qid),
+        sel = e?.v14LastMissSelected || e?.selected,
+        autopsy = !!(q && sel && q.options?.length);
+      let h;
+      if (autopsy) {
+        const keep = window.INTELLECTUALITY_TOPIC_VISUAL;
+        window.INTELLECTUALITY_TOPIC_VISUAL = () => "";
+        try {
+          h = oldRepair(e);
+        } finally {
+          window.INTELLECTUALITY_TOPIC_VISUAL = keep;
+        }
+      } else h = oldRepair(e);
+      const marker = '<button class="primary bigAction" data-act="repair"';
+      const l = lessonById(e.lessonId);
+      if (autopsy) {
+        const card = autopsyHTML(l, q, { selected: sel, confidence: e.confidence }, { gate: true, errorId: e.id });
+        h = h.replace('<div class="stage">', '<div class="stage" data-v14-noctx="1">');
+        const at = h.indexOf('<div class="repair"><b>');
+        h = at >= 0 ? h.slice(0, at) + card + h.slice(at) : h.replace(marker, card + marker);
+      }
+      const card = autopsy
+        ? reconGateHTML(q, e, e.id)
+        : '<div class="v14Recall" data-v14-recall="' + E(e.id) + '"><b lang="ar" dir="rtl">رجّعها من دماغك</b><span>' + E(l?.draw || "Rebuild the model without looking.") + '</span><textarea data-v14-recon="' + E(e.id) + '" rows="2" maxlength="200" placeholder="One line: the model in your own words.">' + E(e.v14Recon?.t || "") + '</textarea><div class="v14RecallRow"><button type="button" class="v14Aloud' + (e.v14Recon ? " done" : "") + '" data-v14-aloud="' + E(e.id) + '"><span lang="ar" dir="rtl">قلتها بصوتي</span>' + (e.v14Recon ? " ✓" : "") + "</button></div></div>";
+      const gated = e.v14Recon ? marker + ' data-v14-gate="' + E(e.id) + '"' : marker + ' data-v14-gate="' + E(e.id) + '" disabled';
+      return h.indexOf(marker) >= 0 ? h.replace(marker, card + gated.replace(marker, marker)) : h + card;
+    };
+
+    const oldRetestView = retestView;
+    retestView = function (e) {
+      let h = oldRetestView(e);
+      if (/data-act="retest-(mcq|reveal|grade)"/.test(h)) h = h.replace('<span class="chip warn">CHANGED RETEST</span>', '<span class="chip warn">CHANGED RETEST</span><span class="chip">TUTOR-GENERATED PROBE · NOT SOURCE-BANK EVIDENCE</span>');
+      return h;
+    };
+
+    const oldRetestFor = qbankRetestForError;
+    qbankRetestForError = function (e) {
+      const idx = e.retestIndex || 0,
+        src = findQ(e.sourceQuestionId);
+      if (e.v14Retest && e.v14Retest.i === idx) {
+        const q = findQ(e.v14Retest.q);
+        if (q && q.split === "practice") return q;
+      }
+      let q = src && !src.generated ? retestPick(e, src) : null;
+      if (!q) q = oldRetestFor(e);
+      if (q && q.split !== "practice") q = null; // firewall: a held-out item is never a repair item
+      if (q) e.v14Retest = { i: idx, q: q.id };
+      return q;
+    };
+
+    const oldMockResult = mockResultView;
+    mockResultView = function (m) {
+      let h = oldMockResult(m);
+      const cards = m.items
+        .map((q, i) => ({ q, a: m.answers[i] }))
+        .filter((x) => x.a?.ok === false && x.q?.answerKeys && x.a.selected)
+        .map((x, i) => '<details class="v14MockAutopsy"' + (i === 0 ? " open" : "") + "><summary>Miss " + (i + 1) + " · " + E(x.q.chapter || x.q.courseTopic || "MCQ") + "</summary>" + autopsyHTML(null, x.q, x.a, {}) + "</details>")
+        .join("");
+      const marker = '<button class="primary bigAction" data-act="finish-mock"';
+      return cards && h.indexOf(marker) >= 0 ? h.replace(marker, '<h3 class="v14H">Visual autopsies · consumed items only</h3>' + cards + marker) : h;
+    };
+
+    const oldNext = nextAction;
+    nextAction = function () {
+      if (S.mock?.active) return { kind: "MOCK" };
+      return oldNext();
+    };
+
+    const oldHUD = renderHUD;
+    renderHUD = function () {
+      safe(syncCalendar);
+      const out = oldHUD.apply(this, arguments);
+      safe(() => {
+        const cal = V().calendar,
+          d = day(),
+          ey = document.querySelector("#eyebrow");
+        if (ey) ey.textContent = "DAY " + d.day + "/" + C.days.length + " · " + phaseLabel(d) + " · " + (cal.debt > 0 ? "WORK " + fmtDay(d.date) + " · TODAY " + fmtDay(cal.today) : fmtDay(cal.today));
+      });
+      return out;
+    };
+
+    const oldUI = window.INTELLECTUALITY_COURSE_UI;
+    window.INTELLECTUALITY_COURSE_UI = function () {
+      const out = oldUI ? oldUI.apply(this, arguments) : undefined;
+      safe(() => {
+        const cal = V().calendar,
+          d = day(),
+          lab = document.querySelector("#railToday .railLabel");
+        if (lab) lab.textContent = cal.debt > 0 ? "WORK DAY " + d.day + " · " + fmtDay(d.date) + " · " + (cal.mode === "catchup" ? "CATCH-UP" : "CARRYOVER") : "TODAY · DAY " + d.day + " · " + fmtDay(cal.today);
+      });
+      return out;
+    };
+
+    const oldAct = act;
+    act = function (b) {
+      const kind = b?.dataset?.act,
+        qid = b?.dataset?.qid,
+        id = b?.dataset?.id,
+        choice = b?.dataset?.choice,
+        cur = safe(() => currentLessonSegment(), null);
+      if (kind === "repair") {
+        const e = S.errors?.[id];
+        if (e && !e.v14Recon) return; // reconstruction gate (defence in depth beyond the disabled button)
+      }
+      const before = kind === "retest-qbank" || kind === "retest-mcq" || kind === "retest-grade" ? S.errors?.[id] : null,
+        cmdAtRetest = before?.v14Cmd || "";
+      const out = oldAct(b);
+      if (kind === "qbank-choice" && qid) {
+        const r = S.qbank?.results?.[qid];
+        if (r?.ok === true && cur?.key && cur.seg?.type === "question") {
+          S.segments[cur.key] = false; // keep the answered item on screen for "why", pinned; NEXT completes it
+          safe(() => save());
+          render();
+        }
+        setTimeout(() => safe(() => recordOutcome(qid, "p")), 260);
+      }
+      if ((kind === "retest-qbank" || kind === "retest-mcq" || kind === "retest-grade") && before) {
+        const e = S.errors?.[id];
+        if (kind === "retest-qbank" && qid) {
+          const r = S.qbank?.results?.[qid];
+          if (e && r?.ok === false) {
+            e.v14LastMissQuestionId = qid;
+            e.v14LastMissSelected = choice;
+            e.v14Recon = null;
+          }
+          setTimeout(() => safe(() => recordOutcome(qid, "r", { cmd: cmdAtRetest })), 260);
+        } else if (e && !e.resolved) e.v14Recon = null;
+        if (e && !e.resolved && (e.retestIndex || 0) >= 3) {
+          // Loop guard: three changed items missed → park to spaced repair instead of an endless loop.
+          e.resolved = true;
+          e.readyRetest = false;
+          e.v14Parked = new Date().toISOString();
+          const m = S.memory?.[e.topic];
+          if (m) m.halfLife = Math.min(m.halfLife || 1, 1);
+          V().parked.push({ id: e.id, topic: e.topic, at: e.v14Parked });
+          V().parked = V().parked.slice(-40);
+          V().notice = { kind: "parked", topic: e.topic, at: Date.now() };
+        }
+        safe(() => save());
+        render();
+      }
+      if (kind === "certify") safe(syncCalendar);
+      return out;
+    };
+
+    const oldRender = render;
+    render = function () {
+      safe(() => G.beginRender(screenKey()));
+      const out = oldRender.apply(this, arguments);
+      setTimeout(() => safe(decorate), 20);
+      return out;
+    };
+
+    const oldWire = wire;
+    wire = function () {
+      const out = oldWire.apply(this, arguments);
+      safe(wireV14);
+      return out;
+    };
+
+    window.INTELLECTUALITY_V14 = {
+      version: VERSION,
+      canFastLane,
+      tier,
+      primerDepth,
+      syncCalendar,
+      cairoYMD,
+      chipText: () => chipText(V().calendar?.today ? V().calendar : syncCalendar()),
+      classifyIntent,
+      conceptsForQ: (id) => (findQ(id) ? conceptsForQ(findQ(id), lessonForQ(findQ(id))).map((c) => c.k) : []),
+      plan: (id, phase = "pre") => (findQ(id) ? planVisuals(findQ(id), phase, { sandbox: true }) : Promise.resolve(null)),
+      primerContent: (id) => (findQ(id) ? primerContent(findQ(id), lessonForQ(findQ(id))) : null),
+      autopsy: (id, sel) => (findQ(id) ? autopsyAnalysis(findQ(id), sel) : null),
+      retestFor: (errorId) => (S.errors?.[errorId] ? qbankRetestForError(S.errors[errorId]) : null),
+      preCommand: (id) => (findQ(id) ? preCommand(findQ(id), lessonForQ(findQ(id))) : null),
+      guard: (id) => (findQ(id) ? guardModel(findQ(id)) : null),
+      leaks: (text, id) => leaks(text, guardModel(findQ(id))),
+      audit,
+      governor: G,
+      visualPlanCount: () => (QB.questions || []).length,
+    };
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) dateTick();
+    });
+    window.addEventListener("focus", dateTick);
+    window.addEventListener("pageshow", dateTick);
+    setInterval(dateTick, 60000);
+    persistSoon();
+  }
+
+  /* ───────────────────────── on-device visual diversity audit ───────────────────────── */
+  async function audit(opts = {}) {
+    // Simulates a study session over a systematic sample of practice items through the real
+    // governor and live Commons, without persisting assignments or history.
+    const n = opts.n || 60,
+      pool = (QB.questions || []).filter((q) => q.split === "practice" && q.autoScore),
+      per = { ANATOMY: Math.round(n * 0.4), PHYSIOLOGY: Math.round(n * 0.4) };
+    per.HISTOLOGY = n - per.ANATOMY - per.PHYSIOLOGY;
+    const bySub = {};
+    for (const s of Object.keys(per)) {
+      const arr = pool.filter((q) => q.subject === s),
+        step = Math.max(1, Math.floor(arr.length / per[s]));
+      bySub[s] = [];
+      for (let i = opts.offset || 0; i < arr.length && bySub[s].length < per[s]; i += step) bySub[s].push(arr[i]);
+    }
+    const sample = [];
+    for (let i = 0; sample.length < n && i < n; i++) for (const s of ["ANATOMY", "PHYSIOLOGY", "HISTOLOGY"]) if (bySub[s][i]) sample.push(bySub[s][i]);
+    const snap = G.snapshot(),
+      rows = [],
+      firstSeen = new Map();
+    try {
+      for (let i = 0; i < sample.length; i++) {
+        const q = sample[i];
+        G.beginRender("audit:" + i);
+        const plan = await planVisuals(q, "pre", { sandbox: true });
+        const k = plan.primary?.key || (plan.source ? "source:" + q.id : "");
+        if (plan.primary) G.note(plan.primary.key, { concept: plan.concept, modality: plan.primary.modality });
+        const dist = k && firstSeen.has(k) ? i - firstSeen.get(k) : null;
+        if (k && !firstSeen.has(k)) firstSeen.set(k, i);
+        else if (k) firstSeen.set(k, i);
+        rows.push({ i, qid: q.id, subject: q.subject, topic: q.courseTopic, intent: plan.intent, concept: plan.concept, primary: plan.primary ? cleanTitle(plan.primary.title) : plan.source ? "SOURCE FIGURE" : "", origin: plan.primary?.origin || (plan.source ? "source" : ""), modality: plan.primary?.modality || "", license: plan.primary?.license || "", sourceFigure: !!plan.source, repeatDistance: dist, reason: plan.reason });
+      }
+    } finally {
+      G.restore(snap);
+    }
+    const withV = rows.filter((r) => r.primary),
+      keys = withV.map((r) => r.primary),
+      uniq = new Set(keys).size;
+    const exact = withV.filter((r) => r.repeatDistance != null).length,
+      adj = withV.filter((r) => r.repeatDistance === 1).length;
+    const metrics = {
+      n: rows.length,
+      primaryCoveragePct: +((withV.length / Math.max(1, rows.length)) * 100).toFixed(1),
+      uniqueVisualPct: +((uniq / Math.max(1, withV.length)) * 100).toFixed(1),
+      exactRepeatPct: +((exact / Math.max(1, withV.length)) * 100).toFixed(1),
+      adjacentRepeatPct: +((adj / Math.max(1, withV.length)) * 100).toFixed(1),
+      noVisualPct: +(((rows.length - withV.length) / Math.max(1, rows.length)) * 100).toFixed(1),
+      irrelevantPct: "requires human review of rows[].primary",
+    };
+    return { metrics, rows };
+  }
+
+  window.INTELLECTUALITY_V14_INIT = function () {
+    if (window.INTELLECTUALITY_V14_INSTALLED) return;
+    window.INTELLECTUALITY_V14_INSTALLED = true;
+    try {
+      install();
+    } catch (e) {
+      console.error("[v14 init fail-safe]", e);
+    }
+  };
 })();

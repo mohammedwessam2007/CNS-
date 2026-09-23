@@ -6,7 +6,7 @@ const safe=(fn,f=null)=>{try{return fn()}catch(_){return f}};
 function lessonById(id){for(const d of C.days||[]){const l=(d.lessons||[]).find(x=>x.id===id);if(l)return l}return null}
 function currentLesson(){const id=document.querySelector('[data-lesson-id]')?.dataset.lessonId;return id?lessonById(id):safe(()=>currentLessonSegment()?.l,null)}
 function currentTopic(){return document.querySelector('#courseCrumbTitle')?.textContent?.trim()||currentLesson()?.topic||''}
-function snippets(){return [...document.querySelectorAll('.spoonCard .bigSay,.spoonFact .a,.professorLead,.professorModel')].map(x=>(x.textContent||'').replace(/\s+/g,' ').trim()).filter(x=>x.length>=18).slice(0,6)}
+function snippets(){return [...document.querySelectorAll('.spoonCard .bigSay,.spoonFact .a,.professorLead,.professorModel,.v14ModelLine,.v14Cue')].map(x=>(x.textContent||'').replace(/\s+/g,' ').trim()).filter(x=>x.length>=18).slice(0,6)}
 function beginEpisode(){const l=currentLesson();episode={started:Date.now(),topic:l?.topic||currentTopic(),lessonId:l?.id||'',subject:l?.subject||'',deep:false,videos:[],visual:false,audio:false,vision:false,snippets:snippets()}}
 function methods(ep){const x=[];if(ep?.vision)x.push('vision');if(ep?.videos?.length)x.push('video');if(ep?.deep)x.push('deep');if(ep?.audio)x.push('audio');if(ep?.visual)x.push('visual');if(!x.length)x.push('feed');return [...new Set(x)]}
 function observeScreen(){
@@ -18,7 +18,7 @@ function finishScreen(){if(!screen)return;const ms=Math.min(Math.max(0,Date.now(
 function captureScroll(){if(!screen)return;const d=document.documentElement,den=Math.max(1,d.scrollHeight-innerHeight),p=T().clamp(scrollY/den);screen.scrollMax=Math.max(screen.scrollMax||0,p)}
 function trackInteraction(e){
  lastInteraction=Date.now();const s=T().session();s.lastSeen=new Date().toISOString();
- const el=e.target?.closest?.('[data-ctx-video],.realImg,.ctxImage a,[data-prof-speak],[data-v12="vision"]');if(!el)return;if(!episode)beginEpisode();
+ const el=e.target?.closest?.('[data-ctx-video],.realImg,.ctxImage a,.v14Visual,[data-prof-speak],[data-v12="vision"]');if(!el)return;if(!episode)beginEpisode();
  if(el.dataset.ctxVideo){if(!episode.videos.includes(el.dataset.ctxVideo))episode.videos.push(el.dataset.ctxVideo);s.videos++}
  else if(el.matches('[data-prof-speak]')){episode.audio=true;s.audio++}
  else if(el.dataset.v12==='vision'){episode.vision=true;s.vision++}

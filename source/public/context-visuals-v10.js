@@ -126,34 +126,56 @@ function closeVideo(){const m=document.querySelector('#ctxVideoModal');if(!m)ret
 function wireVideos(root=document){
  root.querySelectorAll('[data-ctx-video]').forEach(a=>{if(a.dataset.ctxVideoWired)return;a.dataset.ctxVideoWired='1';a.addEventListener('click',e=>{e.preventDefault();openVideo(a.dataset.ctxVideo,a.dataset.ctxStart,a.dataset.ctxTitle,a.dataset.ctxEnd)})});
 }
+/* v14.1 · companions are answer-blind, skipped in assessment contexts, and governed by the shared
+   anti-repeat governor: ≤3 distinct images per screen, no duplicate image or teacher card per screen,
+   recently-shown images rotate out, and a line collapses to text when no fresh relevant image exists. */
+function assessmentNode(node){
+ const st=node.closest('.stage,.mockQ');
+ return !!(node.closest('.mockQ')||st?.querySelector('[data-act="mock-qbank"],[data-act="mock-choice"],[data-act="mock-reveal"],[data-act="retest-qbank"],[data-act="retest-mcq"],[data-act="retest-reveal"],[data-act="practical-source-choice"],[data-fast-choice]'));
+}
 function companion(node,l,kind){
  const text=(node.innerText||node.textContent||'').replace(/\s+/g,' ').trim();
  if(text.length<18)return null;
- const q=findQ(text),query=queryFor((q?.stem||'')+' '+(q?.answerText||'')+' '+text,l),vids=bestVideos(text,l,1);
+ if(kind==='question'&&assessmentNode(node))return null;
+ const G=window.INTELLECTUALITY_VISUAL_GOVERNOR;
+ const q=findQ(text),query=queryFor((q?.stem||'')+' '+text,l),vids=bestVideos(text,l,1).filter(v=>!G||G.allowVideo(v.id));
  const shell=document.createElement('div');shell.className='ctxCompanion';shell.dataset.ctxQuery=query;shell.dataset.ctxKind=kind||'explain';
  if(q?.visualData){
    shell.innerHTML='<div class="ctxImage source"><img src="'+q.visualData+'" alt="Actual source-bank visual" loading="lazy"><div class="ctxSource">ACTUAL SOURCE-BANK FIGURE · p.'+E(q.page||'—')+'</div></div>'+(vids[0]?ytCard(vids[0],l,true):'');
  }else{
    shell.innerHTML='<div class="ctxImage commons"><div class="ctxLoading">visualizing…</div></div>'+(vids[0]?ytCard(vids[0],l,true):'');
  }
+ if(kind==='question'&&window.INTELLECTUALITY_V14)shell.dataset.ctxLoaded='1';
  return shell;
 }
 const cache=new Map();
-async function commonsOne(query){
+async function commonsList(query){
  if(cache.has(query))return cache.get(query);
- try{
-  const u='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(query)+'&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=700&format=json&origin=*';
-  const r=await fetch(u),j=await r.json();
-  const rows=Object.values(j.query?.pages||{}).map(p=>{const ii=p.imageinfo?.[0]||{};return{title:p.title||'',thumb:ii.thumburl,url:ii.descriptionurl||'',license:ii.extmetadata?.LicenseShortName?.value||'Commons',mime:ii.mime||''}}).filter(x=>x.thumb&&/^image\/(jpeg|png|webp|svg\+xml)/.test(x.mime)&&!/logo|flag|coat of arms|icon|portrait/i.test(x.title));
-  const hit=rows[0]||null;cache.set(query,hit);return hit;
- }catch(_){cache.set(query,null);return null}
+ const u='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(query)+'&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url|mime|extmetadata&iiextmetadatafilter=LicenseShortName&iiurlwidth=700&format=json&origin=*';
+ const task=(async()=>{
+  try{
+   const NET=window.INTELLECTUALITY_V14_NET;
+   const j=NET?await NET.json(u):await (await fetch(u)).json();
+   return Object.values(j.query?.pages||{}).map(p=>{const ii=p.imageinfo?.[0]||{};return{title:p.title||'',thumb:ii.thumburl,url:ii.descriptionurl||'',license:String(ii.extmetadata?.LicenseShortName?.value||'Commons').replace(/<[^>]*>/g,''),mime:ii.mime||''}}).filter(x=>x.thumb&&/^image\/(jpeg|png|webp|svg\+xml)/.test(x.mime)&&!/logo|flag|coat of arms|icon|portrait|statue|stamp|poster/i.test(x.title));
+  }catch(_){cache.delete(query);return[]}
+ })();
+ cache.set(query,task);return task;
+}
+function collapse(shell){
+ shell.querySelector('.ctxImage')?.remove();
+ if(!shell.children.length){const row=shell.closest('.ctxRow');shell.remove();row?.classList.add('v14Solo')}
 }
 async function hydrate(shell){
  if(shell.dataset.ctxLoaded)return;shell.dataset.ctxLoaded='1';
  const box=shell.querySelector('.ctxImage.commons');if(!box)return;
- const hit=await commonsOne(shell.dataset.ctxQuery||'human neuroanatomy');
- if(!hit){box.innerHTML='<div class="ctxMissing">No useful real image found</div>';return}
- box.innerHTML='<a href="'+E(hit.url)+'" target="_blank" rel="noopener"><img src="'+E(hit.thumb)+'" alt="'+E(hit.title.replace(/^File:/,''))+'" loading="lazy"><span>'+E(hit.title.replace(/^File:/,'').replace(/_/g,' '))+'</span></a>';
+ const G=window.INTELLECTUALITY_VISUAL_GOVERNOR;
+ if(G&&(!G.allowV10()||!G.allowFetch())){collapse(shell);return}
+ const rows=await commonsList(shell.dataset.ctxQuery||'human neuroanatomy');
+ if(!shell.isConnected)return;
+ const hit=G?G.pick(rows.map((r,i)=>({...r,key:G.gkey(r.title),score:10-i*2})),{surface:'v10',concept:shell.dataset.ctxQuery}):rows[0];
+ if(!hit||(G&&!G.allowV10())){collapse(shell);return}
+ if(G){G.claimV10();G.note(hit.key,{surface:'v10',concept:shell.dataset.ctxQuery,modality:'dia'})}
+ box.innerHTML='<a href="'+E(hit.url)+'" target="_blank" rel="noopener"><img src="'+E(hit.thumb)+'" alt="'+E(hit.title.replace(/^File:/,''))+'" loading="lazy"><span>'+E(hit.title.replace(/^File:/,'').replace(/_/g,' '))+' · '+E(hit.license)+'</span></a>';
 }
 let ctxObserver=null;
 function scheduleHydrate(shell){
@@ -168,7 +190,7 @@ function wrapTarget(node,l,kind){
  const parent=node.parentNode;if(!parent)return;
  const row=document.createElement('div');row.className='ctxRow';row.dataset.lessonId=l?.id||'';
  parent.insertBefore(row,node);row.appendChild(node);
- const c=companion(node,l,kind);if(c){row.appendChild(c);scheduleHydrate(c)}
+ const c=companion(node,l,kind);if(c){row.appendChild(c);scheduleHydrate(c)}else row.classList.add('v14Solo');
 }
 function questionTargets(root){
  const out=[...root.querySelectorAll('.mockQ h3,.sourcePrompt')];
@@ -177,7 +199,7 @@ function questionTargets(root){
  return [...new Set(out)];
 }
 function visibleExplainTargets(root){
- return [...root.querySelectorAll('.spoonFact,.spoonCard,.kasrMove,.professorLead,.professorModel,.professorExam,.professorTrap,.professorVisual,.professorCheck,.mental,.repair,.writtenBoss,.practicalBoss')].filter(x=>!x.closest('.deepOptional'));
+ return [...root.querySelectorAll('.spoonFact,.spoonCard,.kasrMove,.professorLead,.professorModel,.professorExam,.professorTrap,.professorVisual,.professorCheck,.mental,.repair,.writtenBoss,.practicalBoss')].filter(x=>!x.closest('.deepOptional')&&!x.closest('[data-v14-noctx]'));
 }
 function deepTargets(details){return [...details.querySelectorAll('.pstep,.professorLead,.professorModel,.professorExam,.professorTrap,.professorVisual,.professorCheck')]}
 function lecturerStrip(root){
@@ -187,6 +209,8 @@ function lecturerStrip(root){
  const strip=document.createElement('div');strip.className='lecturerStrip';strip.dataset.lessonId=l.id;
  strip.innerHTML='<div class="lecturerTitle">REAL VISUAL TEACHERS · pick only if the professor feed needs another angle</div><div class="lecturerGrid">'+vids.map(v=>ytCard(v,l,false)).join('')+'</div>';
  host.parentNode.insertBefore(strip,host.nextSibling);
+ // v14.1: the strip already offers these teachers; drop duplicate mini cards from line companions.
+ root.querySelectorAll('.ctxCompanion .ctxVideo.mini').forEach(a=>{if(vids.some(v=>v.id===a.dataset.ctxVideo)){const sh=a.closest('.ctxCompanion');a.remove();if(sh&&!sh.children.length){const row=sh.closest('.ctxRow');sh.remove();row?.classList.add('v14Solo')}}});
 }
 window.INTELLECTUALITY_CONTEXT_VISUALS=function(root=document){
  const scope=root.querySelector?.('#player')||root;
