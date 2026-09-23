@@ -5,7 +5,7 @@ if (process.env.IX_STANDIN_NO_CLOUD !== "1") process.env.IX_MEMORY_STORE = "1";
 const http = require("http"), fs = require("fs"), path = require("path");
 const ROOT = path.resolve(__dirname, "../deploy/vercel");
 const DIST = path.join(ROOT, "dist"), PORT = Number(process.argv[2] || 8790);
-const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css", ".json": "application/json", ".png": "image/png" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css", ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif" };
 const handlers = {};
 async function handler(name) {
   if (!handlers[name]) handlers[name] = (await import(path.join(ROOT, "api", name + ".js"))).default;

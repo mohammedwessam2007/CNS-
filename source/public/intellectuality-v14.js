@@ -608,6 +608,13 @@
   function netData(url, transform = (x) => x) {
     // Global concurrency cap (2), 7 s abort, in-memory promise cache, compact local cache.
     if (NET.mem.has(url)) return NET.mem.get(url);
+    // v15.1: a Commons file lookup whose files are all bundled in the app is answered locally
+    const loc = typeof window.INTELLECTUALITY_LOCAL_NET === "function" ? window.INTELLECTUALITY_LOCAL_NET(url) : null;
+    if (loc) {
+      const p = Promise.resolve(transform(loc));
+      NET.mem.set(url, p);
+      return p;
+    }
     const hit = lsGet(url);
     if (hit) {
       const p = Promise.resolve(hit);
@@ -951,11 +958,12 @@
   function visualCardHTML(c, label, phase, extra = "") {
     const title = cleanTitle(c.title);
     return (
-      '<a class="v14Visual ' + extra + '" href="' + E(c.page) + '" target="_blank" rel="noopener" data-v14-vkey="' + E(c.key) + '">' +
+      // v15.1: no outside link; a tap enlarges the picture inside the app (learn-v15.js zoom)
+      '<a class="v14Visual ' + extra + '" role="button" tabindex="0" data-v14-page="' + E(c.page) + '" data-v14-vkey="' + E(c.key) + '">' +
       '<span class="v14Img"><img src="' + E(c.thumb) + '" alt="' + (phase === "pre" ? "Question visual — title hidden until you answer" : E(title)) + '" loading="lazy" decoding="async"></span>' +
       '<span class="v14Cap"><b>' + E(label) + (c.modality ? " · " + E(MOD_LABEL[c.modality] || "") : "") + "</b>" +
       (phase === "pre" ? "" : "<i>" + E(c.caption || title) + "</i>") +
-      "<small>" + E(c.license || "license on file page") + (c.artist ? " · " + E(c.artist) : "") + " · " + E(c.via || "Wikimedia Commons") + " ↗</small></span></a>"
+      "<small>" + E(c.license || "license on file page") + (c.artist ? " · " + E(c.artist) : "") + " · " + E(c.via || "Wikimedia Commons") + "</small></span></a>"
     );
   }
   function sourceFigureHTML(src) {
@@ -1000,6 +1008,8 @@
     );
   }
   function atlasHTML(subject) {
+    // v15.1: the owner asked for pictures inside the app, not links to press; atlas link cards are off.
+    if (window.INTELLECTUALITY_NO_LINKS !== false) return "";
     const a = (REG().atlas?.[subject] || [])[0];
     return a ? '<a class="v14AcademicRef" href="' + E(a.href) + '" target="_blank" rel="noopener"><b>ACADEMIC ATLAS · LINK ONLY</b><span>' + E(a.label) + " · " + E(a.terms) + "</span></a>" : "";
   }

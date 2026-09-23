@@ -23,6 +23,8 @@ async function toKind(page, want, max = 30) {
   return null;
 }
 const lessonTaughtKey = (lid) => (d) => d.lessons.some((l) => l.id === lid);
+// BUNDLED=1: APP_URL is a Vercel build whose /pics bundle was made (tests/host_ctl.sh with IX_PICS_MOCK=1)
+const BUNDLED = process.env.BUNDLED === '1';
 
 (async () => {
   const t0 = Date.now();
@@ -32,15 +34,26 @@ const lessonTaughtKey = (lid) => (d) => d.lessons.some((l) => l.id === lid);
     const { page, log } = s;
     const wikiOnHome = (log.wiki || []).length;
     const k = await toKind(page, /teach/);
+    const netAtLecture = { wiki: (log.wiki || []).length, commons: log.commons.length };
     await page.waitForTimeout(900);
     const r = await page.evaluate(() => {
       const a = nextAction(), secs = INTELLECTUALITY_V15.sectionsForLesson(a.l.id);
       const figs = [...document.querySelectorAll('#player .v15Pic')];
-      return { lesson: a.l.id, n: secs.length, big: !!document.querySelector('.v15Big'), h: document.querySelector('.v15Sec h3')?.textContent, top: document.querySelector('.v15Top')?.innerText, figs: figs.length, hydrated: figs.filter((f) => f.querySelector('.v15Fig img')).length, licensed: figs.filter((f) => /Public domain|CC BY/.test(f.innerText)).length, via: figs.map((f) => (f.querySelector('.v15Cap small')?.textContent || '').replace(/.*· (Wikipedia[^↗]*)↗.*/, '$1').trim()), links: document.querySelectorAll('#player .v15Links a').length, cmd: document.querySelector('.v15Cmd span')?.textContent, recall: !!document.querySelector('.v15Recall .v15RQ'), mcq: document.querySelectorAll('#player [data-act="qbank-choice"]').length, wallpaper: document.querySelectorAll('#player .ctxCompanion, #player .realVisualBank').length };
+      return { lesson: a.l.id, n: secs.length, big: !!document.querySelector('.v15Big'), h: document.querySelector('.v15Sec h3')?.textContent, top: document.querySelector('.v15Top')?.innerText, figs: figs.length, hydrated: figs.filter((f) => f.querySelector('.v15Fig img')).length, licensed: figs.filter((f) => /Public domain|CC BY/.test(f.innerText)).length, via: figs.map((f) => (f.querySelector('.v15Cap small')?.textContent || '').replace(/.*· (Wikipedia.*)$/, '$1').trim()), links: document.querySelectorAll('#player .v15Learn a[href]').length, local: figs.filter((f) => /^\/pics\//.test(f.querySelector('.v15Fig img')?.getAttribute('src') || '')).length, bundle: !!window.INTELLECTUALITY_PICS, cmd: document.querySelector('.v15Cmd span')?.textContent, recall: !!document.querySelector('.v15Recall .v15RQ'), mcq: document.querySelectorAll('#player [data-act="qbank-choice"]').length, wallpaper: document.querySelectorAll('#player .ctxCompanion, #player .realVisualBank').length };
     });
     check('L1', 'Teach step = LEARN lecture: whole-picture intro, section 1/N, Egyptian command, no MCQ, no topic wallpaper', /teach/.test(k) && r.n >= 3 && r.big && /SECTION 1 \/ /.test(r.top) && !!r.cmd && r.mcq === 0 && r.wallpaper === 0, { k, ...r });
-    check('L2', 'Each section picture is fetched for its exact term (Wikipedia article → free Commons file, license shown) with search-everywhere links', r.figs >= 1 && r.hydrated === r.figs && r.licensed === r.figs && r.via.every((v) => /^Wikipedia · /.test(v)) && r.links >= 2 * r.figs, r);
+    check('L2', 'Each section picture is shown for its exact term (Wikipedia article → free Commons file, licence shown), inside the app: no link to press', r.figs >= 1 && r.hydrated === r.figs && r.licensed === r.figs && r.via.every((v) => /^Wikipedia · /.test(v)) && r.links === 0, r);
     check('L2b', 'No Wikipedia request on the first (home) screen: pictures load only when their page is shown', wikiOnHome === 0, { wikiOnHome });
+    if (BUNDLED) check('L2c', 'Bundled build: every lecture picture is served from the app itself (/pics/…) and the lecture page makes no Wikipedia or Commons request', r.bundle && r.local === r.figs && (log.wiki || []).length === netAtLecture.wiki && log.commons.length === netAtLecture.commons, { local: r.local, figs: r.figs, wikiOnLecture: (log.wiki || []).length - netAtLecture.wiki, commonsOnLecture: log.commons.length - netAtLecture.commons, commonsBefore: netAtLecture.commons });
+    // tap a picture → in-app zoom; tap outside → closed; the page never navigates away
+    const url0 = page.url();
+    await page.evaluate(() => document.querySelector('#player .v15Fig').click()); await page.waitForTimeout(200);
+    const z = await page.evaluate(() => { const d = document.querySelector('.v15Zoom'); return d ? { img: d.querySelector('img')?.getAttribute('src'), cap: d.querySelector('.v15ZoomCap')?.innerText.slice(0, 60), h: d.querySelector('.v15ZoomX').getBoundingClientRect().height } : null; });
+    await page.evaluate(() => document.querySelector('.v15Zoom .v15ZoomImg img').click()); await page.waitForTimeout(80);
+    const big = await page.evaluate(() => document.querySelector('.v15Zoom')?.classList.contains('big'));
+    await page.evaluate(() => document.querySelector('.v15Zoom').click()); await page.waitForTimeout(80);
+    const closed = await page.evaluate(() => !document.querySelector('.v15Zoom'));
+    check('L2d', 'Tap a picture → it opens large inside the app (2× on tap, closes on tap outside); no navigation', !!z && !!z.img && z.h >= 44 && big && closed && page.url() === url0, { z, big, closed });
     // recall: miss section 1, then page to the end
     await page.evaluate(() => { document.querySelector('[data-act="v15-show"]').click(); document.querySelector('[data-act="v15-rate"][data-ok="0"]').click(); });
     const missed = await page.evaluate(() => document.querySelector('.v15Rate')?.innerText || '');
@@ -112,15 +125,18 @@ const lessonTaughtKey = (lid) => (d) => d.lessons.some((l) => l.id === lid);
     check('L7', 'After a wrong answer the autopsy links back to the note section that teaches the question', /FROM YOUR NOTES/.test(post.note), { note: post.note });
     check('L8', 'Option pictures use the exact words of the option: every exact-term picture names a term whose words are all in that option', precise, { exact: exactCells.length, cells: post.cells.map((c) => c.label + ' ⇐ ' + c.text.slice(0, 50)) });
     check('L8b', 'No page errors after answering', log.errors.length === 0, log.errors.slice(0, 2));
+    const outside = await page.evaluate(() => [...document.querySelectorAll('#player a[href]')].map((a) => a.getAttribute('href')).filter((h) => /wikimedia|wikipedia|google\.|radiopaedia|kenhub/.test(h)));
+    const cards = await page.evaluate(() => ({ cards: document.querySelectorAll('#player .v14Visual, #player .v15Fig, #player .realImg').length, local: [...document.querySelectorAll('#player .v14Visual img, #player .v15Fig img, #player .realImg img')].filter((i) => /^\/pics\//.test(i.getAttribute('src') || '')).length }));
+    check('L8c', 'After answering: no picture card is an outside link (options, autopsy, note card, topic pictures)' + (BUNDLED ? '; bundled pictures used where available' : ''), outside.length === 0 && (!BUNDLED || cards.local > 0), { outside: outside.slice(0, 3), ...cards });
     await s.close();
   }
 
-  // ── L9: Wikipedia unreachable → honest note + search links, still no errors ──
+  // ── L9: Wikipedia unreachable → bundled pictures still show (bundled build) or an honest note ──
   {
     const s = await open({ time: '2026-09-21T10:00:00+03:00', state: null, settle: 900, wikiFail: true, commonsFail: true });
     await toKind(s.page, /teach/); await s.page.waitForTimeout(1200);
-    const r = await s.page.evaluate(() => ({ figs: document.querySelectorAll('#player .v15Pic').length, notes: [...document.querySelectorAll('#player .v15NoPic')].map((x) => x.innerText.slice(0, 80)), links: document.querySelectorAll('#player .v15NoPic .v15Links a').length, text: (document.querySelector('.v15Pts')?.innerText || '').length }));
-    check('L9', 'Picture sources down: each figure says so honestly and offers search-everywhere links; the lecture text is intact', r.figs >= 1 && r.notes.length === r.figs && r.links >= 2 && r.text > 100 && s.log.errors.length === 0, r);
+    const r = await s.page.evaluate(() => ({ figs: document.querySelectorAll('#player .v15Pic').length, shown: document.querySelectorAll('#player .v15Pic .v15Fig img').length, notes: [...document.querySelectorAll('#player .v15NoPic')].map((x) => x.innerText.slice(0, 80)), links: document.querySelectorAll('#player .v15Learn a[href]').length, text: (document.querySelector('.v15Pts')?.innerText || '').length }));
+    check('L9', BUNDLED ? 'Wikipedia and Commons down: every lecture picture still shows (bundled in the app); the lecture text is intact' : 'Picture sources down: each figure says so honestly (no links); the lecture text is intact', r.figs >= 1 && (BUNDLED ? r.shown === r.figs : r.notes.length === r.figs) && r.links === 0 && r.text > 100 && s.log.errors.length === 0, r);
     await s.close();
   }
 

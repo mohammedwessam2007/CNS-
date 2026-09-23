@@ -1,4 +1,4 @@
-// INTELLECTUALITY v15.0 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
+// INTELLECTUALITY v15.1 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
 // Usage: node tests/certify.js [outDir]   (server: node tests/serve.js source/public 8787)
 const fs = require('fs');
 const path = require('path');
@@ -344,8 +344,8 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     // Commons outage: text model still renders immediately, honest no-visual state
     const s = await open({ time: T('2026-09-22T10:00:00+03:00'), state: null, settle: 1000, commonsFail: true });
     await toQuestion(s.page); await s.page.waitForTimeout(900);
-    const r = await s.page.evaluate(() => ({ primer: !!document.querySelector('.v14Primer'), model: (document.querySelector('.v14ModelLine')?.textContent || '').length, missing: !!document.querySelector('.v14Primer .v14VisualMissing'), gate: !!document.querySelector('[data-v14-reveal]') }));
-    check('L6', 'Remote image host down: primer text + gate still work, honest no-visual state', r.primer && r.model > 30 && r.missing && r.gate, r);
+    const r = await s.page.evaluate(() => ({ primer: !!document.querySelector('.v14Primer'), model: (document.querySelector('.v14ModelLine')?.textContent || '').length, missing: !!document.querySelector('.v14Primer .v14VisualMissing'), gate: !!document.querySelector('[data-v14-reveal]'), bundled: [...document.querySelectorAll('.v14Primer .v14Visual img')].filter((i) => /^\/pics\//.test(i.getAttribute('src') || '')).length, remote: [...document.querySelectorAll('.v14Primer .v14Visual img')].filter((i) => !/^\/pics\//.test(i.getAttribute('src') || '')).length }));
+    check('L6', 'Remote image host down: primer text + gate still work; pictures bundled in the app still show, otherwise an honest no-visual state', r.primer && r.model > 30 && (r.missing || (r.bundled > 0 && r.remote === 0)) && r.gate, r);
     check('N9', 'No page errors when Commons is unreachable', s.log.errors.length === 0, s.log.errors.slice(0, 3));
     await s.close();
   }

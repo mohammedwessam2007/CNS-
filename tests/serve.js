@@ -3,7 +3,7 @@
 const http = require('http'), fs = require('fs'), path = require('path');
 const ROOT = path.resolve(process.argv[2] || path.join(__dirname, '..', 'source', 'public'));
 const PORT = Number(process.argv[3] || 8787);
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.json': 'application/json' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.json': 'application/json' };
 let cloud = null, version = 0;
 http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x');

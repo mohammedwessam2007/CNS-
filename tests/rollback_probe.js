@@ -32,5 +32,5 @@ const { open } = require('./harness');
   await s.close();
   out.pass = out.v142.errors.length === 0 && out.v53.errors.length === 0 && !out.v53.renderErr && out.back.errors.length === 0 && out.back.schema === 2 && out.back.primed >= 1 && out.back.v53FieldsDropped;
   console.log(JSON.stringify(out, null, 1));
-  require('fs').writeFileSync(process.argv[2] || 'out/rollback_probe.json', JSON.stringify(out, null, 1));
+  require('fs').writeFileSync(process.argv[2] || require('path').join(__dirname, 'out', 'rollback_probe.json'), JSON.stringify(out, null, 1));
 })();

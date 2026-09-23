@@ -16,7 +16,7 @@
  */
 (function () {
   "use strict";
-  const VERSION = "15.0";
+  const VERSION = "15.1";
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
   const SP = [[/fibre/g, "fiber"], [/\bgrey/g, "gray"], [/centre/g, "center"], [/haem/g, "hem"], [/oesoph/g, "esoph"], [/oedema/g, "edema"], [/ambiguous/g, "ambiguus"], [/leminisc/g, "lemnisc"], [/mamill/g, "mammill"], [/lentiform/g, "lenticular"], [/\b1st\b/g, "first"], [/\b2nd\b/g, "second"], [/\b3rd\b/g, "third"], [/\b4th\b/g, "fourth"], [/\b5th\b/g, "fifth"], [/\b6th\b/g, "sixth"], [/\b7th\b/g, "seventh"], [/\b8th\b/g, "eighth"]];
   const norm = (s) => SP.reduce((z, [a, b]) => z.replace(a, b), String(s || "").toLowerCase()).replace(/[^a-z0-9]+/g, " ").trim();
@@ -221,10 +221,62 @@
     if (!clinical && PATHO.test(file + " " + caption)) s -= 3;
     return s;
   }
+  /* ── bundled pictures (v15.1) ──
+   * The Vercel build downloads a real, freely licensed picture for every note term, plus every fixed
+   * registry file, into /pics and lists them in window.INTELLECTUALITY_PICS (deploy/vercel/pics.mjs).
+   * Those are shown from the app's own domain: nothing to press, nothing to wait for. A term that
+   * was not bundled still uses the live lookup below. */
+  const PICS = () => (isObj(window.INTELLECTUALITY_PICS) ? window.INTELLECTUALITY_PICS : null);
+  const fileKey = (t) => {
+    let k = String(t || "").replace(/^File:/i, "");
+    try {
+      k = decodeURIComponent(k);
+    } catch (_) {}
+    k = k.replace(/ /g, "_");
+    return k.charAt(0).toUpperCase() + k.slice(1);
+  };
+  const UPL = /^https?:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/(?:thumb\/)?[0-9a-f]\/[0-9a-f]{2}\/([^/?#]+)/i;
+  function localFile(titleOrUrl) {
+    const P = PICS();
+    if (!P || !isObj(P.files)) return null;
+    const m = String(titleOrUrl || "").match(UPL);
+    return P.files[fileKey(m ? m[1] : titleOrUrl)] || null;
+  }
+  // Commons "imageinfo by title" request → answered from the bundle when every file is in it
+  // (used by the v9/v14 topic pictures through INTELLECTUALITY_V14_NET). Searches still go live.
+  function localNet(url) {
+    const P = PICS();
+    if (!P || !isObj(P.files) || !/commons\.wikimedia\.org\/w\/api\.php/.test(url)) return null;
+    let u;
+    try {
+      u = new URL(url);
+    } catch (_) {
+      return null;
+    }
+    const titles = u.searchParams.get("titles");
+    if (!titles || u.searchParams.get("generator") || !/imageinfo/.test(u.searchParams.get("prop") || "")) return null;
+    const pages = {};
+    let i = 0;
+    for (const t of titles.split("|")) {
+      const f = localFile(t);
+      if (!f) return null;
+      const mime = /\.svg$/i.test(t) ? "image/svg+xml" : /\.png$/i.test(t) ? "image/png" : /\.gif$/i.test(t) ? "image/gif" : /\.webp$/i.test(t) ? "image/webp" : "image/jpeg";
+      pages[String(-++i)] = { title: f.title || t, imageinfo: [{ thumburl: f.src, url: f.src, descriptionurl: "https://commons.wikimedia.org/wiki/" + encodeURIComponent(f.title || t), mime, width: f.w || 960, height: f.h || 720, extmetadata: { LicenseShortName: { value: f.license || "" }, Artist: { value: f.artist || "" } } }] };
+    }
+    return { query: { pages } };
+  }
+  function localTerm(term, avoid) {
+    const P = PICS(),
+      t = P && isObj(P.terms) ? P.terms[term] : null;
+    if (!t || !t.src || (avoid && avoid.has(t.title))) return null;
+    return { key: "exact:" + t.title, title: t.title, thumb: t.src, page: "", license: t.license, artist: t.artist, mime: "", modality: modality(t.title, ""), caption: t.caption || "", via: t.via || "Wikimedia Commons", term, exact: (t.score || 0) >= 4, origin: "exact", concept: "", local: true };
+  }
   // Picture for one exact term (a Wikipedia article title). `phrase` supplies the extra words
   // used to pick among the article's images by caption.
   async function pictureForTerm(term, phrase, opt = {}) {
     const avoid = opt.avoid || new Set();
+    const loc = opt.noLocal ? null : localTerm(term, avoid);
+    if (loc) return loc;
     let art = await wikiArticle(term).catch(() => null);
     if (!art || art.missing) {
       const t = await wikiSearch(term, new Set(toks(phrase + " " + term))).catch(() => null);
@@ -250,7 +302,8 @@
       // local (non-Commons) Wikipedia files are often non-free: never shown
       if (!info || info.missing || !OKMIME.test(info.mime)) continue;
       if (Math.min(info.w, info.h) && Math.min(info.w, info.h) < 180) continue;
-      return { key: "exact:" + info.title, title: info.title, thumb: info.thumb, page: info.page, license: info.license, artist: info.artist, mime: info.mime, modality: modality(info.title, info.mime), caption: c.cap || info.desc || "", via: c.via, term, exact: c.s >= 4, origin: "exact", concept: "" };
+      const lf = localFile(info.title);
+      return { key: "exact:" + info.title, title: info.title, thumb: lf ? lf.src : info.thumb, local: !!lf, page: info.page, license: info.license, artist: info.artist, mime: info.mime, modality: modality(info.title, info.mime), caption: c.cap || info.desc || "", via: c.via, term, exact: c.s >= 4, origin: "exact", concept: "" };
     }
     return null;
   }
@@ -266,27 +319,75 @@
     }
     return null;
   }
-  function searchLinks(term, subject) {
-    const hint = subject === "HISTOLOGY" ? " histology" : subject === "PHYSIOLOGY" ? " diagram" : " anatomy";
-    const q = encodeURIComponent(term + hint);
-    return (
-      '<span class="v15Links">🔎 ' +
-      '<a href="https://www.google.com/search?tbm=isch&q=' + q + '" target="_blank" rel="noopener">Google Images</a>' +
-      (subject === "ANATOMY" ? ' · <a href="https://radiopaedia.org/search?q=' + encodeURIComponent(term) + '" target="_blank" rel="noopener">Radiopaedia</a>' : "") +
-      ' · <a href="https://www.google.com/search?q=' + encodeURIComponent("site:kenhub.com " + term) + '" target="_blank" rel="noopener">Kenhub</a></span>'
-    );
-  }
+  // v15.1: a figure, not a link. A tap opens the in-app zoom (openZoom); credit stays visible.
   function picHTML(r, label) {
     return (
-      '<a class="v15Fig" href="' + E(r.page) + '" target="_blank" rel="noopener" data-v15-key="' + E(r.key) + '">' +
+      '<div class="v15Fig" role="button" tabindex="0" aria-label="Enlarge: ' + E(label || r.term) + '" data-v15-key="' + E(r.key) + '"' + (r.local ? ' data-v15-local="1"' : "") + ">" +
       '<span class="v15Img"><img src="' + E(r.thumb) + '" alt="' + E(r.term) + '" loading="lazy" decoding="async"></span>' +
       '<span class="v15Cap"><b>' + E(label || r.term) + " · " + E(MOD[r.modality] || "") + "</b>" +
       (r.caption ? "<i>" + E(r.caption) + "</i>" : "") +
-      "<small>" + E(r.license || "license on file page") + (r.artist ? " · " + E(r.artist) : "") + " · " + E(r.via || "Wikimedia Commons") + " ↗</small></span></a>"
+      "<small>" + E(r.license || "free licence") + (r.artist ? " · " + E(r.artist) : "") + " · " + E(r.via || "Wikimedia Commons") + "</small></span></div>"
     );
   }
-  const missingHTML = (term, subject, why) =>
-    '<div class="v15NoPic"><b>' + E(why || "No free picture found for exactly “" + term + "”.") + "</b>" + searchLinks(term, subject) + "</div>";
+  const missingHTML = (term, subject, why) => '<div class="v15NoPic"><b>' + E(why || "No free picture of exactly “" + term + "” yet.") + "</b><span>The words above carry it: build the picture in your head from them.</span></div>";
+
+  /* ── in-app zoom: every picture card opens here, never on another site ── */
+  const CARD = ".v15Fig, .v14Visual, .realImg, .ctxImage a, .v15Zoomable";
+  function closeZoom() {
+    document.querySelectorAll(".v15Zoom").forEach((z) => z.remove());
+    document.documentElement.classList.remove("v15ZoomOpen");
+  }
+  function openZoom(card) {
+    const img = card.querySelector("img");
+    if (!img) return;
+    const cap = card.querySelector(".v15Cap, .v14Cap, .realCap, span:not(.v15Img):not(.v14Img)");
+    closeZoom();
+    const d = document.createElement("div");
+    d.className = "v15Zoom";
+    d.setAttribute("role", "dialog");
+    d.setAttribute("aria-modal", "true");
+    d.setAttribute("aria-label", "Picture");
+    // cap is this app's own escaped DOM (a pre-answer card never contains the title)
+    d.innerHTML = '<button type="button" class="v15ZoomX" data-v15-zoom-close aria-label="Close">✕</button><div class="v15ZoomImg"><img src="' + E(img.currentSrc || img.src) + '" alt="' + E(img.alt) + '"></div>' + (cap ? '<div class="v15ZoomCap">' + cap.innerHTML + "</div>" : "") + '<div class="v15ZoomHint">Tap the picture for 2× · tap outside to close</div>';
+    document.body.appendChild(d);
+    document.documentElement.classList.add("v15ZoomOpen");
+    d.querySelector(".v15ZoomX").focus?.();
+  }
+  function onZoomClick(ev) {
+    const z = ev.target.closest?.(".v15Zoom");
+    if (z) {
+      if (ev.target.closest(".v15ZoomImg img")) z.classList.toggle("big");
+      else if (ev.target.closest("[data-v15-zoom-close]") || !ev.target.closest(".v15ZoomCap")) closeZoom();
+      return;
+    }
+    const card = ev.target.closest?.(CARD);
+    if (!card || !card.querySelector("img") || card.closest("button,[data-act],[data-ctx-video]") || card.matches("[data-ctx-video]")) return;
+    ev.preventDefault();
+    openZoom(card);
+  }
+  // Bundled copies replace remote thumbnails wherever the file is in the bundle, and picture cards
+  // from older layers (v9/v10) lose their outside link.
+  function localize(root) {
+    if (!root || !root.querySelectorAll) return;
+    const imgs = root.matches?.("img") ? [root] : root.querySelectorAll('img[src*="upload.wikimedia.org"]');
+    imgs.forEach((img) => {
+      const f = /upload\.wikimedia\.org/.test(img.getAttribute("src") || "") && localFile(img.getAttribute("src"));
+      if (f) {
+        img.src = f.src;
+        img.dataset.v15Local = "1";
+      }
+    });
+    root.querySelectorAll("a[href]").forEach((a) => {
+      const h = a.getAttribute("href") || "";
+      if (!a.querySelector("img") || a.hasAttribute("data-ctx-video") || !/wikimedia\.org|wikipedia\.org/.test(h)) return;
+      a.dataset.v15Page = h;
+      a.removeAttribute("href");
+      a.removeAttribute("target");
+      a.setAttribute("role", "button");
+      a.tabIndex = 0;
+      a.classList.add("v15Zoomable");
+    });
+  }
 
   /* ───────────────────────── state ───────────────────────── */
   const isObj = (x) => !!x && typeof x === "object" && !Array.isArray(x);
@@ -442,10 +543,18 @@
         if (!fig.isConnected) return;
         if (r) {
           onPage.add(r.title);
-          fig.innerHTML = picHTML(r, r.term) + searchLinks(term, subj);
+          fig.innerHTML = picHTML(r, r.term);
         } else fig.innerHTML = missingHTML(term, subj, navigator.onLine === false ? "Offline: the picture of “" + term + "” loads when you are back online." : "");
         const img = fig.querySelector("img");
-        if (img) img.onerror = () => (fig.innerHTML = missingHTML(term, subj, "The picture of “" + term + "” did not load."));
+        if (img)
+          img.onerror = async () => {
+            // a bundled copy that fails to load → the live lookup, then the honest note
+            const live = r && r.local ? await pictureForTerm(term, fig.dataset.v15Focus || term, { avoid: onPage, focus: fig.dataset.v15Focus, noLocal: true }).catch(() => null) : null;
+            if (!fig.isConnected) return;
+            fig.innerHTML = live && !live.local ? picHTML(live, live.term) : missingHTML(term, subj, "The picture of “" + term + "” did not load.");
+            const im2 = fig.querySelector("img");
+            if (im2) im2.onerror = () => (fig.innerHTML = missingHTML(term, subj, "The picture of “" + term + "” did not load."));
+          };
       };
       // details (closed) and off-screen figures load when opened / near the viewport
       const det = fig.closest("details");
@@ -457,7 +566,23 @@
     const { secs } = pagesFor(a),
       i = Number(V().pos[a.key]) || 0,
       s = secs[i + 1];
-    if (s) (s.pic || []).slice(0, 2).forEach((t) => setTimeout(() => pictureForTerm(t, s.h, { focus: s.h }).catch(() => null), 1200));
+    // warm the next page: bundled pictures go straight into the browser cache
+    if (s)
+      (s.pic || []).slice(0, 2).forEach((t) =>
+        setTimeout(
+          () =>
+            pictureForTerm(t, s.h, { focus: s.h })
+              .then((r) => {
+                if (r && r.local) {
+                  const im = new Image();
+                  im.decoding = "async";
+                  im.src = r.thumb;
+                }
+              })
+              .catch(() => null),
+          1200,
+        ),
+      );
   }
 
   /* ───────────────────────── wiring ───────────────────────── */
@@ -557,6 +682,20 @@
       return out;
     };
     document.addEventListener("click", onClick);
+    document.addEventListener("click", onZoomClick, true);
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape") closeZoom();
+      else if ((ev.key === "Enter" || ev.key === " ") && ev.target.matches?.(".v15Fig,.v14Visual,.v15Zoomable")) {
+        ev.preventDefault();
+        openZoom(ev.target);
+      }
+    });
+    window.INTELLECTUALITY_LOCAL_NET = localNet;
+    localize(document.body);
+    if (typeof MutationObserver === "function")
+      new MutationObserver((ms) => {
+        for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1) localize(n);
+      }).observe(document.body, { childList: true, subtree: true });
     window.INTELLECTUALITY_V15 = {
       version: VERSION,
       sectionsForLesson: (lid) => sectionsForLesson(lid).map((s) => ({ id: s.id, h: s.h, pic: s.pic || [], chapter: s.ch.chapter })),
@@ -577,7 +716,7 @@
       },
     };
     // exact-words picture service used by the v14 option gallery and autopsy
-    window.INTELLECTUALITY_EXACT = { pic, pictureForTerm, termsFor, searchLinks };
+    window.INTELLECTUALITY_EXACT = { pic, pictureForTerm, termsFor, localFile, bundled: () => (PICS() ? PICS().stats || {} : null) };
   }
   function boot() {
     if (window.INTELLECTUALITY_V15_INSTALLED) return;
