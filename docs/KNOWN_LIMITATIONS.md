@@ -1,6 +1,17 @@
-# Known Limitations (v15.3)
+# Known Limitations (v16.0 · MCQ exam)
 
-v15.3 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v16.0 MCQ exam system (MCQ focus is the default)
+
+- **Explanations are hand-written and not reviewed by a clinician.** All 921 practice and all 399 usable held-out past papers have one: why the key is right, plus a line for every wrong option. They follow Guyton, Snell, Gray's and Junqueira-level teaching. A wrong reason could still be in there.
+- **Doubtful keys: both answers are accepted in the app, but the exam grades by its own key.** 25 keys look wrong (17 practice, 8 held-out) and 37 other options are also defensible (28 + 9). The explanation always says what the bank keys and what standard teaching says. On the real paper, the department's key decides.
+- **Held-out explanations were written after the notes were frozen** (commit `a6f2cbf`). The notes were not changed from held-out items. Held-out explanations show only after a mock answer (test M6d).
+- **One held-out item cannot be used.** `ANAT-EMBRYOLOGY-DEVELOPMENT-OF-CNS-MCQ-8` has two keys and is not auto-scored, so 399 of 400 are in mocks.
+- **Four source items had two options glued together** by the PDF extraction (e.g. "c) Lacerum. d· rotundum."). The v16 view shows them as separate a–d options. The bank file itself is unchanged, so the legacy (focus ALL) views still show three options.
+- **The predicted score is only as good as the bank.** It comes from first attempts at never-seen held-out past papers (Wilson 80% interval, n ≥ 20). The real paper will also have questions outside the bank. The notes teach 68.1% of held-out answers at chapter level and 49.7% at section level (measured before the held-out items were read). So new questions may score lower than the prediction.
+- **Time per day is a simulation.** A learner who studies every day was simulated to average about 108 min, with a maximum of 141 min. Missed days make catch-up days longer (the block size shrinks, but the backlog is still paced to finish teaching by day 47).
+- **Written and practical steps are off until the MCQ exam is over.** They come back by themselves on 16 Nov, the day after the planning anchor (test M11). If the real MCQ date moves, the anchor in the course data must move too, or MCQ focus ends a day after the old date. Nothing in v16 prepares for the written or practical exams.
 
 ## 000. v15.3 notes, badges, pictures, pace, offline
 

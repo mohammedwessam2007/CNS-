@@ -202,6 +202,22 @@ function rng(seed) { let x = seed >>> 0; return () => { x ^= x << 13; x >>>= 0; 
     await s.close();
   }
 
+  // ── M11: MCQ focus lasts through the exam day; the next day the written and practical flow returns by itself ──
+  {
+    const s = await open({ v16: true, time: '2026-11-15T20:00:00+02:00', state: null, settle: 1500 });
+    const { page } = s;
+    const onExam = await page.evaluate(() => ({ focus: INTELLECTUALITY_V16.focus(), kind: nextAction().kind }));
+    await page.clock.setSystemTime(new Date('2026-11-16T09:00:00+02:00'));
+    await page.evaluate(() => render()); await page.waitForTimeout(300);
+    const after = await page.evaluate(() => ({ focus: INTELLECTUALITY_V16.focus(), kind: nextAction().kind, date: INTELLECTUALITY_V14.cairoYMD() }));
+    await page.evaluate(() => { S.v16.focus = 'ALL'; save(); });
+    await page.clock.setSystemTime(new Date('2026-11-10T09:00:00+02:00'));
+    const forced = await page.evaluate(() => INTELLECTUALITY_V16.focus());
+    check('M11', 'MCQ focus holds on the MCQ exam day (15 Nov); from 16 Nov the full flow (written, practical) is back without any setting; an explicit "ALL" always wins', onExam.focus === 'MCQ' && after.focus === 'ALL' && !/^V16_/.test(after.kind) && forced === 'ALL', { onExam, after, forced });
+    check('M11b', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
+    await s.close();
+  }
+
   // ── M8: focus "ALL" restores the full v15 flow; M9: legacy v14 repairs migrate ──
   {
     const s = await open({ time: '2026-09-23T10:00:00+03:00', state: null, settle: 1500 }); // harness default: focus ALL

@@ -46,6 +46,13 @@ if (pics && pics.stats.images > 0 && !html.includes(picTag)) {
   if (html.split(picAnchor).length !== 2) throw new Error("build: expected exactly one learn-v15.js tag in index.html");
   html = html.replace(picAnchor, picTag + picAnchor);
 }
+// fail fast: every same-origin script and stylesheet index.html names must be in dist (v16 adds six)
+{
+  const { access } = await import("node:fs/promises");
+  const refs = [...html.matchAll(/<(?:script[^>]*\ssrc|link[^>]*\shref)="\/([^"?#]+)"/g)].map((m) => m[1]).filter((p) => /\.(js|css)$/.test(p) && !p.startsWith("pics/"));
+  for (const p of refs) await access(new URL(p, OUT)).catch(() => { throw new Error("build: index.html names /" + p + " but it is not in dist"); });
+  console.log("[build] " + refs.length + " app scripts/styles present");
+}
 await writeFile(indexUrl, html);
 
 const info = {

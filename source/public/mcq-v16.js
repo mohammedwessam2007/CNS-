@@ -16,6 +16,7 @@
  *   The predicted score uses unseen first attempts only, with an 80% interval.
  * - MCQ focus: no written boss, written or practical wave, visual boss or draw-from-memory step.
  *   Set window.INTELLECTUALITY_V16_FOCUS = "ALL" (or S.v16.focus = "ALL") for the full v15 flow.
+ *   After the MCQ exam day the full flow returns by itself.
  */
 (function () {
   "use strict";
@@ -63,9 +64,14 @@
     return v;
   }
   const persist = () => safe(() => save());
+  // MCQ focus is the owner's instruction "for now": it lasts through the MCQ exam day. From the next
+  // (Cairo) day the written and practical steps come back by themselves. An explicit "ALL" always wins.
   function focusOn() {
     const f = window.INTELLECTUALITY_V16_FOCUS || (isObj(S.v16) ? S.v16.focus : "MCQ");
-    return f !== "ALL";
+    if (f === "ALL") return false;
+    if (window.INTELLECTUALITY_V16_FOCUS) return true;
+    const exam = ((typeof C !== "undefined" && C.examAnchors) || []).find((x) => x.id === "MCQ")?.date;
+    return !exam || ymd() <= exam;
   }
 
   /* ───────────────────────── calendar ───────────────────────── */

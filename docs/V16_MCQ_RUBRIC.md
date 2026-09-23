@@ -6,7 +6,7 @@ The target is the **NEU-205 MCQ exam** (planning anchor **Sun 15 Nov 2026**). Wr
 
 | # | Criterion | 9.5-level bar | Evidence |
 |---|---|---|---|
-| 1 | **Every past-paper MCQ is done before the exam** | All 918 auto-scorable practice MCQs are scheduled and answered by the end of teaching (Fri 6 Nov). All 398 held-out MCQs are used in mocks by Sat 14 Nov. | Full-course simulation in `tests/v16_test.js` |
+| 1 | **Every past-paper MCQ is done before the exam** | All 921 auto-scorable practice MCQs are scheduled and answered by the end of teaching (Fri 6 Nov). All 399 usable held-out MCQs are used in mocks by Sat 14 Nov. | Full-course simulation in `tests/v16_test.js` |
 | 2 | **Every MCQ is explained** | Every practice MCQ has a hand-written explanation: why the key is right, and why each wrong option is wrong. Every held-out MCQ is explained after it is used in a mock. | Explanation coverage count (target 100%) |
 | 3 | **Answer keys are audited** | Every practice key was checked while writing its explanation. A doubtful key shows the standard answer and the reason, and both answers are accepted. | Flag list in the receipt |
 | 4 | **Learn before you are tested** | An MCQ is asked only after the lesson that teaches it (by its notes section) has been learned. | Simulation check |

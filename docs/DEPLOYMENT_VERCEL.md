@@ -1,8 +1,8 @@
-# Deployment: Vercel host (v15.3)
+# Deployment: Vercel host (v16.0 · MCQ exam)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.3 · LEARN FIRST") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v16.0 · MCQ EXAM") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
 | Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, commit `5f9288b`; root directory `deploy/vercel` |
 | Deployment | `dpl_5VVHU6ySd6Ureg2WweAe9d3h3Uqf`: **READY**, production, functions in `fra1` (Frankfurt) |
@@ -16,6 +16,8 @@
 - `api/state.js`: the same contract as the Hatchable `/api/state` (GET, POST, `baseVersion`, 409 conflict, 413 size cap). Progress is stored in **one private Vercel Blob per learner** at `learners/<sha256(code)>.json`, with `ifMatch` concurrency. Without a store it answers `503 cloud_not_configured`.
 - `api/vision.js`: `503 vision_unavailable_on_this_host`. Professor Vision needs the Hatchable AI connection; everything else works.
 
+Since v16 the build also fails if `index.html` names a same-origin script or stylesheet that is not in the output. v16 adds six app files: `mcq-v16.js`, `mcq-v16.css`, and the four `mcq-explain-anat/phys/hist/held-v16.js` files.
+
 ## Pictures bundled at build time (v15.1)
 
 `build.mjs` runs `pics.mjs`, which downloads a real, freely licensed Wikimedia picture for every exact note term, plus every fixed v9/v14 registry file, into `dist/pics/`. It writes `dist/pics/manifest.json` and `manifest.js` and injects one `<script defer src="/pics/manifest.js">` tag before `learn-v15.js`. The app then shows those pictures from its own domain, with no links. The build log prints every `[pics] term → File · licence · via · score` choice and a summary line. `build-info.json` carries the same counts under `pictures`.
@@ -27,7 +29,7 @@
 
 ## Offline (v15.3)
 
-`source/public/sw.js` is registered by the app (https or localhost only). It is network-first for pages, scripts and notes, cache-first for the content-addressed bundled pictures (`/pics/<hash>.<ext>`; `manifest.js` is network-first), and it never touches `/api/*` or other origins. Its shell cache is named per version (`ix-shell-15.3`), so an update clears the old copies. The test harness blocks service workers except in `tests/v153_test.js` P5.
+`source/public/sw.js` is registered by the app (https or localhost only). It is network-first for pages, scripts and notes, cache-first for the content-addressed bundled pictures (`/pics/<hash>.<ext>`; `manifest.js` is network-first), and it never touches `/api/*` or other origins. Its shell cache is named per version (`ix-shell-16.1` since v16's held-out explanations), so an update clears the old copies. The test harness blocks service workers except in `tests/v153_test.js` P5.
 
 ## Saving progress
 
@@ -64,8 +66,9 @@ After that, the ☁ button shows **SYNCED hh:mm**, and the sync page shows "Clou
 | Opening the live URL from the build session | sandbox curl / WebFetch / Vercel fetch tool | **Not possible**: the session's egress policy blocks `*.vercel.app`, and the connector's fetch and log tools return 403/404. Not routed around |
 
 **On the iPad, open the URL and check:**
-- the tab title reads v15.0 and the date chip shows today's Cairo date;
-- answer a question: options appear after "I CAN PICTURE IT", and after answering you see *EVERY OPTION, PICTURED*;
+- the tab title reads **v16.0 · MCQ EXAM** and the date chip shows today's Cairo date;
+- after a lesson's notes, its past-paper MCQs come straight away; a wrong answer shows the key's reason and a line under every option;
+- on a weekend day, the sealed mock shows a timer and no pictures; after the last answer every question is explained;
 - the ☁ button reads "SAVED ON THIS DEVICE" (no store yet) or "SYNCED …" (store connected).
 
 ## Rollback
