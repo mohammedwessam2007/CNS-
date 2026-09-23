@@ -1,0 +1,60 @@
+/* INTELLECTUALITY v16 · MCQ exam system */
+.v16Stage .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px }
+.v16Strip { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted); margin: 4px 0 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: #0a1019 }
+.v16Strip b { color: var(--ink) }
+.v16Pred b { color: var(--lime) }
+.v16Src { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px }
+.v16Src span { font-size: 11px; border: 1px solid #40516a; border-radius: 99px; padding: 4px 8px; color: #b8c7da }
+.v16Src .v16Tag { border-color: #6a5a2b; color: var(--warn) }
+.v16Tier.tS { border-color: var(--bad); color: var(--bad) }
+.v16Tier.tA { border-color: var(--warn); color: var(--warn) }
+.v16Stem { font-size: clamp(18px, 2.3vw, 22px) !important; line-height: 1.35; margin: 8px 0 14px }
+.v16Opts { display: grid; gap: 10px }
+.v16Opt { display: flex; gap: 12px; align-items: flex-start; text-align: left; width: 100%; min-height: 56px; padding: 14px 16px !important; font-size: 16px !important; font-weight: 650; line-height: 1.35; border-radius: 14px; background: #121a26; border: 1px solid #334158; margin: 0 }
+.v16Opt:hover, .v16Opt:focus-visible { border-color: var(--cyan); outline: none }
+.v16Opt:active { transform: scale(.995) }
+.v16L { flex: 0 0 auto; min-width: 22px; font-weight: 900; color: var(--cyan) }
+.v16Verdict { font-size: 20px; font-weight: 900; margin: 4px 0 10px; padding: 10px 14px; border-radius: 12px }
+.v16Verdict.good { color: #06220f; background: var(--good) }
+.v16Verdict.bad { color: #2a0610; background: var(--bad) }
+.v16Explain { display: grid; gap: 8px }
+.v16Row { border: 1px solid #2b394d; border-radius: 12px; padding: 10px 12px; background: #0f1621 }
+.v16Row.key { border-color: var(--good); background: #0d1f16 }
+.v16Row.std { border-color: var(--warn); background: #211b0b }
+.v16Row.mine { border-color: var(--bad); background: #230d14 }
+.v16RowTop { display: flex; gap: 8px; align-items: baseline; font-weight: 750; font-size: 15px; line-height: 1.35; flex-wrap: wrap }
+.v16Mark { flex: 0 0 auto; width: 18px; font-weight: 900 }
+.v16Row.key .v16Mark { color: var(--good) }
+.v16Row.mine .v16Mark { color: var(--bad) }
+.v16Row.std .v16Mark { color: var(--warn) }
+.v16You { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid currentColor; border-radius: 99px; padding: 2px 6px; color: var(--muted) }
+.v16Why { margin: 6px 0 0 26px; font-size: 14px; line-height: 1.45; color: #d7e0ec }
+.v16Row.key .v16Why { color: #eafff1 }
+.v16Flag { border: 1px solid var(--warn); background: #231c08; color: #ffe9a8; border-radius: 12px; padding: 10px 12px; font-size: 14px; line-height: 1.45 }
+.v16Auto { border-left: 3px solid var(--cyan); padding: 6px 10px; font-size: 14px; line-height: 1.45; background: #0b1520; border-radius: 0 10px 10px 0 }
+.v16Pics { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 4px }
+.v16Fig { border: 1px solid #2b394d; border-radius: 12px; padding: 8px; background: #0f1621 }
+.v16Fig.good { border-color: #2f6b47 }
+.v16Fig.bad { border-color: #6b2f3d }
+.v16FigLab { font-size: 11px; font-weight: 800; letter-spacing: .04em; margin-bottom: 6px; color: var(--muted) }
+.v16Fig figure { margin: 0 }
+.v16Next { display: grid; gap: 6px; margin-top: 12px }
+.v16Next .bigAction span[lang], .v16Soft span[lang] { margin-right: 6px }
+.v16Soft { width: 100%; min-height: 48px; font-size: 14px !important; color: var(--muted); background: transparent; border-style: dashed }
+.v16Tiny { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.4 }
+.v16Kind { border-color: #4d3f7a; color: var(--purple) }
+.v16Kind.kchg, .v16Kind.kagain { border-color: #7a3f4d; color: var(--pink) }
+.v16Kind.kfinal { border-color: #7a6a3f; color: var(--warn) }
+.v16Rules { border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; background: #0a1019; font-size: 15px; line-height: 1.45 }
+.v16Clock.over { border-color: var(--bad); color: var(--bad) }
+.v16Result .grid { margin: 10px 0 }
+.v16H { margin-top: 18px }
+.v16Rev { border: 1px solid #2b394d; border-radius: 12px; margin: 8px 0; padding: 8px 12px; background: #0f1621 }
+.v16Rev > summary { cursor: pointer; font-weight: 750; font-size: 14px; line-height: 1.4; min-height: 32px }
+.v16Rev.ok > summary span { color: var(--good) }
+.v16Rev.bad > summary span { color: var(--bad) }
+.v16Sum { font-size: 15px; margin: 6px 0 4px; line-height: 1.45 }
+@media (max-width: 520px) {
+  .v16Opt { font-size: 15px !important; padding: 12px !important }
+  .v16Why { margin-left: 8px }
+}

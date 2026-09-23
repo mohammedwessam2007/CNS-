@@ -91,6 +91,9 @@ async function open(opts = {}) {
       }
     }, [opts.state === undefined ? undefined : opts.state, opts.localStorage || null]);
   }
+  // v16 MCQ focus is the app's default. The v9–v15 suites certify the full flow (written, practical,
+  // reconstruct, v14 primer), so they run with focus "ALL" unless a probe asks for v16 (opts.v16).
+  if (!opts.v16) await context.addInitScript(() => { window.INTELLECTUALITY_V16_FOCUS = 'ALL'; });
   const page = await context.newPage();
   page.on('pageerror', (e) => log.errors.push(String(e && e.stack || e)));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') log.console.push(m.type() + ': ' + m.text()); });

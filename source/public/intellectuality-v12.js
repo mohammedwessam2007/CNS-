@@ -250,7 +250,7 @@ function install(){
  const oldAct=act;act=function(b){const x=beforeAction(b);const out=oldAct(b);setTimeout(()=>safe(()=>afterAction(x)),0);return out};
  const oldRender=render;render=function(...args){const out=oldRender(...args);setTimeout(()=>safe(()=>decorate()),0);return out};
  const oldUi=window.INTELLECTUALITY_COURSE_UI;window.INTELLECTUALITY_COURSE_UI=function(){oldUi?.();decorate()};
- window.INTELLECTUALITY_V12={posterior,roiFor,brainHTML,buildTwin,buildGraph,mutationCandidate,predictedScore,openVision,openBrain,refreshCounterfactual,examMode};
+ window.INTELLECTUALITY_V12={posterior,roiFor,brainHTML,buildTwin,buildGraph,mutationCandidate,predictedScore,openVision,openBrain,refreshCounterfactual,examMode,recordEvidence,logError,qTopic};
  decorate();refreshCounterfactual();save();
 }
 window.INTELLECTUALITY_V12_INIT=function(){try{install()}catch(e){console.error('[v12 init fail-safe]',e)}};

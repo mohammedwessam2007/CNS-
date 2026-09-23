@@ -895,6 +895,20 @@
         const c = index().byChapter[chKey];
         return c ? [c.big, ...c.s.flatMap((s) => [s.h, ...(s.p || []), s.why || "", s.trap || "", ...(s.q || [])])].join(" ") : "";
       },
+      // v16 (MCQ engine): the note section behind an answer, its card, picture hydration, lesson minutes
+      section: (id) => {
+        const s = index().all.find((x) => x.id === id);
+        return s ? { id: s.id, h: s.h, p: s.p || [], why: s.why || "", trap: s.trap || "", pic: s.pic || [], lesson: s.lesson, subject: s.ch.subject, chapter: s.ch.chapter } : null;
+      },
+      noteCard: (id) => {
+        const s = index().all.find((x) => x.id === id);
+        return s ? noteCardHTML(s) : "";
+      },
+      hydrate: (root) => hydratePics(root || document),
+      lessonMinutes: (lid) => {
+        const secs = sectionsForLesson(lid);
+        return secs.length ? Math.max(1, Math.round(secs.reduce((z, s) => z + (s.p || []).join(" ").split(/\s+/).length, 0) / 130 + secs.length * 0.6)) : 0;
+      },
     };
     // exact-words picture service used by the v14 option gallery and autopsy
     window.INTELLECTUALITY_EXACT = { pic, pictureForTerm, termsFor, localFile, bundled: () => (PICS() ? PICS().stats || {} : null) };
