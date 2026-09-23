@@ -1,0 +1,46 @@
+{
+ "v142": {
+  "schema": 2,
+  "qa": 0,
+  "errors": []
+ },
+ "v53": {
+  "title": "INTELLECTUALITY CNS v14 · UNDERSTAND FIRST",
+  "day": 1,
+  "v14keys": [
+   "auto",
+   "calendar",
+   "feed",
+   "ledger",
+   "legacy",
+   "parked",
+   "pins",
+   "preds",
+   "primed",
+   "qa",
+   "schema",
+   "seq",
+   "stats",
+   "vc",
+   "version",
+   "vh",
+   "visualAssignments",
+   "visualRecent",
+   "visualUsed",
+   "vstats"
+  ],
+  "hasVA": true,
+  "segs": 0,
+  "body": 2441,
+  "renderErr": null,
+  "errors": []
+ },
+ "back": {
+  "title": "INTELLECTUALITY CNS v14.2 · UNDERSTAND FIRST",
+  "schema": 2,
+  "primed": 1,
+  "v53FieldsDropped": true,
+  "errors": []
+ },
+ "pass": true
+}

@@ -62,14 +62,23 @@ iPad is not behind this proxy, and it fetches Commons at runtime.
 
 Verified by search result (page exists; title and description match). The license is
 re-read live at runtime:
-`Spinal_Cord_Sectional_Anatomy.png`, `Spinal_Cord_Segments_and_body_representation.png`, `Spinal_cord_tracts_-_English.svg`, `Gray663.png`, `Blausen_0657_MultipolarNeuron.png`, `Neuron_with_oligodendrocyte_and_myelin_sheath.svg`, `Blausen_0870_TypesofNeuroglia.png`, `Blausen_0809_Skin_TactileReceptors.png`, `Blausen_0896_Ventricles_Brain.png`, `Blausen_0328_EarAnatomy.png`, `Blausen_0329_EarAnatomy_InternalEar.png`, `Patellar_tendon_reflex_arc.png`, `Brain_human_normal_inferior_view_with_labels_en.svg`, `Brain_human_normal_inferior_view_without_label.svg`, `Brain_human_sagittal_section.svg`, `Brain_stem_sagittal_section.svg`, `Schematic_diagram_of_the_human_eye_en.svg`, `Retina_layers.svg`, `Retina-diagram.svg`, `Sleep_Hypnogram.svg`, `EEG_Brainwaves.svg`, `Sleep_EEG_REM.png`, `Corona_radiata.png`, `Gray153.png`, `Musculi_coli_base,_my_edits_for_tringles,_Carotid_T.svg`, `1421_Sensory_Homunculus.jpg`, `Sensory_Homunculus-en.svg`, `Neural_Crest.png`, `Neural.crest.cells.migration.svg`, `Skull_foramina_labeled.svg`, `Schematic_of_spatial_summation_curve.svg`, `Action_potential_propagation_animation.gif`, `Propagation_of_action_potential_along_myelinated_nerve_fiber_en.svg`.
+`Spinal_Cord_Sectional_Anatomy.png`, `Spinal_Cord_Segments_and_body_representation.png`, `Spinal_cord_tracts_-_English.svg`, `Gray663.png`, `Blausen_0657_MultipolarNeuron.png`, `Neuron_with_oligodendrocyte_and_myelin_sheath.svg`, `Blausen_0870_TypesofNeuroglia.png`, `Blausen_0809_Skin_TactileReceptors.png`, `Blausen_0896_Ventricles_Brain.png`, `Blausen_0328_EarAnatomy.png`, `Blausen_0329_EarAnatomy_InternalEar.png`, `Patellar_tendon_reflex_arc.png`, `Brain_human_normal_inferior_view_with_labels_en.svg`, `Brain_human_normal_inferior_view_without_label.svg`, `Brain_human_sagittal_section.svg`, `Brain_stem_sagittal_section.svg`, `Schematic_diagram_of_the_human_eye_en.svg`, `Retina_layers.svg`, `Retina-diagram.svg`, `Sleep_Hypnogram.svg`, `EEG_Brainwaves.svg`, `Sleep_EEG_REM.png`, `Corona_radiata.png`, `Gray153.png`, `Musculi_coli_base,_my_edits_for_tringles,_Carotid_T.svg`, `1421_Sensory_Homunculus.jpg`, `Sensory_Homunculus-en.svg`, `Neural_Crest.png`, `Neural.crest.cells.migration.svg`, `Skull_foramina_labeled.svg`, `Schematic_of_spatial_summation_curve.svg`, `Action_potential_propagation_animation.gif`, `Propagation_of_action_potential_along_myelinated_nerve_fiber_en.svg`, `1417_Ascending_Pathways_of_Spinal_Cord.jpg`, `IPSPsummation.JPG` ([file page](https://commons.wikimedia.org/wiki/File:IPSPsummation.JPG), line-chart diagram, 1,033 × 376).
 
 Commons categories with search evidence (runtime `incategory:` sources):
 `Human spinal cord cross-section`, `Human spinal cord`, `Histology of dorsal root ganglion`,
 `Dorsal root ganglion`, `Internal capsule`, `Corona radiata`, `Human inner ear`, `Sleep stages`,
 `Cortical homunculus`, `Neural crest`, `Cranial base`, `Middle cranial fossa`,
 `Patellar reflex`, `SVG reflex arc`, `Human brain (sagittal section)`,
-`Animations of neurology`, `SVG optics diagrams of the human eye`.
+`Animations of neurology`, `SVG optics diagrams of the human eye`, `Human tongue`, `Human orbit`, `Somatotopy`,
+`Histology of the cerebellum`, `Medial lemniscus`, `Histology of nerves`, `Ventricular system`, `Brain lobes`,
+`Sulcus (neuroanatomy)`, `Skin sensory receptors`, `Pain`, `Neuropathic pain`.
+
+v14.2 search pass (category names that did **not** resolve were replaced or dropped):
+`Posterior column-medial lemniscus pathway` → `Medial lemniscus`; `Histology of peripheral nerves` → `Histology of nerves`;
+`Ventricular system of the brain` → `Ventricular system`; `Lobes of the brain` → `Brain lobes`; `Sulci of the brain` →
+`Sulcus (neuroanatomy)`; `Cutaneous receptors` → `Skin sensory receptors`; `Gate control theory of pain` (no category) →
+dropped in favour of `Neuropathic pain` for neuropathic stems; `Nasal conchae` and `Summation (neurophysiology)` → dropped
+(the plain `Summation` category is mathematical). Added file `1417_Ascending_Pathways_of_Spinal_Cord.jpg` (OpenStax, CC BY 4.0).
 
 Files inherited from v9/v10/v14 (previously shown in production) are kept, and they
 now pass through the same runtime license and relevance checks.

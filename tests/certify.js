@@ -1,4 +1,4 @@
-// INTELLECTUALITY v14.1 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
+// INTELLECTUALITY v14.2 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
 // Usage: node tests/certify.js [outDir]   (server: node tests/serve.js source/public 8787)
 const fs = require('fs');
 const path = require('path');

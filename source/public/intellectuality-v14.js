@@ -1,4 +1,4 @@
-/* INTELLECTUALITY v14.1 · UNDERSTAND FIRST
+/* INTELLECTUALITY v14.2 · UNDERSTAND FIRST
  *
  * Understanding-first practice MCQs, calendar truth (Africa/Cairo), the question visual genome
  * (answer-blind pre-answer routing, answer-aware post-answer routing), one anti-repeat governor
@@ -14,7 +14,7 @@
   if (window.INTELLECTUALITY_V14_LOADED) return;
   window.INTELLECTUALITY_V14_LOADED = true;
 
-  const VERSION = "14.1";
+  const VERSION = "14.2";
   const TZ = "Africa/Cairo";
   const REG = () => window.INTELLECTUALITY_V14_REGISTRY || { commands: {}, concepts: [], contrasts: [], atlas: {} };
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
@@ -85,6 +85,13 @@
   function V() {
     const v = S.v14 || (S.v14 = {});
     if (v.schema !== 2) migrate(v);
+    else if (v.visualAssignments) {
+      // A rollback to v53 and back re-adds its answer-derived assignment fields; drop them again.
+      delete v.visualAssignments;
+      delete v.visualUsed;
+      delete v.visualRecent;
+      v.version = VERSION;
+    }
     return v;
   }
   function migrate(v) {
@@ -799,7 +806,8 @@
     const files = (concept._files || []).filter((x) => !t || !x.re || x.re.test(t));
     const catScore = (x) => (x.re ? (x.re.test(t) ? 3 : 0) : 1);
     const ranked = t ? [...(concept._cats || [])].sort((a, b) => catScore(b) - catScore(a)) : concept._cats || [];
-    const cats = (t && ranked.some((x) => catScore(x) > 0) ? ranked.filter((x) => catScore(x) > 0) : ranked).slice(0, 2).map((x) => x.name);
+    // When every category is triggered and none fires, use none: the curated files (and keyword) carry the concept.
+    const cats = (t ? ranked.filter((x) => catScore(x) > 0) : ranked).slice(0, 2).map((x) => x.name);
     if (files.length) {
       try {
         const rows = await netData(urlFiles(files.map((x) => x.f)), commonsRows);

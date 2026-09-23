@@ -106,3 +106,21 @@ Evidence letters refer to docs/RESEARCH_RECEIPTS.md (L1–L14).
    - v13 snippet selector (so v14 cues feed teaching-language memory)
 3. **One anti-repeat governor** (`window.INTELLECTUALITY_VISUAL_GOVERNOR`) owned by v14 and consulted by v9, v10 and v14. No second calendar, mastery model, or render loop.
 4. **All new state** stays under `S.v14`: bounded, compacted, and migrated from the v53 v14 schema without reset.
+
+## v14.2 addendum: second round, driven by benchmark failures
+
+Five failures from the 120-item visual review and the 22-item autopsy benchmark (`docs/VISUAL_QBANK_AUDIT.md`) were re-entered as candidates and scored with the same rubric.
+
+| # | Capability | Trigger (measured failure) | Value | Conf | Cost | Score | Verdict |
+|---|---|---|---|---|---|---|---|
+| 76 | Stem hits ×2 over chapter hits, phrase-length weighting in concept detection | "corneal reflex" → optics; "cervical lymph nodes" → nose | 9 | 0.92 | 1 | 7.7 | **WIN** |
+| 77 | Per-file / per-category **stem triggers** in the registry | scalp artery → facial-nerve drawing; only the first two categories were ever searched | 9 | 0.92 | 1 | 7.7 | **WIN** |
+| 78 | Concept `not` guards (shared word, different topic) | micturition "reflex" → reflex arc; "basal ganglia" → neuroglia | 6 | 0.92 | 0 | 5.5 | **WIN** |
+| 79 | Strict concepts for question visuals (no multi-topic lesson-title guessing) | "CNS is soft" → BBB; "Border cells" → BBB | 7 | 0.92 | 1 | 5.8 | **WIN** (coverage 100% → 96.7%, irrelevant 8 → 0) |
+| 80 | Chosen-option-first frame scoring for the autopsy fallback | stretch reflex "spindles sense tension" → inverse-stretch frame | 8 | 0.83 | 0 | 6.6 | **WIN** |
+| 81 | Neuro-context requirement on the hemisection frame | sternomastoid "same side" → Brown-Séquard text | 7 | 1.00 | 0 | 7.0 | **WIN** |
+| 82 | Four new contrasts (SCM action, RPE vs photoreceptor, basal nuclei parts, DCML vs spinocerebellar) | 4 mis-framed autopsies | 7 | 0.83 | 1 | 5.2 | **WIN** (medical text author-reviewed; see KNOWN_LIMITATIONS §3) |
+| 83 | Search-verify every registry category; replace names that do not resolve | 7 category names not found on Commons | 6 | 0.92 | 0 | 5.5 | **WIN** |
+| 84 | Drop v53's re-added answer-derived fields after a rollback round trip | rollback probe | 4 | 1.00 | 0 | 4.0 | **WIN** |
+| 85 | Lookbehind regexes to exclude "basal ganglia" from *ganglia* | — | 4 | 0.83 | 3 | 1.5 | reject: throws on iPadOS < 16.4; replaced by `not` guards |
+| 86 | Always show *some* visual (topic fallback) for coverage | — | 4 | 0.50 | 6 | −1.6 | reject: "never fill a blank card", and it measurably produced irrelevant images |

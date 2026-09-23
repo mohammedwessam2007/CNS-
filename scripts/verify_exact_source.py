@@ -3,7 +3,8 @@ from pathlib import Path
 import hashlib, json, sys
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'source'
-MAN = ROOT / 'manifests' / 'CURRENT_EXACT_SOURCE_MANIFEST.json'
+# Default: the v53 rollback manifest. Pass a manifest path (e.g. manifests/V14_2_CANDIDATE_MANIFEST.json) to verify another tree.
+MAN = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / 'manifests' / 'CURRENT_EXACT_SOURCE_MANIFEST.json'
 data = json.loads(MAN.read_text(encoding='utf-8'))
 errors=[]
 for item in data['files']:
@@ -18,4 +19,4 @@ for item in data['files']:
 if errors:
     print('\n'.join(errors))
     sys.exit(1)
-print(f"OK: {len(data['files'])} exact source files verified for v{data['deployment_version']}")
+print(f"OK: {len(data['files'])} exact source files verified for v{data.get('deployment_version') or data.get('candidate_version')}")

@@ -54,7 +54,7 @@ PASS N4    v9 real visual bank, v11 shell, v12 brain, v13 twin, content integrit
 PASS N5    Autopilot brain drawer (v12 + v13 addon) still opens  · true
 PASS N6    Written wave, practical wave, weekly mock, retention bridge and commute views render  · {"WRITTEN_WAVE":true,"PRACTICAL_WAVE":true,"WEEKLY_MOCK":true,"RETENTION_BRIDGE":true,"commute":true}
 PASS N7    No page errors on cold load + drawers  · []
-PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":2,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.423Z"},"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"}
+PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":2,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.430Z"},"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"}
 PASS N8    No page errors on legacy migration  · []
 PASS L6    Remote image host down: primer text + gate still work, honest no-visual state  · {"primer":true,"model":188,"missing":true,"gate":true}
 PASS N9    No page errors when Commons is unreachable  · []
