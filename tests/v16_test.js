@@ -195,9 +195,19 @@ function rng(seed) { let x = seed >>> 0; return () => { x ^= x << 13; x >>>= 0; 
       const c = INTELLECTUALITY_V16.counts(), V = INTELLECTUALITY_V16;
       const glued = ['EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-2', 'EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-7', 'EHSAN-ANAT-CRANIAL-CAVITY-MCQ-18', 'EHSAN-ANAT-ORBIT-MCQ-6'].map((id) => ({ id, n: V.options(id).length, keys: V.options(id).map((o) => o.key).join(''), glue: V.options(id).some((o) => /(^|\s)[a-f]\u00b7\s/.test(o.text)), bank: QB.questions.find((q) => q.id === id).options.length }));
       const plain = V.options('EHSAN-ANAT-SPINAL-CORD-MCQ-3');
-      return { c, glued, plainSame: JSON.stringify(plain) === JSON.stringify(QB.questions.find((q) => q.id === 'EHSAN-ANAT-SPINAL-CORD-MCQ-3').options.map((o) => ({ key: o.key, text: o.text }))) };
+      // structure of every explanation: a key line, and one reason (plain, doubtful-key or also-accepted) per non-key option
+      const usable = (q) => q.autoScore && (q.options || []).length >= 2 && (q.answerKeys || []).length && (!q.requiresVisual || q.visualData);
+      const gaps = [];
+      for (const q of QB.questions.filter(usable)) {
+        const x = V.explain(q.id), keys = new Set(q.answerKeys), letters = V.options(q.id).map((o) => o.key);
+        if (!x || !String(x.key || '').trim()) { gaps.push(q.id + ':nokey'); continue; }
+        const covered = new Set([...Object.keys(x.opt), ...(x.flag ? [x.flag.k] : []), ...x.also.map((a) => a.k)]);
+        for (const L of letters) if (!keys.has(L) && !covered.has(L)) gaps.push(q.id + ':' + L);
+        for (const L of covered) if (!letters.includes(L) || keys.has(L)) gaps.push(q.id + ':bad-' + L);
+      }
+      return { c, gaps: gaps.slice(0, 10), nGaps: gaps.length, glued, plainSame: JSON.stringify(plain) === JSON.stringify(QB.questions.find((q) => q.id === 'EHSAN-ANAT-SPINAL-CORD-MCQ-3').options.map((o) => ({ key: o.key, text: o.text }))) };
     });
-    check('M10', 'Every usable past paper (practice and held-out) has a hand-written explanation; the 4 options the source PDF glued together are shown as separate a–d options (bank unchanged); ordinary items are untouched', r.c.explained === r.c.practice && r.c.heldExplained === r.c.heldout && r.c.heldout >= 399 && r.glued.every((g) => g.n === 4 && g.keys === 'abcd' && !g.glue && g.bank === 3) && r.plainSame, r);
+    check('M10', 'Every usable past paper (practice and held-out) has a hand-written explanation with a key line and a reason for every wrong option; the 4 options the source PDF glued together are shown as separate a–d options (bank unchanged); ordinary items are untouched', r.c.explained === r.c.practice && r.c.heldExplained === r.c.heldout && r.c.heldout >= 399 && r.nGaps === 0 && r.glued.every((g) => g.n === 4 && g.keys === 'abcd' && !g.glue && g.bank === 3) && r.plainSame, r);
     check('M10b', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
     await s.close();
   }

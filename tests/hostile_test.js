@@ -213,9 +213,11 @@ function bigPng(w, h) {
       await p.evaluate(() => { localStorage.clear(); localStorage.setItem('intellectuality_v41_launch_state', JSON.stringify({ day: 9, marker: 'other' })); });
       await p.setInputFiles('#importFile', file);
       await p.waitForTimeout(1600);
-      const after = await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('intellectuality_v41_launch_state')); const b = JSON.parse(localStorage.getItem('intellectuality_state_backup_before_link') || 'null'); return { day: s.day, segs: Object.keys(s.segments || {}).length, prev: b && JSON.parse(b.state).marker, url: location.pathname }; });
+      // this browser runs on the real clock: after the restore the app moves the restored Day to today's
+      // Cairo course day (v15.2 date truth), so the expected day is the later of the file's day and today's
+      const after = await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('intellectuality_v41_launch_state')); const b = JSON.parse(localStorage.getItem('intellectuality_state_backup_before_link') || 'null'); const ymd = window.INTELLECTUALITY_V14?.cairoYMD?.(); const todayDay = (C.days || []).filter((d) => d.date <= ymd).map((d) => d.day).pop() || 1; return { day: s.day, todayDay, segs: Object.keys(s.segments || {}).length, xp: s.xp, prev: b && JSON.parse(b.state).marker, url: location.pathname }; });
       check('B1', 'Backup download: one dated JSON with all progress keys (not the gap probe)', okFile, { name: dl.suggestedFilename(), day: j.day, keys: Object.keys(j.keys).length });
-      check('B2', 'Restore: progress replaced from the file, previous copy kept as a local backup, back to the course', after.day === partial.day && after.segs === Object.keys(partial.segments).length && after.prev === 'other' && after.url === '/', after);
+      check('B2', 'Restore: progress replaced from the file, previous copy kept as a local backup, back to the course', after.day === Math.max(partial.day, after.todayDay) && after.segs === Object.keys(partial.segments).length && after.xp === partial.xp && after.prev === 'other' && after.url === '/', after);
       // bad file is refused and changes nothing
       await p.goto(HOST + 'login?next=/'); await p.waitForTimeout(300);
       const junk = path.join(__dirname, 'out', 'not_a_backup.json'); fs.writeFileSync(junk, JSON.stringify({ hello: 1 }));

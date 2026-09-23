@@ -1,0 +1,7 @@
+62/62 checks passed (91s)
+PASS M7   Full course to 15 Nov: every auto-scored practice past paper is answered by the end of teaching (day 47), and every held-out one is used in a mock by the last sprint day  · {"practice":921,"seenP":921,"lastPracticeFirstDay":47,"held":399,"usedH":399,"wrong":567,"reasked":567,"stateKB":867,"mocks":14,"pred":{"n":340,"k":218,"p":0.6411764705882353,"lo":0.6072328433717671,"hi":0.6737626428
+PASS M7b  Every simulated mistake is asked again before the exam  · {"wrong":567,"reasked":567}
+PASS M7c  Time: about 2 h a day or less on average, no day above 2.5 h; saved progress stays under 1.2 MB (cloud limit 1.5 MB)  · {"avg":108,"max":141,"stateKB":867,"perDay":"3:137 4:141 5:131 6:71 7:77 8:105 9:121 10:120 11:121 12:122 13:72 14:101 15:120 16:122 17:121 18:121 19:72 20:72 21:101 22:121 23:121 24:121 25:121 26:122 27:72 28:101 29:121 30:121 31:122 32:123 33:121 34:72 35:101 36:121 
+PASS M7d  Mock predictions come from unseen first attempts with an interval  · {"n":340,"k":218,"p":0.6411764705882353,"lo":0.6072328433717671,"hi":0.6737626428591132}
+PASS M7e  No page errors over the whole course  · {"errors":[],"other":[]}
+25/25 v16 checks passed (202s)

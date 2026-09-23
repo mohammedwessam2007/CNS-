@@ -66,11 +66,43 @@ With MCQ focus on (the default), the draw-from-memory step, the v14 primer, the 
 
 ## Evidence
 
-{{EVIDENCE}}
+All runs are against the local copy of `source/public` (`:8787`) unless marked as the Vercel build (`deploy/vercel/dist` served by the real handlers on `:8790`). Logs are in `receipts/v16/`.
+
+| Check | Result |
+|---|---|
+| **v16 suite** (`tests/v16_test.js`, full course) | **23/23** on the source run; **20/20** quick after M11 was added. **Vercel build: 25/25** in the full course run, M11 included |
+| Full course, 23 Sep → 15 Nov, a learner who studies every day (M7) | **921/921** practice past papers answered, the last new one on **day 47**. **399/399** usable held-out used in **14 mocks**. **567/567** mistakes asked again. **108 min/day** on average, **141** at most. Saved progress **867 KB** (cloud cap 1.5 MB). No page errors |
+| Prediction at the end of the simulation (M7d) | **64%** (80% interval **61–67%**) from **340** first attempts at unseen held-out items. The simulated learner answers at random rates, so this number only proves the method works |
+| Held-out firewall (M6d) | During a 29-item mock, **0** explanation fragments appeared on screen before an answer. After submission, **29/29** items showed their own written reason |
+| Explanation coverage (M10) | **921/921** practice + **399/399** held-out. The 4 glued items show as a–d; ordinary items are untouched |
+| MCQ focus ends after the exam (M11) | 15 Nov: MCQ. 16 Nov: the full flow, with no setting. An explicit ALL wins |
+| Structure audit (M10 in the app, and `receipts/v16/explanation_coverage.json`) | Every explanation has a key line and a reason for each wrong option (**0 gaps**). No stray ids. Held-out explanations live only in the held-out file. No key line merely restates the option (6 found and fixed) |
+| Spot review | 14 random held-out anatomy explanations re-read after writing: 14 correct |
+| certify · spread · LEARN · v15.3 | **62/62** (and **62/62** on the Vercel build) · **23/23** · **17/17** · **10/10** |
+| hostile | **26/26** (B1–B2 need the `:8790` host). B2 was changed to expect today's course day after a restore; see below |
+| Vercel host · options gallery | **14/14** · **7/7** (130/160 options pictured in the 40-item sample) |
+| Leak audit | 921 texts: **0** text leaks, **0** query leaks, **0** errors |
+| Rollback to the exact v53 files (`6e3ebec`, byte-identical tree on `:8788`) | pass: v16 state loads and renders in v53 with no errors, and comes back to v16 intact |
+| Build | The new check reports "35 app scripts/styles present"; all four explanation files and `mcq-v16.js` are in `dist` |
+
+**About the B2 change.** B2 restores a Day-1 backup from Mon 21 Sep. Its browser runs on the real clock, which was already 24 Sep in Cairo, so the app moved the restored save to today's course day (day 4). That is the v15.2 date-truth rule. The v15.3 files behave the same way today (checked on `:8788` with commit `978ae07`). The test now expects the later of the file's day and today's day. It still checks that segments, XP, the local backup of the replaced copy, and the return to the course are all correct.
 
 ## Rating against the rubric
 
-{{RATING}}
+| # | Criterion | Score | Why |
+|---|---|---|---|
+| 1 | Every past paper done before the exam | **10** | 921/921 practice by day 47; 399/399 usable held-out by the last sprint day |
+| 2 | Every MCQ explained | **9.5** | 1,320/1,320, with a line for every wrong option. Not reviewed by a clinician |
+| 3 | Keys audited | **9.5** | Every key checked while writing: 25 doubtful, 37 also-defensible. Judged against textbooks, not the department |
+| 4 | Learn before being tested | **10** | Blocks and mocks draw only from lessons already taught (M1, M6) |
+| 5 | Mistakes come back until fixed | **10** | Changed question the next day, the exact item 3 days later, then spacing; 567/567 re-asked |
+| 6 | Exam-like mocks, honest prediction | **9** | Sealed, timed, stratified, explained afterwards, with an interval. The prediction covers only the bank |
+| 7 | MCQ only | **10** | No written, practical, visual-boss or draw-from-memory steps; they return by themselves after 15 Nov |
+| 8 | Fits the owner's life | **9.5** | 108 min/day on average, 141 at most. Missed days make catch-up days longer |
+| 9 | One button | **10** | Look, answer, Next |
+| 10 | Nothing breaks | **9.5** | Every suite passes on both builds. The live site cannot be opened from the build sandbox |
+
+**Overall: 9.7 by the rubric. As an honest single number: 9.5/10.** The 0.5 gap is what no build can close: clinician review, seeing the real pictures, and the real exam.
 
 ## What still cannot reach 10
 

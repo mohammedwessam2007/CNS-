@@ -1,0 +1,22 @@
+{
+ "practice": {
+  "usable": 921,
+  "explained": 921
+ },
+ "heldout": {
+  "usable": 399,
+  "explained": 399
+ },
+ "problems": [],
+ "stray": [],
+ "wrongFile": [],
+ "flags": {
+  "practice": 17,
+  "heldout": 8
+ },
+ "also": {
+  "practice": 28,
+  "heldout": 9
+ },
+ "unusableExplained": 0
+}
