@@ -962,6 +962,17 @@
     return '<figure class="v14Visual v14Src"><span class="v14Img"><img src="' + E(src.src) + '" alt="Actual source-bank figure" loading="lazy"></span><span class="v14Cap"><b>ACTUAL SOURCE-BANK FIGURE</b><small>' + E(src.file || "Ketab al Qesm") + " · p." + E(src.page || "—") + "</small></span></figure>";
   }
   const MENINGES_Q = new Set(["EHSAN-ANAT-SPINAL-CORD-MCQ-20", "EHSAN-ANAT-SPINAL-CORD-MCQ-24"]);
+  const CONUS_Q = new Set([1, 2, 3, 5, 9, 10, 12, 17, 26].map((n) => "EHSAN-ANAT-SPINAL-CORD-MCQ-" + n));
+  function conusMapHTML(compact = false) {
+    return '<div class="v14ConusMap' + (compact ? ' compact' : '') + '" role="img" aria-label="Adult vertebral levels: spinal cord tapers to the conus near L1 to L2. Below it the cauda equina is a bundle of nerve roots in the CSF-filled lumbar cistern. L3 to L4 is below the usual adult conus and is a site used for lumbar puncture into the subarachnoid space. The dural and arachnoid sac ends near S2.">' +
+      '<div class="v14ConusRow"><b>L1–L2</b><span>CORD → CONUS MEDULLARIS</span><small>Source bank often specifies lower L1.</small></div>' +
+      '<div class="v14ConusRow target"><b>L3–L4</b><span>CAUDA EQUINA ROOTS + CSF</span><small>Lumbar puncture samples the subarachnoid space here.</small></div>' +
+      '<div class="v14ConusRow"><b>S2</b><span>DURAL + ARACHNOID SAC ENDS</span><small>The cord has already ended above.</small></div>' +
+      '<p>Conus = tapered cord end. Cauda equina = descending nerve roots. Vertebral levels vary; use the source key for the exact MCQ wording.</p></div>';
+  }
+  function conusHeroHTML() {
+    return '<figure class="v14ConusHero"><img src="/assets/conus-cauda-lumbar-ai-v4.webp" alt="Conceptual lumbar cutaway: a single spinal cord tapers into a conus; separate golden cauda equina roots descend through a blue CSF space, with some exiting laterally" loading="lazy" decoding="async"><figcaption><b>CORD → CONUS → DESCENDING ROOTS</b><span>AI-assisted conceptual illustration. The bone levels are deliberately unlabeled; use the exact level map beside it.</span><a href="https://www.ncbi.nlm.nih.gov/books/NBK526133/" target="_blank" rel="noopener">Anatomy reference ↗</a></figcaption></figure>';
+  }
   function meningesMapHTML(compact = false) {
     return '<div class="v14MeningesMap' + (compact ? ' compact' : '') + '" role="img" aria-label="From spinal cord outward: pia, CSF-filled subarachnoid space, arachnoid, dura. The denticulate ligament begins in pia, crosses the arachnoid and attaches to dura. Dura also sleeves the exiting spinal nerve root.">' +
       '<div class="v14LayerLine"><span>CORD</span><span>PIA</span><span>CSF SPACE</span><span>ARACHNOID</span><span>DURA</span></div>' +
@@ -1430,7 +1441,7 @@
       .join("");
     return (
       '<div class="v14OptGallery" data-v14-opts="' + E(q.id) + '" data-v14-sel="' + E(sel) + '" data-v14-which="' + which + '">' +
-      '<div class="v14OptHead"><b lang="ar" dir="rtl">شوف كل اختيار</b><span>' + (which === "others" ? "THE OTHER OPTIONS, PICTURED" : "EVERY OPTION, PICTURED") + "</span></div>" +
+      '<div class="v14OptHead"><b lang="ar" dir="rtl">شوف كل اختيار</b><span>' + (q.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-24" ? "THE OTHER OPTIONS, MAPPED" : which === "others" ? "THE OTHER OPTIONS, PICTURED" : "EVERY OPTION, PICTURED") + "</span></div>" +
       '<div class="v14OptGrid">' + cells + "</div></div>"
     );
   }
@@ -1509,6 +1520,14 @@
       const o = (q.options || []).find((x) => x.key === cell.dataset.v14Opt),
         pic = cell.querySelector(".v14OptPic");
       if (!o || !pic) continue;
+      if (q.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-24" && o.key.toLowerCase() === "b") {
+        pic.innerHTML = '<div class="v14ExactOption"><b>FORAMEN MAGNUM</b><span>Dura is anchored here; pia closely invests the spinal cord.</span><small>Check the layer named in the option.</small></div>';
+        continue;
+      }
+      if (q.id === "EHSAN-ANAT-SPINAL-CORD-MCQ-24" && o.key.toLowerCase() === "c") {
+        pic.innerHTML = '<div class="v14ExactOption"><b>ADULT VERTEBRAL LEVELS</b><span>Conus medullaris · around L1–L2</span><span>Dural and arachnoid sac · around S2</span><small>L2 describes the cord end, not the arachnoid end.</small></div>';
+        continue;
+      }
       const r = await optionVisual(q, o, used, pre, ctx).catch(() => null);
       if (!box.isConnected) return;
       if (r && r.c) {
@@ -1561,15 +1580,17 @@
     const intentLabel = (INTENTS[plan.intent] || INTENTS.identify).label;
     let h = "";
     if (plan.source) h += sourceFigureHTML(plan.source);
-    const meningeal = MENINGES_Q.has(q.id);
+    const meningeal = MENINGES_Q.has(q.id), conus = CONUS_Q.has(q.id);
     if (meningeal && !mini) h += meningesHeroHTML() + meningesMapHTML();
+    if (conus && !mini) h += '<div class="v14ConusPair">' + conusHeroHTML() + conusMapHTML() + '</div>';
     const onScreen = (k) => [...document.querySelectorAll(".v14Visual[data-v14-vkey]")].some((a) => a.dataset.v14Vkey === k && !box.contains(a));
     if (meningeal && mini) h += meningesMapHTML(true);
-    if (!meningeal && plan.primary && !(mini && onScreen(plan.primary.key))) {
+    if (conus && mini) h += conusMapHTML(true);
+    if (!meningeal && !conus && plan.primary && !(mini && onScreen(plan.primary.key))) {
       h += visualCardHTML(plan.primary, mini ? "SAME ANCHOR" : "SEE IT · " + intentLabel, phase, "v14Main");
       G.note(plan.primary.key, { concept: plan.concept, modality: plan.primary.modality });
     }
-    if (!meningeal && !mini && plan.secondary && !plan.source) {
+    if (!meningeal && !conus && !mini && plan.secondary && !plan.source) {
       h += visualCardHTML(plan.secondary, "SECOND ANGLE", phase);
       G.note(plan.secondary.key, { concept: plan.concept, modality: plan.secondary.modality });
     }

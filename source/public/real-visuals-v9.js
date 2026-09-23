@@ -121,7 +121,7 @@ function query(l){
 window.INTELLECTUALITY_TOPIC_VISUAL=function(l,p){
  const c=curated(l),y=yt(l),sf=sourceFigures(l),q=query(l);
  return '<div class="realVisualBank" data-real-id="'+E(l.id)+'">'+
-   '<div class="realVisualHead"><b>REAL VISUAL BANK</b><span>No generated anatomy</span></div>'+
+   '<div class="realVisualHead"><b>REAL VISUAL BANK</b><span>Sourced reference images</span></div>'+
    (y||'')+
    (sf?'<div class="realGrid">'+sf+'</div>':'')+
    (c?'<div class="realGrid curated">'+c+'</div>':'')+
