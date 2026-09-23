@@ -226,7 +226,7 @@
   ]);
   add("ph-spinal-reflexes", "γ-motor neurons", [
     "γ discharge keeps the spindle taut, so it keeps signalling while the muscle shortens: **α–γ co-activation**. It is what lets the spindle work during voluntary movement. Cutting the γ supply **relaxes** the intrafusal fibres, and spindle discharge falls. Spindle discharge rises with γ discharge or any stretch; it **falls** when α discharge alone shortens the muscle.",
-    "To **stabilize a joint**, the brain **co-activates α and γ** motor neurons of the muscles around it. ⚠ The bank asks this twice with different keys ('↑ γ to postural muscles' and 'α–γ co-activation'); co-activation is the Guyton answer.",
+    "To **stabilize a joint** (Guyton), the brain-stem (bulboreticular) centres **raise γ drive to the spindles of the muscles on both sides of the joint**: both spindles fire, both muscles contract reflexly against each other, and the joint is held tense. ⚠ The bank keys this twice differently ('↑ γ to postural muscles' and 'α–γ co-activation'); the app accepts the γ answers in both.",
   ]);
   add("ph-spinal-reflexes", "Stretch reflex, tendon jerks", [
     "Tendon-jerk centres: **biceps C5–C6**, triceps C6–C7 (C7–C8), knee L3–L4, ankle S1–S2; the jaw jerk is in the **pons** (V). **Decreased tone** = **LMN lesion** (also cerebellar lesions). Tone rises with γ activation, anxiety, Parkinsonism and UMN lesions.",

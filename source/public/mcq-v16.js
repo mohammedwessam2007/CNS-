@@ -154,13 +154,13 @@
       arr = m && X[m[1]] ? X[m[1]][m[2]] : null;
     let out = null;
     if (Array.isArray(arr) && arr.length) {
-      out = { key: "", opt: {}, flag: null, also: null };
+      out = { key: "", opt: {}, flag: null, also: [] };
       arr.forEach((s, i) => {
         // "!x:" the bank key is doubtful and x is the standard answer; "~x:" x is also defensible
         const mm = /^([!~]?)([a-f]):\s*([\s\S]*)$/.exec(String(s));
         if (mm) {
           if (mm[1] === "!") out.flag = { k: mm[2], why: mm[3] };
-          else if (mm[1] === "~") out.also = { k: mm[2], why: mm[3] };
+          else if (mm[1] === "~") out.also.push({ k: mm[2], why: mm[3] });
           else out.opt[mm[2]] = mm[3];
         } else if (i === 0 || !out.key) out.key = String(s);
         else out.key += " " + s;
@@ -173,7 +173,7 @@
     const s = new Set(q.answerKeys || []),
       x = explain(q);
     if (x?.flag && q.options.some((o) => o.key === x.flag.k)) s.add(x.flag.k);
-    if (x?.also && q.options.some((o) => o.key === x.also.k)) s.add(x.also.k);
+    for (const a of x?.also || []) if (q.options.some((o) => o.key === a.k)) s.add(a.k);
     return s;
   }
   const optText = (q, k) => q.options.find((o) => o.key === k)?.text || k;
@@ -655,7 +655,7 @@
             mine = o.key === sel,
             cls = isKey ? "key" : isStd ? "std" : mine ? "mine" : "",
             mark = isKey || isStd ? "✓" : mine ? "✗" : "·",
-            why = isKey ? x?.key || "" : isStd ? (x?.flag?.k === o.key ? x.flag.why : x?.also?.k === o.key ? x.also.why : "") : x?.opt?.[o.key] || "";
+            why = isKey ? x?.key || "" : isStd ? (x?.flag?.k === o.key ? x.flag.why : (x?.also || []).find((a) => a.k === o.key)?.why || "") : x?.opt?.[o.key] || "";
           return (
             '<div class="v16Row ' + cls + '"><div class="v16RowTop"><span class="v16Mark">' + mark + '</span><span class="v16L">' + E(o.key.toUpperCase()) + ".</span><span>" + E(o.text) + "</span>" +
             (mine ? '<span class="v16You">your answer</span>' : "") + (isStd ? '<span class="v16You">' + (x?.flag?.k === o.key ? "standard answer" : "also accepted") + "</span>" : "") + "</div>" +

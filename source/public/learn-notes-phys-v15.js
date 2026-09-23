@@ -319,7 +319,7 @@
           "**Cutting γ discharge** → relaxation of the spindle fibres → **decreased spindle sensitivity** to stretch.",
           "**α–γ co-activation**: during voluntary contraction the brain drives both together, so the spindle keeps responding while the muscle shortens and **proprioceptive information to higher centres is maintained**. It is driven from above, not by linking interneurons.",
           "γ is **inhibited** by the Golgi tendon organs of the same muscle, spindles of antagonists, the **medullary** reticular formation (and paleocerebellum/basal ganglia). It is **excited** by the **pontine** reticular formation, the vestibular nuclei and (bank key) the **neocerebellum**.",
-          "⚠ Two bank items on holding a joint still conflict: one keys '**increasing γ discharge to postural muscles**', the other '**co-activation of α and γ**'. Know both answers."],
+          "⚠ Two bank items on holding a joint still conflict: one keys '**increasing γ discharge to postural muscles**', the other '**co-activation of α and γ**'. Guyton's mechanism: γ drive rises to the spindles of the muscles on **both sides** of the joint, so the opposing muscles tense together."],
         trap: "α discharge **unloads** the spindle (less discharge); γ discharge **loads** it (more).",
         q: ["Why does the spindle keep signalling while the muscle contracts?", "α–γ co-activation keeps the intrafusal fibres taut, maintaining proprioceptive information to higher centres."] },
       { h: "Stretch reflex, tendon jerks and muscle tone", l: "T036", pic: ["Stretch reflex", "Muscle tone"],
