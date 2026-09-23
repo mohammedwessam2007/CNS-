@@ -1,6 +1,13 @@
-# Known Limitations (v15.1)
+# Known Limitations (v15.2)
 
-v15.1 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+v15.2 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## 00. v15.2 start-from-today spread
+
+- **Relevance is text similarity plus the department's order**, not a clinician's judgement (`docs/V15_2_RECEIPT.md`). The first week's placements were checked against standard teaching; later weeks were not reviewed by hand.
+- **Catch-up days are heavier** (about 170–192 planned min while catching up two days in three).
+- **Spreading is the default whenever the real date passes an unfinished day.** "Keep the original order instead" switches back to the v14 carryover; the choice is saved.
+- **A rollback to v53** does not know about spreads; lessons moved away from a past day are not shown there until the app returns to v15.2.
 
 ## 0. v15 LEARN notes and exact-words pictures
 

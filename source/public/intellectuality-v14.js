@@ -180,11 +180,258 @@
   function dayGreen(d) {
     return !!d && safe(() => dayProgress(d), 0) >= 100 && !(safe(() => unresolved(), []) || []).some((e) => e.day <= d.day);
   }
+  /* ───────────────────────── catch-up spread (v15.2) ─────────────────────────
+   * Owner's policy (23 Sep 2026): start from TODAY; the lessons of missed days are not run first as
+   * catch-up but spread over the next few teaching days, each placed just before the upcoming lesson it
+   * matters most for (lesson-relevance-v15.js), keeping the department's order within a subject, with
+   * the planned minutes balanced across those days. Nothing is skipped or relabelled: every moved lesson
+   * keeps its progress (segment keys stay on its original day) and is labelled with its original date.
+   * The plan is stored (S.v14.calendar.spreads) and re-applied to the course at every load; "Keep the
+   * original order instead" (policy "inorder") restores the v14 carryover behaviour exactly. */
+  const SPREAD_CAP = 200; // planned lesson minutes per catch-up day before the window grows by a day
+  let PRISTINE = null,
+    spreadApplied = false;
+  function pristine() {
+    if (!PRISTINE) PRISTINE = new Map((C.days || []).map((d) => [d.day, { lessons: (d.lessons || []).slice(), title: d.title, est: d.estimatedMinutes, mode: d.mode }]));
+    return PRISTINE;
+  }
+  const instKey = (l, dn) => l.id + "@" + (l._from || dn);
+  const segDone = (d, l, i) => !!S.segments?.[segmentKey(d, l, i)];
+  const lessonRem = (d, l) => (l.segments || []).reduce((z, g, i) => z + (segDone(d, l, i) ? 0 : g.minutes || 3), 0);
+  const lessonDoneN = (d, l) => (l.segments || []).filter((_, i) => segDone(d, l, i)).length;
+  function relOf(a, b) {
+    const R = window.INTELLECTUALITY_LESSON_RELEVANCE || {};
+    return (R[a] && R[a][b]) || (R[b] && R[b][a]) || 0;
+  }
+  const partStem = (t) => String(t || "").replace(/\s+(I{1,3}|IV)$/, "").trim().toLowerCase();
+  const partNo = (t) => (String(t || "").match(/\s(I{1,3}|IV)$/) || [])[1] || "";
+  function applySpreads() {
+    const P = pristine(),
+      cal = V().calendar || {};
+    for (const d of C.days || []) {
+      const p = P.get(d.day);
+      if (!p) continue;
+      d.lessons = p.lessons.slice();
+      d.title = p.title;
+      d.estimatedMinutes = p.est;
+      d.mode = p.mode;
+      delete d._spread;
+      delete d._absorbed;
+    }
+    if (cal.policy === "inorder") return;
+    for (const sp of Array.isArray(cal.spreads) ? cal.spreads : []) {
+      if (!isObj(sp) || !isObj(sp.days)) continue;
+      const touched = [...new Set([...(sp.from || []), ...Object.keys(sp.days).map(Number)])].map((n) => C.days[n - 1]).filter(Boolean);
+      const pool = new Map();
+      for (const d of touched) for (const l of d.lessons || []) pool.set(instKey(l, d.day), l);
+      for (const d of touched) d.lessons = [];
+      const placed = new Set();
+      for (const [dn, keys] of Object.entries(sp.days)) {
+        const d = C.days[Number(dn) - 1];
+        if (!d) continue;
+        for (const k of Array.isArray(keys) ? keys : []) {
+          const l = pool.get(k);
+          if (!l || placed.has(k)) continue;
+          placed.add(k);
+          const origin = Number(k.split("@")[1]);
+          d.lessons.push(origin === d.day && !l._from ? l : Object.assign({}, l, { _from: origin }));
+        }
+      }
+      // Anything the stored plan does not name (course data changed) goes back to its own day or,
+      // if that day was emptied, to the first window day: teaching is never lost.
+      const firstWin = C.days[Number(Object.keys(sp.days)[0]) - 1];
+      for (const [k, l] of pool) {
+        if (placed.has(k)) continue;
+        const origin = Number(k.split("@")[1]),
+          home = sp.days[origin] ? C.days[origin - 1] : firstWin;
+        if (home) home.lessons.push(home.day === origin && !l._from ? l : Object.assign({}, l, { _from: origin }));
+      }
+      // a review/mock day that is TODAY becomes a catch-up teaching day (its review is skipped, and said so)
+      for (const n of sp.convert || []) if (C.days[n - 1] && sp.days[n]) C.days[n - 1].mode = "TEACHING";
+      for (const d of touched) {
+        if (sp.days[d.day]) d._spread = sp;
+        else if ((sp.from || []).includes(d.day)) {
+          d._absorbed = sp;
+          delete d._spread;
+        }
+      }
+    }
+    for (const d of C.days || []) {
+      if (!d._spread) continue;
+      const ls = d.lessons || [];
+      d.estimatedMinutes = ls.reduce((z, l) => z + (l.segments || []).reduce((y, g) => y + (g.minutes || 3), 0), 0) + 7;
+      d.title = ls.slice(0, 2).map((l) => l.topic).join(" + ") + (ls.length > 2 ? " …" : "");
+    }
+  }
+  // Linear partition of the ordered lessons into k consecutive days: smallest heaviest day first,
+  // then the fewest moves away from each lesson's own day.
+  function partition(items, k) {
+    const n = items.length,
+      pre = [0];
+    for (const it of items) pre.push(pre[pre.length - 1] + it.rem);
+    const disp = (i, j, g) => {
+      let c = 0;
+      for (let x = i; x < j; x++) c += items[x].own ? Math.abs(g - items[x].j) : g * 0.5;
+      return c;
+    };
+    const better = (a, b) => !b || Math.round(a.max / 5) < Math.round(b.max / 5) || (Math.round(a.max / 5) === Math.round(b.max / 5) && a.cost < b.cost - 1e-9);
+    const dp = Array.from({ length: k + 1 }, () => Array(n + 1).fill(null));
+    dp[0][0] = { max: 0, cost: 0, cut: -1 };
+    for (let g = 1; g <= k; g++)
+      for (let j = g; j <= n; j++)
+        for (let i = g - 1; i < j; i++) {
+          const prev = dp[g - 1][i];
+          if (!prev) continue;
+          const cand = { max: Math.max(prev.max, pre[j] - pre[i]), cost: prev.cost + disp(i, j, g - 1), cut: i };
+          if (better(cand, dp[g][j])) dp[g][j] = cand;
+        }
+    if (!dp[k][n]) return null;
+    const groups = [];
+    for (let g = k, j = n; g > 0; g--) {
+      const i = dp[g][j].cut;
+      groups.unshift(items.slice(i, j));
+      j = i;
+    }
+    return { groups, max: dp[k][n].max };
+  }
+  function planSpread(plan) {
+    const fromDays = (C.days || []).filter((d) => d.day >= S.day && d.day < plan);
+    const missed = [];
+    for (const d of fromDays)
+      for (const l of d.lessons || []) {
+        const rem = lessonRem(d, l),
+          dn = lessonDoneN(d, l);
+        missed.push({ l, key: instKey(l, d.day), rem, done: rem === 0, started: dn > 0 && rem > 0 });
+      }
+    if (!missed.some((m) => !m.done)) return null;
+    const teach = (C.days || []).filter((d) => d.day >= plan && d.mode === "TEACHING" && (d.lessons || []).length);
+    if (!teach.length) return null;
+    // Today is a review/mock day but lessons are missing: today teaches them instead of reviewing nothing.
+    const todayD = C.days[plan - 1],
+      convert = todayD && todayD.mode !== "TEACHING" && !(todayD.lessons || []).length ? [todayD.day] : [];
+    if (convert.length) teach.unshift(todayD);
+    const missedTeachDays = fromDays.filter((d) => d.mode === "TEACHING" && (d.lessons || []).length).length;
+    const kMax = Math.min(8, teach.length);
+    let k = Math.min(kMax, Math.max(2, missedTeachDays + 1)),
+      best = null;
+    for (; k <= kMax; k++) {
+      const win = teach.slice(0, k),
+        own = win.flatMap((d, j) => (d.lessons || []).map((l) => ({ l, j, own: true, key: instKey(l, d.day), rem: lessonRem(d, l) })));
+      const todo = missed.filter((m) => !m.done && !m.started).map((m) => Object.assign({}, m));
+      // 1. the upcoming lesson each missed lesson matters most for (earliest among the near-best);
+      //    a lesson days away needs a stronger link, so foundations are never pushed far out
+      const eff = (a, o) => relOf(a, o.l.id) / (1 + 0.35 * o.j);
+      for (const m of todo) {
+        let top = 0;
+        for (const o of own) top = Math.max(top, eff(m.l.id, o));
+        m.host = top >= 0.04 ? own.findIndex((o) => eff(m.l.id, o) >= 0.75 * top) : -1;
+        m.why = m.host >= 0 ? { kind: "rel", to: own[m.host].l.id } : { kind: "base" };
+      }
+      // 2. Part I and Part II of one topic travel together, before the lesson best for both
+      for (let i = 0; i + 1 < todo.length; i++) {
+        const a = todo[i],
+          b = todo[i + 1];
+        if (a.l.subject !== b.l.subject || !partNo(a.l.topic) || !partNo(b.l.topic) || partStem(a.l.topic) !== partStem(b.l.topic)) continue;
+        let top = 0;
+        for (const o of own) top = Math.max(top, eff(a.l.id, o) + eff(b.l.id, o));
+        const h = top >= 0.08 ? own.findIndex((o) => eff(a.l.id, o) + eff(b.l.id, o) >= 0.75 * top) : -1;
+        a.host = b.host = h;
+        a.why = b.why = h >= 0 ? { kind: "rel", to: own[h].l.id } : { kind: "base" };
+      }
+      // 3. department order within a subject: a missed lesson never lands after a later lesson of its
+      //    subject, whether that later lesson was missed too or is one of the upcoming ones
+      for (const m of todo) {
+        const first = own.findIndex((o) => o.l.subject === m.l.subject);
+        if (first >= 0 && m.host > first) {
+          m.host = first;
+          m.why = { kind: "order", to: own[first].l.id };
+        }
+      }
+      for (let i = todo.length - 2; i >= 0; i--) {
+        const nx = todo.slice(i + 1).find((x) => x.l.subject === todo[i].l.subject);
+        if (nx && nx.host < todo[i].host) {
+          todo[i].host = nx.host;
+          todo[i].why = partNo(nx.l.topic) && partStem(nx.l.topic) === partStem(todo[i].l.topic) ? nx.why : { kind: "order", to: nx.l.id };
+        }
+      }
+      const seq = [...missed.filter((m) => m.done).map((m) => Object.assign({}, m, { rem: 0, why: { kind: "done" } })), ...missed.filter((m) => m.started).map((m) => Object.assign({}, m, { why: { kind: "started" } })), ...todo.filter((m) => m.host < 0)];
+      own.forEach((o, i) => {
+        seq.push(...todo.filter((m) => m.host === i));
+        seq.push(o);
+      });
+      const part = partition(seq, k);
+      if (!part) continue;
+      best = { win, part, seq };
+      if (part.max <= SPREAD_CAP) break;
+    }
+    if (!best) return null;
+    const days = {},
+      why = {},
+      loads = {};
+    best.part.groups.forEach((g, gi) => {
+      const d = best.win[gi];
+      days[d.day] = g.map((x) => x.key);
+      loads[d.day] = g.reduce((z, x) => z + x.rem, 0);
+      for (const x of g) {
+        const origin = Number(x.key.split("@")[1]);
+        if (origin !== d.day) why[x.key] = x.own ? { kind: "balance", after: best.seq.filter((m) => !m.own && m.why?.to === x.l.id).map((m) => m.l.id) } : x.why || { kind: "base" };
+      }
+    });
+    return { v: 1, at: new Date().toISOString(), today: cairoYMD(), planDay: plan, prevDay: S.day, from: fromDays.map((d) => d.day), skipped: fromDays.filter((d) => d.mode !== "TEACHING").map((d) => d.day).concat(convert), convert, days, why, loads };
+  }
+  // A spread never yanks a question the learner is looking at (options, gate or answer): while one is
+  // on screen the spread waits for the next non-question step. At load nothing is in use yet.
+  let spreadLive = false;
+  function spreadBlocked() {
+    if (!spreadLive) return false;
+    const a = safe(() => nextAction(), null);
+    if (!a || a.kind !== "SEGMENT" || a.seg?.type !== "question") return false;
+    return !!document.querySelector('#player [data-act="qbank-choice"], #player [data-act="finish-qbank"], #player [data-v14-reveal]');
+  }
+  function maybeSpread(cal, plan) {
+    if (cal.policy === "inorder" || !(plan > S.day) || spreadBlocked()) return false;
+    const sp = planSpread(plan);
+    if (!sp) return false;
+    cal.spreads = (Array.isArray(cal.spreads) ? cal.spreads : []).concat(sp).slice(-12);
+    S.day = plan;
+    S.blockStart = Date.now();
+    applySpreads();
+    return true;
+  }
+  // Days whose lessons were all spread elsewhere count as done once every one of those lessons is.
+  function settleAbsorbed() {
+    let moved = false;
+    for (const d of C.days || []) {
+      if (!d._absorbed || (S.doneDays || []).includes(d.day)) continue;
+      let all = true,
+        any = false;
+      for (const h of C.days)
+        for (const l of h.lessons || [])
+          if (l._from === d.day) {
+            any = true;
+            if (lessonRem(h, l) > 0) all = false;
+          }
+      if (any && all) {
+        S.doneDays.push(d.day);
+        S.doneDays.sort((a, b) => a - b);
+        moved = true;
+      }
+    }
+    return moved;
+  }
+  function spreadToday(d) {
+    const ls = (d?.lessons || []).filter((l) => l._from && l._from !== d.day);
+    return { moved: ls, open: ls.filter((l) => lessonRem(d, l) > 0) };
+  }
   function syncCalendar() {
     const v = V(),
       cal = v.calendar || (v.calendar = {}),
       today = cairoYMD(),
       plan = planDayFor(today);
+    if (!spreadApplied) {
+      spreadApplied = true;
+      applySpreads();
+    }
     if (!cal.firstRun && trulyFresh()) cal.firstRun = { date: today, planDay: Math.max(1, plan), atDay: S.day };
     // The clock may move the plan; it may never delete teaching. Advance only through days that are
     // already certified or whose required evidence is fully green (the same gate as CERTIFY).
@@ -209,6 +456,8 @@
       }
       break;
     }
+    if (maybeSpread(cal, plan)) moved = true;
+    if (settleAbsorbed()) moved = true;
     const debt = plan > 0 ? Math.max(0, plan - S.day) : 0,
       ahead = plan > 0 ? Math.max(0, S.day - plan) : 0,
       fr = cal.firstRun,
@@ -225,17 +474,41 @@
     if (moved) persistSoon();
     return cal;
   }
+  const originsText = (ls) => {
+    const ds = [...new Set(ls.map((l) => l._from))].sort((a, b) => a - b).map((n) => fmtDay(C.days[n - 1]?.date || "").replace(/ [A-Z]{3}$/, ""));
+    return ds.length > 2 ? ds[0] + "–" + ds[ds.length - 1] : ds.join(" + ");
+  };
   function chipText(cal) {
     const base = "TODAY · " + fmtDay(cal.today),
       s = (n) => (n === 1 ? "" : "S");
+    const sp = cal.mode === "today" || cal.mode === "ahead" ? spreadToday(safe(() => day(), null)) : { open: [] };
+    if (cal.mode === "today" && sp.open.length) return base + " · +" + sp.open.length + " FROM " + originsText(sp.open);
     if (cal.mode === "carryover") return base + " · " + cal.debt + " DAY" + s(cal.debt) + " CARRYOVER";
     if (cal.mode === "catchup") return base + " · FIRST-RUN CATCH-UP";
     if (cal.mode === "ahead") return base + " · " + cal.ahead + " DAY" + s(cal.ahead) + " AHEAD";
     if (cal.mode === "precourse") return base + " · COURSE STARTS " + fmtDay(C.days[0].date);
     return base;
   }
+  function spreadBannerHTML(cal, d) {
+    const sp = d?._spread,
+      t = spreadToday(d);
+    if (!sp || !t.open.length) return "";
+    const winDays = Object.keys(sp.days).map(Number),
+      from = (sp.from || []).filter((n) => !(sp.skipped || []).includes(n)).map((n) => fmtDay(C.days[n - 1].date, true));
+    const order = (d.lessons || []).map((l) => (l._from && l._from !== d.day ? "<b>" + E(l.topic) + "</b> <i>(" + E(fmtDay(C.days[l._from - 1].date, true)) + ")</i>" : E(l.topic))).join(" → ");
+    const plan = winDays.map((n) => E(fmtDay(C.days[n - 1].date, true)) + ": " + (C.days[n - 1].lessons || []).length + " lessons · ~" + (C.days[n - 1].estimatedMinutes || 0) + " min").join(" · ");
+    return (
+      '<div class="v14Carryover v14Spread" role="status"><b>CAUGHT UP BY SPREADING · REAL DATE KEPT</b><span>' +
+      E("Today is " + fmtDay(cal.today, true) + " (Day " + d.day + "). The " + from.join(" and ") + " lessons you had not done are spread over " + fmtDay(C.days[winDays[0] - 1].date, true) + " – " + fmtDay(C.days[winDays[winDays.length - 1] - 1].date, true) + ", each just before the upcoming lesson it matters most for. Nothing is skipped.") +
+      (sp.skipped?.some((n) => !(sp.convert || []).includes(n)) ? " " + E("Missed review/mock days (" + sp.skipped.filter((n) => !(sp.convert || []).includes(n)).map((n) => fmtDay(C.days[n - 1].date, true)).join(", ") + ") are not repeated; the next weekly review covers them.") : "") +
+      ((sp.convert || []).includes(d.day) ? " " + E("Today was a review day; with lessons missing, it teaches them instead.") : "") +
+      "<em>Today: " + order + ".</em><small>" + plan + "</small></span>" +
+      '<button type="button" class="v14SpreadUndo" data-v14-spread="inorder">Keep the original order instead</button></div>'
+    );
+  }
   function calendarBannerHTML(cal) {
     const d = safe(() => day(), null);
+    if (d && cal.mode === "today") return spreadBannerHTML(cal, d);
     if (!d || !(cal.mode === "carryover" || cal.mode === "catchup")) return "";
     const mins = safe(() => remainingMinutes(d), null),
       work = fmtDay(d.date, true),
@@ -250,7 +523,9 @@
       "</b><span>" +
       E(txt) +
       (Number.isFinite(mins) ? " <em>~" + mins + " planned min in unfinished Day " + d.day + " steps.</em>" : "") +
-      "</span></div>"
+      "</span>" +
+      (cal.policy === "inorder" ? '<button type="button" class="v14SpreadUndo" data-v14-spread="spread">Start from today and spread the missed lessons instead</button>' : "") +
+      "</div>"
     );
   }
   function dateTick() {
@@ -1759,6 +2034,23 @@
         stage.insertAdjacentHTML("afterbegin", b);
       }
     }
+    // v15.2: a lesson spread here from another day says where it came from and why it sits here
+    const cur = kind === "SEGMENT" ? safe(() => nextAction(), null) : null;
+    if (stage && cur?.l?._from && cur.l._from !== cur.d?.day && !stage.querySelector(".v14Moved")) {
+      const w = cur.d?._spread?.why?.[cur.l.id + "@" + cur.l._from] || {},
+        to = w.to ? lessonById(w.to) : null;
+      const reason =
+        w.kind === "rel" && to ? "placed just before “" + to.topic + "”, the lesson it matters most for" :
+        w.kind === "order" && to ? "placed before “" + to.topic + "”: same subject, taught first by the department" :
+        w.kind === "balance" && w.after?.length ? "moved here so the lessons it builds on (" + w.after.map((id) => lessonById(id)?.topic || id).join(", ") + ") come first" :
+        w.kind === "balance" ? "moved a day to balance the catch-up days" :
+        w.kind === "started" ? "you had started it, so it continues first" :
+        "a foundation lesson, so it comes first";
+      const tag = '<div class="v14Moved">📅 From ' + E(fmtDay(C.days[cur.l._from - 1]?.date || "", true)) + " · " + E(reason) + "</div>",
+        banner = stage.querySelector(".v14Carryover");
+      if (banner) banner.insertAdjacentHTML("afterend", tag);
+      else stage.insertAdjacentHTML("afterbegin", tag);
+    }
     const note = V().notice;
     if (stage && note && note.kind === "parked" && parkedShown !== note.at) {
       parkedShown = note.at;
@@ -1904,14 +2196,33 @@
   function install() {
     V();
     prepConcepts();
+    // v15.2: a lesson spread to another day keeps the keys of its original day, so its progress,
+    // answers and pinned questions follow it (and survive "keep the original order").
+    const baseSegKey = segmentKey,
+      baseQKey = questionKey,
+      baseQbKey = qbankKey;
+    segmentKey = (d, l, si) => (l && l._from ? "d" + l._from + ":" + l.id + ":s" + si : baseSegKey(d, l, si));
+    // After a spread, a mock only asks about lessons already scheduled on or before today.
+    const baseMockPool = mockQuestionPool;
+    mockQuestionPool = function () {
+      const pool = baseMockPool.apply(this, arguments);
+      if (!(V().calendar?.spreads || []).length || V().calendar?.policy === "inorder") return pool;
+      const covered = new Set();
+      for (const d of C.days || []) if (d.day <= S.day) for (const l of d.lessons || []) covered.add(l.id);
+      const f = pool.filter((q) => !(q.lessonIds || []).length || q.lessonIds.some((id) => covered.has(id)));
+      return f.length ? f : pool;
+    };
+    questionKey = (d, l, q) => (l && l._from ? "d" + l._from + ":" + l.id + ":" + q.id : baseQKey(d, l, q));
+    qbankKey = (d, l, q) => (l && l._from ? "d" + l._from + ":" + l.id + ":EHSAN:" + q.id : baseQbKey(d, l, q));
     syncCalendar();
+    spreadLive = true;
 
     // Pin the served question per (day, lesson, slot) so answering never swaps the item underneath
     // the learner; avoid same-day recognition of items shown in the professor feed.
     const oldQFor = qbankForLesson;
     qbankForLesson = function (l, d, slot = 0) {
       const v = V(),
-        pk = d.day + ":" + l.id + ":" + slot,
+        pk = (l._from || d.day) + ":" + l.id + ":" + slot,
         pinned = v.pins[pk] ? findQ(v.pins[pk]) : null;
       if (pinned && pinned.split === "practice" && !pinned.generated) return pinned;
       let q = oldQFor(l, d, slot);
@@ -1926,9 +2237,12 @@
       }
       if (q) {
         v.pins[pk] = q.id;
+        // keep pins of lessons scheduled near today (a spread lesson is pinned under its original day)
+        const live = new Set();
+        for (const dd of C.days || []) if (Math.abs(dd.day - S.day) <= 2) for (const ll of dd.lessons || []) live.add(ll._from || dd.day);
         for (const k of Object.keys(v.pins)) {
           const dd = Number(k.split(":")[0]);
-          if (dd < S.day - 2 || dd > S.day + 2) delete v.pins[k];
+          if ((dd < S.day - 2 || dd > S.day + 2) && !live.has(dd)) delete v.pins[k];
         }
         persistSoon();
       }
@@ -2055,6 +2369,11 @@
           d = day(),
           lab = document.querySelector("#railToday .railLabel");
         if (lab) lab.textContent = cal.debt > 0 ? "WORK DAY " + d.day + " · " + fmtDay(d.date) + " · " + (cal.mode === "catchup" ? "CATCH-UP" : "CARRYOVER") : "TODAY · DAY " + d.day + " · " + fmtDay(cal.today);
+        const heads = document.querySelectorAll("#railToday .railLesson .railLessonHead");
+        (d.lessons || []).forEach((l, i) => {
+          const h = heads[i];
+          if (h && l._from && l._from !== d.day && !h.querySelector(".v14RailFrom")) h.insertAdjacentHTML("beforeend", '<span class="v14RailFrom">FROM ' + E(fmtDay(C.days[l._from - 1]?.date || "")) + "</span>");
+        });
       });
       return out;
     };
@@ -2152,6 +2471,22 @@
 
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) dateTick();
+    });
+    document.addEventListener("click", (ev) => {
+      const b = ev.target.closest?.("[data-v14-spread]");
+      if (!b) return;
+      const cal = V().calendar;
+      if (b.dataset.v14Spread === "inorder") {
+        // back to the v14 order: every lesson returns to its own day, progress kept (same keys)
+        const sps = Array.isArray(cal.spreads) ? cal.spreads : [];
+        if (sps.length) S.day = Math.max(1, Math.min(S.day, ...sps.map((x) => Number(x.prevDay) || S.day)));
+        cal.policy = "inorder";
+        cal.spreads = [];
+      } else cal.policy = "spread";
+      applySpreads();
+      syncCalendar();
+      safe(() => save()); // an explicit choice is saved at once, not on the debounce
+      safe(() => render());
     });
     window.addEventListener("focus", dateTick);
     window.addEventListener("pageshow", dateTick);

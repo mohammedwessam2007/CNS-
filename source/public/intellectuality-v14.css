@@ -10,6 +10,16 @@
 .v14Carryover span{font-size:13px;line-height:1.4}
 .v14Carryover em{font-style:normal;color:#ffd983;font-weight:800}
 .v14Carryover.parked{border-color:#4e3a6b;background:#161022;color:#e3d6f7}
+/* v15.2 catch-up spread */
+.v14Carryover.v14Spread{border-color:#2f5d4a;background:#0c1a14;color:#d3f1e2}
+.v14Carryover.v14Spread b{color:#7ff0b6}
+.v14Carryover.v14Spread em{display:block;margin-top:6px;color:#e8fff3;font-weight:600}
+.v14Carryover.v14Spread em b{font-size:inherit;letter-spacing:0;color:#9ff5c8}
+.v14Carryover.v14Spread em i{color:#9fc4b2;font-style:normal;font-size:12px}
+.v14Carryover small{display:block;margin-top:4px;font-size:11px;color:#9fc4b2}
+.v14SpreadUndo{justify-self:start;margin-top:6px;min-height:44px;padding:8px 12px;border-radius:10px;border:1px solid #3d6b57;background:transparent;color:#bfe9d3;font-size:12px;font-weight:700;cursor:pointer}
+.v14Moved{margin:0 0 10px;padding:7px 10px;border-radius:10px;background:#0f2019;border:1px solid #2f5d4a;color:#bfe9d3;font-size:12px;font-weight:700}
+.v14RailFrom{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:6px;background:#12301f;color:#7ff0b6;font-size:9px;font-weight:900;letter-spacing:.06em}
 .v14Carryover.parked b{color:#c9a7ff}
 
 .v14Primer{display:grid;gap:12px}

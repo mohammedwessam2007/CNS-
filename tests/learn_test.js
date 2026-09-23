@@ -155,7 +155,7 @@ const BUNDLED = process.env.BUNDLED === '1';
     const r = await s.page.evaluate(() => {
       const ids = EHSAN_QBANK.questions.filter((q) => q.split !== 'practice').slice(0, 50).map((q) => q.id);
       // bestSection is only offered for practice items in the note card, and the pool filter never touches held-out splits
-      const d = COURSE.days[0], l = d.lessons[0];
+      const d = COURSE.days.find((x) => x.lessons.length), l = d.lessons[0]; // a spread may have emptied Mon 21
       const held = qbankPoolForLesson(l, d, 'heldout').length, heldRaw = EHSAN_QBANK.questions.filter((q) => q.split === 'heldout' && q.unlockDay <= d.day && q.lessonIds?.includes(l.id) && q.autoScore && !q.requiresVisual).length;
       return { held, heldRaw, sample: ids.length };
     });

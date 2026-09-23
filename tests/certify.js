@@ -1,4 +1,4 @@
-// INTELLECTUALITY v15.1 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
+// INTELLECTUALITY v15.2 certification suite (docs/CERTIFICATION_MATRIX.md A–N).
 // Usage: node tests/certify.js [outDir]   (server: node tests/serve.js source/public 8787)
 const fs = require('fs');
 const path = require('path');
@@ -38,7 +38,7 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
   {
     const s = await open({ time: T('2026-09-22T10:00:00+03:00'), state: null, settle: 1300 });
     const r = await s.page.evaluate(() => ({ chip: document.querySelector('#v14Calendar')?.textContent, ey: document.querySelector('#eyebrow')?.textContent, banner: document.querySelector('.v14Carryover')?.innerText || '', rail: document.querySelector('.railLabel')?.textContent, day: S.day }));
-    check('A1', 'Fresh state on Sep 22: real date + first-run catch-up label, no fake date', r.chip === 'TODAY · TUE 22 SEP · FIRST-RUN CATCH-UP' && /TODAY TUE 22 SEP/.test(r.ey) && /Today is Tue 22 Sep/.test(r.banner) && r.day === 1, r);
+    check('A1', 'Fresh state on Sep 22: starts from today (Day 2) with the Mon 21 lessons spread in and labelled; real date, no fake date', r.chip === 'TODAY · TUE 22 SEP · +4 FROM MON 21' && /TUE 22 SEP/.test(r.ey) && /Today is Tue 22 Sep \(Day 2\)/.test(r.banner) && r.day === 2, r);
     await s.close();
   }
   // build a Day-1 partial state created on Sep 21
@@ -53,9 +53,15 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
   }
   {
     const s = await open({ time: T('2026-09-22T00:01:00+03:00'), state: partialDay1, settle: 1300 });
-    const r = await s.page.evaluate(() => ({ chip: document.querySelector('#v14Calendar')?.textContent, banner: document.querySelector('.v14Carryover')?.innerText || '', day: S.day, segs: Object.values(S.segments).filter(Boolean).length, ey: document.querySelector('#eyebrow')?.textContent, rail: document.querySelector('.railLabel')?.textContent }));
-    check('A2', 'Sep 22 00:01 with Day-1 partial: "1 DAY CARRYOVER" + deliberate carryover banner, work kept', r.chip === 'TODAY · TUE 22 SEP · 1 DAY CARRYOVER' && /This is unfinished Mon 21 Sep work, carried forward deliberately/.test(r.banner) && r.day === 1 && r.segs === Object.values(partialDay1.segments).filter(Boolean).length, r);
+    const r = await s.page.evaluate(() => ({ chip: document.querySelector('#v14Calendar')?.textContent, banner: document.querySelector('.v14Carryover')?.innerText || '', day: S.day, segs: Object.values(S.segments).filter(Boolean).length, ey: document.querySelector('#eyebrow')?.textContent, rail: document.querySelector('.railLabel')?.textContent, moved: document.querySelector('.v14Moved')?.innerText || '' }));
+    check('A2', 'Sep 22 00:01 with Day-1 partial: starts from today, Mon 21 lessons spread in and labelled, the started lesson first, work kept', r.chip === 'TODAY · TUE 22 SEP · +4 FROM MON 21' && /CAUGHT UP BY SPREADING · REAL DATE KEPT/.test(r.banner) && /you had started it/.test(r.moved) && r.day === 2 && r.segs === Object.values(partialDay1.segments).filter(Boolean).length, r);
     await s.close();
+    // same state with the owner's "Keep the original order instead" choice: v14 carryover exactly
+    const io = JSON.parse(JSON.stringify(partialDay1)); io.v14.calendar.policy = 'inorder';
+    const s2 = await open({ time: T('2026-09-22T00:01:00+03:00'), state: io, settle: 1300 });
+    const r2 = await s2.page.evaluate(() => ({ chip: document.querySelector('#v14Calendar')?.textContent, banner: document.querySelector('.v14Carryover')?.innerText || '', day: S.day }));
+    check('A2i', 'Original-order choice: "1 DAY CARRYOVER" + deliberate carryover banner, work kept', r2.chip === 'TODAY · TUE 22 SEP · 1 DAY CARRYOVER' && /This is unfinished Mon 21 Sep work, carried forward deliberately/.test(r2.banner) && r2.day === 1, r2);
+    await s2.close();
   }
   {
     // midnight rollover: Sep 21 23:59 → 00:01 without reload
@@ -64,7 +70,7 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     await s.page.clock.runFor(125000);
     await s.page.waitForTimeout(400);
     const after = await s.page.evaluate(() => document.querySelector('#v14Calendar')?.textContent);
-    check('A3', 'Midnight rollover re-evaluates without reload (23:59 → 00:01)', before === 'TODAY · MON 21 SEP' && after === 'TODAY · TUE 22 SEP · 1 DAY CARRYOVER', { before, after });
+    check('A3', 'Midnight rollover re-evaluates without reload (23:59 → 00:01): today moves to Tue 22 with Mon 21 spread in', before === 'TODAY · MON 21 SEP' && after === 'TODAY · TUE 22 SEP · +4 FROM MON 21', { before, after });
     await s.close();
   }
   {
@@ -83,8 +89,13 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     const day2partial = await stateOf(s2.page); await s2.close();
     const s3 = await open({ time: T('2026-09-23T08:00:00+03:00'), state: day2partial, settle: 1200 });
     const r3 = await s3.page.evaluate(() => ({ chip: document.querySelector('#v14Calendar')?.textContent, day: S.day, banner: document.querySelector('.v14Carryover')?.innerText || '' }));
-    check('A5', 'Sep 23 after Day-2 partial: "TODAY · WED 23 SEP · 1 DAY CARRYOVER" (Tue 22 Sep work)', r3.chip === 'TODAY · WED 23 SEP · 1 DAY CARRYOVER' && r3.day === 2 && /unfinished Tue 22 Sep work/.test(r3.banner), r3);
+    check('A5', 'Sep 23 after Day-2 partial: today is Wed 23 (Day 3) with the Tue 22 lessons spread in', /^TODAY · WED 23 SEP · \+\d FROM TUE 22$/.test(r3.chip) && r3.day === 3 && /Today is Wed 23 Sep \(Day 3\)/.test(r3.banner), r3);
     await s3.close();
+    const io5 = JSON.parse(JSON.stringify(day2partial)); io5.v14.calendar.policy = 'inorder';
+    const s4 = await open({ time: T('2026-09-23T08:00:00+03:00'), state: io5, settle: 1200 });
+    const r4 = await s4.page.evaluate(() => ({ chip: document.querySelector('#v14Calendar')?.textContent, day: S.day, banner: document.querySelector('.v14Carryover')?.innerText || '' }));
+    check('A5i', 'Original-order choice on Sep 23 after Day-2 partial: "1 DAY CARRYOVER" (Tue 22 Sep work)', r4.chip === 'TODAY · WED 23 SEP · 1 DAY CARRYOVER' && r4.day === 2 && /unfinished Tue 22 Sep work/.test(r4.banner), r4);
+    await s4.close();
   }
   {
     const st = JSON.parse(JSON.stringify(partialDay1)); st.day = 3; st.doneDays = [1, 2];
@@ -97,7 +108,7 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     // device clock in UTC, instant = Sep 22 01:30 Cairo
     const s = await open({ time: '2026-09-21T22:30:00Z', timezoneId: 'UTC', state: partialDay1, settle: 1000 });
     const r = await s.page.evaluate(() => document.querySelector('#v14Calendar')?.textContent);
-    check('A7', 'Cairo date is used even when the device timezone is UTC', r === 'TODAY · TUE 22 SEP · 1 DAY CARRYOVER', r);
+    check('A7', 'Cairo date is used even when the device timezone is UTC', r === 'TODAY · TUE 22 SEP · +4 FROM MON 21', r);
     await s.close();
   }
 
@@ -336,7 +347,7 @@ async function noOverflow(page) { return page.evaluate(() => ({ sw: document.doc
     legacy.v14 = { version: '14.0', primed: { 'EHSAN-ANAT-SPINAL-CORD-MCQ-20': true }, visualAssignments: { x: [{ title: 'File:Oligodendrocyte.png', thumb: 'u' }] }, visualUsed: { 'File:Spinal_Cord_Sectional_Anatomy.png': 9 }, visualRecent: ['File:Spinal_Cord_Sectional_Anatomy.png'], calendar: {}, stats: { primersSeen: 3 } };
     const s = await open({ time: T('2026-09-22T10:00:00+03:00'), state: legacy, settle: 1200 });
     const r = await s.page.evaluate(() => ({ schema: S.v14.schema, segs: Object.values(S.segments).filter(Boolean).length, va: 'visualAssignments' in S.v14, vc: Object.keys(S.v14.vc).length, legacy: S.v14.legacy, chip: document.querySelector('#v14Calendar')?.textContent }));
-    check('L5', 'Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)', r.schema === 2 && r.segs === Object.values(partialDay1.segments).filter(Boolean).length && !r.va && r.vc >= 1 && r.legacy?.primersSeen === 3 && /CARRYOVER/.test(r.chip), r);
+    check('L5', 'Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)', r.schema === 2 && r.segs === Object.values(partialDay1.segments).filter(Boolean).length && !r.va && r.vc >= 1 && r.legacy?.primersSeen === 3 && /CARRYOVER|FROM MON 21/.test(r.chip), r);
     check('N8', 'No page errors on legacy migration', s.log.errors.length === 0, s.log.errors.slice(0, 3));
     await s.close();
   }

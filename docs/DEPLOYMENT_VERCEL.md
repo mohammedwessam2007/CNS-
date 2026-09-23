@@ -1,8 +1,8 @@
-# Deployment: Vercel host (v15.1)
+# Deployment: Vercel host (v15.2)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.1 · LEARN FIRST") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.2 · LEARN FIRST") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
 | Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, commit `5f9288b`; root directory `deploy/vercel` |
 | Deployment | `dpl_5VVHU6ySd6Ureg2WweAe9d3h3Uqf`: **READY**, production, functions in `fra1` (Frankfurt) |

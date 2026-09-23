@@ -1,0 +1,25 @@
+PASS S1   Fresh on Wed 23 Sep: starts from today (Day 3), real date kept, chip names the moved lessons  · {"chip":"TODAY · WED 23 SEP · +4 FROM MON 21 + TUE 22","day":3}
+PASS S1b  Nothing lost or duplicated: every lesson of Mon 21–Fri 25 appears exactly once in Wed 23–Fri 25; Mon 21 and Tue 22 are empty  · {"wed":["T003@1","T006@2","T009@3","T001@1","T002@1"],"thu":["T007@2","T008@2","T010@3","T004@1","T005@2","T011@3"],"fri":["T012@4","T013@4","T014@4","T015@5","T016@5","T017@5"]}
+PASS S1c  Placed where relevant: synapse physiology before sensory receptors, brainstem before cerebellum and 4th ventricle, PNS nerves before neuroglia and nerve endings  · T003 T006 T009 T001 T002 T007 T008 T010 T004 T005 T011 T012 T013 T014 T015 T016 T017
+PASS S1d  The department's order within each subject is kept (anatomy: spinal cord → brainstem → cerebellum → …)  · {"ANAT":["T001","T002","T007","T008","T010","T012","T013","T015"],"PHYS":["T003","T006","T009","T014","T016","T017"],"HIST":["T004","T005","T011"]}
+PASS S1e  Load is balanced over the catch-up days (each ≤ 207 planned min incl. the daily boss); the weekend review and mock are untouched  · {"est":[170,192,172],"sat":{"day":6,"mode":"CONTINUITY","est":35,"ls":[]},"sun":{"day":7,"mode":"CONTINUITY","est":35,"ls":[]}}
+PASS S1f  Today starts with a moved lesson that says where it came from and why it sits here  · 📅 From Mon 21 Sep · placed just before “Sensory receptors and afferents”, the lesson it matters most for
+PASS S1g  The course rail tags each moved lesson with its original date  · ["PHYSIOLOGY Introduction to synapse FROM MON 21 SEP","PHYSIOLOGY Synaptic potentials and transmission FROM TUE 22 SEP","PHYSIOLOGY Sensory receptors and afferents","ANATOMY Spinal cord I FROM MON 21 SEP","ANATOMY Spinal cord II FROM MON 21 SEP"]
+PASS S1h  No page errors  · []
+PASS S3   Reload re-applies the same plan (no second spread, same order)  · {"spreads":1}
+PASS S7   A moved lesson teaches normally (LEARN lecture) and its progress is saved under its original day  · {"lesson":"T003","from":1,"key":"d1:T003:s1","learn":true,"h":"Structure: knob, cleft, receptors","segs":["d1:T003:s0"]}
+PASS S8   A mock after the spread only asks about lessons already scheduled on or before today  · {"n":21,"outside":0}
+PASS S2   Work already done is kept: same completed steps, and the started lesson continues first today  · {"was":["d1:T001:s0"],"now":["d1:T001:s0"],"first":"T001@1","next":{"kind":"SEGMENT","l":"T001","key":"d1:T001:s1"},"moved":"📅 From Mon 21 Sep · you had started it, so it continues first"}
+PASS S4   "Keep the original order instead" restores every lesson to its own day and the carryover label; progress kept; choice survives reload  · {"chip":"TODAY · WED 23 SEP · 2 DAYS CARRYOVER","day":1,"reload":{"day":1,"chip":"TODAY · WED 23 SEP · 2 DAYS CARRYOVER"}}
+PASS S4b  The carryover banner offers the spread; choosing it spreads again from today  · {"hasOffer":true,"day":3,"chip":"TODAY · WED 23 SEP · +4 FROM MON 21 + TUE 22"}
+PASS S5   A spread-out day counts as done once all of its lessons are done (Mon 21 yes, Tue 22 not yet)  · [1]
+PASS S5b  No page errors across undo/redo  · []
+PASS S6   Midnight with a question on screen: the answer screen stays; the spread happens at the next non-question step  · {"mid":{"day":1,"finish":true,"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"},"between":{"day":1,"q":"question"},"after":{"day":2,"rec":true,"chip":"TODAY · TUE 22 SEP · +3 FROM MON 21"}}
+PASS S6b  No page errors across midnight  · []
+PASS S9   Five days behind on a Saturday: today teaches the missed lessons instead of reviewing nothing; nothing lost across the course  · {"day":6,"sat":{"day":6,"mode":"TEACHING","est":170,"ls":["T001@1","T002@1","T003@1","T006@2","T009@3"]},"chip":"TODAY · SAT 26 SEP · +5 FROM MON 21–WED 23"}
+PASS S9b  No page errors after a multi-day gap  · []
+PASS S11  A lesson moved from Mon 21 and answered on a later day keeps its question pinned (the answer screen never swaps items)  · {"setup":{"day":4,"l":"T004","from":1},"q":{"id":"EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-1","key":"b","l":"T004","from":1},"after":{"id":"EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-1","pins":["1:T004:0","1:T004:1"]}}
+PASS S11b No page errors  · []
+PASS S10  390 px: no horizontal overflow with the spread banner; its button and all player buttons ≥ 44 px  · {"sw":390,"iw":390,"btn":44,"small":[]}
+
+23/23 spread checks passed (24s)

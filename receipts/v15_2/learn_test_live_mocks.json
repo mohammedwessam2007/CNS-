@@ -1,0 +1,108 @@
+{
+ "pass": 17,
+ "total": 17,
+ "results": [
+  {
+   "id": "L1",
+   "name": "Teach step = LEARN lecture: whole-picture intro, section 1/N, Egyptian command, no MCQ, no topic wallpaper",
+   "ok": true,
+   "detail": "{\"k\":\"SEGMENT:teach:T001\",\"lesson\":\"T001\",\"n\":4,\"big\":true,\"h\":\"Extent: where the cord begins and ends\",\"top\":\"SECTION 1 / 4\",\"figs\":2,\"hydrated\":2,\"licensed\":2,\"via\":[\"Wikipedia · Conus medullaris\",\"Wikipedia · Spinal cord\"],\"links\":0,\"local\":0,\"bundle\":false,\"cmd\":\"كوّن الصورة\",\"recall\":true,\"mcq\":0,\"wallpaper\":0}"
+  },
+  {
+   "id": "L2",
+   "name": "Each section picture is shown for its exact term (Wikipedia article → free Commons file, licence shown), inside the app: no link to press",
+   "ok": true,
+   "detail": "{\"lesson\":\"T001\",\"n\":4,\"big\":true,\"h\":\"Extent: where the cord begins and ends\",\"top\":\"SECTION 1 / 4\",\"figs\":2,\"hydrated\":2,\"licensed\":2,\"via\":[\"Wikipedia · Conus medullaris\",\"Wikipedia · Spinal cord\"],\"links\":0,\"local\":0,\"bundle\":false,\"cmd\":\"كوّن الصورة\",\"recall\":true,\"mcq\":0,\"wallpaper\":0}"
+  },
+  {
+   "id": "L2b",
+   "name": "No Wikipedia request on the first (home) screen: pictures load only when their page is shown",
+   "ok": true,
+   "detail": "{\"wikiOnHome\":0}"
+  },
+  {
+   "id": "L2d",
+   "name": "Tap a picture → it opens large inside the app (2× on tap, closes on tap outside); no navigation",
+   "ok": true,
+   "detail": "{\"z\":{\"img\":\"https://upload.wikimedia.org/mock/File%3AConus%20medullaris%20labeled%20diagram.svg\",\"cap\":\"Conus medullaris · LABELED DIAGRAM\\nConus medullaris, labeled\",\"h\":48},\"big\":true,\"closed\":true}"
+  },
+  {
+   "id": "L3",
+   "name": "Back/next paging works and the page survives a reload (saved position)",
+   "ok": true,
+   "detail": "{\"back\":\"SECTION 1 / 4\",\"afterReload\":\"SECTION 1 / 4\"}"
+  },
+  {
+   "id": "L4",
+   "name": "A recall rated \"not yet\" comes back once on a FINAL RECALL page before practice",
+   "ok": true,
+   "detail": "{\"missed\":\"✗ It comes back once before practice.\",\"pages\":4,\"finalRecall\":\"One more pass on what did not come back\\nرجّعها من دماغك\\nPull it from memory\\nرجّعها من دماغك\\nCOVER IT · ANSWER IN YOUR HE\"}"
+  },
+  {
+   "id": "L4b",
+   "name": "LESSON LEARNED → PRACTICE finishes the teach segment and moves on",
+   "ok": true,
+   "detail": "{\"kind\":\"SEGMENT\",\"seg\":\"video\",\"method\":\"\",\"segs\":2}"
+  },
+  {
+   "id": "L4c",
+   "name": "No page errors in the lecture flow",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "L5",
+   "name": "Teach before test: questions whose note is in a not-yet-learned lesson are held back, and return once that lesson is learned",
+   "ok": true,
+   "detail": "{\"lesson\":\"T001\",\"raw\":18,\"rawLater\":10,\"pool\":8,\"later\":0,\"pool2\":18,\"later2\":10}"
+  },
+  {
+   "id": "L6",
+   "name": "Nothing from v15 appears before the answer (no note card, no exact option pictures)",
+   "ok": true,
+   "detail": "{\"note\":0,\"exact\":0}"
+  },
+  {
+   "id": "L7",
+   "name": "After a wrong answer the autopsy links back to the note section that teaches the question",
+   "ok": true,
+   "detail": "{\"note\":\"ارجع للنوتة\\n📖 FROM YOUR NOTES · Filum terminale and cauda equina\"}"
+  },
+  {
+   "id": "L8",
+   "name": "Option pictures use the exact words of the option: every exact-term picture names a term whose words are all in that option",
+   "ok": true,
+   "detail": "{\"exact\":1,\"cells\":[\"DENTICULATE LIGAMENTS · LABELED DIAGRAM ⇐ Denticulate ligament are lateral extension of arac\",\" ⇐ The adult spinal cord terminates at intervertebral\"]}"
+  },
+  {
+   "id": "L8b",
+   "name": "No page errors after answering",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "L8c",
+   "name": "After answering: no picture card is an outside link (options, autopsy, note card, topic pictures)",
+   "ok": true,
+   "detail": "{\"outside\":[],\"cards\":3,\"local\":0}"
+  },
+  {
+   "id": "L9",
+   "name": "Picture sources down: each figure says so honestly (no links); the lecture text is intact",
+   "ok": true,
+   "detail": "{\"figs\":2,\"shown\":0,\"notes\":[\"No free picture of exactly “Conus medullaris” yet.\\nThe words above carry it: bui\",\"No free picture of exactly “Spinal cord” yet.\\nThe words above carry it: build th\"],\"links\":0,\"text\":496}"
+  },
+  {
+   "id": "L10",
+   "name": "390 px: no horizontal overflow on a lecture page; every lecture button ≥ 44 px tall",
+   "ok": true,
+   "detail": "{\"sw\":390,\"iw\":390,\"small\":[]}"
+  },
+  {
+   "id": "L11",
+   "name": "Held-out pool is not filtered or re-ordered by v15",
+   "ok": true,
+   "detail": "{\"held\":11,\"heldRaw\":11,\"sample\":50}"
+  }
+ ]
+}

@@ -1,0 +1,219 @@
+{
+ "pass": 23,
+ "total": 23,
+ "results": [
+  {
+   "id": "S1",
+   "name": "Fresh on Wed 23 Sep: starts from today (Day 3), real date kept, chip names the moved lessons",
+   "ok": true,
+   "detail": "{\"chip\":\"TODAY · WED 23 SEP · +4 FROM MON 21 + TUE 22\",\"day\":3}"
+  },
+  {
+   "id": "S1b",
+   "name": "Nothing lost or duplicated: every lesson of Mon 21–Fri 25 appears exactly once in Wed 23–Fri 25; Mon 21 and Tue 22 are empty",
+   "ok": true,
+   "detail": "{\"wed\":[\"T003@1\",\"T006@2\",\"T009@3\",\"T001@1\",\"T002@1\"],\"thu\":[\"T007@2\",\"T008@2\",\"T010@3\",\"T004@1\",\"T005@2\",\"T011@3\"],\"fri\":[\"T012@4\",\"T013@4\",\"T014@4\",\"T015@5\",\"T016@5\",\"T017@5\"]}"
+  },
+  {
+   "id": "S1c",
+   "name": "Placed where relevant: synapse physiology before sensory receptors, brainstem before cerebellum and 4th ventricle, PNS nerves before neuroglia and nerve endings",
+   "ok": true,
+   "detail": "T003 T006 T009 T001 T002 T007 T008 T010 T004 T005 T011 T012 T013 T014 T015 T016 T017"
+  },
+  {
+   "id": "S1d",
+   "name": "The department's order within each subject is kept (anatomy: spinal cord → brainstem → cerebellum → …)",
+   "ok": true,
+   "detail": "{\"ANAT\":[\"T001\",\"T002\",\"T007\",\"T008\",\"T010\",\"T012\",\"T013\",\"T015\"],\"PHYS\":[\"T003\",\"T006\",\"T009\",\"T014\",\"T016\",\"T017\"],\"HIST\":[\"T004\",\"T005\",\"T011\"]}"
+  },
+  {
+   "id": "S1e",
+   "name": "Load is balanced over the catch-up days (each ≤ 207 planned min incl. the daily boss); the weekend review and mock are untouched",
+   "ok": true,
+   "detail": "{\"est\":[170,192,172],\"sat\":{\"day\":6,\"mode\":\"CONTINUITY\",\"est\":35,\"ls\":[]},\"sun\":{\"day\":7,\"mode\":\"CONTINUITY\",\"est\":35,\"ls\":[]}}"
+  },
+  {
+   "id": "S1f",
+   "name": "Today starts with a moved lesson that says where it came from and why it sits here",
+   "ok": true,
+   "detail": "📅 From Mon 21 Sep · placed just before “Sensory receptors and afferents”, the lesson it matters most for"
+  },
+  {
+   "id": "S1g",
+   "name": "The course rail tags each moved lesson with its original date",
+   "ok": true,
+   "detail": "[\"PHYSIOLOGY Introduction to synapse FROM MON 21 SEP\",\"PHYSIOLOGY Synaptic potentials and transmission FROM TUE 22 SEP\",\"PHYSIOLOGY Sensory receptors and afferents\",\"ANATOMY Spinal cord I FROM MON 21 SEP\",\"ANATOMY Spinal cord II FROM MON 21 SEP\"]"
+  },
+  {
+   "id": "S1h",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "S3",
+   "name": "Reload re-applies the same plan (no second spread, same order)",
+   "ok": true,
+   "detail": "{\"spreads\":1}"
+  },
+  {
+   "id": "S7",
+   "name": "A moved lesson teaches normally (LEARN lecture) and its progress is saved under its original day",
+   "ok": true,
+   "detail": "{\"lesson\":\"T003\",\"from\":1,\"key\":\"d1:T003:s1\",\"learn\":true,\"h\":\"Structure: knob, cleft, receptors\",\"segs\":[\"d1:T003:s0\"]}"
+  },
+  {
+   "id": "S8",
+   "name": "A mock after the spread only asks about lessons already scheduled on or before today",
+   "ok": true,
+   "detail": "{\"n\":21,\"outside\":0}"
+  },
+  {
+   "id": "S2",
+   "name": "Work already done is kept: same completed steps, and the started lesson continues first today",
+   "ok": true,
+   "detail": "{\"was\":[\"d1:T001:s0\"],\"now\":[\"d1:T001:s0\"],\"first\":\"T001@1\",\"next\":{\"kind\":\"SEGMENT\",\"l\":\"T001\",\"key\":\"d1:T001:s1\"},\"moved\":\"📅 From Mon 21 Sep · you had started it, so it continues first\"}"
+  },
+  {
+   "id": "S4",
+   "name": "\"Keep the original order instead\" restores every lesson to its own day and the carryover label; progress kept; choice survives reload",
+   "ok": true,
+   "detail": "{\"chip\":\"TODAY · WED 23 SEP · 2 DAYS CARRYOVER\",\"day\":1,\"reload\":{\"day\":1,\"chip\":\"TODAY · WED 23 SEP · 2 DAYS CARRYOVER\"}}"
+  },
+  {
+   "id": "S4b",
+   "name": "The carryover banner offers the spread; choosing it spreads again from today",
+   "ok": true,
+   "detail": "{\"hasOffer\":true,\"day\":3,\"chip\":\"TODAY · WED 23 SEP · +4 FROM MON 21 + TUE 22\"}"
+  },
+  {
+   "id": "S5",
+   "name": "A spread-out day counts as done once all of its lessons are done (Mon 21 yes, Tue 22 not yet)",
+   "ok": true,
+   "detail": "[1]"
+  },
+  {
+   "id": "S5b",
+   "name": "No page errors across undo/redo",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "S6",
+   "name": "Midnight with a question on screen: the answer screen stays; the spread happens at the next non-question step",
+   "ok": true,
+   "detail": "{\"mid\":{\"day\":1,\"finish\":true,\"chip\":\"TODAY · TUE 22 SEP · 1 DAY CARRYOVER\"},\"between\":{\"day\":1,\"q\":\"question\"},\"after\":{\"day\":2,\"rec\":true,\"chip\":\"TODAY · TUE 22 SEP · +3 FROM MON 21\"}}"
+  },
+  {
+   "id": "S6b",
+   "name": "No page errors across midnight",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "S9",
+   "name": "Five days behind on a Saturday: today teaches the missed lessons instead of reviewing nothing; nothing lost across the course",
+   "ok": true,
+   "detail": "{\"day\":6,\"sat\":{\"day\":6,\"mode\":\"TEACHING\",\"est\":170,\"ls\":[\"T001@1\",\"T002@1\",\"T003@1\",\"T006@2\",\"T009@3\"]},\"chip\":\"TODAY · SAT 26 SEP · +5 FROM MON 21–WED 23\"}"
+  },
+  {
+   "id": "S9b",
+   "name": "No page errors after a multi-day gap",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "S11",
+   "name": "A lesson moved from Mon 21 and answered on a later day keeps its question pinned (the answer screen never swaps items)",
+   "ok": true,
+   "detail": "{\"setup\":{\"day\":4,\"l\":\"T004\",\"from\":1},\"q\":{\"id\":\"EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-1\",\"key\":\"b\",\"l\":\"T004\",\"from\":1},\"after\":{\"id\":\"EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-1\",\"pins\":[\"1:T004:0\",\"1:T004:1\"]}}"
+  },
+  {
+   "id": "S11b",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "S10",
+   "name": "390 px: no horizontal overflow with the spread banner; its button and all player buttons ≥ 44 px",
+   "ok": true,
+   "detail": "{\"sw\":390,\"iw\":390,\"btn\":44,\"small\":[]}"
+  }
+ ],
+ "freshLayout": [
+  {
+   "day": 1,
+   "mode": "TEACHING",
+   "est": 140,
+   "ls": []
+  },
+  {
+   "day": 2,
+   "mode": "TEACHING",
+   "est": 130,
+   "ls": []
+  },
+  {
+   "day": 3,
+   "mode": "TEACHING",
+   "est": 170,
+   "ls": [
+    "T003@1",
+    "T006@2",
+    "T009@3",
+    "T001@1",
+    "T002@1"
+   ]
+  },
+  {
+   "day": 4,
+   "mode": "TEACHING",
+   "est": 192,
+   "ls": [
+    "T007@2",
+    "T008@2",
+    "T010@3",
+    "T004@1",
+    "T005@2",
+    "T011@3"
+   ]
+  },
+  {
+   "day": 5,
+   "mode": "TEACHING",
+   "est": 172,
+   "ls": [
+    "T012@4",
+    "T013@4",
+    "T014@4",
+    "T015@5",
+    "T016@5",
+    "T017@5"
+   ]
+  },
+  {
+   "day": 6,
+   "mode": "CONTINUITY",
+   "est": 35,
+   "ls": []
+  },
+  {
+   "day": 7,
+   "mode": "CONTINUITY",
+   "est": 35,
+   "ls": []
+  },
+  {
+   "day": 8,
+   "mode": "TEACHING",
+   "est": 117,
+   "ls": [
+    "T018@8",
+    "T019@8",
+    "T020@8",
+    "T021@8"
+   ]
+  }
+ ]
+}

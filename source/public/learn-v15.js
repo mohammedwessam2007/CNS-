@@ -16,7 +16,7 @@
  */
 (function () {
   "use strict";
-  const VERSION = "15.1";
+  const VERSION = "15.2";
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
   const SP = [[/fibre/g, "fiber"], [/\bgrey/g, "gray"], [/centre/g, "center"], [/haem/g, "hem"], [/oesoph/g, "esoph"], [/oedema/g, "edema"], [/ambiguous/g, "ambiguus"], [/leminisc/g, "lemnisc"], [/mamill/g, "mammill"], [/lentiform/g, "lenticular"], [/\b1st\b/g, "first"], [/\b2nd\b/g, "second"], [/\b3rd\b/g, "third"], [/\b4th\b/g, "fourth"], [/\b5th\b/g, "fifth"], [/\b6th\b/g, "sixth"], [/\b7th\b/g, "seventh"], [/\b8th\b/g, "eighth"]];
   const norm = (s) => SP.reduce((z, [a, b]) => z.replace(a, b), String(s || "").toLowerCase()).replace(/[^a-z0-9]+/g, " ").trim();

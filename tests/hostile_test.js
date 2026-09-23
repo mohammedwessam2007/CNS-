@@ -60,8 +60,16 @@ function bigPng(w, h) {
   {
     const s = await open({ time: '2026-09-26T09:00:00+03:00', state: partial, settle: 1100 });
     const r = { chip: await chipOf(s.page), day: await s.page.evaluate(() => S.day), banner: await s.page.evaluate(() => document.querySelector('.v14Carryover')?.innerText || '') };
-    check('X1', 'Five days missed: real date (SAT 26 SEP) + "5 DAYS CARRYOVER", Day-1 work kept, never relabelled as today', r.chip === 'TODAY · SAT 26 SEP · 5 DAYS CARRYOVER' && r.day === 1 && /unfinished Mon 21 Sep work/.test(r.banner), r);
+    const segs = await s.page.evaluate(() => Object.keys(S.segments).filter((k) => S.segments[k]).sort());
+    check('X1', 'Five days missed: real date (SAT 26 SEP), today teaches the missed lessons (each labelled with its date), Day-1 work kept', /^TODAY · SAT 26 SEP · \+\d+ FROM MON 21–/.test(r.chip) && r.day === 6 && /Today was a review day/.test(r.banner) && JSON.stringify(segs) === JSON.stringify(Object.keys(partial.segments).filter((k) => partial.segments[k]).sort()), r);
     check('X1b', 'No page errors after a multi-day gap', s.log.errors.length === 0, s.log.errors.slice(0, 2));
+    await s.close();
+  }
+  {
+    const io = JSON.parse(JSON.stringify(partial)); io.v14.calendar.policy = 'inorder';
+    const s = await open({ time: '2026-09-26T09:00:00+03:00', state: io, settle: 1100 });
+    const r = { chip: await chipOf(s.page), day: await s.page.evaluate(() => S.day), banner: await s.page.evaluate(() => document.querySelector('.v14Carryover')?.innerText || '') };
+    check('X1i', 'Original-order choice, five days missed: "5 DAYS CARRYOVER", Day-1 work kept, never relabelled as today', r.chip === 'TODAY · SAT 26 SEP · 5 DAYS CARRYOVER' && r.day === 1 && /unfinished Mon 21 Sep work/.test(r.banner), r);
     await s.close();
   }
   {
@@ -74,7 +82,7 @@ function bigPng(w, h) {
   {
     const s = await open({ time: '2026-09-21T22:30:00Z', timezoneId: 'America/New_York', state: partial, settle: 1000 });
     const r = await chipOf(s.page);
-    check('X3', 'Device set to New York (still Mon evening there): Cairo date (Tue 22 Sep) is used', r === 'TODAY · TUE 22 SEP · 1 DAY CARRYOVER', r);
+    check('X3', 'Device set to New York (still Mon evening there): Cairo date (Tue 22 Sep) is used', r === 'TODAY · TUE 22 SEP · +4 FROM MON 21', r);
     await s.close();
   }
   {
@@ -90,7 +98,7 @@ function bigPng(w, h) {
     await page.evaluate((k) => document.querySelector('[data-act="qbank-choice"][data-choice="' + k + '"]')?.click(), q.keys[0]);
     await page.waitForTimeout(500);
     const after = await page.evaluate((id) => ({ rec: !!S.qbank.results[id], same: !!document.querySelector('[data-act="finish-qbank"]') }), q.id);
-    check('X4', 'Overnight resume: chip rolls to Tue 22 Sep carryover without yanking the open question; answer recorded', before === 'TODAY · MON 21 SEP' && mid.chip === 'TODAY · TUE 22 SEP · 1 DAY CARRYOVER' && mid.stillQ >= 2 && after.rec && after.same, { before, mid, after });
+    check('X4', 'Overnight resume: chip rolls to Tue 22 Sep (1 day carryover while the question is on screen) without yanking the open question; answer recorded', before === 'TODAY · MON 21 SEP' && mid.chip === 'TODAY · TUE 22 SEP · 1 DAY CARRYOVER' && mid.stillQ >= 2 && after.rec && after.same, { before, mid, after });
     check('X4b', 'No page errors across midnight', s.log.errors.length === 0, s.log.errors.slice(0, 2));
     await s.close();
   }
