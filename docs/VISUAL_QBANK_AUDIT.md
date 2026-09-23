@@ -138,3 +138,19 @@ node tests/certify.js                         # 60 checks
 ```
 On the live site (iPad Safari console or desktop): `await INTELLECTUALITY_V14.audit({n:60})` returns the same metrics against live Commons. Review `rows[].primary` by hand for relevance.
 
+## 6. Every MCQ option, pictured (v14.3)
+
+After an answer, each option gets its own card: all options after a correct answer, and the other options inside the wrong-answer autopsy, since the key and your pick are already side by side there. A picture is accepted only when:
+- its title names the option's **distinctive** words (not class nouns like "neurons" or "sinuses", and not position words like "middle" or "anterior"); or
+- a look-alike contrast that fits the **question** names that option.
+
+An option-derived concept is used only when it belongs to the question, or when the option names it unambiguously; this stops "crista galli" from pulling in the inner-ear crista. No image repeats on a screen. Nothing is rendered before the answer.
+
+| Measure (`tests/options_gallery_test.js`, receipt `receipts/v14/options_gallery.json`) | Result |
+|---|---|
+| Checks (never before the answer · all options after correct · other options in autopsy · no repeats · no errors) | **7/7** |
+| 40-item sample: options with a picture that names them | **36/160 (22.5%)**. The rest are statements, numbers or levels, and get an honest "no trustworthy picture of this exact option" note |
+| Hand review of the 36 pictured options | **0 wrong-structure pictures.** Some are region-level, e.g. "middle meningeal artery" → meninges, "carotid sheath" → neck triangles, "lesser petrosal" → parotid (via the secretomotor contrast) |
+| Review history | The first pass pictured 54/160 with 1 wrong-domain match (crista galli → semicircular canals) and generic class-noun matches. The precision rules above removed both, at the cost of coverage (22.5%) |
+
+Also fixed: after a correct answer, the "why" panel repeated the anchor image already shown above it. Hydration now skips an image that is already on screen.

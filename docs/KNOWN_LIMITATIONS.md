@@ -1,14 +1,17 @@
-# Known Limitations (v14.2)
+# Known Limitations (v14.3)
 
 v14.2 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
 
-## 1. Deployment and live verification (blocking)
+## 1. Deployment and live verification
 
 | Limitation | Consequence | What closes it |
 |---|---|---|
-| **Not deployed.** This build session has no Hatchable MCP connector, and its network policy blocks `*.hatchable.site`. The 403s were reported, not retried or routed around. | Live is still **v53** ("INTELLECTUALITY CNS v14 · UNDERSTAND FIRST"). None of the v14.2 behaviour reaches the iPad until someone deploys. | Follow the deploy procedure in `docs/V14_CERTIFICATION_RECEIPT.md` from a Hatchable-connected session. |
-| **No live test, no production logs.** | Zero-new-errors in production is unverified. | `view_logs` after deploy, plus the live checklist in the receipt. |
-| **No cache-busting on script URLs** (same as v53). | An iPad may keep old JS for a while after deploy. | Confirm the tab title reads **v14.2**; hard-refresh if not. |
+| **Live on Vercel, not Hatchable.** v14.3 is deployed to **https://intellectuality-cns.vercel.app** (READY; see `docs/DEPLOYMENT_VERCEL.md`). Hatchable could not be reached from the build session, so the Hatchable site is still v53. | Two sites exist. Progress does not move between them automatically: the Hatchable site uses email login and Postgres, the Vercel site uses sync codes and Blob. | Use the Vercel site. To bring Hatchable progress over, export or copy the saved state from the old site (not automated). |
+| **Cloud backup needs one owner action.** The Vercel connector may not create storage (403). | Until a Blob store is connected, progress is saved **on each device only**; the ☁ button says so. Clearing Safari website data, or a new device, starts fresh. | Connect a private Blob store and redeploy (4 steps in `docs/DEPLOYMENT_VERCEL.md`). |
+| **The live site was not opened from the build session.** Its egress policy blocks `*.vercel.app`; the connector's fetch and log tools returned 403/404. | Proof is limited to: the READY build from the tested commit, 60/60 certification plus 14/14 host checks against the identical local build, and the build step's fail-fast checks. No live screenshot, and no production logs read. | Open the URL on the iPad (checklist in the deployment doc); Vercel → project → Logs. |
+| **Sync code = the key.** No email or password. | Anyone with the code or link can read and write that progress. If every device loses it (e.g. Safari clears site data) and it was not saved, the cloud copy cannot be found. | Screenshot the code from the sync page. The code is 128-bit random and only its hash is stored. |
+| **Professor Vision is off on Vercel.** It needs the Hatchable AI connection. | The Vision drawer reports it as unavailable; nothing else is affected. | Add an AI key and a Vercel `api/vision` implementation if wanted. |
+| **No cache-busting on script URLs** (same as v53). | An iPad may keep old JS briefly after a new deploy. | Confirm the tab title reads **v14.3**; reload if not. |
 
 ## 2. Visuals
 

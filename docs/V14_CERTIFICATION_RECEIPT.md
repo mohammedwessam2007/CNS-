@@ -1,4 +1,4 @@
-# v14.2 Certification Receipt
+# v14.2 Certification Receipt (+ v14.3 addendum at the end)
 
 | | |
 |---|---|
@@ -184,4 +184,17 @@ The other 20 deploy files (`api/state.js`, `api/vision.js`, `hatchable.toml`, th
    - in the console, `await INTELLECTUALITY_V14.audit({n:60})` and review `rows[].primary`;
    - `view_logs` shows zero new errors.
 6. Rollback: redeploy the v53 files from commit `6e3ebec` (verified by `scripts/verify_exact_source.py`), or use the Hatchable console history to restore deployment 53. v14 state lives under `S.v14` and is ignored by v53 code; the legacy fields v53 reads are left intact.
+
+## v14.3 addendum: option pictures + Vercel deployment
+
+| | |
+|---|---|
+| Deployed | **https://intellectuality-cns.vercel.app**, Vercel deployment `dpl_5VVHU6ySd6Ureg2WweAe9d3h3Uqf`, READY, commit `5f9288b`, region fra1. Hatchable remains v53. |
+| Certification, plain build (`source/public`) | **60/60** (`receipts/v14/certify_checks.txt`) |
+| Certification, Vercel build (`deploy/vercel/dist` + real `api/state.js` on an in-memory store) | **60/60** (`receipts/v14/certify_checks_vercel_build.txt`) |
+| Host adapter (save, batch, hide, link, conflicts with clock skew, sync page, guards) | **14/14** (`receipts/v14/vercel_host_test.json`) |
+| Option pictures (never pre-answer, all options / other options, no repeats) | **7/7**; 36/160 options pictured in a 40-item sample, 0 wrong-structure pictures on review (`receipts/v14/options_gallery.json`) |
+| Leak audit after the change | **0/921** text leaks, 0 answer-derived queries |
+| Manifest | `manifests/V14_3_CANDIDATE_MANIFEST.json` (27 deploy files, 7 changed vs v53) |
+| Not verified | Opening the live URL from the build session (egress-blocked), production logs (connector 403), real Commons responses, real iPad Safari |
 
