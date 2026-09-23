@@ -1,0 +1,19 @@
+PASS L1   Teach step = LEARN lecture: whole-picture intro, section 1/N, Egyptian command, no MCQ, no topic wallpaper  · {"k":"SEGMENT:teach:T001","lesson":"T001","n":4,"big":true,"h":"Extent: where the cord begins and ends","top":"SECTION 1 / 4","figs":2,"hydrated":2,"licensed":2,"via":["Wikipedia · Conus medullaris","Wikipedia · Spinal cord"],"lin
+PASS L2   Each section picture is shown for its exact term (Wikipedia article → free Commons file, licence shown), inside the app: no link to press  · {"lesson":"T001","n":4,"big":true,"h":"Extent: where the cord begins and ends","top":"SECTION 1 / 4","figs":2,"hydrated":2,"licensed":2,"via":["Wikipedia · Conus medullaris","Wikipedia · Spinal cord"],"links":0,"local":0,"bundle":
+PASS L2b  No Wikipedia request on the first (home) screen: pictures load only when their page is shown  · {"wikiOnHome":0}
+PASS L2d  Tap a picture → it opens large inside the app (2× on tap, closes on tap outside); no navigation  · {"z":{"img":"https://upload.wikimedia.org/mock/File%3AConus%20medullaris%20labeled%20diagram.svg","cap":"Conus medullaris · LABELED DIAGRAM\nConus medullaris, labeled","h":48},"big":true,"closed":true}
+PASS L3   Back/next paging works and the page survives a reload (saved position)  · {"back":"SECTION 1 / 4","afterReload":"SECTION 1 / 4"}
+PASS L4   A recall rated "not yet" comes back once on a FINAL RECALL page before practice  · {"missed":"✗ It comes back once before practice.","pages":4,"finalRecall":"One more pass on what did not come back\nرجّعها من دماغك\nPull it from memory\nرجّعها من دماغك\nCOVER IT · ANSWER IN YOUR HE"}
+PASS L4b  LESSON LEARNED → PRACTICE finishes the teach segment and moves on  · {"kind":"SEGMENT","seg":"video","method":"","segs":2}
+PASS L4c  No page errors in the lecture flow  · []
+PASS L5   Teach before test: questions whose note is in a not-yet-learned lesson are held back, and return once that lesson is learned  · {"lesson":"T001","raw":18,"rawLater":10,"pool":8,"later":0,"pool2":18,"later2":10}
+PASS L6   Nothing from v15 appears before the answer (no note card, no exact option pictures)  · {"note":0,"exact":0}
+PASS L7   After a wrong answer the autopsy links back to the note section that teaches the question  · {"note":"ارجع للنوتة\n📖 FROM YOUR NOTES · Filum terminale and cauda equina"}
+PASS L8   Option pictures use the exact words of the option: every exact-term picture names a term whose words are all in that option  · {"exact":1,"cells":["DENTICULATE LIGAMENTS · LABELED DIAGRAM ⇐ Denticulate ligament are lateral extension of arac"," ⇐ The adult spinal cord terminates at intervertebral"]}
+PASS L8b  No page errors after answering  · []
+PASS L8c  After answering: no picture card is an outside link (options, autopsy, note card, topic pictures)  · {"outside":[],"cards":3,"local":0}
+PASS L9   Picture sources down: each figure says so honestly (no links); the lecture text is intact  · {"figs":2,"shown":0,"notes":["No free picture of exactly “Conus medullaris” yet.\nThe words above carry it: bui","No free picture of exactly “Spinal cord” yet.\nThe words above carry it: build th"],"links":0,"text":496}
+PASS L10  390 px: no horizontal overflow on a lecture page; every lecture button ≥ 44 px tall  · {"sw":390,"iw":390,"small":[]}
+PASS L11  Held-out pool is not filtered or re-ordered by v15  · {"held":11,"heldRaw":11,"sample":50}
+
+17/17 LEARN checks passed (22s)

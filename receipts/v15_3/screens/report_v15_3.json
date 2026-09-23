@@ -1,0 +1,105 @@
+{
+ "label": "v15_3",
+ "url": "http://127.0.0.1:8790/",
+ "viewports": {
+  "iphone": {
+   "sw": 390,
+   "iw": 390,
+   "small": [],
+   "overflow": false,
+   "errors": 0
+  },
+  "ipad": {
+   "sw": 820,
+   "iw": 820,
+   "small": [],
+   "overflow": false,
+   "errors": 0
+  },
+  "ipadpro": {
+   "sw": 1024,
+   "iw": 1024,
+   "small": [],
+   "overflow": false,
+   "errors": 0
+  },
+  "ipad-land": {
+   "sw": 1180,
+   "iw": 1180,
+   "small": [],
+   "overflow": false,
+   "errors": 0
+  }
+ },
+ "perf": {
+  "coldLoad": {
+   "domContentLoaded": 378,
+   "load": 379,
+   "fcp": 184,
+   "transferKB": 4248,
+   "requests": 40,
+   "heapMB": 4.4,
+   "nodes": 554,
+   "listeners": 39,
+   "layouts": 0,
+   "styleRecalcs": 0,
+   "commonsOnLoad": 2
+  },
+  "transitionsMs": {
+   "revealOptions": 2.8,
+   "wrongAnswerToAutopsy": 16.8
+  },
+  "session30": {
+   "answered": 30,
+   "steps": 171,
+   "wallS": 13.8,
+   "stepP50ms": 8,
+   "stepP95ms": 17,
+   "before": {
+    "heapMB": 6.4,
+    "nodes": 1027,
+    "listeners": 43,
+    "layouts": 3,
+    "styleRecalcs": 3
+   },
+   "after": {
+    "heapMB": 9.2,
+    "nodes": 1022,
+    "listeners": 45,
+    "layouts": 0,
+    "styleRecalcs": 0
+   },
+   "heapGrowthMB": 2.8,
+   "listenerGrowth": 2,
+   "maxCommonsInflight": 2,
+   "commonsCalls": 71,
+   "stateKB": 129,
+   "actions": {
+    "repair": 6,
+    "retest": 6,
+    "reveal": 24,
+    "answer": 18,
+    "next": 18,
+    "SEGMENT:[data-act=\"visual-hide\"]": 12,
+    "SEGMENT:[data-act=\"finish-segment\"]": 41,
+    "SEGMENT:[data-act=\"v15-next\"]": 32,
+    "answer-wrong": 6,
+    "DAY_VISUAL_BOSS:button.primary": 2,
+    "DAY_WRITTEN_BOSS:.bigAction": 2,
+    "DAY_WRITTEN_BOSS:button.primary": 2,
+    "STOP:[data-act=\"certify\"]": 2
+   },
+   "errors": []
+  },
+  "duplicateRenders": {
+   "nodes": [
+    1023,
+    1022
+   ],
+   "listeners": [
+    45,
+    45
+   ]
+  }
+ }
+}

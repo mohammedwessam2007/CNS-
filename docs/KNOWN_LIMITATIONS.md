@@ -1,6 +1,14 @@
-# Known Limitations (v15.2)
+# Known Limitations (v15.3)
 
-v15.2 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+v15.3 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## 000. v15.3 notes, badges, pictures, pace, offline
+
+- **Coverage is measured by word-matching.** Chapter level: 93.0% practice / 68.1% held-out (counts only). Strict (same section): 82.9% / 49.7%. Paraphrased teaching is not counted; held-out items are never read, so they are not targeted.
+- **Written model answers** come from the notes, not from a department marking scheme.
+- **"✗ Wrong picture"** swaps to the next free picture found live; with no network, the note says so.
+- **Offline** works after one online visit and pre-fetches only the next two days' pictures. The service worker is network-first for the app itself, so a new deploy is picked up on the next online load.
+- **Pace** is only an estimate: time with the app open but untouched counts, up to 3× a step's plan.
 
 ## 00. v15.2 start-from-today spread
 

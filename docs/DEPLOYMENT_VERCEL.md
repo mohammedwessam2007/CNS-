@@ -1,8 +1,8 @@
-# Deployment: Vercel host (v15.2)
+# Deployment: Vercel host (v15.3)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.2 · LEARN FIRST") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v15.3 · LEARN FIRST") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
 | Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, commit `5f9288b`; root directory `deploy/vercel` |
 | Deployment | `dpl_5VVHU6ySd6Ureg2WweAe9d3h3Uqf`: **READY**, production, functions in `fra1` (Frankfurt) |
@@ -24,6 +24,10 @@
 - Limits: 7 minutes (`PICS_MINUTES`) plus a 45 s hard stop and 160 MB. Six requests run in parallel with a descriptive User-Agent. 429 and 5xx responses are retried with backoff.
 - `PICS=0` turns bundling off. `PICS_WP`, `PICS_WREST` and `PICS_COMMONS` point the build at another endpoint; the tests use `tests/pics_mock_server.js`, started by `IX_PICS_MOCK=1 bash tests/host_ctl.sh start`.
 - Cache: `node_modules/.cache/intellectuality-pics/` (kept by Vercel between builds).
+
+## Offline (v15.3)
+
+`source/public/sw.js` is registered by the app (https or localhost only). It is network-first for pages, scripts and notes, cache-first for the content-addressed bundled pictures (`/pics/<hash>.<ext>`; `manifest.js` is network-first), and it never touches `/api/*` or other origins. Its shell cache is named per version (`ix-shell-15.3`), so an update clears the old copies. The test harness blocks service workers except in `tests/v153_test.js` P5.
 
 ## Saving progress
 

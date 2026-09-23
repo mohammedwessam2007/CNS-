@@ -294,6 +294,6 @@ export async function bundlePictures({ outDir, noteSources, registrySources = []
 }
 
 export async function readNoteSources(srcDir) {
-  const names = ["learn-notes-anat-v15.js", "learn-notes-phys-v15.js", "learn-notes-hist-v15.js"];
+  const names = ["learn-notes-anat-v15.js", "learn-notes-phys-v15.js", "learn-notes-hist-v15.js", "learn-notes-plus-v15.js"];
   return Promise.all(names.map((n) => readFile(new URL(n, srcDir), "utf8")));
 }

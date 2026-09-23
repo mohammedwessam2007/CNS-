@@ -1,0 +1,16 @@
+PASS P6   Notes plus: every addition found its section, original section ids unchanged, new sections complete (facts, why, trap, recall, pictures)  · {"missed":[],"kept":240,"base":240,"added":16,"bullets":229}
+PASS P1   Lecture shows the chapter exam tier and the past-paper weight of the section (batches from practice items only)  · {"kicker":"THE WHOLE PICTURE · SPINAL CORD · EXAM TIER A (10 sources)","hy":"🔥🔥 4 bank questions · past exams: 196 · 194 · 193 · 192"}
+PASS P2   A lecture section carries the written (essay) question the department asks about it  · السؤال المقالي
+✍️ The written exam asks this section as
+What are the structures formed by thickening of the Pia mater to fix the spinal cord
+Mention thickenings of Pia matter (196 1st)
+Answer it in yo
+PASS P2b  Written boss: after the reveal, a model-answer outline built from the notes (headings + points) sits above the scaffold  · {"kind":"DAY_WRITTEN_BOSS","prompt":"Discuss the mechanism of synaptic transmission","heads":["Structure: knob, cleft, receptors","Termination, and the resting membrane","Types of synapses and transmitters"],"pts":12}
+PASS P2c  No page errors  · []
+PASS P3   Zoom offers "✗ Wrong picture — show another" (≥ 44 px); tapping it swaps in a different picture and the rejection survives a reload  · {"before":{"term":"Conus medullaris","key":"exact:File:Conus medullaris labeled diagram.svg"},"after":{"key":"exact:File:Conus medullaris histology micrograph.jpg","note":"","ban":["File:Conus medullaris labeled diagram.svg"],"zoom":false},"reload":{"key":"exa
+PASS P3b  No page errors  · []
+PASS P4   Personal pace: after 8+ timed steps at twice the plan, the pace is ≈ 2× and "minutes remaining" is shown at the learner's pace  · {"plan0":140,"ratio":2.000855860156253,"n":12,"meta":"Visual-first teaching mission · ~140 min ceiling · ~116 min remaining at your pace (×2.0) · NORMAL ENERGY · ZERO LECTURES","remain":116}
+PASS P4b  No page errors  · []
+PASS P5   Offline: after one online visit, the app and today's lecture open with no network, bundled pictures included  · {"controlled":true,"online":["/pics/8eb17fd9f802d5.svg","/pics/bf2780c9c6cd6c.svg"],"off":{"title":"INTELLECTUALITY CNS v15.3 · LEARN FIRST","learn":true,"h":"Extent: where the cord begins and ends","imgs":[{"src":"/pics/8eb17fd9f802d5.svg","ok":true},{"src":"
+
+10/10 v15.3 checks passed (26s)

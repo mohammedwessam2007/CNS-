@@ -1,0 +1,764 @@
+{
+ "practice": {
+  "n": 915,
+  "taught": 851
+ },
+ "heldout": {
+  "n": 398,
+  "taught": 271
+ },
+ "chapters": {
+  "ANATOMY · Spinal cord": {
+   "notes": true,
+   "practice": [
+    18,
+    18
+   ],
+   "heldout": [
+    8,
+    5
+   ]
+  },
+  "ANATOMY · Brain stem": {
+   "notes": true,
+   "practice": [
+    28,
+    28
+   ],
+   "heldout": [
+    12,
+    11
+   ]
+  },
+  "ANATOMY · Cerebellum": {
+   "notes": true,
+   "practice": [
+    11,
+    11
+   ],
+   "heldout": [
+    5,
+    4
+   ]
+  },
+  "ANATOMY · Fourth ventricle": {
+   "notes": true,
+   "practice": [
+    9,
+    9
+   ],
+   "heldout": [
+    4,
+    2
+   ]
+  },
+  "ANATOMY · Sulci & gyri": {
+   "notes": true,
+   "practice": [
+    6,
+    5
+   ],
+   "heldout": [
+    2,
+    2
+   ]
+  },
+  "ANATOMY · Base of brain": {
+   "notes": true,
+   "practice": [
+    6,
+    6
+   ],
+   "heldout": [
+    3,
+    2
+   ]
+  },
+  "ANATOMY · Cerebral hemisphere white matter": {
+   "notes": true,
+   "practice": [
+    17,
+    16
+   ],
+   "heldout": [
+    7,
+    6
+   ]
+  },
+  "ANATOMY · Basal ganglia": {
+   "notes": true,
+   "practice": [
+    3,
+    3
+   ],
+   "heldout": [
+    1,
+    1
+   ]
+  },
+  "ANATOMY · Lateral ventricle": {
+   "notes": true,
+   "practice": [
+    6,
+    6
+   ],
+   "heldout": [
+    2,
+    2
+   ]
+  },
+  "ANATOMY · Diencephalon": {
+   "notes": true,
+   "practice": [
+    7,
+    7
+   ],
+   "heldout": [
+    3,
+    3
+   ]
+  },
+  "ANATOMY · Third ventricle": {
+   "notes": true,
+   "practice": [
+    6,
+    6
+   ],
+   "heldout": [
+    3,
+    1
+   ]
+  },
+  "ANATOMY · Meninges": {
+   "notes": true,
+   "practice": [
+    6,
+    6
+   ],
+   "heldout": [
+    3,
+    1
+   ]
+  },
+  "ANATOMY · Cerebrospinal fluid (CSF)": {
+   "notes": true,
+   "practice": [
+    8,
+    8
+   ],
+   "heldout": [
+    4,
+    3
+   ]
+  },
+  "ANATOMY · Arterial and venous supply of brain": {
+   "notes": true,
+   "practice": [
+    17,
+    17
+   ],
+   "heldout": [
+    7,
+    7
+   ]
+  },
+  "ANATOMY · Embryology (Development of CNS)": {
+   "notes": true,
+   "practice": [
+    9,
+    7
+   ],
+   "heldout": [
+    3,
+    3
+   ]
+  },
+  "ANATOMY · Scalp": {
+   "notes": true,
+   "practice": [
+    4,
+    4
+   ],
+   "heldout": [
+    2,
+    1
+   ]
+  },
+  "ANATOMY · Face": {
+   "notes": true,
+   "practice": [
+    15,
+    15
+   ],
+   "heldout": [
+    7,
+    6
+   ]
+  },
+  "ANATOMY · Parotid gland": {
+   "notes": true,
+   "practice": [
+    9,
+    9
+   ],
+   "heldout": [
+    4,
+    3
+   ]
+  },
+  "ANATOMY · Muscles of mastication": {
+   "notes": true,
+   "practice": [
+    10,
+    10
+   ],
+   "heldout": [
+    4,
+    4
+   ]
+  },
+  "ANATOMY · Temporomandibular joint": {
+   "notes": true,
+   "practice": [
+    3,
+    3
+   ],
+   "heldout": [
+    2,
+    1
+   ]
+  },
+  "ANATOMY · Trigeminal (5th cranial) nerve": {
+   "notes": true,
+   "practice": [
+    24,
+    24
+   ],
+   "heldout": [
+    10,
+    9
+   ]
+  },
+  "ANATOMY · Maxillary artery & pterygoid venous plexus": {
+   "notes": true,
+   "practice": [
+    6,
+    6
+   ],
+   "heldout": [
+    3,
+    3
+   ]
+  },
+  "ANATOMY · Cranial cavity": {
+   "notes": true,
+   "practice": [
+    19,
+    19
+   ],
+   "heldout": [
+    8,
+    5
+   ]
+  },
+  "ANATOMY · Orbit": {
+   "notes": true,
+   "practice": [
+    8,
+    8
+   ],
+   "heldout": [
+    4,
+    4
+   ]
+  },
+  "ANATOMY · Cervical fascia": {
+   "notes": true,
+   "practice": [
+    2,
+    2
+   ],
+   "heldout": [
+    1,
+    0
+   ]
+  },
+  "ANATOMY · Posterior triangle & External jugular vein": {
+   "notes": true,
+   "practice": [
+    4,
+    4
+   ],
+   "heldout": [
+    2,
+    2
+   ]
+  },
+  "ANATOMY · Sternomastoid muscle": {
+   "notes": true,
+   "practice": [
+    5,
+    5
+   ],
+   "heldout": [
+    2,
+    2
+   ]
+  },
+  "ANATOMY · Cervical plexus & Lateral vertebral muscles": {
+   "notes": true,
+   "practice": [
+    0,
+    0
+   ],
+   "heldout": [
+    1,
+    0
+   ]
+  },
+  "ANATOMY · Subclavian artery and vein": {
+   "notes": true,
+   "practice": [
+    3,
+    3
+   ],
+   "heldout": [
+    1,
+    0
+   ]
+  },
+  "ANATOMY · Submandibular region": {
+   "notes": true,
+   "practice": [
+    10,
+    10
+   ],
+   "heldout": [
+    4,
+    4
+   ]
+  },
+  "ANATOMY · Muscular triangle and thyroid gland": {
+   "notes": true,
+   "practice": [
+    8,
+    8
+   ],
+   "heldout": [
+    4,
+    3
+   ]
+  },
+  "ANATOMY · Carotid triangle": {
+   "notes": true,
+   "practice": [
+    14,
+    14
+   ],
+   "heldout": [
+    6,
+    6
+   ]
+  },
+  "ANATOMY · Cranial Nerves": {
+   "notes": true,
+   "practice": [
+    21,
+    21
+   ],
+   "heldout": [
+    9,
+    8
+   ]
+  },
+  "ANATOMY · Oral Cavity": {
+   "notes": true,
+   "practice": [
+    11,
+    11
+   ],
+   "heldout": [
+    4,
+    4
+   ]
+  },
+  "ANATOMY · Pharynx": {
+   "notes": true,
+   "practice": [
+    9,
+    9
+   ],
+   "heldout": [
+    4,
+    3
+   ]
+  },
+  "ANATOMY · Nose": {
+   "notes": true,
+   "practice": [
+    42,
+    42
+   ],
+   "heldout": [
+    18,
+    14
+   ]
+  },
+  "PHYSIOLOGY · Anatomy of synapses & Mechanism of synaptic transmission": {
+   "notes": true,
+   "practice": [
+    11,
+    10
+   ],
+   "heldout": [
+    5,
+    2
+   ]
+  },
+  "PHYSIOLOGY · Properties and factors affecting synaptic transmission": {
+   "notes": true,
+   "practice": [
+    11,
+    10
+   ],
+   "heldout": [
+    5,
+    1
+   ]
+  },
+  "PHYSIOLOGY · Sensory Code, Mechanoreceptive & Thermal Sensations": {
+   "notes": true,
+   "practice": [
+    15,
+    14
+   ],
+   "heldout": [
+    6,
+    3
+   ]
+  },
+  "PHYSIOLOGY · Sensory receptors": {
+   "notes": true,
+   "practice": [
+    16,
+    14
+   ],
+   "heldout": [
+    7,
+    4
+   ]
+  },
+  "PHYSIOLOGY · Somatic sensory pathways & Somatic Sensory Cortex": {
+   "notes": true,
+   "practice": [
+    16,
+    15
+   ],
+   "heldout": [
+    6,
+    5
+   ]
+  },
+  "PHYSIOLOGY · Types of synaptic potentials": {
+   "notes": true,
+   "practice": [
+    22,
+    20
+   ],
+   "heldout": [
+    9,
+    7
+   ]
+  },
+  "PHYSIOLOGY · Lesions of the sensory system": {
+   "notes": true,
+   "practice": [
+    6,
+    5
+   ],
+   "heldout": [
+    3,
+    2
+   ]
+  },
+  "PHYSIOLOGY · Pain control system": {
+   "notes": true,
+   "practice": [
+    8,
+    7
+   ],
+   "heldout": [
+    4,
+    3
+   ]
+  },
+  "PHYSIOLOGY · Pain sensation": {
+   "notes": true,
+   "practice": [
+    32,
+    23
+   ],
+   "heldout": [
+    14,
+    8
+   ]
+  },
+  "PHYSIOLOGY · Spinal reflexes and Spinal cord transection": {
+   "notes": true,
+   "practice": [
+    70,
+    66
+   ],
+   "heldout": [
+    30,
+    23
+   ]
+  },
+  "PHYSIOLOGY · Equilibrium and Vestibular apparatus": {
+   "notes": true,
+   "practice": [
+    23,
+    20
+   ],
+   "heldout": [
+    10,
+    7
+   ]
+  },
+  "PHYSIOLOGY · Motor Cortex": {
+   "notes": true,
+   "practice": [
+    9,
+    9
+   ],
+   "heldout": [
+    4,
+    1
+   ]
+  },
+  "PHYSIOLOGY · Upper and Lower Motor Neuron Lesion": {
+   "notes": true,
+   "practice": [
+    11,
+    10
+   ],
+   "heldout": [
+    5,
+    3
+   ]
+  },
+  "PHYSIOLOGY · Basal ganglia": {
+   "notes": true,
+   "practice": [
+    14,
+    12
+   ],
+   "heldout": [
+    6,
+    1
+   ]
+  },
+  "PHYSIOLOGY · The cerebellum": {
+   "notes": true,
+   "practice": [
+    15,
+    13
+   ],
+   "heldout": [
+    7,
+    4
+   ]
+  },
+  "PHYSIOLOGY · Control of voluntary movement": {
+   "notes": true,
+   "practice": [
+    2,
+    2
+   ],
+   "heldout": [
+    1,
+    1
+   ]
+  },
+  "PHYSIOLOGY · The Arousal Mechanism": {
+   "notes": true,
+   "practice": [
+    4,
+    4
+   ],
+   "heldout": [
+    2,
+    1
+   ]
+  },
+  "PHYSIOLOGY · Sleep": {
+   "notes": true,
+   "practice": [
+    12,
+    12
+   ],
+   "heldout": [
+    5,
+    3
+   ]
+  },
+  "PHYSIOLOGY · Speech and language": {
+   "notes": true,
+   "practice": [
+    6,
+    5
+   ],
+   "heldout": [
+    3,
+    1
+   ]
+  },
+  "PHYSIOLOGY · Memory & Learning": {
+   "notes": true,
+   "practice": [
+    12,
+    10
+   ],
+   "heldout": [
+    5,
+    0
+   ]
+  },
+  "PHYSIOLOGY · Fluid system of the eye and intraocular pressure": {
+   "notes": true,
+   "practice": [
+    6,
+    4
+   ],
+   "heldout": [
+    2,
+    1
+   ]
+  },
+  "PHYSIOLOGY · Physiologic optics": {
+   "notes": true,
+   "practice": [
+    3,
+    2
+   ],
+   "heldout": [
+    2,
+    0
+   ]
+  },
+  "PHYSIOLOGY · Color vision and visual pathway": {
+   "notes": true,
+   "practice": [
+    10,
+    8
+   ],
+   "heldout": [
+    4,
+    2
+   ]
+  },
+  "PHYSIOLOGY · Refractive media of the eye": {
+   "notes": true,
+   "practice": [
+    23,
+    21
+   ],
+   "heldout": [
+    10,
+    4
+   ]
+  },
+  "PHYSIOLOGY · The retina": {
+   "notes": true,
+   "practice": [
+    24,
+    19
+   ],
+   "heldout": [
+    10,
+    4
+   ]
+  },
+  "PHYSIOLOGY · The uveal tract": {
+   "notes": true,
+   "practice": [
+    6,
+    5
+   ],
+   "heldout": [
+    3,
+    0
+   ]
+  },
+  "PHYSIOLOGY · Inner ear (Labyrinth )": {
+   "notes": true,
+   "practice": [
+    15,
+    12
+   ],
+   "heldout": [
+    7,
+    3
+   ]
+  },
+  "PHYSIOLOGY · Sound & Function of middle ear": {
+   "notes": true,
+   "practice": [
+    7,
+    6
+   ],
+   "heldout": [
+    3,
+    2
+   ]
+  },
+  "HISTOLOGY · Nervous Tissue": {
+   "notes": true,
+   "practice": [
+    28,
+    26
+   ],
+   "heldout": [
+    11,
+    9
+   ]
+  },
+  "HISTOLOGY · Central Nervous System": {
+   "notes": true,
+   "practice": [
+    37,
+    34
+   ],
+   "heldout": [
+    17,
+    13
+   ]
+  },
+  "HISTOLOGY · Eye": {
+   "notes": true,
+   "practice": [
+    31,
+    29
+   ],
+   "heldout": [
+    14,
+    11
+   ]
+  },
+  "HISTOLOGY · Ear": {
+   "notes": true,
+   "practice": [
+    26,
+    24
+   ],
+   "heldout": [
+    11,
+    7
+   ]
+  }
+ },
+ "missing": [],
+ "noNotes": [],
+ "sections": 256,
+ "nChapters": 68
+}

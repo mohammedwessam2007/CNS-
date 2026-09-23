@@ -16,7 +16,7 @@
  */
 (function () {
   "use strict";
-  const VERSION = "15.2";
+  const VERSION = "15.3";
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
   const SP = [[/fibre/g, "fiber"], [/\bgrey/g, "gray"], [/centre/g, "center"], [/haem/g, "hem"], [/oesoph/g, "esoph"], [/oedema/g, "edema"], [/ambiguous/g, "ambiguus"], [/leminisc/g, "lemnisc"], [/mamill/g, "mammill"], [/lentiform/g, "lenticular"], [/\b1st\b/g, "first"], [/\b2nd\b/g, "second"], [/\b3rd\b/g, "third"], [/\b4th\b/g, "fourth"], [/\b5th\b/g, "fifth"], [/\b6th\b/g, "sixth"], [/\b7th\b/g, "seventh"], [/\b8th\b/g, "eighth"]];
   const norm = (s) => SP.reduce((z, [a, b]) => z.replace(a, b), String(s || "").toLowerCase()).replace(/[^a-z0-9]+/g, " ").trim();
@@ -274,7 +274,9 @@
   // Picture for one exact term (a Wikipedia article title). `phrase` supplies the extra words
   // used to pick among the article's images by caption.
   async function pictureForTerm(term, phrase, opt = {}) {
-    const avoid = opt.avoid || new Set();
+    // pictures the learner rejected for this term ("✗ Wrong picture") are never shown again
+    const banned = safe(() => V().ban[term]) || [];
+    const avoid = banned.length ? new Set([...(opt.avoid || []), ...banned]) : opt.avoid || new Set();
     const loc = opt.noLocal ? null : localTerm(term, avoid);
     if (loc) return loc;
     let art = await wikiArticle(term).catch(() => null);
@@ -348,12 +350,39 @@
     d.setAttribute("aria-modal", "true");
     d.setAttribute("aria-label", "Picture");
     // cap is this app's own escaped DOM (a pre-answer card never contains the title)
-    d.innerHTML = '<button type="button" class="v15ZoomX" data-v15-zoom-close aria-label="Close">✕</button><div class="v15ZoomImg"><img src="' + E(img.currentSrc || img.src) + '" alt="' + E(img.alt) + '"></div>' + (cap ? '<div class="v15ZoomCap">' + cap.innerHTML + "</div>" : "") + '<div class="v15ZoomHint">Tap the picture for 2× · tap outside to close</div>';
+    const fig = card.closest("figure.v15Pic[data-v15-term]"),
+      title = (card.dataset.v15Key || "").replace(/^exact:/, "");
+    d.innerHTML =
+      '<button type="button" class="v15ZoomX" data-v15-zoom-close aria-label="Close">✕</button><div class="v15ZoomImg"><img src="' + E(img.currentSrc || img.src) + '" alt="' + E(img.alt) + '"></div>' +
+      (cap ? '<div class="v15ZoomCap">' + cap.innerHTML + "</div>" : "") +
+      (fig && title ? '<button type="button" class="v15Ban" data-v15-ban="' + E(fig.dataset.v15Term) + '" data-v15-file="' + E(title) + '">✗ Wrong picture — show another</button>' : "") +
+      '<div class="v15ZoomHint">Tap the picture for 2× · tap outside to close</div>';
     document.body.appendChild(d);
     document.documentElement.classList.add("v15ZoomOpen");
     d.querySelector(".v15ZoomX").focus?.();
   }
+  function banPicture(term, file) {
+    const v = V(),
+      list = (v.ban[term] = (v.ban[term] || []).filter((x) => x !== file).concat(file).slice(-6));
+    const keys = Object.keys(v.ban);
+    if (keys.length > 400) delete v.ban[keys[0]];
+    persist();
+    closeZoom();
+    document.querySelectorAll("#player figure.v15Pic").forEach((f) => {
+      if (f.dataset.v15Term !== term) return;
+      f.removeAttribute("data-v15-done");
+      f.innerHTML = '<div class="v14Skeleton"><span></span></div>';
+    });
+    hydratePics();
+    return list;
+  }
   function onZoomClick(ev) {
+    const ban = ev.target.closest?.("[data-v15-ban]");
+    if (ban) {
+      ev.preventDefault();
+      banPicture(ban.dataset.v15Ban, ban.dataset.v15File);
+      return;
+    }
     const z = ev.target.closest?.(".v15Zoom");
     if (z) {
       if (ev.target.closest(".v15ZoomImg img")) z.classList.toggle("big");
@@ -396,9 +425,9 @@
     const v = S.v15;
     if (v.schema !== 1) {
       for (const k of Object.keys(v)) delete v[k];
-      Object.assign(v, { schema: 1, version: VERSION, pos: {}, miss: {}, rec: {} });
+      Object.assign(v, { schema: 1, version: VERSION, pos: {}, miss: {}, rec: {}, ban: {}, pace: {} });
     }
-    for (const k of ["pos", "miss", "rec"]) if (!isObj(v[k])) v[k] = {};
+    for (const k of ["pos", "miss", "rec", "ban", "pace"]) if (!isObj(v[k])) v[k] = {};
     return v;
   }
   const persist = () => safe(() => save());
@@ -438,10 +467,11 @@
         [ar, en] = cmdFor(s);
       body =
         (first
-          ? '<div class="v15Big"><div class="v15Kicker">THE WHOLE PICTURE · ' + E(s.ch.chapter.toUpperCase()) + "</div><p>" + md(s.ch.big || "") + "</p></div>"
+          ? '<div class="v15Big"><div class="v15Kicker">THE WHOLE PICTURE · ' + E(s.ch.chapter.toUpperCase()) + chapterTier(s.ch) + "</div><p>" + md(s.ch.big || "") + "</p></div>"
           : "") +
         '<div class="v15Sec" data-v15-sec="' + E(s.id) + '">' +
         '<div class="v15Head"><h3>' + md(s.h) + '</h3><span class="v15Cmd"><span lang="ar" dir="rtl">' + E(ar) + "</span><small>" + E(en) + "</small></span></div>" +
+        hyBadge(s) +
         '<div class="v15Pics">' +
         (s.pic || [])
           .slice(0, 2)
@@ -451,6 +481,7 @@
         '<ul class="v15Pts">' + (s.p || []).map((x) => "<li>" + md(x) + "</li>").join("") + "</ul>" +
         (s.why ? '<div class="v15Why"><b lang="ar" dir="rtl">ليه؟</b> <b>Why it works</b><p>' + md(s.why) + "</p></div>" : "") +
         (s.trap ? '<div class="v15Trap"><b lang="ar" dir="rtl">امسك الفرق</b> <b>Kasr trap</b><p>' + md(s.trap) + "</p></div>" : "") +
+        writtenHTML(s) +
         recallHTML(s, a.key) +
         "</div>";
     } else {
@@ -505,6 +536,98 @@
       if (!best || sc > best.sc) best = { s, sc };
     }
     return best && best.sc > 3 ? best.s : null;
+  }
+  // Past-paper weight of each note section: the PRACTICE questions it teaches, and the exams they
+  // came from (batch numbers 191–198, years, EOM/Final). Held-out items are never counted.
+  let HY = null;
+  function highYield() {
+    if (HY) return HY;
+    HY = new Map();
+    for (const q of window.EHSAN_QBANK?.questions || []) {
+      if (q.split !== "practice") continue;
+      const s = bestSection(q);
+      if (!s) continue;
+      const h = HY.get(s) || { n: 0, exams: new Set() };
+      h.n++;
+      const t = String(q.sourceTag || "");
+      for (const m of t.matchAll(/\b(19[0-9])\b(\s*(?:EOM|Final))?/gi)) h.exams.add(m[1] + (m[2] ? " " + m[2].trim().replace(/final/i, "Final").toUpperCase().replace("FINAL", "Final") : ""));
+      for (const m of t.matchAll(/\b(20[0-2][0-9])\b/g)) h.exams.add(m[1]);
+      HY.set(s, h);
+    }
+    return HY;
+  }
+  // The department's written (essay) questions, each attached to the note section that answers it.
+  function sectionsForText(text, subject, chapter) {
+    const I = index(),
+      want = new Set(toks(text)),
+      ch = I.byChapter[subject + " · " + chapter];
+    const pool = ch ? ch.s : I.all.filter((x) => x.ch.subject === subject);
+    const ranked = pool
+      .map((x) => {
+        const head = new Set(toks(x.h));
+        let sc = 0;
+        for (const w of want) if (x.tok.has(w)) sc += Math.log(1 + I.N / (I.df.get(w) || 1)) * (head.has(w) ? 2 : 1);
+        return { s: x, sc };
+      })
+      .filter((r) => r.sc > 2)
+      .sort((a, b) => b.sc - a.sc);
+    return ranked;
+  }
+  const sectionForText = (text, subject, chapter) => sectionsForText(text, subject, chapter)[0]?.s || null;
+  let WR = null;
+  function writtenMap() {
+    if (WR) return WR;
+    WR = new Map();
+    for (const w of window.EHSAN_QBANK?.written || []) {
+      const x = sectionForText(w.prompt, w.subject, w.chapter);
+      if (!x) continue;
+      (WR.get(x) || WR.set(x, []).get(x)).push(w);
+    }
+    return WR;
+  }
+  function writtenHTML(x) {
+    const ws = writtenMap().get(x);
+    if (!ws || !ws.length) return "";
+    return (
+      '<div class="v15Written"><b lang="ar" dir="rtl">السؤال المقالي</b> <b>✍️ The written exam asks this section as</b><ul>' +
+      ws.slice(0, 3).map((w) => "<li>" + E(w.prompt.replace(/\s*\((19|20)\d[^)]*\)\s*$/, "")) + (w.sourceTag ? " <i>(" + E(w.sourceTag) + ")</i>" : "") + "</li>").join("") +
+      "</ul><small>Answer it in your head as headings from the points above before you go on.</small></div>"
+    );
+  }
+  const plain = (t) => String(t || "").replace(/\*\*(.+?)\*\*/g, "$1").replace(/(^|[\s(])[*_]([^*_]+?)[*_](?=[\s.,;:)]|$)/g, "$1$2");
+  // Written boss / written wave: after the reveal, the model-answer outline comes from the notes.
+  function decorateWritten() {
+    const sc = document.querySelector("#player ol.scaffold");
+    if (!sc || sc.dataset.v15Model) return;
+    sc.dataset.v15Model = "1";
+    const promptEl = document.querySelector("#player .sourcePrompt") || document.querySelector("#player .stage > h2");
+    const text = promptEl ? promptEl.textContent : "";
+    const w = (window.EHSAN_QBANK?.written || []).find((x) => x.prompt.trim() === text.trim());
+    const ranked = w ? sectionsForText(w.prompt, w.subject, w.chapter) : [];
+    if (!ranked.length) return;
+    // an essay usually spans several sections: take those scoring ≥ 60% of the best, in note order
+    const top = ranked.filter((r) => r.sc >= 0.6 * ranked[0].sc).slice(0, 3).map((r) => r.s).sort((a, b) => a.i - b.i);
+    sc.insertAdjacentHTML(
+      "beforebegin",
+      '<div class="v15Model"><b>📖 MODEL ANSWER OUTLINE · FROM YOUR NOTES</b>' +
+        top.map((x) => "<h4>" + md(x.h) + "</h4><ol>" + (x.p || []).slice(0, top.length > 1 ? 4 : 7).map((t) => "<li>" + md(t) + "</li>").join("") + "</ol>").join("") +
+        (top[0].trap ? "<p><b>Don't lose the mark:</b> " + md(top[0].trap) + "</p>" : "") +
+        "<small>Built from your notes' sections; the department's marking scheme may use other headings.</small></div>",
+    );
+  }
+  function hyBadge(s) {
+    const h = highYield().get(s);
+    if (!h) return "";
+    const ex = [...h.exams].sort((a, b) => parseInt(b) - parseInt(a));
+    const hot = ex.length >= 4 ? "🔥🔥" : ex.length ? "🔥" : "📘";
+    return (
+      '<span class="v15HY" title="Practice questions this section teaches, and the past exams they came from">' + hot + " " + h.n + " bank question" + (h.n === 1 ? "" : "s") +
+      (ex.length ? " · past exams: " + E(ex.slice(0, 5).join(" · ")) + (ex.length > 5 ? " +" + (ex.length - 5) : "") : "") + "</span>"
+    );
+  }
+  function chapterTier(ch) {
+    const c = window.NEU205_PATTERN?.chapters?.[ch.subject + "||" + ch.chapter];
+    return c && c.tier ? " · EXAM TIER " + E(c.tier) + " (" + (c.sourceN || 0) + " sources)" : "";
   }
   function noteCardHTML(s) {
     return (
@@ -618,6 +741,51 @@
     }
   }
 
+  /* ───────────────────────── personal pace (v15.3) ─────────────────────────
+   * The planned minutes are estimates. Each finished step is timed against its plan (only while the
+   * page is visible; one step is capped at 3× its plan so a break does not count), and an average
+   * ratio per step type becomes the learner's pace. After 8 timed steps, "minutes remaining" and the
+   * size of a catch-up spread use it. */
+  let paceCur = null,
+    hiddenAt = 0,
+    hiddenMs = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) hiddenAt = Date.now();
+    else if (hiddenAt) {
+      hiddenMs += Date.now() - hiddenAt;
+      hiddenAt = 0;
+    }
+  });
+  function paceTick() {
+    const a = safe(() => nextAction()),
+      key = a && a.kind === "SEGMENT" ? a.key : null;
+    if (paceCur && paceCur.key !== key) {
+      if (S.segments?.[paceCur.key]) {
+        const planMin = paceCur.plan,
+          mins = Math.max(0, (Date.now() - paceCur.t - (hiddenMs - paceCur.hidden)) / 60000);
+        if (planMin > 0 && mins > 0.05) {
+          const r = Math.min(3, mins / planMin),
+            p = V().pace,
+            e = p[paceCur.type] || { r: 1, n: 0 };
+          e.r = e.n ? 0.8 * e.r + 0.2 * r : r;
+          e.n++;
+          p[paceCur.type] = e;
+          const all = p._all || { r: 1, n: 0 };
+          all.r = all.n ? 0.85 * all.r + 0.15 * r : r;
+          all.n++;
+          p._all = all;
+        }
+      }
+      paceCur = null;
+    }
+    if (key && !paceCur) paceCur = { key, type: a.seg?.type || "step", plan: a.seg?.minutes || 3, t: Date.now(), hidden: hiddenMs };
+  }
+  function paceRatio() {
+    const all = safe(() => V().pace._all);
+    return all && all.n >= 8 ? Math.max(0.6, Math.min(2.2, all.r)) : 1;
+  }
+  window.INTELLECTUALITY_PACE = paceRatio;
+
   /* ───────────────────────── teach before test ───────────────────────── */
   // A practice question is served only after the lesson whose note teaches it has been learned,
   // whenever the pool still has other questions (never an empty slot, never a held-out item).
@@ -663,6 +831,14 @@
       if (a && a.seg && a.seg.type === "teach" && a.l && sectionsForLesson(a.l.id).length) return learnView(a);
       return base.apply(this, arguments);
     };
+    // minutes remaining follow the learner's measured pace (planned minutes × pace)
+    if (typeof remainingMinutes === "function") {
+      const baseRemain = remainingMinutes;
+      remainingMinutes = function (d) {
+        const m = baseRemain.apply(this, arguments);
+        return Number.isFinite(m) ? Math.round(m * paceRatio()) : m;
+      };
+    }
     const oldRender = render;
     render = function () {
       const out = oldRender.apply(this, arguments);
@@ -672,7 +848,12 @@
             const st = document.querySelector("#player .v15Stage");
             // topic wallpaper does not belong on a note page: pictures there are exact-term only
             if (st) st.querySelectorAll(".ctxCompanion,.realVisualBank,.v14Visuals").forEach((x) => x.remove());
+            paceTick();
+            const pr = paceRatio(),
+              meta = document.querySelector("#meta");
+            if (meta && pr !== 1 && !/your pace/.test(meta.textContent)) meta.textContent = meta.textContent.replace(/ · ~(\d+) min remaining/, " · ~$1 min remaining at your pace (×" + pr.toFixed(1) + ")");
             decoratePost();
+            decorateWritten();
             hydratePics();
             const a = typeof nextAction === "function" ? nextAction() : null;
             if (st && a && a.kind === "SEGMENT") prefetchNext(a);
@@ -718,6 +899,23 @@
     // exact-words picture service used by the v14 option gallery and autopsy
     window.INTELLECTUALITY_EXACT = { pic, pictureForTerm, termsFor, localFile, bundled: () => (PICS() ? PICS().stats || {} : null) };
   }
+  /* ── offline (v15.3): service worker + the next days' pictures fetched ahead ── */
+  function offlineReady() {
+    if (!("serviceWorker" in navigator) || !(location.protocol === "https:" || /^(localhost|127\.0\.0\.1)$/.test(location.hostname))) return;
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then(() => navigator.serviceWorker.ready)
+      .then((reg) => {
+        const P = PICS();
+        if (!P || !isObj(P.terms) || typeof S === "undefined") return;
+        const urls = new Set();
+        for (const d of (window.COURSE?.days || []).slice(Math.max(0, S.day - 1), S.day + 2))
+          for (const l of d.lessons || []) for (const x of sectionsForLesson(l.id)) for (const t of x.pic || []) if (P.terms[t]?.src) urls.add(P.terms[t].src);
+        const w = reg.active || navigator.serviceWorker.controller;
+        if (w && urls.size) setTimeout(() => w.postMessage({ type: "precache", urls: [...urls] }), 4000);
+      })
+      .catch(() => null);
+  }
   function boot() {
     if (window.INTELLECTUALITY_V15_INSTALLED) return;
     if (typeof segmentView !== "function" || typeof render !== "function" || typeof S === "undefined") return void setTimeout(boot, 50);
@@ -728,6 +926,7 @@
     } catch (e) {
       console.error("[v15 init fail-safe]", e);
     }
+    safe(offlineReady);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();

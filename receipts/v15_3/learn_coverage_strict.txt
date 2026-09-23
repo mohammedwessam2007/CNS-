@@ -1,0 +1,70 @@
+STRICT practice taught 762/919 (82.9%)
+STRICT held-out taught 198/398 (49.7%)  [counts only]
+  ANATOMY · Spinal cord                                            practice 17/18  held-out 4/8
+  ANATOMY · Brain stem                                             practice 26/29  held-out 10/12
+  ANATOMY · Cerebellum                                             practice 11/11  held-out 3/5
+  ANATOMY · Fourth ventricle                                       practice 9/9  held-out 2/4
+  ANATOMY · Sulci & gyri                                           practice 5/6  held-out 1/2
+  ANATOMY · Base of brain                                          practice 6/6  held-out 2/3
+  ANATOMY · Cerebral hemisphere white matter                       practice 15/17  held-out 4/7
+  ANATOMY · Basal ganglia                                          practice 3/3  held-out 1/1
+  ANATOMY · Lateral ventricle                                      practice 6/6  held-out 1/2
+  ANATOMY · Diencephalon                                           practice 7/7  held-out 3/3
+  ANATOMY · Third ventricle                                        practice 6/6  held-out 1/3
+  ANATOMY · Meninges                                               practice 4/6  held-out 1/3
+  ANATOMY · Cerebrospinal fluid (CSF)                              practice 8/8  held-out 2/4
+  ANATOMY · Arterial and venous supply of brain                    practice 15/17  held-out 5/7
+  ANATOMY · Embryology (Development of CNS)                        practice 7/9  held-out 1/3
+  ANATOMY · Scalp                                                  practice 3/4  held-out 1/2
+  ANATOMY · Face                                                   practice 14/15  held-out 6/7
+  ANATOMY · Parotid gland                                          practice 9/9  held-out 3/4
+  ANATOMY · Muscles of mastication                                 practice 10/10  held-out 3/4
+  ANATOMY · Temporomandibular joint                                practice 3/3  held-out 1/2
+  ANATOMY · Trigeminal (5th cranial) nerve                         practice 24/24  held-out 8/10
+  ANATOMY · Maxillary artery & pterygoid venous plexus             practice 6/6  held-out 3/3
+  ANATOMY · Cranial cavity                                         practice 19/19  held-out 5/8
+  ANATOMY · Orbit                                                  practice 8/8  held-out 2/4
+  ANATOMY · Cervical fascia                                        practice 2/2  held-out 0/1
+  ANATOMY · Posterior triangle & External jugular vein             practice 4/4  held-out 2/2
+  ANATOMY · Sternomastoid muscle                                   practice 4/5  held-out 0/2
+  ANATOMY · Cervical plexus & Lateral vertebral muscles            practice 1/1  held-out 0/1
+  ANATOMY · Subclavian artery and vein                             practice 3/3  held-out 0/1
+  ANATOMY · Submandibular region                                   practice 10/10  held-out 3/4
+  ANATOMY · Muscular triangle and thyroid gland                    practice 7/8  held-out 1/4
+  ANATOMY · Carotid triangle                                       practice 13/14  held-out 5/6
+  ANATOMY · Cranial Nerves                                         practice 19/22  held-out 5/9
+  ANATOMY · Oral Cavity                                            practice 10/11  held-out 2/4
+  ANATOMY · Pharynx                                                practice 8/9  held-out 3/4
+  ANATOMY · Nose                                                   practice 40/43  held-out 9/18
+  PHYSIOLOGY · Anatomy of synapses & Mechanism of synaptic transmission practice 8/11  held-out 1/5
+  PHYSIOLOGY · Properties and factors affecting synaptic transmission practice 9/11  held-out 2/5
+  PHYSIOLOGY · Sensory Code, Mechanoreceptive & Thermal Sensations practice 11/15  held-out 3/6
+  PHYSIOLOGY · Sensory receptors                                   practice 13/16  held-out 4/7
+  PHYSIOLOGY · Somatic sensory pathways & Somatic Sensory Cortex   practice 11/16  held-out 4/6
+  PHYSIOLOGY · Types of synaptic potentials                        practice 18/22  held-out 6/9
+  PHYSIOLOGY · Lesions of the sensory system                       practice 5/6  held-out 1/3
+  PHYSIOLOGY · Pain control system                                 practice 5/8  held-out 2/4
+  PHYSIOLOGY · Pain sensation                                      practice 20/32  held-out 3/14
+  PHYSIOLOGY · Spinal reflexes and Spinal cord transection         practice 60/70  held-out 18/30
+  PHYSIOLOGY · Equilibrium and Vestibular apparatus                practice 16/23  held-out 2/10
+  PHYSIOLOGY · Motor Cortex                                        practice 9/9  held-out 0/4
+  PHYSIOLOGY · Upper and Lower Motor Neuron Lesion                 practice 7/11  held-out 3/5
+  PHYSIOLOGY · Basal ganglia                                       practice 11/14  held-out 1/6
+  PHYSIOLOGY · The cerebellum                                      practice 9/15  held-out 2/7
+  PHYSIOLOGY · Control of voluntary movement                       practice 2/2  held-out 0/1
+  PHYSIOLOGY · The Arousal Mechanism                               practice 4/4  held-out 0/2
+  PHYSIOLOGY · Sleep                                               practice 10/12  held-out 1/5
+  PHYSIOLOGY · Speech and language                                 practice 5/6  held-out 0/3
+  PHYSIOLOGY · Memory & Learning                                   practice 9/12  held-out 0/5
+  PHYSIOLOGY · Fluid system of the eye and intraocular pressure    practice 2/6  held-out 1/2
+  PHYSIOLOGY · Physiologic optics                                  practice 2/3  held-out 0/2
+  PHYSIOLOGY · Color vision and visual pathway                     practice 9/10  held-out 2/4
+  PHYSIOLOGY · Refractive media of the eye                         practice 17/23  held-out 1/10
+  PHYSIOLOGY · The retina                                          practice 16/24  held-out 2/10
+  PHYSIOLOGY · The uveal tract                                     practice 5/6  held-out 1/3
+  PHYSIOLOGY · Inner ear (Labyrinth )                              practice 8/15  held-out 2/7
+  PHYSIOLOGY · Sound & Function of middle ear                      practice 6/7  held-out 2/3
+  HISTOLOGY · Nervous Tissue                                       practice 24/28  held-out 7/11
+  HISTOLOGY · Central Nervous System                               practice 25/37  held-out 11/17
+  HISTOLOGY · Eye                                                  practice 25/31  held-out 6/14
+  HISTOLOGY · Ear                                                  practice 19/26  held-out 7/11

@@ -362,7 +362,8 @@
       const part = partition(seq, k);
       if (!part) continue;
       best = { win, part, seq };
-      if (part.max <= SPREAD_CAP) break;
+      // a slower measured pace means fewer planned minutes fit in a real day
+      if (part.max <= SPREAD_CAP / Math.max(1, safe(() => window.INTELLECTUALITY_PACE?.(), 1) || 1)) break;
     }
     if (!best) return null;
     const days = {},

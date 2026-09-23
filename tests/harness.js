@@ -35,6 +35,8 @@ async function open(opts = {}) {
     locale: 'en-GB',
     deviceScaleFactor: 1,
     hasTouch: !!opts.touch,
+    // the app registers a service worker (v15.3); probes keep it off unless a test asks for it
+    serviceWorkers: opts.sw ? 'allow' : 'block',
   });
   const log = { errors: [], console: [], commons: [], requests: 0 };
   if (opts.time) await context.clock.install({ time: new Date(opts.time) });
@@ -93,7 +95,7 @@ async function open(opts = {}) {
   page.on('pageerror', (e) => log.errors.push(String(e && e.stack || e)));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') log.console.push(m.type() + ': ' + m.text()); });
   page.on('request', () => log.requests++);
-  await page.goto(BASE + (opts.path || ''), { waitUntil: 'load' });
+  await page.goto(opts.url || BASE + (opts.path || ''), { waitUntil: 'load' });
   await page.waitForTimeout(opts.settle || 400);
   return { browser, context, page, log, close: async () => { await context.close(); if (!opts.browser) await browser.close(); } };
 }
