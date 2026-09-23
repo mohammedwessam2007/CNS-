@@ -84,6 +84,7 @@ All runs are against the local copy of `source/public` (`:8787`) unless marked a
 | Leak audit | 921 texts: **0** text leaks, **0** query leaks, **0** errors |
 | Rollback to the exact v53 files (`6e3ebec`, byte-identical tree on `:8788`) | pass: v16 state loads and renders in v53 with no errors, and comes back to v16 intact |
 | Build | The new check reports "35 app scripts/styles present"; all four explanation files and `mcq-v16.js` are in `dist` |
+| Vercel production | `dpl_4vTt3Y9efF7nAGQkMAZXWr5ijTNb` from `9329e17`: **READY** and aliased to `intellectuality-cns.vercel.app`. The build sandbox cannot open `*.vercel.app` (network policy), so the live page itself was not loaded from here |
 
 **About the B2 change.** B2 restores a Day-1 backup from Mon 21 Sep. Its browser runs on the real clock, which was already 24 Sep in Cairo, so the app moved the restored save to today's course day (day 4). That is the v15.2 date-truth rule. The v15.3 files behave the same way today (checked on `:8788` with commit `978ae07`). The test now expects the later of the file's day and today's day. It still checks that segments, XP, the local backup of the replaced copy, and the return to the course are all correct.
 

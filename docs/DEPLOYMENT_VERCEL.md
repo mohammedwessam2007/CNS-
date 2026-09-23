@@ -4,8 +4,8 @@
 |---|---|
 | Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v16.0 · MCQ EXAM") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
-| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, commit `5f9288b`; root directory `deploy/vercel` |
-| Deployment | `dpl_5VVHU6ySd6Ureg2WweAe9d3h3Uqf`: **READY**, production, functions in `fra1` (Frankfurt) |
+| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `9329e17` (v16.0; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
+| Deployment | `dpl_4vTt3Y9efF7nAGQkMAZXWr5ijTNb`: **READY** in 17 s (picture cache warm), production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's build-log tool returned 404, so the new file check was seen in the identical local build, not in Vercel's log |
 | Access | Public: Vercel Authentication and password protection are **off**, so the iPad needs no Vercel login |
 | Hatchable | Untouched. The Hatchable site is still v53 (there is no Hatchable connector in the build session) |
 
