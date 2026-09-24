@@ -1,11 +1,11 @@
-# Deployment: Vercel host (v16.0 · MCQ exam)
+# Deployment: Vercel host (v16.2 · MCQ exam + department drawings)
 
 | | |
 |---|---|
 | Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v16.0 · MCQ EXAM") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
-| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `9329e17` (v16.0; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
-| Deployment | `dpl_4vTt3Y9efF7nAGQkMAZXWr5ijTNb`: **READY** in 17 s (picture cache warm), production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's build-log tool returned 404, so the new file check was seen in the identical local build, not in Vercel's log |
+| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `f45807d` (v16.2; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
+| Deployment | `dpl_CyqrBpRXmSx9CZMrbVj8RtAShqJK` (v16.2): **READY** in 15 s (picture cache warm), production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's file-tree and build-log tools return 404 for Git deployments, so the file check ("38 app scripts/styles present", 50 encrypted drawings in `dist/dept`) was seen in the identical local build. Previous: `dpl_4vTt3Y9e…` (v16.0) |
 | Access | Public: Vercel Authentication and password protection are **off**, so the iPad needs no Vercel login |
 | Hatchable | Untouched. The Hatchable site is still v53 (there is no Hatchable connector in the build session) |
 
@@ -16,7 +16,7 @@
 - `api/state.js`: the same contract as the Hatchable `/api/state` (GET, POST, `baseVersion`, 409 conflict, 413 size cap). Progress is stored in **one private Vercel Blob per learner** at `learners/<sha256(code)>.json`, with `ifMatch` concurrency. Without a store it answers `503 cloud_not_configured`.
 - `api/vision.js`: `503 vision_unavailable_on_this_host`. Professor Vision needs the Hatchable AI connection; everything else works.
 
-Since v16 the build also fails if `index.html` names a same-origin script or stylesheet that is not in the output. v16 adds six app files: `mcq-v16.js`, `mcq-v16.css`, and the four `mcq-explain-anat/phys/hist/held-v16.js` files.
+Since v16 the build also fails if `index.html` names a same-origin script or stylesheet that is not in the output. v16 adds six app files: `mcq-v16.js`, `mcq-v16.css`, and the four `mcq-explain-anat/phys/hist/held-v16.js` files. v16.2 adds `mcq-dept-v16.js`, `dept-figs-v16-data.js`, `dept-figs-v16.js`, and the folder `dept/` of AES-256-GCM encrypted department drawings (unreadable without the owner's key, which is never deployed).
 
 ## Pictures bundled at build time (v15.1)
 
@@ -29,7 +29,7 @@ Since v16 the build also fails if `index.html` names a same-origin script or sty
 
 ## Offline (v15.3)
 
-`source/public/sw.js` is registered by the app (https or localhost only). It is network-first for pages, scripts and notes, cache-first for the content-addressed bundled pictures (`/pics/<hash>.<ext>`; `manifest.js` is network-first), and it never touches `/api/*` or other origins. Its shell cache is named per version (`ix-shell-16.1` since v16's held-out explanations), so an update clears the old copies. The test harness blocks service workers except in `tests/v153_test.js` P5.
+`source/public/sw.js` is registered by the app (https or localhost only). It is network-first for pages, scripts and notes, cache-first for the content-addressed bundled pictures (`/pics/<hash>.<ext>`; `manifest.js` is network-first), and it never touches `/api/*` or other origins. Its shell cache is named per version (`ix-shell-16.2` since the department drawings), so an update clears the old copies. The test harness blocks service workers except in `tests/v153_test.js` P5.
 
 ## Saving progress
 
