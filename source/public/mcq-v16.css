@@ -59,3 +59,19 @@
   .v16Opt { font-size: 15px !important; padding: 12px !important }
   .v16Why { margin-left: 8px }
 }
+
+/* v16.2 · department drawings (private, decrypted on the owner's device) */
+.ixDeptWrap { margin: 10px 0 }
+.ixDeptRow { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 10px }
+.ixDept { margin: 0; border: 1px solid #3c5f7a; border-radius: 12px; padding: 8px; background: #0f1621 }
+.ixDeptLab { font-size: 11px; font-weight: 850; letter-spacing: .05em; color: var(--cyan); margin-bottom: 6px }
+.ixDeptLab span { margin-right: 6px }
+.ixDeptImg { width: 100%; background: #fff; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center }
+.ixDeptImg img { display: block; width: 100%; height: 100%; object-fit: contain; cursor: zoom-in }
+.ixDept figcaption { font-size: 13px; line-height: 1.35; color: #c9d6e6; margin-top: 6px }
+.ixDeptMore { margin-top: 8px }
+.ixDeptMore summary { cursor: pointer; font-size: 13px; font-weight: 750; color: var(--cyan); padding: 6px 0 }
+.ixDeptZoom { position: fixed; inset: 0; z-index: 9999; background: rgba(4, 8, 14, .96); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; touch-action: pinch-zoom; overflow: auto }
+.ixDeptZoom img { max-width: 100%; max-height: calc(100vh - 60px); background: #fff; border-radius: 6px }
+.ixDeptZoomCap { color: #c9d6e6; font-size: 13px; margin-top: 8px; text-align: center; max-width: 900px }
+.ixDeptToast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 10000; max-width: min(92vw, 560px); background: #10273a; color: #e8f2ff; border: 1px solid #3c7aa8; border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.35; box-shadow: 0 8px 30px rgba(0, 0, 0, .45) }

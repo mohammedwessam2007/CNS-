@@ -707,7 +707,7 @@
       tm = tk && sel && !acc.has(sel) ? pictureFor(q, optText(q, sel)) : null,
       // the chosen option's picture only next to the right answer's picture, for contrast
       pics = tk ? figHTML(tk, "✓ " + tk, "good", q) + (tm && tm !== tk ? figHTML(tm, "✗ what you chose: " + tm, "bad", q) : "") : "";
-    return '<div class="v16Explain">' + rows + flag + (pics ? '<div class="v16Pics">' + pics + "</div>" : "") + note + (x ? "" : '<div class="v16Tiny">No tutor note is written for this item yet; the explanation comes from your notes.</div>') + "</div>";
+    return '<div class="v16Explain" data-qid="' + E(q.id) + '">' + rows + flag + (pics ? '<div class="v16Pics">' + pics + "</div>" : "") + note + (x ? "" : '<div class="v16Tiny">No tutor note is written for this item yet; the explanation comes from your notes.</div>') + "</div>";
   }
   function questionHTML(q, ctx, meta) {
     const v = V(),

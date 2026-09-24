@@ -658,4 +658,78 @@
   add("hi-eye", "Macula lutea and fovea", [
     "**Macula lutea**: yellow (xanthophyll) area lateral to the disc. **Fovea centralis** at its centre: **only cones**, with the inner layers pushed aside, giving the sharpest vision. The **optic disc** has **no photoreceptors**, hence the **blind spot**; the central artery and vein of the retina enter here.",
   ]);
+  /* ───────────── v16.2 · facts asked by the Nov 2024 paper's items that the bank lacked (practice items) ───────────── */
+  add("an-submandibular", "Submandibular triangle: boundaries and contents", [
+    "**Submental triangle** (a single midline triangle): **between the two anterior bellies of the digastric**, base = body of the hyoid, apex = chin, floor = the two **mylohyoids**; it holds the submental lymph nodes. Do not confuse it with the **muscular** triangle (below the hyoid) or the **occipital** triangle (upper part of the posterior triangle).",
+  ]);
+  sec("an-sulci-gyri", "Inferior surface", {
+    h: "Functional areas: which area, which deficit", l: "T013", pic: ["Brodmann area", "Paracentral lobule"],
+    p: [
+      "Loss of **general sensation** on one side → **areas 3, 1, 2** (primary somatosensory, postcentral gyrus) of the opposite hemisphere.",
+      "**Incontinence of urine and stool** → the **paracentral lobule** (medial surface, around the upper end of the central sulcus): leg, perineum, bladder and rectum.",
+      "**Inability to talk** (understands, cannot speak) → **Broca's area** (44, 45), inferior frontal gyrus of the dominant hemisphere: motor aphasia.",
+      "**Cannot discriminate colours** → the **visual association areas 18, 19**. Area 17 (primary visual) receives the image; a lesion there → blindness in the opposite half-field.",
+      "A woman **working as a tailor** who has not been able to do her work for a few weeks (fine skilled hand movement) → **motor area 4** (precentral gyrus; the hand has a large area).",
+      "Other numbers they use as distractors: **22** = auditory association (Wernicke's), **41, 42** = primary auditory, **39, 40** = angular and supramarginal gyri (reading, writing), **28** = entorhinal (smell), **6** = premotor.",
+    ],
+    why: "Every one of these cases is answered by one pairing: the symptom names a function, and each function has one area number. Learn the pairs as symptom → number.",
+    trap: "Colour loss is 18, 19 (association), not 17; incontinence is the paracentral lobule (medial surface), not a lateral-surface area.",
+    q: ["Incontinence of urine and stool: which area? Cannot discriminate colours: which areas?", "The paracentral lobule; the visual association areas 18, 19."],
+  });
+  add("ph-synapse-properties", "Properties of synaptic transmission", [
+    "**Neuronal pools**. **Divergence** = one fibre to many neurons: it **spreads (distributes)** a signal. **Convergence** = many fibres onto one neuron: it gives **spatial** summation and so **helps in the selection of important signals and ignoring unimportant ones**.",
+    "**Facilitation vs occlusion**. Two input fibres whose **discharge zones are apart**: each leaves a **subliminal fringe**; stimulated together the fringes overlap → **more** neurons fire than the sum of each alone = **facilitation**, which is due to **stimulation of 2 input neurons away from each other**. Two inputs **close together** with a **common discharge zone** → **fewer** than the sum = **occlusion**.",
+  ]);
+  /* ───────────── v16.2 · the department's "Applied anatomy" boxes (Dr Hanan: important; some came in the exam) ───────────── */
+  add("an-csf", "Circulation and absorption", [
+    "Department numbers: the adult has about **135 cc** of CSF; **400–500 cc** is made (and absorbed) daily, so the CSF is **renewed about three times a day**. Normal pressure ≈ **100 mm water**; obstruction at the narrow foramina and aqueduct raises it. **Lumbar puncture** is safe **below L2** (the cord ends at L1–L2).",
+  ]);
+  add("an-brain-blood", "Circle of Willis", [
+    "Applied: one artery of the circle is often very small or absent without symptoms. Normally the two sides' blood hardly **mingles**; if a big artery is blocked before the circle, the connections open up. **Cortical branches** anastomose with each other **before** they enter the brain, not after (inside they are **end arteries**); the **central branches are end arteries**.",
+  ]);
+  add("an-scalp", "Five layers and the dangerous layer", [
+    "Applied (dense connective-tissue layer, the 2nd): its **fibrous septa** limit the spread of infection, but a cut there **bleeds severely**: the rich vessels are held open by the septa and **cannot contract**. The 4th layer (loose areolar) is the dangerous one: infection reaches the cranial cavity through its **emissary veins**, and bleeding there lifts the scalp off the skull.",
+  ]);
+  add("an-parotid", "Nerve supply: secretomotor pathway and pain", [
+    "**Parotitis** (mumps: viral or bacterial, reaching the gland through its duct or the blood): severe pain and swelling with the **lobule of the auricle raised (everted)**. The pain comes from stretching of the **tight parotid capsule**, and it is worse on **chewing** because the gland is closely related to the TMJ. **Parotid tumours** arise mostly in the part **superficial to the facial nerve** branches: **benign** ones spare the nerve, **malignant** ones invade it → facial palsy.",
+  ]);
+  add("an-tmj", "Structure, movements and dislocation", [
+    "Department wording: the mandible dislocates **only forwards**. With the mouth open the condyles sit under the articular tubercle; a sudden blow or even a convulsive yawn pushes one or both condyles **into the infratemporal fossa in front of the tubercle**. **Reduction**: press the mandible **down and back** while **raising the chin** at the same time.",
+  ]);
+  add("an-maxillary-artery", "Middle meningeal artery and the pterion", [
+    "Applied: a temporal fracture (or an injury stripping dura from bone) tears the middle meningeal artery → blood between dura and bone = **extradural haemorrhage**; a **trephine** (burr-hole) operation relieves the cerebral compression.",
+  ]);
+  add("an-cranial-cavity", "Cavernous sinus: tributaries, drainage and communicatio", [
+    "**Cavernous sinus thrombosis**: infection spreads from the **dangerous area of the face** (around the nose and upper lip) by facial vein → **deep facial vein → pterygoid plexus → emissary vein through the foramen ovale** (or the ophthalmic veins) → cavernous sinus. Signs: **fever**, **internal (medial) squint** (the abducent nerve, lying free in the sinus, suffers first), a congested oedematous eye (**black eye**) and later **proptosis**.",
+  ]);
+  add("an-posterior-triangle", "External jugular vein", [
+    "Applied: the external jugular vein is **adherent to the deep fascia where it pierces it** (just above the clavicle). Cut there, it is held open and **cannot collapse** → air is sucked in → **air embolism**.",
+  ]);
+  add("an-carotid-triangle", "Internal jugular vein", [
+    "**Central venous catheter**: a line into a large vein, the **internal jugular** or the **subclavian**, for rapid drugs, fluids and nutrition, and to measure the **central venous pressure**.",
+  ]);
+  add("an-muscular-triangle-thyroid", "Thyroidectomy and the laryngeal nerves", [
+    "A **goitre** can grow down behind the sternum (**retrosternal goitre**) → dyspnoea and venous congestion. During thyroidectomy leave the **posterior part** of the gland: the **parathyroids** lie in it, and removing them → **hypocalcaemia and tetany**.",
+    "Voices of nerve injury: **external laryngeal** (cricothyroid paralysed, the cords slack) → a **weak, low-pitched voice** with mild hoarseness, noticeable mainly when both sides are cut. **Recurrent laryngeal**, one side → a **hoarse, breathy voice** (it may improve as the other cord over-adducts); it is commoner on the **left** because of its long course in the thorax (bronchogenic carcinoma is the commonest thoracic cause). Both sides, **partial** → the abductors fail, the cords lie adducted → **dyspnoea and stridor**, needing a tracheostomy; both sides, **complete** → cords fixed in the **cadaveric position** (midway) → **aphonia**.",
+    "**Tracheostomy**: a small transverse incision in the lower neck; the strap muscles are pulled aside, the thyroid **isthmus divided** if needed, and the opening made in the **2nd and 3rd tracheal rings**. In an emergency a needle through the **cricothyroid ligament** (felt by palpation) gives an airway.",
+  ]);
+  add("an-submandibular", "Submandibular and sublingual glands", [
+    "**Stones** form in the **submandibular duct** far more often (about **50 times**) than in the parotid duct: its secretion is **thick and viscid**, it drains **against gravity**, and it opens in the floor of the mouth where food particles enter and seed a stone. The swelling in the submandibular region **grows during meals** and settles between them.",
+  ]);
+  add("an-cranial-nerves", "Vagus nerve (X) in the neck", [
+    "**Vagus injury**: tachycardia and arrhythmia. **Vasovagal attack** (vagal over-stimulation, e.g. at the sight of blood or fear) → bradycardia, hypotension and fainting. Pharyngeal branch injury → **dysphagia**, and the soft palate (**uvula**) deviates to the **opposite (healthy) side**.",
+  ]);
+  add("an-cranial-nerves", "Accessory (XI), hypoglossal (XII) and the ans", [
+    "The **spinal accessory** nerve is **subcutaneous** in the posterior triangle, so a **superficial cut** or a **lymph-node biopsy** there injures it → weakness and wasting of **sternomastoid and trapezius**, with weak turning of the face to the opposite side and a drooping shoulder.",
+    "**Hypoglossal injury** → **hemiatrophy** of that side of the tongue, and on protrusion the tongue deviates **towards the affected side** (the healthy genioglossus pushes it over).",
+  ]);
+  add("an-cranial-nerves", "Glossopharyngeal nerve (IX)", [
+    "**Glossopharyngeal injury** → loss of taste (and general sensation) on the **posterior 1/3 of the tongue** and loss of the **gag reflex** on that side. Tonsillitis pain can be **referred to the (middle) ear**, because IX supplies both.",
+  ]);
+  add("an-trigeminal", "Mandibular nerve (V3): posterior division", [
+    "**Trigeminal neuralgia (tic douloureux)**: severe, brief, episodic pain in the area of the **maxillary and/or mandibular** nerve, caused by compression of the trigeminal **sensory root** by a blood vessel or a tumour.",
+  ]);
+  add("an-diencephalon", "Parts of the diencephalon", [
+    "**Pituitary tumours** show 3 kinds of feature: **endocrine** disturbance; **raised intracranial tension** (headache, vomiting, blurred vision); and **pressure** effects, e.g. on the optic chiasma → **bitemporal hemianopia**.",
+  ]);
 })();
