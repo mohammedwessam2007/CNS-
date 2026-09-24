@@ -1,0 +1,6042 @@
+{
+ "name": "Kasr Alainy Data (198)",
+ "type": "public_channel",
+ "id": 2214768100,
+ "messages": [
+  {
+   "id": 2299,
+   "type": "message",
+   "date": "2025-09-23T07:51:28",
+   "date_unixtime": "1758603088",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/spinal cord 2025.pdf",
+   "file_name": "spinal cord 2025.pdf",
+   "file_size": 892927,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2300,
+   "type": "message",
+   "date": "2025-09-23T07:51:28",
+   "date_unixtime": "1758603088",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Brain stem 2025.pdf",
+   "file_name": "Brain stem 2025.pdf",
+   "file_size": 2352775,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2309,
+   "type": "message",
+   "date": "2025-09-23T08:36:31",
+   "date_unixtime": "1758605791",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Alaa [205][1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Alaa [205][1]"
+    }
+   ]
+  },
+  {
+   "id": 2310,
+   "type": "message",
+   "date": "2025-09-23T08:36:39",
+   "date_unixtime": "1758605799",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/MKXb5KjR3wg?si=BC7HOvyRupxGsxsF"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/MKXb5KjR3wg?si=BC7HOvyRupxGsxsF"
+    }
+   ]
+  },
+  {
+   "id": 2311,
+   "type": "message",
+   "date": "2025-09-23T08:36:59",
+   "date_unixtime": "1758605819",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_209@23-09-2025_08-36-59.jpg",
+   "photo_file_size": 137393,
+   "width": 1280,
+   "height": 960,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2312,
+   "type": "message",
+   "date": "2025-09-23T08:36:59",
+   "date_unixtime": "1758605819",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_210@23-09-2025_08-36-59.jpg",
+   "photo_file_size": 136781,
+   "width": 1280,
+   "height": 960,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2313,
+   "type": "message",
+   "date": "2025-09-23T08:37:11",
+   "date_unixtime": "1758605831",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/NEUANATOMY PART 1.pdf",
+   "file_name": "NEUANATOMY PART 1.pdf",
+   "file_size": 30492161,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2314,
+   "type": "message",
+   "date": "2025-09-23T08:37:11",
+   "date_unixtime": "1758605831",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/رسومات خط اليد NEURO.pdf",
+   "file_name": "رسومات خط اليد NEURO.pdf",
+   "file_size": 2361153,
+   "thumbnail": "files/رسومات خط اليد NEURO.pdf_thumb.jpg",
+   "thumbnail_file_size": 14977,
+   "mime_type": "application/pdf",
+   "text": "رسومات خط اليد spinal cord",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "رسومات خط اليد spinal cord"
+    }
+   ]
+  },
+  {
+   "id": 2315,
+   "type": "message",
+   "date": "2025-09-23T08:37:18",
+   "date_unixtime": "1758605838",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Alaa [205][2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Alaa [205][2]"
+    }
+   ]
+  },
+  {
+   "id": 2316,
+   "type": "message",
+   "date": "2025-09-23T08:37:36",
+   "date_unixtime": "1758605856",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/BL2BTzbIDFY?si=9i4_lFcR9SLmiR55"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/BL2BTzbIDFY?si=9i4_lFcR9SLmiR55"
+    }
+   ]
+  },
+  {
+   "id": 2317,
+   "type": "message",
+   "date": "2025-09-23T08:37:36",
+   "date_unixtime": "1758605856",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_211@23-09-2025_08-37-36.jpg",
+   "photo_file_size": 155768,
+   "width": 1280,
+   "height": 960,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2318,
+   "type": "message",
+   "date": "2025-09-23T08:37:36",
+   "date_unixtime": "1758605856",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_212@23-09-2025_08-37-36.jpg",
+   "photo_file_size": 112250,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2319,
+   "type": "message",
+   "date": "2025-09-23T08:38:52",
+   "date_unixtime": "1758605932",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵 Physio Dr.Elsherif [205][1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵 Physio Dr.Elsherif [205][1]"
+    }
+   ]
+  },
+  {
+   "id": 2320,
+   "type": "message",
+   "date": "2025-09-23T08:38:58",
+   "date_unixtime": "1758605938",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/dN0Wfrvx9mM?si=5I0tmtOFdxN_iv1K"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/dN0Wfrvx9mM?si=5I0tmtOFdxN_iv1K"
+    }
+   ]
+  },
+  {
+   "id": 2321,
+   "type": "message",
+   "date": "2025-09-23T08:39:15",
+   "date_unixtime": "1758605955",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/CNS Physiology - INTRO (1).pdf",
+   "file_name": "CNS Physiology - INTRO (1).pdf",
+   "file_size": 1344650,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2322,
+   "type": "message",
+   "date": "2025-09-23T08:39:38",
+   "date_unixtime": "1758605978",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢 Histo Dr.Abdelwahab [205][1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢 Histo Dr.Abdelwahab [205][1]"
+    }
+   ]
+  },
+  {
+   "id": 2323,
+   "type": "message",
+   "date": "2025-09-23T08:40:00",
+   "date_unixtime": "1758606000",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/7qztXJpvotU?si=ZNs_lVVu42v5pCHq"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/7qztXJpvotU?si=ZNs_lVVu42v5pCHq"
+    }
+   ]
+  },
+  {
+   "id": 2324,
+   "type": "message",
+   "date": "2025-09-23T08:40:00",
+   "date_unixtime": "1758606000",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Nervous tisuue 1  KA.pdf",
+   "file_name": "Nervous tisuue 1  KA.pdf",
+   "file_size": 1364647,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2326,
+   "type": "service",
+   "date": "2025-09-24T22:30:28",
+   "date_unixtime": "1758742228",
+   "actor": "Kasr Alainy Data (198)",
+   "actor_id": "channel2214768100",
+   "action": "pin_message",
+   "message_id": 2265,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2327,
+   "type": "message",
+   "date": "2025-09-24T22:57:47",
+   "date_unixtime": "1758743867",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟥 توزيعه درجات المديولات",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 توزيعه درجات المديولات"
+    }
+   ]
+  },
+  {
+   "id": 2328,
+   "type": "message",
+   "date": "2025-09-24T22:58:05",
+   "date_unixtime": "1758743885",
+   "edited": "2025-11-02T02:57:30",
+   "edited_unixtime": "1762045050",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_213@24-09-2025_22-58-05.jpg",
+   "photo_file_size": 22094,
+   "width": 702,
+   "height": 167,
+   "text": "205 [CNS]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "205 [CNS]"
+    }
+   ]
+  },
+  {
+   "id": 2329,
+   "type": "message",
+   "date": "2025-09-24T22:58:24",
+   "date_unixtime": "1758743904",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_214@24-09-2025_22-58-24.jpg",
+   "photo_file_size": 58272,
+   "width": 1117,
+   "height": 355,
+   "text": "206 [DIG]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "206 [DIG]"
+    }
+   ]
+  },
+  {
+   "id": 2331,
+   "type": "message",
+   "date": "2025-09-24T23:00:24",
+   "date_unixtime": "1758744024",
+   "edited": "2026-02-10T22:45:48",
+   "edited_unixtime": "1770756348",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_215@24-09-2025_23-00-24.jpg",
+   "photo_file_size": 38870,
+   "width": 1014,
+   "height": 336,
+   "text": "207 [ END ]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "207 [ END ]"
+    }
+   ]
+  },
+  {
+   "id": 2332,
+   "type": "message",
+   "date": "2025-09-24T23:00:25",
+   "date_unixtime": "1758744025",
+   "edited": "2026-02-10T22:46:06",
+   "edited_unixtime": "1770756366",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_216@24-09-2025_23-00-25.jpg",
+   "photo_file_size": 46047,
+   "width": 1030,
+   "height": 343,
+   "text": "208 [ INT ]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "208 [ INT ]"
+    }
+   ]
+  },
+  {
+   "id": 2333,
+   "type": "message",
+   "date": "2025-09-24T23:00:26",
+   "date_unixtime": "1758744026",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2334,
+   "type": "message",
+   "date": "2025-09-24T23:00:27",
+   "date_unixtime": "1758744027",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2335,
+   "type": "message",
+   "date": "2025-09-24T23:00:28",
+   "date_unixtime": "1758744028",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2336,
+   "type": "message",
+   "date": "2025-09-24T23:00:29",
+   "date_unixtime": "1758744029",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2344,
+   "type": "message",
+   "date": "2025-09-24T23:26:06",
+   "date_unixtime": "1758745566",
+   "edited": "2026-09-11T12:52:16",
+   "edited_unixtime": "1789120336",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "⬛️ Final Anatomy 205\n\n🔸️ Anatomy Orientation + Cases \n",
+    {
+     "type": "link",
+     "text": "https://t.me/KASR_198/1300"
+    },
+    "\n\n■ الشرح\n\n◼️Dr.Jalal 198 [Crash END]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9787"
+    },
+    "\n◼️Dr.Jalal Cases \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2895"
+    },
+    "\n\n■النوتس\n\n◼️متحددة بلاهمية \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2900"
+    },
+    "\n\n◼️امتحانات سنين الاناتومي\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2902"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⬛️ Final Anatomy 205\n\n🔸️ Anatomy Orientation + Cases \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/KASR_198/1300"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n■ الشرح\n\n◼️Dr.Jalal 198 [Crash END]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9787"
+    },
+    {
+     "type": "plain",
+     "text": "\n◼️Dr.Jalal Cases \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2895"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n■النوتس\n\n◼️متحددة بلاهمية \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2900"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n◼️امتحانات سنين الاناتومي\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2902"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2345,
+   "type": "message",
+   "date": "2025-09-24T23:26:06",
+   "date_unixtime": "1758745566",
+   "edited": "2026-09-11T12:54:19",
+   "edited_unixtime": "1789120459",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "⬛️Final Histology 205\n\n■ الشرح \n\n◼️Dr.Dalia Crash END 198\n",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9824"
+    },
+    "\n\n■النوتس\n\n◼️",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9825"
+    },
+    "\n\n◼️تجميعة لأسئلة MCQ\n●سنوات سابقة:\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2439"
+    },
+    "\n●كتاب القسم \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2633"
+    },
+    "\n●أسئلة د.داليا\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2436"
+    },
+    "\n●أسئلة Formative Assessments \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2637"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⬛️Final Histology 205\n\n■ الشرح \n\n◼️Dr.Dalia Crash END 198\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9824"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n■النوتس\n\n◼️"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9825"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n◼️تجميعة لأسئلة MCQ\n●سنوات سابقة:\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2439"
+    },
+    {
+     "type": "plain",
+     "text": "\n●كتاب القسم \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2633"
+    },
+    {
+     "type": "plain",
+     "text": "\n●أسئلة د.داليا\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2436"
+    },
+    {
+     "type": "plain",
+     "text": "\n●أسئلة Formative Assessments \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2637"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2346,
+   "type": "message",
+   "date": "2025-09-24T23:26:07",
+   "date_unixtime": "1758745567",
+   "edited": "2026-09-11T12:52:51",
+   "edited_unixtime": "1789120371",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "⬛️ Final Physiology 205\n\n■ الشرح \n\n◼️Dr.Maher Crash END 198\n",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9745"
+    },
+    "\n\n■ النوتس \n\n◼️متحددة بلاهمية و السنين\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/5020?single"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⬛️ Final Physiology 205\n\n■ الشرح \n\n◼️Dr.Maher Crash END 198\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/9745"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n■ النوتس \n\n◼️متحددة بلاهمية و السنين\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/5020?single"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2347,
+   "type": "message",
+   "date": "2025-09-24T23:26:20",
+   "date_unixtime": "1758745580",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Alaa [205][3]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Alaa [205][3]"
+    }
+   ]
+  },
+  {
+   "id": 2348,
+   "type": "message",
+   "date": "2025-09-24T23:26:47",
+   "date_unixtime": "1758745607",
+   "edited": "2025-09-24T23:26:54",
+   "edited_unixtime": "1758745614",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/ON01j4tCgfM?si=AO88Gd5tjczPHZwH"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/ON01j4tCgfM?si=AO88Gd5tjczPHZwH"
+    }
+   ]
+  },
+  {
+   "id": 2349,
+   "type": "message",
+   "date": "2025-09-24T23:26:47",
+   "date_unixtime": "1758745607",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_217@24-09-2025_23-26-47.jpg",
+   "photo_file_size": 103088,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2350,
+   "type": "message",
+   "date": "2025-09-24T23:26:47",
+   "date_unixtime": "1758745607",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_218@24-09-2025_23-26-47.jpg",
+   "photo_file_size": 124621,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2351,
+   "type": "message",
+   "date": "2025-09-24T23:26:47",
+   "date_unixtime": "1758745607",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_219@24-09-2025_23-26-47.jpg",
+   "photo_file_size": 118914,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2352,
+   "type": "message",
+   "date": "2025-09-24T23:27:02",
+   "date_unixtime": "1758745622",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Alaa [205][4]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Alaa [205][4]"
+    }
+   ]
+  },
+  {
+   "id": 2353,
+   "type": "message",
+   "date": "2025-09-24T23:27:22",
+   "date_unixtime": "1758745642",
+   "edited": "2025-09-24T23:27:29",
+   "edited_unixtime": "1758745649",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/QOF0CMMNfPc?si=DJhFE53_ZTSM6G74"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/QOF0CMMNfPc?si=DJhFE53_ZTSM6G74"
+    }
+   ]
+  },
+  {
+   "id": 2354,
+   "type": "message",
+   "date": "2025-09-24T23:27:22",
+   "date_unixtime": "1758745642",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_220@24-09-2025_23-27-22.jpg",
+   "photo_file_size": 107569,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2355,
+   "type": "message",
+   "date": "2025-09-24T23:27:22",
+   "date_unixtime": "1758745642",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_221@24-09-2025_23-27-22.jpg",
+   "photo_file_size": 126943,
+   "width": 1280,
+   "height": 960,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2356,
+   "type": "message",
+   "date": "2025-09-24T23:27:22",
+   "date_unixtime": "1758745642",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_222@24-09-2025_23-27-22.jpg",
+   "photo_file_size": 132276,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2357,
+   "type": "message",
+   "date": "2025-09-24T23:27:22",
+   "date_unixtime": "1758745642",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_223@24-09-2025_23-27-22.jpg",
+   "photo_file_size": 110237,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2358,
+   "type": "message",
+   "date": "2025-09-24T23:27:32",
+   "date_unixtime": "1758745652",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2359,
+   "type": "message",
+   "date": "2025-09-24T23:27:32",
+   "date_unixtime": "1758745652",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2360,
+   "type": "message",
+   "date": "2025-09-24T23:27:33",
+   "date_unixtime": "1758745653",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2361,
+   "type": "message",
+   "date": "2025-09-24T23:28:41",
+   "date_unixtime": "1758745721",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵 Physio Dr.Elsherif [205][2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵 Physio Dr.Elsherif [205][2]"
+    }
+   ]
+  },
+  {
+   "id": 2362,
+   "type": "message",
+   "date": "2025-09-24T23:28:59",
+   "date_unixtime": "1758745739",
+   "edited": "2025-09-24T23:29:05",
+   "edited_unixtime": "1758745745",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/84bDM8xxn_o?si=bIEFbQEXbN-dApY4"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/84bDM8xxn_o?si=bIEFbQEXbN-dApY4"
+    }
+   ]
+  },
+  {
+   "id": 2363,
+   "type": "message",
+   "date": "2025-09-24T23:29:12",
+   "date_unixtime": "1758745752",
+   "edited": "2026-03-31T20:28:09",
+   "edited_unixtime": "1774981689",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🔵 Physio Dr.Elsherif [205][3]\n",
+    {
+     "type": "link",
+     "text": "https://youtu.be/tylhoXyKqd4?si=KqOzLQjRlKifh5tH"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵 Physio Dr.Elsherif [205][3]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://youtu.be/tylhoXyKqd4?si=KqOzLQjRlKifh5tH"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2364,
+   "type": "message",
+   "date": "2025-09-24T23:29:24",
+   "date_unixtime": "1758745764",
+   "edited": "2026-03-31T20:40:46",
+   "edited_unixtime": "1774982446",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🟥 Books Module [206]\n\nنسخة 25/26 دفعة 198\n\n\n🟩Anatomy [206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2366"
+    },
+    "\n\n🟩Histology [ 206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2369"
+    },
+    "\n\n🟩Physiology [206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2368"
+    },
+    "\n\n🟩Biochemistry [206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2365"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 Books Module [206]\n\nنسخة 25/26 دفعة 198\n\n\n🟩Anatomy [206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2366"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Histology [ 206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2369"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Physiology [206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2368"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Biochemistry [206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2365"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2365,
+   "type": "message",
+   "date": "2025-09-24T23:33:06",
+   "date_unixtime": "1758745986",
+   "edited": "2026-03-31T20:29:28",
+   "edited_unixtime": "1774981768",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/BioChem DIG - 206 Dept. Book.pdf",
+   "file_name": "BioChem DIG - 206 Dept. Book.pdf",
+   "file_size": 4279356,
+   "mime_type": "application/pdf",
+   "text": "🟣Biochemistry Department Book [206] (198)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟣Biochemistry Department Book [206] (198)"
+    }
+   ]
+  },
+  {
+   "id": 2366,
+   "type": "message",
+   "date": "2025-09-24T23:33:07",
+   "date_unixtime": "1758745987",
+   "edited": "2026-03-31T20:28:55",
+   "edited_unixtime": "1774981735",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy DIG - 206 Dept. Book (1).pdf",
+   "file_name": "Anatomy DIG - 206 Dept. Book (1).pdf",
+   "file_size": 29338170,
+   "mime_type": "application/pdf",
+   "text": [
+    "🟡Anatomy Department Book [206] (198)\n\n\n+ Papers missing from the book👇🏼\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2367"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Anatomy Department Book [206] (198)\n\n\n+ Papers missing from the book👇🏼\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2367"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2367,
+   "type": "message",
+   "date": "2025-09-24T23:33:07",
+   "date_unixtime": "1758745987",
+   "edited": "2026-03-31T20:28:15",
+   "edited_unixtime": "1774981695",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Merged_ Anatomy .pdf",
+   "file_name": "Merged_ Anatomy .pdf",
+   "file_size": 4223319,
+   "mime_type": "application/pdf",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2368,
+   "type": "message",
+   "date": "2025-09-24T23:33:08",
+   "date_unixtime": "1758745988",
+   "edited": "2026-03-31T20:29:09",
+   "edited_unixtime": "1774981749",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File unavailable, please try again later)",
+   "file_name": "Physio - DIG - 206 Dept. Book.pdf",
+   "file_size": 18037098,
+   "mime_type": "application/pdf",
+   "text": "🔵Physiology Department Book [206] (198)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Physiology Department Book [206] (198)"
+    }
+   ]
+  },
+  {
+   "id": 2369,
+   "type": "message",
+   "date": "2025-09-24T23:33:08",
+   "date_unixtime": "1758745988",
+   "edited": "2026-03-31T20:29:21",
+   "edited_unixtime": "1774981761",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File unavailable, please try again later)",
+   "file_name": "Histo - DIG - 206 Dept. Book.pdf",
+   "file_size": 10413218,
+   "mime_type": "application/pdf",
+   "text": ".🟢Histology Department Book [206] (198)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": ".🟢Histology Department Book [206] (198)"
+    }
+   ]
+  },
+  {
+   "id": 2370,
+   "type": "message",
+   "date": "2025-09-24T23:33:32",
+   "date_unixtime": "1758746012",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟣Anatomy by Dr.Jalal 205[1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟣Anatomy by Dr.Jalal 205[1]"
+    }
+   ]
+  },
+  {
+   "id": 2371,
+   "type": "message",
+   "date": "2025-09-24T23:35:03",
+   "date_unixtime": "1758746103",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/hE4dzrY0_dA?si=KQPUtfzuFNierWKF"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/hE4dzrY0_dA?si=KQPUtfzuFNierWKF"
+    }
+   ]
+  },
+  {
+   "id": 2372,
+   "type": "message",
+   "date": "2025-09-24T23:35:52",
+   "date_unixtime": "1758746152",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟣Anatomy by Dr.Jalal 205[2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟣Anatomy by Dr.Jalal 205[2]"
+    }
+   ]
+  },
+  {
+   "id": 2373,
+   "type": "message",
+   "date": "2025-09-24T23:35:55",
+   "date_unixtime": "1758746155",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/w-kqALDB60k?si=TA_F17znaNTpwxK9"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/w-kqALDB60k?si=TA_F17znaNTpwxK9"
+    }
+   ]
+  },
+  {
+   "id": 2374,
+   "type": "message",
+   "date": "2025-09-24T23:36:14",
+   "date_unixtime": "1758746174",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_224@24-09-2025_23-36-14.jpg",
+   "photo_file_size": 129506,
+   "width": 1280,
+   "height": 853,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2375,
+   "type": "message",
+   "date": "2025-09-24T23:36:14",
+   "date_unixtime": "1758746174",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_225@24-09-2025_23-36-14.jpg",
+   "photo_file_size": 102919,
+   "width": 1280,
+   "height": 853,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2376,
+   "type": "message",
+   "date": "2025-09-24T23:36:18",
+   "date_unixtime": "1758746178",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟣Anatomy by Dr.Jalal 205[3]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟣Anatomy by Dr.Jalal 205[3]"
+    }
+   ]
+  },
+  {
+   "id": 2377,
+   "type": "message",
+   "date": "2025-09-24T23:36:24",
+   "date_unixtime": "1758746184",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/rIVqnkF4rxU?si=I2FEKrkcNNgwP0x9"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/rIVqnkF4rxU?si=I2FEKrkcNNgwP0x9"
+    }
+   ]
+  },
+  {
+   "id": 2378,
+   "type": "message",
+   "date": "2025-09-24T23:36:44",
+   "date_unixtime": "1758746204",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_226@24-09-2025_23-36-44.jpg",
+   "photo_file_size": 99781,
+   "width": 1280,
+   "height": 853,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2379,
+   "type": "message",
+   "date": "2025-09-24T23:36:44",
+   "date_unixtime": "1758746204",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_227@24-09-2025_23-36-44.jpg",
+   "photo_file_size": 116540,
+   "width": 1280,
+   "height": 853,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2380,
+   "type": "message",
+   "date": "2025-09-24T23:36:52",
+   "date_unixtime": "1758746212",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟣Anatomy by Dr.Jalal 205[4]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟣Anatomy by Dr.Jalal 205[4]"
+    }
+   ]
+  },
+  {
+   "id": 2381,
+   "type": "message",
+   "date": "2025-09-24T23:36:56",
+   "date_unixtime": "1758746216",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/rS830bETsdw?si=oRNey1F30rbActJJ"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/rS830bETsdw?si=oRNey1F30rbActJJ"
+    }
+   ]
+  },
+  {
+   "id": 2382,
+   "type": "message",
+   "date": "2025-09-24T23:37:37",
+   "date_unixtime": "1758746257",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_228@24-09-2025_23-37-37.jpg",
+   "photo_file_size": 130934,
+   "width": 1280,
+   "height": 853,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2383,
+   "type": "message",
+   "date": "2025-09-24T23:37:56",
+   "date_unixtime": "1758746276",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "ملازم د جلال",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "ملازم د جلال"
+    }
+   ]
+  },
+  {
+   "id": 2385,
+   "type": "message",
+   "date": "2025-09-24T23:39:09",
+   "date_unixtime": "1758746349",
+   "edited": "2025-10-06T23:05:57",
+   "edited_unixtime": "1759781157",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Neuro all 2026.pdf",
+   "file_name": "Neuro all 2026.pdf",
+   "file_size": 15423766,
+   "mime_type": "application/pdf",
+   "text": "Neuro end tba33a (1).pdf",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Neuro end tba33a (1).pdf"
+    }
+   ]
+  },
+  {
+   "id": 2387,
+   "type": "message",
+   "date": "2025-09-24T23:40:03",
+   "date_unixtime": "1758746403",
+   "edited": "2025-10-06T23:06:11",
+   "edited_unixtime": "1759781171",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/DOC-20250919-WA0008_250924_233953.pdf",
+   "file_name": "DOC-20250919-WA0008_250924_233953.pdf",
+   "file_size": 12739956,
+   "mime_type": "application/pdf",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2388,
+   "type": "message",
+   "date": "2025-09-24T23:41:43",
+   "date_unixtime": "1758746503",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2389,
+   "type": "message",
+   "date": "2025-09-24T23:41:44",
+   "date_unixtime": "1758746504",
+   "edited": "2026-03-31T20:13:39",
+   "edited_unixtime": "1774980819",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🟥 Books Module [205]\n\nنسخة 25/26 دفعة 198\n\n🟩Anatomy [205]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2391"
+    },
+    "\n\n🟩Histology [ 205 ]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2393"
+    },
+    "\n\n🟩Physiology [205]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2390"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 Books Module [205]\n\nنسخة 25/26 دفعة 198\n\n🟩Anatomy [205]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2391"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Histology [ 205 ]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2393"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Physiology [205]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2390"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2390,
+   "type": "message",
+   "date": "2025-09-24T23:41:45",
+   "date_unixtime": "1758746505",
+   "edited": "2026-03-31T20:12:09",
+   "edited_unixtime": "1774980729",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Physiology 205 (1).pdf",
+   "file_name": "Physiology 205 (1).pdf",
+   "file_size": 58731474,
+   "mime_type": "application/pdf",
+   "text": "🔵Physiology Department Book [205] (198)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Physiology Department Book [205] (198)"
+    }
+   ]
+  },
+  {
+   "id": 2391,
+   "type": "message",
+   "date": "2025-09-24T23:41:45",
+   "date_unixtime": "1758746505",
+   "edited": "2026-03-31T20:12:18",
+   "edited_unixtime": "1774980738",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy 205 (1).pdf",
+   "file_name": "Anatomy 205 (1).pdf",
+   "file_size": 176727152,
+   "mime_type": "application/pdf",
+   "text": [
+    "🟡Anatomy Department Book [205] (198)\n\n+ Added chapter from mail👇🏼\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2392"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Anatomy Department Book [205] (198)\n\n+ Added chapter from mail👇🏼\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2392"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2392,
+   "type": "message",
+   "date": "2025-09-24T23:41:46",
+   "date_unixtime": "1758746506",
+   "edited": "2026-03-31T20:11:54",
+   "edited_unixtime": "1774980714",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Extraocular Muscles (1).pdf",
+   "file_name": "Extraocular Muscles (1).pdf",
+   "file_size": 323730,
+   "mime_type": "application/pdf",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2393,
+   "type": "message",
+   "date": "2025-09-24T23:41:47",
+   "date_unixtime": "1758746507",
+   "edited": "2026-03-31T20:10:48",
+   "edited_unixtime": "1774980648",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Histology 205 (1).pdf",
+   "file_name": "Histology 205 (1).pdf",
+   "file_size": 29933091,
+   "mime_type": "application/pdf",
+   "text": "🟢Histology Department Book [205] (198)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Histology Department Book [205] (198)"
+    }
+   ]
+  },
+  {
+   "id": 2394,
+   "type": "message",
+   "date": "2025-09-24T23:45:07",
+   "date_unixtime": "1758746707",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "⚪️ Physio by Dr.Maher 205[1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⚪️ Physio by Dr.Maher 205[1]"
+    }
+   ]
+  },
+  {
+   "id": 2395,
+   "type": "message",
+   "date": "2025-09-24T23:45:11",
+   "date_unixtime": "1758746711",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/NrXFbD8-K8A?si=AW4IIdJypEKbITFu"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/NrXFbD8-K8A?si=AW4IIdJypEKbITFu"
+    }
+   ]
+  },
+  {
+   "id": 2396,
+   "type": "message",
+   "date": "2025-09-24T23:45:32",
+   "date_unixtime": "1758746732",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/1-7(1).pdf",
+   "file_name": "1-7(1).pdf",
+   "file_size": 2670090,
+   "mime_type": "application/pdf",
+   "text": "Document from ..",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Document from .."
+    }
+   ]
+  },
+  {
+   "id": 2397,
+   "type": "message",
+   "date": "2025-09-24T23:45:38",
+   "date_unixtime": "1758746738",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "⚪️ Physio by Dr.Maher 205[2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⚪️ Physio by Dr.Maher 205[2]"
+    }
+   ]
+  },
+  {
+   "id": 2398,
+   "type": "message",
+   "date": "2025-09-24T23:45:40",
+   "date_unixtime": "1758746740",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/Y93yU7vc_TE?si=aXzeD7KdJqsN-NAl"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/Y93yU7vc_TE?si=aXzeD7KdJqsN-NAl"
+    }
+   ]
+  },
+  {
+   "id": 2399,
+   "type": "message",
+   "date": "2025-09-24T23:45:58",
+   "date_unixtime": "1758746758",
+   "edited": "2025-11-19T08:46:21",
+   "edited_unixtime": "1763534781",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/DOC-20250923-WA0004..pdf",
+   "file_name": "DOC-20250923-WA0004..pdf",
+   "file_size": 1988329,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2400,
+   "type": "message",
+   "date": "2025-09-24T23:46:01",
+   "date_unixtime": "1758746761",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2401,
+   "type": "message",
+   "date": "2025-09-24T23:46:01",
+   "date_unixtime": "1758746761",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2402,
+   "type": "message",
+   "date": "2025-09-24T23:46:03",
+   "date_unixtime": "1758746763",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2410,
+   "type": "message",
+   "date": "2025-09-24T23:53:40",
+   "date_unixtime": "1758747220",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2411,
+   "type": "message",
+   "date": "2025-09-24T23:53:40",
+   "date_unixtime": "1758747220",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2412,
+   "type": "message",
+   "date": "2025-09-24T23:53:41",
+   "date_unixtime": "1758747221",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2413,
+   "type": "message",
+   "date": "2025-09-24T23:53:41",
+   "date_unixtime": "1758747221",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2414,
+   "type": "message",
+   "date": "2025-09-24T23:54:39",
+   "date_unixtime": "1758747279",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢Histology by Dr.Hegazy 205 [1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Histology by Dr.Hegazy 205 [1]"
+    }
+   ]
+  },
+  {
+   "id": 2415,
+   "type": "message",
+   "date": "2025-09-24T23:54:54",
+   "date_unixtime": "1758747294",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/KVKupDdGy7I?si=Fxuf1ys6vGhxBhSq"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/KVKupDdGy7I?si=Fxuf1ys6vGhxBhSq"
+    }
+   ]
+  },
+  {
+   "id": 2416,
+   "type": "message",
+   "date": "2025-09-24T23:55:10",
+   "date_unixtime": "1758747310",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢Histology by Dr.Hegazy 205 [2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Histology by Dr.Hegazy 205 [2]"
+    }
+   ]
+  },
+  {
+   "id": 2417,
+   "type": "message",
+   "date": "2025-09-24T23:55:12",
+   "date_unixtime": "1758747312",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/D4pbmCVT_CE?si=D7_kv0YIht5IXwAu"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/D4pbmCVT_CE?si=D7_kv0YIht5IXwAu"
+    }
+   ]
+  },
+  {
+   "id": 2418,
+   "type": "message",
+   "date": "2025-09-24T23:55:17",
+   "date_unixtime": "1758747317",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "ملازم د حجازى",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "ملازم د حجازى"
+    }
+   ]
+  },
+  {
+   "id": 2419,
+   "type": "message",
+   "date": "2025-09-24T23:55:37",
+   "date_unixtime": "1758747337",
+   "edited": "2026-08-08T02:07:33",
+   "edited_unixtime": "1786144053",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/nervous tissue & CNS 205 cairo(1).pdf",
+   "file_name": "nervous tissue & CNS 205 cairo(1).pdf",
+   "file_size": 3547859,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2420,
+   "type": "message",
+   "date": "2025-09-24T23:56:11",
+   "date_unixtime": "1758747371",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2421,
+   "type": "message",
+   "date": "2025-09-24T23:56:12",
+   "date_unixtime": "1758747372",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2422,
+   "type": "message",
+   "date": "2025-09-24T23:56:26",
+   "date_unixtime": "1758747386",
+   "edited": "2025-09-25T00:14:13",
+   "edited_unixtime": "1758748453",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵Histology by Dr.zahra 205 [1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Histology by Dr.zahra 205 [1]"
+    }
+   ]
+  },
+  {
+   "id": 2423,
+   "type": "message",
+   "date": "2025-09-24T23:56:41",
+   "date_unixtime": "1758747401",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/R6MWYlSCdZM?si=ipwffVxn90EZgzz8"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/R6MWYlSCdZM?si=ipwffVxn90EZgzz8"
+    }
+   ]
+  },
+  {
+   "id": 2424,
+   "type": "message",
+   "date": "2025-09-24T23:57:17",
+   "date_unixtime": "1758747437",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2425,
+   "type": "message",
+   "date": "2025-09-24T23:57:18",
+   "date_unixtime": "1758747438",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2426,
+   "type": "message",
+   "date": "2025-09-24T23:58:27",
+   "date_unixtime": "1758747507",
+   "edited": "2026-03-31T20:42:00",
+   "edited_unixtime": "1774982520",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🟥2nd Year Books [ 1st semester 198]  \n\n\n🟩MODULE 205\n\n-198\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2389"
+    },
+    "\n\n🟩MODULES 206\n \n-198 \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2364"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥2nd Year Books [ 1st semester 198]  \n\n\n🟩MODULE 205\n\n-198\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2389"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩MODULES 206\n \n-198 \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2364"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2427,
+   "type": "message",
+   "date": "2025-09-25T00:02:17",
+   "date_unixtime": "1758747737",
+   "edited": "2025-09-25T00:05:02",
+   "edited_unixtime": "1758747902",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🟥 Books Module [205]\n\nنسخة 24/25 دفعة 197\n\n🟩Anatomy [205]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/elkasrdata/1647"
+    },
+    "\n\n🟩Histology [ 205 ]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/elkasrdata/1656"
+    },
+    "\n\n🟩Physiology [205]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/elkasrdata/1652"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 Books Module [205]\n\nنسخة 24/25 دفعة 197\n\n🟩Anatomy [205]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/elkasrdata/1647"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Histology [ 205 ]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/elkasrdata/1656"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Physiology [205]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/elkasrdata/1652"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2428,
+   "type": "message",
+   "date": "2025-09-25T00:02:39",
+   "date_unixtime": "1758747759",
+   "edited": "2025-11-19T22:07:22",
+   "edited_unixtime": "1763582842",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🟥 Books Module [206]\n\nنسخة 24/25 دفعة 197\n\n\n🟩Anatomy [206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8032"
+    },
+    "\n\n🟩Histology [ 206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8037"
+    },
+    "\n\n🟩Physiology [206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8035"
+    },
+    "\n\n🟩Biochemistry [206]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8039"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 Books Module [206]\n\nنسخة 24/25 دفعة 197\n\n\n🟩Anatomy [206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8032"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Histology [ 206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8037"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Physiology [206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8035"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🟩Biochemistry [206]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/recordsfirst/8039"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2429,
+   "type": "message",
+   "date": "2025-09-25T00:02:40",
+   "date_unixtime": "1758747760",
+   "edited": "2025-11-05T19:12:09",
+   "edited_unixtime": "1762362729",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/NEU-205 2024 Answered.pdf",
+   "file_name": "NEU-205 2024 Answered.pdf",
+   "file_size": 6087001,
+   "mime_type": "application/pdf",
+   "text": [
+    "NEU-205 2023 \nامتحان النيورو 196\nمحلول\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2438"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "NEU-205 2023 \nامتحان النيورو 196\nمحلول\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2438"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2430,
+   "type": "message",
+   "date": "2025-09-25T00:02:41",
+   "date_unixtime": "1758747761",
+   "edited": "2025-10-31T00:23:10",
+   "edited_unixtime": "1761862990",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/second 2021   204  NEU   end of module-1_231128_221131.pdf",
+   "file_name": "second 2021   204  NEU   end of module-1_231128_221131.pdf",
+   "file_size": 5561164,
+   "mime_type": "application/pdf",
+   "text": [
+    "إمتحان موديول ٢٠٤  عام ٢٠٢١ ،\n(غير محلول)\n*ناقص شباتر H&N و Nervous\n\nالحل\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2431"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "إمتحان موديول ٢٠٤  عام ٢٠٢١ ،\n(غير محلول)\n*ناقص شباتر H&N و Nervous\n\nالحل\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2431"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2431,
+   "type": "message",
+   "date": "2025-09-25T00:02:41",
+   "date_unixtime": "1758747761",
+   "edited": "2025-10-31T00:22:42",
+   "edited_unixtime": "1761862962",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/second 2021   204  NEU   end of module_231128_221120.pdf",
+   "file_name": "second 2021   204  NEU   end of module_231128_221120.pdf",
+   "file_size": 3643329,
+   "mime_type": "application/pdf",
+   "text": "إمتحان موديول ٢٠٤  عام ٢٠٢١ ،\n( محلول)\n*ناقص شباتر H&N و Nervous",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "إمتحان موديول ٢٠٤  عام ٢٠٢١ ،\n( محلول)\n*ناقص شباتر H&N و Nervous"
+    }
+   ]
+  },
+  {
+   "id": 2432,
+   "type": "message",
+   "date": "2025-09-25T00:02:42",
+   "date_unixtime": "1758747762",
+   "edited": "2025-10-31T00:25:44",
+   "edited_unixtime": "1761863144",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/EOM NEU 204 (2019)_231120_230158.pdf",
+   "file_name": "EOM NEU 204 (2019)_231120_230158.pdf",
+   "file_size": 1915120,
+   "mime_type": "application/pdf",
+   "text": "إمتحان موديول ٢٠٤ ،نفس محتوى ٢٠٥ عام ٢٠١٩ (غير محلول)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "إمتحان موديول ٢٠٤ ،نفس محتوى ٢٠٥ عام ٢٠١٩ (غير محلول)"
+    }
+   ]
+  },
+  {
+   "id": 2433,
+   "type": "message",
+   "date": "2025-09-25T00:02:43",
+   "date_unixtime": "1758747763",
+   "edited": "2025-10-31T15:48:59",
+   "edited_unixtime": "1761918539",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/NEU 205 EOM 197.pdf",
+   "file_name": "NEU 205 EOM 197.pdf",
+   "file_size": 8924026,
+   "mime_type": "application/pdf",
+   "text": [
+    "امتحان 205 ( 197 )\n- الاجابات\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2682"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "امتحان 205 ( 197 )\n- الاجابات\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2682"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2434,
+   "type": "message",
+   "date": "2025-09-25T00:02:43",
+   "date_unixtime": "1758747763",
+   "edited": "2025-11-09T18:16:17",
+   "edited_unixtime": "1762704977",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/2015-2019.pdf",
+   "file_name": "2015-2019.pdf",
+   "file_size": 2467065,
+   "mime_type": "application/pdf",
+   "text": [
+    "امتحان 205 \nمن 2015_2019\n\nMCQ ONLY\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2437"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "امتحان 205 \nمن 2015_2019\n\nMCQ ONLY\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2437"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2435,
+   "type": "message",
+   "date": "2025-09-25T00:02:44",
+   "date_unixtime": "1758747764",
+   "edited": "2025-11-01T05:17:51",
+   "edited_unixtime": "1761967071",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🟥Anatomy Dr.Doaa 205 \n\n🟩Lectures:\n\nEmbryo \nPart[1]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2687"
+    },
+    "\nPart[2]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2689"
+    },
+    "\nPart[3]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2691"
+    },
+    "\nPart[4]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2693"
+    },
+    "\nPart[5]\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2695"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥Anatomy Dr.Doaa 205 \n\n🟩Lectures:\n\nEmbryo \nPart[1]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2687"
+    },
+    {
+     "type": "plain",
+     "text": "\nPart[2]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2689"
+    },
+    {
+     "type": "plain",
+     "text": "\nPart[3]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2691"
+    },
+    {
+     "type": "plain",
+     "text": "\nPart[4]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2693"
+    },
+    {
+     "type": "plain",
+     "text": "\nPart[5]\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2695"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2436,
+   "type": "message",
+   "date": "2025-09-25T00:02:45",
+   "date_unixtime": "1758747765",
+   "edited": "2025-11-09T19:26:05",
+   "edited_unixtime": "1762709165",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/66.pdf",
+   "file_name": "66.pdf",
+   "file_size": 518276,
+   "mime_type": "application/pdf",
+   "text": "MCQ DR.DALIA",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "MCQ DR.DALIA"
+    }
+   ]
+  },
+  {
+   "id": 2437,
+   "type": "message",
+   "date": "2025-09-25T00:02:45",
+   "date_unixtime": "1758747765",
+   "edited": "2025-11-09T18:15:59",
+   "edited_unixtime": "1762704959",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/7777.pdf",
+   "file_name": "7777.pdf",
+   "file_size": 8523566,
+   "mime_type": "application/pdf",
+   "text": "امتحان 205 \nمن 2015_2019\nMCQ ONLY",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "امتحان 205 \nمن 2015_2019\nMCQ ONLY"
+    }
+   ]
+  },
+  {
+   "id": 2438,
+   "type": "message",
+   "date": "2025-09-25T00:02:48",
+   "date_unixtime": "1758747768",
+   "edited": "2025-11-05T19:11:55",
+   "edited_unixtime": "1762362715",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/55.pdf",
+   "file_name": "55.pdf",
+   "file_size": 6085394,
+   "mime_type": "application/pdf",
+   "text": "امتحان 2023 موديول 205 محلول",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "امتحان 2023 موديول 205 محلول"
+    }
+   ]
+  },
+  {
+   "id": 2439,
+   "type": "message",
+   "date": "2025-09-25T00:02:48",
+   "date_unixtime": "1758747768",
+   "edited": "2025-10-31T00:13:09",
+   "edited_unixtime": "1761862389",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Histo Exam.pdf",
+   "file_name": "Histo Exam.pdf",
+   "file_size": 522546,
+   "mime_type": "application/pdf",
+   "text": [
+    "إمتحانات السنوات السابقة هستو ٢٠٥ (بدون حل)\n\nالحل\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2440"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "إمتحانات السنوات السابقة هستو ٢٠٥ (بدون حل)\n\nالحل\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2440"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2440,
+   "type": "message",
+   "date": "2025-09-25T00:02:50",
+   "date_unixtime": "1758747770",
+   "edited": "2025-10-31T00:12:57",
+   "edited_unixtime": "1761862377",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Answered Histo Exam.pdf",
+   "file_name": "Answered Histo Exam.pdf",
+   "file_size": 624173,
+   "mime_type": "application/pdf",
+   "text": "إمتحانات السنوات السابقة هستو ٢٠٥ (بحل)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "إمتحانات السنوات السابقة هستو ٢٠٥ (بحل)"
+    }
+   ]
+  },
+  {
+   "id": 2441,
+   "type": "message",
+   "date": "2025-09-25T00:02:51",
+   "date_unixtime": "1758747771",
+   "edited": "2025-09-30T01:36:05",
+   "edited_unixtime": "1759185365",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Haithum [205][5]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Haithum [205][5]"
+    }
+   ]
+  },
+  {
+   "id": 2442,
+   "type": "message",
+   "date": "2025-09-25T00:02:51",
+   "date_unixtime": "1758747771",
+   "edited": "2025-09-30T01:35:55",
+   "edited_unixtime": "1759185355",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/rQJQppQZuSU?si=Lv7rO_i3unlfwwFa"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/rQJQppQZuSU?si=Lv7rO_i3unlfwwFa"
+    }
+   ]
+  },
+  {
+   "id": 2443,
+   "type": "message",
+   "date": "2025-09-25T01:42:09",
+   "date_unixtime": "1758753729",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "Anatomy by Dr. Haitham",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Anatomy by Dr. Haitham"
+    }
+   ]
+  },
+  {
+   "id": 2444,
+   "type": "message",
+   "date": "2025-09-25T01:42:09",
+   "date_unixtime": "1758753729",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Cerebrum 2025.pdf",
+   "file_name": "Cerebrum 2025.pdf",
+   "file_size": 3356120,
+   "mime_type": "application/pdf",
+   "text": "Cerebrum 2025.pdf",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Cerebrum 2025.pdf"
+    }
+   ]
+  },
+  {
+   "id": 2445,
+   "type": "message",
+   "date": "2025-09-25T18:06:09",
+   "date_unixtime": "1758812769",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Alaa [205][5]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Alaa [205][5]"
+    }
+   ]
+  },
+  {
+   "id": 2446,
+   "type": "message",
+   "date": "2025-09-25T18:06:28",
+   "date_unixtime": "1758812788",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/oo9MlctPlhg?si=W2zJf8uvjpU6beTp"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/oo9MlctPlhg?si=W2zJf8uvjpU6beTp"
+    }
+   ]
+  },
+  {
+   "id": 2447,
+   "type": "message",
+   "date": "2025-09-25T18:06:43",
+   "date_unixtime": "1758812803",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_229@25-09-2025_18-06-43.jpg",
+   "photo_file_size": 103672,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2448,
+   "type": "message",
+   "date": "2025-09-25T18:06:43",
+   "date_unixtime": "1758812803",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_230@25-09-2025_18-06-43.jpg",
+   "photo_file_size": 100170,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2449,
+   "type": "message",
+   "date": "2025-09-25T18:06:43",
+   "date_unixtime": "1758812803",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_231@25-09-2025_18-06-43.jpg",
+   "photo_file_size": 100086,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2450,
+   "type": "message",
+   "date": "2025-09-25T18:06:43",
+   "date_unixtime": "1758812803",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_232@25-09-2025_18-06-43.jpg",
+   "photo_file_size": 241637,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2451,
+   "type": "message",
+   "date": "2025-09-25T18:06:43",
+   "date_unixtime": "1758812803",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_233@25-09-2025_18-06-43.jpg",
+   "photo_file_size": 144639,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2452,
+   "type": "message",
+   "date": "2025-09-25T18:06:43",
+   "date_unixtime": "1758812803",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_234@25-09-2025_18-06-43.jpg",
+   "photo_file_size": 198793,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2453,
+   "type": "message",
+   "date": "2025-09-25T18:06:43",
+   "date_unixtime": "1758812803",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_235@25-09-2025_18-06-43.jpg",
+   "photo_file_size": 128516,
+   "width": 960,
+   "height": 1280,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2454,
+   "type": "message",
+   "date": "2025-09-25T18:06:54",
+   "date_unixtime": "1758812814",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Cerebrum.pdf",
+   "file_name": "Cerebrum.pdf",
+   "file_size": 498717,
+   "thumbnail": "files/Cerebrum.pdf_thumb.jpg",
+   "thumbnail_file_size": 32382,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2455,
+   "type": "message",
+   "date": "2025-09-25T18:06:54",
+   "date_unixtime": "1758812814",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/رسومات خط اليد NEURO (1).pdf",
+   "file_name": "رسومات خط اليد NEURO.pdf",
+   "file_size": 8859209,
+   "thumbnail": "files/رسومات خط اليد NEURO (1).pdf_thumb.jpg",
+   "thumbnail_file_size": 17475,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2456,
+   "type": "message",
+   "date": "2025-09-25T18:09:09",
+   "date_unixtime": "1758812949",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵 Physio Dr.Elsherif [205][4]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵 Physio Dr.Elsherif [205][4]"
+    }
+   ]
+  },
+  {
+   "id": 2457,
+   "type": "message",
+   "date": "2025-09-25T18:09:13",
+   "date_unixtime": "1758812953",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/sO6qnkC0kxo?si=WErJAOno0p1Fb7FO"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/sO6qnkC0kxo?si=WErJAOno0p1Fb7FO"
+    }
+   ]
+  },
+  {
+   "id": 2458,
+   "type": "message",
+   "date": "2025-09-26T21:05:08",
+   "date_unixtime": "1758909908",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢 Histo Dr.Abdelwahab [205][2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢 Histo Dr.Abdelwahab [205][2]"
+    }
+   ]
+  },
+  {
+   "id": 2459,
+   "type": "message",
+   "date": "2025-09-26T21:05:27",
+   "date_unixtime": "1758909927",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/WIvmZexE5vg?si=5-Bg_Ynx9ZImKTG0"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/WIvmZexE5vg?si=5-Bg_Ynx9ZImKTG0"
+    }
+   ]
+  },
+  {
+   "id": 2460,
+   "type": "message",
+   "date": "2025-09-26T21:05:50",
+   "date_unixtime": "1758909950",
+   "edited": "2025-09-26T21:10:41",
+   "edited_unixtime": "1758910241",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Nerve lec 2 د عبدالوهاب.pdf",
+   "file_name": "Nerve lec 2 د عبدالوهاب.pdf",
+   "file_size": 1638514,
+   "mime_type": "application/pdf",
+   "text": "Notes",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Notes"
+    }
+   ]
+  },
+  {
+   "id": 2461,
+   "type": "message",
+   "date": "2025-09-26T21:11:21",
+   "date_unixtime": "1758910281",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "forwarded_from": "Mohmed Abdelwahab",
+   "photo": "photos/photo_236@26-09-2025_21-11-21.jpg",
+   "photo_file_size": 327415,
+   "width": 2560,
+   "height": 1002,
+   "text": [
+    "📝 ",
+    {
+     "type": "bold",
+     "text": "Types of nerve fibers :\n- سؤال رتن ( Category B ) \n- بيلغبط جامد فال MCQ \n\nتعالي نفهمه ونحفظه ف 8 دقائق .. ❤️\n"
+    },
+    {
+     "type": "link",
+     "text": "https://youtu.be/rt6jBQVZFAg?si=UUkZncYJQNa7KlLv"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "📝 "
+    },
+    {
+     "type": "bold",
+     "text": "Types of nerve fibers :\n- سؤال رتن ( Category B ) \n- بيلغبط جامد فال MCQ \n\nتعالي نفهمه ونحفظه ف 8 دقائق .. ❤️\n"
+    },
+    {
+     "type": "link",
+     "text": "https://youtu.be/rt6jBQVZFAg?si=UUkZncYJQNa7KlLv"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2468,
+   "type": "message",
+   "date": "2025-09-27T08:46:36",
+   "date_unixtime": "1758951996",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "ملازم د شريف",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "ملازم د شريف"
+    }
+   ]
+  },
+  {
+   "id": 2469,
+   "type": "message",
+   "date": "2025-09-27T08:46:55",
+   "date_unixtime": "1758952015",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Sensory Part 1 - Physiology Dr Mohamed El-Sherif .pdf",
+   "file_name": "Sensory Part 1 - Physiology Dr Mohamed El-Sherif .pdf",
+   "file_size": 291820,
+   "thumbnail": "files/Sensory Part 1 - Physiology Dr Mohamed El-Sherif .pdf_thumb.jpg",
+   "thumbnail_file_size": 18681,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2470,
+   "type": "message",
+   "date": "2025-09-27T08:51:32",
+   "date_unixtime": "1758952292",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "⚫️Anatomy by Dr.Alaa 205 revtion [1]Part 1",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⚫️Anatomy by Dr.Alaa 205 revtion [1]Part 1"
+    }
+   ]
+  },
+  {
+   "id": 2471,
+   "type": "message",
+   "date": "2025-09-27T08:51:44",
+   "date_unixtime": "1758952304",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/e958q89OTxI?si=28uK1QFF0jjz6wlU"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/e958q89OTxI?si=28uK1QFF0jjz6wlU"
+    }
+   ]
+  },
+  {
+   "id": 2472,
+   "type": "message",
+   "date": "2025-09-27T08:51:54",
+   "date_unixtime": "1758952314",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "⚫️Anatomy by Dr.Alaa 205 revtion [1]Part 2",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⚫️Anatomy by Dr.Alaa 205 revtion [1]Part 2"
+    }
+   ]
+  },
+  {
+   "id": 2473,
+   "type": "message",
+   "date": "2025-09-27T08:52:03",
+   "date_unixtime": "1758952323",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/9HM5IYhm7b8?si=TfHAD_k4uEcbd1I5"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/9HM5IYhm7b8?si=TfHAD_k4uEcbd1I5"
+    }
+   ]
+  },
+  {
+   "id": 2474,
+   "type": "message",
+   "date": "2025-09-27T08:52:12",
+   "date_unixtime": "1758952332",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "د علاء اسئلة",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "د علاء اسئلة"
+    }
+   ]
+  },
+  {
+   "id": 2475,
+   "type": "message",
+   "date": "2025-09-27T08:52:27",
+   "date_unixtime": "1758952347",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy MCQ by Dr.ALAA [Part.1].pdf",
+   "file_name": "Anatomy MCQ by Dr.ALAA [Part.1].pdf",
+   "file_size": 142885,
+   "thumbnail": "files/Anatomy MCQ by Dr.ALAA [Part.1].pdf_thumb.jpg",
+   "thumbnail_file_size": 34964,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2476,
+   "type": "message",
+   "date": "2025-09-27T08:52:27",
+   "date_unixtime": "1758952347",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Neuro Dr. Mahmoud Alaa Quiz .pdf",
+   "file_name": "Neuro Dr. Mahmoud Alaa Quiz .pdf",
+   "file_size": 787327,
+   "thumbnail": "files/Neuro Dr. Mahmoud Alaa Quiz .pdf_thumb.jpg",
+   "thumbnail_file_size": 19727,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2477,
+   "type": "message",
+   "date": "2025-09-27T14:08:01",
+   "date_unixtime": "1758971281",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵 Physio Dr.Elsherif [205] revision[1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵 Physio Dr.Elsherif [205] revision[1]"
+    }
+   ]
+  },
+  {
+   "id": 2478,
+   "type": "message",
+   "date": "2025-09-27T14:08:08",
+   "date_unixtime": "1758971288",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/bYG3EDs5hbk?si=yXPCzr_MWxscp9Ct"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/bYG3EDs5hbk?si=yXPCzr_MWxscp9Ct"
+    }
+   ]
+  },
+  {
+   "id": 2479,
+   "type": "message",
+   "date": "2025-09-28T07:23:11",
+   "date_unixtime": "1759033391",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "Anatomy by Dr. Haitham ملازم",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Anatomy by Dr. Haitham ملازم"
+    }
+   ]
+  },
+  {
+   "id": 2480,
+   "type": "message",
+   "date": "2025-09-28T07:23:29",
+   "date_unixtime": "1759033409",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Diencephalon 2025.pdf",
+   "file_name": "Diencephalon 2025.pdf",
+   "file_size": 3575115,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2481,
+   "type": "message",
+   "date": "2025-09-28T17:44:51",
+   "date_unixtime": "1759070691",
+   "edited": "2025-09-28T17:47:20",
+   "edited_unixtime": "1759070840",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "📝Note Anatomy Dr.Alaa",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "📝Note Anatomy Dr.Alaa"
+    }
+   ]
+  },
+  {
+   "id": 2482,
+   "type": "message",
+   "date": "2025-09-28T17:45:04",
+   "date_unixtime": "1759070704",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/full neu anat 205 .pdf",
+   "file_name": "full neu anat 205 .pdf",
+   "file_size": 31094469,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2483,
+   "type": "message",
+   "date": "2025-09-28T17:48:25",
+   "date_unixtime": "1759070905",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "📌Board Anatomy  Dr.Alaa lec[6]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "📌Board Anatomy  Dr.Alaa lec[6]"
+    }
+   ]
+  },
+  {
+   "id": 2484,
+   "type": "message",
+   "date": "2025-09-28T17:48:34",
+   "date_unixtime": "1759070914",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_237@28-09-2025_17-48-34.jpg",
+   "photo_file_size": 95460,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2485,
+   "type": "message",
+   "date": "2025-09-28T17:48:34",
+   "date_unixtime": "1759070914",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_238@28-09-2025_17-48-34.jpg",
+   "photo_file_size": 105617,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2486,
+   "type": "message",
+   "date": "2025-09-28T17:48:35",
+   "date_unixtime": "1759070915",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_239@28-09-2025_17-48-35.jpg",
+   "photo_file_size": 105857,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2487,
+   "type": "message",
+   "date": "2025-09-28T17:48:35",
+   "date_unixtime": "1759070915",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "photo": "photos/photo_240@28-09-2025_17-48-35.jpg",
+   "photo_file_size": 79973,
+   "width": 1280,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2488,
+   "type": "message",
+   "date": "2025-09-28T23:25:49",
+   "date_unixtime": "1759091149",
+   "edited": "2025-09-29T00:00:50",
+   "edited_unixtime": "1759093250",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢 Histo Dr.Abdelwahab - 205 [1]\nمراجعة الأسبوع الأول",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢 Histo Dr.Abdelwahab - 205 [1]\nمراجعة الأسبوع الأول"
+    }
+   ]
+  },
+  {
+   "id": 2489,
+   "type": "message",
+   "date": "2025-09-28T23:26:00",
+   "date_unixtime": "1759091160",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/fwzc6GCMn3U?si=5lxERwXJI2aBUcHD"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/fwzc6GCMn3U?si=5lxERwXJI2aBUcHD"
+    }
+   ]
+  },
+  {
+   "id": 2498,
+   "type": "message",
+   "date": "2025-10-01T01:06:36",
+   "date_unixtime": "1759269996",
+   "edited": "2025-10-01T01:18:04",
+   "edited_unixtime": "1759270684",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵Note Physiology by Dr. Elsherif",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Note Physiology by Dr. Elsherif"
+    }
+   ]
+  },
+  {
+   "id": 2499,
+   "type": "message",
+   "date": "2025-10-01T01:06:52",
+   "date_unixtime": "1759270012",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Sensory Part 2 Physiology Dr Mohamed Elsherif 2025.pdf",
+   "file_name": "Sensory Part 2 Physiology Dr Mohamed Elsherif 2025.pdf",
+   "file_size": 4026629,
+   "thumbnail": "files/Sensory Part 2 Physiology Dr Mohamed Elsherif 2025.pdf_thumb.jpg",
+   "thumbnail_file_size": 25452,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2500,
+   "type": "message",
+   "date": "2025-10-01T12:40:30",
+   "date_unixtime": "1759311630",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Notes Anatomy by Dr.Alaa",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Notes Anatomy by Dr.Alaa"
+    }
+   ]
+  },
+  {
+   "id": 2501,
+   "type": "message",
+   "date": "2025-10-01T12:40:58",
+   "date_unixtime": "1759311658",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/رسومات خط اليد NEURO (2).pdf",
+   "file_name": "رسومات خط اليد NEURO.pdf",
+   "file_size": 8170298,
+   "thumbnail": "files/رسومات خط اليد NEURO (2).pdf_thumb.jpg",
+   "thumbnail_file_size": 28600,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2513,
+   "type": "message",
+   "date": "2025-10-04T14:03:47",
+   "date_unixtime": "1759575827",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Questions Anatomy by Dr.Alaa",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Questions Anatomy by Dr.Alaa"
+    }
+   ]
+  },
+  {
+   "id": 2514,
+   "type": "message",
+   "date": "2025-10-04T14:03:56",
+   "date_unixtime": "1759575836",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy MCQ by Dr.ALAA [Part.2].pdf",
+   "file_name": "Anatomy MCQ by Dr.ALAA [Part.2].pdf",
+   "file_size": 171502,
+   "thumbnail": "files/Anatomy MCQ by Dr.ALAA [Part.2].pdf_thumb.jpg",
+   "thumbnail_file_size": 33053,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2515,
+   "type": "message",
+   "date": "2025-10-04T14:04:14",
+   "date_unixtime": "1759575854",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Notes Anatomy by Dr.Alaa",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Notes Anatomy by Dr.Alaa"
+    }
+   ]
+  },
+  {
+   "id": 2516,
+   "type": "message",
+   "date": "2025-10-04T14:04:24",
+   "date_unixtime": "1759575864",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/رسومات خط اليد NEURO (3).pdf",
+   "file_name": "رسومات خط اليد NEURO.pdf",
+   "file_size": 25607718,
+   "thumbnail": "files/رسومات خط اليد NEURO (3).pdf_thumb.jpg",
+   "thumbnail_file_size": 30153,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2517,
+   "type": "message",
+   "date": "2025-10-04T14:06:51",
+   "date_unixtime": "1759576011",
+   "edited": "2025-10-04T15:58:57",
+   "edited_unixtime": "1759582737",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵 Revision Physiology by Dr. Elsherif[205][2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵 Revision Physiology by Dr. Elsherif[205][2]"
+    }
+   ]
+  },
+  {
+   "id": 2518,
+   "type": "message",
+   "date": "2025-10-04T14:06:55",
+   "date_unixtime": "1759576015",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/YCAwz2p6BEo?si=aqjhQQOxlT-SgbT4"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/YCAwz2p6BEo?si=aqjhQQOxlT-SgbT4"
+    }
+   ]
+  },
+  {
+   "id": 2519,
+   "type": "message",
+   "date": "2025-10-04T14:34:12",
+   "date_unixtime": "1759577652",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Medhat [205][1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Medhat [205][1]"
+    }
+   ]
+  },
+  {
+   "id": 2520,
+   "type": "message",
+   "date": "2025-10-04T14:34:12",
+   "date_unixtime": "1759577652",
+   "edited": "2025-10-04T14:34:22",
+   "edited_unixtime": "1759577662",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_name": "spinal-cord-1-دكتور-مدحت.mp4",
+   "file_size": 552604658,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 6361,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 4968,
+   "width": 1280,
+   "height": 720,
+   "text": "Spinal cord 1",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Spinal cord 1"
+    }
+   ]
+  },
+  {
+   "id": 2521,
+   "type": "message",
+   "date": "2025-10-04T14:34:31",
+   "date_unixtime": "1759577671",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Medhat [205][2]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Medhat [205][2]"
+    }
+   ]
+  },
+  {
+   "id": 2522,
+   "type": "message",
+   "date": "2025-10-04T14:35:28",
+   "date_unixtime": "1759577728",
+   "edited": "2025-10-04T14:35:35",
+   "edited_unixtime": "1759577735",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_name": "spinal-cord-2-دكتور-مدحت.mp4",
+   "file_size": 392201989,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 6761,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 3078,
+   "width": 1280,
+   "height": 720,
+   "text": "Spinal cord 2",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Spinal cord 2"
+    }
+   ]
+  },
+  {
+   "id": 2523,
+   "type": "message",
+   "date": "2025-10-04T15:57:41",
+   "date_unixtime": "1759582661",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Notes Anatomy by Dr. Haitham",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Notes Anatomy by Dr. Haitham"
+    }
+   ]
+  },
+  {
+   "id": 2524,
+   "type": "message",
+   "date": "2025-10-04T15:57:59",
+   "date_unixtime": "1759582679",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Development of the central nervous system 2025_251003_215528.pdf",
+   "file_name": "Development of the central nervous system 2025_251003_215528.pdf",
+   "file_size": 933654,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2525,
+   "type": "message",
+   "date": "2025-10-05T00:46:00",
+   "date_unixtime": "1759614360",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Questions Anatomy by Dr.Alaa",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Questions Anatomy by Dr.Alaa"
+    }
+   ]
+  },
+  {
+   "id": 2526,
+   "type": "message",
+   "date": "2025-10-05T00:46:12",
+   "date_unixtime": "1759614372",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Dr. Mahmoud Alaa 205 MCQ + Written .pdf",
+   "file_name": "Dr. Mahmoud Alaa 205 MCQ + Written .pdf",
+   "file_size": 1835357,
+   "thumbnail": "files/Dr. Mahmoud Alaa 205 MCQ + Written .pdf_thumb.jpg",
+   "thumbnail_file_size": 23207,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2527,
+   "type": "message",
+   "date": "2025-10-06T03:25:43",
+   "date_unixtime": "1759710343",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "⚫️Physio by Dr.Fawzy 205 [8]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "⚫️Physio by Dr.Fawzy 205 [8]"
+    }
+   ]
+  },
+  {
+   "id": 2528,
+   "type": "message",
+   "date": "2025-10-06T03:25:50",
+   "date_unixtime": "1759710350",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/pain-control.m4a",
+   "file_name": "pain-control.m4a",
+   "file_size": 29531323,
+   "thumbnail": "files/pain-control.m4a_thumb.jpg",
+   "thumbnail_file_size": 16095,
+   "media_type": "audio_file",
+   "performer": "ahmad nofal",
+   "title": "pain control",
+   "mime_type": "audio/mp4",
+   "duration_seconds": 1825,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2529,
+   "type": "message",
+   "date": "2025-10-06T03:26:04",
+   "date_unixtime": "1759710364",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Haithum [205][7]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Haithum [205][7]"
+    }
+   ]
+  },
+  {
+   "id": 2530,
+   "type": "message",
+   "date": "2025-10-06T03:26:12",
+   "date_unixtime": "1759710372",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/muscles-of-mastication.m4a",
+   "file_name": "muscles-of-mastication.m4a",
+   "file_size": 35823336,
+   "thumbnail": "files/muscles-of-mastication.m4a_thumb.jpg",
+   "thumbnail_file_size": 15075,
+   "media_type": "audio_file",
+   "performer": "ahmad nofal",
+   "title": "muscles of mastication",
+   "mime_type": "audio/mp4",
+   "duration_seconds": 2214,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2531,
+   "type": "message",
+   "date": "2025-10-06T15:25:44",
+   "date_unixtime": "1759753544",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "▫️الامتحان الاول باقون 198 - د/عمر مدحت\n",
+    {
+     "type": "link",
+     "text": "https://t.me/bakon198/238"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "▫️الامتحان الاول باقون 198 - د/عمر مدحت\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/bakon198/238"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2532,
+   "type": "message",
+   "date": "2025-10-06T21:07:54",
+   "date_unixtime": "1759774074",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢MCQ Histology Book[205]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢MCQ Histology Book[205]"
+    }
+   ]
+  },
+  {
+   "id": 2533,
+   "type": "message",
+   "date": "2025-10-06T21:08:05",
+   "date_unixtime": "1759774085",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/4_5989975611085433465.pdf",
+   "file_name": "4_5989975611085433465.pdf",
+   "file_size": 28937104,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2534,
+   "type": "message",
+   "date": "2025-10-06T23:01:02",
+   "date_unixtime": "1759780862",
+   "edited": "2025-10-07T04:41:08",
+   "edited_unixtime": "1759801268",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Dr.Doaa Neuro Slides collected & arranged (All)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Dr.Doaa Neuro Slides collected & arranged (All)"
+    }
+   ]
+  },
+  {
+   "id": 2535,
+   "type": "message",
+   "date": "2025-10-06T23:01:02",
+   "date_unixtime": "1759780862",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Neuro Slides Dr. Doaa (all).pdf",
+   "file_name": "Neuro Slides Dr. Doaa (all).pdf",
+   "file_size": 72779965,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2536,
+   "type": "message",
+   "date": "2025-10-06T23:01:17",
+   "date_unixtime": "1759780877",
+   "edited": "2025-10-07T04:41:26",
+   "edited_unixtime": "1759801286",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Dr.Doaa H&N Slides collected & searchable (All)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Dr.Doaa H&N Slides collected & searchable (All)"
+    }
+   ]
+  },
+  {
+   "id": 2537,
+   "type": "message",
+   "date": "2025-10-06T23:01:17",
+   "date_unixtime": "1759780877",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File unavailable, please try again later)",
+   "file_name": "H&N Slides Dr. Doaa (All).pdf",
+   "file_size": 134470005,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2542,
+   "type": "message",
+   "date": "2025-10-09T01:01:06",
+   "date_unixtime": "1759960866",
+   "edited": "2025-10-09T01:01:17",
+   "edited_unixtime": "1759960877",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Histo Zahra.pdf",
+   "file_name": "Histo Zahra.pdf",
+   "file_size": 13346143,
+   "mime_type": "application/pdf",
+   "text": "Notes Dr.Zahra 205",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Notes Dr.Zahra 205"
+    }
+   ]
+  },
+  {
+   "id": 2545,
+   "type": "message",
+   "date": "2025-10-09T01:31:22",
+   "date_unixtime": "1759962682",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Notes Anatomy Dr.Galal (Head)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Notes Anatomy Dr.Galal (Head)"
+    }
+   ]
+  },
+  {
+   "id": 2546,
+   "type": "message",
+   "date": "2025-10-09T01:33:47",
+   "date_unixtime": "1759962827",
+   "edited": "2025-10-09T01:33:53",
+   "edited_unixtime": "1759962833",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/UII10G06_10_2025_14_24_42_251007_152841.pdf",
+   "file_name": "UII10G06_10_2025_14_24_42_251007_152841.pdf",
+   "file_size": 6621044,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2547,
+   "type": "message",
+   "date": "2025-10-09T01:45:05",
+   "date_unixtime": "1759963505",
+   "edited": "2025-10-09T11:14:28",
+   "edited_unixtime": "1759997668",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy MCQ by DrJalal [205]_251009_014457.pdf",
+   "file_name": "Anatomy MCQ by DrJalal [205]_251009_014457.pdf",
+   "file_size": 4249965,
+   "mime_type": "application/pdf",
+   "text": "🟡 MCQ Anatomy Dr.Galal [205]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 MCQ Anatomy Dr.Galal [205]"
+    }
+   ]
+  },
+  {
+   "id": 2548,
+   "type": "message",
+   "date": "2025-10-09T11:49:07",
+   "date_unixtime": "1759999747",
+   "edited": "2025-10-09T11:49:13",
+   "edited_unixtime": "1759999753",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/H&N Galal MCQ .pdf",
+   "file_name": "H&N Galal MCQ .pdf",
+   "file_size": 1601968,
+   "thumbnail": "files/H&N Galal MCQ .pdf_thumb.jpg",
+   "thumbnail_file_size": 20123,
+   "mime_type": "application/pdf",
+   "text": "ملزمة أسئلة MCQ د.جلال مقسمة علي المواضيع\nHead & Neck\nمن داتا 197",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "ملزمة أسئلة MCQ د.جلال مقسمة علي المواضيع\nHead & Neck\nمن داتا 197"
+    }
+   ]
+  },
+  {
+   "id": 2549,
+   "type": "message",
+   "date": "2025-10-10T17:50:57",
+   "date_unixtime": "1760107857",
+   "edited": "2025-10-31T00:07:02",
+   "edited_unixtime": "1761862022",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy Exam.pdf",
+   "file_name": "Anatomy Exam.pdf",
+   "file_size": 3320592,
+   "mime_type": "application/pdf",
+   "text": [
+    "🟡إمتحانات السنوات السابقة أناتومي ٢٠٥ (بدون حل)\n\n●الحل \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2550"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡إمتحانات السنوات السابقة أناتومي ٢٠٥ (بدون حل)\n\n●الحل \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2550"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2550,
+   "type": "message",
+   "date": "2025-10-10T17:50:58",
+   "date_unixtime": "1760107858",
+   "edited": "2025-10-31T00:06:16",
+   "edited_unixtime": "1761861976",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy MCQ Previous exams Answers [205].pdf",
+   "file_name": "Anatomy MCQ Previous exams Answers [205].pdf",
+   "file_size": 12210934,
+   "mime_type": "application/pdf",
+   "text": "🟡إمتحانات السنوات السابقة أناتومي ٢٠٥ (بحل)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡إمتحانات السنوات السابقة أناتومي ٢٠٥ (بحل)"
+    }
+   ]
+  },
+  {
+   "id": 2551,
+   "type": "message",
+   "date": "2025-10-10T17:51:16",
+   "date_unixtime": "1760107876",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Haithum [205][8]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Haithum [205][8]"
+    }
+   ]
+  },
+  {
+   "id": 2552,
+   "type": "message",
+   "date": "2025-10-10T17:51:26",
+   "date_unixtime": "1760107886",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Dural-folds.m4a",
+   "file_name": "Dural-folds.m4a",
+   "file_size": 38596072,
+   "thumbnail": "files/Dural-folds.m4a_thumb.jpg",
+   "thumbnail_file_size": 14381,
+   "media_type": "audio_file",
+   "performer": "ahmad nofal",
+   "title": "Dural folds",
+   "mime_type": "audio/mp4",
+   "duration_seconds": 2385,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2553,
+   "type": "message",
+   "date": "2025-10-11T00:08:47",
+   "date_unixtime": "1760130527",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Mcq Neuro.pdf",
+   "file_name": "Mcq Neuro.pdf",
+   "file_size": 910615,
+   "thumbnail": "files/Mcq Neuro.pdf_thumb.jpg",
+   "thumbnail_file_size": 21588,
+   "mime_type": "application/pdf",
+   "text": "كتاب ال MCQ neuro لد جلال",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "كتاب ال MCQ neuro لد جلال"
+    }
+   ]
+  },
+  {
+   "id": 2554,
+   "type": "message",
+   "date": "2025-10-12T02:30:36",
+   "date_unixtime": "1760225436",
+   "edited": "2025-10-31T00:10:13",
+   "edited_unixtime": "1761862213",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Physio Exam.pdf",
+   "file_name": "Physio Exam.pdf",
+   "file_size": 852876,
+   "mime_type": "application/pdf",
+   "text": [
+    "إمتحانات السنوات السابقة فسيو ٢٠٥ (بدون حل)\nالحل \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2555"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "إمتحانات السنوات السابقة فسيو ٢٠٥ (بدون حل)\nالحل \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2555"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2555,
+   "type": "message",
+   "date": "2025-10-12T02:30:36",
+   "date_unixtime": "1760225436",
+   "edited": "2025-10-31T00:10:04",
+   "edited_unixtime": "1761862204",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Physio Exam-1.pdf",
+   "file_name": "Physio Exam-1.pdf",
+   "file_size": 881872,
+   "mime_type": "application/pdf",
+   "text": "إمتحانات السنوات السابقة فسيو ٢٠٥ (بحل)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "إمتحانات السنوات السابقة فسيو ٢٠٥ (بحل)"
+    }
+   ]
+  },
+  {
+   "id": 2562,
+   "type": "message",
+   "date": "2025-10-15T19:09:48",
+   "date_unixtime": "1760544588",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟥 أطلس اناتومي بترتيب ملزمة د.جلال",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 أطلس اناتومي بترتيب ملزمة د.جلال"
+    }
+   ]
+  },
+  {
+   "id": 2563,
+   "type": "message",
+   "date": "2025-10-15T19:09:48",
+   "date_unixtime": "1760544588",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/head.pdf",
+   "file_name": "head.pdf",
+   "file_size": 24309370,
+   "mime_type": "application/pdf",
+   "text": "Head",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Head"
+    }
+   ]
+  },
+  {
+   "id": 2564,
+   "type": "message",
+   "date": "2025-10-15T19:09:48",
+   "date_unixtime": "1760544588",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Neck.pdf",
+   "file_name": "Neck.pdf",
+   "file_size": 66336075,
+   "mime_type": "application/pdf",
+   "text": "Neck",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Neck"
+    }
+   ]
+  },
+  {
+   "id": 2565,
+   "type": "message",
+   "date": "2025-10-15T19:10:25",
+   "date_unixtime": "1760544625",
+   "edited": "2025-11-09T18:05:35",
+   "edited_unixtime": "1762704335",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/MCQ Neurosciences.pdf",
+   "file_name": "MCQ Neurosciences.pdf",
+   "file_size": 1346917,
+   "thumbnail": "files/MCQ Neurosciences.pdf_thumb.jpg",
+   "thumbnail_file_size": 29670,
+   "mime_type": "application/pdf",
+   "text": "من ايميل الكلية ( السنة اللي فاتت دفعة 197 )\nMCQ physiology - كتاب القسم",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "من ايميل الكلية ( السنة اللي فاتت دفعة 197 )\nMCQ physiology - كتاب القسم"
+    }
+   ]
+  },
+  {
+   "id": 2577,
+   "type": "message",
+   "date": "2025-10-17T14:09:16",
+   "date_unixtime": "1760699356",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Extraocular Muscles.pdf",
+   "file_name": "Extraocular Muscles.pdf",
+   "file_size": 323730,
+   "thumbnail": "files/Extraocular Muscles.pdf_thumb.jpg",
+   "thumbnail_file_size": 33175,
+   "mime_type": "application/pdf",
+   "text": "🟥 من الايميل\n Anatomy - Extraocular muscles",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 من الايميل\n Anatomy - Extraocular muscles"
+    }
+   ]
+  },
+  {
+   "id": 2578,
+   "type": "message",
+   "date": "2025-10-18T16:48:06",
+   "date_unixtime": "1760795286",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Anatomy Notes Dr.Hitham (TRIANGLES  OF THE NECK)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Anatomy Notes Dr.Hitham (TRIANGLES  OF THE NECK)"
+    }
+   ]
+  },
+  {
+   "id": 2579,
+   "type": "message",
+   "date": "2025-10-18T16:49:28",
+   "date_unixtime": "1760795368",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/TRIANGLES  OF THE NECK.pdf",
+   "file_name": "TRIANGLES  OF THE NECK.pdf",
+   "file_size": 562125,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2583,
+   "type": "message",
+   "date": "2025-10-19T15:56:13",
+   "date_unixtime": "1760878573",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy (205) Mindmaps",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy (205) Mindmaps"
+    }
+   ]
+  },
+  {
+   "id": 2584,
+   "type": "message",
+   "date": "2025-10-19T15:56:20",
+   "date_unixtime": "1760878580",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy Neuro Notes .pdf",
+   "file_name": "Anatomy Neuro Notes .pdf",
+   "file_size": 25407247,
+   "mime_type": "application/pdf",
+   "text": "Anatomy neuroscience in 13 pages",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Anatomy neuroscience in 13 pages"
+    }
+   ]
+  },
+  {
+   "id": 2585,
+   "type": "message",
+   "date": "2025-10-19T15:56:21",
+   "date_unixtime": "1760878581",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy Head Notes (Maryam Elshazly IPKA) 197.pdf",
+   "file_name": "Anatomy Head Notes (Maryam Elshazly IPKA) 197.pdf",
+   "file_size": 110977983,
+   "mime_type": "application/pdf",
+   "text": "Anatomy Head in 9 pages\nملحوظة:\nThe file is pretty large cause it has a lot of pictures and I couldn’t get it down without compromising the quality.\nPreview won’t work so open it on a notes app or Google chrome on a laptop.\nBy notes app i mean an app or ipad/tablet",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Anatomy Head in 9 pages\nملحوظة:\nThe file is pretty large cause it has a lot of pictures and I couldn’t get it down without compromising the quality.\nPreview won’t work so open it on a notes app or Google chrome on a laptop.\nBy notes app i mean an app or ipad/tablet"
+    }
+   ]
+  },
+  {
+   "id": 2586,
+   "type": "message",
+   "date": "2025-10-19T15:56:21",
+   "date_unixtime": "1760878581",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy neck notes (Maryam Elshazly 197)-1.pdf",
+   "file_name": "Anatomy neck notes (Maryam Elshazly 197)-1.pdf",
+   "file_size": 62146873,
+   "mime_type": "application/pdf",
+   "text": [
+    "Anatomy neck in 10 pages\nملحوظة:\npage 5 زيادة حطاها بالغلط\n\nA few mistakes i found in the neck notes 👇\n",
+    {
+     "type": "link",
+     "text": "https://t.me/kasr_197/63388?single"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Anatomy neck in 10 pages\nملحوظة:\npage 5 زيادة حطاها بالغلط\n\nA few mistakes i found in the neck notes 👇\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/kasr_197/63388?single"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2587,
+   "type": "message",
+   "date": "2025-10-19T15:56:46",
+   "date_unixtime": "1760878606",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵 Physio (205) Mindmaps",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵 Physio (205) Mindmaps"
+    }
+   ]
+  },
+  {
+   "id": 2588,
+   "type": "message",
+   "date": "2025-10-19T15:56:55",
+   "date_unixtime": "1760878615",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Intro + sensory mind maps (Maryam elshazly IPKA 197).pdf",
+   "file_name": "Intro + sensory mind maps (Maryam elshazly IPKA 197).pdf",
+   "file_size": 9663469,
+   "mime_type": "application/pdf",
+   "text": "Physiology mind maps ( intro + sensory )",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Physiology mind maps ( intro + sensory )"
+    }
+   ]
+  },
+  {
+   "id": 2589,
+   "type": "message",
+   "date": "2025-10-19T15:57:07",
+   "date_unixtime": "1760878627",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Motor Mind maps (Maryam Elshazly IPKA 197.pdf",
+   "file_name": "Motor Mind maps (Maryam Elshazly IPKA 197.pdf",
+   "file_size": 11785336,
+   "mime_type": "application/pdf",
+   "text": "Physiology mind maps ( Motor )",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Physiology mind maps ( Motor )"
+    }
+   ]
+  },
+  {
+   "id": 2590,
+   "type": "message",
+   "date": "2025-10-19T15:57:14",
+   "date_unixtime": "1760878634",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Vision Mind Maps (Maryam Elshazly IPKA 197).pdf",
+   "file_name": "Vision Mind Maps (Maryam Elshazly IPKA 197).pdf",
+   "file_size": 4713556,
+   "mime_type": "application/pdf",
+   "text": "Physiology mind maps ( vision )",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Physiology mind maps ( vision )"
+    }
+   ]
+  },
+  {
+   "id": 2591,
+   "type": "message",
+   "date": "2025-10-19T16:01:08",
+   "date_unixtime": "1760878868",
+   "edited": "2025-10-19T16:02:05",
+   "edited_unixtime": "1760878925",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "🟥 Mind maps 205 ( من دفعة 197 ) :\n\n🟡 Anatomy \n- Neuro\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2584"
+    },
+    "\n- Head\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2585"
+    },
+    "\n- Neck \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2586"
+    },
+    "\n\n🔵 Physiology \n- intro + sensory\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2588"
+    },
+    "\n- Motor \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2589"
+    },
+    "\n- Vision \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2590"
+    },
+    "\n\n📍By our colleague  \nAllah bless her \nDon't forget her in your prayers\n",
+    {
+     "type": "link",
+     "text": "https://t.me/KASR_198/1221"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 Mind maps 205 ( من دفعة 197 ) :\n\n🟡 Anatomy \n- Neuro\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2584"
+    },
+    {
+     "type": "plain",
+     "text": "\n- Head\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2585"
+    },
+    {
+     "type": "plain",
+     "text": "\n- Neck \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2586"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n🔵 Physiology \n- intro + sensory\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2588"
+    },
+    {
+     "type": "plain",
+     "text": "\n- Motor \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2589"
+    },
+    {
+     "type": "plain",
+     "text": "\n- Vision \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2590"
+    },
+    {
+     "type": "plain",
+     "text": "\n\n📍By our colleague  \nAllah bless her \nDon't forget her in your prayers\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/KASR_198/1221"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2592,
+   "type": "message",
+   "date": "2025-10-19T16:06:09",
+   "date_unixtime": "1760879169",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟥 أطلس اناتومي بترتيب ملزمة د.جلال",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 أطلس اناتومي بترتيب ملزمة د.جلال"
+    }
+   ]
+  },
+  {
+   "id": 2593,
+   "type": "message",
+   "date": "2025-10-19T16:06:09",
+   "date_unixtime": "1760879169",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/head.pdf",
+   "file_name": "head.pdf",
+   "file_size": 24309370,
+   "mime_type": "application/pdf",
+   "text": "Head",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Head"
+    }
+   ]
+  },
+  {
+   "id": 2594,
+   "type": "message",
+   "date": "2025-10-19T16:06:09",
+   "date_unixtime": "1760879169",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Neck.pdf",
+   "file_name": "Neck.pdf",
+   "file_size": 66336075,
+   "mime_type": "application/pdf",
+   "text": "Neck",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Neck"
+    }
+   ]
+  },
+  {
+   "id": 2603,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "edited": "2025-10-20T13:59:25",
+   "edited_unixtime": "1760957965",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Notes Anatomy Dr.Jalal (Neck)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Notes Anatomy Dr.Jalal (Neck)"
+    }
+   ]
+  },
+  {
+   "id": 2604,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/NEW neck galal notes .pdf",
+   "file_name": "NEW neck galal notes .pdf",
+   "file_size": 32908709,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2605,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "edited": "2025-10-20T13:59:19",
+   "edited_unixtime": "1760957959",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡MCQ Anatomy Dr.Jalal (neu)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡MCQ Anatomy Dr.Jalal (neu)"
+    }
+   ]
+  },
+  {
+   "id": 2606,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Neuro mcq jalal new .pdf",
+   "file_name": "Neuro mcq jalal new .pdf",
+   "file_size": 910615,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2607,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "edited": "2025-10-20T13:59:13",
+   "edited_unixtime": "1760957953",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡MCQ Anatomy Dr.Jalal (head)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡MCQ Anatomy Dr.Jalal (head)"
+    }
+   ]
+  },
+  {
+   "id": 2608,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/head mcq galal.pdf",
+   "file_name": "head mcq galal.pdf",
+   "file_size": 401547,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2609,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "edited": "2025-10-20T13:59:06",
+   "edited_unixtime": "1760957946",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡MCQ Anatomy Dr.Jalal (neck)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡MCQ Anatomy Dr.Jalal (neck)"
+    }
+   ]
+  },
+  {
+   "id": 2610,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/MCQ Neck_88148.pdf",
+   "file_name": "MCQ Neck_88148.pdf",
+   "file_size": 1006978,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2611,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "edited": "2025-10-20T13:58:58",
+   "edited_unixtime": "1760957938",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡MCQ Anatomy القسم (H&N)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡MCQ Anatomy القسم (H&N)"
+    }
+   ]
+  },
+  {
+   "id": 2612,
+   "type": "message",
+   "date": "2025-10-20T13:47:58",
+   "date_unixtime": "1760957278",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Anatomy MCQ -H&N-.pdf",
+   "file_name": "Anatomy MCQ -H&N-.pdf",
+   "file_size": 1153692,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2613,
+   "type": "message",
+   "date": "2025-10-20T13:56:23",
+   "date_unixtime": "1760957783",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵Notes Physiology Dr.Maher ( intro+Sensory)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Notes Physiology Dr.Maher ( intro+Sensory)"
+    }
+   ]
+  },
+  {
+   "id": 2614,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/all sensory .pdf",
+   "file_name": "all sensory .pdf",
+   "file_size": 1232546,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2615,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵Notes Physiology Dr.Maher ( motor part 1)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Notes Physiology Dr.Maher ( motor part 1)"
+    }
+   ]
+  },
+  {
+   "id": 2616,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/motor part 1.pdf",
+   "file_name": "motor part 1.pdf",
+   "file_size": 1083428,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2617,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵Notes Physiology Dr.Maher ( motor part 2)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Notes Physiology Dr.Maher ( motor part 2)"
+    }
+   ]
+  },
+  {
+   "id": 2618,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Motor 2_87519.pdf",
+   "file_name": "Motor 2_87519.pdf",
+   "file_size": 1097237,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2619,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵MCQ Physiology  205",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵MCQ Physiology  205"
+    }
+   ]
+  },
+  {
+   "id": 2620,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Physio MCQ -205--1-.pdf",
+   "file_name": "Physio MCQ -205--1-.pdf",
+   "file_size": 36482,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2621,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/MCQ Neurosciences (1).pdf",
+   "file_name": "MCQ Neurosciences.pdf",
+   "file_size": 1346917,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2622,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵MCQ Physiology  205 (197القسم)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵MCQ Physiology  205 (197القسم)"
+    }
+   ]
+  },
+  {
+   "id": 2623,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Physiology MCQ 2nd Year.pdf",
+   "file_name": "Physiology MCQ 2nd Year.pdf",
+   "file_size": 36697088,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2624,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵MCQ Exam Physiology  205",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵MCQ Exam Physiology  205"
+    }
+   ]
+  },
+  {
+   "id": 2625,
+   "type": "message",
+   "date": "2025-10-20T13:56:24",
+   "date_unixtime": "1760957784",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Physio Exam (1).pdf",
+   "file_name": "Physio Exam.pdf",
+   "file_size": 852876,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2626,
+   "type": "message",
+   "date": "2025-10-20T14:09:16",
+   "date_unixtime": "1760958556",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢Notes Histology Dr.Zahra (205)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Notes Histology Dr.Zahra (205)"
+    }
+   ]
+  },
+  {
+   "id": 2627,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/zahra 205.pdf",
+   "file_name": "zahra 205.pdf",
+   "file_size": 13346143,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2628,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢nervous tissue drawing  Histology Dr.Zahra (205)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢nervous tissue drawing  Histology Dr.Zahra (205)"
+    }
+   ]
+  },
+  {
+   "id": 2629,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/nervous tissue drawings.pdf",
+   "file_name": "nervous tissue drawings.pdf",
+   "file_size": 10872238,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2630,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢Exam Histology 205",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Exam Histology 205"
+    }
+   ]
+  },
+  {
+   "id": 2631,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Histo Exam (1).pdf",
+   "file_name": "Histo Exam.pdf",
+   "file_size": 522546,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2632,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Answered Histo Exam (1).pdf",
+   "file_name": "Answered Histo Exam.pdf",
+   "file_size": 624173,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2633,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢Question Histology 205 (القسم)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Question Histology 205 (القسم)"
+    }
+   ]
+  },
+  {
+   "id": 2634,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/CNS histo MCQ 198.pdf",
+   "file_name": "CNS histo MCQ 198.pdf",
+   "file_size": 28937104,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2635,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢Question Histology 205",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Question Histology 205"
+    }
+   ]
+  },
+  {
+   "id": 2636,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/HISTOLOGY MCQ 2nd Year.pdf",
+   "file_name": "HISTOLOGY MCQ 2nd Year.pdf",
+   "file_size": 3028285,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2637,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢Formative Assessment Histology 205",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢Formative Assessment Histology 205"
+    }
+   ]
+  },
+  {
+   "id": 2638,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Histology Formative Assessment 2.pdf",
+   "file_name": "Histology Formative Assessment 2.pdf",
+   "file_size": 1433241,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2639,
+   "type": "message",
+   "date": "2025-10-20T14:09:17",
+   "date_unixtime": "1760958557",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Histology — Practical Slides.pdf",
+   "file_name": "Histology — Practical Slides.pdf",
+   "file_size": 3155229,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2640,
+   "type": "message",
+   "date": "2025-10-21T11:59:36",
+   "date_unixtime": "1761037176",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Notes Anatomy Dr.Hitham",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Notes Anatomy Dr.Hitham"
+    }
+   ]
+  },
+  {
+   "id": 2641,
+   "type": "message",
+   "date": "2025-10-21T11:59:48",
+   "date_unixtime": "1761037188",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/CERVICAL FASCIA.pdf",
+   "file_name": "CERVICAL FASCIA.pdf",
+   "file_size": 1445828,
+   "thumbnail": "files/CERVICAL FASCIA.pdf_thumb.jpg",
+   "thumbnail_file_size": 15094,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2642,
+   "type": "message",
+   "date": "2025-10-21T11:59:48",
+   "date_unixtime": "1761037188",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/GREAT VESSELS OF THE NECK.pdf",
+   "file_name": "GREAT VESSELS OF THE NECK.pdf",
+   "file_size": 4593420,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2643,
+   "type": "message",
+   "date": "2025-10-22T00:50:16",
+   "date_unixtime": "1761083416",
+   "edited": "2025-10-22T00:50:58",
+   "edited_unixtime": "1761083458",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🔵Notes Physiology Dr.Maher (special sense)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🔵Notes Physiology Dr.Maher (special sense)"
+    }
+   ]
+  },
+  {
+   "id": 2644,
+   "type": "message",
+   "date": "2025-10-22T00:50:33",
+   "date_unixtime": "1761083433",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/spicial sense_88313.pdf",
+   "file_name": "spicial sense_88313.pdf",
+   "file_size": 6583187,
+   "thumbnail": "files/spicial sense_88313.pdf_thumb.jpg",
+   "thumbnail_file_size": 28399,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2653,
+   "type": "message",
+   "date": "2025-10-23T12:24:31",
+   "date_unixtime": "1761211471",
+   "edited": "2025-10-23T14:13:41",
+   "edited_unixtime": "1761218021",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡Note neck Dr.galal\n( without watermark )",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡Note neck Dr.galal\n( without watermark )"
+    }
+   ]
+  },
+  {
+   "id": 2654,
+   "type": "message",
+   "date": "2025-10-23T12:24:46",
+   "date_unixtime": "1761211486",
+   "edited": "2025-10-23T12:41:40",
+   "edited_unixtime": "1761212500",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Neck Dr galal.pdf",
+   "file_name": "Neck Dr galal.pdf",
+   "file_size": 73666198,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2665,
+   "type": "message",
+   "date": "2025-10-27T20:47:28",
+   "date_unixtime": "1761587248",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Applied Anatomy  (1).pdf",
+   "file_name": "Applied Anatomy  (1).pdf",
+   "file_size": 1423963,
+   "mime_type": "application/pdf",
+   "text": "كل ال Applied Anatomy متجمعه في ملف من احد الزملاء في ١٩٧ السنه الي فاتت دكتوره حنان قالت انهم مهمين .. جه منهم في الامتحان",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "كل ال Applied Anatomy متجمعه في ملف من احد الزملاء في ١٩٧ السنه الي فاتت دكتوره حنان قالت انهم مهمين .. جه منهم في الامتحان"
+    }
+   ]
+  },
+  {
+   "id": 2667,
+   "type": "message",
+   "date": "2025-10-28T23:53:39",
+   "date_unixtime": "1761684819",
+   "edited": "2025-10-28T23:57:08",
+   "edited_unixtime": "1761685028",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟥 فيديوهات من زمايلنا ربنا يكرمهم",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟥 فيديوهات من زمايلنا ربنا يكرمهم"
+    }
+   ]
+  },
+  {
+   "id": 2668,
+   "type": "message",
+   "date": "2025-10-28T23:53:39",
+   "date_unixtime": "1761684819",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 72975411,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 14124,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 175,
+   "width": 1280,
+   "height": 720,
+   "text": "🚨 Histo Tracts Mnemonics",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🚨 Histo Tracts Mnemonics"
+    }
+   ]
+  },
+  {
+   "id": 2669,
+   "type": "message",
+   "date": "2025-10-28T23:53:39",
+   "date_unixtime": "1761684819",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_name": "IMG_8569.MP4",
+   "file_size": 67021262,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 11725,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 310,
+   "width": 848,
+   "height": 464,
+   "text": "Anterior Horn",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Anterior Horn"
+    }
+   ]
+  },
+  {
+   "id": 2670,
+   "type": "message",
+   "date": "2025-10-28T23:53:39",
+   "date_unixtime": "1761684819",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 85303974,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 16781,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 410,
+   "width": 848,
+   "height": 480,
+   "text": "🚨 Lateral Ventricle Relations",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🚨 Lateral Ventricle Relations"
+    }
+   ]
+  },
+  {
+   "id": 2671,
+   "type": "message",
+   "date": "2025-10-28T23:53:39",
+   "date_unixtime": "1761684819",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 49396729,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 17033,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 247,
+   "width": 848,
+   "height": 480,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2681,
+   "type": "message",
+   "date": "2025-10-31T01:05:25",
+   "date_unixtime": "1761865525",
+   "edited": "2025-11-09T19:32:03",
+   "edited_unixtime": "1762709523",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "bold",
+     "text": "﷽\n🟥 تجميعة ل امتحانات السنين :\n\n       ⛔️ MODULE 205 ⛔️\n\n➖️ مقسمة حسب المواد\n🦴Anatomy🦴\n●اسئلة السنين "
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2549"
+    },
+    {
+     "type": "bold",
+     "text": "\n●كتاب القسم\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2611"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة د.جلال\nNEU:"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2605"
+    },
+    {
+     "type": "bold",
+     "text": "\nHead:"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2607"
+    },
+    {
+     "type": "bold",
+     "text": "\nNeck:"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2609"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n🔬Histology🔬\n●سنوات سابقة:\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2439"
+    },
+    {
+     "type": "bold",
+     "text": "\n●كتاب القسم \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2633"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة د.داليا\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2436"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة Formative Assessments \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2637"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n🧠Physiology 🧠\n●سنوات سابقة \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2554"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة كتاب القسم\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2622"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة د.ماهر \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2700"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n➖️ مقسمة حسب السنين\n●2024\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2433"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2023\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2429"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2021\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2430"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2019\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2432"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2015_2019\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2434"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n📌 الرسالة دائمة التحديث بالمصادر الجديدة فور توفرها\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/KASR_198/1239"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "bold",
+     "text": "﷽\n🟥 تجميعة ل امتحانات السنين :\n\n       ⛔️ MODULE 205 ⛔️\n\n➖️ مقسمة حسب المواد\n🦴Anatomy🦴\n●اسئلة السنين "
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2549"
+    },
+    {
+     "type": "bold",
+     "text": "\n●كتاب القسم\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2611"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة د.جلال\nNEU:"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2605"
+    },
+    {
+     "type": "bold",
+     "text": "\nHead:"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2607"
+    },
+    {
+     "type": "bold",
+     "text": "\nNeck:"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2609"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n🔬Histology🔬\n●سنوات سابقة:\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2439"
+    },
+    {
+     "type": "bold",
+     "text": "\n●كتاب القسم \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2633"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة د.داليا\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2436"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة Formative Assessments \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2637"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n🧠Physiology 🧠\n●سنوات سابقة \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2554"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة كتاب القسم\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2622"
+    },
+    {
+     "type": "bold",
+     "text": "\n●أسئلة د.ماهر \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2700"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n➖️ مقسمة حسب السنين\n●2024\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2433"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2023\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2429"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2021\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2430"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2019\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2432"
+    },
+    {
+     "type": "bold",
+     "text": "\n●2015_2019\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2434"
+    },
+    {
+     "type": "bold",
+     "text": "\n\n📌 الرسالة دائمة التحديث بالمصادر الجديدة فور توفرها\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/KASR_198/1239"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2682,
+   "type": "message",
+   "date": "2025-10-31T15:48:04",
+   "date_unixtime": "1761918484",
+   "edited": "2025-10-31T15:48:48",
+   "edited_unixtime": "1761918528",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/NEU 205 EOM 197_answers.pdf",
+   "file_name": "NEU 205 EOM 197_answers.pdf",
+   "file_size": 11263267,
+   "mime_type": "application/pdf",
+   "text": [
+    "امتحان 205 دفعة 197 ( Answered )\n يحتمل وجود اخطاء\n- بدون اجابات \n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2433"
+    },
+    ""
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "امتحان 205 دفعة 197 ( Answered )\n يحتمل وجود اخطاء\n- بدون اجابات \n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2433"
+    },
+    {
+     "type": "plain",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "id": 2684,
+   "type": "message",
+   "date": "2025-11-01T01:17:36",
+   "date_unixtime": "1761952656",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2685,
+   "type": "message",
+   "date": "2025-11-01T01:17:37",
+   "date_unixtime": "1761952657",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": ".",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "."
+    }
+   ]
+  },
+  {
+   "id": 2686,
+   "type": "message",
+   "date": "2025-11-01T01:17:40",
+   "date_unixtime": "1761952660",
+   "edited": "2025-11-01T21:21:54",
+   "edited_unixtime": "1762024914",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    "Embryo 205 [Development of Spinal cord]\n\n",
+    {
+     "type": "link",
+     "text": "https://youtu.be/TzkmuGx8SmU?si=uA12nAqfidNEp6dU"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Embryo 205 [Development of Spinal cord]\n\n"
+    },
+    {
+     "type": "link",
+     "text": "https://youtu.be/TzkmuGx8SmU?si=uA12nAqfidNEp6dU"
+    }
+   ]
+  },
+  {
+   "id": 2687,
+   "type": "message",
+   "date": "2025-11-01T01:18:07",
+   "date_unixtime": "1761952687",
+   "edited": "2025-11-01T21:22:10",
+   "edited_unixtime": "1762024930",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of the brain]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of the brain]"
+    }
+   ]
+  },
+  {
+   "id": 2688,
+   "type": "message",
+   "date": "2025-11-01T01:18:13",
+   "date_unixtime": "1761952693",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 24205523,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 13016,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 625,
+   "width": 480,
+   "height": 360,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2689,
+   "type": "message",
+   "date": "2025-11-01T01:18:21",
+   "date_unixtime": "1761952701",
+   "edited": "2025-11-01T21:22:21",
+   "edited_unixtime": "1762024941",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of pharyngeal apparatus 1]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of pharyngeal apparatus 1]"
+    }
+   ]
+  },
+  {
+   "id": 2690,
+   "type": "message",
+   "date": "2025-11-01T01:18:27",
+   "date_unixtime": "1761952707",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 99936396,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 12312,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 2256,
+   "width": 480,
+   "height": 360,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2691,
+   "type": "message",
+   "date": "2025-11-01T01:18:35",
+   "date_unixtime": "1761952715",
+   "edited": "2025-11-01T21:22:31",
+   "edited_unixtime": "1762024951",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of pharyngeal apparatus 2\n(Not required) ]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of pharyngeal apparatus 2\n(Not required) ]"
+    }
+   ]
+  },
+  {
+   "id": 2692,
+   "type": "message",
+   "date": "2025-11-01T01:18:42",
+   "date_unixtime": "1761952722",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 262048595,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 26447,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 1255,
+   "width": 960,
+   "height": 720,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2693,
+   "type": "message",
+   "date": "2025-11-01T01:18:49",
+   "date_unixtime": "1761952729",
+   "edited": "2025-11-01T21:22:38",
+   "edited_unixtime": "1762024958",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Doaa 205  [Embryo Development of face & palate]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Doaa 205  [Embryo Development of face & palate]"
+    }
+   ]
+  },
+  {
+   "id": 2694,
+   "type": "message",
+   "date": "2025-11-01T01:18:56",
+   "date_unixtime": "1761952736",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 101863592,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 12514,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 2513,
+   "width": 480,
+   "height": 360,
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2695,
+   "type": "message",
+   "date": "2025-11-01T01:19:10",
+   "date_unixtime": "1761952750",
+   "edited": "2025-11-01T21:22:47",
+   "edited_unixtime": "1762024967",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of the tongue ]",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 Anatomy Dr.Doaa 205 [Embryo Development of the tongue ]"
+    }
+   ]
+  },
+  {
+   "id": 2696,
+   "type": "message",
+   "date": "2025-11-01T01:19:15",
+   "date_unixtime": "1761952755",
+   "edited": "2025-11-01T21:21:19",
+   "edited_unixtime": "1762024879",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "(File not included. Change data exporting settings to download.)",
+   "file_size": 42016513,
+   "thumbnail": "(File not included. Change data exporting settings to download.)",
+   "thumbnail_file_size": 13637,
+   "media_type": "video_file",
+   "mime_type": "video/mp4",
+   "duration_seconds": 1047,
+   "width": 480,
+   "height": 360,
+   "text": [
+    "Last part\nDevelopment of Spinal cord\n",
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2686"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "Last part\nDevelopment of Spinal cord\n"
+    },
+    {
+     "type": "link",
+     "text": "https://t.me/data_KA198/2686"
+    }
+   ]
+  },
+  {
+   "id": 2699,
+   "type": "message",
+   "date": "2025-11-02T12:00:14",
+   "date_unixtime": "1762077614",
+   "edited": "2025-11-02T12:00:29",
+   "edited_unixtime": "1762077629",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/Important summary of HEAD AND NECK.pdf",
+   "file_name": "Important summary of HEAD AND NECK.pdf",
+   "file_size": 3529104,
+   "mime_type": "application/pdf",
+   "text": "تجميعة اناتومى  حلوة كانت موجودة في الكتاب القديم",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "تجميعة اناتومى  حلوة كانت موجودة في الكتاب القديم"
+    }
+   ]
+  },
+  {
+   "id": 2700,
+   "type": "message",
+   "date": "2025-11-02T12:01:09",
+   "date_unixtime": "1762077669",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡MCQ Notes Dr.Maher 205",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡MCQ Notes Dr.Maher 205"
+    }
+   ]
+  },
+  {
+   "id": 2701,
+   "type": "message",
+   "date": "2025-11-02T12:01:26",
+   "date_unixtime": "1762077686",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/MR_vision.mcq.pdf",
+   "file_name": "MR_vision.mcq.pdf",
+   "file_size": 1213512,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2702,
+   "type": "message",
+   "date": "2025-11-02T12:01:26",
+   "date_unixtime": "1762077686",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/MR hearing_mcq.pdf",
+   "file_name": "MR hearing_mcq.pdf",
+   "file_size": 298797,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2703,
+   "type": "message",
+   "date": "2025-11-02T12:01:26",
+   "date_unixtime": "1762077686",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/MR motor_mcq1.pdf",
+   "file_name": "MR motor_mcq1.pdf",
+   "file_size": 284570,
+   "mime_type": "application/pdf",
+   "text": "",
+   "text_entities": []
+  },
+  {
+   "id": 2704,
+   "type": "message",
+   "date": "2025-11-02T16:18:14",
+   "date_unixtime": "1762093094",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟡MCQ Anatomy Department Book (Embryo)",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡MCQ Anatomy Department Book (Embryo)"
+    }
+   ]
+  },
+  {
+   "id": 2705,
+   "type": "message",
+   "date": "2025-11-02T16:18:26",
+   "date_unixtime": "1762093106",
+   "edited": "2025-11-02T16:19:02",
+   "edited_unixtime": "1762093142",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "file": "files/SPECIAL EMBRYOLOGY MCQ [CNS&MSK2].pdf",
+   "file_name": "SPECIAL EMBRYOLOGY MCQ [CNS&MSK2].pdf",
+   "file_size": 548139,
+   "mime_type": "application/pdf",
+   "text": "🟡 الأسئلة الي عليكم الي عليها دائرة ما عدا امبريو ال eye and ear مش معاكم",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟡 الأسئلة الي عليكم الي عليها دائرة ما عدا امبريو ال eye and ear مش معاكم"
+    }
+   ]
+  },
+  {
+   "id": 2707,
+   "type": "message",
+   "date": "2025-11-09T19:18:50",
+   "date_unixtime": "1762708730",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": "🟢 Histology CNS levels Dr.Kandeel",
+   "text_entities": [
+    {
+     "type": "plain",
+     "text": "🟢 Histology CNS levels Dr.Kandeel"
+    }
+   ]
+  },
+  {
+   "id": 2708,
+   "type": "message",
+   "date": "2025-11-09T19:18:54",
+   "date_unixtime": "1762708734",
+   "from": "Kasr Alainy Data (198)",
+   "from_id": "channel2214768100",
+   "text": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/yA-WlvmJHwQ?si=IIWjwmpe_Z0KO0cL"
+    }
+   ],
+   "text_entities": [
+    {
+     "type": "link",
+     "text": "https://youtu.be/yA-WlvmJHwQ?si=IIWjwmpe_Z0KO0cL"
+    }
+   ]
+  }
+ ]
+}
