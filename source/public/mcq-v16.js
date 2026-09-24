@@ -20,7 +20,7 @@
  */
 (function () {
   "use strict";
-  const VERSION = "16.0";
+  const VERSION = "16.3";
   const INT = [1, 2, 4, 8, 16, 32]; // Leitner intervals, days
   const BLOCK_CAP = 8; // new past-paper MCQs at the end of a lesson
   const MIN_Q = 1.2; // minutes per practice MCQ including its explanation

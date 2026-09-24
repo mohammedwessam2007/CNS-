@@ -9,6 +9,7 @@ v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuri
 - **The GitHub repository is public**, and the uploaded PDFs sit at its root. Only the site copy is protected. Make the repository private to protect the files themselves.
 - **The Nov 2024 figure C answers** come from the owner's answered copy (a student's marks), not an official key.
 - **CNS-levels answers are the book's.** Structure names in the explanations are ours; figure 7 label 4 is given only as the book states it.
+- **The department book's answer row for its 5 CNS problem-solving items does not fit them** (1 of 5 matches). Those items use the standard answer and say so; if the department's exam key followed the misprint, the app would disagree with it there.
 - **The CNS/eye/ear formative paper has no key**; its 7 items carry standard answers, each marked as such in its explanation.
 
 ## v16.0 MCQ exam system (MCQ focus is the default)

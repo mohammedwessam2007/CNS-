@@ -55,7 +55,7 @@
   const have = new Set(QB.questions.map((q) => q.id));
   const push = (id, n, stem, opts, key, ...meta) => {
     if (have.has(id)) return;
-    const options = opts.map((text, i) => ({ key: "abcd"[i], text }));
+    const options = opts.map((text, i) => ({ key: "abcdefg"[i], text }));
     QB.questions.push(Object.assign({ id, number: n, page: 0, stem, options, answerKeys: [key], answerText: options.find((o) => o.key === key).text }, base, ...meta));
   };
   for (const [subj, n, lk, stem, opts, key] of ITEMS) push("DEPT-EOM197-" + subj + "-MCQ-" + n, n, stem, opts, key, L[lk]);
@@ -140,7 +140,137 @@
       QB.questions.push(Object.assign({ id, number: num, page: 0, stem: "CNS level " + n + " · " + lvl + ". In the department drawing above, label " + k + " is", options, answerKeys: [key], answerText: options.find((o) => o.key === key).text }, base, LV, meta || {}));
     }
 
+  /* 4) The department histology book's own problem-solving (B) and matching (C) sections, with its answer
+   *    tables (its MCQ sections are already the bank's "Department" histology items; all 106 keys agree).
+   *    Rows that would repeat a sealed-mock question are left out, and are never named in explanations. */
+  L.EAR = { subject: "HISTOLOGY", chapter: "Ear", group: "Department", lessonIds: ["T031", "T040", "T078"], unlockDay: 12, courseTopic: "External and middle ear", dimension: "discrimination", failureType: "discrimination" };
+  const BK = { sourceTag: "Department book", authority: ["DEPARTMENT"], sourceWeight: 1.25, sourceFile: "HISTOLOGY MCQ 2nd Year.pdf", provenance: "OWNER_UPLOAD_DEPT_HIST_BOOK" };
+  const CHN = { NT: "nervous tissue", CNS: "CNS", EYE: "eye", EAR: "ear" };
+  const MISPRINT = " The book's printed answer row for these five CNS problems does not fit them (it looks shifted); this is the standard answer.";
+  const BOOKPS = [
+    ["NT", 1, "A 9-year-old child was diagnosed as having an occipital brain tumor. A biopsy of this tumor mass reveals", ["Marked hyperplasia of neurons.", "Many degenerated neurons.", "Multiple demyelinated nerve fibres.", "Proliferation of macroglia."], "d",
+      ["Brain tumours in children are mostly **gliomas**: a **proliferation of macroglia** (astrocytes). Mature neurons cannot divide.", "a: Mature neurons do not divide, so they do not form a hyperplasia or a tumour.", "b: Degenerated neurons do not make a tumour mass.", "c: Demyelinated fibres belong to demyelinating disease, not to a tumour mass."]],
+    ["NT", 2, "Examination of immunohistochemically stained sections from the biopsy of the above case (a child's occipital brain tumour) would reveal the following intermediate filament", ["Neurofilaments.", "Cytokeratins.", "Vimentin.", "Glial fibrillar acidic protein."], "d",
+      ["Macroglia (astrocytes) are marked by **glial fibrillary acidic protein (GFAP)**, their intermediate filament.", "a: Neurofilaments are the intermediate filaments of **neurons**.", "b: Cytokeratins mark **epithelial** cells.", "c: Vimentin marks cells of **mesenchymal** origin (fibroblasts, endothelium)."]],
+    ["NT", 4, "A 40-year-old house-wife was brought to the emergency room with injured ulnar nerve while using the kitchen knife. After surgical intervention, she was terribly concerned about the repair of this nerve. Proper regeneration of this injured nerve depends upon", ["Approximation of two parts of axons.", "Approximation of two parts of myelin sheath.", "Approximation of two parts of the axon & the neurolemmal sheath.", "Number of lymphocytes at site of injury."], "c",
+      ["Regeneration needs the cut ends brought together **and the neurolemmal (Schwann) sheath**, whose tube guides the sprouting axon; that is why peripheral nerves regenerate and CNS tracts do not.", "a: The axon ends alone are not enough: without the Schwann tube the sprouts wander.", "b: Myelin breaks down distal to the cut; it does not guide regrowth.", "d: Lymphocytes play no part in guiding regeneration."]],
+    ["CNS", 1, "A 5-year-old girl with meningitis. Doctor prescribes her antibiotics. Which of the following statements should be considered true?", ["Blood brain barrier (B.B.B.) normally allows the passage of all antibiotics.", "The B.B.B. does not allow passage of antibiotics due to big molecular size.", "Systemic administration of penicillin normally → large amount entering CNS.", "Meninges become more permeable to penicillin at the site of inflammation and its concentration rises in cerebrospinal fluid."], "d",
+      ["Inflamed meninges become **more permeable**, so penicillin, which barely crosses the normal barrier, reaches useful levels in the CSF." + MISPRINT, "a: The blood–brain barrier **restricts** most drugs; it does not let all antibiotics pass.", "b: Some antibiotics do cross; the barrier is not a size cut-off that stops all of them.", "c: Normally only a **small** amount of penicillin enters the CNS."]],
+    ["CNS", 2, "A patient with lesion in right gracile nucleus is expected to have less.....", ["tactile localization at right arm.", "Fine touch at left leg.", "stereognosis at right hand.", "tactile discrimination at right leg."], "d",
+      ["The gracile nucleus relays fine touch and discrimination from the **lower** body of the **same** side (it lies below the sensory decussation): the **right leg**.", "a: The arm relays in the **cuneate** nucleus.", "b: Below the decussation a right-sided lesion affects the **right** side.", "c: The hand relays in the **cuneate** nucleus."]],
+    ["CNS", 3, "An injury to the posterior column of the lumbar spinal cord may be manifested as loss of ...", ["Fine touch at upper limbs.", "tactile discrimination at lower limbs.", "Crude touch at upper limbs.", "Pain & temperature at the lower limbs."], "b",
+      ["At lumbar level the posterior column holds only **lower-limb** fibres (gracile tract): loss of **tactile discrimination**, vibration and position sense in the lower limbs." + MISPRINT, "a: Upper-limb fibres join above the lumbar level (cuneate tract).", "c: Crude touch runs in the anterior spinothalamic tract, and no upper-limb fibres are at lumbar level.", "d: Pain and temperature run in the **lateral spinothalamic** tract, not the posterior column."]],
+    ["CNS", 4, "A patient with defective pain, simple touch and proprioception sensations from one side of the face and scalp probably has lesion in...", ["spinal lemniscus.", "trigeminal lemniscus.", "lateral lemniscus.", "medial lemniscus."], "b",
+      ["All sensation from the face and scalp reaches the thalamus (VPMN) in the **trigeminal lemniscus**." + MISPRINT, "a: The spinal lemniscus carries pain, temperature and crude touch from the **body**.", "c: The lateral lemniscus is **auditory**.", "d: The medial lemniscus carries fine touch and proprioception from the **body**."]],
+    ["CNS", 5, "40 years old male complains of unsteadiness in gait especially in the dark, his complaint may be due to lesion in", ["Lateral spinothalamic tract.", "Ventral spinothalamic tract.", "Cuneo-cerebellar tract.", "Dorsal column tracts."], "d",
+      ["Unsteadiness **worse in the dark** is sensory ataxia: conscious proprioception (**dorsal columns**) is lost and only vision makes up for it." + MISPRINT, "a: The lateral spinothalamic tract carries pain and temperature.", "b: The ventral spinothalamic tract carries crude touch and pressure.", "c: The cuneocerebellar tract carries unconscious proprioception from the upper limb; its loss does not worsen with the eyes closed."]],
+    ["EYE", 24, "A patient presenting by redness and watering of eye, known clinically as pink eye is caused by", ["Inflammation of Zeis gland.", "Inflammation of Meibomian gland.", "Inflammation of Moll's gland.", "Inflammation of conjunctiva."], "d",
+      ["Pink eye is **conjunctivitis**: inflamed conjunctival vessels (redness) and tearing.", "a: Zeis gland inflammation is a **stye** at the lid margin.", "b: A blocked Meibomian gland gives a **chalazion**.", "c: Moll's gland inflammation gives a lid-margin swelling, not a red watery eye."]],
+    ["EYE", 101, "A patient presenting with corneal opacity causing visual defects was directed to corneal transplantation is having", ["Injured epithelium.", "Corneal vascularization.", "Irregular substantia arrangement.", "Injured Bowman's membrane."], "d",
+      ["**Bowman's membrane does not regenerate**: its injury leaves a permanent opacity that needs a graft.", "a: The corneal epithelium regenerates quickly, so it heals without a graft.", "b: Vascularization is a complication, not the injury this problem describes.", "c: The classic permanent scar after injury is Bowman's membrane, not the stroma's arrangement."]],
+    ["EYE", 102, "A patient presenting with acute eye pain, by examination showed rise of the intraocular pressure, a condition known as...due to...", ["Cataract, lens opacity.", "Presbyopia, decreased lens elasticity.", "Glaucoma, increased vitreous formation.", "Glaucoma, improper drainage of aqueous."], "d",
+      ["**Glaucoma**: raised intraocular pressure from **impaired drainage of aqueous** through the trabecular meshwork and canal of Schlemm.", "a: Cataract is a painless lens opacity with normal pressure.", "b: Presbyopia is loss of near focusing with age.", "c: The vitreous is not continuously formed; aqueous drainage is the problem."]],
+    ["EYE", 103, "A 50-year-old patient presented with difficulty to focus during reading, was diagnosed as...due to....", ["Cataract, lens opacity.", "Cataract, denaturated crystallin.", "Presbyopia, defective accommodation.", "Presbyopia, defective lens fibers."], "c",
+      ["**Presbyopia**: with age the lens loses its elasticity, so **accommodation** for near vision fails.", "a: Cataract blurs all vision; the problem here is near focusing.", "b: Denatured crystallins cause cataract, not a focusing problem.", "d: The lens as a whole loses elasticity; it is the accommodation that is defective."]],
+    ["EYE", 104, "A 20-year-old female patient presenting with painless visual defects and normal intraocular pressure was diagnosed as...", ["Cataract.", "Presbyopia.", "Glaucoma.", "Retinal detachment."], "d",
+      ["Painless visual loss with normal pressure in a young adult: **retinal detachment**.", "a: Cataract is mostly a disease of old age.", "b: Presbyopia starts in the 40s.", "c: Glaucoma means raised intraocular pressure."]],
+    ["EYE", 105, "A 60-year-old male patient presenting with painless central visual defects and normal intraocular pressure was diagnosed as...", ["Cataract.", "Presbyopia.", "Glaucoma.", "Macular degeneration."], "d",
+      ["Painless loss of **central** vision in an older person: **macular degeneration** (the macula serves central vision).", "a: Cataract blurs the whole field, not only its centre.", "b: Presbyopia affects near focusing, not the central field.", "c: Glaucoma raises the pressure and first affects the peripheral field."]],
+    ["EYE", 106, "A twenty-year-old female complaining of a chalazion in her eye lid, the cause may be due to", ["Inflammation of Zeis gland.", "Inflammation of lacrimal gland.", "Inflammation of Moll's gland.", "Inflammation of Meibomian gland."], "d",
+      ["A **chalazion** is a blocked, inflamed **Meibomian (tarsal) gland** inside the tarsal plate.", "a: Zeis gland inflammation is a **stye** at the lid margin.", "b: Lacrimal gland inflammation swells the upper outer orbit, not the lid.", "c: Moll's gland inflammation gives a swelling at the lid margin, not in the tarsal plate."]],
+    ["EYE", 107, "An old man complaining of a small swelling at the margin of the eyelid the most probable origin is", ["Meibomian gland.", "Zeis gland.", "Lacrimal gland.", "Tarsal gland."], "b",
+      ["A swelling **at the lid margin** is a stye of a **Zeis gland** (the sebaceous gland of the eyelashes).", "a: Meibomian glands lie inside the tarsal plate; their swelling (chalazion) is away from the margin.", "c: The lacrimal gland is in the orbit, not the lid margin.", "d: Tarsal glands are the Meibomian glands, inside the tarsal plate."]],
+    ["EYE", 108, "A patient presenting with corneal opacity due to injury of the anterior limiting membrane, the condition could be treated by", ["Eye ointments.", "Cataract surgery.", "Lasik surgery.", "Corneal transplantation."], "d",
+      ["The anterior limiting (**Bowman's**) membrane cannot regenerate, so the opacity is permanent: **corneal transplantation**.", "a: Ointments cannot restore Bowman's membrane.", "b: Cataract surgery replaces the lens, not the cornea.", "c: LASIK reshapes the stroma to correct refraction; it does not remove a scar of Bowman's membrane."]],
+    ["EYE", 109, "A young man presenting with defective vision, by examination retinal detachment was found the possible cause is", ["Separation of rods and cones.", "Separation of retinal pigmented epithelium.", "Separation of Bruch's membrane.", "Separation of outer limiting membrane."], "b",
+      ["Retinal detachment is **separation of the neural retina from the pigment epithelium** (the potential space left from the optic cup).", "a: Rods and cones stay with the neural retina; it is the pigment epithelium they separate from.", "c: Bruch's membrane stays with the choroid.", "d: The outer limiting membrane lies inside the neural retina and does not separate."]],
+    ["EAR", 101, "A 10 years old child complained of loss of hearing following infection associated with external ear inflammation, by examination he showed", ["Defective hair cells of macula.", "Defective hair cells of crista.", "Conductive hearing loss.", "Defective supporting cells."], "c",
+      ["Inflammation of the external ear blocks the passage of sound: **conductive hearing loss**.", "a: Macular hair cells sense linear acceleration (balance).", "b: Crista hair cells sense rotation (balance).", "d: Supporting cells are in the inner ear, untouched by an external-ear infection."]],
+    ["EAR", 102, "A 7 years old girl presented with earache, ear discharge and history of recent sore throat, by examination.......was found", ["Sensorineural hearing loss.", "Perforated tympanic membrane.", "cochlear neuritis.", "Defective malleus."], "b",
+      ["Sore throat → infection up the Eustachian tube → **otitis media**; pus bursts the drum and discharges through a **perforated tympanic membrane**.", "a: Sensorineural loss is an inner-ear or nerve problem.", "c: Cochlear neuritis does not cause ear discharge.", "d: The malleus is not destroyed by an acute otitis media."]],
+    ["EAR", 103, "A 4 years male patient presented with permanent hearing loss following examination cochlear transplantation was decided, the likely cause was", ["Supporting cells damage.", "Macula hair cells damage.", "Crista hair cells damage.", "Organ hair cells damage."], "d",
+      ["A cochlear implant stands in for lost **hair cells of the organ of Corti**, stimulating the cochlear nerve directly.", "a: Supporting-cell damage alone is not what an implant replaces.", "b: Macular hair cells serve balance.", "c: Crista hair cells serve balance."]],
+    ["EAR", 104, "A middle-aged woman came to the clinic suffering from vertigo, a possible cause explaining her status may be", ["Cochlear nerve degeneration.", "Loss of hair cells of organ of Corti.", "Otitis media.", "Defective vestibular apparatus."], "d",
+      ["Vertigo is a disorder of balance: the **vestibular apparatus** (utricle, saccule, semicircular canals).", "a: Cochlear nerve degeneration causes deafness, not vertigo.", "b: Loss of Corti hair cells causes sensorineural deafness.", "c: Otitis media causes pain and conductive deafness."]],
+    ["EAR", 105, "Degeneration of the cochlear nerve in the inner ear causes", ["Motion sickness.", "Neural deafness.", "Vertigo.", "Conductive deafness."], "b",
+      ["The cochlear nerve carries hearing: its degeneration causes **neural (sensorineural) deafness**.", "a: Motion sickness is vestibular.", "c: Vertigo is vestibular.", "d: Conductive deafness comes from the external or middle ear."]],
+    ["EAR", 106, "A child three years old pushed an ear cotton bud forcibly along his external auditory canal. He was diagnosed as", ["Motion sickness.", "Vertigo.", "Neural deafness.", "Conductive deafness."], "d",
+      ["A bud pushed along the canal injures the canal or the drum, so sound conduction fails: **conductive deafness**.", "a: Motion sickness is vestibular.", "b: Vertigo needs a vestibular (inner-ear) injury.", "c: Neural deafness needs damage to the cochlea or its nerve."]],
+    ["EAR", 107, "Neural deafness diagnosed in children can be caused by drugs which damage...", ["Hair cells in organ of Corti.", "External auditory canal.", "Auditory ossicles.", "Chorda tympani nerve."], "a",
+      ["Ototoxic drugs (e.g. aminoglycosides) destroy the **hair cells of the organ of Corti** → neural (sensorineural) deafness.", "b: Canal damage gives conductive deafness.", "c: Ossicle damage gives conductive deafness.", "d: The chorda tympani carries taste, not hearing."]],
+  ];
+  // matching tables: [chapter, table, column B (a–g), answer letters for rows 1–5, rows, why each row's answer, unused options, rows left out, also-accepted]
+  const BOOKMT = [
+    ["NT", 1, ["Demonstrated by silver stain", "Are rER and polyribosomes", "Cells are multipolar pyramidal", "Has receptors for acetylcholine", "Stained with PAS", "Have uniform diameter", "Cells are unipolar"], "gdafb",
+      ["Spinal ganglion", "Post synaptic membrane", "Golgi apparatus", "The axons", "Nissl bodies"],
+      ["Spinal (dorsal root) ganglion cells are **pseudo-unipolar**: one process that divides like a T.", "The postsynaptic membrane carries the **receptors for the transmitter** (acetylcholine at cholinergic synapses).", "The Golgi apparatus of neurons is shown by **silver** impregnation, as a network around the nucleus.", "Axons keep a **uniform diameter** along their length (dendrites taper).", "Nissl bodies are stacks of **rER with polyribosomes**, hence basophilic."],
+      { c: "Multipolar pyramidal cells are the neurons of the cerebral cortex; no row here.", e: "PAS stains glycogen and glycoproteins; no row here." }, [], {}],
+    ["NT", 2, ["Osmic acid", "Gap junctions", "Tapering", "Silver", "Has myelinated nerve fibers", "Axosomatic", "Is devoid of Nissl granules"], "egfab",
+      ["The ulnar nerve", "The axon", "Site of contact of axon and cell body", "Myelin sheath is stained with", "Electrical synapse"],
+      ["A peripheral nerve like the ulnar is made mostly of **myelinated** fibres.", "The axon (and its hillock) is **free of Nissl granules**.", "A synapse of an axon on a cell body is **axosomatic**.", "", "Electrical synapses are **gap junctions**."],
+      { c: "Tapering describes dendrites, not axons.", d: "Silver shows neurofibrils, axons and the Golgi apparatus." }, [4], {}],
+    ["NT", 3, ["Substantia nigra", "Shows delicate fibers or granules", "Cerebellum", "The grey matter", "Cerebral cortex", "There is proliferation of Schwann cells", "Are sensory neurons"], "fcabe",
+      ["In regeneration", "Purkinje cells are found in", "Melanin pigment is seen in", "The synaptic cleft", "Pyramidal cells are seen in"],
+      ["In regeneration the **Schwann cells proliferate** and form the bands that guide the new axon.", "Purkinje cells lie in the **cerebellar** cortex.", "Neurons of the **substantia nigra** contain melanin (hence the name).", "The synaptic cleft **shows delicate fibres or granules** of intercellular material.", "Pyramidal cells are the typical neurons of the **cerebral cortex**."],
+      { d: "Too general: the table wants the specific site (cerebellum, cerebral cortex, substantia nigra).", g: "Sensory neurons are the dorsal-root-ganglion cells; no row here." }, [], {}],
+    ["NT", 4, ["Nerve fibers are thin non-myelinated", "Silver", "Sudan III", "Cells are bipolar", "Are absent", "Osmic acid", "Satellite cells are abundant"], "gefba",
+      ["In spinal ganglion", "Centrioles in neurons", "Myelin sheath is stained by", "Golgi is stained by", "In sympathetic ganglia"],
+      ["In spinal ganglia each cell has a complete capsule of **abundant satellite cells**.", "Mature neurons have **no centrioles**, so they cannot divide.", "", "The neuronal Golgi apparatus is shown by **silver**.", "In sympathetic ganglia the fibres are mostly **thin non-myelinated** (postganglionic)."],
+      { c: "Sudan III stains fat in frozen sections; it is not the department's answer for any row.", d: "Bipolar cells are found in the retina, the olfactory epithelium and the cochlear and vestibular ganglia; no row here." }, [3], {}],
+    ["NT", 5, ["Mesodermal in origin", "Simple cuboidal ciliated", "Star shaped with multiple processes", "Around nerve cells in ganglia", "Form myelin in central nervous system", "In peripheral nervous system", "Contain Nissl's granules"], "ceafb",
+      ["Astrocytes", "Oligodendrocytes", "Microglia", "Schwann cells", "Ependymal cells"],
+      ["Astrocytes are **star-shaped** with many processes.", "Oligodendrocytes **form myelin in the CNS**.", "Microglia are the only neuroglia of **mesodermal** origin.", "Schwann cells belong to the **peripheral** nervous system.", "Ependymal cells are a **simple cuboidal (to columnar) ciliated** lining of the ventricles and central canal."],
+      { d: "Cells around nerve cells in ganglia are satellite cells; no row here.", g: "Nissl granules belong to neurons, not neuroglia." }, [], {}],
+    ["CNS", 1, ["Homologous to accessory cuneate nucleus.", "Carries pain & temperature sensations", "Corticobulbar tract.", "Corticospinal tract.", "Ends in VPLN.", "Ends in superior colliculus", "Continuation of medial longitudinal bundle"], "bdage",
+      ["Lateral spinothalamic tract", "Upper 2/3 of motor area 4 of cerebral cortex", "Clark's nucleus", "Sulcomarginal tract", "Medial lemniscus"],
+      ["The lateral spinothalamic tract **carries pain and temperature**.", "The upper two-thirds of area 4 give the **corticospinal** tract (the lower third gives corticobulbar fibres).", "Clark's nucleus (lower limb) is **homologous to the accessory cuneate nucleus** (upper limb): both send unconscious proprioception to the cerebellum.", "The sulcomarginal tract is the **continuation of the medial longitudinal bundle** into the cord.", "The medial lemniscus **ends in the VPLN** of the thalamus."],
+      { c: "Corticobulbar fibres come from the lower third of area 4; no row here.", f: "The spinotectal tract ends in the superior colliculus; no row here." }, [], {}],
+    ["EYE", 1, ["Simple columnar epithelium", "Non keratinized stratified squamous epithelium", "Keratinized stratified squamous epithelium", "Simple cuboidal epithelium", "Pseudo stratified columnar ciliated epithelium", "Stratified columnar epithelium with goblet cells", "Simple cubical epithelium"], "befdc",
+      ["Cornea", "Lacrimal duct", "Conjunctiva", "Subcapsular epithelium of the lens", "Outer surface of eye lid"],
+      ["The corneal epithelium is **non-keratinized stratified squamous**.", "", "The conjunctiva is **stratified columnar with goblet cells**.", "The subcapsular epithelium of the lens is **simple cuboidal** (anterior surface only).", "The outer surface of the eyelid is thin skin: **keratinized stratified squamous**."],
+      { a: "Simple columnar epithelium lines none of these rows.", g: "“Simple cubical” is the same epithelium as simple cuboidal (d): it belongs to the lens's subcapsular epithelium." }, [2], { 4: { g: "Also accepted: “simple cubical” is the same epithelium as d; the book keys d." } }],
+    ["EAR", 1, ["Handle of malleus", "No collagen fibers", "Stratified squamous epithelium", "Radial and circular", "Three layers of collagen", "Simple cuboidal epithelium", "Foot plate of the stapes"], "cfbda",
+      ["Outer surface of tympanic membrane", "Inner surface of tympanic membrane", "Pars flaccida of tympanic membrane", "Collagen fibers of tympanic membrane", "Attached to the tympanic membrane"],
+      ["The outer surface of the drum is thin skin: **stratified squamous** epithelium.", "The inner surface is middle-ear mucosa: **simple cuboidal** epithelium.", "", "", "The **handle of the malleus** is attached to the inner surface of the drum."],
+      { e: "It is not the department's answer for any row of this table.", g: "The stapes footplate fits the **oval window**, not the drum." }, [3, 4], {}],
+    ["EAR", 2, ["Tensor tympani", "Stapedius", "Mastoid air cells", "Stapes footplate", "Secondary tympanic membrane", "Eustachian tube", "Chorda tympani"], "deafc",
+      ["Oval window", "Round window", "Malleus", "Anterior wall of tympanic cavity", "Posterior wall of tympanic cavity"],
+      ["The oval window is closed by the **stapes footplate**.", "The round window is closed by the **secondary tympanic membrane**.", "**Tensor tympani** is inserted into the malleus.", "The anterior wall carries the opening of the **Eustachian (auditory) tube**.", "The posterior wall leads through the aditus to the mastoid antrum and **mastoid air cells**."],
+      { b: "Stapedius is inserted into the **stapes**; no row here.", g: "The chorda tympani crosses the inner surface of the drum; no row here." }, [], {}],
+    ["EAR", 3, ["Cupula", "Phalangeal cells", "Pillar cells", "Tectorial membrane", "Otolithic membrane", "Bony semicircular canals", "Spiral ganglia"], "bcfae",
+      ["Supporting cells", "Tunnel of Corti", "Perilymph", "Crista ampullaris", "Macula"],
+      ["The supporting cells that hold the outer hair cells are the **phalangeal (Deiters') cells**.", "The tunnel of Corti is bounded by the inner and outer **pillar cells**.", "", "The crista ampullaris is capped by the gelatinous **cupula**.", "The macula is covered by the **otolithic membrane**."],
+      { d: "The tectorial membrane lies over the hair cells of the organ of Corti; no row here.", g: "The spiral ganglion holds the cell bodies of the cochlear nerve; no row here." }, [3], {}],
+  ];
+  const XB = {};
+  for (const [ch, n, stem, opts, key, lines] of BOOKPS) {
+    push("DEPT-BOOK-" + ch + "-PS-" + n, n, stem, opts, key, L[ch], BK);
+    // the five CNS problems already say why their key is the standard answer, not the book's printed row
+    const keyLine = lines[0].includes("standard answer") ? lines[0] : lines[0] + " This is the department book's answer.";
+    (XB["DEPT-BOOK-" + ch + "-PS-"] = XB["DEPT-BOOK-" + ch + "-PS-"] || {})[n] = [keyLine, ...lines.slice(1)];
+  }
+  for (const [ch, t, opts, keys, rows, why, other, skip, also] of BOOKMT)
+    for (let r = 1; r <= 5; r++) {
+      if (skip.includes(r)) continue;
+      const num = t * 10 + r,
+        key = keys[r - 1],
+        pre = "DEPT-BOOK-" + ch + "-MT-",
+        lines = [why[r - 1] + " This is the department book's answer."];
+      for (const Lt of "abcdefg") {
+        if (Lt === key) continue;
+        if (also[r] && also[r][Lt]) {
+          lines.push("~" + Lt + ": " + also[r][Lt]);
+          continue;
+        }
+        const j = keys.indexOf(Lt);
+        lines.push(Lt + ": " + (j >= 0 ? (skip.includes(j + 1) ? "That belongs to another row of this table." : "That goes with “" + rows[j] + "” in this table.") : other[Lt]));
+      }
+      (XB[pre] = XB[pre] || {})[num] = lines;
+      push(pre + num, num, rows[r - 1] + " → ?", opts, key, L[ch], BK, { group: "Matching", sourceTag: "Department book matching, " + CHN[ch] + " table " + ["", "I", "II", "III", "IV", "V"][t] });
+    }
+
   const IX = (window.INTELLECTUALITY_MCQ_X = window.INTELLECTUALITY_MCQ_X || {});
+  for (const k of Object.keys(XB)) IX[k] = Object.assign(IX[k] || {}, XB[k]);
   IX["DEPT-EOM197-ANAT-MCQ-"] = Object.assign(IX["DEPT-EOM197-ANAT-MCQ-"] || {}, {
     24: ["The **submental** triangle lies **between the two anterior bellies of the digastric**, with the body of the hyoid as its base and the chin as its apex; its floor is the two mylohyoids.", "a: The occipital triangle is the upper part of the posterior triangle, above the inferior belly of omohyoid.", "b: The posterior triangle lies behind the sternomastoid and in front of the trapezius.", "c: The muscular triangle lies below the hyoid, between the midline, the superior belly of omohyoid and the sternomastoid."],
     34: ["General (somatic) sensation from the **opposite half of the body** reaches the **primary somatosensory area 3, 1, 2** in the postcentral gyrus; a lesion there → loss of general sensation on the opposite side.", "b: Area 22 is the auditory association (Wernicke's) area: understanding speech.", "c: Area 17 is the primary visual area around the calcarine sulcus.", "d: Areas 18, 19 are the visual association areas."],

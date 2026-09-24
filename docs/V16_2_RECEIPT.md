@@ -1,4 +1,4 @@
-# v16.2 Receipt: the department's own drawings, the real Nov 2024 paper, and Applied Anatomy
+# v16.2–16.3 Receipt: the department's own drawings, the real Nov 2024 paper, Applied Anatomy, the department book, and full notes coverage
 
 Source material: the 14 files the owner uploaded from the batch-198 channel on 24 Sep (see `docs/TELEGRAM_198_INDEX.md`). The goal is unchanged: the most marks per minute in the NEU-205 MCQ exam, not a perfect score.
 
@@ -30,6 +30,24 @@ The 50 figure questions are meaningless without their figures, so they exist onl
 | v16 suite, as the owner's device (key present, all 50 figure items in the bank) | **25/25**. Full course: **992/992** practice past papers by day 47 (the figure drill included), 399/399 held-out, **109** min/day on average, **142** at most, 885 KB. The drill adds no day above the 2.5 h cap |
 | Build | "38 app scripts/styles present"; the new scripts and all 50 encrypted drawings are in `dist` |
 | Other suites (final pass, `receipts/v16_2/all_suites_final.txt`) | certify **62/62** · spread **23/23** · LEARN **17/17** · hostile **26/26** · v15.3 **10/10** · Vercel host **14/14** · options gallery **7/7** · leak audit **0** text or query leaks over 942 texts · rollback to v53 and back: **pass** |
+
+## v16.3: the department book's answer tables, and every practice fact taught first
+
+The owner asked for flawless without waiting for more files. Two things were still improvable from what we had.
+
+- **Every department histology key checked against the department's own answer tables.** The book `HISTOLOGY MCQ 2nd Year.pdf` prints official answers for its nervous tissue, CNS, eye and ear sections. The bank's 106 "Department" histology items come from it, and **all 106 keys agree** (nervous tissue 28/28, CNS 32/32, eye 23/23, ear 22/22). Two differ only because the bank reorders the options (CNS #32 and eye #16); CNS #32's explanation now quotes the book's wording.
+- **69 new department-book items** from the book's problem-solving and matching sections, with its answers: nervous tissue 26, CNS 10, eye 14, ear 19. 7 more were left out because they would repeat a sealed-mock question almost word for word, and explanations never name those pairings. For the 5 CNS problem-solving items the book's printed answer row does not fit (only 1 of 5 matches the questions); those use the standard answer, and each explanation says so.
+- **Strict notes coverage is now 100%.** Every practice question's fact is taught in its own lesson section before the question is asked: **1009/1009**, up from 762/919 at the start of the day. About 200 note lines were added, each written from a practice item only; held-out items were never used to write notes. One item has a doubtful bank key (LMN lesion "with clonus"): the notes name it with ⚠ and teach the standard fact.
+
+**v16.3 final pass** (`receipts/v16_2/all_suites_final_v16_3.txt`, on the final files):
+
+| Check | Result |
+|---|---|
+| v16 suite, public site | **25/25**. Full course: **1011/1011** practice past papers by day 47, 399/399 held-out in 14 mocks, **109** min/day on average, **140** at most, 888 KB |
+| v16 suite, owner's device (drawings key present) | **25/25**. **1061/1061** practice past papers (the 50 figure items included) by day 47, **109** min/day on average, **141** at most, 897 KB |
+| Strict notes coverage | practice **1009/1009 (100%)** |
+| Drawings | **16/16** on the source and on the Vercel build |
+| Other suites | certify **62/62** · spread **23/23** · LEARN **17/17** · hostile **26/26** · v15.3 **10/10** · Vercel host **14/14** · options gallery **7/7** · leak audit **0** leaks · rollback to v53 and back **pass** |
 
 ## Honest limits of this round
 

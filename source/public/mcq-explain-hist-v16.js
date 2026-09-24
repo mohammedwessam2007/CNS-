@@ -79,7 +79,7 @@ IX["EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-DEPARTMENT-"] = {
   26: ["The **trigeminal lemniscus** is seen in the **pons and midbrain** (on its way to the thalamus).", "a: Kasr places it in the pons and midbrain.", "c: Not in the midbrain only.", "d: Not in the medulla only."],
   29: ["The BBB depends on **tight junctions between non-fenestrated** capillary endothelial cells.", "a: Fenestrated endothelium leaks (e.g. choroid plexus).", "b: Astrocyte end-feet support the barrier; the tight junctions are endothelial.", "d: Border cells belong to the arachnoid barrier."],
   30: ["**Border cells** form the outer layer of the **arachnoid** (arachnoid barrier).", "a: Not the pia.", "c: Not the dura.", "d: The pons is brain tissue."],
-  32: ["A **climbing fibre** (from the inferior olive) synapses directly on a **Purkinje cell**, winding up its dendrites.", "a: It arises from the **inferior olive**; mossy fibres come from the pontine nuclei and elsewhere.", "c: **Mossy** fibres synapse on granule cells.", "d: Climbing fibres are **excitatory**."],
+  32: ["A **climbing fibre** (from the inferior olive) synapses directly on a **Purkinje cell**, winding up its dendrites: the department book words it \"each fibre synapses with one Purkinje cell\".", "a: It arises from the **inferior olive**; mossy fibres come from the pontine nuclei and elsewhere.", "c: **Mossy** fibres synapse on granule cells.", "d: Climbing fibres are **excitatory**."],
 };
 
 IX["EHSAN-HIST-EYE-SOURCE-BASED-"] = {

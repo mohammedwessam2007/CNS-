@@ -756,4 +756,363 @@
   add("hi-eye", "Cornea: five layers", [
     "**Success of corneal transplantation** is explained because the **cornea is avascular** (no blood vessels, no lymphatics): the recipient's immune cells hardly reach the graft. Its transparency comes from the regular arrangement of collagen and relative dehydration.",
   ]);
+  /* ───────────── v16.3 · the department histology book's problem-solving and matching sections (official answers) ───────────── */
+  add("hi-nervous-tissue", "The neuron under the microscope", [
+    "Department matching facts: **Nissl bodies are rER and polyribosomes**; **the axon is devoid of Nissl granules** (so is the axon hillock); **the axons have uniform diameter** (dendrites taper); the **Golgi apparatus is demonstrated by silver stain** (Golgi is stained by silver); **centrioles in neurons are absent**, so neurons cannot divide; **melanin pigment is seen in the substantia nigra**.",
+  ]);
+  add("hi-nervous-tissue", "Types of neurons and the synapse", [
+    "Department matching facts: **spinal ganglion** cells are **unipolar** (pseudo-unipolar); **Purkinje cells are found in the cerebellum**; **pyramidal cells are seen in the cerebral cortex**; the **site of contact of axon and cell body** is an **axosomatic** synapse; an **electrical synapse** is made of **gap junctions**; the **post synaptic membrane has receptors for acetylcholine** (for the transmitter); **the synaptic cleft shows delicate fibers or granules**.",
+  ]);
+  add("hi-nervous-tissue", "Neuroglia", [
+    "Department matching facts: **astrocytes** are **star shaped with multiple processes**; **oligodendrocytes form myelin in the central nervous system**; **microglia** are **mesodermal in origin**; **Schwann cells** are **in the peripheral nervous system**; **ependymal cells** are **simple cuboidal ciliated**.",
+    "A **9-year-old child** with an **occipital brain tumor**: the **biopsy** of the tumor mass reveals **proliferation of macroglia** (a glioma), since mature neurons do not divide. **Immunohistochemically stained sections** of that biopsy show the astrocytes' **intermediate filament**, **glial fibrillar acidic protein (GFAP)**; neurofilaments are neuronal, cytokeratins epithelial, vimentin mesenchymal.",
+  ]);
+  add("hi-nervous-tissue", "Nerve fibres and the peripheral nerve", [
+    "**The ulnar nerve** (like any peripheral nerve) **has myelinated nerve fibers** for the most part.",
+  ]);
+  add("hi-nervous-tissue", "Ganglia, degeneration and regeneration, stains", [
+    "Department matching facts: **in spinal ganglion satellite cells are abundant** (a complete capsule); **in sympathetic ganglia** the **nerve fibers are thin non-myelinated**; **in regeneration there is proliferation of Schwann cells**.",
+    "An **injured ulnar nerve** (a kitchen-knife cut): **proper regeneration of this injured nerve depends upon approximation of two parts of the axon & the neurolemmal sheath** (the Schwann tube guides the sprouts), not the axon ends or the myelin alone.",
+  ]);
+  add("hi-cns", "Spinal cord tracts on a section", [
+    "Department matching facts: the **upper 2/3 of motor area 4 of the cerebral cortex** give the **corticospinal tract** (the lower third, corticobulbar); **Clark's nucleus** is **homologous to the accessory cuneate nucleus**; the **sulcomarginal tract** is the **continuation of the medial longitudinal bundle**; the **lateral spinothalamic tract carries pain & temperature sensations**.",
+    "An **injury to the posterior column of the lumbar spinal cord** → **loss of tactile discrimination at the lower limbs** (only lower-limb fibres are there; pain and temperature run in the lateral spinothalamic tract).",
+  ]);
+  add("hi-cns", "Medulla: arcuate fibres and the lemnisci", [
+    "The **medial lemniscus ends in the VPLN** of the thalamus. A **lesion in the right gracile nucleus** gives **less tactile discrimination at the right leg** (below the sensory decussation, lower body, same side).",
+  ]);
+  add("hi-cns", "Meninges and the blood–brain barrier", [
+    "A child with **meningitis** given **antibiotics**: the **meninges become more permeable to penicillin at the site of inflammation and its concentration rises in cerebrospinal fluid**; normally the blood–brain barrier lets only a little penicillin in.",
+  ]);
+  add("hi-eye", "Cornea: five layers", [
+    "The **cornea** is lined by **non keratinized stratified squamous epithelium**. A patient with a **corneal opacity causing visual defects**, directed to **corneal transplantation**, is having an **injured Bowman's membrane** (the anterior limiting membrane does not regenerate; the epithelium does).",
+  ]);
+  add("hi-eye", "Sclera, limbus and aqueous drainage", [
+    "**Acute eye pain** with a **rise of the intraocular pressure** = **glaucoma, due to improper drainage of aqueous**.",
+  ]);
+  add("hi-eye", "Lens and accommodation", [
+    "A **50-year-old** with **difficulty to focus during reading** = **presbyopia, due to defective accommodation** (the lens loses elasticity). The **subcapsular epithelium of the lens** is **simple cuboidal epithelium**.",
+  ]);
+  add("hi-eye", "Retinal pigment epithelium, rods and cones", [
+    "**Retinal detachment** = **separation of the retinal pigmented epithelium** from the neural retina: the possible cause in a **young man** presenting with **defective vision**. A **20-year-old** with **painless visual defects** and **normal intraocular pressure** → **retinal detachment**.",
+  ]);
+  add("hi-eye", "Macula lutea and fovea", [
+    "A **60-year-old** with **painless central visual defects** and **normal intraocular pressure** → **macular degeneration**.",
+  ]);
+  add("hi-eye", "Eyelid, conjunctiva, tear film and lacrimal appara", [
+    "**Pink eye** (redness and watering of the eye) = **inflammation of the conjunctiva**. A **chalazion** in the eyelid = **inflammation of a Meibomian gland**. A **small swelling at the margin of the eyelid** (stye) = a **Zeis gland**. The **conjunctiva** is **stratified columnar epithelium with goblet cells**; the **outer surface of the eyelid** is **keratinized stratified squamous epithelium**.",
+  ]);
+  add("hi-ear", "External ear and tympanic membrane", [
+    "The **handle of the malleus** is **attached to the tympanic membrane**. A **7-year-old** with **earache, ear discharge** and a recent **sore throat** → otitis media with a **perforated tympanic membrane**.",
+  ]);
+  add("hi-ear", "Middle ear and auditory tube", [
+    "The **malleus** receives **tensor tympani**; the **anterior wall of the tympanic cavity** has the opening of the **Eustachian tube**; the **posterior wall** leads to the **mastoid air cells**.",
+  ]);
+  add("hi-ear", "Cochlear duct and organ of Corti", [
+    "In the organ of Corti the **supporting cells** are the **phalangeal cells**, and the **tunnel of Corti** is formed by the **pillar cells**.",
+  ]);
+  add("hi-ear", "Maculae and cristae", [
+    "The **crista ampullaris** is capped by the **cupula**; the **macula** by the **otolithic membrane**. A **middle-aged woman suffering from vertigo**: the possible cause explaining her status is a **defective vestibular apparatus**.",
+  ]);
+  add("hi-ear", "Deafness: conductive vs sensorineural", [
+    "A **child** who **pushed an ear cotton bud forcibly along his external auditory canal** → **conductive deafness**.",
+  ]);
+  /* ───────────── v16.3 · strict coverage: every practice fact taught in its own section (pain) ───────────── */
+  add("ph-pain-control", "The analgesia system", [
+    "The **neurotransmitter** of the raphe magnus fibres that end in the dorsal horn is **serotonin** (they excite enkephalin interneurons there).",
+    "After an injury, the substance most likely associated with the **production of pain** is **substance P**, the slow-pain transmitter of C fibres (bradykinin, K⁺, histamine and prostaglandins stimulate or sensitize the nociceptors).",
+  ]);
+  add("ph-pain-control", "Gate control and cordotomy", [
+    "**Inhibition of pain signals by tactile stimulation of a skin surface** (rubbing) involves **type A beta fibers in peripheral nerves**: they excite inhibitory interneurons in the dorsal horn.",
+  ]);
+  add("ph-pain", "Nociceptors and what stimulates them", [
+    "**The most important functional parameter of pain receptors**: they **exhibit little or no adaptation** (they may even sensitize), so the warning continues.",
+    "**Pain sensation produces reactions that block transmission of pain impulses** (it switches on the analgesia system). **Reactions to pain** include increased heart rate, depression and withdrawal reflexes, but **no stoppage of impulse discharge from nociceptors in chronic painful conditions**.",
+    "Pain disturbs sleep because the **ascending pain pathway excites the reticular formation**, which is **involved in the maintenance of the waking state**.",
+  ]);
+  add("ph-pain", "Fast and slow pain pathways", [
+    "**Fast pain differs from slow pain** in **having a sharp quality** (pricking, well localized). **Type A-delta pain fibers are responsible for the localization of a pain stimulus** during the **transmission of pain signals into the CNS**.",
+    "**Ischemic pain** is slow pain carried by C **sensory fibers terminating within the substantia gelatinosa of the dorsal cord**.",
+  ]);
+  add("ph-pain", "Cutaneous and deep pain", [
+    "**Cutaneous pain** is **sharp in character** (but not *only* sharp: burning slow pain follows) and is **transmitted by Aδ sensory fibers** for its fast part.",
+  ]);
+  add("ph-pain", "Visceral pain and referred pain", [
+    "**Pain receptors in the wall of the GIT and urinary tract** are stimulated by distention, inflammation of the wall, acid fluid and very strong contractions behind an obstruction, but **not by cutting through their wall with a sharp scalpel**.",
+  ]);
+  add("ph-pain", "Hyperalgesia", [
+    "**Primary hyperalgesia** (in the injured skin itself, with a lowered pain threshold) **may be due to sun burn**.",
+  ]);
+  /* strict coverage: spinal reflexes and CNS histology */
+  add("ph-spinal-reflexes", "γ-motor neurons, the γ loop and co-activation", [
+    "The **gamma efferent neurons control spindle activity during voluntary movements**: they keep the spindle taut as the muscle shortens.",
+    "Whenever the **position of a joint is stabilized at a certain attitude**, the nervous system produces this by **co-activation of alpha- and gamma-motor neurons innervating the involved muscles**. The 194 paper keyed the γ side of it: **increasing γ-motor neuron discharge to postural muscles**.",
+    "The **muscle spindle remains capable of responding to stretch even when the muscle is contracting** because of **co-activation of alpha- and gamma-motor neurons**.",
+    "**Interruption of gamma-motor neuron discharge** to a skeletal muscle produces **relaxation of the spindle fibers** (the intrafusal fibres), so the spindle goes slack.",
+    "**Discharge from muscle spindles** is increased by gamma-motor discharge, by stretch of the intrafusal fibers and by stretch of the extrafusal (whole) muscle, but **not by increased alpha-motor neuron discharge** alone: extrafusal contraction unloads the spindle.",
+  ]);
+  add("ph-spinal-reflexes", "Stretch reflex, tendon jerks and muscle tone", [
+    "The reflex correctly paired with its receptor: **stretch reflex – muscle spindle**; autogenic inhibition – Golgi tendon organ; reciprocal inhibition is a spinal circuit, not a receptor.",
+    "The tendon jerk with its **center in the 5th and 6th cervical segments** of the spinal cord is the **biceps jerk** (triceps: C6–C7; jaw jerk: pons).",
+    "**Decreased muscle tone** occurs in **LMNL** (lower motor neuron lesion); γ activation, anxiety and Parkinson's disease raise it.",
+  ]);
+  add("ph-spinal-reflexes", "Decerebrate rigidity", [
+    "The **excessive muscle tone produced in decerebrate rigidity can be reversed by cutting the dorsal roots**: it is γ-rigidity, running through the stretch reflex.",
+  ]);
+  add("hi-cns", "Grey matter, white matter and the ependyma", [
+    "The **central nervous system is soft because it does not contain C.T.** (no connective-tissue framework inside; neuroglia support it). The CNS **has grey matter & white matter**.",
+  ]);
+  add("hi-cns", "Spinal cord tracts on a section", [
+    "Nov 2024 exam figures: in the brainstem figure the structure pointed out by number (1) is the spinal lemniscus, **formed by union of the lateral & ventral spinothalamic tracts**. In the spinal cord figure the structure pointed out by number (1) is the spinotectal tract, **responsible for the spino-visual reflex**, and the structure pointed by number (2) is **a single extrapyramidal tract**.",
+  ]);
+  add("hi-cns", "Medulla: arcuate fibres and the lemnisci", [
+    "A **receptor for vibration** is the **Pacinian corpuscle**. The **trigeminal lemniscus is present in the pons & mid brain** (department answer).",
+  ]);
+  add("hi-cns", "Cerebellar cortex", [
+    "In the **cerebellar cortex** the **dendrites of Golgi cells extend in all layers of the grey matter**; granule cells have a few short dendrites; Purkinje cells are multipolar (pyriform), in one row.",
+  ]);
+  add("hi-cns", "Meninges and the blood–brain barrier", [
+    "**Arachnoid matter** is **formed of border cells and trabecular cells**, so **border cells can be found in the arachnoid matter**.",
+  ]);
+  add("hi-cns", "Clinical correlation: tabes dorsalis on section", [
+    "A **syphilitic patient** with **unsteadiness of gait and hypotonia**, diagnosed as **tabes dorsalis**: the possible cause is **lesions of the gracile and cuneate tracts within the spinal cord**.",
+  ]);
+  /* strict coverage: vestibular apparatus, retina, inner ear */
+  add("ph-vestibular", "Maculae: position and linear acceleration", [
+    "The **maculae of the vestibular apparatus alter the pattern of their discharge by head tilting**: they signal static head position and linear acceleration, not angular acceleration.",
+  ]);
+  add("ph-vestibular", "Semicircular canals: angular acceleration", [
+    "**Co-planar canals**: the **anterior vertical canal on one side and the posterior vertical canal on the opposite side** (and the two horizontal canals).",
+    "**At the beginning of head rotation in a horizontal plane to the left**, the **endolymph filling the S.C.C moves** (lags behind) **bending the cristae of both sides to the right**.",
+  ]);
+  add("ph-vestibular", "Nystagmus and post-rotational effects", [
+    "When a person **slowly rotates toward the right**, **both the left and right eyes deviate toward the left** (slow phase) **then rapidly deviate to the right** (fast phase of nystagmus).",
+    "**Post-rotational alteration of muscle tone results from increased discharge from the SCCs on the opposite side of rotation** (department answer).",
+  ]);
+  add("ph-vestibular", "Vestibular reflexes, pathways, tests and motion", [
+    "The **caloric method of stimulation of SCCs checks one SCC in one ear** (mainly the horizontal canal of the irrigated ear).",
+  ]);
+  add("ph-retina", "Rhodopsin and phototransduction", [
+    "**Rhodopsin** is formed when the pair **scotopsin and 11-cis retinal** combine. **Rod cell excitation by photons** results in the **conversion of 11-cis-retinal to all-trans-retinal**.",
+    "When rods are stimulated, **metarhodopsin II activates G protein** (transducin): the **stimulation of photoreceptors by light** means the **formation of metarhodopsin II increases**, cGMP falls and the Na⁺ channels close.",
+    "**When rhodopsin is decomposed by light energy**, the **membrane permeability for sodium ions in the outer segment is decreased**: this is what changes the membrane potential of the rod (it hyperpolarizes). So **when rhodopsin is activated by light**, rod cells show **decreased release of neurotransmitter**.",
+    "The **dark current in the outer segment of the photoreceptors** results from the **influx of sodium ions via c-GMP-dependent sodium channels**.",
+  ]);
+  add("ph-retina", "Retinal processing: receptive fields, lateral in", [
+    "In the visual system the term **blobs** refers to **clusters of cells in layers 2 and 3 of the visual cortex that have high levels of cytochrome oxidase**: they process colour.",
+  ]);
+  add("ph-inner-ear", "Endolymph, perilymph and the endocochlear potent", [
+    "**The endolymph is found within the membranous labyrinth**, and **endolymph is produced by** the **stria vascularis** (striavascularis). In the **organ of Corti** region the **stria vascularis is responsible for the endolymphatic potential** (about +80 mV).",
+  ]);
+  add("ph-inner-ear", "Basilar membrane and pitch (place theory)", [
+    "The **basilar membrane vibrates in a pattern determined by the form of the travelling wave in the fluids in the cochlea**. In **auditory encoding**, the **encoding of pitch depends on the site of maximum displacement of the basilar membrane** (place theory).",
+    "The events that make the **auditory system interpret a sound as loud**: the **amplitude of vibration of the basilar membrane increases** (more hair cells excited, faster firing).",
+  ]);
+  add("ph-inner-ear", "Inner and outer hair cells", [
+    "Regarding the **hair cells of the organ of Corti**: **outer hair cells modify the movements of the basilar membrane** (they are motile: the cochlear amplifier); inner hair cells send most of the afferent signal.",
+  ]);
+  /* strict coverage: sensory pathways, cerebellum, refraction, eye and ear histology */
+  add("ph-sensory-pathways", "Dorsal column–medial lemniscus pathway", [
+    "An **automobile accident** that completely **eliminates all nerve traffic in the right half of the spinal cord at C2**: below it, on the right side, **vibration sense and motor function** are lost; on the left, pain and temperature.",
+    "The **main final destination of signals that carry kinesthetic sensations** is the **post-central gyrus of the cerebral cortex** (via the gracile/cuneate nuclei and the thalamus).",
+  ]);
+  add("ph-sensory-pathways", "Anterolateral (spinothalamic) system", [
+    "The **ventrolateral spino-thalamic tract** carries **crude pressure** and crude touch; vibration, stereognosis and fine touch go in the dorsal columns.",
+    "The **lateral spinothalamic tract** carries fibres that terminate in the thalamus, contains mainly second-order neurone axons, and carries pain and temperature from the opposite side: it does **not contain nerve fibres from receptors on the ipsilateral side of the body**.",
+  ]);
+  add("ph-sensory-pathways", "Somatosensory cortex: map and lesions", [
+    "The **somato-sensory deficit NOT typically seen** after lesions that involve the **post-central gyrus** is **inability to move the contralateral arm and leg** (that is the motor cortex); localizing touch, judging weight and texture are lost.",
+  ]);
+  add("ph-cerebellum", "Three functional parts", [
+    "The **archi-cerebellum is the oldest part and occupies the flocculo-nodular lobe**.",
+    "Regarding the role of the cerebellum: **the cerebellar hemispheres control and receive inputs from ipsilateral muscles**.",
+  ]);
+  add("ph-cerebellum", "Cerebellar lesions and ataxia", [
+    "**Neurological disease associated with the cerebellum produces ataxia**; a **feature of cerebellar dysfunction** is a **drunken gait**. In an ataxic patient the area of his brain most likely to have a lesion is the **cerebellum**.",
+    "A patient with **motor ataxia** (cerebellar) **differs from** one with **sensory ataxia** in **having speech disorders** (scanning speech), and vision does not help him.",
+  ]);
+  add("ph-refraction", "Accommodation: how the lens changes", [
+    "The human eye: **the outermost layer is opaque and white** (the sclera); photoreceptors are in the innermost layer. In order for **accommodation** to occur, **the shape of the lens must be changed**.",
+    "A **student** who **changes his view from his book to his friend's book** sitting on the other side of the room (near → far): **thinner lens, relaxation of ciliary muscle**.",
+    "**Accommodation for far vision** requires **dilation of the pupil of the eye**, a relaxed ciliary muscle and a thinner lens.",
+    "Regarding the **power of the eye**: **the ability of the eye to focus on near objects is controlled exclusively by parasympathetic innervations of ciliary muscle**.",
+  ]);
+  add("ph-refraction", "Errors of refraction", [
+    "**Myopia**: **a near source of light is focused on the retina without accommodation** (the far point is near); a concave lens corrects it.",
+  ]);
+  add("hi-eye", "Lens and accommodation", [
+    "At view of the **eye lens**: **presbyopia is caused by loss of lens capsule elasticity** (department wording).",
+  ]);
+  add("hi-eye", "Retinal pigment epithelium, rods and cones", [
+    "Regarding the **retinal pigmented epithelium**: it **shares in formation of the blood retinal barrier**. **The characteristics of cones include** that **they exist in the fovea**.",
+  ]);
+  add("hi-eye", "The ten retinal layers and Müller cells", [
+    "The correct matching pair for the contents of the retinal layers: **inner nuclear layer / horizontal and amacrine cells** (with bipolar and Müller nuclei). The **outer limiting membrane is formed by junctional complex between photoreceptors & Muller (Müller) cells**.",
+  ]);
+  add("hi-ear", "External ear and tympanic membrane", [
+    "Concerning the **auditory meatus**: it **exhibits ceruminous glands** in its outer cartilaginous part.",
+  ]);
+  add("hi-ear", "Inner ear: bony and membranous labyrinth", [
+    "**Structural features of the cochlea**: it is a **bony tube forming 2 ½ turns** around the modiolus.",
+    "A **boxing match** blow to the ear with vertigo, imbalance, vomiting and fullness, later diagnosed as a **perilymphatic fistula** (perilymph leaking): the space involved is the **scala tympani**.",
+  ]);
+  add("hi-ear", "Maculae and cristae", [
+    "The **maculae of the utricle and saccule** have **type 1 and 2 mechanoreceptor hair cells**. **The macula demonstrates a covering otolithic membrane**.",
+  ]);
+  /* strict coverage: anatomy */
+  add("an-spinal-cord", "Lumbar puncture", [
+    "To **insert a needle into the subarachnoid space to sample CSF**, a **relatively safe point for needle insertion** is **between L-3 and L-4**.",
+  ]);
+  add("an-brain-stem", "Crossed brainstem syndromes: localize the lesi", [
+    "A patient with **LMNL of the hypoglossal nerve on the right side and UMNL hemiplegia on the left side**: the **site of the lesion** is the **medulla oblongata** (right medial medullary syndrome).",
+  ]);
+  add("an-brain-stem", "Pons: nerves and the facial colliculus", [
+    "**The cranial nerves related to the pons are 5, 6, 7, 8** (V on its side; VI, VII, VIII at the pontomedullary junction).",
+  ]);
+  add("an-brain-stem", "Midbrain: surfaces and colliculi", [
+    "Regarding the **mid brain**: **it occupies the tentorial notch of the tentorium cerebelli**.",
+  ]);
+  add("an-sulci-gyri", "The insula: the hidden lobe", [
+    "Incorrect about the **insula**: “**its apex is referred to as the pulvinar**”. Its apex is the **limen insulae**; the pulvinar is the back of the thalamus.",
+  ]);
+  add("an-white-matter", "Internal capsule: shape and neighbours", [
+    "Incorrect about the **internal capsule**: “**it is made up of grey matter**”. It is **white matter** (projection fibres) between the caudate, thalamus and lentiform nucleus.",
+  ]);
+  add("an-white-matter", "Internal capsule: what runs in each part", [
+    "The **part of the internal capsule that contains the optic radiation** is the **retro-lenticular part** (retrolenticular).",
+  ]);
+  add("an-meninges", "Arachnoid, pia and the three spaces", [
+    "The **subarachnoid space contains CSF**. Most accurate about the **meninges**: the **pia mater pierces the distal extreme of the dura as the filum terminale** (at S2).",
+  ]);
+  add("an-brain-blood", "Vertebral and basilar arteries: their branches", [
+    "A **cerebral vascular accident** (stroke) with a small **hematoma produced by the superior cerebellar artery** most likely affects the **trochlear** nerve, which winds round the midbrain beside that artery.",
+  ]);
+  add("an-brain-blood", "Circle of Willis", [
+    "The **middle cerebral artery is not part of the circulus arteriosus** (circle of Willis); the anterior cerebral, anterior and posterior communicating arteries are.",
+  ]);
+  add("an-embryology-cns", "Neural tube, neuropores and neural crest", [
+    "In the **development of the central nervous system**, **its neuropores establish a temporary connection of the neural tube with the amnion** until they close.",
+  ]);
+  add("an-embryology-cns", "Positional change and spina bifida", [
+    "In the **development of the spinal cord**: **meningocele is the condition in which spina bifida is associated with herniation of meninges** (meningomyelocele if the cord herniates too).",
+  ]);
+  add("an-scalp", "Arteries and nerves of the scalp", [
+    "The areas the **auriculotemporal nerve** is supplying: the **external auditory meatus and outer surface of the ear drum** (and the skin of the temple).",
+  ]);
+  add("an-face", "Muscles of facial expression and the facial ne", [
+    "A **professional student** who **wakes up with a facial nerve (CN VII or Bell) palsy**: the **muscle** that will **continue to function despite this affection** is the **masseter** (a muscle of mastication, supplied by V3).",
+  ]);
+  add("an-sternomastoid", "Attachments, nerve and action", [
+    "**Moving the head so that the face looks upwards and to the left** is a movement produced by the **right sternocleidomastoid**.",
+  ]);
+  add("an-carotid-triangle", "External carotid artery and its branches", [
+    "The artery that **does not accompany its correspondingly named nerve throughout most of its course** is the **lingual**: the lingual artery runs deep to hyoglossus, the lingual nerve superficial to it (greater palatine, inferior alveolar and posterior superior alveolar arteries run with their nerves).",
+  ]);
+  add("an-cranial-nerves", "Parasympathetic nuclei and the cervical sympat", [
+    "The **nuclei containing visceromotor (autonomic) cell bodies whose axons join the glossopharyngeal nerve**: the **inferior salivatory nucleus**.",
+  ]);
+  add("an-cranial-nerves", "Vagus nerve (X) in the neck", [
+    "A **patient with goiter admitted for thyroidectomy** who develops **hoarseness of voice after the operation**: the **affected nerve** is the **recurrent laryngeal**.",
+  ]);
+  add("an-cranial-nerves", "Facial nerve lesions: localize by the symptoms", [
+    "**Hearing loss in the left ear** with **loss of taste and drippling of saliva from the left side of the mouth**: a **tumor compressing the nerve entering the skull through** the **internal auditory meatus** (VII with VIII).",
+  ]);
+  add("an-oral-cavity", "Muscles of the tongue and their actions", [
+    "**Movements of the tongue**: **protrusion of the tongue is produced by simultaneous contraction of both genioglossus muscles**.",
+  ]);
+  add("an-pharynx", "Parts, constrictors and nerve supply", [
+    "**Innervation of the pharynx**: **the oral part of the pharynx receives its sensory supply from the glossopharyngeal nerve**.",
+  ]);
+  add("an-nose", "Maxillary sinus", [
+    "A male with **maxillary tooth pain**, a **dental examination** showing **no abnormalities of his teeth**, and **sharp pain on tapping his maxilla**: **maxillary sinusitis** (the superior alveolar nerves supply both the sinus and the teeth).",
+  ]);
+  add("an-nose", "Pouches, clefts and their anomalies", [
+    "An **infant born with absence of thymus**: the **3rd** **pharyngeal pouch** is involved. In the **development of the pharyngeal pouches** the **thymus arises from the ventral part of the 3rd pouch**.",
+  ]);
+  /* strict coverage: physiology and histology */
+  add("ph-synapse-mechanism", "Structure: knob, cleft, receptors", [
+    "Regarding **synapses**: **presynaptic knobs contain vesicles with V-Snare proteins in their membranes** (they dock with t-SNAREs). **Synaptic knobs synthesize different types of neurotransmitters** (small-molecule ones).",
+  ]);
+  add("ph-synapse-mechanism", "Release: calcium is the trigger", [
+    "**The release of neurotransmitters at a chemical synapse in the CNS is dependent upon** the **influx of calcium into the presynaptic terminal**.",
+  ]);
+  add("ph-synapse-properties", "Properties of synaptic transmission", [
+    "**Synaptic transmission** is characterized by one-way conduction, fatigue and change according to body needs, but it is not true that **alkalosis depresses synaptic transmission**: alkalosis increases excitability (acidosis depresses it).",
+    "**Synaptic delay**: **the minimal delay time in the central nervous system is about 0.5 millisecond** (0.5millisecond).",
+  ]);
+  add("ph-sensory-code", "Sensory coding: modality, location, intensity", [
+    "A man who **loses his right hand in a farm accident** and years later has **phantom limb pain** in the missing hand: his cerebral cortex might be expected to show **projection of fibers from neighboring sensory areas into the right-hand area of his left primary somatosensory cortex**.",
+  ]);
+  add("ph-sensory-code", "Touch, two-point discrimination and vibration", [
+    "**A more developed two-point tactile discrimination is inversely related to the size of the receptive fields of the stimulated sensory units** (small fields → fine discrimination).",
+  ]);
+  add("ph-sensory-code", "Proprioception", [
+    "**Proprioceptive sensations** include static position sense and the rate of movement, carried by afferent neurons of Aβ fibers, **not afferent neurons of Aδ fibers** (those carry fast pain and cold).",
+  ]);
+  add("ph-sensory-code", "Thermal sensations", [
+    "**Action potentials recorded after stimulation of thermal receptors** show that **the maximal rate of discharge of action potentials in the cold nerve fibers is at 25°C** (250C in the bank's typing).",
+  ]);
+  add("ph-sensory-receptors", "Coding stimulus strength", [
+    "**Receptors detect increased stimulus intensity by generating receptor potentials having higher magnitudes**: **sensory receptor potentials are graded in size, depending on stimulus intensity**.",
+  ]);
+  add("ph-sensory-receptors", "The receptor potential", [
+    "A **specific stimulus produces a receptor potential** by **enhancing Na + influx into the receptor** (opening cation channels).",
+  ]);
+  add("ph-synaptic-potentials", "IPSP and summation", [
+    "**When EPSP and IPSP occur simultaneously** the **postsynaptic membrane shows potential changes that depend upon the summation of their effects**.",
+    "**The excitatory or inhibitory action of a neurotransmitter is determined by** the **function of its post synaptic receptor**.",
+    "The **micturition reflex** is influenced by signals from the bladder, the sacral centre and supraspinal centres, but not by **voluntary control initiated from the brain stem** (voluntary control comes from the cortex).",
+  ]);
+  add("ph-synaptic-potentials", "Presynaptic inhibition and facilitation", [
+    "In **presynaptic inhibition** **there's a decrease in the release of chemical transmitters from the presynaptic neurone**.",
+  ]);
+  add("ph-sensory-lesions", "Syringomyelia", [
+    "**Tabes dorsalis is accompanied with incoordination of voluntary movements** (sensory ataxia). The 197 paper then asked what **a lesion of the dorsal column pathway is most likely to effect**: fine touch and position sense.",
+  ]);
+  add("ph-umn-lmn", "UMN vs LMN: the comparison table", [
+    "**Hypertonia and hyperreflexia** are shown in **upper motor neuron lesion**. **In UMN lesions the response of the paralyzed muscles to electrical stimulation is not changed** (no reaction of degeneration).",
+    "**Lower motor neuron lesions** cause wasting, flaccidity and denervation supersensitivity (**more** receptors), **not a decreased number of transmitter receptors in the denervated muscle**.",
+    "⚠ One past-paper item keys “**Lower Motor Neuron (LMN) lesion is accompanied with clonus**”. Clonus is an **UMN** sign; the standard answer (an LMN lesion can result from poliomyelitis) is accepted too.",
+  ]);
+  add("ph-basal-ganglia", "Circuits and transmitters", [
+    "A connection between components of the **basal ganglia**: **the subthalamic nucleus releases glutamate to excite the globus pallidus interna**.",
+  ]);
+  add("ph-basal-ganglia", "Hyperkinetic disorders: chorea, athetosis, bal", [
+    "The **hyperkinetic features of Huntington's disease are due to the loss of neurons in the intrastriatal GABAergic and cholinergic system** (GAB Aergic in the bank's typing).",
+    "A woman with **uncontrolled movements of her arms, legs, head, face and upper body**, depressed and irritable, who **repeats the same question** (Huntington's disease): **γ-aminobutyric acid (GABA) neurons in the caudate nucleus and putamen** are decreased.",
+  ]);
+  add("ph-sleep", "EEG waves", [
+    "**Electroencephalogram activity**: **delta waves are characteristic of slow wave sleep**, and **during deep sleep the EEG is always dominated by delta waves**.",
+  ]);
+  add("ph-speech", "Broca's (motor) aphasia", [
+    "Regarding **speech**: **people with Broca's aphasia are able to speak only with great difficulty** (withgreat difficult in the bank's typing).",
+  ]);
+  add("ph-memory", "Hippocampus, LTP and the glutamate receptors", [
+    "Incorrect about the **NMDA receptor**: “**it is a potassium ion channel**”. It is a Ca²⁺/Na⁺ channel blocked by Mg²⁺ at rest.",
+  ]);
+  add("ph-memory", "Short-term synaptic changes", [
+    "**Sensitization of synapses is explained by presynaptic facilitation and excess release of neurotransmitters**.",
+  ]);
+  add("ph-eye-fluid", "Aqueous humour and intraocular pressure", [
+    "**Aqueous humor is the main regulator of intra-ocular pressure**. **The intra-ocular pressure, if increased, prevents near vision** (department answer).",
+  ]);
+  add("ph-eye-fluid", "Glaucoma", [
+    "**Closed angle glaucoma** is characterized by a blocked angle and raised pressure, but **the canal of Schlemm is not closed** (the bank item's wrong statement: “the canal of Shlemm is closed”).",
+    "A **60-year-old woman** with **eye pain** and an **intra-ocular pressure of 22 mm Hg in her right eye and 25 mm Hg in her left**: the most likely cause is **increased resistance of the trabecular meshwork** (open-angle glaucoma).",
+  ]);
+  add("ph-optics", "Refractive power", [
+    "Regarding the **eye**: the **eye ball is formed of 3 layers**, but **the outermost** is the sclera and cornea; it does **not contain photoreceptors** (the innermost layer, the retina, does).",
+  ]);
+  add("ph-color-vision", "Colour vision and acuity", [
+    "Concerning **color vision**: **the stimulation ratio of the 3 types of cones allows specific color perception**.",
+  ]);
+  add("ph-uveal", "Iris muscles and the light reflex", [
+    "Concerning the **pupillary light reflex**: **it is used to evaluate the stages of anesthesia** (and the depth of coma).",
+  ]);
+  add("ph-middle-ear", "Middle ear amplification", [
+    "**The primary function of the bones of the middle ear is to amplify the sound stimulus** (impedance matching).",
+  ]);
+  add("hi-nervous-tissue", "Nerve fibres and the peripheral nerve", [
+    "**Unmyelinated nerve fibers with Schwann cells are found in post ganglionic sympathetic fibers**.",
+  ]);
 })();
