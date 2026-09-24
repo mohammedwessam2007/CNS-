@@ -1,11 +1,11 @@
-# Deployment: Vercel host (v16.2 · MCQ exam + department drawings)
+# Deployment: Vercel host (v16.3 · MCQ exam + department drawings)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v16.0 · MCQ EXAM") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v16.3 · MCQ EXAM") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
-| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `f45807d` (v16.2; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
-| Deployment | `dpl_CyqrBpRXmSx9CZMrbVj8RtAShqJK` (v16.2): **READY** in 15 s (picture cache warm), production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's file-tree and build-log tools return 404 for Git deployments, so the file check ("38 app scripts/styles present", 50 encrypted drawings in `dist/dept`) was seen in the identical local build. Previous: `dpl_4vTt3Y9e…` (v16.0) |
+| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `81819d1` (v16.3; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
+| Deployment | `dpl_BqnsfG9xYkE4tYLmdP8oUHah9UvQ` (v16.3): **READY** in 20 s (picture cache warm), production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's file-tree and build-log tools return 404 for Git deployments, so the file check ("38 app scripts/styles present", 50 encrypted drawings in `dist/dept`) was seen in the identical local build. Previous: `dpl_CyqrBpRX…` (v16.2), `dpl_4vTt3Y9e…` (v16.0) |
 | Access | Public: Vercel Authentication and password protection are **off**, so the iPad needs no Vercel login |
 | Hatchable | Untouched. The Hatchable site is still v53 (there is no Hatchable connector in the build session) |
 
@@ -29,7 +29,7 @@ Since v16 the build also fails if `index.html` names a same-origin script or sty
 
 ## Offline (v15.3)
 
-`source/public/sw.js` is registered by the app (https or localhost only). It is network-first for pages, scripts and notes, cache-first for the content-addressed bundled pictures (`/pics/<hash>.<ext>`; `manifest.js` is network-first), and it never touches `/api/*` or other origins. Its shell cache is named per version (`ix-shell-16.2` since the department drawings), so an update clears the old copies. The test harness blocks service workers except in `tests/v153_test.js` P5.
+`source/public/sw.js` is registered by the app (https or localhost only). It is network-first for pages, scripts and notes, cache-first for the content-addressed bundled pictures (`/pics/<hash>.<ext>`; `manifest.js` is network-first), and it never touches `/api/*` or other origins. Its shell cache is named per version (`ix-shell-16.3` since v16.3), so an update clears the old copies. The test harness blocks service workers except in `tests/v153_test.js` P5.
 
 ## Saving progress
 
@@ -66,7 +66,7 @@ After that, the ☁ button shows **SYNCED hh:mm**, and the sync page shows "Clou
 | Opening the live URL from the build session | sandbox curl / WebFetch / Vercel fetch tool | **Not possible**: the session's egress policy blocks `*.vercel.app`, and the connector's fetch and log tools return 403/404. Not routed around |
 
 **On the iPad, open the URL and check:**
-- the tab title reads **v16.0 · MCQ EXAM** and the date chip shows today's Cairo date;
+- the tab title reads **v16.3 · MCQ EXAM** and the date chip shows today's Cairo date;
 - after a lesson's notes, its past-paper MCQs come straight away; a wrong answer shows the key's reason and a line under every option;
 - on a weekend day, the sealed mock shows a timer and no pictures; after the last answer every question is explained;
 - the ☁ button reads "SAVED ON THIS DEVICE" (no store yet) or "SYNCED …" (store connected).
