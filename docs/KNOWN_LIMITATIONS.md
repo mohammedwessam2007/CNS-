@@ -1,6 +1,15 @@
-# Known Limitations (v16.0 · MCQ exam)
+# Known Limitations (v16.2 · MCQ exam)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v16.2 department drawings and the uploaded department files
+
+- **The drawings need the owner's key once.** Until the key link is opened on a device (or the synced state reaches it), the app shows no department drawings and the 50 figure questions do not exist there. On a new device restored with the sync code, the drawings show once the state arrives; the CNS-levels questions appear after the next reload.
+- **If the key is lost** (every device cleared and the cloud copy gone), the encrypted drawings cannot be opened. A new key means re-encrypting with `scripts/dept-figs/` (the PDFs at the repo root are the source) and a new link.
+- **The GitHub repository is public**, and the uploaded PDFs sit at its root. Only the site copy is protected. Make the repository private to protect the files themselves.
+- **The Nov 2024 figure C answers** come from the owner's answered copy (a student's marks), not an official key.
+- **CNS-levels answers are the book's.** Structure names in the explanations are ours; figure 7 label 4 is given only as the book states it.
+- **The CNS/eye/ear formative paper has no key**; its 7 items carry standard answers, each marked as such in its explanation.
 
 ## v16.0 MCQ exam system (MCQ focus is the default)
 

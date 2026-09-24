@@ -75,3 +75,6 @@
 .ixDeptZoom img { max-width: 100%; max-height: calc(100vh - 60px); background: #fff; border-radius: 6px }
 .ixDeptZoomCap { color: #c9d6e6; font-size: 13px; margin-top: 8px; text-align: center; max-width: 900px }
 .ixDeptToast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 10000; max-width: min(92vw, 560px); background: #10273a; color: #e8f2ff; border: 1px solid #3c7aa8; border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.35; box-shadow: 0 8px 30px rgba(0, 0, 0, .45) }
+.ixDeptAns { display: block; margin-top: 4px; color: #e9f3ff; font-weight: 650 }
+.ixDeptQ { margin: 4px 0 10px }
+.ixDeptLock { display: block; width: 100%; min-height: 44px; margin: 8px 0; padding: 10px 12px !important; text-align: left; font-size: 13px !important; font-weight: 650; color: #9fb3c8; background: #0f1621; border: 1px dashed #3c5f7a; border-radius: 10px }

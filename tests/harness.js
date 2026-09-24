@@ -81,6 +81,8 @@ async function open(opts = {}) {
   });
   await context.route(/(upload\.wikimedia\.org|i\.ytimg\.com)/, (route) => route.fulfill({ contentType: 'image/png', body: PNG }));
   await context.route(/(youtube\.com|youtube-nocookie\.com)/, (route) => route.fulfill({ contentType: 'text/html', body: '<html><body>video</body></html>' }));
+  // IX_TEST_LOCALSTORAGE='{"k":"v"}' seeds every page (e.g. the owner's drawings key, to run a suite as the owner's device)
+  if (process.env.IX_TEST_LOCALSTORAGE) opts.localStorage = Object.assign(JSON.parse(process.env.IX_TEST_LOCALSTORAGE), opts.localStorage || {});
   if (opts.state !== undefined || opts.localStorage) {
     await context.addInitScript(([state, extra]) => {
       if (!sessionStorage.getItem('__seeded')) {

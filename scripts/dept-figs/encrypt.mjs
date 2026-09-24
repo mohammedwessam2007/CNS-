@@ -1,9 +1,9 @@
-// Encrypt the prepared department drawings for the public site (AES-256-GCM, one random IV per file).
+// Encrypt the prepared department drawings for the public site (AES-256-GCM, a content-derived IV per file).
 // Usage: IX_DEPT_KEY=<kid>.<base64url 32-byte key> node scripts/dept-figs/encrypt.mjs <prepared_dir>
 // Writes source/public/dept/<id>.bin (IV ‖ ciphertext ‖ tag, the layout WebCrypto decrypts) and the
 // manifest source/public/dept-figs-v16-data.js. The key is never written into the repo: the owner's
 // app receives it once through a link (#ixk=<kid>.<key>) and keeps it in the synced, private state.
-import { createCipheriv, randomBytes } from "node:crypto";
+import { createCipheriv, createHmac } from "node:crypto";
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,8 +16,10 @@ if (!/^k\d+$/.test(kid || "") || key.length !== 32) throw new Error("IX_DEPT_KEY
 const src = process.argv[2];
 if (!src) throw new Error("usage: encrypt.mjs <prepared_dir>");
 
+// IV = HMAC(key, content): an unchanged picture encrypts to the same bytes (no repo churn on re-runs),
+// and an IV is never reused with different content under this key.
 const seal = (buf) => {
-  const iv = randomBytes(12),
+  const iv = createHmac("sha256", key).update("ix-dept-iv\0").update(buf).digest().subarray(0, 12),
     c = createCipheriv("aes-256-gcm", key, iv),
     body = Buffer.concat([c.update(buf), c.final()]);
   return Buffer.concat([iv, body, c.getAuthTag()]);
@@ -42,7 +44,7 @@ for (const f of map.figs) {
   const buf = readFileSync(join(src, f.id + ".jpg"));
   writeFileSync(join(out, f.id + ".bin"), seal(buf));
   const { w, h } = jpegSize(buf);
-  figs.push({ id: f.id, sec: f.sec, cap: f.cap, w, h, src: f.pdf });
+  figs.push({ id: f.id, sec: f.sec, cap: f.cap, ...(f.ans ? { ans: f.ans } : {}), ...(f.drill ? { drill: f.drill } : {}), w, h, src: f.pdf });
 }
 const data = { kid, probe: seal(Buffer.from("intellectuality-dept-ok")).toString("base64"), figs };
 writeFileSync(

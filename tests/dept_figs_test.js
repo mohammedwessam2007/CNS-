@@ -42,7 +42,7 @@ const inject = ([secId, qid]) => {
     await s.close();
   }
   if (!KEY) {
-    console.log('SKIP D3–D6: set IX_DEPT_KEY to run the unlocked checks');
+    console.log('SKIP D3–D11: set IX_DEPT_KEY to run the unlocked checks');
   } else {
     // ── D3–D5: the owner's link unlocks; drawings decrypt into the lesson section and after the answer ──
     const s = await open({ v16: true, time: T, state: null, settle: 1500, path: '#ixk=' + KEY });
@@ -92,6 +92,48 @@ const inject = ([secId, qid]) => {
     const r2 = await s2.page.evaluate(() => ({ n: document.querySelectorAll('.v15Sec .ixDept img').length, dev: Object.keys(JSON.parse(localStorage.getItem('intellectuality_dept_keys_v1') || '{}')) }));
     check('D8', 'A second device that only has the synced state (restored with the sync code) shows the drawings and keeps a device copy of the key', r2.n >= 1 && r2.dev.length === 1, r2);
     await s2.close();
+    // ── D9–D11: CNS-levels drill (50 figure items), only where the key is on the device ──
+    const kobj = { [kid]: KEY.split('.')[1] };
+    const s3 = await open({ v16: true, time: T, state: null, settle: 1500, localStorage: { intellectuality_dept_keys_v1: kobj } });
+    const d = await s3.page.evaluate(() => {
+      const V = INTELLECTUALITY_V16, items = QB.questions.filter((q) => /^DEPT-LEVELS-/.test(q.id));
+      const gaps = [];
+      for (const q of items) {
+        const x = V.explain(q.id), keys = new Set(q.answerKeys), covered = new Set([...Object.keys(x?.opt || {}), ...(x?.also || []).map((a) => a.k)]);
+        if (!x || !x.key) { gaps.push(q.id + ':nokey'); continue; }
+        for (const o of q.options) if (!keys.has(o.key) && !covered.has(o.key)) gaps.push(q.id + ':' + o.key);
+      }
+      return { n: items.length, practice: V.counts().practice, explained: V.counts().explained, gaps: gaps.slice(0, 5), nGaps: gaps.length, figs: new Set(items.map((q) => INTELLECTUALITY_DEPT.drillFig(q.id))).size };
+    });
+    check('D9', 'With the key on the device the 50 figure items (9 department CNS-levels figures + the Nov 2024 paper\'s Section B figure, 5 labels each) join the practice bank, each explained (key + a reason for every other option), each tied to its figure', d.n === 50 && d.nGaps === 0 && d.explained === d.practice && d.figs === 10, d);
+    await s3.page.evaluate(() => {
+      const p = document.getElementById('player');
+      p.innerHTML = '<div class="stage v16Stage v16Q"><h3 class="v16Stem">CNS level 7 · pons. In the department drawing above, label 3 is</h3><div class="v16Opts"><button class="v16Opt" data-v16="pick" data-qid="DEPT-LEVELS-HIST-MCQ-73" data-choice="a">a</button></div></div>';
+    });
+    await s3.page.waitForTimeout(1200);
+    const q1 = await s3.page.evaluate(() => ({ fig: document.querySelector('.ixDeptQ .ixDept')?.dataset.ixDept || null, before: !!document.querySelector('.ixDeptQ + h3.v16Stem'), ans: !!document.querySelector('.ixDeptAns'), w: document.querySelector('.ixDeptQ img')?.naturalWidth || 0 }));
+    check('D10', 'A drill question shows its department figure above the stem BEFORE answering, with the answers hidden', q1.fig === 'cns-level-7' && q1.before && !q1.ans && q1.w > 100, q1);
+    await s3.page.evaluate(() => {
+      const p = document.getElementById('player');
+      p.innerHTML = '<div class="stage v16Stage v16Q"><h3 class="v16Stem">CNS level 7 · pons. In the department drawing above, label 3 is</h3><div class="v16Explain" data-qid="DEPT-LEVELS-HIST-MCQ-73"><div class="v16Row key">e</div></div></div>';
+    });
+    await s3.page.waitForTimeout(1200);
+    const q2 = await s3.page.evaluate(() => ({ fig: document.querySelector('.ixDeptQ .ixDept')?.dataset.ixDept || null, ans: document.querySelector('.ixDeptQ .ixDeptAns')?.textContent || '', inExplain: document.querySelectorAll('.v16Explain .ixDept').length }));
+    check('D11', 'After answering, the same figure carries the department answers for all 5 labels (not repeated inside the explanation)', q2.fig === 'cns-level-7' && /1 trigeminal lemniscus/.test(q2.ans) && q2.inExplain === 0, q2);
+    check('D11b', 'No page errors', s3.log.errors.length === 0, s3.log.errors.slice(0, 2));
+    await s3.close();
+    // ── D12: a Home Screen app has its own storage: a locked section offers to paste the link, and that unlocks ──
+    const s4 = await open({ v16: true, time: T, state: null, settle: 1500 });
+    await s4.page.evaluate(inject, ['an-carotid-triangle#4', null]);
+    await s4.page.waitForTimeout(500);
+    const lock = await s4.page.evaluate(() => ({ lock: document.querySelectorAll('.ixDeptLock').length, figs: document.querySelectorAll('.ixDept').length }));
+    s4.page.once('dialog', (dlg) => dlg.accept('here it is: https://intellectuality-cns.vercel.app/#ixk=' + KEY));
+    await s4.page.click('.ixDeptLock');
+    await s4.page.waitForTimeout(1800);
+    const after = await s4.page.evaluate(() => ({ lock: document.querySelectorAll('.ixDeptLock').length, imgs: [...document.querySelectorAll('.v15Sec .ixDept img')].filter((i) => i.naturalWidth > 100).length, saved: Object.keys(S.ixDeptKeys || {}), toast: document.querySelector('.ixDeptToast')?.textContent || '' }));
+    check('D12', 'Locked: a section with drawings shows one "paste your unlock link" line (no drawing); pasting the link unlocks in place and the drawings appear', lock.lock === 1 && lock.figs === 0 && after.lock === 0 && after.imgs >= 1 && after.saved.length === 1 && /reopen the app once/.test(after.toast), { lock, after: { lock: after.lock, imgs: after.imgs, saved: after.saved.length, toast: after.toast } });
+    check('D12b', 'No page errors', s4.log.errors.length === 0, s4.log.errors.slice(0, 2));
+    await s4.close();
   }
   const out = process.argv.find((a) => a.endsWith('.json')) || path.join(__dirname, 'out', 'dept_figs_test.json');
   fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), results }, null, 1));

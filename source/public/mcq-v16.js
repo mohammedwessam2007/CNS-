@@ -163,7 +163,7 @@
       out = { key: "", opt: {}, flag: null, also: [] };
       arr.forEach((s, i) => {
         // "!x:" the bank key is doubtful and x is the standard answer; "~x:" x is also defensible
-        const mm = /^([!~]?)([a-f]):\s*([\s\S]*)$/.exec(String(s));
+        const mm = /^([!~]?)([a-g]):\s*([\s\S]*)$/.exec(String(s));
         if (mm) {
           if (mm[1] === "!") out.flag = { k: mm[2], why: mm[3] };
           else if (mm[1] === "~") out.also.push({ k: mm[2], why: mm[3] });

@@ -29,9 +29,19 @@ def main(out):
     readers = {}
     for f in m["figs"]:
         r = readers.get(f["pdf"]) or readers.setdefault(f["pdf"], pypdf.PdfReader(os.path.join(ROOT, f["pdf"])))
-        page, idx = f["img"][1:].split("_")
-        data = r.pages[int(page) - 1].images[int(idx)].data
-        im = trim(Image.open(io.BytesIO(data)).convert("RGB"))
+        if "img" in f:
+            page, idx = f["img"][1:].split("_")
+            im = Image.open(io.BytesIO(r.pages[int(page) - 1].images[int(idx)].data)).convert("RGB")
+        elif "boxf" in f:
+            # a figure inside a photographed page: box given as fractions of that image
+            ph = Image.open(io.BytesIO(r.pages[f["page"] - 1].images[f.get("imgIndex", 0)].data)).convert("RGB")
+            x0, y0, x1, y1 = f["boxf"]
+            im = ph.crop((int(x0 * ph.width), int(y0 * ph.height), int(x1 * ph.width), int(y1 * ph.height)))
+        else:
+            # a figure on a scanned page: the band between its title and its table (300-dpi scan pixels)
+            scan = Image.open(io.BytesIO(r.pages[f["page"] - 1].images[0].data)).convert("RGB")
+            im = scan.crop((0, f["y"][0], scan.width, f["y"][1]))
+        im = trim(im)
         if max(im.size) > MAX:
             k = MAX / max(im.size)
             im = im.resize((round(im.width * k), round(im.height * k)), Image.LANCZOS)

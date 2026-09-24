@@ -732,4 +732,28 @@
   add("an-diencephalon", "Parts of the diencephalon", [
     "**Pituitary tumours** show 3 kinds of feature: **endocrine** disturbance; **raised intracranial tension** (headache, vomiting, blurred vision); and **pressure** effects, e.g. on the optic chiasma → **bitemporal hemianopia**.",
   ]);
+  /* ───────────── v16.2 · department histology self-assessments (nervous tissue 2025 model answers; CNS/eye/ear formative) ───────────── */
+  add("hi-nervous-tissue", "Sensory nerve endings", [
+    "**Muscle spindles** are **more numerous in antigravity muscles** (and in muscles of fine movement). Their intrafusal fibres lie **parallel** to the extrafusal fibres; **afferent (sensory)** nerves envelope the intrafusal fibres, and the striated polar ends receive **efferent (gamma) motor** fibres.",
+  ]);
+  add("hi-nervous-tissue", "Ganglia, degeneration and regeneration, stains", [
+    "In **Wallerian degeneration** (the part distal to the cut) the **myelin sheath shows widening of the nodes of Ranvier**, then breaks into ovoids, and the **Schwann cells multiply** (they do not decrease in number). **Chromatolysis** and a **nucleus that migrates to a peripheral position** are changes in the **cell body** (retrograde reaction), not Wallerian degeneration.",
+  ]);
+  add("hi-nervous-tissue", "Neuroglia", [
+    "The **largest neuroglia cells** are the **astrocytes**: their end-feet **share in the formation of the blood brain barrier**. **Mesoglia** = microglia, the smallest and the only **mesodermal** ones; **myelin production** is the job of oligodendrocytes.",
+    "**Oligodendrocytes**: **satellite oligodendrocytes support nerve cells** (beside cell bodies in grey matter); **interfascicular** oligodendrocytes lie between the fibres of **white** matter and make myelin. Neuroglia are **ectodermal** (except microglia) and keep their centrioles, so they can divide.",
+  ]);
+  add("hi-nervous-tissue", "Types of neurons and the synapse", [
+    "**Chemical synapses** are the commonest type (not less common than electrical ones). The **axon terminal is rich in mitochondria & synaptic vesicles of transmitter**, and the cleft is about **20–30 nm**. A **2–3 nm** gap with **gap junctions** passing ions is an **electrical** synapse.",
+  ]);
+  add("hi-cns", "Spinal cord tracts on a section", [
+    "**Long sensory tracts to the subcortical levels** (they end below the cortex): the **spinoolivary** (spino-olivary), spinotectal and spinocerebellar tracts. The spinothalamic tracts and the gracile and cuneate tracts reach the **cortex**.",
+    "Corticobulbar fibres: the **lateral corticobulbar tract terminates in** the **5th cranial nerve nucleus** (motor trigeminal) and the other cranial motor nuclei (7, 9, 10, 11); the fibres for the eye-muscle nuclei, the **3rd, 4th and 6th**, run **medially** (medial corticobulbar).",
+  ]);
+  add("hi-eye", "Retinal pigment epithelium, rods and cones", [
+    "The **retinal pigment epithelium** is characterized by **phagocytosis of worn out part of photoreceptor cells** (the shed outer-segment discs); it also stores vitamin A and absorbs stray light. It has no photoreceptors or amacrine cells and does not make the vitreous humor.",
+  ]);
+  add("hi-eye", "Cornea: five layers", [
+    "**Success of corneal transplantation** is explained because the **cornea is avascular** (no blood vessels, no lymphatics): the recipient's immune cells hardly reach the graft. Its transparency comes from the regular arrangement of collagen and relative dehydration.",
+  ]);
 })();
