@@ -118,7 +118,7 @@ IX["EHSAN-ANAT-EMBRYOLOGY-DEVELOPMENT-OF-CNS-MCQ-"] = Object.assign(IX["EHSAN-AN
 });
 
 IX["EHSAN-ANAT-SCALP-MCQ-"] = Object.assign(IX["EHSAN-ANAT-SCALP-MCQ-"] || {}, {
-  3: ["Scalp wounds **bleed profusely**: the vessels in the dense connective tissue are held open and cannot retract.", "a: The scalp has **five** layers (S-C-A-L-P).", "b: The aponeurosis joins **frontalis and occipitalis**, not temporalis.", "c: The superficial three layers are fused together but move over the pericranium on the loose areolar layer."],
+  3: ["Scalp wounds **bleed profusely**: the vessels in the dense connective tissue are held open and cannot retract.", "a: The scalp has **five** layers (S-C-A-L-P).", "b: The aponeurosis joins **frontalis and occipitalis**; at the sides it thins onto the **temporal fascia**, not the temporalis muscle.", "c: The superficial three layers are fused together but move over the pericranium on the loose areolar layer."],
   4: ["Skin **behind the auricle** (over the mastoid) is supplied by the **great auricular** nerve (posterior branch), with the lesser occipital.", "a: The zygomaticotemporal supplies the anterior temple.", "c: The auriculotemporal supplies the skin **in front** of the ear.", "d: The supratrochlear supplies the medial forehead."],
 });
 
@@ -573,7 +573,7 @@ IX["EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-SOURCE-BASED-"] = Object.assign(IX["EHSAN-
 IX["EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-DEPARTMENT-"] = Object.assign(IX["EHSAN-HIST-CENTRAL-NERVOUS-SYSTEM-DEPARTMENT-"] || {}, {
   6: ["The thoracic cord has **two lateral horns** (sympathetic neurons, T1–L2).", "a: It is **round**; the cervical cord is oval.", "b: It is **small** (little grey matter).", "c: It has **six** horns (two anterior, two posterior, two lateral)."],
   7: ["The **dorsal spinocerebellar** tract carries unconscious proprioception to the **cerebellum** (subcortical).", "b: The gracile tract reaches the cortex (conscious).", "c: The lateral spinothalamic tract reaches the cortex.", "d: The ventral spinothalamic tract reaches the cortex."],
-  8: ["The bank lists **Pacinian corpuscles** (in joints and deep tissue) as proprioceptors.", "b: Meissner's corpuscles sense fine touch.", "c: The bank does not count Ruffini's endings here.", "d: Not the bank's answer."],
+  8: ["The bank lists **Pacinian corpuscles** (in joints and deep tissue) as proprioceptors.", "b: Meissner's corpuscles sense fine touch.", "~c: Also accepted: Ruffini endings in joint capsules are proprioceptors too (joint angle); the bank's answer is Pacinian.", "d: Meissner's corpuscles sense touch, so this pair is wrong."],
   10: ["The first-order neuron of every spinal sensory pathway is in the **spinal (dorsal-root) ganglion**.", "a: The gracile nucleus holds the **second**-order neuron.", "b: The cuneate nucleus serves the **upper** body (second order).", "d: The main sensory nucleus is trigeminal (face)."],
   17: ["Internal arcuate fibres (from gracile/cuneate nuclei) carry **proprioception** (and fine touch) from the body.", "b: Head pain/temperature uses the spinal trigeminal pathway.", "c: Body pain/temperature uses the spinothalamic tract.", "d: Head crude touch uses the trigeminal pathway."],
   19: ["The medial lemniscus comes from the **gracile and cuneate nuclei of the opposite side**.", "a: The fibres cross, so not the same side.", "c: Not the arcuate nucleus.", "d: Not the arcuate nucleus."],
