@@ -119,12 +119,12 @@
       cg: ["ciliary ganglion", "short ciliary nerve"],
     },
     eom: {
-      LR: ["lateral rectus", "abducent nerve", "abducens nerve"],
-      MR: ["medial rectus"],
-      SR: ["superior rectus"],
-      IR: ["inferior rectus"],
-      SO: ["superior oblique", "trochlear nerve"],
-      IO: ["inferior oblique"],
+      LR: ["lateral rectus", "abducent nerve", "abducens nerve", "extraocular muscles"],
+      MR: ["medial rectus", "extraocular muscles"],
+      IR: ["inferior rectus", "extraocular muscles"],
+      SO: ["superior oblique", "trochlear nerve", "extraocular muscles"],
+      IO: ["inferior oblique", "extraocular muscles"],
+      SR: ["superior rectus", "extraocular muscles"],
     },
     cortex: {
       a4: ["primary motor", "area 4", "precentral gyrus", "motor cortex", "primary motor cortex", "motor area"],
