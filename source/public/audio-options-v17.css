@@ -1,0 +1,8 @@
+/* INTELLECTUALITY v17.2 · Commute mode and the read-aloud voice stay hidden until they are switched on. */
+body:not(.ixAudioOn) #driveQuickBtn,body:not(.ixAudioOn) [data-prof-speak]{display:none!important}
+.ixAudioRow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px;padding:10px 12px;border-radius:14px;border:1px solid #33506f;background:#0b1828;color:#e8f2ff;font:750 13px/1.3 Inter,system-ui,sans-serif}
+.ixAudioRow label{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ixAudioRow select{min-height:40px;max-width:min(320px,70vw);border-radius:10px;border:1px solid #33506f;background:#0e1c2d;color:#e8f2ff;font:700 13px Inter,system-ui,sans-serif;padding:0 8px}
+.ixAudioBtn{min-height:40px;border-radius:12px;border:1px solid #d9ff43;background:#d9ff43;color:#07111d;font:900 13px/1 Inter,system-ui,sans-serif;padding:9px 12px;cursor:pointer}
+.ixAudioBtn.ghost{background:#0e1c2d;color:#dbe7f6;border-color:#33506f}
+.ixAudioTip{margin-top:8px;font-size:12px;line-height:1.5;color:#9fb4cc}

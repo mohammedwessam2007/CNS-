@@ -100,6 +100,7 @@ async function open(opts = {}) {
   page.on('pageerror', (e) => log.errors.push(String(e && e.stack || e)));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') log.console.push(m.type() + ': ' + m.text()); });
   page.on('request', () => log.requests++);
+  if (opts.init) await context.addInitScript(opts.init);
   await page.goto(opts.url || BASE + (opts.path || ''), { waitUntil: 'load' });
   await page.waitForTimeout(opts.settle || 400);
   return { browser, context, page, log, close: async () => { await context.close(); if (!opts.browser) await browser.close(); } };

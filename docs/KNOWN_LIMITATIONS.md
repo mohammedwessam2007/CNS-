@@ -1,6 +1,12 @@
-# Known Limitations (v17 · MCQ exam)
+# Known Limitations (v17.2 · MCQ exam)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v17.2 commute mode and voice (opt-in)
+
+- **The voice is the device's own text-to-speech.** The app can only pick the best voice installed. On an iPad without a downloaded Premium or Enhanced voice, even the best available one (a compact voice) still sounds synthetic. There is no recorded human narration.
+- **iPad Safari can pause speech** when the screen locks or Safari goes to the background. The trip then stops early, and only the parts actually spoken are credited.
+- **Off means silent everywhere.** While commute mode is off, every read-aloud request in the app is dropped.
 
 ## v17 CNS atlas and ADHD game layer
 

@@ -97,3 +97,50 @@ The owner asked (25 Sep 2026): *"A feature to see the upcoming days and the prev
 Nothing can be skipped while a sealed mock is running. The map's record (`S.map`) stays under 3 KB.
 
 **Evidence:** `tests/course_map_test.js` **11/11**. It checks every day with its real weekday and date; "you are here"; the exam day; moved days; reading changes nothing; mark learned keeps the block; skip moves on and sends the past papers to the rounds; undo restores; skip mock, skip day and jump; a skipped round closes the day; nothing changes during a mock; the record stays small; the map fits a 390 px phone; no page errors. The full-regression results are in the table below.
+
+### v17.1 final regression (all suites green)
+
+| Suite | Result |
+|---|---|
+| Course map | **11/11** on the source and on the Vercel build |
+| Atlas + game | **22/22** on the source and on the Vercel build |
+| v16 MCQ system | **25/25** public and **25/25** with the department key present |
+| Department drawings | **16/16** on the source and on the Vercel build |
+| Strict notes coverage | practice **1,009/1,009 (100%)** |
+| Other suites | certify **62/62** · spread **23/23** · LEARN **17/17** · hostile **26/26** · v15.3 **10/10** · Vercel host **14/14** · options gallery **7/7** · leak audit **0** text leaks · rollback v17.1 → v53 → v17.1 **pass** |
+| Build | "49 app scripts/styles present" (the map's script and style included) |
+| Deployment | `dpl_J1zvDz7uG4mC4gYikK8tj5ez8nbp`, **READY**, production, aliased to https://intellectuality-cns.vercel.app (tab title "INTELLECTUALITY CNS v17.1 · MCQ EXAM") |
+
+Log: `receipts/v17_1/all_suites_final_v17_1.txt`.
+
+## v17.2: commute mode and the read-aloud voice are opt-in
+
+The owner asked (25 Sep 2026) to make commute mode optional, and did not want the robotic AI voice.
+
+**Now (default OFF):**
+
+- The app **never opens the commute screen by itself**, on any day. A saved state that was left in commute mode opens in the course.
+- The professor's **"🔊 READ IT TO ME"** button is hidden, and the device **cannot speak**: every speech request is dropped while commute mode is off.
+- Nothing is removed. **⚙ Study mode → "🚗 Commute mode: OFF · tap to turn on"** turns it on and opens the commute screen in one tap. The progress panel's settings have the same switch.
+
+**When it is on:**
+
+- The commute screen works as before: two 25-minute hands-free trips on Sunday, Tuesday and Thursday.
+- The screen adds a **voice menu, a speed menu and a ▶ Test button**. By default the app picks **the best English voice on the device**: Premium, then Enhanced/Neural, then Siri, then Google/Microsoft. Novelty voices (Albert, Zarvox, …) and non-English voices are left out.
+- The best voices on an iPad are free but must be downloaded once. The screen says where: *Settings → Accessibility → Spoken Content → Voices → English*, then a **Premium** or **Enhanced** voice.
+- **"Turn commute mode off"** stops any speech at once and hides everything again. The chosen voice and speed are remembered.
+
+The saved record is `S.audio = {commute, voice, rate}`.
+
+**Evidence:** `tests/audio_options_test.js` **11/11**, run against a fake speech engine that has an iPad's mix of voices. It checks:
+
+- Off by default on a drive day: no commute screen, no read-aloud button, no speech.
+- One tap turns it on: commute screen, trip button and voice menu (Premium voice ranked first; novelty and Arabic voices excluded).
+- ▶ Test uses the best voice.
+- A picked voice and speed are used and saved.
+- The 25-minute trip speaks with them.
+- Off stops the speech, hides everything, and survives a reload.
+- The progress-panel switch works.
+- An old save left in commute mode opens in the course.
+- The menu fits a 390 px phone.
+- No page errors.

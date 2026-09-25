@@ -348,6 +348,7 @@
       '<div class="ixGSub">Each quest +30 XP; all three open the daily chest (+50). Today: ' + d.a + " answered, " + d.k + " right, " + d.fix + " rematches won, " + d.xp + " bonus XP.</div>" +
       "<h4>Settings</h4>" +
       [["on", "Game layer (bar, XP pops, quests)"], ["haptic", "Vibration on answers (Android)"], ["sound", "Sounds"], ["calm", "Calm mode (no motion or confetti)"]].map(([k, t]) => '<label class="ixGOpt"><input type="checkbox" data-ixg-opt="' + k + '"' + (g.opt[k] ? " checked" : "") + "> " + E(t) + "</label>").join("") +
+      (window.INTELLECTUALITY_AUDIO ? '<label class="ixGOpt"><input type="checkbox" data-ixau-opt="commute"' + (window.INTELLECTUALITY_AUDIO.on() ? " checked" : "") + '> Commute mode + read-aloud voice (off = hidden)</label>' : "") +
       '<button type="button" class="ixGBtn ghost" data-ixg="break">🏃 Take a 2-minute move break now</button>' +
       '<details class="ixGWhy"><summary>Why it works like this (ADHD research)</summary><ul>' +
       "<li><b>Reward now, not later.</b> ADHD brains discount delayed rewards steeply, and do best when every response is rewarded. So every answer pays at once, and nothing is ever taken away.</li>" +
