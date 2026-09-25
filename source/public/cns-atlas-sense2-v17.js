@@ -119,7 +119,7 @@
         rp_dur: ["stays for a variable period"],
         rp_spec: ["adequate stimulus", "specific stimulus", "broad range of stimuli", "one form of energy", "only by specific stimuli", "specific stimuli"],
         ad_fast: ["rapidly adapting", "rapidly adapting receptors", "phasic receptors", "touch receptors", "immediate inactivation"],
-        ad_slow: ["slowly adapting", "slowly adapting receptors", "tonic receptors", "tonic sensory receptors", "baroreceptors", "lung stretch receptors", "alveolar stretch receptors", "auditory receptors", "propioreceptors", "proprioceptors", "no change in response"],
+        ad_slow: ["slowly adapting", "slowly adapting receptors", "tonic receptors", "tonic sensory receptors", "baroreceptors", "lung stretch receptors", "alveolar stretch receptors", "auditory receptors", "propioreceptors", "proprioceptors", "no change in response", "nociceptors", "nociceptor", "pain receptors", "muscle spindles", "golgi tendon organs", "chemoreceptors"],
         ad_mod: ["moderately adapting", "thermal receptors", "variable rate of adaptation"],
         ch_mod: ["labeled line", "labelled line", "labeled line law", "labeled line principle", "specific nerve energies", "stimulus modality", "type of the stimulated receptor", "type of the involved touch receptor"],
         ch_loc: ["location of the receptors", "localize the site of stimuli", "cortical projection", "point to point"],

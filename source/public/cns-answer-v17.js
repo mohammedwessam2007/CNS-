@@ -491,13 +491,28 @@
     for (const r of raw) for (const h of [...r.own, ...r.wh]) if (!h.weak) strong.add(h.scene);
     for (const h of stemRaw) if (!h.weak) strong.add(h.scene);
     const keep = (hs) => hs.filter((h) => !h.weak || strong.has(h.scene));
+    const stem0 = keep(stemRaw);
+    const mk = (h) => h.scene + "|" + h.pid;
+    const isValue = (t) => {
+      const w = String(t).toLowerCase().replace(/[^a-z0-9+%°\u0370-\u03ff]+/g, " ").trim().split(/\s+/).filter(Boolean);
+      return w.length > 0 && w.length <= 6 && w.every((x) => VALUE.has(x) || /^[0-9][0-9.,/-]*(st|nd|rd|th|x|%)?$/.test(x));
+    };
     const opts = raw.map(({ o, own: own0, wh: wh0 }) => {
       const own = keep(own0),
         wh = keep(wh0);
-      const anchors = own.length ? own : wh;
+      // a value option ("Not changed", "2-6 weeks") is pictured at what the stem asks about; its explanation's
+      // other names become "also named" marks, never the answer's own colour
+      let anchors = own,
+        val = false;
+      if (!own.length && stem0.length && isValue(o.text)) {
+        const ws = new Set(wh.map(mk)),
+          both = stem0.filter((h) => ws.has(mk(h)));
+        anchors = (both.length ? both : stem0).slice(0, 4);
+        val = true;
+      } else if (!own.length) anchors = wh;
       const mark = (h) => h.scene + "|" + h.pid;
       const aset = new Set(anchors.map(mark));
-      return { k: o.key, text: o.text, good: good.has(o.key), mine: !!sel && o.key === sel, anchors, see: wh.filter((h) => !aset.has(mark(h))) };
+      return { k: o.key, text: o.text, good: good.has(o.key), mine: !!sel && o.key === sel, anchors, val, see: wh.filter((h) => !aset.has(mark(h))) };
     });
     // options that point at other options ("all of the above", "a & c are correct", "none of the above")
     // are pictured by what they point at
@@ -523,7 +538,7 @@
           }
       o.refs = refs;
     }
-    const stemSee = keep(stemRaw);
+    const stemSee = stem0;
     // a short option that is only a value ("Exaggerated", "Is absent", "Na influx") of what the stem asks about
     // is pictured at that thing, and the legend says so
     for (const o of opts) {
