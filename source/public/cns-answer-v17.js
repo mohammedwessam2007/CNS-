@@ -45,6 +45,7 @@
       .replace(/grey/g, "gray")
       .replace(/ü/g, "u")
       .replace(/[éè]/g, "e")
+      .replace(/([a-z])[’']s\b/g, "$1")
       .replace(/’|'/g, "")
       .replace(/\ba[\s-]*(alpha|beta|gamma|delta)\b/g, "a$1")
       .replace(/\b(alpha|beta|gamma|delta)\s*-\s*/g, "$1 ")
@@ -377,10 +378,13 @@
       for (const [pid, v] of Object.entries(d.parts || {})) {
         const name = Array.isArray(v) ? v[0] : (v && v.n) || "";
         const al = new Set([...autoAliases(name), ...((AL[sid] && AL[sid][pid]) || []), ...((d.al && d.al[pid]) || [])]);
-        for (const a of al) {
+        for (const a0 of al) {
+          // "~alias" is weak: it counts only when the question already names something else in the same diagram
+          const weak = a0.charAt(0) === "~",
+            a = weak ? a0.slice(1) : a0;
           const t = toks(a);
           if (!t.length) continue;
-          const e = { scene: sid, pid, t, a };
+          const e = { scene: sid, pid, t, a, weak };
           if (!byFirst.has(t[0])) byFirst.set(t[0], []);
           byFirst.get(t[0]).push(e);
         }
@@ -420,7 +424,7 @@
         const k = e.scene + "|" + e.pid;
         if (seen.has(k)) continue;
         seen.add(k);
-        hits.push({ scene: e.scene, pid: e.pid, at: sp.s, a: e.a });
+        hits.push({ scene: e.scene, pid: e.pid, at: sp.s, a: e.a, weak: !!e.weak && !sp.es.some((x) => x !== e && x.scene === e.scene && x.pid === e.pid && !x.weak) });
       }
     }
     return hits;
@@ -477,10 +481,19 @@
     if (x.flag) good.add(x.flag.k);
     for (const a of x.also) good.add(a.k);
     const fq = safe(() => A.forQuestion(qid), null);
-    const opts = q.options.map((o) => {
+    const raw = q.options.map((o) => {
       const why = keys.has(o.key) ? x.key : x.flag && x.flag.k === o.key ? x.flag.why : (x.also.find((a) => a.k === o.key) || {}).why || x.opt[o.key] || "";
-      const own = match(o.text),
-        wh = match(why);
+      return { o, own: match(o.text), wh: match(why) };
+    });
+    const stemRaw = match(q.stem);
+    // weak aliases stand only where the question also names something else in that diagram
+    const strong = new Set();
+    for (const r of raw) for (const h of [...r.own, ...r.wh]) if (!h.weak) strong.add(h.scene);
+    for (const h of stemRaw) if (!h.weak) strong.add(h.scene);
+    const keep = (hs) => hs.filter((h) => !h.weak || strong.has(h.scene));
+    const opts = raw.map(({ o, own: own0, wh: wh0 }) => {
+      const own = keep(own0),
+        wh = keep(wh0);
       const anchors = own.length ? own : wh;
       const mark = (h) => h.scene + "|" + h.pid;
       const aset = new Set(anchors.map(mark));
@@ -510,7 +523,7 @@
           }
       o.refs = refs;
     }
-    const stemSee = match(q.stem);
+    const stemSee = keep(stemRaw);
     // a short option that is only a value ("Exaggerated", "Is absent", "Na influx") of what the stem asks about
     // is pictured at that thing, and the legend says so
     for (const o of opts) {
