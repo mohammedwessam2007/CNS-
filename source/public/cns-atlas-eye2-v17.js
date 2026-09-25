@@ -236,7 +236,7 @@
         punc: ["Lacrimal puncta", "Tiny openings on the upper and lower lid margins near the medial angle."],
         can: ["Lacrimal canaliculi", "Carry tears from the puncta **to** the lacrimal sac."],
         sac: ["Lacrimal sac", "Receives the canaliculi and passes tears **down** into the nasolacrimal duct (not back to the canaliculi)."],
-        nld2: ["Nasolacrimal duct", "Lined by **pseudostratified ciliated columnar** epithelium; opens into the **inferior meatus** of the nose."],
+        nld2: ["Nasolacrimal duct", "Lined by **pseudostratified ciliated columnar** epithelium; drains tears to the nose, ending below the **inferior concha** (inferior meatus)."],
         dz_stye: ["Stye (external hordeolum)", "A small painful swelling at the lid margin: an infected **gland of Zeis**."],
         dz_chal: ["Chalazion", "A firm lump in the lid: inflammation of a **Meibomian** gland."],
         dz_conj: ["Pink eye", "Redness and watering: **conjunctivitis**."],
@@ -361,7 +361,7 @@
         { id: "far", label: "Look far", on: ["lensF", "cmF", "pupF"], lost: ["lensN"], info: "**Far** (looking up from a book): ciliary muscle **relaxes** → zonule tight → lens **thinner**; the pupil **dilates**." },
         { id: "errors", label: "Errors", on: ["myo", "hyp", "ast", "pres"], info: "**Myopia**: long eye, focus in front → **concave**. **Hypermetropia**: short eye, focus behind → **convex**. **Astigmatism**: uneven cornea → cylindrical. **Presbyopia**: stiff lens → convex for reading." },
       ],
-      secs: { "ph-refraction#0": "near", "ph-refraction#1": "near", "ph-refraction#2": "", "ph-refraction#3": "errors", "ph-refraction#4": "errors" },
+      secs: { "ph-refraction#0": "near", "ph-refraction#1": "near", "ph-refraction#2": "", "ph-refraction#3": "errors", "ph-refraction+accommodation-in-numbers-presbyopia-and-": "errors" },
       rules: [
         [/myopi|hypermetrop|hyperop|astigmat|presbyop/i, "errors"],
         [/far vision|distant|looks up|thinner lens|relax/i, "far"],

@@ -136,7 +136,7 @@
         { id: "lmn", label: "LMN lesion", on: ["ahc", "nerve", "musc", "lesL", "l_par", "l_tone", "l_ref", "l_bab", "l_wast", "l_fasc", "l_emg", "l_sup", "l_ext", "l_cause"], lost: ["u_par", "u_tone", "u_ref", "u_bab"], info: "**LMN**: flaccid, hypotonia, areflexia (withdrawal reflex too), **marked wasting**, fasciculations, EMG changes, denervation **super**sensitivity (more receptors). Polio." },
         { id: "notp", label: "Not pyramidal", on: ["nb_inv", "nb_thy", "nb_sleep", "nb_aprx"], info: "**Involuntary movements** and **cogwheel rigidity** are basal ganglia; hypothyroidism gives slow-relaxing jerks; sleep lowers tone; apraxia has **no** paralysis." },
       ],
-      secs: { "ph-umn-lmn#0": "", "ph-umn-lmn#1": "umn", "ph-umn-lmn#2": "" },
+      secs: { "ph-umn-lmn#0": "", "ph-umn-lmn#1": "umn", "ph-umn-lmn+signs-in-detail-spasticity-babinski-fasc": "" },
       rules: [
         [/lower motor neuron|\bLMN/i, "lmn"],
         [/upper motor neuron|\bUMN|pyramidal tract lesion|corticospinal tract disease|babinski|hemiplegia/i, "umn"],

@@ -237,7 +237,7 @@
         { id: "stop", label: "▶ Stop", on: ["f_stop", "e_stop", "s_stop", "q_stop", "post"], info: "Endolymph runs on → the **opposite** canals fire → you feel turning **left**, past-point, tend to fall; nystagmus beats the other way." },
         { id: "tests", label: "Caloric and disease", on: ["cal", "lab", "men", "cent", "loss", "motion"], info: "**Caloric**: one horizontal canal of one ear (COWS). **Labyrinthitis**: no tinnitus; **Ménière**: tinnitus + deafness." },
       ],
-      secs: { "ph-vestibular#4": "tests" },
+      secs: { "ph-vestibular+vestibular-reflexes-pathways-tests-and-m": "tests" },
       rules: [
         [/post.?rotat|stops/i, "stop"],
         [/caloric|labyrinthitis|m[eé]ni[eè]re|vertigo/i, "tests"],

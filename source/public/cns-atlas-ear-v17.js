@@ -299,7 +299,7 @@
         { id: "rem", label: "REM sleep", on: ["rem", "remc", "beta"], info: "REM: β-like EEG, eye movements, **hypotonia**, irregular HR/breathing, remembered dreams; grows towards morning." },
         { id: "sws", label: "Slow-wave sleep", on: ["sws", "swsc", "delta"], info: "Slow-wave sleep: δ waves, regular slow vital signs, sleep walking; deepest in the first half of the night." },
       ],
-      secs: { "ph-sleep#0": "waves", "ph-sleep#1": "rem", "ph-sleep#2": "", "ph-sleep#3": "sws" },
+      secs: { "ph-sleep#0": "waves", "ph-sleep#1": "rem", "ph-sleep#2": "", "ph-sleep+sleep-cycles-how-sleep-is-made-and-the-e": "sws" },
       rules: [
         [/rem|paradoxical|narcolep/i, "rem"],
         [/slow wave|sleep walking|stage 4|deep sleep/i, "sws"],
@@ -367,7 +367,7 @@
         { id: "ltp", label: "▶ LTP", show: ["ltp"], on: ["ampa", "nmda", "mg", "ltpc"], info: "Glutamate → **AMPA** (Na⁺) depolarizes → Mg²⁺ expelled → **NMDA** lets **Ca²⁺ into the postsynaptic** neuron → CaMKII → more AMPA receptors." },
         { id: "short", label: "Short-term changes", on: ["hab", "sens2", "ptp2"], info: "All **presynaptic**: habituation (**less** release, Ca²⁺ channels inactivated), sensitization (**more** release via a serotonin facilitator), PTP (Ca²⁺ **accumulates** in the terminal)." },
       ],
-      secs: { "ph-memory#0": "short", "ph-memory#1": "ltp", "ph-memory#2": "" },
+      secs: { "ph-memory#0": "short", "ph-memory#1": "ltp", "ph-memory+types-of-memory-consolidation-and-amnesi": "" },
       rules: [
         [/nmda|ampa|long[\s-]*term potentiation|ltp/i, "ltp"],
         [/habituation|sensitization|post[\s-]*tetanic/i, "short"],

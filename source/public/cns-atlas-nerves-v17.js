@@ -218,7 +218,7 @@
         spal: ["Sensation of the soft palate", "**Lesser palatine nerves** (V2 through the ganglion) and the **glossopharyngeal (IX)**. The hard palate: greater palatine and nasopalatine (V2)."],
         tongue: ["Nerves of the tongue muscles", "**Hypoglossal (XII)** for all **except the palatoglossus** (vagus)."],
         v2h: ["Maxillary nerve (V2)", "**Wholly sensory**. It does not supply the lower teeth or lip (V3), the upper eyelid (V1) or the buccinator skin (V3 buccal)."],
-        cav2: ["In the cavernous sinus wall", "V2 runs in the **lateral wall of the cavernous sinus** (V3 does not pass through the sinus)."],
+        cav2: ["In the cavernous sinus wall", "V2 runs forward inside the cavernous sinus's **lateral wall**, below V1 (V3 does not pass through the sinus)."],
         fr: ["Foramen rotundum", "V2 leaves the skull through the **foramen rotundum**, not the foramen spinosum."],
         ppf: ["Pterygopalatine fossa", "V2 and the pterygopalatine ganglion lie here (**not** the infratemporal fossa)."],
         v2men: ["Meningeal branch of V2", "To the meninges of the **middle cranial fossa**."],
