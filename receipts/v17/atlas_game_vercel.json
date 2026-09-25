@@ -1,0 +1,388 @@
+{
+ "at": "2026-09-25T00:33:06.800Z",
+ "results": [
+  {
+   "id": "A1",
+   "what": "Every diagram draws, every state applies with its explanation, every named part is drawn and tappable, every drill target exists",
+   "ok": true,
+   "detail": {
+    "n": 22,
+    "sims": 97,
+    "parts": 244,
+    "bad": []
+   }
+  },
+  {
+   "id": "A2",
+   "what": "Every lesson section a diagram is assigned to exists in the notes; at least 60 sections carry a diagram",
+   "ok": true,
+   "detail": {
+    "mapped": 93,
+    "badSecs": []
+   }
+  },
+  {
+   "id": "A3",
+   "what": "After an answer the diagram opens in the state that question tests (hemisection → cord cut, bitemporal → chiasma lesion, Argyll Robertson → pretectal, Huntington → striatum lost …)",
+   "ok": true,
+   "detail": [
+    {
+     "re": "/syringomyel/i",
+     "qid": null,
+     "got": null,
+     "ok": true
+    },
+    {
+     "re": "/bitemporal/i",
+     "qid": null,
+     "got": null,
+     "ok": true
+    }
+   ]
+  },
+  {
+   "id": "A4",
+   "what": "A large share of practice questions get a live diagram after they are answered (reported)",
+   "ok": true,
+   "detail": {
+    "n": 559,
+    "of": 1011
+   }
+  },
+  {
+   "id": "A5",
+   "what": "Tap a tract → its name and meaning; Spot-it drill runs 5 prompts, a clean sweep earns XP (+3 each, +10 bonus, +30 more if it completes a quest); full screen opens and closes",
+   "ok": true,
+   "detail": {
+    "hasCard": true,
+    "ex": "Lateral spinothalamic tract left sidePain and temperature from the opposite side",
+    "dr": {
+     "end": "5 / 5 🔥 clean sweep · +10 XP bonus",
+     "xp": 55,
+     "gain": 55
+    },
+    "zoom": true
+   }
+  },
+  {
+   "id": "A6",
+   "what": "Simulators work: left optic nerve cut → no reaction to light in the left eye, both react to the right; VI palsy → right eye cannot abduct; right UMN facial lesion → only the LEFT lower face; two EPSPs together fire the neuron (spatial summation)",
+   "ok": true,
+   "detail": {
+    "litL": [
+     9.5,
+     9.5
+    ],
+    "litR": [
+     4,
+     4
+    ],
+    "tr": "translate(0.0 0.0)",
+    "umn": [
+     "lf.L"
+    ],
+    "sum": true,
+    "spike": "⚡ Fired 1×. That was spatial summation (two inputs together)."
+   }
+  },
+  {
+   "id": "A7",
+   "what": "Reduce-motion: diagrams stop moving (static trails instead of animation)",
+   "ok": true,
+   "detail": {
+    "still": true
+   }
+  },
+  {
+   "id": "A9",
+   "what": "Held-out firewall: no sealed-mock question shares a 7-word run with the diagrams' text",
+   "ok": true,
+   "detail": {
+    "hits": [],
+    "n": 0,
+    "chars": 46886
+   }
+  },
+  {
+   "id": "A8",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "L1",
+   "what": "Lesson: the live diagram opens its section, before the department drawings and the photos, and fits the screen",
+   "ok": true,
+   "detail": {
+    "sec": "an-spinal-cord#3",
+    "kids": [
+     "v15Head",
+     "ixAWrap",
+     "v15Pics",
+     "v15Pts",
+     "v15Trap",
+     "v15Recall"
+    ],
+    "fits": true,
+    "doc": true
+   }
+  },
+  {
+   "id": "G1",
+   "what": "The progress bar is on screen; learning sections already earned XP and counted towards the learn quest; game XP is kept apart (the app's own S.xp is never changed by it)",
+   "ok": true,
+   "detail": {
+    "bar": true,
+    "gxp": 39,
+    "sec": 5,
+    "same": true,
+    "up": 2,
+    "streak": {
+     "n": 1,
+     "best": 1,
+     "last": "2026-09-25",
+     "freeze": 2,
+     "run": 1
+    }
+   }
+  },
+  {
+   "id": "G2",
+   "what": "Every answer pays at once: an XP pop on the verdict (+12 right, +4 wrong, never a loss), and a sprint dot fills",
+   "ok": true,
+   "detail": {
+    "pre": 0,
+    "answered": 8,
+    "pops": [
+     "+4 XP",
+     "+4 XP",
+     "+12 XP",
+     "+4 XP",
+     "+4 XP",
+     "+4 XP",
+     "+12 XP",
+     "+4 XP"
+    ],
+    "sxp": [
+     4,
+     4,
+     12,
+     4,
+     4,
+     4,
+     12,
+     4
+    ],
+    "dots": 0
+   }
+  },
+  {
+   "id": "G3",
+   "what": "After the 8th answer and \"next\": a sprint-cleared card (score, XP, minutes) with \"Keep going\" and an optional move break; the sprint resets",
+   "ok": true,
+   "detail": {
+    "text": "🏁 Sprint cleared · 2/8 right · +48 XP · 1 minKeep going ▶🏃 2-min move break",
+    "g": {
+     "v": 1,
+     "xp": 144,
+     "opt": {
+      "on": true,
+      "sound": false,
+      "haptic": true,
+      "calm": false
+     },
+     "days": {
+      "2026-09-25": {
+       "a": 8,
+       "k": 2,
+       "sec": 14,
+       "fix": 0,
+       "spot": 0,
+       "clean": 0,
+       "xp": 144,
+       "combo": 1,
+       "boss": 0,
+       "spike": 1,
+       "min": 0,
+       "qd": {
+        "learn": 1
+       },
+       "cap": {
+        "spike": 2
+       }
+      }
+     },
+     "streak": {
+      "n": 1,
+      "best": 1,
+      "last": "2026-09-25",
+      "freeze": 2,
+      "run": 1
+     },
+     "sprint": {
+      "n": 0,
+      "k": 0,
+      "xp": 0,
+      "t0": 0,
+      "best": 0,
+      "h": []
+     },
+     "sprints": 1,
+     "lvl": 2
+    }
+   }
+  },
+  {
+   "id": "G4",
+   "what": "Move break: a 2-minute visual countdown with three movement ideas; \"Back to it\" returns straight to the questions",
+   "ok": true,
+   "detail": {
+    "on": true,
+    "clock": "1:59",
+    "moves": 3,
+    "brkOff": true
+   }
+  },
+  {
+   "id": "G5",
+   "what": "Quests panel: three daily quests with progress, the settings (game on/off, vibration, sound, calm mode) and the research reasons",
+   "ok": true,
+   "detail": {
+    "quests": 3,
+    "opts": 4,
+    "why": true
+   }
+  },
+  {
+   "id": "G6",
+   "what": "No page errors in the whole lesson → MCQ → sprint → break flow",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "G7",
+   "what": "Forgiving streak: next day +1; a gap covered by freezes keeps it; a longer gap restarts at 1 with a welcome (no shame screen); 7 days in a row earns a freeze (max 3)",
+   "ok": true,
+   "detail": {
+    "next": {
+     "n": 6,
+     "best": 6,
+     "last": "2026-09-25",
+     "freeze": 2,
+     "run": 6
+    },
+    "gap2": {
+     "n": 6,
+     "best": 6,
+     "last": "2026-09-25",
+     "freeze": 0,
+     "run": 6
+    },
+    "reset": {
+     "n": 1,
+     "best": 1,
+     "last": "2026-09-25",
+     "freeze": 1,
+     "run": 1
+    },
+    "earn": {
+     "n": 7,
+     "best": 7,
+     "last": "2026-09-25",
+     "freeze": 2,
+     "run": 7
+    },
+    "same": {
+     "n": 4,
+     "best": 0,
+     "last": "2026-09-25",
+     "freeze": 2,
+     "run": 4
+    }
+   }
+  },
+  {
+   "id": "G8",
+   "what": "Quests: finishing each pays +30 XP; all three open the daily chest (+50)",
+   "ok": true,
+   "detail": {
+    "quests": [
+     {
+      "id": "learn",
+      "i": "📖",
+      "t": "Learn 6 lesson sections",
+      "n": 6,
+      "of": 6,
+      "done": true
+     },
+     {
+      "id": "mcq",
+      "i": "✅",
+      "t": "Answer 25 past-paper MCQs",
+      "n": 25,
+      "of": 25,
+      "done": true
+     },
+     {
+      "id": "clean2",
+      "i": "🎯",
+      "t": "Clean-sweep a Spot-it drill (5/5)",
+      "n": 1,
+      "of": 1,
+      "done": true
+     }
+    ],
+    "gain": 140,
+    "chest": true
+   }
+  },
+  {
+   "id": "G9",
+   "what": "Sealed mock = boss fight: no diagrams, no XP pop, and the bar shows no score while it runs (nothing leaks whether an answer was right)",
+   "ok": true,
+   "detail": {
+    "mk": {
+     "bar": "1Neuron 👾 boss fight · sealed🔥4❄️2🎯 2/3",
+     "atlas": 0,
+     "lvl": "1"
+    },
+    "mk2": {
+     "bar": "1Neuron 👾 boss fight · sealed🔥4❄️2🎯 2/3",
+     "pops": 0,
+     "atlas": 0,
+     "lvl": "1"
+    }
+   }
+  },
+  {
+   "id": "G10",
+   "what": "Game layer can be switched off (bar gone, nothing else changes) and back on",
+   "ok": true,
+   "detail": {
+    "hidden": true,
+    "pad": false
+   }
+  },
+  {
+   "id": "G11",
+   "what": "A broken or foreign S.game is repaired without errors, and the saved game state stays small",
+   "ok": true,
+   "detail": {
+    "out": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "size": 363
+   }
+  },
+  {
+   "id": "G12",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

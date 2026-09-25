@@ -50,12 +50,18 @@ The research is in `docs/ADHD_RESEARCH.md` (13 findings with sources and evidenc
 
 **What it does not touch.** The game layer keeps its own XP (`S.game.xp`); the app's own `S.xp`, which v14 reads, is never changed by it. It adds no questions, no steps and no minutes. During a sealed mock the bar shows **no score**, and the displayed XP is frozen even after a reload, so nothing reveals whether an answer was right.
 
-## Evidence
+## Evidence (final pass on the deployed files, `receipts/v17/all_suites_final_v17.txt`)
 
 | Check | Result |
 |---|---|
-| New suite `tests/atlas_game_test.js` | **22/22** (see the final pass below): all 22 diagrams draw; all 97 states apply with an explanation; every named part is drawn and tappable; every Spot-it target exists; 93 mapped sections exist in the notes; questions open in the right state (16 keyword cases); 559/1,011 practice questions get a diagram; explore, drill (5/5 + XP), full screen; simulators (torch, VI palsy, UMN face, spatial summation); reduce-motion; **held-out firewall** (no sealed-mock stem shares a 7-word run with the diagrams' text); lesson order and fit; XP pops (+12/+4, never a loss); sprint card; move break; quests panel; forgiving streak; quests and chest; **sealed mock shows no score and no diagram**; game on/off; broken state repaired; no page errors |
-| All earlier suites | See the final regression table below (run on the final files) |
+| **New:** `tests/atlas_game_test.js` | **22/22** on the source and **22/22** on the Vercel build. All 22 diagrams draw; all 97 states apply with an explanation; every named part is drawn and tappable; every Spot-it target exists; the 93 mapped sections exist in the notes; questions open in the right state (16 keyword cases); 559/1,011 practice questions get a diagram. Explore, drill (5/5 + XP) and full screen work. Simulators work (torch, VI palsy, UMN face, spatial summation). Reduce-motion is respected. **Held-out firewall**: no sealed-mock stem shares a 7-word run with the diagrams' text. Lesson order and fit are right. XP pops are +12/+4, never a loss. Sprint card, move break and quests panel work. The streak is forgiving. Quests and the chest pay out. **A sealed mock shows no score and no diagram**, even after a reload. The game switches on and off. A broken state is repaired. No page errors. |
+| v16 suite, public site | **25/25**. Full course: **1,011/1,011** practice past papers by day 47, **399/399** held-out in 14 mocks, **109** min/day on average, **140** at most, 891 KB saved state. Same pace as v16.3: the new layers add no minutes. |
+| v16 suite, owner's device (drawings key present) | **25/25**. **1,061/1,061** by day 47, 109 min/day on average, **141** at most, 900 KB |
+| Department drawings | **16/16** on the source and on the Vercel build (the atlas sits above them; the drawings-first-then-photos order holds) |
+| Strict notes coverage | practice **1,009/1,009 (100%)** |
+| Other suites | certify **62/62** · spread **23/23** · LEARN **17/17** · hostile **26/26** · v15.3 **10/10** · Vercel host **14/14** · options gallery **7/7** · leak audit **0** text or query leaks · rollback v17 → v53 → v17 **pass** |
+| Build | "47 app scripts/styles present" (the 6 atlas scripts, the atlas and game styles, and the game script) |
+| Deployment | `dpl_H4vSAFNrxUKucNV56cR8uTbEKKVq`, **READY**, production, aliased to https://intellectuality-cns.vercel.app (tab title "INTELLECTUALITY CNS v17 · MCQ EXAM") |
 
 ## Honest limits
 
