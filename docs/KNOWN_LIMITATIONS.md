@@ -1,6 +1,13 @@
-# Known Limitations (v16.2 · MCQ exam)
+# Known Limitations (v17 · MCQ exam)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v17 CNS atlas and ADHD game layer
+
+- **The diagrams are schematic teaching drawings**, hand-drawn in SVG from standard anatomy and the notes' wording. Proportions are simplified, and a clinician has not reviewed them. Where textbooks differ (e.g. tract positions in the anterior funiculus), they follow the common teaching layout.
+- **Which diagram, in which state, opens after an answer is chosen by keyword rules** on the stem and the key, with the question's note section as the fallback. 559 of 1,011 practice questions get one. A rule can pick a reasonable but not ideal state; the diagram still opens on the right topic.
+- **The game layer changes nothing in the course.** It keeps its own XP (`S.game.xp`), adds no questions or minutes, and hides the score during sealed mocks. Its sprint card and move break are offered, never forced. Vibration works on Android only.
+- **The ADHD research is general evidence** (`docs/ADHD_RESEARCH.md`), not a promise for one learner, and the app is not a treatment.
 
 ## v16.2 department drawings and the uploaded department files
 

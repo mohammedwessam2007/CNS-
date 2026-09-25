@@ -1,0 +1,93 @@
+/* INTELLECTUALITY v17 · CNS atlas (interactive diagrams). Dark "light-box" cards that sit inside the
+   white lesson sections and under answered questions. Touch targets ≥ 40 px; motion respects the
+   device's reduce-motion setting. */
+.ixAWrap{margin:12px 0;min-width:0;max-width:100%;width:100%}
+.ixA{min-width:0;max-width:100%;--ixa-bg:#07111d;--ixa-ink:#eef5ff;--ixa-mut:#93a8c2;--ixa-line:#22364f;position:relative;border-radius:18px;overflow:hidden;color:var(--ixa-ink);
+  background:radial-gradient(120% 80% at 50% 0%,#11263d 0%,#0a1726 45%,#060d17 100%);border:1px solid #27425f;box-shadow:0 10px 30px #0006,inset 0 1px 0 #ffffff12}
+.ixAHd{display:flex;align-items:center;gap:10px;padding:11px 12px 6px 14px}
+.ixAK{flex:none;font-size:10px;font-weight:950;letter-spacing:.12em;color:#07111d;background:linear-gradient(90deg,#d9ff43,#66e9ff);border-radius:99px;padding:4px 8px}
+.ixAT{flex:1;min-width:0;font-size:15px;line-height:1.25;font-weight:900;color:#fff;overflow-wrap:anywhere}
+.ixAZ{flex:none;min-width:40px;min-height:40px;border-radius:12px;border:1px solid #33506f;background:#0e1c2d;color:#cfe3ff;font-size:18px;font-weight:900;cursor:pointer}
+.ixABar{display:flex;gap:6px;min-width:0;max-width:100%;overflow-x:auto;padding:4px 12px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.ixABar::-webkit-scrollbar{display:none}
+.ixAChip{flex:none;min-height:36px;border-radius:99px;border:1px solid #2f4a68;background:#0d1a2a;color:#cfe0f4;font-size:12.5px;font-weight:850;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.ixAChip:hover{border-color:#4e7aa6}
+.ixAChip.on{background:#d9ff43;border-color:#d9ff43;color:#07111d}
+.ixAChip.ixADrillBtn{border-color:#6a4fb0;color:#dccfff}
+.ixAChip.ixADrillBtn.on{background:#b99cff;border-color:#b99cff;color:#140a2a}
+.ixAStage{padding:0 8px;touch-action:manipulation}
+.ixASvg{display:block;width:100%;height:auto;max-height:min(62vh,520px);margin:0 auto;-webkit-user-select:none;user-select:none}
+.ixAZoomed .ixASvg{max-height:calc(100vh - 230px)}
+.ixACompact .ixASvg{max-height:min(46vh,400px)}
+.ixAInfo{min-height:58px;padding:8px 14px 13px;border-top:1px solid #ffffff10;background:linear-gradient(180deg,#0000,#00000026)}
+.ixAInfo p{margin:5px 0;font-size:14.5px;line-height:1.5;color:#dbe7f6}
+.ixAInfo b{color:#fff}
+.ixAHint{color:#9fb4cc!important}
+.ixAName{font-size:16px;color:#d9ff43!important}
+.ixASide{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#07111d;background:#66e9ff;border-radius:99px;padding:2px 7px;vertical-align:2px}
+.ixASub{color:#c5d6ea!important}
+.ixARes{display:grid;gap:8px;margin:8px 0 2px}
+.ixARes2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0 2px}
+@media(max-width:560px){.ixARes2{grid-template-columns:1fr}}
+.ixABox{border:1px solid #2a4260;background:#0b1828;border-radius:12px;padding:8px 10px;min-width:0}
+.ixABox h5{margin:0 0 5px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8fb3d9}
+.ixABox ul{margin:0;padding-left:17px}.ixABox li{font-size:13.5px;line-height:1.45;color:#e2ecf8;margin:2px 0}
+.ixABox svg{display:block;width:100%;height:auto;max-height:190px}
+.ixALeg{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:#b8cbe0;margin-top:4px}
+.ixALeg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.ixADrillQ{font-size:17px!important}.ixADrillQ span{font-size:12px;font-weight:950;letter-spacing:.1em;color:#b99cff;text-transform:uppercase}
+.ixADots{display:flex;gap:6px}.ixADots i{width:22px;height:6px;border-radius:9px;background:#23364d}.ixADots i.now{background:#b99cff}.ixADots i.ok{background:#5ef0a0}.ixADots i.no{background:#ff6e8a}
+.ixADrillR.ok{color:#8ff7bd!important}.ixADrillR.no{color:#ffb3c2!important}
+.ixADrillEnd{font-size:16px!important}
+.ixAAct{min-height:40px;border-radius:12px;border:1px solid #3a5b80;background:#10223a;color:#e8f2ff;font-weight:900;font-size:13px;padding:8px 12px;cursor:pointer}
+.ixAAct.on{background:#66e9ff;color:#06121e;border-color:#66e9ff}
+.ixARow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}
+.ixARange{width:100%;accent-color:#d9ff43;min-height:32px}
+
+/* SVG language: .pf = a filled part, .ps = a stroked part, .lab = a label; [data-x] = shown by a state */
+.ixASvg .pf{fill:var(--r,#e7ecf3);stroke:var(--rs,#9eb0c7);stroke-width:.7;cursor:pointer;transition:fill .25s,opacity .25s,stroke .25s,stroke-width .2s}
+.ixASvg .ps{fill:none;stroke:var(--r,#7d93ad);stroke-width:var(--w,3);stroke-linecap:round;stroke-linejoin:round;cursor:pointer;transition:stroke .25s,opacity .25s,stroke-width .2s}
+.ixASvg .hit{fill:none;stroke:#0000;stroke-width:16;cursor:pointer;pointer-events:stroke}
+.ixASvg .pf.ixOn,.ixASvg .pf.ixPick{fill:var(--c,#d9ff43);stroke:#fff;stroke-width:1.6}
+.ixASvg .ps.ixOn,.ixASvg .ps.ixPick{stroke:var(--c,#d9ff43);stroke-width:calc(var(--w,3) * 1.6)}
+.ixASvg .pf.ixLost{fill:url(#ixHatch);stroke:#ff5d7a;stroke-width:1.4}
+.ixASvg .ps.ixLost{stroke:#ff5d7a;stroke-dasharray:4 4}
+.ixASvg .ixMute{opacity:.28}
+.ixASvg .pf.ixGood,.ixASvg .ps.ixGood{fill:#5ef0a0;stroke:#fff;stroke-width:2;opacity:1}
+.ixASvg .ps.ixGood{fill:none;stroke:#5ef0a0}
+.ixASvg .pf.ixBad{fill:#ff6e8a;opacity:1}.ixASvg .ps.ixBad{stroke:#ff6e8a;opacity:1}
+.ixASvg .ixGood{animation:ixPulse .6s ease-in-out 2}
+.ixASvg .lab{fill:#eaf2fc;font:800 9px/1 Inter,system-ui,-apple-system,Segoe UI,sans-serif;pointer-events:none;paint-order:stroke;stroke:#07111dcc;stroke-width:2.6px;stroke-linejoin:round}
+.ixASvg .lab.dk{fill:#0b1726;stroke:#ffffffb0}
+.ixASvg .lab.sm{font-size:7.5px;font-weight:750}
+.ixASvg .lab.big{font-size:11.5px;font-weight:950}
+.ixASvg .lab.mut{fill:#8fa6c0}
+.ixASvg .ttl{fill:#8fb3d9;font:950 9px/1 Inter,system-ui,sans-serif;letter-spacing:.14em;pointer-events:none}
+.ixASvg .ld{stroke:#b9cbe0;stroke-width:.6;fill:none;opacity:.8;pointer-events:none}
+.ixADrilling .ixASvg .lab:not(.keep),.ixADrilling .ixASvg .ld{opacity:0}
+.ixASvg [data-x]{opacity:0;pointer-events:none;transition:opacity .3s}
+.ixASvg [data-x].ixShow{opacity:1;pointer-events:auto}
+.ixASvg .ov,.ixASvg .ov *{pointer-events:none!important}
+.ixASvg .pf[data-h]:not(.ixOn):not(.ixPick):not(.ixGood):not(.ixBad):not(.ixLost){stroke:#0000}
+.ixASvg .fl{fill:none;stroke:var(--c,#fff);stroke-width:var(--w,3.2);stroke-linecap:round;stroke-dasharray:7 93;animation:ixFlow var(--t,2.2s) linear infinite}
+.ixASvg .flb{fill:none;stroke:var(--c,#fff);stroke-width:calc(var(--w,3.2) * .5);stroke-opacity:.38;stroke-linecap:round;stroke-linejoin:round}
+.ixASvg .fl2{animation-delay:calc(var(--t,2.2s) / -2)}
+.ixASvg .blink{animation:ixBlink 1.2s ease-in-out infinite}
+.ixASvg.ixStill .fl{stroke-dasharray:none;opacity:.55;animation:none}
+.ixASvg.ixStill .blink,.ixASvg.ixStill .ixGood{animation:none}
+@keyframes ixSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes ixNysR{0%{transform:translateX(5px)}82%{transform:translateX(-6px)}100%{transform:translateX(5px)}}
+@keyframes ixNysL{0%{transform:translateX(-5px)}82%{transform:translateX(6px)}100%{transform:translateX(-5px)}}
+@keyframes ixKick{0%,55%,100%{transform:rotate(0deg)}18%{transform:rotate(-16deg)}}
+@keyframes ixFlow{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes ixPulse{50%{opacity:.45}}
+@keyframes ixBlink{50%{opacity:.25}}
+@media (prefers-reduced-motion: reduce){.ixASvg .fl{stroke-dasharray:none;opacity:.55;animation:none}.ixASvg .blink,.ixASvg .ixGood{animation:none}}
+
+/* full screen */
+.ixAZoom{position:fixed;inset:0;z-index:10050;background:#02060bf2;display:grid;place-items:center;padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));overflow:auto}
+.ixAZoom .ixA{width:min(1100px,100%);max-height:100%;overflow:auto}
+html.ixANoScroll,html.ixANoScroll body{overflow:hidden}
+/* inside a white lesson card the dark light-box needs a little air */
+.v15Sec .ixAWrap{margin:10px 0 14px}
+.v16Explain .ixAWrap{margin:12px 0;min-width:0;max-width:100%;width:100%}

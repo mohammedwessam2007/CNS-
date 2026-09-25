@@ -1,0 +1,93 @@
+/* INTELLECTUALITY v17 · game layer: the progress bar, XP pops, quests, sprint cards, move breaks.
+   Calm by design: no red "failure" states, motion off under reduce-motion or calm mode. */
+body.ixGOn{padding-bottom:calc(66px + env(safe-area-inset-bottom))}
+.ixG{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;gap:10px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,#0a1422ee,#070d16f7);border-top:1px solid #22384f;box-shadow:0 -8px 24px #0007;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#eaf2fc;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+.ixG[hidden]{display:none}
+.ixG button{font:inherit;color:inherit;cursor:pointer}
+.ixGLv{position:relative;flex:none;width:44px;height:44px;border:0;background:none;padding:2px;display:grid;place-items:center}
+.ixGLv svg{position:absolute;inset:2px}
+.ixGLv b{position:relative;font-size:15px;font-weight:950;color:#d9ff43}
+.ixGMid{flex:1;min-width:0}
+.ixGRank{font-size:13px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ixGRank small{font-weight:750;color:#8fa6c0;margin-left:4px}
+.ixGXp{height:6px;border-radius:9px;background:#1a2c42;margin-top:5px;overflow:hidden}
+.ixGXp i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#d9ff43,#66e9ff);transition:width .5s}
+.ixGStreak{flex:none;font-size:15px;font-weight:950;display:flex;align-items:baseline;gap:3px}
+.ixGStreak small{font-size:11px;color:#9fd8ff}
+.ixGSprint{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.ixGDots{display:flex;gap:3px}
+.ixGDots i{width:9px;height:9px;border-radius:50%;background:#20354d;transition:background .25s,transform .25s}
+.ixGDots i.ok{background:#5ef0a0}
+.ixGDots i.no{background:#ffb86b}
+.ixGDots i.now{box-shadow:0 0 0 2px #d9ff43 inset}
+.ixGSprint small{font-size:10.5px;color:#8fa6c0;font-variant-numeric:tabular-nums}
+.ixGQ{flex:none;min-height:40px;border-radius:12px;border:1px solid #33506f;background:#0e1c2d;padding:6px 10px;font-weight:900}
+.ixGQ.all{border-color:#d9ff43;color:#d9ff43}
+@media(max-width:560px){.ixGRank small{display:none}.ixGSprint small{display:none}.ixG{gap:8px}}
+@media(max-width:380px){.ixGDots i{width:7px;height:7px}}
+
+/* XP pop on the verdict */
+.v16Verdict{position:relative}
+.ixGPop{display:inline-block;margin-left:10px;padding:3px 9px;border-radius:99px;background:#d9ff43;color:#07111d;font-size:13px;font-weight:950;vertical-align:2px;animation:ixGPop .7s cubic-bezier(.2,1.6,.4,1) both}
+.ixGPop.still{animation:none}
+.ixGCombo,.ixGRe,.ixGTrap{display:inline-block;margin-left:6px;padding:3px 9px;border-radius:99px;font-size:12.5px;font-weight:900;vertical-align:2px}
+.ixGCombo{background:#ff9f43;color:#1b0d00}
+.ixGRe{background:#b99cff;color:#140a2a}
+.ixGTrap{background:#0b1726;color:#ffd9a8;border:1px solid #6a5732}
+@keyframes ixGPop{0%{transform:scale(.3) translateY(8px);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.ixGBurst{position:absolute;left:28px;top:50%;width:0;height:0;pointer-events:none}
+.ixGBurst i{position:absolute;width:6px;height:6px;border-radius:50%;background:#d9ff43;transform:rotate(var(--a)) translateX(0);animation:ixGBurst .8s ease-out forwards}
+.ixGBurst i:nth-child(3n){background:#66e9ff}.ixGBurst i:nth-child(3n+1){background:#ff8fb7}
+@keyframes ixGBurst{to{transform:rotate(var(--a)) translateX(46px);opacity:0}}
+
+/* toasts (top, never over the answer buttons) */
+.ixGToasts{position:fixed;left:50%;top:max(66px,env(safe-area-inset-top));transform:translateX(-50%);z-index:10040;display:grid;gap:8px;width:min(520px,92vw);pointer-events:none}
+.ixGToast{pointer-events:none;background:#0b1828f5;border:1px solid #2f4a68;border-radius:14px;padding:10px 14px;color:#eaf2fc;font:800 14px/1.4 Inter,system-ui,sans-serif;box-shadow:0 12px 32px #0009;animation:ixGIn .35s ease-out both}
+.ixGToast.interactive{pointer-events:auto}
+.ixGToast.good{border-color:#3fae78}.ixGToast.gold{border-color:#d9ff43;background:linear-gradient(135deg,#1c2a0a,#0b1828)}
+.ixGToast.mini{justify-self:center;padding:6px 12px;font-size:12.5px;border-radius:99px}
+.ixGToast.out{opacity:0;transform:translateY(-8px);transition:opacity .35s,transform .35s}
+.ixGLvUp{color:#d9ff43;font-size:16px;letter-spacing:.06em}
+@keyframes ixGIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.ixGSprintEnd b{color:#d9ff43}
+.ixGRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
+.ixGBtn{min-height:42px;border-radius:12px;border:1px solid #d9ff43;background:#d9ff43;color:#07111d;font:900 14px/1 Inter,system-ui,sans-serif;padding:10px 14px;cursor:pointer}
+.ixGBtn.ghost{background:#0e1c2d;color:#cfe3ff;border-color:#33506f}
+.ixGSub{font-size:12.5px;color:#9fb4cc;font-weight:650;line-height:1.45;margin-top:6px}
+.ixGBoss{margin:10px 0;padding:10px 12px;border-radius:12px;border:1px solid #8a6fb0;background:linear-gradient(135deg,#1d1236,#0c1726);color:#eadcff;font-size:14px}
+
+/* quests panel */
+.ixGSheetWrap{position:fixed;inset:0;z-index:10030;background:#02060bb3;display:flex;align-items:flex-end;justify-content:center}
+.ixGSheet{position:relative;width:min(640px,100%);max-height:88vh;overflow:auto;background:#0b1422;border:1px solid #2a4260;border-bottom:0;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));color:#eaf2fc;font-family:Inter,system-ui,sans-serif;animation:ixGUp .3s ease-out both}
+@keyframes ixGUp{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.ixGX{position:absolute;right:12px;top:12px;min-width:40px;min-height:40px;border-radius:12px;border:1px solid #33506f;background:#0e1c2d;color:#cfe3ff;font-size:16px;cursor:pointer}
+.ixGHead{display:flex;gap:14px;align-items:center;margin-right:44px}
+.ixGBig{font-size:19px;font-weight:950}
+.ixGSheet h4{margin:18px 0 8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8fb3d9}
+.ixGQuest{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;border:1px solid #22384f;border-radius:12px;margin:6px 0;font-weight:800;font-size:14px}
+.ixGQuest.done{border-color:#3fae78;background:#0d2419}
+.ixGQi{font-size:20px;text-align:center}
+.ixGQBar{height:6px;border-radius:9px;background:#1a2c42;margin-top:6px;overflow:hidden}.ixGQBar i{display:block;height:100%;background:#5ef0a0;border-radius:9px}
+.ixGOpt{display:flex;gap:10px;align-items:center;min-height:40px;font-size:14px;font-weight:750}
+.ixGOpt input{width:22px;height:22px;accent-color:#d9ff43}
+.ixGWhy{margin-top:14px;border:1px solid #22384f;border-radius:12px;padding:10px 12px}
+.ixGWhy summary{cursor:pointer;font-weight:900;font-size:13.5px;color:#cfe3ff}
+.ixGWhy li{font-size:13.5px;line-height:1.5;color:#c9d7e8;margin:6px 0}
+
+/* move break */
+.ixGBreak{position:fixed;inset:0;z-index:10060;background:radial-gradient(circle at 50% 30%,#10263d,#03070c);display:grid;place-items:center;padding:20px;color:#eaf2fc;font-family:Inter,system-ui,sans-serif}
+.ixGBreakCard{width:min(460px,100%);text-align:center}
+.ixGRingBig{position:relative;width:150px;height:150px;margin:0 auto 12px}
+.ixGRingBig b{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;font-weight:950;font-variant-numeric:tabular-nums}
+.ixGBreakCard ol{text-align:left;margin:12px auto;max-width:320px;font-size:16px;line-height:1.7;font-weight:750}
+.ixGBreakCard .ixGRow{justify-content:center}
+
+/* confetti */
+.ixGConf{position:fixed;left:0;right:0;top:0;height:0;z-index:10070;pointer-events:none}
+.ixGConf i{position:absolute;top:-10px;width:8px;height:12px;border-radius:2px;animation:ixGFall 1.5s ease-in forwards}
+@keyframes ixGFall{to{transform:translate(var(--dx),92vh) rotate(540deg);opacity:.2}}
+@media (prefers-reduced-motion: reduce){.ixGPop,.ixGToast,.ixGSheet{animation:none}.ixGConf,.ixGBurst{display:none}}
+
+/* rematch badge on the returning items */
+.v16Kind.kagain::before,.v16Kind.kchg::before,.v16Kind.kfinal::before{content:"⚔️ ";}
