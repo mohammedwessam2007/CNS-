@@ -18,7 +18,11 @@ function fakeSpeech() {
   window.__spoken = [];
   window.__cancels = 0;
   window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; this.rate = 1; this.pitch = 1; this.voice = null; } };
-  const ss = { speaking: false, getVoices: () => VOICES.slice(), cancel() { window.__cancels++; }, addEventListener() {}, speak(u) { window.__spoken.push({ text: String(u.text).slice(0, 80), voice: u.voice && u.voice.name, rate: u.rate }); setTimeout(() => u.onend && u.onend(), 5); } };
+  // ?late: the list starts empty and fills later, as on iPad Safari
+  let list = /late/.test(location.search) ? [] : VOICES.slice();
+  window.__ssl = [];
+  window.__fillVoices = () => { list = VOICES.slice(); window.__ssl.forEach((f) => f()); };
+  const ss = { speaking: false, getVoices: () => list.slice(), cancel() { window.__cancels++; }, addEventListener(t, f) { if (t === 'voiceschanged') window.__ssl.push(f); }, speak(u) { window.__spoken.push({ text: String(u.text).slice(0, 80), voice: u.voice && u.voice.name, rate: u.rate }); setTimeout(() => u.onend && u.onend(), 5); } };
   Object.defineProperty(window, 'speechSynthesis', { value: ss, configurable: true });
   window.visible = (sel) => [...document.querySelectorAll(sel)].some((el) => el.offsetParent !== null && getComputedStyle(el).display !== 'none');
 }
@@ -71,8 +75,14 @@ function fakeSpeech() {
     await tick(p, 300);
     const a7 = await p.evaluate((c) => { const n = window.__spoken.length; speechSynthesis.speak(new SpeechSynthesisUtterance('silent again')); return { cancelled: window.__cancels > c, on: S.audio.commute, commute: S.commute, kind: nextAction().kind, speak: visible('[data-prof-speak]'), after: window.__spoken.length - n, label: document.querySelector('#commuteBtn').textContent }; }, c0);
     await p.reload({ waitUntil: 'load' });
-    await tick(p, 1500);
-    const a7b = await p.evaluate(() => ({ on: S.audio.commute, voice: S.audio.voice, label: document.querySelector('#commuteBtn').textContent }));
+    // on the Vercel host the sync layer may restore the cloud copy and reload once more: read after it settles
+    let a7b = null;
+    for (let i = 0; i < 4 && !a7b; i++) {
+      await tick(p, 1500).catch(() => {});
+      await p.waitForLoadState('load').catch(() => {});
+      a7b = await p.evaluate(() => (typeof S !== 'undefined' && S.audio && document.querySelector('#commuteBtn') ? { on: S.audio.commute, voice: S.audio.voice, label: document.querySelector('#commuteBtn').textContent } : null)).catch(() => null);
+    }
+    a7b = a7b || {};
     check('A7', '"Turn commute mode off" stops the voice at once, hides it all again, and stays off after a reload (the picked voice is remembered)', a7.cancelled && !a7.on && !a7.commute && a7.kind !== 'COMMUTE' && !a7.speak && a7.after === 0 && /OFF/.test(a7.label) && !a7b.on && a7b.voice === 'com.apple.voice.compact.en-US.Samantha' && /OFF/.test(a7b.label), { a7, a7b });
     // A8: the progress panel has the same switch
     await p.evaluate(() => document.querySelector('[data-ixg="panel"]').click());
@@ -104,6 +114,18 @@ function fakeSpeech() {
     await tick(s.page, 300);
     const r = await s.page.evaluate(() => { const row = document.querySelector('.ixAudioRow'); return { row: !!row, right: row && row.getBoundingClientRect().right, vw: innerWidth, sw: document.documentElement.scrollWidth }; });
     check('A11', 'On a phone (390 px) the voice menu fits the screen', r.row && r.right <= r.vw && r.sw <= r.vw + 1 && s.log.errors.length === 0, r);
+    await s.close();
+  }
+  {
+    // A12: the voice list arrives late (iPad Safari): the open menu refreshes itself
+    const s = await open({ v16: true, time: SUN, state: null, settle: 1500, init: fakeSpeech, path: '?late=1' });
+    await s.page.evaluate(() => { window.INTELLECTUALITY_AUDIO.set(true); S.commute = true; render(); });
+    await tick(s.page, 200);
+    const before = await s.page.evaluate(() => document.querySelectorAll('[data-ixau="voice"] option').length);
+    await s.page.evaluate(() => window.__fillVoices());
+    await tick(s.page, 200);
+    const after = await s.page.evaluate(() => ({ n: document.querySelectorAll('[data-ixau="voice"] option').length, first: document.querySelector('[data-ixau="voice"] option')?.textContent, boxes: document.querySelectorAll('#player .ixAudioBox').length }));
+    check('A12', 'When the device\'s voice list arrives late (iPad Safari), the open voice menu fills in by itself', before === 1 && after.n === 3 && /Ava \(Premium\)/.test(after.first) && after.boxes === 1 && s.log.errors.length === 0, { before, ...after });
     await s.close();
   }
   const out = process.argv.find((a) => a.endsWith('.json')) || path.join(__dirname, 'out', 'audio_options_test.json');

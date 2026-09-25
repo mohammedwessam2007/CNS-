@@ -128,11 +128,12 @@ The owner asked (25 Sep 2026) to make commute mode optional, and did not want th
 - The commute screen works as before: two 25-minute hands-free trips on Sunday, Tuesday and Thursday.
 - The screen adds a **voice menu, a speed menu and a ▶ Test button**. By default the app picks **the best English voice on the device**: Premium, then Enhanced/Neural, then Siri, then Google/Microsoft. Novelty voices (Albert, Zarvox, …) and non-English voices are left out.
 - The best voices on an iPad are free but must be downloaded once. The screen says where: *Settings → Accessibility → Spoken Content → Voices → English*, then a **Premium** or **Enhanced** voice.
+- If the iPad loads its voice list late (Safari does), the open menu fills in by itself.
 - **"Turn commute mode off"** stops any speech at once and hides everything again. The chosen voice and speed are remembered.
 
 The saved record is `S.audio = {commute, voice, rate}`.
 
-**Evidence:** `tests/audio_options_test.js` **11/11**, run against a fake speech engine that has an iPad's mix of voices. It checks:
+**Evidence:** `tests/audio_options_test.js` **12/12**, run against a fake speech engine that has an iPad's mix of voices. It checks:
 
 - Off by default on a drive day: no commute screen, no read-aloud button, no speech.
 - One tap turns it on: commute screen, trip button and voice menu (Premium voice ranked first; novelty and Arabic voices excluded).
@@ -143,4 +144,20 @@ The saved record is `S.audio = {commute, voice, rate}`.
 - The progress-panel switch works.
 - An old save left in commute mode opens in the course.
 - The menu fits a 390 px phone.
+- A late voice list fills the open menu.
 - No page errors.
+
+### v17.2 final regression (all suites green)
+
+| Suite | Result |
+|---|---|
+| Commute + voice (new) | **12/12** on the source and on the Vercel build |
+| Course map | **11/11** on the source and on the Vercel build |
+| Atlas + game | **22/22** on the source and on the Vercel build |
+| v16 MCQ system | **25/25** public and **25/25** with the department key present |
+| Department drawings | **16/16** on the source and on the Vercel build |
+| Strict notes coverage | practice **1,009/1,009 (100%)** |
+| Other suites | certify **62/62** (the commute view still renders) · spread **23/23** · LEARN **17/17** · hostile **26/26** · v15.3 **10/10** · Vercel host **14/14** · options gallery **7/7** · leak audit **0** text leaks · rollback v17.2 → v53 → v17.2 **pass** |
+| Build | "51 app scripts/styles present" (the new script and style included) |
+
+One run failed first, and it was the test's fault. On the Vercel build, the audio suite stopped after A6: the host's sync layer restored the cloud copy and reloaded the page while the test was reloading it. The test now waits for that second load. The rerun passes, and it shows the off setting survives the cloud restore. Log: `receipts/v17_2/all_suites_final_v17_2.txt`.

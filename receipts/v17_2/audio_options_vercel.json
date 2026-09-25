@@ -1,0 +1,163 @@
+{
+ "at": "2026-09-25T12:53:55.807Z",
+ "results": [
+  {
+   "id": "A1",
+   "what": "Fresh start on a drive day: commute mode is OFF, the professor's robot read-aloud button is hidden, and the app never routes to the commute screen",
+   "ok": true,
+   "detail": {
+    "weekday": "Sunday",
+    "audio": {
+     "commute": false,
+     "voice": "",
+     "rate": 0
+    },
+    "commute": false,
+    "kind": "SEGMENT",
+    "speak": false,
+    "label": "🚗 Commute mode: OFF · tap to turn on"
+   }
+  },
+  {
+   "id": "A2",
+   "what": "While off, nothing can switch the commute screen on or make the device speak",
+   "ok": true,
+   "detail": {
+    "k": "SEGMENT",
+    "commute": false,
+    "spoken": 0
+   }
+  },
+  {
+   "id": "A3",
+   "what": "Study mode → Commute mode (one tap) turns it on: the commute screen opens with its trip button and a voice menu (best voice = the Premium one; novelty and non-English voices left out); the read-aloud button is back",
+   "ok": true,
+   "detail": {
+    "on": true,
+    "commute": true,
+    "kind": "COMMUTE",
+    "row": true,
+    "opts": [
+     "Best on this device (Ava (Premium))",
+     "Ava (Premium) · en-US",
+     "Samantha · en-US"
+    ],
+    "start": true,
+    "speak": true,
+    "label": "🚗 Drive audio: 0/50 min"
+   }
+  },
+  {
+   "id": "A4",
+   "what": "▶ Test speaks with the best voice on the device (not the default compact one)",
+   "ok": true,
+   "detail": [
+    {
+     "text": "Brown-Séquard: the right half of the cord is cut. Same side: vibration and movem",
+     "voice": "Ava (Premium)",
+     "rate": 1
+    }
+   ]
+  },
+  {
+   "id": "A5",
+   "what": "A picked voice and speed are used and saved",
+   "ok": true,
+   "detail": {
+    "last": {
+     "text": "Brown-Séquard: the right half of the cord is cut. Same side: vibration and movem",
+     "voice": "Samantha",
+     "rate": 1.1
+    },
+    "audio": {
+     "commute": true,
+     "voice": "com.apple.voice.compact.en-US.Samantha",
+     "rate": 1.1
+    }
+   }
+  },
+  {
+   "id": "A6",
+   "what": "The hands-free trip speaks with the chosen voice and speed",
+   "ok": true,
+   "detail": [
+    {
+     "text": "Driving mode. Start only while parked. Keep your eyes on the road. Do not touch ",
+     "voice": "Samantha",
+     "rate": 1.1
+    }
+   ]
+  },
+  {
+   "id": "A7",
+   "what": "\"Turn commute mode off\" stops the voice at once, hides it all again, and stays off after a reload (the picked voice is remembered)",
+   "ok": true,
+   "detail": {
+    "a7": {
+     "cancelled": true,
+     "on": false,
+     "commute": false,
+     "kind": "SEGMENT",
+     "speak": false,
+     "after": 0,
+     "label": "🚗 Commute mode: OFF · tap to turn on"
+    },
+    "a7b": {
+     "on": false,
+     "voice": "com.apple.voice.compact.en-US.Samantha",
+     "label": "🚗 Commute mode: OFF · tap to turn on"
+    }
+   }
+  },
+  {
+   "id": "A8",
+   "what": "The progress panel's settings have the same switch (turning it on there does not jump into the commute screen; Study mode then offers it)",
+   "ok": true,
+   "detail": {
+    "was": false,
+    "on": true,
+    "label": "🚗 Drive audio: 0/50 min",
+    "kind": "SEGMENT"
+   }
+  },
+  {
+   "id": "A9",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "A10",
+   "what": "An old save left in commute mode opens in the course (commute mode off), with nothing lost",
+   "ok": true,
+   "detail": {
+    "commute": false,
+    "on": false,
+    "kind": "SEGMENT",
+    "label": "🚗 Commute mode: OFF · tap to turn on"
+   }
+  },
+  {
+   "id": "A11",
+   "what": "On a phone (390 px) the voice menu fits the screen",
+   "ok": true,
+   "detail": {
+    "row": true,
+    "right": 365,
+    "vw": 390,
+    "sw": 390
+   }
+  },
+  {
+   "id": "A12",
+   "what": "When the device's voice list arrives late (iPad Safari), the open voice menu fills in by itself",
+   "ok": true,
+   "detail": {
+    "before": 1,
+    "n": 3,
+    "first": "Best on this device (Ava (Premium))",
+    "boxes": 1
+   }
+  }
+ ]
+}

@@ -106,20 +106,20 @@
     const vs = voices().filter((v) => score(v) > -100).sort((a, b) => score(b) - score(a)),
       cur = best();
     return (
-      '<div class="ixAudioRow"><label>🎙 Voice <select data-ixau="voice">' +
+      '<div class="ixAudioBox"><div class="ixAudioRow"><label>🎙 Voice <select data-ixau="voice">' +
       '<option value="">Best on this device' + (cur && !A().voice ? " (" + E(cur.name) + ")" : "") + "</option>" +
       vs.map((v) => '<option value="' + E(v.voiceURI) + '"' + (A().voice === v.voiceURI ? " selected" : "") + ">" + E(v.name) + " · " + E(v.lang) + "</option>").join("") +
       '</select></label><label>Speed <select data-ixau="rate">' +
       [["", "normal"], ["0.85", "slower"], ["1.1", "faster"], ["1.25", "fast"]].map(([v, t]) => '<option value="' + v + '"' + (String(A().rate || "") === v ? " selected" : "") + ">" + t + "</option>").join("") +
       '</select></label><button type="button" class="ixAudioBtn" data-ixau="test">▶ Test</button><button type="button" class="ixAudioBtn ghost" data-ixau="off">Turn commute mode off</button></div>' +
-      '<div class="ixAudioTip">The voice is your device\'s own. On iPad the best ones are free: Settings → Accessibility → Spoken Content → Voices → English → download a <b>Premium</b> or <b>Enhanced</b> voice (e.g. Ava, Evan, Zoe), then pick it here.</div>'
+      '<div class="ixAudioTip">The voice is your device\'s own. On iPad the best ones are free: Settings → Accessibility → Spoken Content → Voices → English → download a <b>Premium</b> or <b>Enhanced</b> voice (e.g. Ava, Evan, Zoe), then pick it here.</div></div>'
     );
   }
   function decorate() {
     const p = document.getElementById("player");
     if (!p || !on() || !S.commute) return;
     const box = p.querySelector(".drivebox, .stage");
-    if (box && !box.querySelector(".ixAudioRow")) box.insertAdjacentHTML("beforeend", voiceRow());
+    if (box && !box.querySelector(".ixAudioBox")) box.insertAdjacentHTML("beforeend", voiceRow());
   }
   document.addEventListener(
     "click",
@@ -167,7 +167,18 @@
     window.INTELLECTUALITY_AUDIO_BOOTED = true;
     A();
     patchSpeech();
-    safe(() => window.speechSynthesis && speechSynthesis.addEventListener && speechSynthesis.addEventListener("voiceschanged", () => {}));
+    // iPad Safari fills the voice list late: refresh the menu when it arrives
+    safe(() =>
+      speechSynthesis.addEventListener("voiceschanged", () =>
+        safe(() => {
+          const b = document.querySelector("#player .ixAudioBox");
+          if (b && !b.contains(document.activeElement)) {
+            b.remove();
+            decorate();
+          }
+        }),
+      ),
+    );
     // commute mode only when it is switched on
     const base = nextAction;
     nextAction = function () {
