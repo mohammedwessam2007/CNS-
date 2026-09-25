@@ -1,0 +1,15 @@
+=== atlas_game http://127.0.0.1:8787/
+ALL 22 PASSED
+=== answer_figure http://127.0.0.1:8787/
+ALL 10 PASSED
+=== course_map http://127.0.0.1:8787/
+ALL 11 PASSED
+=== atlas_game http://127.0.0.1:8790/
+ALL 22 PASSED
+=== answer_figure http://127.0.0.1:8790/
+ALL 10 PASSED
+=== course_map http://127.0.0.1:8790/
+ALL 11 PASSED
+=== certify
+62/62 checks passed (93s)
+=== RERUN DONE

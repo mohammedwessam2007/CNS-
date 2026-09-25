@@ -6,7 +6,7 @@ v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuri
 
 - **Matching is by words, not understanding.** An option is marked where its own words (or its explanation line) name a drawn part, through a hand-written alias list.
   - A wrong match is possible. The engine guards against it in three ways: weak aliases count only when the question already names that diagram, bare words that name many things were removed, and the question's own lesson wins ties. The bank-wide audit showed a few picks that are defensible but not ideal: a thalamus-heavy motor-cortex question opens the diagram of the diencephalon.
-- **About 6% of options are not drawn** (355 of 5,815; 20 of 1,410 right answers). They are mostly:
+- **About 6% of options are not drawn** (346 of 5,815; 17 of 1,410 right answers). They are mostly:
   - statements with no structure in them ("is a sign of a central inhibitory state");
   - rows of the department's matching tables;
   - a few facts no diagram has a place for.

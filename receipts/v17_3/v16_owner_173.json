@@ -1,0 +1,156 @@
+{
+ "pass": 25,
+ "total": 25,
+ "results": [
+  {
+   "id": "M1",
+   "name": "After the lesson notes the next step is a block of that lesson's past-paper MCQs (≤ 8), each owned by the lesson just taught; no draw-from-memory step, no v14 primer, no picture before answering; options ≥ 48 px",
+   "ok": true,
+   "detail": "{\"b\":{\"l\":\"T003\",\"ids\":[\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6\",\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-7\",\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-4\",\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-2\",\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-15\"],\"taught\":[\"T003\",\"T003\",\"T003\",\"T003\",\"T003\"],\"segDone\":[\"visual:true\",\"teach:true\",\"reconstruct:true\",\"question:false\",\"question:false\"]},\"pre\":{\"pics\":0,\"gate\":false,\"opts\":4,\"h\":56},\"seen\":[\"SEGMENT:visual\",\"SEGMENT:teach\",\"V16_BLOCK:\"]}"
+  },
+  {
+   "id": "M2",
+   "name": "A wrong answer is explained on the spot: verdict, the key row, \"your answer\" row, a reason under every option when the item has a tutor note, the teaching note, and Next buttons ≥ 44 px",
+   "ok": true,
+   "detail": "{\"hand\":true,\"rows\":4,\"opts\":4,\"key\":1,\"mine\":1,\"whys\":4,\"verdict\":\"✗ غلط Not this one+4 XP🪤 trap spotted: it comes back as a rematch\",\"note\":true,\"next\":[44,48]}"
+  },
+  {
+   "id": "M2b",
+   "name": "A reload keeps the answered item and its explanation on screen",
+   "ok": true,
+   "detail": "{\"cur\":true,\"rows\":4}"
+  },
+  {
+   "id": "M3",
+   "name": "The day runs lesson → past-paper block → … → today's MCQ round → STOP with an MCQ summary; the written boss and visual boss never appear; every question segment is completed by its block",
+   "ok": true,
+   "detail": "{\"kinds\":[\"V16_BLOCK\",\"SEGMENT\",\"V16_ROUND\"],\"stop\":{\"kind\":\"STOP\",\"sum\":\"Today: 37 past-paper MCQs · 68% right · 12 mistakes come back tomorrow as changed questions\",\"boss\":\"{\\\"visual\\\":true,\\\"written\\\":true,\\\"writtenRevealed\\\":false,\\\"v16skip\\\":true}\",\"qsegs\":true}}"
+  },
+  {
+   "id": "M3b",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "M4",
+   "name": "A doubtful bank key accepts the standard answer too (CSF: \"4th ventricle communicates directly\"); an also-defensible option is accepted; ordinary items accept only the key",
+   "ok": true,
+   "detail": "{\"csf5\":[\"a\",\"c\"],\"flag\":\"c\",\"men8\":[\"d\",\"a\"],\"plain\":[\"a\"]}"
+  },
+  {
+   "id": "M5",
+   "name": "A missed past paper comes back the next day as a CHANGED item on the same fact (retest law); once that is answered, the exact item is due 3 days later",
+   "ok": true,
+   "detail": "{\"missed\":{\"id\":\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6\",\"st\":{\"n\":1,\"k\":0,\"b\":0,\"f\":3,\"lp\":1,\"l\":3,\"r\":\"w\",\"x\":1,\"d\":4}},\"tomorrow\":{\"day\":4,\"kind\":[\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-2\",\"chg:EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6\"],\"n\":12},\"parentAfter\":{\"parent\":{\"n\":1,\"k\":0,\"b\":0,\"f\":3,\"lp\":1,\"l\":3,\"r\":\"w\",\"x\":0,\"d\":7},\"today\":4,\"servedChg\":\"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-2\"}}"
+  },
+  {
+   "id": "M5b",
+   "name": "Three days later the exact past-paper item is back in the round (\"back again\")",
+   "ok": true,
+   "detail": "{\"day\":7,\"kind\":\"again\"}"
+  },
+  {
+   "id": "M5c",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "M6",
+   "name": "Weekend mock: a sealed, timed exam of held-out past papers from lessons already learned — no pictures, notes or explanations before submission",
+   "ok": true,
+   "detail": "{\"start\":{\"day\":7,\"ct\":\"WEEKLY_MOCK\",\"kind\":\"V16_MOCK_START\",\"n\":29,\"text\":\"Progress counts planned steps; it is not study time or proven mastery. The minute figures are estimates.\\nWEEKLY SEALED MOCK\\n29 MCQs · 29 min\\n29 past-paper MCQs you have never seen\\n136 / 1,460 past-pap\"},\"sealed\":{\"kind\":\"V16_MOCK\",\"pics\":0,\"explain\":0,\"clock\":\"⏱ 29:00 left\",\"held\":true,\"taught\":true}}"
+  },
+  {
+   "id": "M6d",
+   "name": "Held-out firewall: while a mock question is open none of its hand-written explanation is on screen; after submission every mock item shows its own written reason",
+   "ok": true,
+   "detail": "{\"fw\":{\"asked\":29,\"leaks\":[]},\"whys\":29,\"n\":29}"
+  },
+  {
+   "id": "M6b",
+   "name": "After the last answer: score, and every question explained; saving sends every miss into tomorrow's changed-question retests and continues to today's round",
+   "ok": true,
+   "detail": "{\"res\":{\"kind\":\"V16_MOCK_RESULT\",\"revs\":29,\"rows\":116,\"whys\":29,\"n\":29,\"pct\":\"69%\"},\"after\":{\"kind\":\"V16_ROUND\",\"hist\":1,\"misses\":9,\"mocks\":1}}"
+  },
+  {
+   "id": "M6c",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "M10",
+   "name": "Every usable past paper (practice and held-out) has a hand-written explanation with a key line and a reason for every wrong option; the 4 options the source PDF glued together are shown as separate a–d options (bank unchanged); ordinary items are untouched",
+   "ok": true,
+   "detail": "{\"c\":{\"practice\":1061,\"heldout\":399,\"explained\":1061,\"heldExplained\":399},\"gaps\":[],\"nGaps\":0,\"glued\":[{\"id\":\"EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-2\",\"n\":4,\"keys\":\"abcd\",\"glue\":false,\"bank\":3},{\"id\":\"EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-7\",\"n\":4,\"keys\":\"abcd\",\"glue\":false,\"bank\":3},{\"id\":\"EHSAN-ANAT-CRANIAL-CAVITY-MCQ-18\",\"n\":4,\"keys\":\"abcd\",\"glue\":false,\"bank\":3},{\"id\":\"EHSAN-ANAT-ORBIT-MCQ-6\",\"n\":4,\"keys\":\"abcd\",\"glue\":false,\"bank\":3}],\"plainSame\":true}"
+  },
+  {
+   "id": "M10b",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "M11",
+   "name": "MCQ focus holds on the MCQ exam day (15 Nov); from 16 Nov the full flow (written, practical) is back without any setting; an explicit \"ALL\" always wins",
+   "ok": true,
+   "detail": "{\"onExam\":{\"focus\":\"MCQ\",\"kind\":\"SEGMENT\"},\"after\":{\"focus\":\"ALL\",\"kind\":\"SEGMENT\",\"date\":\"2026-11-16\"},\"forced\":\"ALL\"}"
+  },
+  {
+   "id": "M11b",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "M8",
+   "name": "With focus \"ALL\" the full v15 flow is back (draw-from-memory step, then the v15/v14 question view)",
+   "ok": true,
+   "detail": "[\"SEGMENT:visual\",\"SEGMENT:visual\",\"SEGMENT:teach\",\"SEGMENT:teach\",\"SEGMENT:teach\",\"SEGMENT:teach\",\"SEGMENT:teach\",\"SEGMENT:reconstruct\",\"SEGMENT:question\"]"
+  },
+  {
+   "id": "M9",
+   "name": "An open v14 repair migrates into the MCQ engine: the error is closed (kept, marked) and its past-paper item is due now as a changed-question retest",
+   "ok": true,
+   "detail": "{\"e\":{\"resolved\":true,\"v16\":\"migrated\"},\"st\":{\"n\":1,\"k\":0,\"b\":0,\"f\":1,\"lp\":1,\"x\":1,\"d\":3,\"r\":\"w\",\"l\":3},\"today\":3,\"kind\":\"SEGMENT\"}"
+  },
+  {
+   "id": "M9b",
+   "name": "No page errors",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "id": "M7",
+   "name": "Full course to 15 Nov: every auto-scored practice past paper is answered by the end of teaching (day 47), and every held-out one is used in a mock by the last sprint day",
+   "ok": true,
+   "detail": "{\"practice\":1061,\"seenP\":1061,\"lastPracticeFirstDay\":47,\"held\":399,\"usedH\":399,\"wrong\":614,\"reasked\":614,\"stateKB\":900,\"mocks\":14,\"pred\":{\"n\":340,\"k\":222,\"p\":0.6529411764705882,\"lo\":0.6191907697885196,\"hi\":0.6852210069616006}}"
+  },
+  {
+   "id": "M7b",
+   "name": "Every simulated mistake is asked again before the exam",
+   "ok": true,
+   "detail": "{\"wrong\":614,\"reasked\":614}"
+  },
+  {
+   "id": "M7c",
+   "name": "Time: about 2 h a day or less on average, no day above 2.5 h; saved progress stays under 1.2 MB (cloud limit 1.5 MB)",
+   "ok": true,
+   "detail": "{\"avg\":109,\"max\":141,\"stateKB\":900,\"perDay\":\"3:141 4:138 5:132 6:71 7:87 8:117 9:122 10:121 11:121 12:122 13:72 14:101 15:120 16:122 17:122 18:122 19:72 20:72 21:101 22:122 23:121 24:121 25:121 26:121 27:72 28:101 29:120 30:121 31:122 32:123 33:121 34:72 35:101 36:121 37:122 38:108 39:115 40:113 41:72 42:101 43:121 44:121 45:108 46:102 47:104 48:119 49:118 50:118 51:118 52:118 53:118 54:118 55:118 56:18\"}"
+  },
+  {
+   "id": "M7d",
+   "name": "Mock predictions come from unseen first attempts with an interval",
+   "ok": true,
+   "detail": "{\"n\":340,\"k\":222,\"p\":0.6529411764705882,\"lo\":0.6191907697885196,\"hi\":0.6852210069616006}"
+  },
+  {
+   "id": "M7e",
+   "name": "No page errors over the whole course",
+   "ok": true,
+   "detail": "{\"errors\":[],\"other\":[]}"
+  }
+ ]
+}

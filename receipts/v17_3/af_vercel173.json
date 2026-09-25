@@ -1,0 +1,223 @@
+{
+ "at": "2026-09-25T19:51:08.964Z",
+ "results": [
+  {
+   "id": "F1",
+   "what": "Coverage: ≥ 90% of all options and ≥ 97% of right answers are marked on a diagram; ≥ 98% of questions get one",
+   "ok": true,
+   "detail": {
+    "questions": 1410,
+    "withFig": 1410,
+    "opts": 5815,
+    "marked": 5460,
+    "pOpts": 0.939,
+    "keys": 1410,
+    "keysMarked": 1390,
+    "pKeys": 0.986,
+    "every": 1131,
+    "scenes": 68
+   }
+  },
+  {
+   "id": "F2",
+   "what": "An answered question opens \"✅ This answer\": the right answer green, wrong options red, a letter badge on each marked part, one legend row per option",
+   "ok": true,
+   "detail": {
+    "has": true,
+    "chip": true,
+    "scene": "umnlmn",
+    "badges": [
+     "A",
+     "B",
+     "C",
+     "D"
+    ],
+    "rows": [
+     "A✗ Marked wasting (LMN) your answer",
+     "B✗ Fasciculations (LMN)",
+     "C✗ Denervation supersensitivity (LMN)",
+     "D✓ Spastic paralysis (UMN) right answer"
+    ],
+    "nOpts": 4,
+    "green": 1,
+    "red": 3,
+    "cls": {}
+   }
+  },
+  {
+   "id": "F3",
+   "what": "Value answers sit on the thing the stem asks about (\"electrical reaction unchanged\"), the legend says \"about\", and the LMN contrasts in the explanation are blue, not green",
+   "ok": true,
+   "detail": {
+    "scene": "umnlmn",
+    "cls": {
+     "u_emg": "ixAnsK",
+     "l_emg": "ixAnsS"
+    },
+    "rows": [
+     "A✗ “Exaggerated”, about UMN lesion + Electrical reaction unchanged (UMN) your answer",
+     "B✗ “Inhibited (decreased)”, about UMN lesion + Electrical reaction unchanged (UMN)",
+     "C✓ “Not changed”, about UMN lesion + Electrical reaction unchanged (UMN) right answer",
+     "D✗ “Is absent”, about UMN lesion + Electrical reaction unchanged (UMN)"
+    ]
+   }
+  },
+  {
+   "id": "F4",
+   "what": "\"All of the above\" is pictured by the options it points at, and says so (= A + B + C)",
+   "ok": true,
+   "detail": [
+    {
+     "id": "EHSAN-PHYS-TYPES-OF-SYNAPTIC-POTENTIALS-MCQ-11",
+     "refs": [
+      "a",
+      "b",
+      "c"
+     ],
+     "names": 5
+    },
+    {
+     "id": "EHSAN-PHYS-TYPES-OF-SYNAPTIC-POTENTIALS-MCQ-15",
+     "refs": [
+      "a",
+      "b",
+      "c"
+     ],
+     "names": 3
+    },
+    {
+     "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-35",
+     "refs": [
+      "a",
+      "b",
+      "c",
+      "d"
+     ],
+     "names": 1
+    },
+    {
+     "id": "EHSAN-PHYS-PAIN-SENSATION-MCQ-44",
+     "refs": [
+      "a",
+      "b",
+      "c"
+     ],
+     "names": 1
+    },
+    {
+     "id": "EHSAN-PHYS-SPINAL-REFLEXES-AND-SPINAL-CORD-TRANSECTION-MCQ-54",
+     "refs": [
+      "a",
+      "b",
+      "c"
+     ],
+     "names": 5
+    }
+   ]
+  },
+  {
+   "id": "F5",
+   "what": "Bare names like \"Lips\" are weak aliases; in the somatosensory-map question they land on the S1 strip",
+   "ok": true,
+   "detail": {
+    "weakHit": true,
+    "lipsScene": "touch",
+    "lipsCovered": 4
+   }
+  },
+  {
+   "id": "F6",
+   "what": "Diagrams drawn for the question's own lesson win ties (REM-sleep question → the sleep diagram)",
+   "ok": true,
+   "detail": {
+    "id": "EHSAN-PHYS-SLEEP-MCQ-2",
+    "main": "sleep"
+   }
+  },
+  {
+   "id": "F7",
+   "what": "No page errors while planning and drawing answer figures",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "F8",
+   "what": "In the real lesson flow every answered question in the block shows the answer figure",
+   "ok": true,
+   "detail": [
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6",
+     "fig": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-7",
+     "fig": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-4",
+     "fig": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-2",
+     "fig": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-15",
+     "fig": true
+    }
+   ]
+  },
+  {
+   "id": "F9",
+   "what": "Photos after an answer: each labelled with its option letter and ✓/✗, the right answer's first, never a wrong option's photo alone",
+   "ok": true,
+   "detail": [
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6",
+     "fig": true,
+     "labs": [],
+     "firstGood": true,
+     "allLettered": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-7",
+     "fig": true,
+     "labs": [
+      "✓ B · Ligand-gated ion channel"
+     ],
+     "firstGood": true,
+     "allLettered": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-4",
+     "fig": true,
+     "labs": [],
+     "firstGood": true,
+     "allLettered": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-2",
+     "fig": true,
+     "labs": [],
+     "firstGood": true,
+     "allLettered": true
+    },
+    {
+     "id": "EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-15",
+     "fig": true,
+     "labs": [
+      "✓ D · Neurotransmitter"
+     ],
+     "firstGood": true,
+     "allLettered": true
+    }
+   ]
+  },
+  {
+   "id": "F10",
+   "what": "No page errors in the answer flow",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

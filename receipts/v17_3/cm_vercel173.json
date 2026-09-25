@@ -1,0 +1,176 @@
+{
+ "at": "2026-09-25T19:50:25.830Z",
+ "results": [
+  {
+   "id": "M1",
+   "what": "The map opens from the top bar: every day up to the MCQ exam as a card and a tile with its real weekday and date; \"you are here\" on today's work day; the exam day marked",
+   "ok": true,
+   "detail": {
+    "cards": 56,
+    "days": 56,
+    "cells": 56,
+    "dateOk": true,
+    "here": "ixmp-d5",
+    "exam": "56",
+    "head": "Fri 25 Sep · Day 5 of 56",
+    "left": "51 days to the MCQ exam (Sun 15 Nov) · on plan"
+   }
+  },
+  {
+   "id": "M2",
+   "what": "Days whose lessons were moved by the start-from-today spread show as moved (↪), not as missing",
+   "ok": true,
+   "detail": [
+    "moved",
+    "moved",
+    "moved",
+    "moved"
+   ]
+  },
+  {
+   "id": "M3",
+   "what": "Read any lesson from any day now: its note sections, points and live diagrams, read-only (nothing marked done by reading)",
+   "ok": true,
+   "detail": {
+    "secs": 2,
+    "want": 2,
+    "pts": 14,
+    "atlas": 2,
+    "learnBtn": true,
+    "same": true
+   }
+  },
+  {
+   "id": "M4",
+   "what": "\"Mark learned\" (after reading ahead) completes the learning steps but keeps the lesson's own past-paper block for its day",
+   "ok": true,
+   "detail": [
+    [
+     "visual",
+     true
+    ],
+    [
+     "teach",
+     true
+    ],
+    [
+     "reconstruct",
+     true
+    ],
+    [
+     "question",
+     false
+    ],
+    [
+     "question",
+     false
+    ]
+   ]
+  },
+  {
+   "id": "M5",
+   "what": "Skip a lesson (after a one-line confirm that says its past papers still come): the app moves straight on to the next lesson, and the skipped lesson's past papers go to the daily rounds instead of being lost",
+   "ok": true,
+   "detail": {
+    "ask": "Skip Spinal cord I? Its 8 past papers still come, in your daily rounds. ⏭ Skip itKeep",
+    "cur": {
+     "kind": "SEGMENT",
+     "key": "d1:T002:s0",
+     "type": "visual"
+    },
+    "allDone": true,
+    "block": {
+     "n": 0,
+     "done": 1,
+     "skip": 1
+    },
+    "n": 8,
+    "st": "now"
+   }
+  },
+  {
+   "id": "M6",
+   "what": "↩ Undo restores the lesson exactly as it was (the app is back on it)",
+   "ok": true,
+   "detail": {
+    "cur": {
+     "kind": "SEGMENT",
+     "key": "d1:T001:s0",
+     "type": "visual"
+    },
+    "rec": null,
+    "block": null
+   }
+  },
+  {
+   "id": "M7",
+   "what": "Skip a mock (its questions move to later mocks), skip a whole future day, and jump ahead: the days in between are marked passed and the app starts the chosen day",
+   "ok": true,
+   "detail": {
+    "n0": 2,
+    "n1": 0,
+    "a": true,
+    "b": true,
+    "st8": "skipped",
+    "c": true,
+    "day": 9,
+    "done": [
+     4,
+     5,
+     6,
+     7,
+     8
+    ],
+    "cur": {
+     "kind": "SEGMENT",
+     "key": "d5:T016:s0",
+     "type": "visual"
+    },
+    "rounds": [
+     "5"
+    ]
+   }
+  },
+  {
+   "id": "M8",
+   "what": "Skipping the round of the day you are on closes it, so the day can be certified; its unseen past papers wait for the next round",
+   "ok": true,
+   "detail": {
+    "i": 16,
+    "n": 16,
+    "unseen": 16,
+    "kind": "STOP",
+    "next": 12
+   }
+  },
+  {
+   "id": "M9",
+   "what": "While a sealed mock runs, skipping and jumping are refused",
+   "ok": true,
+   "detail": {
+    "skip": false,
+    "jump": false,
+    "day": 9
+   }
+  },
+  {
+   "id": "M10",
+   "what": "The map's saved record stays small, and there are no page errors",
+   "ok": true,
+   "detail": {
+    "size": 2857,
+    "errors": []
+   }
+  },
+  {
+   "id": "M11",
+   "what": "On a phone (390 px) the map fits without sideways scrolling",
+   "ok": true,
+   "detail": {
+    "sw": 390,
+    "cw": 390,
+    "cards": 56
+   }
+  }
+ ]
+}

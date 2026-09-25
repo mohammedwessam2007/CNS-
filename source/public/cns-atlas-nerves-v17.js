@@ -157,7 +157,7 @@
       cell("notv3", 92, 184, 108, 66, ["NOT V3 muscles:", "buccinator, posterior", "digastric, stylohyoid", "(VII); geniohyoid,", "thyrohyoid (C1)"], R, RR) +
       cell("palate", 92, 254, 108, 76, ["SOFT PALATE: all", "VAGUS (pharyngeal", "plexus) EXCEPT", "TENSOR PALATI (V3):", "levator, palatoglossus,", "palatopharyngeus, uvulae"], P, PR) +
       cell("spal", 92, 334, 108, 36, ["soft palate feels by", "lesser palatine (V2)", "+ IX"], P, PR) +
-      cell("tongue", 92, 374, 108, 36, ["tongue muscles: XII", "except palatoglossus", "(vagus)"], P, PR) +
+      cell("tongue", 92, 374, 108, 46, ["tongue: XII except", "palatoglossus (X);", "GENIOGLOSSUS = bulk,", "both → PROTRUSION"], P, PR) +
       // V2 column
       cell("v2h", 206, 28, 160, 26, ["V2 MAXILLARY", "WHOLLY sensory"], G, GR) +
       cell("cav2", 206, 58, 160, 16, ["lateral wall of the cavernous sinus"], G, GR) +
@@ -216,7 +216,7 @@
         notv3: ["Muscles NOT supplied by V3", "**Buccinator**, **posterior belly of the digastric** and **stylohyoid** are facial (VII); **geniohyoid** is C1 through XII; **thyrohyoid** is C1. A motor-root injury of V3 spares them."],
         palate: ["Muscles of the soft palate", "Tensor palati, levator palati, palatoglossus, **palatopharyngeus** and **musculus uvulae**: all **vagus** (pharyngeal plexus) **except the tensor palati** (V3, nerve to medial pterygoid)."],
         spal: ["Sensation of the soft palate", "**Lesser palatine nerves** (V2 through the ganglion) and the **glossopharyngeal (IX)**. The hard palate: greater palatine and nasopalatine (V2)."],
-        tongue: ["Nerves of the tongue muscles", "**Hypoglossal (XII)** for all **except the palatoglossus** (vagus)."],
+        tongue: ["Tongue muscles and their nerves", "**Hypoglossal (XII)** supplies all **except the palatoglossus** (vagus). The **genioglossus** forms the **main bulk** of the tongue; **protrusion = both genioglossi contracting together**; one genioglossus pushes the tongue to the opposite side, so after a hypoglossal lesion the protruded tongue deviates **towards the lesion**. Hyoglossus depresses; styloglossus draws it up and back."],
         v2h: ["Maxillary nerve (V2)", "**Wholly sensory**. It does not supply the lower teeth or lip (V3), the upper eyelid (V1) or the buccinator skin (V3 buccal)."],
         cav2: ["In the cavernous sinus wall", "V2 runs forward inside the cavernous sinus's **lateral wall**, below V1 (V3 does not pass through the sinus)."],
         fr: ["Foramen rotundum", "V2 leaves the skull through the **foramen rotundum**, not the foramen spinosum."],
@@ -261,7 +261,7 @@
         notv3: ["buccinator", "stylohyoid", "geniohyoid", "thyrohyoid", "thyrohyoid muscle", "posterior belly of the digastric"],
         palate: ["musculus uvulae", "palatopharyngeus", "levator palati", "levator veli palatini", "muscles of the soft palate"],
         spal: ["sensory fibers for the soft palate", "soft palate"],
-        tongue: ["palatoglossus", "hypoglossal"],
+        tongue: ["palatoglossus", "hypoglossal", "genioglossus", "genioglossus muscle", "protrusion of the tongue", "main bulk of the tongue", "hyoglossus", "styloglossus", "movements of the tongue", "muscles of the tongue"],
         cav2: ["passes inside cavernous sinus", "lateral wall of the cavernous sinus"],
         fr: ["foramen rotundum"],
         ppf: ["pterygopalatine fossa"],

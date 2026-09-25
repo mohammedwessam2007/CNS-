@@ -203,9 +203,9 @@ Before v17.3, an answered question opened one diagram in one state, chosen by ke
 | | Before v17.3 | v17.3 |
 |---|---|---|
 | Questions with an answer figure | 559 of 1,011 practice (keyword rule) | **1,410 / 1,410** (practice and held-out) |
-| Options marked on a diagram | 13.6% | **93.9%** (5,460 / 5,815); practice **94.8%** (3,993 / 4,212) |
-| Right answers marked | 20% | **98.6%** (1,390 / 1,410); practice **99.1%** (1,002 / 1,011) |
-| Questions with *every* option marked | 45 | **1,131** |
+| Options marked on a diagram | 13.6% | **94.0%** (5,469 / 5,815); practice **95.0%** (4,001 / 4,212) |
+| Right answers marked | 20% | **98.8%** (1,393 / 1,410); practice **99.4%** (1,005 / 1,011) |
+| Questions with *every* option marked | 45 | **1,135** |
 
 Where an option is still not drawn, its legend row shows its text in grey. The explanation beside it still names it.
 
@@ -227,3 +227,24 @@ Where an option is still not drawn, its legend row shows its text in grey. The e
 - lesson ties;
 - the real lesson flow: the figure appears on every answered question, and photos are letter-labelled with the right answer first;
 - no page errors.
+
+### v17.3 final regression (all suites green)
+
+| Suite | Result |
+|---|---|
+| Answer figure (new) | **10/10** on the source and on the Vercel build |
+| Atlas + game | **22/22** on the source and on the Vercel build (includes the held-out firewall A9) |
+| Course map | **11/11** on the source and on the Vercel build |
+| Commute + voice | **12/12** on the source and on the Vercel build |
+| Department drawings | **16/16** on the source and on the Vercel build |
+| v16 MCQ system | **25/25** public and **25/25** with the department key present |
+| Other suites | certify **62/62** · spread **23/23** · LEARN **17/17** · hostile **26/26** · v15.3 **10/10** · Vercel host **14/14** · options gallery **7/7** · leak audit **0** text leaks · rollback v17.3 → v53 → v17.3 **pass** |
+| Strict notes coverage | practice **1,009/1,009 (100%)** |
+| Build | "68 app scripts/styles present" (the 10 new diagram files included) |
+
+The first full pass had two red items, and both were fixed:
+
+- **LEARN L10 (touch targets).** On a 390 px lecture page, the diagram's state buttons were 36 px tall. The spinal-cord lesson now opens a diagram, so they appear on the first lecture page. The diagram's buttons are now at least **44 px** tall, and L10 passes. The suites that draw diagrams were rerun after the change: atlas, answer figure, course map and certify, on the source and the build.
+- **Rollback probe.** It needs the exact v53 files (`6e3ebec`) served on :8788, and that server was not running. With it served, the probe passes.
+
+Logs: `receipts/v17_3/all_suites_first_pass_v17_3.txt`, `receipts/v17_3/rerun_after_fixes_v17_3.txt`, `receipts/v17_3/rollback_probe.txt`.

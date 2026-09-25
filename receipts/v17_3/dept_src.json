@@ -1,0 +1,213 @@
+{
+ "at": "2026-09-25T19:48:56.242Z",
+ "results": [
+  {
+   "id": "D1",
+   "what": "Locked (no key): no drawing is shown, and every drawing file on the public site is sealed (not a readable JPEG)",
+   "ok": true,
+   "detail": {
+    "n": 50,
+    "secs": 30,
+    "shown": 0,
+    "unlocked": false,
+    "heads": [
+     "sealed",
+     "sealed",
+     "sealed",
+     "sealed",
+     "sealed"
+    ],
+    "keyInPage": false
+   }
+  },
+  {
+   "id": "D1b",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "D2",
+   "what": "A wrong key link is refused (nothing stored, the link is removed from the address bar, the learner is told)",
+   "ok": true,
+   "detail": {
+    "hash": "",
+    "dev": null,
+    "syn": null,
+    "toast": "That drawings link is not valid. Nothing was changed."
+   }
+  },
+  {
+   "id": "D3",
+   "what": "The owner's link unlocks: key kept on the device AND in the saved learner state (so the sync code carries it to other devices); the link is removed from the address bar",
+   "ok": true,
+   "detail": {
+    "hash": "",
+    "dev": [
+     "k1"
+    ],
+    "syn": [
+     "k1"
+    ],
+    "saved": [
+     "k1"
+    ],
+    "toast": "Department drawings unlocked. They now appear in the neck and histology lessons and after answers, and reach your other devices with your sync code. Close and reopen the app once to add the 50 figure questions."
+   }
+  },
+  {
+   "id": "D4",
+   "what": "Lesson section: its department drawings are decrypted and shown first (2 open, the rest one tap away), each a real image",
+   "ok": true,
+   "detail": {
+    "secShown": 2,
+    "secMore": 3,
+    "secImgs": [
+     {
+      "w": 1250,
+      "src": "blob:"
+     },
+     {
+      "w": 1150,
+      "src": "blob:"
+     }
+    ],
+    "beforePics": true,
+    "exFig": "nv-ijv",
+    "exImgs": [
+     {
+      "w": 606,
+      "src": "blob:"
+     }
+    ],
+    "best": "nv-ijv"
+   }
+  },
+  {
+   "id": "D5",
+   "what": "After an answer: the one drawing that fits the question is shown (internal jugular vein question → the IJV drawing)",
+   "ok": true,
+   "detail": {
+    "secShown": 2,
+    "secMore": 3,
+    "secImgs": [
+     {
+      "w": 1250,
+      "src": "blob:"
+     },
+     {
+      "w": 1150,
+      "src": "blob:"
+     }
+    ],
+    "beforePics": true,
+    "exFig": "nv-ijv",
+    "exImgs": [
+     {
+      "w": 606,
+      "src": "blob:"
+     }
+    ],
+    "best": "nv-ijv"
+   }
+  },
+  {
+   "id": "D6",
+   "what": "Tap a drawing → full screen; tap → back",
+   "ok": true,
+   "detail": {
+    "z1": true,
+    "z2": false
+   }
+  },
+  {
+   "id": "D6b",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "D7",
+   "what": "Every one of the drawings decrypts to a picture with the owner's key",
+   "ok": true,
+   "detail": {
+    "n": 50,
+    "bad": []
+   }
+  },
+  {
+   "id": "D8",
+   "what": "A second device that only has the synced state (restored with the sync code) shows the drawings and keeps a device copy of the key",
+   "ok": true,
+   "detail": {
+    "n": 2,
+    "dev": [
+     "k1"
+    ]
+   }
+  },
+  {
+   "id": "D9",
+   "what": "With the key on the device the 50 figure items (9 department CNS-levels figures + the Nov 2024 paper's Section B figure, 5 labels each) join the practice bank, each explained (key + a reason for every other option), each tied to its figure",
+   "ok": true,
+   "detail": {
+    "n": 50,
+    "practice": 1061,
+    "explained": 1061,
+    "gaps": [],
+    "nGaps": 0,
+    "figs": 10
+   }
+  },
+  {
+   "id": "D10",
+   "what": "A drill question shows its department figure above the stem BEFORE answering, with the answers hidden",
+   "ok": true,
+   "detail": {
+    "fig": "cns-level-7",
+    "before": true,
+    "ans": false,
+    "w": 1400
+   }
+  },
+  {
+   "id": "D11",
+   "what": "After answering, the same figure carries the department answers for all 5 labels (not repeated inside the explanation)",
+   "ok": true,
+   "detail": {
+    "fig": "cns-level-7",
+    "ans": "Department answers: 1 trigeminal lemniscus (ends in VPMN) · 2 medial lemniscus (ends in VPLN) · 3 medial longitudinal bundle (continues as the sulcomarginal tract) · 4 the bundle keyed as continuing as the septomarginal tract · 5 transverse pontine fibres (separate the pyramidal bundles)",
+    "inExplain": 0
+   }
+  },
+  {
+   "id": "D11b",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "D12",
+   "what": "Locked: a section with drawings shows one \"paste your unlock link\" line (no drawing); pasting the link unlocks in place and the drawings appear",
+   "ok": true,
+   "detail": {
+    "lock": {
+     "lock": 1,
+     "figs": 0
+    },
+    "after": {
+     "lock": 0,
+     "imgs": 1,
+     "saved": 1,
+     "toast": "Department drawings unlocked. They now appear in the neck and histology lessons and after answers, and reach your other devices with your sync code. Close and reopen the app once to add the 50 figure questions."
+    }
+   }
+  },
+  {
+   "id": "D12b",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}
