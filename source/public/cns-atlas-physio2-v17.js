@@ -129,7 +129,7 @@
         hyp1: ["primary hyperalgesia", "hyperalgesia", "sunburn", "sun burn", "inflammatory mediators"],
         hyp2: ["secondary hyperalgesia", "surrounding the flare", "healthy area", "central facilitation", "thalamic syndrome"],
         thr: ["pain threshold", "threshold", "lowest intensity", "highest intensity"],
-        react: ["heart rate", "depression", "reactions", "increased heart rate"],
+        react: ["reactions to pain", "reaction to pain", "pain reactions"],
       },
       drill: ["noc", "bk", "kp", "pg", "ad", "cf", "lam1", "sg", "neo", "paleo", "rf", "pag", "nrm", "enk", "abeta"],
       sims: [

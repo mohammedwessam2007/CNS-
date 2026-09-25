@@ -481,6 +481,12 @@
     if (x.flag) good.add(x.flag.k);
     for (const a of x.also) good.add(a.k);
     const fq = safe(() => A.forQuestion(qid), null);
+    // diagrams drawn for this question's own lesson come first when the words tie
+    const home = new Set();
+    safe(() => {
+      const secs = new Set((window.INTELLECTUALITY_V15.sectionsForLesson((q.lessonIds || [])[0]) || []).map((x) => x.id));
+      for (const sid of A.scenes()) if (Object.keys(A.def(sid).secs || {}).some((k) => secs.has(k))) home.add(sid);
+    }, null);
     const raw = q.options.map((o) => {
       const why = keys.has(o.key) ? x.key : x.flag && x.flag.k === o.key ? x.flag.why : (x.also.find((a) => a.k === o.key) || {}).why || x.opt[o.key] || "";
       return { o, own: match(o.text), wh: match(why) };
@@ -565,8 +571,11 @@
       const see = new Set();
       for (const o of opts) for (const h of o.see) if (h.scene === sid) see.add(h.pid);
       for (const h of stemSee) if (h.scene === sid) see.add(h.pid);
+      const drawn = sc > 0;
       sc += Math.min(4, see.size) * 0.8;
-      if (fq && fq.id === sid) sc += 1.5;
+      // the question's own diagram and its lesson's diagrams win ties, but only where they picture an option
+      if (drawn && fq && fq.id === sid) sc += 1.5;
+      if (drawn && home.has(sid)) sc += 2;
       return sc;
     };
     const pick = (left, not) => {
