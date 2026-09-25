@@ -37,6 +37,8 @@
 .v16Fig { border: 1px solid #2b394d; border-radius: 12px; padding: 8px; background: #0f1621 }
 .v16Fig.good { border-color: #2f6b47 }
 .v16Fig.bad { border-color: #6b2f3d }
+.v16Fig.other { opacity: .92 }
+.v16Fig.other .v16FigLab { color: #ff9aac }
 .v16FigLab { font-size: 11px; font-weight: 800; letter-spacing: .04em; margin-bottom: 6px; color: var(--muted) }
 .v16Fig figure { margin: 0 }
 .v16Next { display: grid; gap: 6px; margin-top: 12px }

@@ -651,9 +651,11 @@
       [ar, en] = KIND[k] || KIND.new;
     return '<span class="chip v16Kind k' + E(k) + '"><span lang="ar" dir="rtl">' + E(ar) + "</span> " + E(en) + "</span>";
   }
+  // lead photos too general to show what an option says
+  const WEAK_PHOTO = new Set(["Pain", "Human eye", "Cranial nerves", "Muscle tone", "Nervous system", "Brain", "Human brain", "Neuron", "Skin", "Muscle", "Blood"]);
   function pictureFor(q, text) {
     const t = safe(() => V15()?.termsFor(text, { stem: q.stem }) || [], []);
-    return t[0] || null;
+    return t.find((x) => !WEAK_PHOTO.has(x)) || null;
   }
   function figHTML(term, label, cls, q) {
     return (
@@ -702,11 +704,26 @@
         note = (b ? '<div class="v16Auto"><b>From your notes:</b> ' + md(b) + "</div>" : "") + card.replace("<details ", "<details open ");
       } else note = card;
     }
-    const keyText = [...keys].map((k) => optText(q, k)).join(" "),
-      tk = pictureFor(q, keyText),
-      tm = tk && sel && !acc.has(sel) ? pictureFor(q, optText(q, sel)) : null,
-      // the chosen option's picture only next to the right answer's picture, for contrast
-      pics = tk ? figHTML(tk, "✓ " + tk, "good", q) + (tm && tm !== tk ? figHTML(tm, "✗ what you chose: " + tm, "bad", q) : "") : "";
+    // one photo per option whose own words name something (never a word the stem already names), each labelled
+    // with its letter: right answer first, then your choice, then the others. Wrong options' photos appear only
+    // beside the right answer's, for contrast.
+    const figs = [],
+      seenT = new Set(),
+      order = opts(q)
+        .map((o, i) => ({ o, i, good: keys.has(o.key) || acc.has(o.key), mine: o.key === sel }))
+        .sort((a, b) => b.good - a.good || b.mine - a.mine || a.i - b.i);
+    for (const { o, good, mine } of order) {
+      const t = pictureFor(q, o.text);
+      if (!t || seenT.has(t)) continue;
+      seenT.add(t);
+      figs.push({ k: o.key, t, good, mine });
+    }
+    const pics = figs.length && figs[0].good
+      ? figs
+          .slice(0, 5)
+          .map((f) => figHTML(f.t, (f.good ? "✓ " : "✗ ") + f.k.toUpperCase() + " · " + f.t + (f.mine ? " · your answer" : ""), f.good ? "good" : f.mine ? "bad" : "bad other", q))
+          .join("")
+      : "";
     return '<div class="v16Explain" data-qid="' + E(q.id) + '">' + rows + flag + (pics ? '<div class="v16Pics">' + pics + "</div>" : "") + note + (x ? "" : '<div class="v16Tiny">No tutor note is written for this item yet; the explanation comes from your notes.</div>') + "</div>";
   }
   function questionHTML(q, ctx, meta) {
