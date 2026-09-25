@@ -69,3 +69,31 @@ The research is in `docs/ADHD_RESEARCH.md` (13 findings with sources and evidenc
 - 452 practice questions (mostly neck anatomy, histology details and physiology numbers) have no diagram of their own. Neck lessons keep the department's own drawings (v16.2), and every question keeps its photos.
 - Vibration works on Android only; iPad Safari has no vibration API.
 - The ADHD research shows what helps attention and learning in general. It does not promise a result for one learner, and this app is not a treatment.
+
+## v17.1: the course map (every day, every date; skip or read anything)
+
+The owner asked (25 Sep 2026): *"A feature to see the upcoming days and the previous days like a map, and I can skip something if I want. Full access to the dates and everything I can see."*
+
+**Where:** a **🗺️ Map** button in the top bar (also at the top of the course outline).
+
+**What it shows:**
+
+- **Header:** today's date, the day you are on ("Day 5 of 56"), days left to the MCQ exam, and whether you are on plan, ahead or behind.
+- **Four counters:** lessons learned, past papers done, mocks finished, lessons skipped.
+- **The road to the exam:** a calendar of all 56 days (Mon–Sun weeks). Each tile is coloured by status: done, you are here, today's date, behind, skipped, lessons moved, ahead, mock 👾, exam 🎯. Tap a tile to open that day.
+- **Every day** as a card, grouped by week, with the real weekday and date. Each card shows its lessons (subject, topic, step dots), each lesson's past-paper count and score, where a moved lesson came from, the day's round and mock, and minutes. The days after the MCQ exam are one tap away.
+
+**What you can do:**
+
+| Action | What happens |
+|---|---|
+| 📖 **Read** (any lesson, any day) | Opens the lesson's notes read-only: its sections, points, "why", traps, live diagrams and pictures. Reading changes nothing. |
+| ✓ **Mark learned** (from the reader) | Completes the lesson's learning steps. Its own past-paper block still comes on its day. |
+| ⏭ **Skip a lesson** | One-line confirm, then the app moves on. The lesson counts as taught, so **its past papers come in the daily rounds; none is lost.** |
+| ⏭ **Skip the round / a mock / the rest of today / a whole day** | Due reviews wait for the next round. A skipped mock hands its held-out questions to later mocks. |
+| ⏩ **Start this day now** | Jumps ahead. The days in between are skipped and marked passed, and the app starts the chosen day. |
+| ↩ **Undo** | Restores a skipped lesson or day exactly, until that day has been passed. |
+
+Nothing can be skipped while a sealed mock is running. The map's record (`S.map`) stays under 3 KB.
+
+**Evidence:** `tests/course_map_test.js` **11/11**. It checks every day with its real weekday and date; "you are here"; the exam day; moved days; reading changes nothing; mark learned keeps the block; skip moves on and sends the past papers to the rounds; undo restores; skip mock, skip day and jump; a skipped round closes the day; nothing changes during a mock; the record stays small; the map fits a 390 px phone; no page errors. The full-regression results are in the table below.

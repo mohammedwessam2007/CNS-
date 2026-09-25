@@ -7,6 +7,7 @@ v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuri
 - **The diagrams are schematic teaching drawings**, hand-drawn in SVG from standard anatomy and the notes' wording. Proportions are simplified, and a clinician has not reviewed them. Where textbooks differ (e.g. tract positions in the anterior funiculus), they follow the common teaching layout.
 - **Which diagram, in which state, opens after an answer is chosen by keyword rules** on the stem and the key, with the question's note section as the fallback. 559 of 1,011 practice questions get one. A rule can pick a reasonable but not ideal state; the diagram still opens on the right topic.
 - **The game layer changes nothing in the course.** It keeps its own XP (`S.game.xp`), adds no questions or minutes, and hides the score during sealed mocks. Its sprint card and move break are offered, never forced. Vibration works on Android only.
+- **Skipping is your call, and it has a cost.** A skipped lesson's past papers still come in the daily rounds, but without the lesson's notes first; read it from the map (📖) when you can. Skipping many mocks late in the course can leave some held-out items unused, because the last mock takes at most 60. Jumping ahead marks the days in between as passed, and there is no "go back" for a passed day (its lessons stay readable).
 - **The ADHD research is general evidence** (`docs/ADHD_RESEARCH.md`), not a promise for one learner, and the app is not a treatment.
 
 ## v16.2 department drawings and the uploaded department files
