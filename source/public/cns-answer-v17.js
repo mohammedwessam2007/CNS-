@@ -523,7 +523,6 @@
     // options that point at other options ("all of the above", "a & c are correct", "none of the above")
     // are pictured by what they point at
     for (const o of opts) {
-      if (o.anchors.length) continue;
       const t = String(o.text).toLowerCase().trim();
       let refs = [];
       if (/(all|none) of (the )?above|all of these|all the above/.test(t)) refs = opts.filter((p) => p !== o && p.k < o.k).map((p) => p.k);
@@ -532,7 +531,7 @@
         if (m) refs = [m[1], m[2], m[3]].filter(Boolean);
       }
       if (!refs.length) continue;
-      const seen = new Set();
+      const seen = new Set(o.anchors.map((h) => h.scene + "|" + h.pid));
       for (const p of opts)
         if (refs.includes(p.k))
           for (const h of p.anchors) {
