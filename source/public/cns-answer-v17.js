@@ -267,9 +267,9 @@
       reup: ["reuptake"],
     },
     path: {
-      dcml: ["dorsal column", "medial lemniscus", "dcml", "gracile nucleus", "cuneate nucleus", "nucleus gracilis", "nucleus cuneatus", "internal arcuate", "sensory decussation", "dorsal column medial lemniscal"],
-      stt: ["spinothalamic", "anterolateral system", "anterolateral pathway"],
-      cst: ["corticospinal", "pyramidal tract", "pyramidal pathway"],
+      dcml: ["dorsal column", "medial lemniscus", "dcml", "gracile nucleus", "cuneate nucleus", "nucleus gracilis", "nucleus cuneatus", "internal arcuate", "sensory decussation", "dorsal column medial lemniscal", "vibration sense", "vibration", "fine touch", "position sense", "conscious proprioception", "two point discrimination"],
+      stt: ["spinothalamic", "anterolateral system", "anterolateral pathway", "pain and temperature", "temperature sensation", "pain sensation", "crude touch", "polymodality", "polymodality of sensations"],
+      cst: ["corticospinal", "pyramidal tract", "pyramidal pathway", "motor function", "voluntary movement", "voluntary movements"],
     },
     cochlea: {
       bm: ["basilar membrane"],
@@ -456,6 +456,18 @@
     const v = A.def(sid)?.parts?.[pid];
     return String(Array.isArray(v) ? v[0] : (v && v.n) || pid).replace(/\*\*/g, "");
   };
+  // words that make an option a value of something (how much, which way, when), not a structure of its own
+  const VALUE = new Set(
+    ("a an the it is are be was were becomes become remains remain not no none only very both neither either of to in at by and or than as its " +
+      "increase increased increases increasing decrease decreased decreases decreasing rise rises fall falls exaggerated inhibited inhibition absent present " +
+      "unchanged unaffected changed normal abnormal reduced reduction enhanced enhancement lost loss preserved spared abolished depressed stimulated excited " +
+      "facilitated facilitation diminished augmented hyperactive hypoactive brisk sluggish same opposite ipsilateral contralateral bilateral unilateral bilaterally " +
+      "left right upward downward up down forward backward inward outward higher lower faster slower more less greater smaller larger longer shorter high low " +
+      "fast slow rapid rapidly slowly quickly gradually suddenly strong weak stronger weaker positive negative true false yes all some many few " +
+      "ms msec millisecond milliseconds sec second seconds min minute minutes hour hours hr hrs day days week weeks wk month months year years mm cm m um μm nm hz khz db " +
+      "mv mmhg times fold percent degree degrees c zero one two three four five six seven eight nine ten twice half double triple " +
+      "depolarization hyperpolarization depolarized hyperpolarized maximal minimal maximum minimum nil constant variable continuous intermittent").split(" ")
+  );
   function plan(qid, sel) {
     const q = qget(qid);
     if (!q || !(q.options || []).length) return null;
@@ -499,6 +511,22 @@
       o.refs = refs;
     }
     const stemSee = match(q.stem);
+    // a short option that is only a value ("Exaggerated", "Is absent", "Na influx") of what the stem asks about
+    // is pictured at that thing, and the legend says so
+    for (const o of opts) {
+      if (o.anchors.length || o.refs || !stemSee.length) continue;
+      const w = String(o.text).toLowerCase().replace(/[^a-z0-9+%°\u0370-\u03ff]+/g, " ").trim().split(/\s+/).filter(Boolean);
+      if (!w.length || w.length > 6 || !w.every((t) => VALUE.has(t) || /^[0-9][0-9.,/-]*(st|nd|rd|th|x|%)?$/.test(t))) continue;
+      const seen = new Set();
+      for (const h of stemSee) {
+        const k = h.scene + "|" + h.pid;
+        if (seen.has(k) || seen.size >= 4) continue;
+        seen.add(k);
+        o.anchors.push(h);
+      }
+      o.val = true;
+      o.see = o.see.filter((h) => !seen.has(h.scene + "|" + h.pid));
+    }
     const scenes = new Set();
     for (const o of opts) for (const h of [...o.anchors, ...o.see]) scenes.add(h.scene);
     for (const h of stemSee) scenes.add(h.scene);
@@ -566,6 +594,7 @@
         fig: where[o.k],
         names: [...new Set(o.anchors.filter((h) => h.scene === sid).map((h) => partName(sid, h.pid)))],
         refs: o.refs || null,
+        val: !!o.val,
         text: o.text,
       }));
       const see = [...marks.values()].filter((m) => m.role === "see").map((m) => partName(sid, m.pid));
@@ -672,7 +701,7 @@
       .map((o) => {
         const cls = o.good ? "k" : o.mine ? "m" : "x",
           mark = o.good ? "✓" : "✗",
-          name = (o.refs ? "= " + o.refs.map((r) => r.toUpperCase()).join(" + ") + (o.here ? ": " : "") : "") + (o.here ? o.names.map((n) => md(n)).join(" + ") : o.fig > 0 ? "on panel " + (o.fig + 1) + " below" : o.fig === 0 ? "on the first picture" : ""),
+          name = (o.refs ? "= " + o.refs.map((r) => r.toUpperCase()).join(" + ") + (o.here ? ": " : "") : "") + (o.val ? "“" + E(o.text) + "”, about " : "") + (o.here ? o.names.map((n) => md(n)).join(" + ") : o.fig > 0 ? "on panel " + (o.fig + 1) + " below" : o.fig === 0 ? "on the first picture" : ""),
           tail = o.good ? " <em>right answer</em>" : o.mine ? " <em>your answer</em>" : "";
         if (!o.here && o.fig < 0) return '<div class="ixAnsRow no"><span class="ixAnsDot">' + E(o.k.toUpperCase()) + "</span><span>" + E(o.text) + "</span></div>";
         return '<div class="ixAnsRow ' + (o.here ? "" : "else ") + cls + '"' + (o.here ? ' data-ixans-k="' + E(o.k) + '"' : "") + '><span class="ixAnsDot ' + cls + '">' + E(o.k.toUpperCase()) + '</span><span><b>' + mark + "</b> " + name + tail + "</span></div>";
