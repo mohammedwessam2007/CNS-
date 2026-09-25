@@ -474,6 +474,30 @@
       const aset = new Set(anchors.map(mark));
       return { k: o.key, text: o.text, good: good.has(o.key), mine: !!sel && o.key === sel, anchors, see: wh.filter((h) => !aset.has(mark(h))) };
     });
+    // options that point at other options ("all of the above", "a & c are correct", "none of the above")
+    // are pictured by what they point at
+    for (const o of opts) {
+      if (o.anchors.length) continue;
+      const t = String(o.text).toLowerCase().trim();
+      let refs = [];
+      if (/(all|none) of (the )?above|all of these|all the above/.test(t)) refs = opts.filter((p) => p !== o && p.k < o.k).map((p) => p.k);
+      else {
+        const m = /^\(?([a-g])\)?\s*(?:,|&|and|\+)\s*\(?([a-g])\)?(?:\s*(?:,|&|and|\+)\s*\(?([a-g])\)?)?\s*(?:are|is)?\s*(?:correct|true|right)?\.?$/.exec(t);
+        if (m) refs = [m[1], m[2], m[3]].filter(Boolean);
+      }
+      if (!refs.length) continue;
+      const seen = new Set();
+      for (const p of opts)
+        if (refs.includes(p.k))
+          for (const h of p.anchors) {
+            const k = h.scene + "|" + h.pid;
+            if (!seen.has(k)) {
+              seen.add(k);
+              o.anchors.push(h);
+            }
+          }
+      o.refs = refs;
+    }
     const stemSee = match(q.stem);
     const scenes = new Set();
     for (const o of opts) for (const h of [...o.anchors, ...o.see]) scenes.add(h.scene);
@@ -541,6 +565,7 @@
         here: where[o.k] === fi,
         fig: where[o.k],
         names: [...new Set(o.anchors.filter((h) => h.scene === sid).map((h) => partName(sid, h.pid)))],
+        refs: o.refs || null,
         text: o.text,
       }));
       const see = [...marks.values()].filter((m) => m.role === "see").map((m) => partName(sid, m.pid));
@@ -647,7 +672,7 @@
       .map((o) => {
         const cls = o.good ? "k" : o.mine ? "m" : "x",
           mark = o.good ? "✓" : "✗",
-          name = o.here ? o.names.map((n) => md(n)).join(" + ") : o.fig > 0 ? "on panel " + (o.fig + 1) + " below" : o.fig === 0 ? "on the first picture" : "",
+          name = (o.refs ? "= " + o.refs.map((r) => r.toUpperCase()).join(" + ") + (o.here ? ": " : "") : "") + (o.here ? o.names.map((n) => md(n)).join(" + ") : o.fig > 0 ? "on panel " + (o.fig + 1) + " below" : o.fig === 0 ? "on the first picture" : ""),
           tail = o.good ? " <em>right answer</em>" : o.mine ? " <em>your answer</em>" : "";
         if (!o.here && o.fig < 0) return '<div class="ixAnsRow no"><span class="ixAnsDot">' + E(o.k.toUpperCase()) + "</span><span>" + E(o.text) + "</span></div>";
         return '<div class="ixAnsRow ' + (o.here ? "" : "else ") + cls + '"' + (o.here ? ' data-ixans-k="' + E(o.k) + '"' : "") + '><span class="ixAnsDot ' + cls + '">' + E(o.k.toUpperCase()) + '</span><span><b>' + mark + "</b> " + name + tail + "</span></div>";
