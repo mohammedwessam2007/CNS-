@@ -91,3 +91,32 @@ html.ixANoScroll,html.ixANoScroll body{overflow:hidden}
 /* inside a white lesson card the dark light-box needs a little air */
 .v15Sec .ixAWrap{margin:10px 0 14px}
 .v16Explain .ixAWrap{margin:12px 0;min-width:0;max-width:100%;width:100%}
+
+/* v17.3 answer figure: every option of the answered question marked on the diagram */
+.ixAAnsChip{border-color:#2f8a5c;color:#9ff5c6}
+.ixAAnsChip.on{background:#5ef0a0;border-color:#5ef0a0;color:#05160d}
+.ixASvg .pf.ixAnsK{fill:#5ef0a0;stroke:#fff;stroke-width:1.8;opacity:1}
+.ixASvg .ps.ixAnsK{stroke:#5ef0a0;stroke-width:calc(var(--w,3) * 1.7);opacity:1}
+.ixASvg .pf.ixAnsX{fill:#ff6e8a;stroke:#fff;stroke-width:1.2;opacity:1}
+.ixASvg .ps.ixAnsX{stroke:#ff6e8a;stroke-width:calc(var(--w,3) * 1.5);opacity:1}
+.ixASvg .pf.ixAnsM{fill:#ff6e8a;stroke:#ffd166;stroke-width:3;opacity:1}
+.ixASvg .ps.ixAnsM{stroke:#ff6e8a;stroke-width:calc(var(--w,3) * 1.9);opacity:1}
+.ixASvg .pf.ixAnsS{fill:#66d4ff;stroke:#fff;stroke-width:1;opacity:1}
+.ixASvg .ps.ixAnsS{stroke:#66d4ff;stroke-width:calc(var(--w,3) * 1.4);opacity:1}
+.ixASvg .ixAnsFade{opacity:.18!important}
+.ixASvg .ixAnsBd rect{fill:#0b1726;stroke-width:2}
+.ixASvg .ixAnsBd text{font:950 11px/1 Inter,system-ui,sans-serif;fill:#fff}
+.ixASvg .ixAnsBd.k rect{fill:#0f5132;stroke:#5ef0a0}
+.ixASvg .ixAnsBd.x rect{fill:#5c1224;stroke:#ff6e8a}
+.ixASvg .ixAnsBd.m rect{fill:#5c1224;stroke:#ffd166;stroke-width:3}
+.ixAnsLeg{display:grid;gap:5px}
+.ixAnsRow,.ixAnsSee{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;line-height:1.4;color:#dbe7f6;border-radius:10px;padding:4px 6px}
+.ixAnsRow[data-ixans-k]{cursor:pointer}
+.ixAnsRow[data-ixans-k]:hover,.ixAnsRow.on{background:#ffffff12}
+.ixAnsRow em{font-style:normal;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#07111d;background:#5ef0a0;border-radius:99px;padding:1px 7px;margin-left:4px}
+.ixAnsRow.m em{background:#ffd166}
+.ixAnsRow.else,.ixAnsRow.no{color:#9fb4cc}
+.ixAnsDot{flex:none;display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:99px;font-size:12px;font-weight:950;background:#23364d;color:#fff;border:2px solid #3a5b80}
+.ixAnsDot.k{background:#0f5132;border-color:#5ef0a0}.ixAnsDot.x{background:#5c1224;border-color:#ff6e8a}.ixAnsDot.m{background:#5c1224;border-color:#ffd166}.ixAnsDot.s{background:#0d3550;border-color:#66d4ff}
+.ixAnsPanelHd{margin:10px 2px 6px;font-size:11px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;color:#8fb3d9}
+.ixAPanel .ixASvg{max-height:min(34vh,300px)}

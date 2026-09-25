@@ -99,13 +99,16 @@
     if (!d) return "";
     opt = opt || {};
     const k = "ixa" + ++N,
-      sim = d.sims.find((s) => s.id === simId) || null;
+      ans = opt.ans && ANS.get(opt.ans) ? opt.ans : "",
+      isAns = !!ans && simId === "__ans",
+      sim = isAns ? null : d.sims.find((s) => s.id === simId) || null;
     const chips =
-      '<button type="button" class="ixAChip' + (sim ? "" : " on") + '" data-ixa-go="">👆 Explore</button>' +
+      (ans ? '<button type="button" class="ixAChip ixAAnsChip' + (isAns ? " on" : "") + '" data-ixa-go="__ans">✅ This answer</button>' : "") +
+      '<button type="button" class="ixAChip' + (sim || isAns ? "" : " on") + '" data-ixa-go="">👆 Explore</button>' +
       d.sims.map((s) => '<button type="button" class="ixAChip' + (sim && sim.id === s.id ? " on" : "") + '" data-ixa-go="' + E(s.id) + '">' + E(s.label) + "</button>").join("") +
       (d.drill && d.drill.length ? '<button type="button" class="ixAChip ixADrillBtn" data-ixa-drill="1">🎯 Spot it</button>' : "");
     return (
-      '<div class="ixA' + (opt.zoom ? " ixAZoomed" : "") + (opt.compact ? " ixACompact" : "") + '" data-ixa="' + E(id) + '" data-ixa-sim="' + E(sim ? sim.id : "") + '" data-ixa-k="' + k + '">' +
+      '<div class="ixA' + (opt.zoom ? " ixAZoomed" : "") + (opt.compact ? " ixACompact" : "") + (ans ? " ixAAns" : "") + '" data-ixa="' + E(id) + '" data-ixa-sim="' + E(isAns ? "__ans" : sim ? sim.id : "") + '" data-ixa-k="' + k + '"' + (ans ? ' data-ixa-ans="' + E(ans) + '"' : "") + ">" +
       '<div class="ixAHd"><span class="ixAK">' + E(d.kicker || "LIVE DIAGRAM") + '</span><b class="ixAT">' + md(d.title) + "</b>" +
       (opt.zoom ? '<button type="button" class="ixAZ" data-ixa-close="1" aria-label="Close">✕</button>' : '<button type="button" class="ixAZ" data-ixa-zoom="1" aria-label="Full screen">⤢</button>') +
       "</div>" +
@@ -117,9 +120,28 @@
   function defOf(card) {
     return SC[card.dataset.ixa];
   }
+  // answer specs: what one answered question marks on this diagram (built by cns-answer-v17.js)
+  const ANS = new Map();
+  let ANSN = 0;
+  const putAns = (spec) => {
+    const k = "ans" + ++ANSN;
+    ANS.set(k, spec);
+    return k;
+  };
   function apply(card, simId) {
     const d = defOf(card);
     if (!d) return;
+    card.querySelectorAll(".ixAnsB").forEach((g) => g.remove());
+    card.querySelectorAll(".ixAnsK,.ixAnsX,.ixAnsM,.ixAnsS").forEach((el) => el.classList.remove("ixAnsK", "ixAnsX", "ixAnsM", "ixAnsS"));
+    if (simId === "__ans" && ANS.get(card.dataset.ixaAns)) {
+      const spec = ANS.get(card.dataset.ixaAns);
+      // the question's own state (e.g. the hemisection) under the option marks, else everything else dimmed
+      apply(card, spec.sim || "");
+      card.dataset.ixaSim = "__ans";
+      card.querySelectorAll(".ixAChip[data-ixa-go]").forEach((b) => b.classList.toggle("on", b.dataset.ixaGo === "__ans"));
+      safe(() => window.IX_ANSWER?.overlay(card, spec, !spec.sim));
+      return;
+    }
     const sim = d.sims.find((s) => s.id === simId) || null;
     card.dataset.ixaSim = sim ? sim.id : "";
     delete card.dataset.ixaPick;
@@ -147,7 +169,10 @@
       base = baseOf(pid),
       part = d.parts[base];
     if (!part) return;
+    card.querySelectorAll(".ixAnsB").forEach((g) => g.remove());
+    card.querySelectorAll(".ixAChip[data-ixa-go]").forEach((b) => b.classList.remove("on"));
     card.querySelectorAll("[data-p]").forEach((el) => {
+      el.classList.remove("ixAnsK", "ixAnsX", "ixAnsM", "ixAnsS");
       const same = baseOf(el.dataset.p) === base;
       el.classList.toggle("ixPick", same && (el.dataset.p === pid || !sideOf(pid)));
       el.classList.toggle("ixMute", !same);
@@ -230,7 +255,7 @@
   function zoom(card) {
     const o = document.createElement("div");
     o.className = "ixAZoom";
-    o.innerHTML = cardHTML(card.dataset.ixa, card.dataset.ixaSim, { zoom: true });
+    o.innerHTML = cardHTML(card.dataset.ixa, card.dataset.ixaSim, { zoom: true, ans: card.dataset.ixaAns || "" });
     document.body.appendChild(o);
     document.documentElement.classList.add("ixANoScroll");
     const c = o.querySelector(".ixA");
@@ -259,7 +284,7 @@
     const part = t.closest("[data-p]");
     if (!part) return;
     if (DR.has(card)) return void drillTap(card, part.dataset.p);
-    if (card.dataset.ixaSim && defOf(card).tapInSim) return void defOf(card).tapInSim(card, part.dataset.p);
+    if (card.dataset.ixaSim && card.dataset.ixaSim !== "__ans" && defOf(card).tapInSim) return void defOf(card).tapInSim(card, part.dataset.p);
     explore(card, part.dataset.p);
   });
   document.addEventListener("keydown", (ev) => {
@@ -358,10 +383,12 @@
       const dt = el.closest("details");
       if (dt && !dt.open) return; // mock review: drawn when the item is opened
       el.dataset.ixaDone = "1";
+      const at = el.querySelector(":scope > .ixDeptWrap") || el.querySelector(":scope > .v16Pics") || el.querySelector(":scope > details.v15Note") || el.querySelector(":scope > .v16Tiny");
+      const put = (box) => (at ? at.before(box) : el.append(box));
+      if (safe(() => window.IX_ANSWER?.mount(el, put), false)) return;
       const m = forQuestion(el.dataset.qid);
       if (!m) return;
-      const at = el.querySelector(":scope > .ixDeptWrap") || el.querySelector(":scope > .v16Pics") || el.querySelector(":scope > details.v15Note") || el.querySelector(":scope > .v16Tiny");
-      mountAt(el, (box) => (at ? at.before(box) : el.append(box)), m.id, m.sim, { compact: true });
+      mountAt(el, put, m.id, m.sim, { compact: true });
     });
   }
   let queued = false;
@@ -437,6 +464,9 @@
     html: cardHTML,
     apply,
     mount: (el, id, sim, opt) => mountAt(el, (box) => el.append(box), id, sim, opt),
+    mountAt,
+    putAns,
+    getAns: (k) => ANS.get(k) || null,
     forQuestion,
     forSection,
     sections: () => [...secMap().keys()],

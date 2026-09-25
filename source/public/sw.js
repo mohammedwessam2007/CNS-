@@ -5,7 +5,7 @@
  * - The page can ask for the next days' pictures to be fetched ahead ({type: "precache", urls}).
  * - /api/* (cloud save) and every other origin are never touched.
  */
-const SHELL = "ix-shell-17.2";
+const SHELL = "ix-shell-17.3";
 const PICS = "ix-pics";
 const IMMUTABLE = /^\/pics\/[0-9a-f]{14}\.(png|jpe?g|svg|webp|gif)$/;
 
