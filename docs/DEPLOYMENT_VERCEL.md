@@ -1,11 +1,11 @@
-# Deployment: Vercel host (v16.3 · MCQ exam + department drawings)
+# Deployment: Vercel host (v17 · MCQ exam + department drawings + CNS atlas + game layer)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v16.3 · MCQ EXAM") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v17 · MCQ EXAM") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
-| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `81819d1` (v16.3; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
-| Deployment | `dpl_BqnsfG9xYkE4tYLmdP8oUHah9UvQ` (v16.3): **READY** in 20 s (picture cache warm), production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's file-tree and build-log tools return 404 for Git deployments, so the file check ("38 app scripts/styles present", 50 encrypted drawings in `dist/dept`) was seen in the identical local build. Previous: `dpl_CyqrBpRX…` (v16.2), `dpl_4vTt3Y9e…` (v16.0) |
+| Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `79eaa8b` (v17; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
+| Deployment | `dpl_H4vSAFNrxUKucNV56cR8uTbEKKVq` (v17): **READY** in 19 s, production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's file tools refuse Git deployments (404/401), so the file check ("47 app scripts/styles present": the 6 atlas scripts, 2 new styles and the game script included) was seen in the identical local build, and the full suites ran against that build on :8790. Previous: `dpl_BqnsfG9x…` (v16.3), `dpl_CyqrBpRX…` (v16.2), `dpl_4vTt3Y9e…` (v16.0) |
 | Access | Public: Vercel Authentication and password protection are **off**, so the iPad needs no Vercel login |
 | Hatchable | Untouched. The Hatchable site is still v53 (there is no Hatchable connector in the build session) |
 
