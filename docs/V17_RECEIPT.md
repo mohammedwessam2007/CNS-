@@ -161,3 +161,69 @@ The saved record is `S.audio = {commute, voice, rate}`.
 | Build | "51 app scripts/styles present" (the new script and style included) |
 
 One run failed first, and it was the test's fault. On the Vercel build, the audio suite stopped after A6: the host's sync layer restored the cloud copy and reloaded the page while the test was reloading it. The test now waits for that second load. The rerun passes, and it shows the off setting survives the cloud restore. Log: `receipts/v17_2/all_suites_final_v17_2.txt`.
+
+## v17.3: the answer's picture shows what the explanation says
+
+The owner said (25 Sep 2026): *"The photos and visuals not on point… the images must include everything in the explanation."*
+
+Before v17.3, an answered question opened one diagram in one state, chosen by keyword rules, and the photos showed only the right answer and your choice. That diagram usually did not show the wrong options. The explanation names each one ("b: an LMN lesion abolishes deep reflexes"), but the picture had nowhere for most of them.
+
+**Now, after every answer (`cns-answer-v17.js`):**
+
+- **"✅ This answer"** opens the diagram and marks every option it can:
+  - the right answer in **green**;
+  - each wrong option in **red**, with your own choice **ringed in yellow**;
+  - anything else the explanation names in **blue**.
+- Each marked structure carries its **letter badge**. A **legend row per option** names what is marked. Tap a row to show only that option.
+- Options drawn on other diagrams get **up to two zoomed panels** underneath, cropped to the marked parts.
+- **How an option is placed.** An option is marked where its own words name a drawn part. If they name none, its line in the explanation decides.
+  - A **value** answer ("Exaggerated", "Not changed", "2–6 weeks") is marked on the thing the stem asks about. The legend says *"“Not changed”, about Electrical reaction unchanged (UMN)"*, and the explanation's contrasts stay blue, never green.
+  - **"All of the above"** and **"a & c are correct"** are pictured by the options they point at (*"= A + B + C"*).
+- **How the diagram is chosen.** The diagram that shows the most options wins, with the right answer counting double. On a tie, the question's own diagram and the diagrams drawn for its lesson win.
+- **Avoiding false marks.** Bare names ("Lips", "Face", "Nerve cells") are *weak*: they count only when the question already names something else in that diagram.
+
+**46 new diagrams (68 in all, in 21 files).** Each was drawn for the topics whose options had no place to be marked, from the notes' wording:
+
+- **Histology:** neuron and stains; neuron types; glia; nerve and Wallerian degeneration; endings.
+- **Physiology:**
+  - spindle; fibre types; reflexes; transection; decerebrate; pain; visceral/referred pain; EPSP/IPSP; synaptic properties;
+  - **UMN vs LMN**; **cerebellar signs**; **basal-ganglia disorders and the five gaits**;
+  - **receptor potential, adaptation and the sensory code**; **touch, S1 map, proprioception, temperature**;
+  - **stretch reflex and tone**; **rotation and nystagmus**; **phototransduction**; **pupillary reflex in the clinic**; **sound and decibels**.
+- **Head and neck:** nose and sinuses; larynx; middle ear; pharyngeal arches; lymph nodes; eyeball layers; eyelid and tears; refraction; spinal levels; neck triangles; external carotid; **trigeminal branches and ganglia**.
+- **Brain:** labyrinth; ear histology; sleep; memory; **white-matter fibres**; **cranial cavity and cavernous sinus**; **diencephalon and 3rd ventricle**; **brainstem surfaces and nuclei**; **cerebral sulci, insula and interpeduncular fossa**; **CNS histology board**.
+
+**Photos.** One photo per option whose *own* words name a structure, never a word the stem already names. Each photo is labelled with its letter and ✓/✗: the right answer first, then your choice, then the rest, up to five.
+
+- A wrong option's photo appears only beside the right answer's.
+- Lead photos too general to show an option ("Pain", "Human eye", "Cranial nerves", "Muscle tone") are skipped in favour of the option's next, more specific term.
+
+### Coverage, measured over the whole bank
+
+| | Before v17.3 | v17.3 |
+|---|---|---|
+| Questions with an answer figure | 559 of 1,011 practice (keyword rule) | **1,410 / 1,410** (practice and held-out) |
+| Options marked on a diagram | 13.6% | **93.9%** (5,460 / 5,815); practice **94.8%** (3,993 / 4,212) |
+| Right answers marked | 20% | **98.6%** (1,390 / 1,410); practice **99.1%** (1,002 / 1,011) |
+| Questions with *every* option marked | 45 | **1,131** |
+
+Where an option is still not drawn, its legend row shows its text in grey. The explanation beside it still names it.
+
+### Guard rails
+
+- **Held-out firewall.** Every diagram's text is checked against the sealed mock questions. No 7-word run is shared (atlas test A9). The check caught two phrases during the work, and both were reworded.
+- **Sealed mocks** still show no diagrams and no photos until submission (G9, M6).
+- **Section ids.** The notes' inserted sections use slug ids (`ph-sleep+sleep-cycles-…`), and the diagrams now point at those.
+
+### Evidence
+
+`tests/answer_figure_test.js` **10/10** checks:
+
+- the coverage thresholds;
+- the rendered answer: chip, green key, red wrong options, a badge on every letter, one legend row per option;
+- value answers, with the contrasts in blue;
+- "all of the above";
+- weak aliases;
+- lesson ties;
+- the real lesson flow: the figure appears on every answered question, and photos are letter-labelled with the right answer first;
+- no page errors.
