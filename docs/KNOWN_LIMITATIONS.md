@@ -2,6 +2,16 @@
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
 
+## v17.4 answer figures and Renaissance v1
+
+- One practice option is still not drawn (EHSAN-PHYS-PHYSIOLOGIC-OPTICS-MCQ-4 c, "protected by bony orbit"); 89 held-out options and 7 held-out keys are not drawn and were deliberately not tailored (firewall).
+- Renaissance stores its learner model only on this device (`localStorage["renaissance_v1"]`), not in the cloud save: clearing site data erases it. Intentional for the first release (isolation from medicine).
+- Renaissance appears only when medicine returns STOP for the day; on days medicine is never finished, it never appears (intended before the exam).
+- Season 1 has six sessions; after them only hooks come back until season 2 is authored. Taste, literature, art and music are not yet in it.
+- Four references in season 1 are marked "not re-checked in this build" in the app (Kirby & Herrnstein 1995, Kydland & Prescott 1977, DellaVigna & Malmendier 2006, Diamond & Dybvig 1983, Berkson 1946, MRC 1948).
+- The Odyssey scene is a paraphrase: Project Gutenberg is blocked from the build machine and nothing was quoted from memory.
+- The live deployment could not be verified from the build session (Vercel connector 403/404).
+
 ## v17.3 answer figures and per-option photos
 
 - **Matching is by words, not understanding.** An option is marked where its own words (or its explanation line) name a drawn part, through a hand-written alias list.

@@ -1,0 +1,23 @@
+{
+ "at": "2026-09-26T10:26:43.018Z",
+ "questions": 1410,
+ "options": 5815,
+ "marked": 5725,
+ "keys": 1410,
+ "keysMarked": 1403,
+ "practice": {
+  "options": 4212,
+  "marked": 4211,
+  "keys": 1011,
+  "keysMarked": 1011
+ },
+ "heldout": {
+  "options": 1603,
+  "marked": 1514,
+  "keys": 399,
+  "keysMarked": 392
+ },
+ "undrawnPractice": [
+  "EHSAN-PHYS-PHYSIOLOGIC-OPTICS-MCQ-4 c) Is protected by bony orbit"
+ ]
+}

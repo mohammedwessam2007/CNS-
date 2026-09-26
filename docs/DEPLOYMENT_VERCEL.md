@@ -1,11 +1,12 @@
-# Deployment: Vercel host (v17.3 · MCQ exam + department drawings + CNS atlas + game layer + course map + opt-in commute/voice + answer figures)
+# Deployment: Vercel host (v17.4 · MCQ exam + department drawings + CNS atlas + game layer + course map + opt-in commute/voice + answer figures + Renaissance v1)
 
 | | |
 |---|---|
-| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v17.3 · MCQ EXAM") |
+| Live URL | **https://intellectuality-cns.vercel.app** (tab title "INTELLECTUALITY CNS v17.4 · MCQ EXAM") |
 | Vercel project | `intellectuality-cns` (`prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk`), team *mohammedwessam2007's projects*, Hobby plan |
 | Built from | GitHub `mohammedwessam2007/CNS-`, branch `claude/intellectuality-v14-upgrade-e2e4vt`, app from commit `fd9ba32` (v17.3; later docs-only commits redeploy the same app); root directory `deploy/vercel` |
 | Deployment | `dpl_4xQNYFmM9vA7tvGWbY3knfrNXcUJ` (v17.3, commit `fd9ba32`): **READY** in 16 s, production, aliased to `intellectuality-cns.vercel.app`, functions in `fra1` (Frankfurt). The connector's file tools refuse Git deployments (404/401), so the file check ("68 app scripts/styles present": the 10 new diagram files and `cns-answer-v17.js`) was read in the identical local build, and every suite ran against that build on :8790. Earlier v17.3 parts each deployed on push (parts 7–18, e.g. `dpl_DiZt2AHJ…` for part 18). Previous: `dpl_T2X17iza…` (v17.2), `dpl_J1zvDz7u…` (v17.1 course map), `dpl_H4vSAFNr…` (v17), `dpl_BqnsfG9x…` (v16.3), `dpl_CyqrBpRX…` (v16.2), `dpl_4vTt3Y9e…` (v16.0) |
+| v17.4 | Pushed 26 Sep 2026 (commits `3412407` drawings, `8329929` Renaissance, then docs/tests). Every push redeploys automatically. **Not confirmed from the build session**: the Vercel connector now returns 403 (list deployments) and 404 (deployment by URL) for this project, so the READY state and the live files could not be read. The identical build (`deploy/vercel/build.mjs`) passed every suite on :8790. To confirm on the iPad: the tab title reads "v17.4", and after finishing the day's medicine a RENAISSANCE card appears under "STOP MEDICINE". |
 | Access | Public: Vercel Authentication and password protection are **off**, so the iPad needs no Vercel login |
 | Hatchable | Untouched. The Hatchable site is still v53 (there is no Hatchable connector in the build session) |
 

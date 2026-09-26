@@ -248,3 +248,49 @@ The first full pass had two red items, and both were fixed:
 - **Rollback probe.** It needs the exact v53 files (`6e3ebec`) served on :8788, and that server was not running. With it served, the probe passes.
 
 Logs: `receipts/v17_3/all_suites_first_pass_v17_3.txt`, `receipts/v17_3/rerun_after_fixes_v17_3.txt`, `receipts/v17_3/rollback_probe.txt`.
+
+
+## v17.4: the last undrawn options, and a second organ (Renaissance) after medicine
+
+The owner asked (26 Sep 2026): *"Draw the remaining 6% too, no AI goyslop, super relevant. And we will add an extra sector in our system: after CNS is done for the day, we start the new sector."* (with the full Renaissance Singularity mission).
+
+### The remaining options, drawn
+
+Seven new boards (development of the CNS; scalp and face nerves; parotid, jaw and TMJ; cortical areas and aphasias; arousal and the hypothalamus; pharynx, tonsil and the cervical plexus), the claustrum and amygdala on the capsule section, the deltoid jerk, Purkinje–Sanson images, amblyopia and strabismus, sound localisation and pitch, and names for scattered options on the parts that answer them (75 diagrams in total).
+
+| Answer figures | v17.3 | v17.4 |
+|---|---|---|
+| Practice right answers drawn | 1,000 / 1,011 | **1,011 / 1,011** |
+| Practice options drawn | ~96% | **4,211 / 4,212** (the one left: "the eye is protected by the bony orbit" — the orbit is not in the eyeball section and a forced mark would be filler) |
+| All options, whole bank | 94.0% | **98.5%** (5,725 / 5,815) |
+| All right answers, whole bank | 98.8% | **99.5%** (1,403 / 1,410) |
+
+Held-out-only gaps (89 options, 7 keys) were not tailored: aliases were never written from held-out items (firewall check: 0 shared 7-word phrases with held-out stems). Receipt: `receipts/v17_4/answer_figure_coverage.json`.
+
+### Renaissance v1
+
+A separate organ: its own files (`renaissance-v1.js`, `renaissance-s1.js`, `renaissance-v1.css`), its own storage key, its own screen. It shows one door on the **STOP MEDICINE** screen — today's question and CONTINUE — and nothing else in the app changes. Behind the door: committed predictions with confidence, every wrong option pre-diagnosed and repaired, a picture or model you can change, two real cases compared, the idea used in a new case and in a far one, a small build (FORGE), and ideas that come back 1, 7 and 30 days later without hints. Helpers: WHY THIS?, SHOW ME DIFFERENTLY, I ALREADY GET THIS, THIS DIDN'T CLICK, GO DEEPER, DONE.
+
+Life first: one session a day; shut on the exam weekend and between 01:00 and 05:00; a 10-minute dose in exam week, late at night or after a heavy week (and the session simply continues another day); rests above 300 minutes a week; no streaks, no backlog. Off switches: `?renaissance=off`, `localStorage.renaissance_off = "1"`, or one constant.
+
+Season 1 (six sessions): tying your own hands (commitment devices), the planes that came back (selection), the test says positive (base rates), the shower that won't settle (feedback with delay), paying for rat tails (Goodhart), the two clinics of Vienna (discriminating tests, on Semmelweis's own counts). Research, architecture, failure universe, benchmarks, invention registry and a 10-year simulation: `docs/RENAISSANCE/`.
+
+### Evidence (`receipts/v17_4/`)
+
+| Suite | Source :8787 | Vercel build :8790 |
+|---|---|---|
+| renaissance_test (new, 27 checks) | 27/27 | 27/27 |
+| answer_figure_test | 10/10 | 10/10 |
+| atlas_game_test | 22/22 | 22/22 |
+| course_map_test · audio_options_test · dept_figs_test | 11/11 · 12/12 · 16/16 | 11/11 · 12/12 · 16/16 |
+| v16_test (public and owner device) | 25/25 · 25/25 | |
+| certify · spread · learn · v15.3 · host · gallery | 62/62 · 23/23 · 17/17 · 10/10 · 14/14 · 7/7 | |
+| hostile_test | 26/26 (S1 now counts the Renaissance door separately: medicine still has exactly one next button) | |
+| leak audit · rollback probe | 0 text leaks, 0 query leaks · v53 → v14.2 → v17.4 clean | |
+| strict coverage | practice taught 1,009/1,009 | |
+
+### Honest limits
+
+- Nothing shows yet that Renaissance makes him more capable; the instruments exist, the months of delayed data do not.
+- Taste, literature, art and music are not in season 1 (their lawful primary material could not be fetched from the build machine).
+- The live deploy could not be confirmed from the build session: the Vercel connector now answers 403/404 for this project. The identical build passed every suite locally.
