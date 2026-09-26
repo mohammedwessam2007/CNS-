@@ -589,7 +589,8 @@
     if (step && step.kind !== "hook") h += visual(q.svg);
     if (q.panels) h += '<div class="rnPair">' + q.panels.map((pn) => '<div class="rnSide"><h3>' + E(pn.title) + "</h3>" + visual(pn.svg) + md(pn.body || "") + "</div>").join("") + "</div>";
     if (s.hint && q.alt) h += '<div class="rnRep" data-kind="alt"><div class="rnRepTag">Another way to see the question</div>' + md(q.alt) + "</div>";
-    h += '<div class="rnOpts">' + perm(id, q.options.length)
+    // the challenge id repeats across sessions; salt it with the session so its right answer moves too
+    h += '<div class="rnOpts">' + perm(id === "challenge" && P && P.sid ? P.sid + ":challenge" : id, q.options.length)
       .map((k, pos) => {
         const o = q.options[k],
           L = "ABCDEFG"[pos];
@@ -983,9 +984,9 @@
    * Opt-out (the learner decides what is measured): localStorage renaissance_probes = "off". */
   const probesOff = () => safe(() => localStorage.getItem("renaissance_probes") === "off", false);
   const SEALED = () => window.RENAISSANCE_SEALED || { items: [] };
-  function unseal(blob, id) {
+  function unseal(blob, id, suffix) {
     return safe(() => {
-      const salt = SEALED().salt || "";
+      const salt = (SEALED().salt || "") + (suffix || "");
       const bin = atob(blob);
       let h = hashNum(salt + ":" + id);
       const bytes = new Uint8Array(bin.length);
@@ -998,8 +999,7 @@
   }
   function probeDue(st, today) {
     const P0 = st.probe || {},
-      start = P0.start;
-    if (!start) return [];
+      start = P0.start || today; // before the first open, today is day 0 (the baseline shows at the door)
     const since = daysBetween(start, today),
       out = [];
     for (const it of SEALED().items || []) {
@@ -1017,27 +1017,31 @@
         break;
       }
     }
-    return out.sort((a, b) => a.at - b.at || (a.it.order || 0) - (b.it.order || 0));
+    // the pre-registered comparisons (forms, reader questions) come before this week's unknown problem
+    const rank = (f) => (f === "A" || f === "B" ? 0 : f === "rt" ? 1 : 2);
+    return out.sort((a, b) => rank(a.it.form) - rank(b.it.form) || a.at - b.at || (a.it.order || 0) - (b.it.order || 0));
   }
   function dueProbes(st, today, dose) {
     if (probesOff() || dose <= DOSE.short) return [];
     const list = probeDue(st, today).slice(0, 2);
     return list
       .map(({ key, it }) => {
-        const q = unseal(it.blob, it.id);
+        const q = unseal(it.blob, it.id),
+          meta = (it.meta && unseal(it.meta, it.id, "/meta")) || {};
         if (!q) return null;
-        return { id: "probe:" + key, type: "q", kind: "probe", stage: "probe", probe: key, form: it.form, min: 1.5, stem: q.stem, options: q.options, after: q.after, feedback: it.form === "alien", title: q.title || "", atoms: q.atoms || [] };
+        const work = it.after ? ((sessionById(it.after) || {}).works || [])[0] || null : null;
+        return { id: "probe:" + key, type: "q", kind: "probe", stage: "probe", probe: key, form: it.form, work, min: 1.5, stem: q.stem, options: q.options, after: q.after, feedback: it.form === "alien", title: q.title || "", atoms: meta.atoms || [] };
       })
       .filter(Boolean);
   }
   function recordProbe(st, step, a) {
     st.probe = st.probe || { start: null, done: {} };
-    st.probe.done[step.probe] = { t: a.t, ok: a.ok, conf: a.conf, ms: a.ms, form: step.form, day: st.probe.start ? daysBetween(st.probe.start, dayKey(new Date(a.t))) : null };
+    st.probe.done[step.probe] = { t: a.t, ok: a.ok, conf: a.conf, ms: a.ms, form: step.form, work: step.work || null, day: st.probe.start ? daysBetween(st.probe.start, dayKey(new Date(a.t))) : null };
   }
   function probeReport(st) {
     const by = {};
     for (const [key, r] of Object.entries((st.probe || {}).done || {})) {
-      const f = r.form + (/@90$/.test(key) ? "@90" : "");
+      const f = r.form === "rt" && r.work ? "rt-" + r.work : r.form + (/@90$/.test(key) ? "@90" : "");
       const o = (by[f] = by[f] || { n: 0, ok: 0 });
       o.n++;
       if (r.ok && r.conf !== "guess") o.ok++;
