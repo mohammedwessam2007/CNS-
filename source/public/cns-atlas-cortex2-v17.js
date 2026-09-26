@@ -214,13 +214,18 @@
       cell("amp", 300, 158, 210, 36, ["AMPLIFIES ≈ 22× in pressure:", "area ratio ≈ 17× + lever ≈ 1.3×", "(primary job of the ossicles)"], B, BR) +
       cell("att", 300, 198, 210, 36, ["ATTENUATION reflex: STAPEDIUS (VII)", "+ TENSOR TYMPANI (V3), 40–80 ms;", "facial palsy → HYPERACUSIS"], O, OR) +
       cell("eust", 300, 238, 210, 26, ["EUSTACHIAN tube equalizes air", "pressure on both sides of the drum"], G, GR) +
-      cell("cond", 300, 268, 210, 16, ["ossicles lost → conductive loss 15–20 dB"], R, RR);
+      cell("cond", 300, 268, 210, 16, ["ossicles lost → conductive loss 15–20 dB"], R, RR) +
+      box(4, 294, 512, 36) + T(260, 306, "NOT THE OSSICLES' JOB", "sm mut") +
+      cell("loc", 12, 310, 244, 16, ["DIRECTION: both ears, brainstem (superior olive)"], P, PR) +
+      cell("pitch", 264, 310, 244, 16, ["PITCH: the cochlea's basilar membrane (place)"], P, PR);
     A.scene("sound", {
       title: "Sound · the decibel scale and middle-ear amplification",
-      vb: "0 0 520 292",
+      vb: "0 0 520 334",
       svg,
       intro: "Top: the **decibel** scale (0 dB is the threshold; each ×1000 in pressure adds **60 dB**). Bottom: the drum-to-oval-window **area ratio** and the ossicular **lever** amplify about **22×**.",
       parts: {
+        loc: ["Localizing sound", "Worked out **centrally**, by comparing the two ears: the **time** difference (medial superior olive) and the **loudness** difference (lateral superior olive). The ossicles do not do it."],
+        pitch: ["Telling frequencies apart", "Done by the **cochlea**: each frequency peaks at its own place on the basilar membrane (high at the base, low at the apex). The ossicles do not do it."],
         db0: ["0 dB", "The **threshold** of hearing: just audible, not inaudible."],
         db60: ["60 dB", "Normal conversation. A sound whose **pressure is 1000×** the threshold = 20 × 3 = **60 dB** (1000× the intensity would be 30 dB)."],
         db120: ["120 dB", "Discomfort."],
@@ -235,6 +240,8 @@
         cond: ["Loss of the ossicles", "Middle-ear disease of the ossicles → **conductive** deafness; hearing drops about 15–20 dB."],
       },
       al: {
+        loc: ["localizing sound", "localization of sound", "sound localization", "direction of a sound", "direction of sound"],
+        pitch: ["distinguish different sound frequencies", "frequency discrimination", "discrimination of frequency", "discriminate frequencies"],
         db0: ["0 db", "threshold of hearing"],
         db60: ["60 db", "1000 times the pressure", "pressure 1000 times"],
         db140: ["140 db", "damages the auditory receptors"],

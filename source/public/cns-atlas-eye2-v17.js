@@ -313,10 +313,13 @@
       cell("pow", 316, 276, 158, 40, ["POWER ≈ 59 D: cornea ≈ 43 D", "(most); lens ≈ 15–20 D (variable)", "D = 1/f (m): f = 1 cm → 100 D"], "#66e9ff") +
       cell("triad", 16, 330, 150, 34, ["NEAR TRIAD: accommodation,", "convergence, miosis"], "#d9ff43") +
       cell("miosis", 172, 330, 150, 34, ["MIOSIS: depth of focus ↑,", "spherical + chromatic aberration ↓"], "#d9ff43") +
-      cell("cat", 328, 330, 146, 34, ["CATARACT: lens opacity (protein", "denaturation) → remove, convex IOL"], "#ff5d7a");
+      cell("cat", 328, 330, 146, 34, ["CATARACT: lens opacity (protein", "denaturation) → remove, convex IOL"], "#ff5d7a") +
+      cell("psi", 14, 370, 232, 44, ["PURKINJE–SANSON: THREE images of a candle:", "cornea (upright) · anterior lens (upright, big,", "SHRINKS for near) · posterior lens (small, INVERTED)"], "#66e9ff") +
+      cell("amb", 250, 370, 104, 44, ["AMBLYOPIA: lazy eye,", "poor vision from", "disuse in childhood"], "#b39cff") +
+      cell("fus", 358, 370, 116, 44, ["STRABISMUS: the two", "images not fused", "→ diplopia"], "#b39cff");
     A.scene("refract", {
       title: "Accommodation and the errors of refraction",
-      vb: "0 0 480 372",
+      vb: "0 0 480 418",
       svg,
       intro: "Top: what changes when you look from far to near. Bottom: where the image falls in each error, and which lens fixes it.",
       parts: {
@@ -335,6 +338,9 @@
         pow: ["Refractive power", "**D = 1 / focal length in metres** (1 cm → **100 D**). The eye ≈ **59 D**: the **cornea gives most** (≈ 43 D); the lens ≈ 15–20 D and is the only variable part."],
         triad: ["Near response (triad)", "**Accommodation + convergence + miosis**. Ciliary muscle relaxation is **not** part of it. It runs through the cortex, so it survives a pretectal lesion (Argyll Robertson)."],
         miosis: ["Effects of miosis", "**Increases the depth of focus**, reduces spherical and **chromatic** aberration, cuts peripheral rays; less light enters."],
+        psi: ["Purkinje–Sanson images", "A candle in front of the eye gives **three** images: from the cornea (upright), the **anterior** lens surface (large, upright) and the **posterior** lens surface (small, **inverted**). For near vision the anterior surface bulges, so its image becomes **smaller** and moves: proof that the lens accommodates."],
+        amb: ["Amblyopia", "A 'lazy eye': poor vision from disuse in childhood (squint, unequal refraction). Not a loss of accommodation."],
+        fus: ["Strabismus (squint)", "The eyes are not aligned, so the two images are **not fused** in the cortex → diplopia (or suppression). Not myopia."],
         cat: ["Cataract", "**Loss of lens transparency** from denaturation and coagulation of lens proteins (age, **diabetes**, **UV**, trauma, steroids). Treated by removing the lens and implanting a **convex** lens."],
       },
       al: {
@@ -353,6 +359,9 @@
         pow: ["refractive power", "diopter", "diopters", "focal length", "power of the eye", "focusing power", "100"],
         triad: ["near response", "convergence", "near triad", "accommodation"],
         miosis: ["miosis", "depth of focus", "depth of field", "chromatic aberration", "spherical aberration", "reduces visual field"],
+        psi: ["purkinje sanson", "purkinje sansons", "images of the candle", "image of the candle", "sanson"],
+        amb: ["amblyopia", "lazy eye"],
+        fus: ["strabismus", "squint", "not fused", "diplopia"],
         cat: ["cataract", "lens opacity", "loss of lens transparency", "denaturation", "coagulation of the proteins", "diabetes", "uvr", "ultraviolet"],
       },
       drill: ["lensN", "lensF", "cmN", "cmF", "myo", "hyp", "ast", "pres", "cat", "triad"],

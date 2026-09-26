@@ -140,7 +140,7 @@
         lgn: ["Lateral geniculate body", "Thalamic relay to the cortex. **Not** part of the light reflex."],
         mey: ["Meyer's loop (lower optic radiation)", "Swings forward into the **temporal** lobe; carries the **upper** quadrant of the opposite field. Temporal lesion → **superior quadrantanopia** ('pie in the sky')."],
         par: ["Upper (parietal) optic radiation", "Carries the **lower** quadrant of the opposite field. The radiation passes through the **retrolenticular** part of the internal capsule."],
-        v1: ["Primary visual cortex (area 17)", "Calcarine sulcus, **posterior cerebral artery** territory. Occlusion → opposite homonymous hemianopia **with macular sparing**."],
+        v1: ["Primary visual cortex (area 17)", "Calcarine sulcus, **posterior cerebral artery** territory. Occlusion → opposite homonymous hemianopia **with macular sparing**. Inside it the **blobs** code **colour**; the interblobs code orientation and form; layer 4 is the main input from the LGN."],
         pre: ["To the pretectal nucleus", "Light-reflex fibres leave the tract **before** the LGB → pretectal nucleus → both Edinger–Westphal nuclei."],
       },
       drill: ["on", "ch", "ot", "lgn", "mey", "par", "v1", "retN", "retT"],

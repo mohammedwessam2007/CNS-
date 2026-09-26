@@ -179,14 +179,14 @@
       pyr: ["pyramid", "medullary pyramid", "medulla oblongata"],
       dec: ["pyramidal decussation", "motor decussation", "decussation of the pyramid"],
       oli: ["olive", "inferior olive", "olivary"],
-      n3: ["oculomotor nerve", "oculomotor", "third nerve", "cranial nerve iii"],
-      n4: ["trochlear", "fourth nerve", "cranial nerve iv"],
-      n5: ["trigeminal", "cranial nerve v"],
-      n6: ["abducent", "abducens", "sixth nerve", "cranial nerve vi"],
-      n7: ["facial nerve", "cranial nerve vii"],
-      n8: ["vestibulocochlear", "eighth nerve", "auditory nerve", "cranial nerve viii"],
-      n9x: ["glossopharyngeal", "vagus", "vagal", "accessory nerve", "spinal accessory", "cranial nerve ix", "cranial nerve x", "cranial nerve xi"],
-      n12: ["hypoglossal", "cranial nerve xii"],
+      n3: ["oculomotor nerve", "oculomotor", "third nerve", "cranial nerve iii", "~3rd"],
+      n4: ["trochlear", "fourth nerve", "cranial nerve iv", "~4th"],
+      n5: ["trigeminal", "cranial nerve v", "~5th"],
+      n6: ["abducent", "abducens", "sixth nerve", "cranial nerve vi", "~6th"],
+      n7: ["facial nerve", "cranial nerve vii", "~7th"],
+      n8: ["vestibulocochlear", "eighth nerve", "auditory nerve", "cranial nerve viii", "~8th"],
+      n9x: ["glossopharyngeal", "vagus", "vagal", "accessory nerve", "spinal accessory", "cranial nerve ix", "cranial nerve x", "cranial nerve xi", "~9th", "~10th", "~11th"],
+      n12: ["hypoglossal", "cranial nerve xii", "~12th"],
     },
     csf: {
       lv: ["lateral ventricle"],
@@ -330,7 +330,7 @@
       syn: ["synaptic terminal", "synaptic body", "glutamate release"],
     },
     facial: {
-      n7: ["facial nerve", "facial canal", "geniculate ganglion", "stylomastoid foramen"],
+      n7: ["facial nerve", "facial canal", "geniculate ganglion", "stylomastoid foramen", "~7th"],
       n8: ["vestibulocochlear"],
       gpn: ["greater petrosal", "lacrimal gland"],
       stn: ["nerve to stapedius", "stapedius", "hyperacusis"],
@@ -340,6 +340,46 @@
       cross: ["lower face", "lower half of the face"],
     },
   };
+  // v17.4: the names the last undrawn options use, each put on the part that answers it
+  const AL_MORE = {
+    levels: { conus: ["~lower border of l5"] },
+    visc: { tent: ["posterior cranial fossa"], vis: ["~more common than the other types of pain"] },
+    cereb: { icp: ["~medulla"], mcp: ["~pons"], scp: ["~midbrain"] },
+    embryo: { v_myel: ["~medulla"], v_met: ["~pons"], v_mes: ["~midbrain"] },
+    cnshist: { closed: ["~medulla"], open: ["~medulla"], endo: ["~blood vessels", "rich in blood vessels"] },
+    capsule: { cl: ["claustrum"], amy: ["amygdala", "amygdaloid", "amygdaloid nucleus"], genu: ["brainstem motor nuclei", "brain stem motor nuclei", "corticobulbar tract"] },
+    necktri: { scm: ["turns the face", "turn the face"] },
+    willis: { va: ["suboccipital triangle", "foramen transversarium", "foramina transversaria", "vertebral artery"] },
+    eca: { ica: ["~ophthalmic"] },
+    trigem: { tongue: ["shape of the tongue", "extrinsic muscles", "intrinsic muscles"], nasph: ["pharyngeal nerve"] },
+    nose: { palate: ["~floor"] },
+    parotid: { tmj: ["condylar synovial joint", "condylar synovial joints", "condylar joint"] },
+    path: { cst: ["corticospinal tract"] },
+    synprop: { fatigue: ["decreased synthesis of neurotransmitter", "decreased synthesis of neurotransmitters"], mict: ["signals from the brain stem", "signals from the brainstem"] },
+    psp: { rec: ["molecular composition"], ipsp: ["~shorter duration"], pinh: ["ca2+ influx into presynaptic", "increased ca2+ influx", "ca2+ influx into post synaptic", "ca2+ influx into postsynaptic"] },
+    pain: { noc: ["~skin", "more numerous in viscera", "~voluntary be inhibited", "~voluntarily be inhibited", "~damage of the sensory receptors"], bk: ["~atp"], isch: ["muscle tension"], pag: ["never activated naturally", "activated naturally"], hyp1: ["~decreased pain sensibility", "~skin is normal"] },
+    ras: { c_drug: ["~adrenaline", "~epinephrine"], r_in: ["~diffuse into neighboring neurons", "~diffuse into neighbouring neurons"] },
+    transect: { flexp: ["~central inhibitory state"], perm: ["loss of sensations", "loss of sensation"] },
+    umnlmn: { nb_sleep: ["~sleep"], l_sup: ["~hyperesthesia", "~hyperaesthesia"], nb_inv: ["~basal ganglia"], cst: ["~brainstem", "~brain stem"] },
+    cbsigns: { gait: ["~abnormal gait", "~abnormal gail"] },
+    memory: { ptp2: ["~ca pump", "rapid active ca pump"] },
+    vision: { v1: ["interblob", "interblobs", "blobs", "visual cortex"] },
+    refract: { myo: ["refractive error", "refractive errors"], hyp: ["refractive error", "refractive errors"], ast: ["refractive error", "refractive errors"] },
+    pupilclin: { lr_use: ["unresponsive and dilated pupil", "fixed dilated pupil", "fixed and dilated pupil"] },
+    labyr: { rw: ["damp out low frequency", "~damp"], endo: ["~vestibule", "bony labyrinth", "membranous labyrinth"], vnrv: ["vertigo"] },
+    sound: { att: ["protect the ear from damage", "protect the ear"] },
+    earhist: { eamc: ["~hairs"], shr: ["shrapnel s membrane", "shrapnel"], tm2: ["pars tensa"] },
+    ntypes: { loc_aut: ["~postganglionic"] },
+    nerve: { chrom: ["~lysosomes"], macro: ["~lymphocytes"] },
+    eyeball: { str: ["~collagen fibrils", "excess collagen"] },
+    csf: { lv: ["fifth ventricle", "cavum septi pellucidi", "septum pellucidum"], ag: ["indent the overlying skull", "pit the skull", "granular foveolae"] },
+    synapse: { term: ["more numerous in peripheral nervous system", "more numerous in the peripheral nervous system"] },
+    receptor: { ad_fast: ["rate of adaptation"], ad_slow: ["rate of adaptation"], ch_mod: ["nature of the stimulus"] },
+  };
+  for (const [sid, m] of Object.entries(AL_MORE)) {
+    AL[sid] = AL[sid] || {};
+    for (const [pid, a] of Object.entries(m)) AL[sid][pid] = [...(AL[sid][pid] || []), ...a];
+  }
   // generic single words never used alone as an alias derived from a name
   const GENERIC = new Set("cortex nucleus tract nerve artery cell layer fiber membrane horn root area window canal duct space ventricle part body gland muscle vein branch process zone surface lobe sinus".split(" "));
 
@@ -470,7 +510,13 @@
       "fast slow rapid rapidly slowly quickly gradually suddenly strong weak stronger weaker positive negative true false yes all some many few " +
       "ms msec millisecond milliseconds sec second seconds min minute minutes hour hours hr hrs day days week weeks wk month months year years mm cm m um μm nm hz khz db " +
       "mv mmhg times fold percent degree degrees c zero one two three four five six seven eight nine ten twice half double triple " +
-      "depolarization hyperpolarization depolarized hyperpolarized maximal minimal maximum minimum nil constant variable continuous intermittent").split(" ")
+      "depolarization hyperpolarization depolarized hyperpolarized maximal minimal maximum minimum nil constant variable continuous intermittent " +
+      // descriptors: what kind of tissue or lining the named structure is ("Simple columnar", "Hyaline cartilage", "Thin and firm")
+      "simple stratified pseudostratified squamous cuboidal cubical columnar ciliated nonciliated keratinized keratinised epithelium epithelial lined lining " +
+      "cartilage hyaline elastic fibrocartilage fibrous collagen collagenous layer layers membrane thin thick firm transparent opaque loose dense cellular acellular " +
+      "can cannot regenerate regenerates formed bone bony outer inner glands gland tubular coiled apocrine holocrine merocrine sebaceous sweat mucous serous " +
+      "alveolar branched compound type types shaped shape oval round large small size rich poor highly vascular avascular pigmented nonpigmented " +
+      "non single cell cells tall flat").split(" ")
   );
   function plan(qid, sel) {
     const q = qget(qid);
@@ -527,7 +573,7 @@
       let refs = [];
       if (/(all|none) of (the )?above|all of these|all the above/.test(t)) refs = opts.filter((p) => p !== o && p.k < o.k).map((p) => p.k);
       else {
-        const m = /^\(?([a-g])\)?\s*(?:,|&|and|\+)\s*\(?([a-g])\)?(?:\s*(?:,|&|and|\+)\s*\(?([a-g])\)?)?\s*(?:are|is)?\s*(?:correct|true|right)?\.?$/.exec(t);
+        const m = /^(?:both\s+)?\(?([a-g])\)?\s*(?:,|&|and|\+)\s*\(?([a-g])\)?(?:\s*(?:,|&|and|\+)\s*\(?([a-g])\)?)?\s*(?:are|is)?\s*(?:correct|true|right)?\.?$/.exec(t);
         if (m) refs = [m[1], m[2], m[3]].filter(Boolean);
       }
       if (!refs.length) continue;
@@ -577,11 +623,12 @@
       if (drawn && home.has(sid)) sc += 2;
       return sc;
     };
-    const pick = (left, not) => {
+    const pick = (left, not, needAnchor) => {
       let best = null,
         bs = 0;
       for (const sid of scenes) {
         if (not.has(sid)) continue;
+        if (needAnchor && !left.some((o) => o.anchors.some((h) => h.scene === sid))) continue;
         const sc = score(sid, left);
         if (sc > bs) {
           bs = sc;
@@ -598,9 +645,9 @@
     figs.push(main);
     used.add(main);
     left = left.filter((o) => !o.anchors.some((h) => h.scene === main));
-    // up to two zoomed panels for the options drawn on other diagrams
-    while (left.length && figs.length < 3) {
-      const sid = pick(left, used);
+    // zoomed panels (up to three) for options drawn on other diagrams: only diagrams that hold one of them
+    while (left.length && figs.length < 4) {
+      const sid = pick(left, used, true);
       if (!sid || !left.some((o) => o.anchors.some((h) => h.scene === sid))) break;
       figs.push(sid);
       used.add(sid);
@@ -737,7 +784,7 @@
       .map((o) => {
         const cls = o.good ? "k" : o.mine ? "m" : "x",
           mark = o.good ? "✓" : "✗",
-          name = (o.refs ? "= " + o.refs.map((r) => r.toUpperCase()).join(" + ") + (o.here ? ": " : "") : "") + (o.val ? "“" + E(o.text) + "”, about " : "") + (o.here ? o.names.map((n) => md(n)).join(" + ") : o.fig > 0 ? "on panel " + (o.fig + 1) + " below" : o.fig === 0 ? "on the first picture" : ""),
+          name = (o.refs ? "= " + o.refs.map((r) => r.toUpperCase()).join(" + ") + (o.here ? ": " : ", ") : "") + (o.val ? "“" + E(o.text) + "”, about " : "") + (o.here ? o.names.map((n) => md(n)).join(" + ") : o.fig > 0 ? "on panel " + (o.fig + 1) + " below" : o.fig === 0 ? "on the first picture" : ""),
           tail = o.good ? " <em>right answer</em>" : o.mine ? " <em>your answer</em>" : "";
         if (!o.here && o.fig < 0) return '<div class="ixAnsRow no"><span class="ixAnsDot">' + E(o.k.toUpperCase()) + "</span><span>" + E(o.text) + "</span></div>";
         return '<div class="ixAnsRow ' + (o.here ? "" : "else ") + cls + '"' + (o.here ? ' data-ixans-k="' + E(o.k) + '"' : "") + '><span class="ixAnsDot ' + cls + '">' + E(o.k.toUpperCase()) + '</span><span><b>' + mark + "</b> " + name + tail + "</span></div>";

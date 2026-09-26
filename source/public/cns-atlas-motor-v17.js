@@ -345,7 +345,7 @@
       svg,
       intro: "Step through it: the action potential opens **voltage-gated Ca²⁺ channels** → Ca²⁺ in → vesicles fuse (**SNARE**) → transmitter binds → the **receptor** decides excite or inhibit.",
       parts: {
-        term: ["Presynaptic knob", "Holds the vesicles, mitochondria and the active zone."],
+        term: ["Presynaptic knob", "Holds the vesicles, mitochondria and the active zone. Chemical synapses like this one are by far most numerous in the **CNS** (a motor neuron carries thousands), not in the peripheral nerves."],
         ves: ["Synaptic vesicles", "Quanta of transmitter, released by **exocytosis** (not diffusion)."],
         dock: ["Docked vesicles and SNAREs", "**v-SNARE** (synaptobrevin) zips with **t-SNAREs** (syntaxin, SNAP-25) to fuse."],
         cach: ["Voltage-gated Ca²⁺ channels", "Open during **depolarization** (not repolarization). Outside Ca²⁺ is ~**10,000×** inside. **Release depends on Ca²⁺ influx.**"],

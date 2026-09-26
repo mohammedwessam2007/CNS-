@@ -177,7 +177,7 @@
       chip("poly", 420, 98, 104, "POLYSYNAPTIC", "withdrawal, crossed ext.", "#ff9f43") + T(420, 136, "longer delay, irradiation,", "sm mut") + T(420, 148, "after-discharge", "sm mut") +
       '<text class="ttl" x="240" y="262" text-anchor="middle">DEEP (TENDON JERK) CENTRES · SUPERFICIAL REFLEXES</text>' +
       chip("jjaw", 44, 272, 70, "jaw jerk", "pons (V)", "#66e9ff") + chip("jbic", 118, 272, 70, "biceps", "C5–C6", "#66e9ff") + chip("jtri", 192, 272, 70, "triceps", "C6–C7", "#66e9ff") +
-      chip("jknee", 266, 272, 70, "knee", "L2–L4", "#66e9ff") + chip("jank", 340, 272, 70, "ankle", "S1–S2", "#66e9ff") + chip("sup", 240, 302, 220, "superficial (skin): abdominal, cremasteric,", "plantar (extensor = Babinski sign)", "#ff9f43");
+      chip("jknee", 266, 272, 70, "knee", "L2–L4", "#66e9ff") + chip("jank", 340, 272, 70, "ankle", "S1–S2", "#66e9ff") + chip("jdel", 414, 272, 70, "deltoid", "C5", "#66e9ff") + chip("sup", 240, 302, 220, "superficial (skin): abdominal, cremasteric,", "plantar (extensor = Babinski sign)", "#ff9f43");
     A.scene("reflexes", {
       title: "Reflex arcs · monosynaptic vs polysynaptic, withdrawal and crossed extensor",
       vb: "0 0 480 334",
@@ -195,6 +195,7 @@
         poly: ["Polysynaptic reflexes", "Withdrawal, crossed extensor, scratch, **mass reflex**: interneurons, longer central delay, irradiation, after-discharge."],
         jjaw: ["Jaw jerk", "Centre in the **pons** (trigeminal, V)."],
         jbic: ["Biceps jerk", "Centre **C5–C6**."],
+        jdel: ["Deltoid jerk", "Centre mainly **C5** (axillary nerve): not the C5–C6 jerk, which is the biceps."],
         jtri: ["Triceps jerk", "Centre **C6–C7**."],
         jknee: ["Knee jerk", "Centre **L2–L4** (L3–L4): a **dynamic stretch reflex**."],
         jank: ["Ankle jerk", "Centre **S1–S2**."],
@@ -212,6 +213,7 @@
         poly: ["polysynaptic", "scratch reflex", "mass reflex", "polysynaptic reflex"],
         jjaw: ["jaw jerk"],
         jbic: ["biceps jerk", "c5 c6", "5th and 6th cervical"],
+        jdel: ["deltoid jerk"],
         jtri: ["triceps jerk", "c6 c7", "c7 c8"],
         jknee: ["knee jerk", "patellar", "l2 l4", "l3 l4"],
         jank: ["ankle jerk", "s1 s2"],
@@ -221,7 +223,7 @@
       sims: [
         { id: "wd", label: "▶ Step on a pin", show: ["wd"], on: ["noc", "aff", "inter", "flx", "cross", "extc"], lost: ["exti"], info: "Pain → **polysynaptic** arc → the same leg **flexes** (extensors inhibited: reciprocal innervation) and the **opposite** leg **extends** to carry the weight (**crossed extensor**)." },
         { id: "mono", label: "Monosynaptic vs polysynaptic", on: ["mono", "poly"], info: "**Monosynaptic** (stretch reflex): 2 neurons, 1 synapse, delay ~0.5 ms, a **deep** reflex. **Polysynaptic**: interneurons, longer delay, irradiation, after-discharge; the withdrawal reflex is **superficial**." },
-        { id: "jerks", label: "Jerk centres", on: ["jjaw", "jbic", "jtri", "jknee", "jank"], info: "Tendon jerks test the **integrity of the reflex arc** at a level: jaw **pons**, biceps **C5–C6**, triceps **C6–C7**, knee **L2–L4**, ankle **S1–S2**." },
+        { id: "jerks", label: "Jerk centres", on: ["jjaw", "jbic", "jdel", "jtri", "jknee", "jank"], info: "Tendon jerks test the **integrity of the reflex arc** at a level: jaw **pons**, biceps **C5–C6**, triceps **C6–C7**, knee **L2–L4**, ankle **S1–S2**." },
       ],
       secs: { "ph-spinal-reflexes#0": "mono", "ph-spinal-reflexes#5": "wd" },
       rules: [
@@ -264,7 +266,7 @@
         tone: ["Muscle tone", "Flaccid in shock; later spastic."],
         bp: ["Blood pressure", "**Loss of vasomotor tone → hypotension** (a severe drop in ABP) during shock; partly recovers as spinal vasomotor reflexes return."],
         bladder: ["Bladder", "Shock: **retention with overflow**. Recovery: an **automatic (reflex) bladder** that empties by reflex, not by will."],
-        flexp: ["Paraplegia in flexion", "Flexor spasms and the **mass reflex** (a small skin stimulus **irradiates**: both legs flex, bladder and rectum empty, sweating)."],
+        flexp: ["Paraplegia in flexion", "Flexor spasms and the **mass reflex** (a small skin stimulus **irradiates**: both legs flex, bladder and rectum empty, sweating). A sign of a **hyperexcitable** cord released from inhibition, not of a central inhibitory state."],
         extp: ["Paraplegia in extension", "In **chronic** paraplegia the extensors predominate, with crossed extensor responses."],
         perm: ["Permanent loss", "**All sensation and all voluntary movement** below the lesion are lost for good. The reflexes are **not** lost permanently."],
       },

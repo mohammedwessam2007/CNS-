@@ -418,7 +418,7 @@
         chrom: ["Cell body: retrograde reaction", "The cell body swells, the **Nissl bodies disperse (chromatolysis, the first change)** and the **nucleus moves to the periphery**. It recovers if the axon regenerates."],
         prox: ["Proximal stump", "Degenerates back only to the nearest node or two, then **sprouts**."],
         ovoid: ["Wallerian degeneration: myelin ovoids", "The **distal** axon and myelin break up into ovoids inside **digestion ('fermentation') chambers**; the earliest sign is **widening of the nodes of Ranvier** as the myelin retracts."],
-        macro: ["Macrophages", "Clear the axon and myelin debris."],
+        macro: ["Macrophages", "Clear the axon and myelin debris. Lymphocytes play no part in guiding regeneration; the Schwann-cell tube does."],
         bung: ["Schwann cells multiply (bands of Büngner)", "Schwann cells **proliferate** (they do not decrease) inside the endoneurial tube and form bands that **guide the regrowing axon**. Regeneration therefore needs the cut ends brought together **with the neurolemmal (Schwann) sheath**."],
       },
       al: {

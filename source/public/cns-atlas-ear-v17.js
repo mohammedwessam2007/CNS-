@@ -78,7 +78,7 @@
         lsc: ["Lateral (horizontal) semicircular duct", "The two horizontal ducts are a **coplanar pair**; the one stimulated by the **caloric test**."],
         amp: ["Ampullae", "Each holds a **crista ampullaris** with its cupula: **angular** acceleration."],
         ow: ["Oval window", "Closed by the footplate of the stapes."],
-        rw: ["Round window", "Closed by the secondary tympanic membrane."],
+        rw: ["Round window", "Closed by the secondary tympanic membrane. A **pressure-release valve**: it bulges outward as the stapes pushes the oval window in, because the cochlear fluid cannot be compressed. It does not damp low frequencies."],
         vnrv: ["Vestibular nerve", "Cell bodies in the vestibular (Scarpa's) ganglion (bipolar)."],
         cnrv: ["Cochlear nerve", "Cell bodies in the spiral ganglion (bipolar)."],
         otm: ["Otolithic membrane", "A gelatinous proteoglycan layer carrying **CaCO₃ otoconia** on top of the macular hair cells (not a 'tectorial membrane')."],
@@ -95,7 +95,7 @@
         lin: ["What each organ senses", "**Maculae**: head position (tilt, gravity) and **linear** acceleration; tilting changes the **pattern** of their discharge. **Canals**: **angular** acceleration; they start nystagmus."],
         copl: ["Coplanar canals", "The two **horizontal** canals; each **anterior** with the **opposite posterior**."],
         calor: ["Caloric test", "Warm or cold water in one ear sets up convection currents in its **horizontal canal** → nystagmus: tests **one canal of one ear**."],
-        endo: ["Endolymph and perilymph", "**Endolymph** (membranous labyrinth, scala media): **high K⁺**, made by the **stria vascularis**, **+80 mV**. **Perilymph** (bony labyrinth: scala vestibuli and **scala tympani**) is like ECF."],
+        endo: ["Endolymph and perilymph", "**Endolymph** (membranous labyrinth, scala media): **high K⁺**, made by the **stria vascularis**, **+80 mV**. **Perilymph** (bony labyrinth: scala vestibuli and **scala tympani**) is like ECF. The **bony** labyrinth is the **vestibule**, the semicircular canals and the cochlea; the **membranous** labyrinth inside it is the utricle, saccule, semicircular **ducts** and cochlear duct."],
       },
       al: {
         coch: ["cochlear duct", "scala media", "cochlea", "membranous labyrinth", "2 turns", "modiolus"],
@@ -177,7 +177,7 @@
       intro: "Top: the tissues of the external and middle ear. Bottom: the two kinds of deafness and how pitch and loudness are coded.",
       parts: {
         aur: ["Auricle", "A plate of **elastic cartilage** covered by skin."],
-        eamc: ["External meatus: outer third", "Cartilaginous, with **hairs**, sebaceous and **ceruminous** glands."],
+        eamc: ["External meatus: outer third", "Cartilaginous, with **hairs**, sebaceous and **ceruminous** glands. The hairs are in this **outer** part, not the inner bony part."],
         cer: ["Ceruminous glands", "**Coiled tubular apocrine sweat glands**: ear wax."],
         eamb: ["External meatus: inner two-thirds", "Bony, thin skin, no hairs."],
         tm2: ["Tympanic membrane", "The **lateral wall** of the middle ear; the **handle of the malleus** is attached to it."],

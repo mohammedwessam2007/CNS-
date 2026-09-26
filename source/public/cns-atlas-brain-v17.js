@@ -180,7 +180,7 @@
       svg,
       intro: "Tap any artery. The **middle cerebral** is the one big branch that is **not** part of the circle.",
       parts: {
-        va: ["Vertebral artery", "From the **subclavian**; through the foramen magnum. Branches: anterior and posterior spinal, **PICA** (largest). The two join at the **lower border of the pons** → basilar."],
+        va: ["Vertebral artery", "From the **subclavian**; through the foramen magnum. Branches: anterior and posterior spinal, **PICA** (largest). The two join at the **lower border of the pons** → basilar. Its **2nd part** runs up through the foramina transversaria (C6–C1); its **3rd part** lies in the **suboccipital triangle**."],
         ba: ["Basilar artery", "Pontine, labyrinthine, **AICA**, **superior cerebellar**; ends by dividing into the two **posterior cerebral** arteries."],
         pica: ["Posterior inferior cerebellar artery (PICA)", "Branch of the **vertebral**. Lateral medulla, inferior cerebellum, choroid plexus of the 4th ventricle. Occlusion → **lateral medullary (Wallenberg)** syndrome."],
         aica: ["Anterior inferior cerebellar artery (AICA)", "Branch of the **basilar** (not the vertebral)."],
@@ -238,13 +238,16 @@
       pf("cd", bl(P.cd), "#b39cff", "#c8b1c3") + pf("th", bl(P.th), "#66e9ff", "#c3a9bf") + pf("pu", bl(P.pu), "#ffb86b", "#c8b1c3") + pf("gp", bl(P.gp), "#ffe16d", "#d9ccd6") +
       pf("al", bl(P.al), "#7bed9f", "#f7f4f6") + pf("genu", bl(P.genu), "#d9ff43", "#f7f4f6") + pf("pl", bl(P.pl), "#ff5d8f", "#f7f4f6") + pf("rl", bl(P.rl), "#ffe16d", "#f7f4f6") +
       '<path class="ps" data-p="sl" d="M340 316 C360 334 372 350 380 362" style="--c:#ffb86b;--r:#b8a7b6;--w:5" stroke-dasharray="4 4"/>' +
-      T(290, 124, "caudate", "sm dk") + T(288, 262, "thalamus", "sm dk") + T(404, 200, "putamen", "sm dk") + T(356, 206, "GP", "sm dk") + T(252, 110, "LV", "sm") + T(438, 150, "insula", "sm dk", "end") +
+      T(290, 124, "caudate", "sm dk") + T(288, 262, "thalamus", "sm dk") + T(404, 200, "putamen", "sm dk") + T(356, 206, "GP", "sm dk") + T(252, 110, "LV", "sm") + T(428, 150, "insula", "sm dk", "end") +
       '<path class="ld" d="M360 104 L402 72"/>' + T(404, 70, "anterior limb", "sm", "start") +
       '<path class="ld" d="M306 194 L262 196"/>' + T(260, 190, "genu", "sm", "end") +
       '<path class="ld" d="M352 284 L400 320"/>' + T(402, 324, "posterior limb", "sm", "start") +
       '<path class="ld" d="M384 326 L420 350"/>' + T(422, 354, "retrolenticular", "sm", "start") +
       T(382, 378, "sublenticular (below)", "sm", "start") +
       // somatotopy in the capsule: face at the genu, then arm, trunk, leg backwards
+      pf("cl", "M434 118 C441 156 442 212 432 268 L429 266 C438 212 437 158 431 120 Z", "#d9ff43", "#8a7a86") +
+      '<rect class="pf" data-p="cl" x="10" y="252" width="222" height="44" rx="6" style="--c:#d9ff43;--r:#13263c;--rs:#2f4a68"/>' + T(121, 264, "CLAUSTRUM (thin sliver under the insula):", "sm") + T(121, 275, "grey sheet between the external and extreme", "sm") + T(121, 286, "capsules; counted among the basal nuclei", "sm") +
+      '<rect class="pf" data-p="amy" x="10" y="302" width="222" height="44" rx="6" style="--c:#ff9f43;--r:#13263c;--rs:#2f4a68"/>' + T(121, 314, "AMYGDALA: below this level, at the tip of the", "sm") + T(121, 325, "INFERIOR horn (temporal lobe); the TAIL of the", "sm") + T(121, 336, "caudate ends in it; not the anterior horn", "sm") +
       '<g class="ov" data-x="soma">' + [["face", 314, 198], ["arm", 324, 226], ["trunk", 336, 254], ["leg", 350, 282]].map(([t, x, y]) => '<circle cx="' + x + '" cy="' + y + '" r="3" fill="#07111d"/>' + T(x - 8, y + 3, t, "sm", "end")).join("") + "</g>" +
       '<g class="ov" data-x="bleed"><ellipse cx="338" cy="230" rx="30" ry="42" fill="#ff1f3d66" stroke="#ff5d7a" stroke-width="2"/></g>';
     A.scene("capsule", {
@@ -264,6 +267,8 @@
         th: ["Thalamus", "Medial to the posterior limb."],
         gp: ["Globus pallidus", "Medial part of the lentiform nucleus."],
         pu: ["Putamen", "Lateral part of the lentiform nucleus; with the caudate = the striatum."],
+        cl: ["Claustrum", "A thin sheet of grey matter **lateral to the putamen**, between the external and extreme capsules, deep to the insula. Anatomically it **is** counted among the basal nuclei (with the caudate, lentiform and amygdala)."],
+        amy: ["Amygdaloid nucleus (amygdala)", "In the temporal lobe at the **tip of the inferior horn** of the lateral ventricle; the **tail of the caudate** ends by joining it. It is not in the wall of the anterior horn."],
       },
       drill: ["al", "genu", "pl", "rl", "cd", "th", "gp", "pu", "lv"],
       sims: [
@@ -387,7 +392,7 @@
       svg,
       intro: "Made by the **choroid plexus** (red), flows lateral → **interventricular foramen** → 3rd → **aqueduct** → 4th → **Magendie + Luschka** → subarachnoid space → **arachnoid granulations** → superior sagittal sinus.",
       parts: {
-        lv: ["Lateral ventricle", "Its choroid plexus (body and **inferior horn**) makes most CSF (~70%). None in the anterior or posterior horns."],
+        lv: ["Lateral ventricle", "Its choroid plexus (body and **inferior horn**) makes most CSF (~70%). None in the anterior or posterior horns. Between the two anterior horns is the **septum pellucidum**; a slit between its two layers is the so-called '**fifth ventricle**' (cavum septi pellucidi), not a true ventricle."],
         ivf: ["Interventricular foramen (of Monro)", "Joins the **lateral and 3rd** ventricles."],
         v3: ["Third ventricle", "Choroid plexus in its **roof**."],
         aq: ["Cerebral aqueduct", "Joins the **3rd and 4th** ventricles; the narrowest point (aqueduct stenosis in infants)."],

@@ -143,7 +143,7 @@
         lr_both: ["Direct + consensual", "Directing light to one eye constricts **both** pupils, not the lit eye only."],
         sph: ["Sphincter pupillae", "The **circular** muscle of the iris: **parasympathetic** (III via the ciliary ganglion); constricts the pupil."],
         dil: ["Dilator pupillae", "Radial fibres: **sympathetic**; dilates the pupil."],
-        lr_use: ["Clinical uses of the light reflex", "Detecting **brain death**, judging the **stages (depth) of anaesthesia**, testing **oculomotor nerve** integrity: **all of the above**."],
+        lr_use: ["Clinical uses of the light reflex", "Detecting **brain death**, judging the **stages (depth) of anaesthesia**, testing **oculomotor nerve** integrity: **all of the above**. A pupil that is **dilated and does not respond** to light points to the optic or oculomotor pathway (or brain death), not to a cataract."],
         ar: ["Argyll Robertson pupil", "In **neurosyphilis**: the **light reflex is absent** and **accommodation is present**. The lesion is in the **pretectal** region, not the Edinger–Westphal nucleus (needed for both). The reflex is **not** intact in neurosyphilis."],
         near: ["The near response", "Accommodation, convergence and miosis run through the **cortex**: kept in the Argyll Robertson pupil, normal if the pretectal nucleus is damaged."],
       },
