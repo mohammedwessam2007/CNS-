@@ -16,7 +16,7 @@
   const VERSION = "1.0";
   const KEY = "renaissance_v1";
   const EXAM_DAY = "2026-11-15";
-  const DOSE = { full: 25, short: 10 };
+  const DOSE = { full: 25, short: 10, deep: 45 };
   const WEEK_CAP = 245; // minutes in 7 days before the dose shrinks
   const WEEK_STOP = 300; // minutes in 7 days before Renaissance rests
   const CONF = { sure: 0.9, think: 0.7, guess: 0.45 };
@@ -46,6 +46,14 @@
     posthoc: "After it, so because of it",
     irrelevant: "An answer that would change nothing",
     notconstraint: "Improving a step that isn't the constraint",
+  };
+  // cognitive x-ray (§76): the mechanism most likely missing behind each diagnosed error
+  const XRAY_OF = {
+    surface: "false analogy", inversion: "causal direction", agent: "causal direction", willpower: "a missing model of your later self", omission: "a missing mechanism",
+    baserate: "a missing prior", inverse: "a condition turned round (formalism)", nodelay: "a missing spatial or time model", gain: "overgeneralisation", proxy: "a bad representation of the goal",
+    confirm: "undergeneralisation of the test", authority: "a prior taken from prestige", consistency: "overgeneralisation", cheapexit: "a missing model of your later self", selection: "a bad representation (the filter is invisible)",
+    rigid: "overgeneralisation", moral: "a missing mechanism", independence: "a missing prior", scale: "wrong scale", confound: "a missing variable", pretension: "vocabulary instead of structure",
+    linear: "wrong scale", posthoc: "causal direction", irrelevant: "a missing decision model", notconstraint: "a missing model of the flow",
   };
   // capability atoms (docs/RENAISSANCE/omega/01_GENOME.md): what a step trains, in plain words
   const ATOMS = {
@@ -95,13 +103,25 @@
   const pretty = (key) => new Date(key + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 
   /* ───────────── storage (never the CNS state) ───────────── */
-  const fresh = () => ({ v: 1, sessions: {}, days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, beliefs: [], gov: { log: [], off: false }, lastWarm: "" });
+  const fresh = () => ({ v: 1, sessions: {}, days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, beliefs: [], gov: { log: [], off: false }, lastWarm: "", probe: { start: null, done: {} }, exp: {}, picks: [], reads: {}, deeper: {}, forecasts: {} });
   let ST = null;
+  // failure recovery: a record that cannot be read is kept aside (never deleted) and a clean one starts; the shape of
+  // every field is checked so one bad value cannot break the organ
+  const SHAPE = { sessions: "o", days: "o", answers: "a", hooks: "o", bugs: "o", xray: "o", reps: "o", clicks: "a", forge: "o", reality: "o", beliefs: "a", gov: "o", probe: "o", exp: "o", picks: "a", reads: "o", deeper: "o", forecasts: "o" };
   function load() {
     if (ST) return ST;
-    ST = safe(() => JSON.parse(localStorage.getItem(KEY) || "null"), null);
-    if (!ST || ST.v !== 1) ST = fresh();
+    const raw = safe(() => localStorage.getItem(KEY), null);
+    ST = safe(() => JSON.parse(raw || "null"), undefined);
+    let broken = ST === undefined || (ST !== null && (typeof ST !== "object" || Array.isArray(ST) || ST.v !== 1));
+    if (!broken && ST) for (const [k, t] of Object.entries(SHAPE)) if (k in ST && (t === "a" ? !Array.isArray(ST[k]) : !ST[k] || typeof ST[k] !== "object" || Array.isArray(ST[k]))) broken = true;
+    if (broken && raw) {
+      const at = Date.now();
+      safe(() => localStorage.setItem(KEY + "_corrupt_" + at, raw));
+      ST = fresh();
+      ST.recovered = at;
+    } else if (!ST) ST = fresh();
     for (const [k, v] of Object.entries(fresh())) if (!(k in ST)) ST[k] = v;
+    if (!ST.probe.done) ST.probe.done = {};
     return ST;
   }
   function save() {
@@ -164,8 +184,10 @@
       reasons.push("a heavy week (" + Math.round(week) + " min)");
     }
     if (spentToday >= dose + 10) return { open: false, why: "spent", msg: "You have given Renaissance " + Math.round(spentToday) + " minutes today. That is the dose; the rest of the day is yours." };
-    const p = plan(st, dose, today);
+    const p = plan(st, dose, today, t);
+    if (p && p.wait) return { open: false, why: "deepwait", msg: p.wait };
     if (!p) return { open: false, why: "seasondone", msg: "Every season written so far is complete. The next one is being built; nothing is due." };
+    if (p.deep && !p.short) dose = DOSE.deep;
     return { open: true, dose, reasons, plan: p };
   }
 
@@ -173,14 +195,26 @@
   function dueHooks(st, today) {
     const H = allHooks();
     return Object.entries(st.hooks)
-      .filter(([id, h]) => H[id] && h.due <= today)
+      .filter(([id, h]) => H[id] && !h.retired && h.due <= today)
       .sort((a, b) => (a[1].due < b[1].due ? -1 : a[1].due > b[1].due ? 1 : (a[1].n || 0) - (b[1].n || 0) || (a[1].gap || 0) - (b[1].gap || 0)))
       .map(([id]) => H[id]);
   }
-  function plan(st, dose, today) {
-    const s = allSessions().find((x) => !(st.sessions[x.id] && st.sessions[x.id].done));
+  // the order a session's steps are played in: authored, unless a step-order trial (L2) swaps the model and the two
+  // compared cases, or a step-length trial (L3) drops optional depth steps
+  function seq(s, st) {
+    let steps = s.steps.slice();
+    const i = steps.findIndex((x, k) => x.type === "model" && steps[k + 1] && steps[k + 1].type === "contrast");
+    if (i >= 0 && armOf(st, "L2", s.id) === 1) steps = steps.slice(0, i).concat([steps[i + 1], steps[i]], steps.slice(i + 2));
+    if (steps.some((x) => x.opt) && armOf(st, "L3", s.id) === 1) steps = steps.filter((x) => !x.opt);
+    return steps;
+  }
+  function plan(st, dose, today, t) {
+    const pick = choose(st, today, dose, t);
+    const s = pick ? pick.s : null;
     const due = dueHooks(st, today);
-    if (!s && !due.length) return null;
+    const probes = dueProbes(st, today, dose);
+    if (!s && !due.length && !probes.length) return pick && pick.wait ? { wait: pick.wait } : null;
+    const deep = !!(s && s.deep);
     const short = dose <= DOSE.short;
     const steps = [];
     const rec = s ? st.sessions[s.id] || {} : {};
@@ -191,14 +225,16 @@
       const pickd = [];
       for (const h of due) if (pickd.length < (short ? 1 : 2) && !pickd.some((x) => x.sid === h.sid)) pickd.push(h);
       pickd.forEach((h) => steps.push({ id: "hook:" + h.id, type: "q", kind: "hook", stage: "warm", hook: h.id, min: 1.5, stem: h.q.stem, options: h.q.options, after: h.q.after }));
+      probes.forEach((pr) => steps.push(pr));
     }
     let partial = false;
     if (s) {
-      const from = rec.at ? Math.max(0, s.steps.findIndex((x) => x.id === rec.at)) : 0;
+      const order = seq(s, st);
+      const from = rec.at ? Math.max(0, order.findIndex((x) => x.id === rec.at)) : 0;
       let budget = short ? DOSE.short - steps.reduce((a, x) => a + (x.min || 1), 0) - 1 : Infinity;
-      for (const x of s.steps.slice(from)) {
+      for (const x of order.slice(from)) {
         if (short && x.opt) continue;
-        if (short && budget < (x.min || 1) && steps.some((y) => y.stage !== "warm")) {
+        if (short && budget < (x.min || 1) && steps.some((y) => y.stage !== "warm" && y.stage !== "probe")) {
           partial = true;
           break;
         }
@@ -209,7 +245,97 @@
     steps.push({ id: "close", type: "close", stage: "close", min: 1, partial });
     const start = 0;
     const minutes = Math.max(5, Math.round(steps.slice(start).reduce((a, x) => a + (x.min || 1), 0)));
-    return { sid: s ? s.id : null, steps, minutes, short, start, partial };
+    return { sid: s ? s.id : null, steps, minutes, short, start, partial, deep, why: pick ? pick.why : "", mode: pick ? pick.mode : "review", ranked: pick ? pick.ranked || [] : [], arm: pick ? pick.arm : null };
+  }
+
+  /* ───────────── the session compiler ─────────────
+   * The first two seasons are the cognitive bootloader and run in authored order. After them, the next session is
+   * compiled from the learner's record: capability gaps (atoms never trained or weak on delayed, unaided items),
+   * the errors that keep recurring, works not yet possessed, rotation away from the last domains (anti-specialisation),
+   * a budget for the unfamiliar (every fourth compiled pick goes to the least-visited domain), and how many later
+   * sessions depend on it. Long "deep" sessions (masterpieces, boss worlds) are compiled only on the weekend, never in
+   * exam week or on a heavy week. One compiled day in five keeps the authored order as a control (experiment L10). */
+  const W = { gap: 3, errors: 1.5, culture: 2, rotate: 2, unknown: 1.5, leverage: 1, curious: 0.5 };
+  const BUG_ATOMS = { baserate: ["prob"], inverse: ["prob", "info"], selection: ["info", "falsify"], confirm: ["falsify", "question"], nodelay: ["systems"], gain: ["systems"], proxy: ["measure"], willpower: ["selfmodel", "strategy"], inversion: ["causal"], posthoc: ["causal", "experiment"], confound: ["experiment", "causal"], linear: ["scale"], irrelevant: ["question"], notconstraint: ["constraint", "minimal"], surface: ["analogy", "abstr"], omission: ["mech", "minimal"], scale: ["scale"], authority: ["judgment", "falsify"], pretension: ["taste", "compress"], independence: ["prob"], consistency: ["selfmodel"], moral: ["causal", "mech"], agent: ["causal"], cheapexit: ["strategy"], rigid: ["strategy"] };
+  function atomStats(st) {
+    const out = {};
+    for (const a of st.answers || []) {
+      if (!/transfer|far|alien|hook|challenge|probe/.test(a.kind)) continue;
+      for (const k of a.atoms || []) {
+        const o = (out[k] = out[k] || { n: 0, ok: 0 });
+        o.n++;
+        if (a.ok && a.conf !== "guess") o.ok++;
+      }
+    }
+    return out;
+  }
+  const domainOf = (s) => s.domain || (seasonOf(s.id) || {}).domain || "primitives";
+  function choose(st, today, dose, t) {
+    const all = allSessions(),
+      done = (id) => !!(st.sessions[id] && st.sessions[id].done);
+    const started = all.find((x) => st.sessions[x.id] && st.sessions[x.id].start && !done(x.id));
+    if (started) return { s: started, why: "It continues the session you started; nothing else is chosen until it ends.", mode: "resume" };
+    for (const z of seasons())
+      if (z.boot) {
+        const nx = (z.sessions || []).find((x) => !done(x.id));
+        if (nx) return { s: nx, why: "The first seasons are the bootloader (the thinking tools every later session reuses), so they run in their written order.", mode: "bootloader" };
+      }
+    const dow = (t || new Date()).getDay(),
+      week = weekMinutes(st, today);
+    const deepOK = dose > DOSE.short && (dow === 5 || dow === 6) && week + 45 <= WEEK_CAP;
+    const avail = all.filter((x) => !done(x.id) && (x.requires || []).every(done));
+    const cands = avail.filter((x) => !x.deep || deepOK);
+    if (!cands.length) return avail.length ? { s: null, mode: "wait", wait: "The next session is a long one (a masterpiece or a boss world). It waits for the weekend, when there is time for it." } : null;
+    const control = armOf(st, "L10", today) === 0;
+    const ranked = rank(st, cands, today);
+    if (control) {
+      const s = cands[0];
+      return { s, mode: "control", arm: 0, ranked, why: "Today keeps the written order on purpose (one compiled day in five), so the compiler's choices keep being checked against it." };
+    }
+    const top = ranked[0];
+    return { s: top.s, mode: "compiled", arm: 1, ranked, why: "Compiled for you: " + top.reasons.join("; ") + "." };
+  }
+  function rank(st, cands, today) {
+    const A = atomStats(st),
+      all = allSessions(),
+      done = (id) => !!(st.sessions[id] && st.sessions[id].done);
+    const hist = all.filter((x) => done(x.id)).sort((a, b) => (st.sessions[a.id].end || 0) - (st.sessions[b.id].end || 0));
+    const lastDomains = hist.slice(-2).map(domainOf);
+    const visits = {};
+    hist.forEach((x) => (visits[domainOf(x)] = (visits[domainOf(x)] || 0) + 1));
+    const compiledSoFar = (st.picks || []).filter((p) => p.mode === "compiled").length;
+    const unknownTurn = compiledSoFar % 4 === 3;
+    const recentBugs = {};
+    (st.answers || []).slice(-60).forEach((a) => a.bug && (recentBugs[a.bug] = (recentBugs[a.bug] || 0) + 1));
+    const errAtoms = {};
+    Object.entries(recentBugs).forEach(([b, n]) => (BUG_ATOMS[b] || []).forEach((k) => (errAtoms[k] = (errAtoms[k] || 0) + n)));
+    const poss = possession(st);
+    const minVisits = Math.min(...cands.map((x) => visits[domainOf(x)] || 0));
+    const out = cands.map((s, i) => {
+      const atoms = s.atoms || [];
+      const weak = atoms.filter((k) => !A[k] || A[k].n < 3 || A[k].ok / A[k].n < 0.6);
+      const gap = atoms.length ? weak.length / atoms.length : 0;
+      const errors = atoms.reduce((a, k) => a + (errAtoms[k] || 0), 0);
+      const works = s.works || [];
+      const unposs = works.filter((w) => !(poss[w] && poss[w].level >= 9)).length;
+      const culture = works.length ? unposs / works.length : 0;
+      const rotate = lastDomains.includes(domainOf(s)) ? 0 : 1;
+      const unknown = unknownTurn && (visits[domainOf(s)] || 0) === minVisits ? 1 : 0;
+      const leverage = all.filter((x) => (x.requires || []).includes(s.id) && !done(x.id)).length;
+      const curious = Object.entries(st.deeper || {}).filter(([sid]) => domainOf(sessionById(sid) || {}) === domainOf(s)).reduce((a, [, n]) => a + n, 0);
+      const parts = { gap: gap, errors: Math.min(1, errors / 6), culture, rotate, unknown, leverage: Math.min(1, leverage / 2), curious: Math.min(1, curious / 5) };
+      const score = Object.entries(parts).reduce((a, [k, v]) => a + W[k] * v, 0) - i * 0.001;
+      const reasons = [];
+      if (weak.length) reasons.push("it trains " + weak.slice(0, 2).map((k) => ATOMS[k] || k).join(" and ") + ", which your record has not shown yet on later, unaided questions");
+      if (errors) reasons.push("it works on a mistake you have been making");
+      if (unposs) reasons.push("it adds a work you do not yet possess");
+      if (rotate && lastDomains.length) reasons.push("it moves away from " + lastDomains[lastDomains.length - 1]);
+      if (unknown) reasons.push("it is the unfamiliar pick of the week, from the field you have visited least");
+      if (leverage) reasons.push("later sessions build on it");
+      if (!reasons.length) reasons.push("it is next in the written order");
+      return { s, score: +score.toFixed(3), parts, reasons };
+    });
+    return out.sort((a, b) => b.score - a.score);
   }
 
   /* ───────────── the player ───────────── */
@@ -222,12 +348,21 @@
     if (!g.open) return g;
     const st = load(),
       p = g.plan;
-    P = { sid: p.sid, s: sessionById(p.sid), steps: p.steps, i: p.start, dose: g.dose, reasons: g.reasons, minutes: p.minutes, short: p.short, partial: p.partial, t0: Date.now(), acc: 0, qs: {}, rep: {}, shownRep: {}, gov: {}, sheet: null, used: {} };
+    P = { sid: p.sid, s: sessionById(p.sid), steps: p.steps, i: p.start, dose: g.dose, reasons: g.reasons, minutes: p.minutes, short: p.short, partial: p.partial, t0: Date.now(), acc: 0, qs: {}, rep: {}, shownRep: {}, gov: {}, sheet: null, used: {}, why: p.why, mode: p.mode, ranked: p.ranked, seen: {} };
+    const today = dayKey(at || new Date());
     if (p.sid) {
+      const fresh0 = !st.sessions[p.sid];
       const rec = (st.sessions[p.sid] = st.sessions[p.sid] || { start: Date.now() });
       rec.short = p.short;
+      if (fresh0) {
+        rec.mode = p.mode;
+        if (p.arm != null) rec.l10 = p.arm;
+        st.picks.push({ t: Date.now(), day: today, sid: p.sid, mode: p.mode, arm: p.arm, top: (p.ranked || []).slice(0, 3).map((r) => r.s.id + ":" + r.score) });
+        if (st.picks.length > 300) st.picks.splice(0, st.picks.length - 300);
+      }
     }
-    st.lastWarm = dayKey(at || new Date());
+    if (!probesOff() && !st.probe.start) st.probe.start = today;
+    st.lastWarm = today;
     save();
     mount();
     draw();
@@ -295,7 +430,7 @@
   function dock() {
     const x = cur();
     const canGo = !x || !needsCommit(x) || (x.type === "forge" ? P.qs[x.id]?.done && (!x.critique || P.qs[x.id + ":c"]?.done) : x.type === "contrast" ? P.qs[x.id]?.done : P.qs[x.id]?.done);
-    const warm = x && x.stage === "warm",
+    const warm = x && (x.stage === "warm" || x.stage === "probe"),
       closing = x && x.type === "close";
     const aux = [
       ["why", "WHY THIS?"],
@@ -325,6 +460,7 @@
     if (x.type === "scene") body = sceneView(x);
     else if (x.type === "q") body = qView(x, x.id, x);
     else if (x.type === "model") body = modelView(x);
+    else if (x.type === "passage") body = passageView(x);
     else if (x.type === "contrast") body = contrastView(x);
     else if (x.type === "forge") body = forgeView(x);
     else if (x.type === "reality") body = realityView(x);
@@ -346,9 +482,94 @@
       (x.title ? "<h2>" + E(x.title) + "</h2>" : "") +
       md(x.body) +
       (rep ? '<div class="rnRep" data-kind="' + E(rep.kind) + '"><div class="rnRepTag">' + E(rep.label || rep.kind) + "</div>" + visual(rep.svg) + md(rep.body) + "</div>" : visual(x.svg)) +
+      listenView(x) +
+      terms(x) +
+      srcBtn(x)
+    );
+  }
+  /* primary text: the passage is shown whole, with speaker, place in the work, translator and rights; SHOW SOURCE
+   * opens the quotation's full record (the quote engine). Reading time is noted so "read" means read. */
+  const quoteOf = (id) => lookup("quotes", id);
+  const capOf = (q) => [q.speaker, q.work + (q.where ? ", " + q.where : ""), q.translator ? "tr. " + q.translator + (q.trYear ? " (" + q.trYear + ")" : "") : "", q.rights].filter(Boolean).join(" · ");
+  const words = (t) => String(t || "").split(/\s+/).filter(Boolean).length;
+  function passageView(x) {
+    P.seen[x.id] = P.seen[x.id] || Date.now();
+    const qs = (x.quotes || []).map((id) => [id, quoteOf(id)]).filter(([, q]) => q);
+    return (
+      '<div class="rnKind">' + E(x.label || "PRIMARY TEXT") + "</div>" +
+      (x.title ? "<h2>" + E(x.title) + "</h2>" : "") +
+      md(x.body) +
+      qs.map(([id, q]) => '<figure class="rnPassage" data-q="' + E(id) + '"><blockquote' + (q.verse ? ' class="verse"' : "") + ">" + (q.verse ? q.text.split("\n").map((l) => '<span class="rnLine">' + E(l) + "</span>").join("") : md(q.text)) + "</blockquote><figcaption>" + E(capOf(q)) + '</figcaption><button type="button" class="rnSrcBtn" data-rn="source" data-q="' + E(id) + '">SHOW SOURCE</button></figure>').join("") +
+      (x.after ? md(x.after) : "") +
+      listenView(x) +
       terms(x)
     );
   }
+  const srcBtn = (x) => ((x.src && x.src.length) || (x.quotes && x.quotes.length) ? '<button type="button" class="rnSrcBtn" data-rn="source">SHOW SOURCE</button>' : "");
+  function sourceSheet(qid) {
+    const x = cur();
+    let h = "";
+    const q = qid ? quoteOf(qid) : null;
+    if (q) {
+      const row = (k, v) => (v ? '<div class="rnQrow"><span>' + E(k) + "</span>" + md(v) + "</div>" : "");
+      h += "<h3>The quotation, on record</h3>" + '<div class="rnQuoteRec">' + row("Exact words", "“" + q.text.replace(/\n/g, " / ") + "”") + row("Speaker", q.speaker) + row("Work and place", q.work + (q.where ? ", " + q.where : "")) + row("Author", q.author) + row("Translation", q.translator ? q.translator + (q.trYear ? " (" + q.trYear + ")" : "") + (q.edition ? " · " + q.edition : "") : "original language") + row("Context", q.context) + row("What it means", q.meaning) + row("Why it matters", q.matters) + row("Misattribution risk", q.misattribution) + row("Rights", q.rights) + row("How the wording was checked", q.verified) + "</div>";
+    }
+    const srcs = (x.src || []).map(prov).filter(Boolean);
+    if (srcs.length) h += "<h3>Where this step's facts come from</h3>" + srcs.map((pv) => '<div class="rnSrc"><b>' + E(pv.grade) + "</b> " + md(pv.source + " (" + pv.year + ") — " + pv.claim + (pv.note ? " · " + pv.note : "") + (pv.contested ? " · **Contested:** " + pv.contested : "") + " · rights: " + pv.license) + "</div>").join("");
+    const qids = (x.quotes || []).filter((id) => id !== qid);
+    if (!q && qids.length) h += "<h3>Quotations in this step</h3>" + qids.map((id) => { const r = quoteOf(id); return r ? '<div class="rnSrc">' + md("“" + r.text.slice(0, 90) + (r.text.length > 90 ? "…" : "") + "” — " + capOf(r)) + '<button type="button" class="rnSrcBtn" data-rn="source" data-q="' + E(id) + '">THE FULL RECORD</button></div>' : ""; }).join("");
+    return h || "<h3>Sources</h3><p>This step makes no factual claim that needs a source.</p>";
+  }
+  /* listening: short passages are synthesised in the browser (no recordings, no rights question); every one has a
+   * written description so nothing depends on sound alone */
+  const AUDIO = {
+    ctx: null,
+    last: null,
+    plays: 0,
+    freq: (m) => 440 * Math.pow(2, (m - 69) / 12),
+    schedule(seq) {
+      const b = 60 / ((seq && seq.bpm) || 72),
+        out = [];
+      for (const ev of (seq && seq.notes) || []) for (const m of [].concat(ev.n)) out.push({ t: +(ev.t * b).toFixed(3), d: +(ev.d * b).toFixed(3), f: +AUDIO.freq(m).toFixed(2), midi: m });
+      return out;
+    },
+    play(seq) {
+      const sch = AUDIO.schedule(seq);
+      AUDIO.last = sch;
+      AUDIO.plays++;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      return safe(() => {
+        const ctx = AUDIO.ctx || (AUDIO.ctx = new AC());
+        if (ctx.state === "suspended") ctx.resume();
+        const t0 = ctx.currentTime + 0.06,
+          master = ctx.createGain();
+        master.gain.value = 0.16;
+        master.connect(ctx.destination);
+        for (const n of sch) {
+          const o = ctx.createOscillator(),
+            g = ctx.createGain(),
+            a = t0 + n.t,
+            e = a + Math.max(0.12, n.d);
+          o.type = "triangle";
+          o.frequency.value = n.f;
+          g.gain.setValueAtTime(0.0001, a);
+          g.gain.exponentialRampToValueAtTime(0.8, a + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.25, a + Math.min(0.3, n.d * 0.5));
+          g.gain.exponentialRampToValueAtTime(0.0001, e);
+          o.connect(g);
+          g.connect(master);
+          o.start(a);
+          o.stop(e + 0.05);
+        }
+        return true;
+      }, false);
+    },
+  };
+  const listenView = (x) =>
+    (x.listen || []).length
+      ? '<div class="rnListenBox">' + x.listen.map((l, i) => '<div class="rnListen"><button type="button" class="rnPlay" data-rn="play" data-l="' + i + '">▶ ' + E(l.label) + "</button>" + (l.text ? '<div class="rnListenTxt">' + md(l.text) + "</div>" : "") + "</div>").join("") + "</div>"
+      : "";
   const terms = (x) =>
     x.terms && x.terms.length
       ? '<div class="rnTerms">' + x.terms.map((k) => (vocab(k) ? '<button type="button" class="rnTerm" data-rn="term" data-k="' + E(k) + '">' + E(vocab(k).name || k) + "</button>" : "")).join("") + "</div>"
@@ -357,8 +578,14 @@
   function qView(q, id, step) {
     const s = qstate(id),
       hookBanner = step && step.kind === "hook" ? '<div class="rnBanner">From an earlier session · no hints this time</div>' : "";
-    const tag = { predict: "PREDICT FIRST", check: "CHECK", transfer: "USE IT", far: "SOMEWHERE NEW", alien: "NO LABELS: WHICH IDEA IS THIS?", hook: "REMEMBER", challenge: "PROVE IT" }[q.kind || "check"] || "";
-    let h = hookBanner + (tag ? '<div class="rnKind">' + tag + "</div>" : "") + (q.title ? "<h2>" + E(q.title) + "</h2>" : "") + md(q.stem);
+    const tag = { predict: "PREDICT FIRST", check: "CHECK", transfer: "USE IT", far: "SOMEWHERE NEW", alien: "NO LABELS: WHICH IDEA IS THIS?", hook: "REMEMBER", challenge: "PROVE IT", probe: "MEASURED · NO LABELS" }[q.kind || "check"] || "";
+    const probeBanner = step && step.kind === "probe" ? '<div class="rnBanner">' + (step.form === "alien" ? "This week's unknown problem: a field no session has taught. Orient, then answer." : step.form === "rt" ? "A reader's question about a work you possess. Written before you studied it; answered without help." : "Measuring where you are, to compare later. No hints, and no right/wrong until the comparison is done.") + "</div>" : "";
+    if (step && step.kind === "predict" && q.alt && !s.done && !s.hint && P.sid && armOf(load(), "L5", P.sid + ":" + id) === 1) {
+      s.hint = true;
+      s.hintArm = 1;
+    }
+    let h = hookBanner + probeBanner + (tag ? '<div class="rnKind">' + tag + "</div>" : "") + (q.title ? "<h2>" + E(q.title) + "</h2>" : "") + (q.dialogue ? '<div class="rnDialog">' + q.dialogue.map((d) => '<div class="rnSay"><b>' + E(d.who) + "</b><span>" + E(d.say) + "</span></div>").join("") + "</div>" : "") + md(q.stem);
+    if (step && step.listen) h += listenView(step);
     if (step && step.kind !== "hook") h += visual(q.svg);
     if (q.panels) h += '<div class="rnPair">' + q.panels.map((pn) => '<div class="rnSide"><h3>' + E(pn.title) + "</h3>" + visual(pn.svg) + md(pn.body || "") + "</div>").join("") + "</div>";
     if (s.hint && q.alt) h += '<div class="rnRep" data-kind="alt"><div class="rnRepTag">Another way to see the question</div>' + md(q.alt) + "</div>";
@@ -374,11 +601,16 @@
       .join("") + "</div>";
     if (s.pick != null && !s.done)
       h += '<div class="rnConf"><span>How sure are you?</span>' + [["sure", "SURE"], ["think", "THINK SO"], ["guess", "GUESSING"]].map(([c, t]) => '<button type="button" class="rnC" data-rn="commit" data-q="' + E(id) + '" data-c="' + c + '">' + t + "</button>").join("") + "</div>";
+    if (s.done && step && step.kind === "probe" && !step.feedback) {
+      h += '<div class="rnFb">' + md("**Recorded.** No feedback on this one: it may come back to measure change, and knowing the answer now would spoil the comparison.") + "</div>";
+      return h;
+    }
     if (s.done) {
       const o = q.options[s.pick],
         right = q.options.find((x) => x.ok);
       h += '<div class="rnFb ' + (o.ok ? "ok" : "no") + '">' + (o.ok ? "<b>✓ Right.</b>" : "<b>✗ Not this one.</b>" + (o.bug && BUGS[o.bug] ? ' <span class="rnBug">' + E(BUGS[o.bug]) + "</span>" : "")) + md(o.ok ? o.why || "" : o.why || "") + (!o.ok && right ? md("**The answer:** " + right.t + (right.why ? ". " + right.why : "")) : "") + md(q.after || "") + "</div>";
       if (!o.ok && q.repair) h += '<div class="rnRep" data-kind="repair"><div class="rnRepTag">Seen another way</div>' + visual(q.repair.svg) + md(q.repair.body) + "</div>";
+      if (step && step.stage !== "warm" && step.kind !== "probe") h += srcBtn(step);
     }
     return h;
   }
@@ -393,9 +625,12 @@
       '<div class="rnModel" data-model="' + E(x.model) + '"><div class="rnModelSvg"></div><div class="rnCtl">' +
       (m.controls || []).map((c) => '<label><span>' + E(c.label) + ' <b data-out="' + E(c.id) + '"></b></span><input type="range" data-rn="ctl" data-c="' + E(c.id) + '" min="' + c.min + '" max="' + c.max + '" step="' + c.step + '" value="' + v[c.id] + '"></label>').join("") +
       (m.toggles || []).map((c) => '<button type="button" class="rnTog' + (v[c.id] ? " on" : "") + '" data-rn="tog" data-c="' + E(c.id) + '">' + E(c.label) + "</button>").join("") +
+      (m.sound ? '<button type="button" class="rnPlay" data-rn="playModel">▶ PLAY THIS VERSION</button>' : "") +
       '</div><div class="rnRead"></div></div>' +
       (x.ask ? '<div class="rnAsk">' + md(x.ask) + "</div>" : "") +
-      terms(x)
+      listenView(x) +
+      terms(x) +
+      srcBtn(x)
     );
   }
   function drawModel(x) {
@@ -485,8 +720,17 @@
       "**What changed:** " + s.capability,
       "**Evidence:** predictions before the explanation " + pr.filter((a) => a.ok).length + "/" + pr.length + " · after it, used in new cases " + tr.filter((a) => a.ok).length + "/" + tr.length + (far.length ? " (somewhere new: " + far.filter((a) => a.ok).length + "/" + far.length + ")" : "") + " · when you said SURE you were right " + sureOk + "/" + sure.length + ".",
       click ? "**A click:** you got a prediction wrong before the explanation and then used the idea correctly on a case you had not seen. That reorganisation is what this is for." : pr.length && pr.every((a) => a.ok) ? "**No surprise today:** your predictions were already right, so this was confirmation more than revelation. The later hooks will show whether it lasts." : "",
-      Object.keys(bugs).length ? "**Still weak:** " + Object.entries(bugs).map(([b, n]) => BUGS[b] + (n > 1 ? " ×" + n : "")).join(" · ") + ". These return first." : "**Still weak:** nothing showed today; the delayed hooks are the real test.",
+      Object.keys(bugs).length ? "**Still weak:** " + Object.entries(bugs).map(([b, n]) => BUGS[b] + (n > 1 ? " ×" + n : "") + (XRAY_OF[b] ? " (likely cause: " + XRAY_OF[b] + ")" : "")).join(" · ") + ". These return first." : "**Still weak:** nothing showed today; the delayed hooks are the real test.",
       hooks.length ? "**Comes back (no hints):** " + hooks.map((h) => pretty(h.due)).join(" · ") + "." : "",
+      (() => {
+        const rev = (st.beliefs || []).filter((b) => b.sid === s.id && !b.ok && b.t >= (st.sessions[s.id]?.start || 0));
+        return rev.length ? "**What changed in your model:** " + rev.slice(0, 2).map((b) => "“" + b.held + "” → “" + b.revisedTo + "”").join(" · ") + "." : "";
+      })(),
+      (() => {
+        const po = possession(st);
+        const ws = (s.works || []).filter((w) => po[w]);
+        return ws.length ? "**Possession:** " + ws.map((w) => ((window.RENAISSANCE_CIV || {}).nodes || {})[w]?.name + " — " + po[w].label + (po[w].next ? " (next: " + po[w].next + ")" : "")).join(" · ") + "." : "";
+      })(),
       s.connection ? "**New connection:** " + s.connection : "",
       st.forge[s.id] && st.forge[s.id].text ? "**Use it this week:** " + st.forge[s.id].text : "",
     ].filter(Boolean);
@@ -506,8 +750,9 @@
       today = dayKey(new Date());
     if (s && cur().partial) {
       const rec = st.sessions[s.id] || (st.sessions[s.id] = {});
-      const k = s.steps.findIndex((x) => x.id === P.steps[P.steps.length - 2]?.id);
-      if (k >= 0 && s.steps[k + 1]) rec.at = s.steps[k + 1].id;
+      const order = seq(s, st);
+      const k = order.findIndex((x) => x.id === P.steps[P.steps.length - 2]?.id);
+      if (k >= 0 && order[k + 1]) rec.at = order[k + 1].id;
       rec.endDay = today;
       rec.shortDays = (rec.shortDays || 0) + 1;
     } else if (s) {
@@ -519,6 +764,11 @@
       rec.receipt = r.lines;
       if (r.click) st.clicks.push({ t: Date.now(), sid: s.id });
       for (const h of s.hooks || []) if (!st.hooks[h.id]) st.hooks[h.id] = { due: addDays(today, h.gap || 1), gap: h.gap || 1, n: 0, ok: 0 };
+      // experiments judged on this session's use of the idea in new cases
+      const v = sessionTransfer(sessionAnswers(s.id));
+      if (s.steps.some((x, k) => x.type === "model" && s.steps[k + 1] && s.steps[k + 1].type === "contrast")) expLog(st, "L2", s.id, armOf(st, "L2", s.id), v);
+      if (s.steps.some((x) => x.opt)) expLog(st, "L3", s.id, armOf(st, "L3", s.id), v);
+      if (rec.l10 != null) expLog(st, "L10", s.id, rec.l10, v);
     }
     save();
     close();
@@ -545,7 +795,9 @@
     return (
       "<h3>Why this, today</h3>" +
       (s ? md(s.why) + md("**Capability:** " + s.capability) : md("Review only: earlier ideas coming back without hints.")) +
-      md("**Chosen by:** the first unfinished session of Season 1, in an order that alternates between kinds of idea; due hooks from earlier sessions open it. **Dose:** " + P.dose + " minutes" + (P.reasons.length ? " (shortened: " + P.reasons.join(", ") + ")" : "") + ".") +
+      md("**Chosen by:** " + (P.why || "due hooks from earlier sessions: ideas coming back without hints.") + " Due hooks from earlier sessions open it. **Dose:** " + P.dose + " minutes" + (P.reasons.length ? " (shortened: " + P.reasons.join(", ") + ")" : "") + ".") +
+      (P.ranked && P.ranked.length > 1 && P.mode === "compiled" ? md("**Also considered:** " + P.ranked.slice(1, 3).map((r) => "“" + r.s.title + "” (" + r.score + ")").join(" · ") + " against “" + P.ranked[0].s.title + "” (" + P.ranked[0].score + ").") : "") +
+      (st.recovered ? md("**Note:** your earlier Renaissance record could not be read on " + pretty(dayKey(new Date(st.recovered))) + "; it was kept aside unchanged and a clean one started.") : "") +
       (srcs.length ? "<h3>Where this step's facts come from</h3>" + srcs.map((p) => '<div class="rnSrc"><b>' + E(p.grade) + "</b> " + md(p.source + " (" + p.year + ") — " + p.claim + (p.note ? " · " + p.note : "")) + "</div>").join("") : "") +
       "<h3>Your record so far</h3>" +
       md("Predictions before explanations: " + rate((a) => a.kind === "predict") + " · Used in new cases: " + rate((a) => /transfer|far|alien|challenge/.test(a.kind)) + " · Came back days later, no hints: " + rate((a) => a.kind === "hook") + " · Calibration (Brier, 0 is perfect, 0.25 is coin-flipping): " + brier + " over " + A.length + " answers · Renaissance this week: " + Math.round(week) + " min.") +
@@ -570,6 +822,19 @@
         }
         if (g.off) h += md("**The picture chooser is switched off:** " + g.offReason + ". Pictures come in the authored order.");
         else if (v.chooser.n) h += md("**Checking the chooser:** after its choices, right " + v.chooser.ok + "/" + v.chooser.n + "; with the usual order kept, right " + v.control.ok + "/" + v.control.n + ". It switches itself off if it stops doing better.");
+        if (P.sid && !expOff()) {
+          const trials = [];
+          const ses = P.s;
+          if (ses && ses.steps.some((y, k) => y.type === "model" && ses.steps[k + 1] && ses.steps[k + 1].type === "contrast")) trials.push(["L2", armOf(st, "L2", ses.id)]);
+          if (ses && ses.steps.some((y) => y.opt)) trials.push(["L3", armOf(st, "L3", ses.id)]);
+          const rec = st.sessions[P.sid] || {};
+          if (rec.l10 != null) trials.push(["L10", rec.l10]);
+          for (const [id, arm] of trials) {
+            const e = expState(st, id),
+              [a0, a1] = expRates(e);
+            h += md("**Trial (" + EXP[id].what + "):** this session is on “" + EXP[id].arms[arm] + "”. " + (e.verdict ? "Decided: " + e.verdict + "." : "Sessions so far " + a0.n + " vs " + a1.n + "; nothing is decided before " + Math.ceil(EXP[id].minN * (e.caution || 1)) + " on each side."));
+          }
+        }
         return h ? "<h3>How this app is adjusting to you</h3>" + h : "";
       })() +
       md("No combined score is shown on purpose: one number invites optimising the number (that is session 5).")
@@ -616,6 +881,341 @@
     if (!d.length) return "<h3>Deeper</h3><p>Nothing deeper is written for this step yet.</p>";
     return "<h3>Go deeper (optional)</h3>" + d.map((c) => '<div class="rnDeep"><h4>' + E(c.title) + "</h4>" + md(c.body) + "</div>").join("");
   }
+  /* ───────────── safe experiments: self-adjustment beyond picture order ─────────────
+   * Each trial has the authored arm (0, the control) and one alternative (1). Units (a session, a prediction, a hook,
+   * a day) get a stable arm from a hash, so the same unit never flips. Nothing is decided before a minimum sample on
+   * both arms. The alternative is adopted only when clearly better, dropped when it is not better, and stopped at once
+   * if in-session accuracy on it falls under a floor (no harm). After adoption one unit in five still runs the authored
+   * arm; if the adopted arm later does worse, the adoption is rolled back and that trial needs a larger sample next
+   * time (level 14: the judge learns caution from its own reversals). Kill switch: localStorage renaissance_experiments = "off". */
+  const EXP = {
+    L2: { level: 2, what: "step order: the two compared cases before the interactive model instead of after", unit: "session", arms: ["model first", "cases first"], minN: 6 },
+    L3: { level: 3, what: "step length: optional depth steps kept or skipped", unit: "session", arms: ["kept", "skipped"], minN: 6 },
+    L5: { level: 5, what: "difficulty: another way to see a prediction offered before you answer", unit: "item", arms: ["on request", "offered"], minN: 12 },
+    L6: { level: 6, what: "retrieval interval: a remembered idea comes back ×2.5 or ×2 later", unit: "hook", arms: ["×2.5", "×2"], minN: 10 },
+    L10: { level: 10, what: "season order: the written order or the compiler's choice", unit: "day", arms: ["written order", "compiler"], minN: 6 },
+  };
+  const EXPCFG = { margin: 0.15, floor: 0.4, controlEvery: 5, window: 400 };
+  const expOff = () => safe(() => localStorage.getItem("renaissance_experiments") === "off", false);
+  function expState(st, id) {
+    st.exp = st.exp || {};
+    return (st.exp[id] = st.exp[id] || { log: [], verdict: null, caution: 1, history: [] });
+  }
+  function armOf(st, id, unit) {
+    if (expOff() || !EXP[id]) return id === "L10" ? 1 : 0;
+    const e = expState(st, id),
+      h = hashNum(id + ":" + unit);
+    if (id === "L10") {
+      // the compiler is the design; the control arm is the written order one day in five
+      if (e.verdict === "dropped" || e.verdict === "harm") return 0;
+      return h % EXPCFG.controlEvery === 0 ? 0 : 1;
+    }
+    if (e.verdict === "dropped" || e.verdict === "harm") return 0;
+    if (e.verdict === "adopted") return h % EXPCFG.controlEvery === 0 ? 0 : 1;
+    return h % 2;
+  }
+  function expLog(st, id, unit, arm, value) {
+    if (expOff() || !EXP[id] || value == null || isNaN(value)) return;
+    const e = expState(st, id);
+    if (e.log.some((r) => r.unit === unit)) return;
+    e.log.push({ t: Date.now(), unit, arm, v: +(+value).toFixed(3) });
+    if (e.log.length > EXPCFG.window) e.log.splice(0, e.log.length - EXPCFG.window);
+    judgeExp(st, id);
+  }
+  function expRates(e, since) {
+    const r = (k) => {
+      const xs = e.log.filter((x) => x.arm === k && x.t >= (since || 0));
+      return { n: xs.length, rate: xs.length ? xs.reduce((a, x) => a + x.v, 0) / xs.length : null };
+    };
+    return [r(0), r(1)];
+  }
+  function judgeExp(st, id) {
+    const e = expState(st, id),
+      c = EXP[id],
+      minN = Math.ceil(c.minN * (e.caution || 1));
+    if (e.verdict === "dropped" || e.verdict === "harm") return;
+    if (e.verdict === "adopted") {
+      const [a0, a1] = expRates(e, e.decidedAt);
+      if (a0.n >= Math.ceil(minN / 2) && a1.n >= minN && a1.rate < a0.rate) {
+        e.history.push({ t: Date.now(), from: "adopted", to: "rolled back", a0, a1 });
+        e.verdict = null;
+        e.caution = +((e.caution || 1) * 1.5).toFixed(2);
+        e.log = [];
+        e.decidedAt = null;
+      }
+      return;
+    }
+    const [a0, a1] = expRates(e);
+    const armN = id === "L10" ? a0.n >= 2 : a0.n >= minN;
+    if (a1.n >= Math.ceil(minN / 2) && a1.rate < EXPCFG.floor && (a0.n === 0 || a0.rate >= EXPCFG.floor)) {
+      e.verdict = "harm";
+      e.decidedAt = Date.now();
+      e.history.push({ t: e.decidedAt, to: "stopped (no-harm floor)", a0, a1 });
+      return;
+    }
+    if (armN && a1.n >= minN) {
+      if (a1.rate >= a0.rate + EXPCFG.margin) e.verdict = "adopted";
+      else if (a1.rate <= a0.rate) e.verdict = "dropped";
+      if (e.verdict) {
+        e.decidedAt = Date.now();
+        e.history.push({ t: e.decidedAt, to: e.verdict, a0, a1 });
+      }
+    }
+  }
+  function expReport(st) {
+    return Object.entries(EXP).map(([id, c]) => {
+      const e = expState(st, id),
+        [a0, a1] = expRates(e);
+      return { id, level: c.level, what: c.what, arms: c.arms, verdict: e.verdict || "running", caution: e.caution || 1, n: [a0.n, a1.n], rate: [a0.rate, a1.rate].map((x) => (x == null ? null : +x.toFixed(2))), history: e.history || [] };
+    });
+  }
+  const sessionTransfer = (A) => {
+    const xs = A.filter((a) => /transfer|far|alien/.test(a.kind));
+    return xs.length ? xs.filter((a) => a.ok).length / xs.length : null;
+  };
+
+  /* ───────────── sealed measurement: baseline, weekly unknown problems, a month later ─────────────
+   * Items live sealed in renaissance-sealed.js (obfuscated, hashed and pre-registered in docs/RENAISSANCE/sealed/)
+   * and are opened only on the day they are due. Form A is the baseline (days 0–3) and returns at day 90; form B is
+   * the 30-day parallel form; one unknown problem arrives each week for twelve weeks; the reader test for a masterpiece
+   * arrives 30 days after its last session. Forms give no right/wrong feedback (they come back); a weekly unknown
+   * problem is used once, so it explains itself after you commit. Missed windows are skipped, never owed.
+   * Opt-out (the learner decides what is measured): localStorage renaissance_probes = "off". */
+  const probesOff = () => safe(() => localStorage.getItem("renaissance_probes") === "off", false);
+  const SEALED = () => window.RENAISSANCE_SEALED || { items: [] };
+  function unseal(blob, id) {
+    return safe(() => {
+      const salt = SEALED().salt || "";
+      const bin = atob(blob);
+      let h = hashNum(salt + ":" + id);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) {
+        h = (Math.imul(h ^ (h >>> 15), 2246822507) + 3266489909 + i) >>> 0;
+        bytes[i] = bin.charCodeAt(i) ^ (h & 255);
+      }
+      return JSON.parse(new TextDecoder().decode(bytes));
+    }, null);
+  }
+  function probeDue(st, today) {
+    const P0 = st.probe || {},
+      start = P0.start;
+    if (!start) return [];
+    const since = daysBetween(start, today),
+      out = [];
+    for (const it of SEALED().items || []) {
+      let base = null;
+      if (it.after) {
+        const r = st.sessions[it.after];
+        if (!r || !r.done || !r.endDay) continue;
+        base = daysBetween(start, r.endDay);
+      }
+      for (const at0 of it.at || []) {
+        const at = (base || 0) + at0,
+          key = it.id + "@" + at0;
+        if (P0.done[key]) continue;
+        if (since >= at && since - at <= 14) out.push({ key, it, at });
+        break;
+      }
+    }
+    return out.sort((a, b) => a.at - b.at || (a.it.order || 0) - (b.it.order || 0));
+  }
+  function dueProbes(st, today, dose) {
+    if (probesOff() || dose <= DOSE.short) return [];
+    const list = probeDue(st, today).slice(0, 2);
+    return list
+      .map(({ key, it }) => {
+        const q = unseal(it.blob, it.id);
+        if (!q) return null;
+        return { id: "probe:" + key, type: "q", kind: "probe", stage: "probe", probe: key, form: it.form, min: 1.5, stem: q.stem, options: q.options, after: q.after, feedback: it.form === "alien", title: q.title || "", atoms: q.atoms || [] };
+      })
+      .filter(Boolean);
+  }
+  function recordProbe(st, step, a) {
+    st.probe = st.probe || { start: null, done: {} };
+    st.probe.done[step.probe] = { t: a.t, ok: a.ok, conf: a.conf, ms: a.ms, form: step.form, day: st.probe.start ? daysBetween(st.probe.start, dayKey(new Date(a.t))) : null };
+  }
+  function probeReport(st) {
+    const by = {};
+    for (const [key, r] of Object.entries((st.probe || {}).done || {})) {
+      const f = r.form + (/@90$/.test(key) ? "@90" : "");
+      const o = (by[f] = by[f] || { n: 0, ok: 0 });
+      o.n++;
+      if (r.ok && r.conf !== "guess") o.ok++;
+    }
+    return by;
+  }
+
+  /* ───────────── the learner model: what the record can honestly say ───────────── */
+  // functional-capability vector (§38): no IQ, no composite; each dimension shows its evidence and its n
+  const FIV = [
+    ["orientation", "Orienting in a domain you were never taught", (a) => a.kind === "alien" || (a.kind === "probe" && a.form !== "rt")],
+    ["questions", "Choosing the question that changes the decision", (a) => (a.atoms || []).includes("question")],
+    ["compression", "Compressing to the load-bearing structure", (a) => (a.atoms || []).some((k) => k === "compress" || k === "minimal")],
+    ["causal", "Causal reasoning", (a) => (a.atoms || []).includes("causal")],
+    ["transfer", "Using an idea somewhere new", (a) => a.kind === "transfer" || a.kind === "far"],
+    ["synthesis", "Synthesis across fields", (a) => (a.atoms || []).includes("synth")],
+    ["prediction", "Prediction before being told", (a) => a.kind === "predict"],
+    ["structure", "Memory of structure, days later and unaided", (a) => a.kind === "hook"],
+    ["taste", "Aesthetic discrimination", (a) => (a.atoms || []).includes("taste")],
+    ["judgment", "Judgment", (a) => (a.atoms || []).includes("judgment")],
+    ["possession", "Possession of a work (reader questions)", (a) => a.kind === "probe" && a.form === "rt"],
+  ];
+  function vector(st) {
+    const A = st.answers || [];
+    const out = FIV.map(([id, name, f]) => {
+      const xs = A.filter(f),
+        ok = xs.filter((a) => a.ok && a.conf !== "guess").length;
+      return { id, name, n: xs.length, ok, rate: xs.length >= 5 ? Math.round((100 * ok) / xs.length) : null };
+    });
+    const brierXs = A.filter((a) => a.conf);
+    out.push({ id: "calibration", name: "Calibration (Brier; 0 perfect, 0.25 coin-flip)", n: brierXs.length, rate: brierXs.length >= 5 ? +(brierXs.reduce((a, x) => a + Math.pow((CONF[x.conf] || 0.5) - (x.ok ? 1 : 0), 2), 0) / brierXs.length).toFixed(2) : null });
+    const forges = Object.values(st.forge || {}),
+      good = forges.filter((f) => (f.grades || []).length && f.grades.every((g) => g === "good")).length;
+    out.push({ id: "creation", name: "Creation (forges whose every part held up)", n: forges.length, ok: good, rate: forges.length >= 3 ? Math.round((100 * good) / forges.length) : null });
+    const used = Object.values(st.reality || {}).filter((r) => r.v === "used").length;
+    out.push({ id: "reality", name: "Ideas used outside the app (your own report)", n: Object.keys(st.reality || {}).length, ok: used, rate: null });
+    out.push({ id: "explanation", name: "Explaining to another person", n: 0, rate: null, note: "No instrument inside the app yet; counted only from salon reality taps." });
+    return out;
+  }
+  // transformation velocity (§45–46): change in delayed, unaided accuracy per week; acceleration once there is enough
+  function velocity(st) {
+    const A = (st.answers || []).filter((a) => /far|alien|hook|probe/.test(a.kind));
+    if (!A.length) return { weeks: [], tv: null, accel: null, note: "No delayed or unaided answers yet." };
+    const t0 = Math.min(...A.map((a) => a.t)),
+      wk = {};
+    for (const a of A) {
+      const w = Math.floor((a.t - t0) / (7 * 864e5));
+      const o = (wk[w] = wk[w] || { w, n: 0, ok: 0 });
+      o.n++;
+      if (a.ok && a.conf !== "guess") o.ok++;
+    }
+    const weeks = Object.values(wk).filter((o) => o.n >= 5).map((o) => ({ w: o.w, n: o.n, rate: o.ok / o.n }));
+    const slope = (xs) => {
+      if (xs.length < 3) return null;
+      const mx = xs.reduce((a, x) => a + x.w, 0) / xs.length,
+        my = xs.reduce((a, x) => a + x.rate, 0) / xs.length;
+      const num = xs.reduce((a, x) => a + (x.w - mx) * (x.rate - my), 0),
+        den = xs.reduce((a, x) => a + (x.w - mx) * (x.w - mx), 0);
+      return den ? num / den : null;
+    };
+    const tv = slope(weeks);
+    const half = Math.floor(weeks.length / 2);
+    const accel = weeks.length >= 6 ? (slope(weeks.slice(half)) - slope(weeks.slice(0, half))) / Math.max(1, weeks[half].w - weeks[0].w) : null;
+    return { weeks: weeks.map((x) => ({ w: x.w, n: x.n, rate: Math.round(x.rate * 100) })), tv: tv == null ? null : Math.round(tv * 1000) / 10, accel: accel == null ? null : Math.round(accel * 1000) / 10, note: tv == null ? "Needs at least three weeks with five or more delayed, unaided answers each." : weeks.length < 6 ? "Acceleration needs at least six such weeks." : "" };
+  }
+  // multiplex (§36–37): distinct capability atoms with evidence (a later or unaided success), per hour of Renaissance
+  function multiplex(st, days) {
+    const since = Date.now() - (days || 30) * 864e5;
+    const atoms = new Set();
+    for (const a of st.answers || []) if (a.t >= since && a.ok && a.conf !== "guess" && /transfer|far|alien|hook|probe/.test(a.kind)) (a.atoms || []).forEach((k) => atoms.add(k));
+    const today = dayKey(new Date());
+    let min = 0;
+    for (let i = 0; i < (days || 30); i++) min += st.days[addDays(today, -i)] || 0;
+    return { atoms: [...atoms], perHour: min >= 30 ? Math.round((atoms.size / (min / 60)) * 10) / 10 : null, minutes: Math.round(min), rule: "Only atoms with a later or unaided success count; tags alone never do." };
+  }
+  // cultural possession (§162): a ladder per work, each rung earned by evidence, never by exposure alone
+  const LADDER = ["heard of", "recognises", "knows the basic context", "knows the structure", "knows primary material", "knows the arguments", "knows the criticism", "can discuss", "can quote in context", "can compare", "can apply", "culturally possesses"];
+  const RUNG = { context: 3, structure: 4, primary: 5, argument: 6, criticism: 7, discuss: 8, quote: 9, compare: 10, apply: 11 };
+  function possession(st) {
+    const out = {};
+    const bump = (w, lvl, ev) => {
+      const o = (out[w] = out[w] || { level: 0, evidence: {} });
+      o.evidence[lvl] = ev;
+    };
+    for (const ses of allSessions()) {
+      const rec = st.sessions[ses.id];
+      for (const w of ses.works || []) {
+        bump(w, 1, "door");
+        if (rec && rec.start) bump(w, 2, ses.id);
+      }
+      for (const step of ses.steps) {
+        if (!step.poss) continue;
+        for (const [w, kind] of Object.entries(step.poss)) {
+          const lvl = RUNG[kind];
+          if (!lvl) continue;
+          if (step.type === "passage") {
+            const r = (st.reads || {})[ses.id + ":" + step.id];
+            if (r && r.ok) bump(w, lvl, "read " + step.id);
+            continue;
+          }
+          const hit = (st.answers || []).find((a) => a.sid === ses.id && (a.item === step.id || a.item === step.id + ":c") && a.ok);
+          if (hit) bump(w, lvl, step.id);
+        }
+      }
+      for (const h of ses.hooks || []) {
+        if (!h.poss) continue;
+        const hk = (st.answers || []).find((a) => a.item === "hook:" + h.id && a.ok && a.conf !== "guess");
+        for (const [w, kind] of Object.entries(h.poss)) if (hk && RUNG[kind]) bump(w, RUNG[kind], "later, unaided: " + h.id);
+      }
+    }
+    const rt = probeReport(st);
+    for (const [w, o] of Object.entries(out)) {
+      // a rung counts only if every rung below it is also earned; the top rung needs the sealed reader questions
+      let lvl = 0;
+      for (let k = 1; k <= 11; k++) {
+        if (o.evidence[k]) lvl = k;
+        else break;
+      }
+      const r = rt["rt-" + w];
+      if (lvl >= 11 && r && r.n >= 8 && r.ok / r.n >= 0.75) lvl = 12;
+      o.level = lvl;
+      o.label = lvl ? LADDER[lvl - 1] : "not yet";
+      o.next = lvl < 12 ? LADDER[lvl] : null;
+    }
+    return out;
+  }
+  // the twin (§163): per idea, the furthest state the record supports, plus what went backwards
+  function twin(st) {
+    const out = {};
+    for (const ses of allSessions()) {
+      const rec = st.sessions[ses.id];
+      if (!rec) continue;
+      const A = (st.answers || []).filter((a) => a.sid === ses.id);
+      const H = (ses.hooks || []).map((h) => st.hooks[h.id]).filter(Boolean);
+      const hookA = (st.answers || []).filter((a) => a.kind === "hook" && (ses.hooks || []).some((h) => "hook:" + h.id === a.item));
+      const states = ["seen"];
+      if (A.some((a) => a.kind === "check" && a.ok) || A.some((a) => a.kind === "predict" && a.ok)) states.push("recognises");
+      if (A.some((a) => a.kind === "transfer" && a.ok)) states.push("understands");
+      if (A.some((a) => (a.kind === "far" || a.kind === "alien") && a.ok)) states.push("transfers");
+      if (hookA.some((a) => a.ok && a.conf !== "guess")) states.push("recalls later");
+      if (st.forge[ses.id] && (st.forge[ses.id].grades || []).includes("good")) states.push("creates with");
+      if (st.reality[ses.id] && st.reality[ses.id].v === "used") states.push("uses in life");
+      if (H.length && H.every((h) => h.retired)) states.push("assimilated");
+      const flags = [];
+      const recentBugs = A.filter((a) => a.bug).length;
+      if (recentBugs >= 2) flags.push("misunderstands (" + recentBugs + " diagnosed errors)");
+      const hs = hookA.sort((a, b) => a.t - b.t);
+      if (hs.some((a, i) => !a.ok && hs.slice(0, i).some((b) => b.ok))) flags.push("forgot once after knowing");
+      out[ses.id] = { title: ses.title, state: states[states.length - 1], states, flags };
+    }
+    return out;
+  }
+  // personal intellectual physics (§75): falsifiable statements about this learner, with n, never identity labels
+  function laws(st) {
+    const out = [];
+    const ks = kindStats(st);
+    const kinds = Object.entries(ks).filter(([, v]) => v.shown >= 8);
+    if (kinds.length >= 2) {
+      kinds.sort((a, b) => b[1].ok / b[1].shown - a[1].ok / a[1].shown);
+      const [a, b] = [kinds[0], kinds[kinds.length - 1]];
+      out.push({ rule: "After a " + a[0] + " a right answer followed more often than after a " + b[0], a: a[1].ok + "/" + a[1].shown, b: b[1].ok + "/" + b[1].shown, test: "Holds only if the gap survives the control days of the picture chooser.", status: a[1].ok / a[1].shown - b[1].ok / b[1].shown >= 0.15 ? "candidate" : "no difference yet" });
+    }
+    const hk = (st.answers || []).filter((a) => a.kind === "hook");
+    const byGap = {};
+    for (const a of hk) {
+      const id = a.item.slice(5),
+        h = st.hooks[id];
+      if (!h) continue;
+      const g = (a.gap || 1) <= 2 ? "1–2 days" : a.gap <= 10 ? "3–10 days" : "over 10 days";
+      const o = (byGap[g] = byGap[g] || { n: 0, ok: 0 });
+      o.n++;
+      if (a.ok) o.ok++;
+    }
+    const gaps = Object.entries(byGap).filter(([, o]) => o.n >= 6);
+    if (gaps.length >= 2) out.push({ rule: "Recall by gap: " + gaps.map(([g, o]) => g + " " + o.ok + "/" + o.n).join(" · "), test: "A forgetting curve predicts lower recall at longer gaps; if it stays flat, the gaps can grow faster.", status: "measured" });
+    return out;
+  }
+
   /* ───────────── pedagogy governor ─────────────
    * Level 1 improves teaching: when one kind of representation has preceded right answers clearly more often for this
    * learner, it is shown first. Level 2 judges level 1: one eligible scene in five keeps the authored order as a control
@@ -703,7 +1303,20 @@
     const stepNow = cur();
     const atoms = (stepNow && stepNow.atoms) || (P.s && P.s.atoms) || [];
     const a = { t: Date.now(), sid: P.sid || "warm", item: id, kind: kind || q.kind || "check", ok: !!o.ok, conf, ms: Date.now() - s.shown, bug: o.ok ? null : o.bug || null, hinted: !!s.hint, atoms };
+    if (stepNow && stepNow.kind === "probe") {
+      a.sid = "probe";
+      a.form = stepNow.form;
+      a.atoms = stepNow.atoms || [];
+      recordProbe(st, stepNow, a);
+    }
+    if (stepNow && stepNow.kind === "hook") a.gap = (st.hooks[stepNow.hook] || {}).gap || 1;
     st.answers.push(a);
+    // L5: a prediction that was (or wasn't) offered another view is judged by the next use-it answer in the session
+    if (a.kind === "predict" && P.sid && stepNow && stepNow.alt) P.l5 = { unit: P.sid + ":" + id, arm: s.hintArm ? 1 : armOf(st, "L5", P.sid + ":" + id) };
+    else if (P.l5 && /transfer|far/.test(a.kind)) {
+      expLog(st, "L5", P.l5.unit, P.l5.arm, a.ok ? 1 : 0);
+      P.l5 = null;
+    }
     // a committed answer given before any teaching (a prediction, or an unlabelled item) is a belief on record
     if (a.kind === "predict" || a.kind === "alien") {
       st.beliefs = st.beliefs || [];
@@ -725,11 +1338,22 @@
       const h = st.hooks[step.hook] || (st.hooks[step.hook] = { gap: 1, n: 0, ok: 0 });
       h.n++;
       const today = dayKey(new Date());
+      // L6: the stretch factor is a trial; the outcome of the previous stretch is this answer
+      if (h.arm != null && h.n > 1) expLog(st, "L6", step.hook + "#" + (h.n - 1), h.arm, a.ok && conf !== "guess" ? 1 : 0);
       if (a.ok && conf !== "guess") {
         h.ok++;
-        h.gap = Math.round(Math.max(1, h.gap) * 2.5);
-      } else h.gap = 1;
+        h.arm = armOf(st, "L6", step.hook + "#" + h.n);
+        h.gap = Math.round(Math.max(1, h.gap) * (h.arm === 1 ? 2 : 2.5));
+      } else {
+        h.gap = 1;
+        h.arm = null;
+      }
       h.due = addDays(today, h.gap);
+      // assimilated: after three sure successes a gap past half a year retires the hook (garbage collection of drills)
+      if (h.ok >= 3 && h.gap > 180) {
+        h.retired = "assimilated";
+        h.retiredAt = today;
+      }
     }
     save();
     return a;
@@ -752,6 +1376,14 @@
   function go() {
     const x = cur();
     if (x.type === "close") return finish();
+    if (x.type === "passage" && P.sid) {
+      const st = load(),
+        ms = Date.now() - (P.seen[x.id] || Date.now()),
+        n = (x.quotes || []).reduce((a, id) => a + words((quoteOf(id) || {}).text), 0);
+      // 300 words a minute is a fast reader; less time than that means the passage was not read
+      st.reads[P.sid + ":" + x.id] = { t: Date.now(), ms, words: n, ok: ms >= (n / 300) * 60000 };
+      save();
+    }
     P.sheet = null;
     P.i = Math.min(P.i + 1, P.steps.length - 1);
     remember();
@@ -815,8 +1447,29 @@
       return;
     }
     if (a === "why") return sheet(whySheet());
+    if (a === "source") return sheet(sourceSheet(b.dataset.q || null));
+    if (a === "play") {
+      const l = (x.listen || [])[+b.dataset.l];
+      if (l) {
+        AUDIO.play(l.seq);
+        P.used["play:" + x.id + ":" + b.dataset.l] = (P.used["play:" + x.id + ":" + b.dataset.l] || 0) + 1;
+      }
+      return;
+    }
+    if (a === "playModel") {
+      const m = lookup("models", x.model);
+      if (m && m.sound) AUDIO.play(m.sound(P.qs["m:" + x.id]));
+      return;
+    }
     if (a === "term") return sheet(termSheet(b.dataset.k));
-    if (a === "deeper") return sheet(deeperSheet());
+    if (a === "deeper") {
+      if (P.sid) {
+        const st = load();
+        st.deeper[P.sid] = (st.deeper[P.sid] || 0) + 1;
+        save();
+      }
+      return sheet(deeperSheet());
+    }
     if (a === "xray") return sheet(xraySheet());
     if (a === "xcause") return sheet(xrayFix(b.dataset.k));
     if (a === "unsheet") {
@@ -967,6 +1620,78 @@
     safe(() => inject(false));
   }
 
+  /* the session object (§161): every session, whatever its season, compiles to this schema; a missing part is visible */
+  function sessionObject(s) {
+    if (!s) return null;
+    const qs = s.steps.filter((x) => x.type === "q" || x.type === "contrast");
+    const opts = qs.flatMap((x) => (x.type === "contrast" ? x.q.options : x.options) || []);
+    return {
+      id: s.id,
+      title: s.title,
+      domain: domainOf(s),
+      targetCapabilities: s.atoms || [],
+      sourceObjects: (s.provenance || []).map((p) => ({ id: p.id, source: p.source, grade: p.grade, rights: p.license })),
+      irreducibleExperiences: s.steps.filter((x) => x.type === "passage" || x.type === "model" || (x.listen || []).length).map((x) => x.id),
+      compressedContext: s.steps.filter((x) => x.type === "scene").map((x) => x.id),
+      vocabularyBridges: Object.keys(s.vocab || {}),
+      representations: s.steps.flatMap((x) => (x.reps || []).map((r) => x.id + ":" + r.kind)),
+      tasks: qs.map((x) => x.id + ":" + (x.kind || x.type)),
+      misconceptionBranches: opts.filter((o) => !o.ok && o.bug).length,
+      transfer: s.steps.filter((x) => /transfer|far|alien/.test(x.kind || "")).map((x) => x.id),
+      forge: s.steps.filter((x) => x.type === "forge").map((x) => x.id),
+      memoryHooks: (s.hooks || []).map((h) => h.id + "@" + (h.gap || 1) + "d"),
+      worldModelDelta: s.steps.filter((x) => x.kind === "predict" || x.kind === "alien").map((x) => x.id),
+      culturalPossessionDelta: [...new Set(s.steps.flatMap((x) => Object.entries(x.poss || {}).map(([w, k]) => w + ":" + k)))],
+      expectedMinutes: Math.round(s.steps.reduce((a, x) => a + (x.min || 1), 0)),
+      stopCondition: s.deep ? "a deep session: weekends only, " + DOSE.deep + " minutes, and never in exam week or a heavy week" : "the day's dose (" + DOSE.full + " min, " + DOSE.short + " when short); DONE at any step",
+      provenance: (s.provenance || []).length,
+      rights: [...new Set((s.provenance || []).map((p) => p.license))],
+      works: s.works || [],
+      requires: s.requires || [],
+    };
+  }
+  /* device independence (§112): the current step as plain speech, for voice, earbuds or a screen reader */
+  function speakable() {
+    if (!P) return null;
+    const x = cur(),
+      strip = (t) => String(t || "").replace(/\*\*|\*|\[\[|\]\]/g, "").replace(/\|[^\]]*?(?=\s|$)/g, "");
+    const parts = [];
+    if (x.title) parts.push(x.title + ".");
+    if (x.type === "passage") (x.quotes || []).forEach((id) => { const q = quoteOf(id); if (q) parts.push(q.text.replace(/\n/g, " ") + " — " + capOf(q) + "."); });
+    if (x.body) parts.push(strip(x.body));
+    const q = x.type === "contrast" ? x.q : x.type === "q" ? x : null;
+    if (x.type === "contrast") parts.push("First case, " + x.left.title + ": " + strip(x.left.body) + " Second case, " + x.right.title + ": " + strip(x.right.body));
+    if (q) {
+      if (q.dialogue) q.dialogue.forEach((d) => parts.push(d.who + " says: " + d.say));
+      parts.push(strip(q.stem));
+      perm(x.id, q.options.length).forEach((k, pos) => parts.push("Option " + "ABCDEFG"[pos] + ": " + q.options[k].t + "."));
+    }
+    if (x.type === "model") parts.push(strip(x.ask || ""));
+    if (x.listen) x.listen.forEach((l) => parts.push(l.label + ": " + strip(l.text || "")));
+    return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+  }
+  /* the learner owns the record: export it anywhere, import it on another device (sessions, answers and hooks merge) */
+  function importState(obj) {
+    if (!obj || obj.schema !== "renaissance.state/1" || !obj.state || obj.state.v !== 1) return { ok: false, why: "not a Renaissance export" };
+    const st = load(),
+      src = obj.state;
+    for (const [k, t] of Object.entries(SHAPE)) if (k in src && (t === "a" ? !Array.isArray(src[k]) : typeof src[k] !== "object")) return { ok: false, why: "field " + k + " has the wrong shape" };
+    const seen = new Set(st.answers.map((a) => a.t + ":" + a.item));
+    let added = 0;
+    for (const a of src.answers || []) if (!seen.has(a.t + ":" + a.item)) (st.answers.push(a), added++);
+    st.answers.sort((a, b) => a.t - b.t);
+    for (const [id, r] of Object.entries(src.sessions || {})) if (!st.sessions[id] || (r.done && !st.sessions[id].done)) st.sessions[id] = r;
+    for (const [id, h] of Object.entries(src.hooks || {})) if (!st.hooks[id] || (h.n || 0) > (st.hooks[id].n || 0)) st.hooks[id] = h;
+    for (const [d, m] of Object.entries(src.days || {})) st.days[d] = Math.max(st.days[d] || 0, m);
+    for (const k of ["forge", "reality", "reads", "deeper", "forecasts"]) Object.assign(st[k], src[k] || {});
+    if (src.probe) {
+      st.probe.start = st.probe.start && src.probe.start ? (st.probe.start < src.probe.start ? st.probe.start : src.probe.start) : st.probe.start || src.probe.start;
+      Object.assign(st.probe.done, src.probe.done || {});
+    }
+    save();
+    return { ok: true, answersAdded: added };
+  }
+
   window.RENAISSANCE = {
     version: VERSION,
     gate,
@@ -993,6 +1718,32 @@
     },
     BUGS,
     ATOMS,
+    XRAY_OF,
+    LADDER,
+    compile: (at) => {
+      const t = at || new Date(),
+        st = load(),
+        today = dayKey(t);
+      const c = choose(st, today, DOSE.full, t);
+      return c ? { sid: c.s ? c.s.id : null, mode: c.mode, why: c.why || c.wait, ranked: (c.ranked || []).map((r) => ({ sid: r.s.id, score: r.score, parts: r.parts, reasons: r.reasons })) } : null;
+    },
+    sessionObject: (id) => sessionObject(sessionById(id)),
+    experiments: () => expReport(load()),
+    vector: () => vector(load()),
+    velocity: () => velocity(load()),
+    multiplex: (d) => multiplex(load(), d),
+    possession: () => possession(load()),
+    twin: () => twin(load()),
+    laws: () => laws(load()),
+    probes: () => ({ start: load().probe.start, done: Object.keys(load().probe.done).length, due: probeDue(load(), dayKey(new Date())).map((x) => x.key), report: probeReport(load()), off: probesOff() }),
+    unseal: (id) => {
+      const it = (SEALED().items || []).find((x) => x.id === id);
+      return it ? unseal(it.blob, it.id) : null;
+    },
+    audio: { schedule: (seq) => AUDIO.schedule(seq), last: () => AUDIO.last, plays: () => AUDIO.plays },
+    speakable: () => speakable(),
+    export: () => JSON.parse(JSON.stringify({ schema: "renaissance.state/1", exported: new Date().toISOString(), app: VERSION, state: load() })),
+    import: (obj) => importState(obj),
   };
   if (!off()) boot();
 })();

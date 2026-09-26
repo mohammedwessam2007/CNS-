@@ -600,7 +600,7 @@
     ],
   });
 
-  const season2 = { id: "s2", title: "Season 2 · Seeing structure", sessions, visuals, models };
+  const season2 = { id: "s2", boot: true, domain: "primitives", title: "Season 2 · Seeing structure", sessions, visuals, models };
   const S = (window.RENAISSANCE_SEASONS = window.RENAISSANCE_SEASONS || []);
   if (!S.some((z) => z.id === "s2")) S.push(season2);
 })();

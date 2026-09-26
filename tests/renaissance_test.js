@@ -3,7 +3,10 @@
 // content carries provenance. Usage: node tests/renaissance_test.js [out.json]   (app on :8787, or APP_URL)
 const fs = require('fs');
 const path = require('path');
-const { open } = require('./harness');
+const harness = require('./harness');
+// the sealed measurement (probes) and the trials are certified in renaissance_v3_test.js; this suite certifies the
+// original experience with both switched off, exactly as a learner can switch them off
+const open = (o = {}) => harness.open(Object.assign({}, o, { localStorage: Object.assign({ renaissance_probes: 'off', renaissance_experiments: 'off' }, o.localStorage || {}) }));
 const results = [];
 const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, detail }); console.log((ok ? 'PASS ' : 'FAIL ') + id + ' ' + what + (ok ? '' : ' ' + JSON.stringify(detail).slice(0, 900))); };
 

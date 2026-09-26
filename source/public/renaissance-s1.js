@@ -735,5 +735,5 @@
     ],
   });
 
-  window.RENAISSANCE_SEASONS = [{ id: "s1", title: "Season 1 · Six mechanisms that run the world", sessions, visuals, models }];
+  window.RENAISSANCE_SEASONS = [{ id: "s1", boot: true, domain: "primitives", title: "Season 1 · Six mechanisms that run the world", sessions, visuals, models }];
 })();

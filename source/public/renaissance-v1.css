@@ -91,3 +91,26 @@ p .rnTerm{min-height:0;padding:1px 8px;margin:0 1px}
 .rnDeep{margin:8px 0;padding:10px 12px;border-radius:12px;background:#0e1c2d}
 .rnChal{margin-top:8px}
 @media (max-width:640px){.rnPair{grid-template-columns:1fr}.rnAux{font-size:10.5px;padding:0 9px}}
+/* v18 · primary text, sources, listening, dialogue */
+.rnPassage{margin:14px 0;padding:14px 16px 12px;border-radius:14px;border:1px solid #3a3060;background:#110f1f}
+.rnPassage blockquote{margin:0;font:500 17px/1.65 Georgia,"Times New Roman",serif;color:#f1ecff}
+.rnPassage blockquote p{margin:0 0 10px}
+.rnPassage blockquote.verse .rnLine{display:block;padding-left:1.2em;text-indent:-1.2em}
+.rnPassage figcaption{margin-top:8px;font:700 12.5px/1.4 Inter,system-ui,sans-serif;color:#b3a8e0}
+.rnSrcBtn{display:inline-block;min-height:44px;margin:8px 0 0;padding:0 14px;border-radius:12px;border:1px solid #3a3060;background:#141129;color:#cdbfff;font:850 11.5px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;cursor:pointer}
+.rnQuoteRec{display:grid;gap:8px}
+.rnQrow{padding:8px 10px;border-radius:10px;background:#0b1624;border:1px solid #16263a}
+.rnQrow span{display:block;font:900 10.5px/1.2 Inter,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#66e9ff;margin-bottom:4px}
+.rnQrow p{margin:0}
+.rnListenBox{display:grid;gap:10px;margin:12px 0}
+.rnListen{padding:10px 12px;border-radius:14px;border:1px solid #26405e;background:#0b1624}
+.rnPlay{min-height:46px;padding:0 16px;border-radius:12px;border:1px solid #66e9ff;background:#0b1a26;color:#bff4ff;font:900 13px/1 Inter,system-ui,sans-serif;letter-spacing:.05em;cursor:pointer}
+.rnListenTxt{margin-top:8px;font-size:14px;color:#cfe0f0}
+.rnListenTxt p{margin:0}
+.rnDialog{display:grid;gap:8px;margin:10px 0 14px}
+.rnSay{padding:10px 12px;border-radius:14px;background:#0e1c2d;border:1px solid #26405e}
+.rnSay b{display:block;font:900 11px/1.2 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#ffd166;margin-bottom:4px}
+.rnSay span{font:500 15px/1.5 Inter,system-ui,sans-serif}
+.rnReader{font:500 16px/1.7 Georgia,"Times New Roman",serif}
+.rnReader .rnLine{display:block;padding:2px 6px;border-radius:6px}
+.rnReader .rnLine.on{background:#2a2410;color:#fff}
