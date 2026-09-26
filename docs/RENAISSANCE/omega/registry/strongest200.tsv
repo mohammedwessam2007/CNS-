@@ -1,0 +1,201 @@
+rank	id	score	name
+1	O4402	12	Minutes per click
+2	L488	11	Kill switch as pedagogy
+3	O4301	11	Three-boxes drill
+4	O4306	11	Forge from graded parts
+5	O4312	11	Cause-typed repair router
+6	O4319	11	Complexity meter
+7	O4401	11	Click-event candidate
+8	O4404	11	Evidence-only receipt
+9	O4518	11	Domain entry cost
+10	O4601	11	Capability atoms
+11	O4807	11	Same data, two charts
+12	O4902	11	Wormhole cases
+13	O5016	11	Mechanism passport
+14	O5401	11	Belief ledger
+15	O5504	11	Scale switch
+16	O6409	11	Short-dose continuation
+17	L001	10	Capability as the unit
+18	L002	10	Predict before tell
+19	L004	10	Delayed proof
+20	L006	10	Minimum effective dose
+21	L007	10	Confidence on every answer
+22	L011	10	Rebuild test
+23	L012	10	Label after concept
+24	L053	10	Hooks inside later sessions
+25	L054	10	Life-as-lab forge
+26	L064	10	Primitives inside medicine
+27	L144	10	Priority scheduler
+28	L146	10	Kill switch
+29	L274	10	Visible opportunity cost
+30	L278	10	Primitive portfolio
+31	L287	10	Proper scoring rule
+32	L288	10	No composite score
+33	L293	10	No answer-giving AI
+34	L300	10	Implementation intentions
+35	L303	10	Hypercorrection repair
+36	L305	10	Generation effect
+37	L326	10	Curiosity first
+38	L327	10	Prediction error
+39	L355	10	Thought experiments as models
+40	L357	10	Belief version control
+41	L391	10	A constitution
+42	L396	10	Appeals
+43	L403	10	Constitutional kill switch
+44	L418	10	Progressive disclosure
+45	L420	10	Friction detector
+46	L423	10	Dark-pattern ban
+47	L429	10	Provenance on demand
+48	L443	10	Calibration curve
+49	L444	10	What would change my mind?
+50	L483	10	Learner's data as cases
+51	L484	10	Evidence ledger
+52	L489	10	Life-minutes accounting
+53	L490	10	Stop as reward
+54	L491	10	Donor-organ architecture
+55	L494	10	Reality taps
+56	L508	10	Learner authors sessions
+57	L509	10	Learner builds models
+58	O4108	10	Wrongness as tuition
+59	O4201	10	Primary-number rule
+60	O4303	10	Egyptian-Arabic sticky line
+61	O4307	10	One decision per screen
+62	O4313	10	Minimum sufficient model board
+63	O4413	10	One idea per session
+64	O4603	10	Periodic groups by operation
+65	O4605	10	Compound capabilities
+66	O4702	10	Base-rate sense
+67	O4718	10	Blind-spot sense
+68	O4804	10	Counts-first images
+69	O4904	10	Conceptual zip bomb
+70	O5106	10	Intuition audit
+71	O5202	10	Alien domain monthly
+72	O5301	10	Question value test
+73	O5403	10	Idea antigen test
+74	O5602	10	Assimilation test
+75	O5603	10	Idea states
+76	O5618	10	Hook budget cap
+77	O6301	10	Verified pairs P(t)
+78	O6304	10	Objective as a vector
+79	O6503	10	Meta-pedagogy log
+80	O6617	10	Ecology succession
+81	O6804	10	Morbidity and mortality review
+82	L014	9	Mechanism-indexed map
+83	L019	9	Same-shape detector
+84	L028	9	Just-in-time primitive
+85	L029	9	Retirement rule
+86	L033	9	Discovered prerequisites
+87	L040	9	Decisive question as the unit
+88	L041	9	Explorable model as the unit
+89	L042	9	Case contrast as the unit
+90	L044	9	Primary artifact as the unit
+91	L046	9	Faded examples
+92	L048	9	Debug a wrong explanation
+93	L063	9	Sketch it
+94	L065	9	Spiral reuse
+95	L067	9	Apoptosis of representations
+96	L068	9	Homeostatic time budget
+97	L074	9	Circadian gate
+98	L077	9	Reflex arcs
+99	L079	9	Representation tournament
+100	L082	9	Speciation
+101	L083	9	Extinction log
+102	L092	9	Dose controller
+103	L093	9	Success-rate controller
+104	L094	9	Delay-aware evaluation
+105	L098	9	Calendar feedforward
+106	L106	9	Surprise-weighted memory
+107	L108	9	Redundant encoding
+108	L114	9	Mutual information of primitives
+109	L118	9	Jewel vs context
+110	L123	9	Summary must pass a test
+111	L132	9	Prefetch
+112	L140	9	Parallel primitives
+113	L145	9	Process isolation
+114	L148	9	Hidden machinery
+115	L151	9	No deadlock
+116	L157	9	Season compiler
+117	L169	9	Errors that teach
+118	L209	9	Committed bets
+119	L210	9	Multi-primitive boss problems
+120	L219	9	Co-op
+121	L222	9	Mystery structure
+122	L223	9	Thinker conflicts
+123	L289	9	Held-out audits
+124	L295	9	Penalty-free exit
+125	L301	9	Autonomy
+126	L322	9	Analogical distance ladder
+127	L332	9	Exercise before learning
+128	L354	9	Steelmanning
+129	L360	9	Philosophy of science by cases
+130	L362	9	Definitions after concepts
+131	L378	9	Concept genealogy
+132	L382	9	Time-scale switching
+133	L384	9	Lost futures
+134	L385	9	Historians' disputes
+135	L386	9	Timelines as models
+136	L395	9	Separation of powers
+137	L397	9	Transparency reports
+138	L406	9	No single point of failure
+139	L407	9	Session standard
+140	L410	9	Growth archive
+141	L411	9	Knowledge half-life
+142	L413	9	Truth institutions
+143	L416	9	Collapse cases
+144	L445	9	Confidence gap alerts
+145	L447	9	What-worked log
+146	L450	9	Explanatory-depth probes
+147	L457	9	Taste + mechanism
+148	L469	9	Frontier cards
+149	L472	9	Adjacent-possible map
+150	L474	9	Expert disagreement finder
+151	L476	9	Question vault
+152	L482	9	Contract with the future self
+153	L485	9	Experiment registry
+154	L487	9	Self-shrinking dose
+155	L492	9	Myth provenance grades
+156	L493	9	No-amputation archive
+157	L510	9	Dissolve into habits
+158	L513	9	Real research
+159	O4101	9	Minutes-owed inversion
+160	O4103	9	Syllabus as hypothesis
+161	O4206	9	Paced reveal
+162	O4216	9	Reality veto
+163	O4302	9	Decisive-question pick
+164	O4420	9	Click-to-reality conversion
+165	O4503	9	Recompile on source change
+166	O4505	9	Dead-end museum
+167	O4513	9	Belief recompile
+168	O4609	9	Dark-matter atoms
+169	O4816	9	Blind panel pairs
+170	O4901	9	One-missing-step entry
+171	O4903	9	Difficulty arbitrage
+172	O5115	9	Contingency scoring
+173	O5201	9	Unlabelled boss world
+174	O5303	9	Question from a surprise
+175	O5314	9	Question budget per decision
+176	O5315	9	Threshold before asking
+177	O5610	9	World-model gap map
+178	O5615	9	Model consistency check
+179	O5701	9	Blind pairs with stated criteria
+180	O5712	9	Criteria disagreement
+181	O5808	9	Invention log
+182	O5901	9	Learner state vector
+183	O6001	9	Unaided hooks
+184	O6006	9	Explanation supremacy rule
+185	O6217	9	Expert disagreement at the frontier
+186	O6306	9	Rate objective
+187	O6309	9	Agency metric
+188	O6406	9	No-backlog return
+189	O6408	9	Minimum dose estimate
+190	O6415	9	FOMO-free frontier
+191	O6501	9	Season bet scoring
+192	O6605	9	Legal precedent reasoning
+193	O6607	9	Outbreak investigation template
+194	O6609	9	Coach's film review
+195	O6806	9	Red-flag lists
+196	O6916	9	Presumption reversal
+197	O7102	9	Taper before exams
+198	L020	8	Discipline lens toggle
+199	L027	8	Seasons, not courses
+200	L056	8	Conversation seed
