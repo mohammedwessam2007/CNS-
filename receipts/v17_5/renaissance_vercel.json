@@ -1,5 +1,5 @@
 {
- "at": "2026-09-26T11:09:19.523Z",
+ "at": "2026-09-26T11:56:02.116Z",
  "results": [
   {
    "id": "R1",
@@ -17,7 +17,7 @@
    "ok": true,
    "detail": {
     "open": "open",
-    "q": "Why would a rational person deliberately tie his own hands?",
+    "q": "Why would a rational person deliberately tie their own hands?",
     "go": true,
     "top": 738,
     "vh": 1180,
@@ -85,21 +85,25 @@
    "detail": {
     "locked": true,
     "fb": {
-     "text": "✗ Not this one. Wrong actorThe crew have wax in their ears and no reason to act. The risk at the song is him.The answer: He expects to change his mind, and decides now which version of himself to obey. The rope alone is not enough: he is the captain and could order it untied. The order removes his own authority at the moment it will be misused.This is the whole idea in one scene: a present self who can see clearly, a future self who will want something else, and a rule built now to bind the later self.",
+     "text": "✗ Not this one. Wrong actorThe crew have wax in their ears and no reason to act. The risk at the song is him.The answer: He knows he'll change his mind, so he decides now which self to obey. The rope alone is not enough: he is the captain and could order it untied. The order removes his own authority at the moment it will be misused.This is the whole idea in one scene: a present self who can see clearly, a future self who will want something else, and a rule built now to bind the later self.",
      "bug": "Wrong actor",
      "go": true
     },
     "logged": {
-     "t": 1790438402676,
+     "t": 1790438402709,
      "sid": "commit",
      "item": "c2",
      "kind": "predict",
      "ok": false,
      "conf": "sure",
-     "ms": 34,
+     "ms": 45,
      "bug": "agent",
      "hinted": false,
-     "atoms": []
+     "atoms": [
+      "selfmodel",
+      "strategy",
+      "constraint"
+     ]
     }
    }
   },
@@ -361,7 +365,7 @@
     "ended": true,
     "day1": {
      "st": {
-      "start": 1794326401534,
+      "start": 1794326401622,
       "short": true,
       "at": "c5",
       "endDay": "2026-11-10",
@@ -542,6 +546,24 @@
    }
   },
   {
+   "id": "R35",
+   "what": "Test-wise counterfeit learners fail: picking the longest, shortest, wordiest, punctuated, hedged, jargon-heavy or absolute-free option scores within 0.12 of chance on every item of every season",
+   "ok": true,
+   "detail": {
+    "chance": 0.31,
+    "n": 122,
+    "counterfeit": {
+     "longest": 0.323,
+     "shortest": 0.349,
+     "mostWords": 0.312,
+     "punctuated": 0.369,
+     "hedged": 0.354,
+     "jargon": 0.31,
+     "noAbsolutes": 0.347
+    }
+   }
+  },
+  {
    "id": "R22",
    "what": "No open-ended thinking tax (\"what do you think\", \"reflect\", \"research…\"), no links out, no points/badges",
    "ok": true,
@@ -684,7 +706,18 @@
     "lazy": null,
     "links": null,
     "slop": null,
-    "n": 12
+    "n": 12,
+    "counterfeit": {
+     "longest": 0.323,
+     "shortest": 0.349,
+     "mostWords": 0.312,
+     "punctuated": 0.369,
+     "hedged": 0.354,
+     "jargon": 0.31,
+     "noAbsolutes": 0.347
+    },
+    "chance": 0.31,
+    "nItems": 122
    }
   },
   {
@@ -794,15 +827,15 @@
      "bug": "pretension"
     },
     "led": {
-     "t": 1790438401640,
+     "t": 1790438401645,
      "sid": "taste",
      "item": "t1",
-     "held": "Left: it sounds more professional",
+     "held": "Left: it sounds more professional for a report",
      "conf": "sure",
      "ok": false,
-     "revisedTo": "Right: the same claim, with every word doing work"
+     "revisedTo": "Right: the same claim, every word working"
     },
-    "why": "s coin-flipping): 0.81 over 1 answers · Renaissance this week: 0 min.This step trains: aesthetic discrimination · compression.Beliefs you revisedYou committed (sure): “Left: it sounds more professional” → revised to “Right: the same claim, with every word doing work” · Sat, 26 SeptNo combined score is shown on purpose: one number invites optimising the number (that is session 5).BACK TO THE LESSON"
+    "why": "n-flipping): 0.81 over 1 answers · Renaissance this week: 0 min.This step trains: aesthetic discrimination · compression.Beliefs you revisedYou committed (sure): “Left: it sounds more professional for a report” → revised to “Right: the same claim, every word working” · Sat, 26 SeptNo combined score is shown on purpose: one number invites optimising the number (that is session 5).BACK TO THE LESSON"
    }
   },
   {
@@ -831,13 +864,13 @@
     },
     "tag": "NO LABELS: WHICH IDEA IS THIS?",
     "lastA": {
-     "t": 1790438401666,
+     "t": 1790438401681,
      "sid": "boss",
      "item": "x2",
      "kind": "alien",
      "ok": true,
      "conf": "think",
-     "ms": 2,
+     "ms": 8,
      "bug": null,
      "hinted": false,
      "atoms": [
@@ -869,6 +902,125 @@
     "bad": [],
     "more": 0
    }
+  },
+  {
+   "id": "R36",
+   "what": "Pedagogy governor, level 1: with no record the authored picture comes first; when one kind of picture has preceded right answers clearly more often for this learner it is shown first, except on control days when the usual order is kept; WHY THIS? says which and why; the outcome is logged",
+   "ok": true,
+   "detail": {
+    "fresh": {
+     "id": "c1",
+     "shown": "diagram",
+     "n": 0
+    },
+    "seen": [
+     {
+      "shown": "story",
+      "last": {
+       "t": 1790438401638,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": null
+      },
+      "after": {
+       "t": 1790438401638,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": true
+      }
+     },
+     {
+      "shown": "story",
+      "last": {
+       "t": 1790524801581,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": null
+      },
+      "after": {
+       "t": 1790524801581,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": true
+      }
+     },
+     {
+      "shown": "diagram",
+      "last": {
+       "t": 1790611201607,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": true,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": null
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "R37",
+   "what": "Pedagogy governor, level 2: after 20 choices that did no better than the control arm (8/20 vs 5/5), the chooser switches itself off, pictures return to the authored order, and WHY THIS? explains it",
+   "ok": true,
+   "detail": {
+    "off": true,
+    "shown": "diagram",
+    "why": ".How this app is adjusting to youThe picture chooser is switched off: over 20 choices it did no better (8/20) than keeping the usual order (5/5). Pictures come in the authored order.No combined score is shown on purpose: one number invites optimising the number (that is session 5).BACK TO THE LESSON"
+   }
+  },
+  {
+   "id": "R38",
+   "what": "No page errors in the governor checks",
+   "ok": true,
+   "detail": []
   }
  ]
 }

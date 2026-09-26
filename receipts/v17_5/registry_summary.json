@@ -1,0 +1,30 @@
+{
+ "total": 1160,
+ "v1": 520,
+ "omega": 640,
+ "passes": 72,
+ "kept": 863,
+ "merged": 148,
+ "rejected": 149,
+ "rejected_by_code": {
+  "SLOP": 31,
+  "EVID": 29,
+  "SCOPE": 17,
+  "TAX": 16,
+  "COST": 15,
+  "DUP": 9,
+  "TRUTH": 9,
+  "UNTEST": 7,
+  "COPY": 7,
+  "ADDICT": 6,
+  "GUILT": 3
+ },
+ "distinct_after_dedupe": 1003,
+ "novelty_kept": {
+  "KNOWN": 521,
+  "COMBO": 285,
+  "UNCLEAR": 57
+ },
+ "fields_shared_per_pass_v1": 520,
+ "strongest200_min_score": 8
+}

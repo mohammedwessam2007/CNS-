@@ -325,4 +325,24 @@ A **1,160-candidate registry** (1,003 distinct after deduplication) with the 13 
 
 ### Evidence (`receipts/v17_5/`)
 
-*Pending: the full regression on the final code is running; its results replace this line.*
+| Suite | Source :8787 | Vercel build :8790 |
+|---|---|---|
+| renaissance_test (38 checks: gate, controls, memory, stop rules, content integrity, legibility R34, counterfeit learners R35, governor R36–R38) | 38/38 | 38/38 (re-run on a rebuilt copy after the last wording change) |
+| omega_registry_test (11 checks) | 11/11 | — (no server needed) |
+| answer_figure_test · atlas_game_test | 10/10 · 22/22 | 10/10 · 22/22 |
+| course_map_test · audio_options_test · dept_figs_test | 11/11 · 12/12 · 16/16 | 11/11 · 12/12 · 16/16 |
+| v16_test (public and owner device) | 25/25 · 25/25 | |
+| certify · spread · learn · v15.3 · host · gallery | 62/62 · 23/23 · 17/17 · 10/10 · 14/14 · 7/7 | |
+| hostile_test | 26/26 | |
+| leak audit · rollback probe | 0 text leaks, 0 query leaks · v53 → v14.2 → v17.5 clean | |
+| strict coverage | practice taught 1,009/1,009 | |
+
+Counterfeit learners over 122 items (chance 0.31): longest 0.32 · shortest 0.35 · most words 0.31 · punctuated 0.37 · hedged 0.35 · jargon 0.31 · no absolutes 0.35 (`counterfeit_learners.json`). Registry counts: `registry_summary.json`.
+
+### Honest limits
+
+- Nothing shows yet that Renaissance makes him more capable; the first delayed evidence is the 30-day hooks (late October 2026).
+- The governor acts on the next answer after a picture, not on delayed results, and per-kind rates are confounded by item difficulty; its control arm makes the chooser-vs-control comparison fair, not the per-kind rates.
+- Art, music, literature and mathematics seasons are still missing.
+- The live deploy could not be confirmed from this session: the Vercel connector still answers 403 ("You don't have permission to list the deployment"). The pushed code is the code that passed every suite above.
+- An earlier commit message in this release says "350 option texts changed"; the correct count is 312.

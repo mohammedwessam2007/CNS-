@@ -1,4 +1,4 @@
-started 11010
+started 1042
 [build] 73 app scripts/styles present
 === v16_test (public)
 PASS M1   After the lesson notes the next step is a block of that lesson's past-paper MCQs (≤ 8), each owned by the lesson just taught; no draw-from-memory step, no v14 primer, no picture before answering; options ≥ 48 px  · {"b":{"l":"T003","ids":["EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-7","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-4","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-
@@ -26,7 +26,7 @@ PASS M7b  Every simulated mistake is asked again before the exam  · {"wrong":57
 PASS M7c  Time: about 2 h a day or less on average, no day above 2.5 h; saved progress stays under 1.2 MB (cloud limit 1.5 MB)  · {"avg":109,"max":140,"stateKB":891,"perDay":"3:140 4:138 5:132 6:67 7:82 8:110 9:122 10:121 11:121 12:122 13:72 14:101 15:120 16:122 17:122 18:122 19:72 20:72 21:101 22:122 23:121 24:121 25:121 26:121 27:72 28:101 29:120 30:121 31:122 32:123 33:121 34:72 35:101 36:121 37:122 38:108 39:115 40:113 41:
 PASS M7d  Mock predictions come from unseen first attempts with an interval  · {"n":340,"k":236,"p":0.6941176470588235,"lo":0.6612215458215173,"hi":0.725147247745943}
 PASS M7e  No page errors over the whole course  · {"errors":[],"other":[]}
-25/25 v16 checks passed (169s)
+25/25 v16 checks passed (176s)
 === v16_test (owner device, key present)
 PASS M1   After the lesson notes the next step is a block of that lesson's past-paper MCQs (≤ 8), each owned by the lesson just taught; no draw-from-memory step, no v14 primer, no picture before answering; options ≥ 48 px  · {"b":{"l":"T003","ids":["EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-7","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-4","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-
 PASS M2   A wrong answer is explained on the spot: verdict, the key row, "your answer" row, a reason under every option when the item has a tutor note, the teaching note, and Next buttons ≥ 44 px  · {"hand":true,"rows":4,"opts":4,"key":1,"mine":1,"whys":4,"verdict":"✗ غلط Not this one+4 XP🪤 trap spotted: it comes back as a rematch","note":true,"next":[44,48]}
@@ -53,7 +53,7 @@ PASS M7b  Every simulated mistake is asked again before the exam  · {"wrong":61
 PASS M7c  Time: about 2 h a day or less on average, no day above 2.5 h; saved progress stays under 1.2 MB (cloud limit 1.5 MB)  · {"avg":109,"max":141,"stateKB":900,"perDay":"3:141 4:138 5:132 6:71 7:87 8:117 9:122 10:121 11:121 12:122 13:72 14:101 15:120 16:122 17:122 18:122 19:72 20:72 21:101 22:122 23:121 24:121 25:121 26:121 27:72 28:101 29:120 30:121 31:122 32:123 33:121 34:72 35:101 36:121 37:122 38:108 39:115 40:113 41:
 PASS M7d  Mock predictions come from unseen first attempts with an interval  · {"n":340,"k":222,"p":0.6529411764705882,"lo":0.6191907697885196,"hi":0.6852210069616006}
 PASS M7e  No page errors over the whole course  · {"errors":[],"other":[]}
-25/25 v16 checks passed (176s)
+25/25 v16 checks passed (178s)
 === certify
 PASS C5    v13 Learning Twin ingests the evidence; v14 ledger attributes visual/command/depth  · {"twinEv":2,"ledger":2,"mod":{"mic":{"n":1,"ok":1},"dia":{"n":1,"ok":1}},"cmd":{"lookalike":{"n":1,"ok":1},"tissue":{"n":1,"ok":1}}}
 PASS N0    No page errors during fresh + correct flow  · []
@@ -90,7 +90,7 @@ PASS N4    v9 real visual bank, v11 shell, v12 brain, v13 twin, content integrit
 PASS N5    Autopilot brain drawer (v12 + v13 addon) still opens  · true
 PASS N6    Written wave, practical wave, weekly mock, retention bridge and commute views render  · {"WRITTEN_WAVE":true,"PRACTICAL_WAVE":true,"WEEKLY_MOCK":true,"RETENTION_BRIDGE":true,"commute":true}
 PASS N7    No page errors on cold load + drawers  · []
-PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":1,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.407Z"},"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"}
+PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":1,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.423Z"},"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"}
 PASS N8    No page errors on legacy migration  · []
 PASS L6    Remote image host down: primer text + gate still work; pictures bundled in the app still show, otherwise an honest no-visual state  · {"primer":true,"model":207,"missing":true,"gate":true,"bundled":0,"remote":0}
 PASS N9    No page errors when Commons is unreachable  · []
@@ -156,7 +156,7 @@ PASS Y6   Malformed state (future schema v14): app loads, a question can be answ
 PASS Z1   Twelve taps on the gate and twelve alternating option taps count as ONE answer (the first)  · {"ev0":0,"ev":1,"ledger":1,"result":true}
 PASS Z2   Double-tap on NEXT advances exactly one step  · {"seg0":"d1:T004:s3","seg1":"d2:T005:s0"}
 PASS Z3   No page errors under rapid taps  · []
-PASS W1   Image search hanging 9 s: primer text and gate are usable immediately (not blocked on images)  · {"primer":true,"gate":true,"text":1201,"ms":918}
+PASS W1   Image search hanging 9 s: primer text and gate are usable immediately (not blocked on images)  · {"primer":true,"gate":true,"text":1201,"ms":924}
 PASS W2   Offline mid-session: a wrong answer still opens repair and is saved on the device  · {"a":{"reached":true,"id":"EHSAN-HIST-NERVOUS-TISSUE-SOURCE-BASED-9","recorded":true},"persisted":1,"errors":[]}
 PASS W3-390Huge 6000×6000 image at 390px: rendered inside the viewport, no horizontal scroll  · {"big":2,"maxW":338,"sw":390,"iw":390}
 PASS W3-820Huge 6000×6000 image at 820px: rendered inside the viewport, no horizontal scroll  · {"big":2,"maxW":222,"sw":820,"iw":820}
@@ -175,23 +175,23 @@ PASS P2b  Written boss: after the reveal, a model-answer outline built from the 
 PASS P2c  No page errors  · []
 PASS P3   Zoom offers "✗ Wrong picture — show another" (≥ 44 px); tapping it swaps in a different picture and the rejection survives a reload  · {"before":{"term":"Conus medullaris","key":"exact:File:Conus medullaris labeled diagram.svg"},"after":{"key":"exact:File:Conus medullaris histology micrograph.jpg","note":"","ban":["File:Conus medullaris labeled diagram.svg"],"zoom":false},"reload":{"key":"exa
 PASS P3b  No page errors  · []
-PASS P4   Personal pace: after 8+ timed steps at twice the plan, the pace is ≈ 2× and "minutes remaining" is shown at the learner's pace  · {"plan0":140,"ratio":2.000847686090634,"n":12,"meta":"Visual-first teaching mission · ~140 min ceiling · ~116 min remaining at your pace (×2.0) · NORMAL ENERGY · ZERO LECTURES","remain":116}
+PASS P4   Personal pace: after 8+ timed steps at twice the plan, the pace is ≈ 2× and "minutes remaining" is shown at the learner's pace  · {"plan0":140,"ratio":2.000891575609492,"n":12,"meta":"Visual-first teaching mission · ~140 min ceiling · ~116 min remaining at your pace (×2.0) · NORMAL ENERGY · ZERO LECTURES","remain":116}
 PASS P4b  No page errors  · []
 PASS P5   Offline: after one online visit, the app and today's lecture open with no network, bundled pictures included  · {"controlled":true,"online":["/pics/8eb17fd9f802d5.svg","/pics/bf2780c9c6cd6c.svg"],"off":{"title":"INTELLECTUALITY CNS v17.5 · MCQ EXAM","learn":true,"h":"Extent: where the cord begins and ends","imgs":[{"src":"/pics/8eb17fd9f802d5.svg","ok":true},{"src":"/pi
-10/10 v15.3 checks passed (106s)
+10/10 v15.3 checks passed (107s)
 === vercel_host_test
-PASS H1   Fresh device gets a private 26-char sync code and a session  · {"code":"YTQWAKAFEWL2GVKXSAPRFUYF5B","btn":"☁ SYNCED 10:00","link":true,"title":"INTELLECTUALITY CNS v17.5 · MCQ EXAM"}
+PASS H1   Fresh device gets a private 26-char sync code and a session  · {"code":"FR3HAHP4SR5KSCRGT2LCUREM6I","btn":"☁ SYNCED 10:00","link":true,"title":"INTELLECTUALITY CNS v17.5 · MCQ EXAM"}
 PASS H2   First cloud save happens automatically (no sign-in step)  · {"status":200,"v":1,"btn":"☁ SYNCED 10:00"}
 PASS H3   Cloud button shows sync state; sync-code link is offered under it  · {"btn":"☁ SYNCED 10:00","link":true}
 PASS H4   Every action saves on the device immediately  · {"local1":"A-1"}
 PASS H5   Cloud writes are batched, then land (≤ gap)  · {"beforeGap":null,"afterGap":"A-1","v":2}
 PASS H6   Hiding the app saves to the cloud immediately  · {"v":3}
-PASS H7   Second device via link restores the same progress; code removed from the URL  · {"code":"YTQWAKAFEWL2GVKXSAPRFUYF5B","marker":"A-hide","hash":""}
+PASS H7   Second device via link restores the same progress; code removed from the URL  · {"code":"FR3HAHP4SR5KSCRGT2LCUREM6I","marker":"A-hide","hash":""}
 PASS H8   Device B studies; its progress reaches the cloud  · {"v":5,"xp":30}
 PASS H9   An idle device reopening later loads the newer progress and never overwrites it  · {"aNow":{"marker":"B-learned","xp":30,"v":6},"cloud":"B-learned","cloudXp":30}
 PASS H10  A device that studied keeps its progress over a housekeeping-only cloud change  · {"v":8,"xp":50}
 PASS H14  Both studied: the copy with more learning wins, the other is kept as a backup  · {"aAfter":{"marker":"B-learned-2","backup":"newer-cloud-copy"},"cloud":"B-learned-2"}
-PASS H11  Sync page shows the code formatted and rejects an invalid code  · {"shown":"YTQW-AKAF-EWL2-GVKX-SAPR-FUYF-5B","perr":"That is not a valid sync code (26 letters/digits 2–7)."}
+PASS H11  Sync page shows the code formatted and rejects an invalid code  · {"shown":"FR3H-AHP4-SR5K-SCRG-T2LC-UREM-6I","perr":"That is not a valid sync code (26 letters/digits 2–7)."}
 PASS H12  Server: no code → 401, oversize → 413, vision → graceful 503  · {"bad":401,"big":413,"vis":503}
 PASS H13  No page errors on either device or the sync page  · []
 14/14 host checks passed
@@ -396,6 +396,7 @@ PASS R27 A 10-minute day ends with a short receipt and does not close the sessio
 PASS R19 Kill switches: ?renaissance=off or localStorage "renaissance_off" = 1 → no door, not even booted, and the CNS STOP screen is unchanged
 PASS R20 Every task is precise: one right option, every wrong option pre-diagnosed with a named misconception and a repair; every cited source exists; quotations are registered and cited
 PASS R21 Every session of every season has the full arc: ≥2 committed predictions (unlabelled items count), a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min
+PASS R35 Test-wise counterfeit learners fail: picking the longest, shortest, wordiest, punctuated, hedged, jargon-heavy or absolute-free option scores within 0.12 of chance on every item of every season
 PASS R22 No open-ended thinking tax ("what do you think", "reflect", "research…"), no links out, no points/badges
 PASS R23 The interactive model answers its controls (moving a slider redraws the picture and the numbers)
 PASS R24 Every Renaissance button is at least 44 px tall
@@ -408,7 +409,10 @@ PASS R31 The boss world is unlabelled: its items name no session and are recorde
 PASS R32 Every model in every season reacts to each of its controls; every atom, term, model and picture a step names exists
 PASS R33 No page errors in the season 2 checks
 PASS R34 On a 360-px phone every label of every figure and every model state is at least 10 px, inside its canvas, and does not sit on another label
-ALL 34 PASSED
+PASS R36 Pedagogy governor, level 1: with no record the authored picture comes first; when one kind of picture has preceded right answers clearly more often for this learner it is shown first, except on control days when the usual order is kept; WHY THIS? says which and why; the outcome is logged
+PASS R37 Pedagogy governor, level 2: after 20 choices that did no better than the control arm (8/20 vs 5/5), the chooser switches itself off, pictures return to the authored order, and WHY THIS? explains it
+PASS R38 No page errors in the governor checks
+ALL 38 PASSED
 === renaissance_test (Vercel build :8790)
 PASS R1 While the medicine day is unfinished Renaissance stays shut: no door, gate says "cns"
 PASS R2 When medicine says STOP, one door appears under "STOP MEDICINE": today's question and CONTINUE, visible without scrolling
@@ -432,6 +436,7 @@ PASS R27 A 10-minute day ends with a short receipt and does not close the sessio
 PASS R19 Kill switches: ?renaissance=off or localStorage "renaissance_off" = 1 → no door, not even booted, and the CNS STOP screen is unchanged
 PASS R20 Every task is precise: one right option, every wrong option pre-diagnosed with a named misconception and a repair; every cited source exists; quotations are registered and cited
 PASS R21 Every session of every season has the full arc: ≥2 committed predictions (unlabelled items count), a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min
+PASS R35 Test-wise counterfeit learners fail: picking the longest, shortest, wordiest, punctuated, hedged, jargon-heavy or absolute-free option scores within 0.12 of chance on every item of every season
 PASS R22 No open-ended thinking tax ("what do you think", "reflect", "research…"), no links out, no points/badges
 PASS R23 The interactive model answers its controls (moving a slider redraws the picture and the numbers)
 PASS R24 Every Renaissance button is at least 44 px tall
@@ -444,7 +449,23 @@ PASS R31 The boss world is unlabelled: its items name no session and are recorde
 PASS R32 Every model in every season reacts to each of its controls; every atom, term, model and picture a step names exists
 PASS R33 No page errors in the season 2 checks
 PASS R34 On a 360-px phone every label of every figure and every model state is at least 10 px, inside its canvas, and does not sit on another label
-ALL 34 PASSED
+PASS R36 Pedagogy governor, level 1: with no record the authored picture comes first; when one kind of picture has preceded right answers clearly more often for this learner it is shown first, except on control days when the usual order is kept; WHY THIS? says which and why; the outcome is logged
+PASS R37 Pedagogy governor, level 2: after 20 choices that did no better than the control arm (8/20 vs 5/5), the chooser switches itself off, pictures return to the authored order, and WHY THIS? explains it
+PASS R38 No page errors in the governor checks
+ALL 38 PASSED
+=== omega_registry_test
+PASS O1 The registry has the thirteen identity fields of §119 (plus id, pass and verdict) as columns
+PASS O2 At least 1,000 distinct candidates remain after renamed duplicates are merged or rejected (§118, §120)
+PASS O3 Ids and names are unique (no candidate counted twice under the same name)
+PASS O4 Every kept or merged candidate has every identity field filled (a shared per-pass field is marked [pass])
+PASS O5 Every related link and every merge points at a real, different candidate
+PASS O6 Verdicts, rejection codes, novelty labels and friction/cost grades use only the declared vocabularies
+PASS O7 Novelty is claimed sparingly: most kept candidates name an ancestor (KNOWN or COMBO); UNCLEAR stays under 15%
+PASS O8 The summary file matches the registry
+PASS O9 omega/02_REGISTRY.md quotes the registry's own counts (total, distinct, kept, merged, rejected)
+PASS O10 Later generations meet §121–§124: ≥ 100 second-generation, ≥ 50 primitives, ≥ 20 generators, ≥ 12 ontologies
+PASS O11 Every second-generation parent comes from the strongest-200 selection (§121), and every id the doc cites exists
+ALL 11 PASSED
 === strict coverage
 STRICT practice taught 1009/1009 (100.0%)
 STRICT held-out taught 213/398 (53.5%)  [counts only]
