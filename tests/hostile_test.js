@@ -181,8 +181,10 @@ function bigPng(w, h) {
   // ── Stop-study intelligence ──
   {
     const s = await open({ time: '2026-09-21T20:00:00+03:00', state: partial, settle: 900 });
-    const r = await s.page.evaluate(() => { const d = C.days[0]; for (const l of d.lessons) l.segments.forEach((_, i) => (S.segments[segmentKey(d, l, i)] = true)); const bs = dayBossState(d); bs.visual = true; bs.written = true; bs.writtenRevealed = true; for (const e of Object.values(S.errors)) e.resolved = true; save(); render(); const p = document.querySelector('#player'); return { kind: nextAction().kind, stop: /STOP MEDICINE/.test(p.innerText), intel: !!p.querySelector('.v12Stop'), text: p.querySelector('.v12Stop')?.innerText || '', buttons: p.querySelectorAll('button').length }; });
-    check('S1', 'Day evidence green: explicit STOP view with stop-study intelligence and a single next button', r.kind === 'STOP' && r.stop && r.intel && r.buttons === 1, r);
+    const r = await s.page.evaluate(() => { const d = C.days[0]; for (const l of d.lessons) l.segments.forEach((_, i) => (S.segments[segmentKey(d, l, i)] = true)); const bs = dayBossState(d); bs.visual = true; bs.written = true; bs.writtenRevealed = true; for (const e of Object.values(S.errors)) e.resolved = true; save(); render(); const p = document.querySelector('#player'); return { kind: nextAction().kind, stop: /STOP MEDICINE/.test(p.innerText), intel: !!p.querySelector('.v12Stop'), text: p.querySelector('.v12Stop')?.innerText || '', buttons: [...p.querySelectorAll('button')].filter((b) => !b.closest('.rnEntry')).length, rnDoor: p.querySelectorAll('.rnEntry [data-rn-open]').length }; });
+    // v17.4: the Renaissance door (a separate organ, docs/RENAISSANCE) sits on this screen with its own single CONTINUE;
+    // medicine itself still offers exactly one next button
+    check('S1', 'Day evidence green: explicit STOP view with stop-study intelligence and a single next button (plus at most one Renaissance CONTINUE)', r.kind === 'STOP' && r.stop && r.intel && r.buttons === 1 && r.rnDoor <= 1, r);
     await s.close();
   }
 

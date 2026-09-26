@@ -223,7 +223,7 @@ async function runToEnd(p) {
 
   // ── 4. kill switch ──
   {
-    const s = await open({ v16: true, time: '2026-09-26T19:00:00+03:00', state: null, settle: 1200, url: 'http://127.0.0.1:8787/?renaissance=off' });
+    const s = await open({ v16: true, time: '2026-09-26T19:00:00+03:00', state: null, settle: 1200, url: (process.env.APP_URL || 'http://127.0.0.1:8787/') + '?renaissance=off' });
     const p = s.page;
     const offq = await p.evaluate(() => { nextAction = () => ({ kind: 'STOP' }); render(); return { why: RENAISSANCE.gate().why, door: !!document.querySelector('.rnEntry'), booted: !!window.RENAISSANCE_BOOTED }; });
     await p.evaluate(() => localStorage.setItem('renaissance_off', '1'));

@@ -1,0 +1,522 @@
+# pass | candidate | mechanism (one line) | nearest prior art | verdict  (S = kept for crossbreeding · M = merged into a stronger one · R:<why> = rejected)
+# rejection codes: DUP renamed existing idea · EVID contradicted by evidence · COST cost > value · TAX open-ended thinking tax · SLOP decoration/gamification · GUILT backlog/streak pressure · ADDICT manufactured compulsion · TRUTH fabrication risk · COPY rights problem · SCOPE outside the mission · UNTEST cannot be measured
+1 | Capability as the unit | the curriculum unit is a reusable mechanism, not a topic or a book | competency-based education; threshold concepts (Meyer & Land) | S
+1 | Predict before tell | every idea opens with a committed prediction | predict-observe-explain; productive failure (Kapur) | S
+1 | Error as an address | each wrong option points to a named misconception with its repair | bug libraries in ITS (Brown & Burton, BUGGY) | S
+1 | Delayed proof | nothing counts as learned until shown unaided days later | retention tests; spacing research | S
+1 | Transfer as the only credit | a skill is credited only when used in a new domain | transfer assessment (Barnett & Ceci) | S
+1 | Minimum effective dose | compute the smallest session that changes capability; stop there | time-boxing; none precise | S
+1 | Confidence on every answer | the learner stakes a confidence; honesty is scored | certainty-based marking (Gardner-Medwin) | S
+1 | One representation a day | teach each idea one way only to reduce load | — | R:EVID
+1 | Question, not topic | a session is named by the question it answers | curiosity research (Gruber 2014) | M
+1 | Protégé effect | learner teaches a simulated novice | Betty's Brain (Biswas) | M
+1 | Rebuild test | the learner reconstructs the model with the lesson hidden | generation/reconstruction tasks | S
+1 | Label after concept | technical terms only after the idea exists | concept-before-label pedagogy | S
+1 | Explain-to-a-child check | compress an idea for a novice | Feynman-technique folklore | M
+2 | Mechanism-indexed map | one mechanism shown across war, medicine, music, business | "mental models" lists; complexity science | S
+2 | Problem-first tours | a real problem pulls in whatever fields it needs | problem-based learning | M
+2 | Domain distance score | each transfer item tagged by how far it travels | Barnett & Ceci taxonomy | S
+2 | Dependency timeline | ideas ordered by dependency, not discipline | concept maps | R:UNTEST
+2 | Analogy pair as the unit | two analogs taught together | analogical encoding (Gentner) | M
+2 | Same-shape detector | three cases; which two share structure? | odd-one-out category learning | S
+2 | Discipline lens toggle | the same event through economics, psychology, history | multiple-perspectives teaching | S
+2 | Hide subject labels | remove subject names from the UI | — | R:SLOP
+2 | World map of primitives | a map of mechanisms instead of a course list | knowledge maps (Khan) | M
+2 | Borrowed rigor | each mechanism paired with its strongest native formalism | — | S
+2 | Anti-silo hooks | warm-ups come from other sessions than today's | interleaving (Brunmair & Richter) | S
+2 | Question genealogy | trace a question across fields | history of ideas | M
+2 | Primitive × domain matrix | find empty cells and fill them | Mendeleev-style gap search | S
+3 | Seasons, not courses | six primitives per season; no final exam | serial media | S
+3 | Just-in-time primitive | teach when life presents the problem | JIT learning | S
+3 | Retirement rule | retire a primitive when delayed far transfer is steady | mastery learning (Bloom) | S
+3 | Weakness-driven graph walk | next topic chosen by weakest node | adaptive learning platforms | R:DUP
+3 | Rolling syllabus | season rewritten weekly from evidence | agile curricula | M
+3 | Micro-season | three sessions for one hard idea | — | S
+3 | Discovered prerequisites | prerequisites found only when the learner fails | prerequisite compression | S
+3 | Pick by hook | choose among three questions with no topic names | choice and curiosity | S
+3 | Import other curricula's sessions | remix open courses | OER remixing | R:COPY
+3 | Life-event trigger | a negotiation next week pulls the incentives session forward | — | S
+3 | No completion bars | never show % of a season done | — | S
+3 | Archive with reason | retired content kept with the reason | — | S
+3 | Year budget | 25 min/day ≈ 150 h/year, allocated like capital | time budgeting | S
+4 | Decisive question as the unit | one question carries the lesson | Socratic questioning | S
+4 | Explorable model as the unit | a model you change is the lesson | explorable explanations (Victor; Case) | S
+4 | Case contrast as the unit | two cases side by side | contrasting cases (Alfieri et al.) | S
+4 | Two-minute clicks | tiny drills all day | microlearning | R:EVID
+4 | Primary artifact as the unit | a data table or passage is the lesson | primary-source pedagogy | S
+4 | Argue with a historical position | defend Semmelweis's critics | role-play | M
+4 | Faded examples | worked → partly worked → solo | Renkl's fading | S
+4 | Lessonless mode | mature primitives get only hooks and transfer | review decks | S
+4 | Debug a wrong explanation | find the error in a plausible explanation | erroneous examples (Adams et al. 2014) | S
+4 | Lesson as a level with a boss | game framing | games | R:SLOP
+4 | Failure-first | see a real failure before the principle | case method | M
+4 | One-sentence lesson | the whole lesson must fit one sentence | — | M
+4 | Dissolving lesson | steps disappear when a challenge is passed | expertise reversal (Kalyuga) | S
+5 | Hooks inside later sessions | memory kept by later sessions, not a review chore | mnemonic medium (Matuschak & Nielsen) | S
+5 | Life-as-lab forge | apply it this week | implementation intentions (Gollwitzer) | S
+5 | Moment prompts | a prompt at the moment the mechanism appears in life | context-aware learning | S
+5 | Conversation seed | one sentence to use with a friend | elaborative rehearsal | S
+5 | Audio walks | listen while walking | podcasts | R:EVID
+5 | Observation quest | spot one feedback loop today | noticing tasks | S
+5 | Sleep before test | the first hook comes after a night | sleep and consolidation | S
+5 | Lock-screen diagrams | passive exposure | — | R:EVID
+5 | Teach someone | explain it to a person this week | learning by teaching | S
+5 | Journaling | free reflection | — | R:TAX
+5 | Sketch it | draw the loop on paper | drawing effect (Wammes et al.) | S
+5 | Primitives inside medicine | base rates shown inside CNS cases | — | S
+5 | Spiral reuse | season 2 reuses season 1 primitives | spiral curriculum (Bruner) | S
+6 | Immune memory | primary vs faster secondary response → expanding gaps | spacing | M
+6 | Apoptosis of representations | prune those that never precede success | — | S
+6 | Homeostatic time budget | minutes held near a set point | — | S
+6 | Hormesis | small doses of difficulty | desirable difficulties (Bjork) | M
+6 | Plasticity windows | teach inside curiosity states | Gruber 2014 | S
+6 | Symbiosis with medicine | Renaissance feeds on medical cases | — | S
+6 | Variation and selection of explanations | explanations compete | A/B testing | S
+6 | Metabolic dose | session length follows energy | — | S
+6 | Circadian gate | no sessions 01:00–05:00 | sleep hygiene | S
+6 | Mycorrhizal links | primitives "share nutrients" | — | R:SLOP
+6 | Sensory adaptation | rotate modes as novelty fades | attention research | S
+6 | Reflex arcs | if–then plans | implementation intentions | S
+6 | Learner genome | a genome metaphor for the learner | — | M
+7 | Representation tournament | each concept's representations compete on delayed success | bandits in education | S
+7 | Distractor mutation | new wrong options bred from real wrong answers | — | S
+7 | Fitness = delayed transfer | selection on delayed transfer, not immediate accuracy | — | S
+7 | Speciation | a primitive splits when learners confuse its cases | — | S
+7 | Extinction log | retired content with cause | — | S
+7 | Crossbreeding sessions | two primitives in one case (proxy × loop) | — | S
+7 | Niche construction | the learner changes his environment (forge) | — | M
+7 | Genetic algorithm ordering | evolve session order | evolutionary curriculum search | R:COST
+7 | Red Queen difficulty | items stay just ahead | difficulty adaptation | M
+7 | Sexual selection for beauty | — | — | R:SLOP
+7 | Punctuated weeks | occasional big-idea weeks | — | S
+7 | Horizontal transfer | a representation that won for one primitive is tried on another | — | S
+7 | Fossil beliefs | old beliefs kept with dates | belief versioning | S
+8 | Dose controller | weekly minutes with a set point and damping | — | S
+8 | Success-rate controller | keep success near 70–85% | "85% rule" (Wilson et al. 2019) | S
+8 | Delay-aware evaluation | judge a pedagogy change after its delay | — | S
+8 | State observer | estimate understanding from noisy signals | knowledge tracing | M
+8 | Gain scheduling | big steps for novices, small for experts | — | S
+8 | Anti-windup | backlog never accumulates | — | S
+8 | Calendar feedforward | exam week shrinks the dose in advance | — | S
+8 | Set-point drift | detect when goals changed | — | S
+8 | One change per week | never change two pedagogy variables at once | experimental design | S
+8 | Bang-bang sessions | all or nothing | — | R:EVID
+8 | PID review gaps | tune gaps by error | SRS schedulers | M
+8 | Controllability check | can the system influence this capability at all? | — | S
+8 | Oscillation alarm | detect engagement swings | — | S
+9 | Information-gain item choice | ask what most reduces uncertainty about the learner | computerized adaptive testing | M
+9 | Surprise-weighted memory | committed prediction → surprise → memory | Brod et al. 2018 | S
+9 | Term budget per step | at most two new terms per step | cognitive load | S
+9 | Redundant encoding | two representations for robustness | dual coding (Paivio) | S
+9 | Explanation compression | shortest explanation that keeps the truth | minimum description length | S
+9 | Answer entropy as confusion | spread of answers flags confusion | — | S
+9 | Three-encoding check | same idea asked three ways | — | M
+9 | No inference under n=5 | refuse to infer traits from few answers | — | S
+9 | Kolmogorov simplicity | — | — | R:UNTEST
+9 | Mutual information of primitives | does knowing A speed B? | — | S
+9 | Rate–distortion per learner | how much detail to drop | — | S
+9 | Signal detection tasks | discrimination with hits and false alarms | SDT | S
+9 | Bits per minute | — | — | R:SLOP
+10 | Jewel vs context | preserve the irreducible experience, compress the rest | — | S
+10 | Lossless core | core mechanism never simplified away | — | S
+10 | Primitive dictionary | reuse primitives across sessions | — | S
+10 | Delta teaching | teach only what differs from a known primitive | analogy | S
+10 | Compressed receipts | what changed in five lines | — | S
+10 | Summary must pass a test | a summary is shown only after a transfer test | — | S
+10 | Model zoom | simple → mechanism → formal → limits | progressive disclosure | S
+10 | Over-compression alarm | nuance-loss items | — | S
+10 | Book → primitives | distil a book into mechanisms | summary services | R:EVID
+10 | Proof skeleton | the spine of a proof first | — | S
+10 | One diagram per mechanism | — | — | M
+10 | Sticky mnemonic layer | a memorable line (Egyptian Arabic) | mnemonics | S
+10 | Maximal-surprise hook | the hook is the most surprising true question | — | M
+11 | Hot/cold cache | hot primitives reviewed, cold archived | — | M
+11 | Prefetch | today's errors seed tomorrow's warm-up | — | S
+11 | Pipelining | — | — | R:SLOP
+11 | Branch prediction | precomputed misconception branches | — | S
+11 | Instruction set | each primitive declares the cognitive operation it trains | Bloom's taxonomy | S
+11 | Interrupts | life pre-empts a session (DONE) | — | S
+11 | IO mapping | world tasks as inputs | — | M
+11 | Microcode | small drills implementing big skills | — | M
+11 | Speculative representation | try a representation, roll back if it fails | — | M
+11 | Parallel primitives | two primitives in one case | — | S
+11 | Watchdog | idle time never counted beyond a cap | — | S
+11 | Low-power mode | 10-minute dose | — | S
+11 | Benchmark suite | — | — | S
+12 | Priority scheduler | medicine > sleep > Renaissance | — | S
+12 | Process isolation | own storage, own DOM | — | S
+12 | Kill switch | three independent off switches | feature flags | S
+12 | Explicit syscall | read CNS state through one call only | — | S
+12 | Hidden machinery | learner never sees the backend | — | S
+12 | Event journal | every answer is an event | event sourcing | S
+12 | Belief GC | collect beliefs nothing uses | — | S
+12 | No deadlock | never block on one question | — | S
+12 | Permissions | learner data never leaves the device without consent | privacy by design | S
+12 | Season packages | seasons are versioned files | — | S
+12 | Live update | service worker | — | S
+12 | Crash recovery | resume mid-session | — | S
+12 | Multi-user | — | — | R:SCOPE
+13 | Season compiler | primitive specs → sessions | authoring tools | S
+13 | Session type checker | schema tests on every session | — | S
+13 | Linker | cross-session references resolved | — | S
+13 | Optimizer | skip redundant steps for this learner | — | S
+13 | Dead-content elimination | remove what is never shown | — | S
+13 | Intermediate representation | primitive, cases, bugs, hooks | — | S
+13 | Static analysis | detect open-ended prompts before shipping | — | S
+13 | Misconception unit tests | each bug has a test item | — | S
+13 | JIT dose | compile today's steps at open | — | S
+13 | Profile-guided | learner data reorders steps | — | S
+13 | Audio cross-compile | — | — | R:EVID
+13 | Template macros | — | — | R:SLOP
+13 | Errors that teach | the error message is the repair | — | S
+14 | Eventual consistency | learner model across devices | — | S
+14 | Evidence consensus | a claim needs agreeing sources | — | S
+14 | Byzantine sources | treat sources as possibly faulty | — | S
+14 | Idempotent events | replaying an event changes nothing | — | S
+14 | Sharding | — | — | R:SCOPE
+14 | Gossip | ideas travel through friends | — | S
+14 | Leader representation | the winning representation leads | — | M
+14 | Quorum before "learned" | delayed + far + unaided all needed | — | S
+14 | Heartbeat check-ins | — | — | R:TAX
+14 | Backpressure | dose shrinks when life is overloaded | — | S
+14 | Local-first | works offline | — | S
+14 | Replicated sources | primary data embedded | — | S
+14 | Partition tolerance | — | — | S
+15 | Discovery reenactment | real data, the original puzzle | historical case studies | S
+15 | Hypothesis tester | explanations vs observations | — | S
+15 | Archival predict-observe | predict, then see the archive | — | S
+15 | Anomaly hunt | find the point that doesn't fit | — | S
+15 | Replication literacy | why findings fail to replicate | — | S
+15 | Controlled-comparison design | design a fair test | CVS teaching (Chen & Klahr 1999) | S
+15 | Measurement design | choose what to measure | — | S
+15 | Disputes as drama | real scientific conflicts | — | S
+15 | Personal lab notebook | registered self-experiments | — | S
+15 | Fermi estimates | orders of magnitude | Fermi problems | S
+15 | Model-based reasoning | — | — | S
+15 | Peer-review simulation | — | — | R:COST
+15 | Landmark figures | read the original figure | — | S
+16 | Many cases with feedback | recognition-primed skill | Klein's RPD model | S
+16 | Perceptual category learning | fast visual discrimination | perceptual learning modules (Kellman) | S
+16 | Pre-mortem | imagine the failure first | Klein 2007 | S
+16 | Cue discovery | find the cue experts use | — | S
+16 | Expert think-alouds | — | cognitive task analysis | R:COPY
+16 | Fluency rounds | speed after mastery | — | S
+16 | Error patterns | recognise classes of error | — | S
+16 | Reference class | start from base rates of similar cases | reference-class forecasting | S
+16 | Calibration drills | — | Good Judgment Project | S
+16 | Surprise journal | — | — | R:TAX
+16 | Surface variation | same deep structure, many surfaces | — | S
+16 | Expert blind-spot map | — | — | R:UNTEST
+16 | Tacit contrast | elicit tacit knowledge by contrasts | — | S
+17 | Committed bets | stake confidence on predictions | prediction markets | S
+17 | Multi-primitive boss problems | problems needing two primitives | — | S
+17 | Sandbox models | — | — | S
+17 | Speedruns | — | — | R:SLOP
+17 | Hidden-information puzzles | — | — | S
+17 | Levels by transfer | — | — | R:SLOP
+17 | Save points | — | — | S
+17 | Player-reading difficulty | — | dynamic difficulty adjustment | M
+17 | Campaign story | — | — | M
+17 | Badges | — | — | R:SLOP
+17 | Co-op | two learners, one model | — | S
+17 | New Game+ | replay with no scaffolds | — | S
+17 | Emergent play | models that surprise | — | S
+18 | Mystery structure | question → clues → reveal | — | S
+18 | Thinker conflicts | real disputes | — | S
+18 | Future self as protagonist | — | — | S
+18 | Cliffhangers | — | — | R:ADDICT
+18 | Myth checks as twists | vivid story, checked detail | — | S
+18 | Counterfactual narratives | — | — | S
+18 | Story → model → story | — | — | S
+18 | Unreliable narrator | a misleading claim to debunk | erroneous examples | M
+18 | Character anchors | a person carries the idea | — | S
+18 | Branching story | — | — | M
+18 | Serial arcs | season-long threads | — | S
+18 | Stakes per session | — | — | S
+18 | Fictionalised facts | — | — | R:TRUTH
+19 | Paired taste tasks | which of two is better and why | — | S
+19 | Looking protocols | structured looking at masterworks | Visual Thinking Strategies | S
+19 | Alter one thing | which change breaks the composition? | — | S
+19 | Interleaved styles | style discrimination by interleaving | Kornell & Bjork 2008 | S
+19 | Draw to see | — | drawing effect | S
+19 | Art as evidence | a painting as a historical source | — | S
+19 | Calibrated beauty ratings | — | — | S
+19 | Copy then vary | — | atelier method | S
+19 | Virtual museum walk | — | — | R:COPY
+19 | Constraints as design lessons | — | — | S
+19 | Ekphrasis | — | — | R:TAX
+19 | Composition overlays | — | — | S
+19 | Public-domain art library | with provenance | — | S
+20 | Predict the next note | musical expectation | Huron's ITPRA theory | S
+20 | Same melody, other harmony | contrast pairs | — | S
+20 | Rhythm as a loop | — | — | R:SLOP
+20 | Form as argument | sonata form as a structure of claims | — | S
+20 | Cochlea link | pitch place code bridges to CNS | — | S
+20 | Public-domain recordings | — | — | S
+20 | Motif tracking | — | — | S
+20 | Performer comparison | — | — | R:COPY
+20 | Tension curves | draw the tension of a passage | — | S
+20 | Music institutions | patronage as incentive design | — | S
+20 | Dictation | — | ear training | R:COST
+20 | Silence as structure | — | — | R:SLOP
+20 | Consonance physics | frequency ratios model | — | S
+21 | Plans as arguments | — | — | S
+21 | Load paths as causal chains | — | — | S
+21 | Collapses | engineering failures | failure case studies | S
+21 | Room → city scale | — | — | S
+21 | Pattern language | Alexander's patterns as primitives | Alexander 1977 | S
+21 | Walk-through models | — | — | R:COST
+21 | Constraints → form | — | — | S
+21 | Vernacular vs monumental | — | — | S
+21 | The app as architecture | — | — | S
+21 | Induced demand | traffic as a reinforcing loop | — | S
+21 | City time-lapse | — | — | R:COPY
+21 | Building codes and Goodhart | — | — | S
+21 | Light and material | — | — | R:SCOPE
+22 | Visible opportunity cost | — | — | S
+22 | Marginal stop rule | — | — | S
+22 | Incentive audit of the app | — | — | S
+22 | Representation market | — | — | M
+22 | Primitive portfolio | diversify primitives | — | S
+22 | Sunk-cost exit | leave bad sessions | — | S
+22 | Human vs machine advantage | — | — | S
+22 | Minutes as currency | — | — | S
+22 | Externalities on medicine | — | — | S
+22 | Option value | skills that keep futures open | real options | S
+22 | Moral hazard of AI help | — | Bastani et al. 2025 | S
+22 | Signal vs capability | — | Spence signalling | S
+22 | Slot auctions | — | — | R:SLOP
+23 | Proper scoring rule | confidence scored by Brier | proper scoring rules | S
+23 | No composite score | — | Goodhart | S
+23 | Held-out audits | — | CNS donor | S
+23 | Opt-in commitment contracts | — | CARES | S
+23 | Incentive-compatible self-report | "did you use it?" | — | S
+23 | Random audits of self-report | — | — | S
+23 | No answer-giving AI | — | — | S
+23 | Hook-vote season choice | — | — | S
+23 | Penalty-free exit | — | — | S
+23 | Tournaments with prizes | — | — | R:SLOP
+23 | Truthful difficulty reports | — | — | S
+23 | Pre-registration | — | pre-registration | S
+23 | Error bounty | reward finding content errors | bug bounties | S
+24 | Implementation intentions | — | Gollwitzer 1999 | S
+24 | Autonomy | choose the hook | self-determination theory | S
+24 | Growth-mindset messages | — | Dweck | R:EVID
+24 | Hypercorrection repair | confident errors get extra repair | Butterfield & Metcalfe 2001 | S
+24 | Testing effect | — | Roediger & Karpicke 2006 | S
+24 | Generation effect | — | Slamecka & Graf 1978 | S
+24 | No seductive details | — | Rey 2012 | S
+24 | Fluency-illusion checks | — | — | S
+24 | Arousal | — | — | M
+24 | Social proof nudges | — | — | R:SLOP
+24 | Loss-aversion streaks | — | — | R:GUILT
+24 | Restoration breaks | — | attention restoration theory | R:EVID
+24 | Bounded self-explanation | pick the step, not free text | Bisra et al. 2018 | S
+25 | Schema induction | two analogs → schema | Gick & Holyoak 1983 | S
+25 | Load management | — | Sweller | S
+25 | Expertise reversal | — | Kalyuga 2003 | S
+25 | Mental simulation | — | — | S
+25 | Chunking | — | — | S
+25 | Embodied tasks | — | — | S
+25 | Interleaved categories | — | — | S
+25 | Causal model building | — | — | S
+25 | Judgments of learning | — | — | S
+25 | Analogical distance ladder | — | — | S
+25 | Desirable difficulties | — | Bjork | S
+25 | Knowledge in pieces | diagnose fragments | diSessa | S
+25 | Refutation texts | name the misconception, then refute | refutation-text research | S
+26 | Curiosity first | — | Gruber 2014 | S
+26 | Prediction error | — | — | S
+26 | Sleep spacing | — | — | S
+26 | Reconsolidation | retrieve, then modify | — | S
+26 | Reward-prediction engagement | — | — | R:ADDICT
+26 | Neurofeedback | — | — | R:EVID
+26 | Exercise before learning | — | modest evidence | S
+26 | Low-stress framing | — | — | S
+26 | Pattern separation | contrast near-neighbours | — | S
+26 | Multisensory | — | — | M
+26 | Brain training | — | Sala & Gobet 2017 | R:EVID
+26 | Circadian timing | — | — | S
+26 | 20-minute attention cycles | — | a popular myth | R:EVID
+27 | Proof as experience | — | — | S
+27 | Invariants | — | — | S
+27 | Dimensional analysis | — | — | S
+27 | Orders of magnitude | — | — | S
+27 | Natural frequencies | — | Gigerenzer & Hoffrage 1995 | S
+27 | Exponential intuition | — | — | S
+27 | Symmetry arguments | — | — | S
+27 | Counterexample hunting | — | Lakatos | S
+27 | Visual proofs | — | proofs without words | S
+27 | Probability by simulation | — | — | S
+27 | Graph of primitives | — | — | S
+27 | Formalism on request | — | — | S
+27 | Math-anxiety therapy | — | — | R:SCOPE
+28 | Argument mapping | — | van Gelder | S
+28 | Hidden-assumption finder | — | — | S
+28 | Steelmanning | — | — | S
+28 | Thought experiments as models | — | — | S
+28 | Humility scoring | — | — | S
+28 | Belief version control | — | — | S
+28 | Dilemmas with mechanisms | — | — | S
+28 | Socratic chatbots | — | — | R:TAX
+28 | Philosophy of science by cases | — | — | S
+28 | Paradoxes as clicks | — | — | S
+28 | Definitions after concepts | — | — | S
+28 | Fair contested positions | — | — | S
+28 | Whole treatises | — | — | R:COST
+29 | Cross-cultural cases | — | — | S
+29 | Emic/etic switch | — | — | S
+29 | Rituals as commitment | — | — | S
+29 | Kinship networks | — | — | R:SCOPE
+29 | Micro-fieldwork | — | — | S
+29 | Egyptian examples first | — | — | S
+29 | Case-origin bias audit | — | — | S
+29 | Oral memory techniques | — | — | S
+29 | Gift economies | — | Mauss | S
+29 | Taboo as information | — | — | R:UNTEST
+29 | Material culture | — | — | R:COPY
+29 | Institutions as solutions | — | Ostrom | S
+29 | Strong linguistic relativity | — | contested | R:EVID
+30 | Concept genealogy | — | — | S
+30 | Counterfactual tasks | — | — | S
+30 | Archive data | — | — | S
+30 | Myth-busting with grades | — | — | S
+30 | Time-scale switching | — | Big History | S
+30 | Parallel histories | — | — | S
+30 | Lost futures | — | — | S
+30 | Historians' disputes | — | — | S
+30 | Timelines as models | — | — | S
+30 | Presentism alarm | — | — | S
+30 | Great-man stories | — | — | R:TRUTH
+30 | What happened next? | history as prediction test | — | S
+30 | Whole histories | — | — | R:COST
+31 | A constitution | written rules for Renaissance | — | S
+31 | Content audited by tests | — | — | S
+31 | Sunset clauses | — | — | S
+31 | Time as a commons | — | Ostrom | S
+31 | Separation of powers | CNS vs Renaissance | — | S
+31 | Appeals | learner flags a wrong answer | — | S
+31 | Transparency reports | receipts | — | S
+31 | Metric audits | — | — | S
+31 | Source charter | — | — | S
+31 | Bureaucracy minimum | — | — | S
+31 | Term limits for representations | — | — | M
+31 | Federal seasons | — | — | R:SLOP
+31 | Constitutional kill switch | — | — | S
+32 | Primitives as roads | — | — | R:SLOP
+32 | Cheap authored seasons | — | — | S
+32 | No single point of failure | local-first | — | S
+32 | Session standard | — | — | S
+32 | Division of cognitive labour | — | — | S
+32 | Education as public good | — | — | R:SCOPE
+32 | Growth archive | — | — | S
+32 | Knowledge half-life | — | — | S
+32 | Cultural evolution of ideas | — | — | S
+32 | Truth institutions | — | — | S
+32 | Energy budgets | — | — | R:SCOPE
+32 | Diffusion of innovations | — | Rogers | S
+32 | Collapse cases | — | — | S
+33 | One button | — | CNS donor | S
+33 | Progressive disclosure | — | — | S
+33 | 44 px targets | — | HIG | S
+33 | Friction detector | hesitation and latency logged | — | S
+33 | Undo everything | — | — | R:TRUTH
+33 | Offline-first | — | — | S
+33 | Dark-pattern ban | — | — | S
+33 | Voice mode | — | — | S
+33 | Haptic confidence | — | — | R:SLOP
+33 | Sheets not pages | — | — | S
+33 | No notifications | — | — | S
+33 | Accessibility | — | — | S
+33 | Provenance on demand | — | — | S
+34 | AR loops | — | — | S
+34 | Generated voice tutors | — | — | R:SLOP
+34 | Simulated historical interviews | — | — | R:TRUTH
+34 | Time-negotiating agents | — | — | S
+34 | Brain–computer interfaces | — | — | R:SCOPE
+34 | Shared live models | — | — | S
+34 | Live data sessions | — | — | S
+34 | Wearable triggers | — | — | S
+34 | 3D models | — | — | S
+34 | Film animation | — | — | R:COST
+34 | Game-engine models | — | — | S
+34 | Guarded LLM tutor | hints, never answers | Kestin et al. 2025; Bastani et al. 2025 | S
+34 | Generated images | — | — | R:SLOP
+35 | Calibration curve | — | — | S
+35 | What would change my mind? | — | — | S
+35 | Confidence gap alerts | — | — | S
+35 | Strategy choice | — | — | S
+35 | What-worked log | — | — | S
+35 | Predict your own score | — | — | S
+35 | Visible mistake taxonomy | — | — | S
+35 | Explanatory-depth probes | — | Rozenblit & Keil 2002 | S
+35 | Scaffold removal notice | — | — | S
+35 | Self-assessment rubrics | — | — | R:TAX
+35 | Know-what-you-don't-know map | — | — | S
+35 | Time estimation | — | — | S
+35 | Reflection prompts | — | — | R:TAX
+36 | Explain + predict | — | — | S
+36 | Taste + mechanism | — | — | S
+36 | Writing + reasoning | — | — | S
+36 | Speaking + compression | — | — | S
+36 | Physical + cognitive | — | — | S
+36 | Social + incentives | — | — | S
+36 | Medicine + base rates | — | — | S
+36 | Founder + Goodhart | — | — | S
+36 | Acting + perspective | — | — | S
+36 | Math + music transfer | — | a transfer myth | R:EVID
+36 | History + prediction | — | — | S
+36 | Art + attention | — | — | S
+36 | Negotiation + commitment | — | Schelling | S
+37 | Frontier cards | — | — | S
+37 | Random primitive draws | — | — | S
+37 | Which field explains this? | — | — | S
+37 | Adjacent-possible map | — | Kauffman | S
+37 | Serendipity pairs | — | — | S
+37 | Expert disagreement finder | — | — | S
+37 | Anomaly of the week | — | — | S
+37 | Question vault | — | — | S
+37 | Avoidance detector | — | — | S
+37 | Wikipedia random walks | — | — | R:TAX
+37 | Blind-spot survey | — | — | R:TAX
+37 | Research digests | — | — | R:COST
+37 | Cross-season surprises | — | — | S
+38 | Contract with the future self | — | Ulysses contracts | S
+38 | Learner's data as cases | — | — | S
+38 | Evidence ledger | — | — | S
+38 | Experiment registry | — | quantified self | S
+38 | The app audits itself in lessons | — | — | S
+38 | Self-shrinking dose | — | — | S
+38 | Kill switch as pedagogy | — | — | S
+38 | Life-minutes accounting | — | — | S
+38 | Stop as reward | — | — | S
+38 | Donor-organ architecture | — | — | S
+38 | Myth provenance grades | — | fact-checking | S
+38 | No-amputation archive | — | — | S
+38 | Reality taps | — | — | S
+39 | Misconception miner | — | — | S
+39 | Representation generator + tournament | — | — | S
+39 | Case finder | — | — | S
+39 | Distractor evolution | — | — | S
+39 | Session linter | — | — | S
+39 | Distance-labelled transfer generator | — | — | S
+39 | Hook-gap tuner | — | FSRS | S
+39 | Forge templates | — | — | S
+39 | Stakes writer | — | — | S
+39 | Provenance checker | — | — | S
+39 | Auto-season from a book | — | — | R:COPY
+39 | Simulated learners | — | simulated students | S
+39 | The registry itself | — | — | S
+40 | Learner authors sessions | — | — | S
+40 | Learner builds models | — | constructionism (Papert) | S
+40 | Dissolve into habits | — | — | S
+40 | Reality replaces lessons | — | — | S
+40 | Communities of practice | — | Lave & Wenger | S
+40 | Real research | — | citizen science | S
+40 | Creation as curriculum | — | — | S
+40 | Human mentors | — | — | S
+40 | Question-driven life | — | — | S
+40 | Exocortex tools | — | — | S
+40 | Apprenticeship to reality | — | — | S
+40 | Self-directed seasons | — | — | S
+40 | Stop | — | — | S
