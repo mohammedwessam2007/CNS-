@@ -404,6 +404,60 @@ async function runToEnd(p) {
     await s.close();
   }
 
+  // ── 7. phone legibility: every figure and every model state, measured on a 360-px phone ──
+  {
+    const s = await open({ v16: true, time: '2026-09-26T19:00:00+03:00', state: null, settle: 1200, viewport: { width: 360, height: 780 } });
+    const p = s.page;
+    const res = await p.evaluate(() => {
+      nextAction = () => ({ kind: 'STOP' });
+      render();
+      document.querySelector('[data-rn-open]').click();
+      const body = document.querySelector('#rnRoot .rnBody');
+      const bad = [], seen = [];
+      let minPx = 99;
+      const measure = (html, where, ctx) => {
+        body.innerHTML = ctx === 'side' ? '<div class="rnPair"><div class="rnSide"><div class="rnVis">' + html + '</div></div></div>' : ctx === 'model' ? '<div class="rnModel"><div class="rnModelSvg">' + html + '</div></div>' : '<div class="rnVis">' + html + '</div>';
+        const svg = body.querySelector('svg');
+        if (!svg) return bad.push(where + ': no svg');
+        const [, , W, H] = svg.getAttribute('viewBox').split(/\s+/).map(Number), k = svg.getBoundingClientRect().width / W;
+        const boxes = [];
+        for (const el of svg.querySelectorAll('text')) {
+          if (!el.textContent.trim()) continue;
+          const px = +el.getAttribute('font-size') * k, b = el.getBBox();
+          minPx = Math.min(minPx, px);
+          if (px < 9.9) bad.push(where + ': "' + el.textContent + '" renders at ' + px.toFixed(1) + 'px');
+          if (b.x < -1 || b.y < -1 || b.x + b.width > W + 1 || b.y + b.height > H + 1) bad.push(where + ': "' + el.textContent + '" is cut off');
+          boxes.push([el.textContent, b]);
+        }
+        for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+          const [ta, a] = boxes[i], [tb, b] = boxes[j];
+          const w = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x), h = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
+          if (w > 0 && h > 0 && w * h > 0.25 * Math.min(a.width * a.height, b.width * b.height)) bad.push(where + ': "' + ta + '" overlaps "' + tb + '"');
+        }
+        seen.push(where);
+      };
+      for (const z of window.RENAISSANCE_SEASONS) {
+        const side = new Set();
+        for (const ses of z.sessions) for (const st of ses.steps) {
+          for (const pn of st.panels || []) if (typeof pn.svg === 'string') side.add(pn.svg);
+          for (const c of [st.left, st.right]) if (c && typeof c.svg === 'string') side.add(c.svg);
+        }
+        for (const [id, f] of Object.entries(z.visuals || {})) measure(f(), z.id + ' visual ' + id, side.has(id) ? 'side' : 'full');
+        for (const [id, m] of Object.entries(z.models || {})) {
+          const v0 = Object.fromEntries([...(m.controls || []).map((c) => [c.id, c.value]), ...(m.toggles || []).map((c) => [c.id, c.value])]);
+          const vs = [v0];
+          for (const c of m.controls || []) vs.push(Object.assign({}, v0, { [c.id]: c.min }), Object.assign({}, v0, { [c.id]: c.max }));
+          for (const c of m.toggles || []) vs.push(Object.assign({}, v0, { [c.id]: !c.value }));
+          if ((m.toggles || []).length > 1) vs.push(Object.assign({}, v0, Object.fromEntries(m.toggles.map((c) => [c.id, !c.value]))));
+          vs.forEach((v, i) => measure(m.draw(v), z.id + ' model ' + id + '#' + i, 'model'));
+        }
+      }
+      return { bad, n: seen.length, minPx: +minPx.toFixed(1) };
+    });
+    check('R34', 'On a 360-px phone every label of every figure and every model state is at least 10 px, inside its canvas, and does not sit on another label', res.bad.length === 0 && res.n > 60, { n: res.n, minPx: res.minPx, bad: res.bad.slice(0, 12), more: res.bad.length });
+    await s.close();
+  }
+
   const out = process.argv.find((a) => a.endsWith('.json')) || path.join(__dirname, 'out', 'renaissance_test.json');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), results }, null, 1));

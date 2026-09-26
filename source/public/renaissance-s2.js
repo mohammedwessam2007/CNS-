@@ -15,6 +15,15 @@
   const defs = '<defs><marker id="rnArr2" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="' + C.mut + '"/></marker></defs>';
   const arrow = (x1, y1, x2, y2) => '<path d="M' + x1 + " " + y1 + " L" + x2 + " " + y2 + '" stroke="' + C.mut + '" stroke-width="2" marker-end="url(#rnArr2)" fill="none"/>';
   const polyline = (pts, c, w, dash) => '<polyline points="' + pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ") + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2.4) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : "") + "/>";
+  // phone first: canvases 360 wide, labels ≥ 12 units (≥ 10 px on a 360-px phone)
+  const wrap = (str, n) => {
+    const out = [];
+    let cur = "";
+    for (const w of String(str).split(" ")) (cur + " " + w).trim().length > n && cur ? (out.push(cur), (cur = w)) : (cur = (cur + " " + w).trim());
+    if (cur) out.push(cur);
+    return out;
+  };
+  const lines = (x, y, arr, o, dy) => arr.map((l, i) => t(x, y + i * (dy || 16), l, o)).join("");
   // numbers a person reads aloud: 1,024 · 33 thousand · 1.1 million · 10¹⁸
   const big = (n) => {
     const sup = (k) => String(k).split("").map((d) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[+d]).join("");
@@ -27,23 +36,23 @@
   const visuals = {
     // three boxes in a line: the slowest sets the pace, the queue piles up in front of it
     threeBoxes: () =>
-      svg(560, 170,
-        defs + box(20, 50, 140, 70, C.cyan) + t(90, 78, "REGISTER") + t(90, 100, "30 / hour", { c: C.cyan }) +
-          box(210, 50, 140, 70, C.amber, "#2a2410") + t(280, 78, "DOCTOR") + t(280, 100, "12 / hour", { c: C.amber }) +
-          box(400, 50, 140, 70, C.cyan) + t(470, 78, "PHARMACY") + t(470, 100, "20 / hour", { c: C.cyan }) +
-          arrow(160, 85, 208, 85) + arrow(350, 85, 398, 85) +
-          [0, 1, 2, 3, 4, 5].map((i) => '<circle cx="' + (188 - (i % 3) * 8) + '" cy="' + (42 - Math.floor(i / 3) * 9) + '" r="3.5" fill="' + C.pink + '"/>').join("") + t(180, 22, "queue", { c: C.pink, fs: 10 }) +
-          t(280, 150, "Everything flows at 12 an hour: the slowest box sets the pace", { c: C.lime, fs: 12 }),
+      svg(360, 176,
+        defs + box(8, 52, 100, 64, C.cyan) + t(58, 78, "REGISTER", { fs: 13 }) + t(58, 100, "30 / hour", { c: C.cyan, fs: 13 }) +
+          box(130, 52, 100, 64, C.amber, "#2a2410") + t(180, 78, "DOCTOR", { fs: 13 }) + t(180, 100, "12 / hour", { c: C.amber, fs: 13 }) +
+          box(252, 52, 100, 64, C.cyan) + t(302, 78, "PHARMACY", { fs: 13 }) + t(302, 100, "20 / hour", { c: C.cyan, fs: 13 }) +
+          arrow(108, 84, 128, 84) + arrow(230, 84, 250, 84) +
+          [0, 1, 2, 3, 4, 5, 6, 7].map((i) => '<circle cx="' + (136 + (i % 4) * 9) + '" cy="' + (38 - Math.floor(i / 4) * 9) + '" r="3.5" fill="' + C.pink + '"/>').join("") + t(176, 34, "← the queue", { c: C.pink, fs: 12, a: "start" }) +
+          t(180, 146, "Everything flows at 12 an hour:", { c: C.lime, fs: 13 }) + t(180, 164, "the slowest box sets the pace", { c: C.lime, fs: 13 }),
         "Three steps in a line; the doctor at 12 an hour limits everything"),
-    // a decision with and without an answer
+    // a choice (open or not), then chance (demand good or poor)
     decisionTree: () => {
-      const two = (x, y, w, c, a, b) => box(x, y, w, 40, c) + t(x + w / 2, y + 17, a, { fs: 11 }) + t(x + w / 2, y + 33, b, { c: c });
-      return svg(560, 214,
-        defs + box(10, 86, 120, 44, C.cyan) + t(70, 113, "open branch?") +
-          '<circle cx="232" cy="62" r="20" fill="#2a2410" stroke="' + C.amber + '" stroke-width="1.6"/>' + t(232, 67, "?", { c: C.amber, fs: 15, fw: 900 }) + t(232, 98, "demand", { c: C.amber, fs: 10 }) +
-          arrow(130, 98, 210, 68) + t(160, 70, "open", { c: C.mut, fs: 10 }) +
-          two(330, 8, 170, C.green, "demand good", "+100") + two(330, 70, 170, C.pink, "demand poor", "−60") + two(330, 160, 170, C.mut, "don't open", "0") +
-          arrow(252, 55, 328, 30) + arrow(252, 70, 328, 90) + arrow(130, 120, 328, 178) + t(215, 164, "don't open", { c: C.mut, fs: 10 }),
+      const two = (x, y, w, c, a, b) => box(x, y, w, 44, c) + t(x + w / 2, y + 19, a, { fs: 12 }) + t(x + w / 2, y + 37, b, { c: c, fs: 13 });
+      return svg(360, 228,
+        defs + box(4, 90, 96, 48, C.cyan) + t(52, 110, "open the", { fs: 12 }) + t(52, 127, "branch?", { fs: 12 }) +
+          '<circle cx="160" cy="62" r="20" fill="#2a2410" stroke="' + C.amber + '" stroke-width="1.6"/>' + t(160, 68, "?", { c: C.amber, fs: 16, fw: 900 }) + t(160, 100, "demand", { c: C.amber, fs: 12 }) +
+          arrow(84, 90, 138, 70) + t(98, 70, "open", { c: C.mut, fs: 12 }) +
+          two(222, 8, 134, C.green, "demand good", "+100") + two(222, 72, 134, C.pink, "demand poor", "−60") + two(222, 172, 134, C.mut, "don't open", "0") +
+          arrow(180, 56, 220, 32) + arrow(180, 70, 220, 92) + arrow(100, 128, 220, 190) + t(128, 178, "don't open", { c: C.mut, fs: 12 }),
         "A choice (open or not), then chance (demand good or poor)");
     },
     // Snow's two water companies (per 10,000 houses, 1854)
@@ -65,8 +74,8 @@
         const x = 40 + i * 52, h = (v - 30) * 7;
         s += '<path d="M' + x + " " + (180 - h) + " l30 0 l10 -8 l-30 0 Z" + '" fill="#8f7fd9"/><rect x="' + x + '" y="' + (180 - h) + '" width="30" height="' + h + '" fill="' + ["#b39cff", "#66e9ff", "#ff6e8a", "#ffd166"][i] + '"/><path d="M' + (x + 30) + " " + (180 - h) + " l10 -8 l0 " + h + ' l-10 8 Z" fill="#555a7a"/>';
       });
-      s += t(135, 200, "Fig. 1 — Comparative ward performance metrics (3D)", { fs: 9, c: C.mut });
-      s += [0, 1, 2, 3].map((i) => '<rect x="' + (40 + i * 52) + '" y="10" width="8" height="8" fill="' + ["#b39cff", "#66e9ff", "#ff6e8a", "#ffd166"][i] + '"/>' + t(52 + i * 52, 18, "W" + "ABCD"[i], { fs: 8, a: "start" })).join("");
+      s += t(135, 202, "Fig. 1 — Comparative ward metrics (3D)", { fs: 11, c: C.mut });
+      s += [0, 1, 2, 3].map((i) => '<rect x="' + (40 + i * 52) + '" y="10" width="8" height="8" fill="' + ["#b39cff", "#66e9ff", "#ff6e8a", "#ffd166"][i] + '"/>' + t(52 + i * 52, 18, "W" + "ABCD"[i], { fs: 11, a: "start" })).join("");
       return svg(270, 210, s, "A 3D bar chart with gridlines, a colour legend and no values");
     },
     chartGood: () => {
@@ -76,7 +85,7 @@
         const y = 30 + i * 40, w = (v - 30) * 9;
         s += t(70, y + 16, n, { a: "end", fs: 12 }) + '<rect x="80" y="' + y + '" width="' + w + '" height="24" fill="' + C.cyan + '"/>' + t(86 + w, y + 16, v + " min", { a: "start", fs: 12, c: C.lime });
       });
-      s += t(135, 200, "Median wait, minutes (sorted)", { fs: 10, c: C.mut });
+      s += t(135, 200, "Median wait, minutes (sorted)", { fs: 11, c: C.mut });
       return svg(270, 210, s, "Sorted horizontal bars with the values written at their ends");
     },
     labelBad: () => svg(270, 150, box(10, 10, 250, 130, C.pink) + ["WARNING: DO NOT MIX", "WITH OTHER MEDICINES.", "TAKE TWO TABLETS", "EVERY SIX HOURS.", "MAXIMUM EIGHT A DAY.", "KEEP AWAY FROM CHILDREN."].map((l, i) => t(135, 34 + i * 19, l, { fs: 12, fw: 900 })).join(""), "Every line in bold capitals"),
@@ -94,18 +103,18 @@
       ],
       draw(v) {
         const arr = 25, caps = [v.a, v.b, v.c], names = ["REGISTER", "DOCTORS", "PHARMACY"], m = Math.min(arr, ...caps), k = caps.indexOf(Math.min(...caps));
-        let s = defs + t(40, 22, "arrive 25 / h", { c: C.mut, fs: 11, a: "start" });
+        let s = defs + t(8, 18, "25 patients arrive every hour →", { c: C.mut, fs: 12, a: "start" });
         caps.forEach((c, i) => {
-          const x = 30 + i * 180, bott = i === k && Math.min(...caps) < arr;
-          s += box(x, 40, 140, 70, bott ? C.amber : C.cyan, bott ? "#2a2410" : C.bg) + t(x + 70, 68, names[i], { fs: 12 }) + t(x + 70, 92, c + " / h", { c: bott ? C.amber : C.cyan });
-          if (i < 2) s += arrow(x + 140, 75, x + 178, 75);
+          const x = 8 + i * 122, bott = i === k && Math.min(...caps) < arr;
+          s += box(x, 30, 100, 64, bott ? C.amber : C.cyan, bott ? "#2a2410" : C.bg) + t(x + 50, 56, names[i], { fs: 13 }) + t(x + 50, 79, c + " / h", { c: bott ? C.amber : C.cyan, fs: 13 });
+          if (i < 2) s += arrow(x + 100, 62, x + 120, 62);
         });
         const q = Math.max(0, arr - Math.min(...caps));
-        const qx = 30 + k * 180 - 26;
-        for (let i = 0; i < Math.min(q, 24); i++) s += '<circle cx="' + (qx - (i % 4) * 8) + '" cy="' + (132 + Math.floor(i / 4) * 9) + '" r="3.2" fill="' + C.pink + '"/>';
-        s += t(280, 190, "Through the whole line: " + m + " / hour", { c: C.lime, fs: 13 });
-        if (q) s += t(280, 210, "the queue in front of " + names[k] + " grows by " + q + " every hour", { c: C.pink, fs: 12 });
-        return svg(560, 222, s, "Three steps; the slowest limits the flow");
+        const qx = 8 + k * 122;
+        for (let i = 0; i < Math.min(q, 30); i++) s += '<circle cx="' + (qx + 8 + (i % 10) * 9) + '" cy="' + (108 + Math.floor(i / 10) * 9) + '" r="3.3" fill="' + C.pink + '"/>';
+        s += t(180, 158, "Through the whole line: " + m + " / hour", { c: C.lime, fs: 13 });
+        if (q) s += t(180, 177, "the queue at " + names[k] + " grows " + q + " an hour", { c: C.pink, fs: 12 });
+        return svg(360, 186, s, "Three steps; the slowest limits the flow");
       },
       read(v) {
         const caps = [v.a, v.b, v.c], m = Math.min(25, ...caps), names = ["registration", "the doctors", "the pharmacy"], k = caps.indexOf(Math.min(...caps));
@@ -121,15 +130,15 @@
         return { open, best, vi: withInfo - best, choose: open > 0 ? "open" : "don't open" };
       },
       draw(v) {
-        const x0 = 40, x1 = 540, y0 = 232, X = (p) => x0 + ((x1 - x0) * p) / 100, Y = (y) => y0 - y * 2.6;
+        const x0 = 14, x1 = 346, y0 = 236, X = (p) => x0 + ((x1 - x0) * p) / 100, Y = (y) => y0 - y * 3.4;
         const pts = [];
         for (let p = 0; p <= 100; p++) pts.push([X(p), Y(this.at(p).vi)]);
         const r = this.at(v.p);
-        let s = polyline(pts, C.amber, 2.6) + '<line x1="' + X(37.5) + '" x2="' + X(37.5) + '" y1="64" y2="' + y0 + '" stroke="' + C.mut + '" stroke-dasharray="4 4"/>' + t(X(37.5), 58, "either choice looks equal (37.5%)", { c: C.mut, fs: 10 });
-        s += '<line x1="' + X(v.p) + '" x2="' + X(v.p) + '" y1="64" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2"/><circle cx="' + X(v.p) + '" cy="' + Y(r.vi) + '" r="5" fill="' + C.amber + '"/>';
-        s += t(40, 18, "— what a perfect answer about demand is worth", { c: C.amber, fs: 11, a: "start" }) + t(40, 36, "— what an answer about the sign's colour is worth: 0 everywhere", { c: C.pink, fs: 11, a: "start" }) + '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y0 + '" y2="' + y0 + '" stroke="' + C.pink + '" stroke-width="2"/>';
-        s += t(x0, 254, "sure it's poor", { c: C.mut, fs: 10, a: "start" }) + t(x1, 254, "sure it's good", { c: C.mut, fs: 10, a: "end" });
-        return svg(560, 264, s, "The value of an answer peaks where you are least sure which way to go");
+        let s = polyline(pts, C.amber, 2.6) + '<line x1="' + X(37.5) + '" x2="' + X(37.5) + '" y1="84" y2="' + y0 + '" stroke="' + C.mut + '" stroke-dasharray="4 4"/>' + t(X(37.5) + 6, 80, "choices look equal (37.5%)", { c: C.mut, fs: 12, a: "start" });
+        s += '<line x1="' + X(v.p) + '" x2="' + X(v.p) + '" y1="84" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2"/><circle cx="' + X(v.p) + '" cy="' + Y(r.vi) + '" r="5" fill="' + C.amber + '"/>';
+        s += t(x0, 18, "— what a perfect answer about", { c: C.amber, fs: 12, a: "start" }) + t(x0 + 14, 34, "demand is worth to her", { c: C.amber, fs: 12, a: "start" }) + t(x0, 54, "— an answer about the sign's colour: 0", { c: C.pink, fs: 12, a: "start" }) + '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y0 + '" y2="' + y0 + '" stroke="' + C.pink + '" stroke-width="2"/>';
+        s += t(x0, y0 + 18, "sure it's poor", { c: C.mut, fs: 12, a: "start" }) + t(x1, y0 + 18, "sure it's good", { c: C.mut, fs: 12, a: "end" });
+        return svg(360, 262, s, "The value of an answer peaks where you are least sure which way to go");
       },
       read(v) {
         const r = this.at(v.p);
@@ -140,15 +149,15 @@
     street: {
       toggles: [{ id: "water", label: "Colour the houses by water company", value: false }],
       draw(v) {
-        let s = t(280, 18, v.water ? "Same street, same air: coloured by who supplies the water" : "One street: same air, same drains, same people", { c: C.mut, fs: 11 });
-        for (let i = 0; i < 20; i++) {
-          const sv = [0, 2, 3, 5, 7, 8, 10, 11, 13, 15, 17, 18].includes(i), x = 20 + i * 26;
+        let s = v.water ? t(180, 18, "Same street, same air:", { c: C.mut, fs: 12 }) + t(180, 35, "coloured by who supplies the water", { c: C.mut, fs: 12 }) : t(180, 18, "One street: same air, same drains,", { c: C.mut, fs: 12 }) + t(180, 35, "same people", { c: C.mut, fs: 12 });
+        for (let i = 0; i < 12; i++) {
+          const sv = [0, 2, 3, 5, 7, 8, 10].includes(i), x = 12 + i * 28.5;
           const col = v.water ? (sv ? C.pink : C.cyan) : "#3b5877";
-          s += '<path d="M' + x + " 80 l11 -14 l11 14 l0 30 l-22 0 Z" + '" fill="' + col + '"/>';
+          s += '<path d="M' + x + " 76 l11 -14 l11 14 l0 30 l-22 0 Z" + '" fill="' + col + '"/>';
         }
-        s += '<rect x="20" y="118" width="520" height="10" fill="#26405e"/>' + t(280, 146, "the street and its air", { c: C.mut, fs: 10 });
-        if (v.water) s += t(160, 180, "Southwark & Vauxhall: 315 deaths per 10,000 houses", { c: C.pink, fs: 11 }) + t(420, 180, "Lambeth: 37", { c: C.cyan, fs: 11 });
-        return svg(560, 196, s, "Houses on one street supplied by two companies");
+        s += '<rect x="8" y="114" width="344" height="10" fill="#26405e"/>' + t(180, 142, "the street and its air", { c: C.mut, fs: 12 });
+        if (v.water) s += '<rect x="20" y="160" width="12" height="12" fill="' + C.pink + '"/>' + t(38, 171, "Southwark & Vauxhall: 315 deaths", { c: C.pink, fs: 12, a: "start" }) + '<rect x="20" y="182" width="12" height="12" fill="' + C.cyan + '"/>' + t(38, 193, "Lambeth: 37 deaths", { c: C.cyan, fs: 12, a: "start" }) + t(38, 212, "per 10,000 houses, 1854", { c: C.mut, fs: 12, a: "start" });
+        return svg(360, v.water ? 222 : 152, s, "Houses on one street supplied by two companies");
       },
       read(v) {
         return v.water ? "The pipes of both companies ran down the same streets. Air, drains, class and crowding were shared; the **water** differed. Deaths followed the water company: **315 vs 37** per 10,000 houses." : "Anything about the street (smell, crowding, poverty) is the same for every house. So if deaths differ house by house on the same street, the cause is not the street. Switch on the colouring.";
@@ -166,17 +175,17 @@
         return cap ? 1e6 / (1 + (1e6 - 1) / e) : e;
       },
       draw(v) {
-        const x0 = 64, x1 = 540, y0 = 200, X = (d) => x0 + ((x1 - x0) * d) / 60;
+        const x0 = 46, x1 = 350, y0 = 220, X = (d) => x0 + ((x1 - x0) * d) / 60;
         const maxN = this.N(60, v.T, v.cap), lmax = Math.log10(Math.max(10, maxN));
-        const Y = (n) => (v.log ? y0 - (170 * Math.log10(Math.max(1, n))) / lmax : y0 - (170 * n) / maxN);
+        const Y = (n) => (v.log ? y0 - (180 * Math.log10(Math.max(1, n))) / lmax : y0 - (180 * n) / maxN);
         const pts = [];
         for (let d = 0; d <= 60; d += 0.5) pts.push([X(d), Y(this.N(d, v.T, v.cap))]);
         const n = this.N(v.d, v.T, v.cap);
-        let s = polyline(pts, C.cyan, 2.6) + '<line x1="' + X(v.d) + '" x2="' + X(v.d) + '" y1="24" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2"/><circle cx="' + X(v.d) + '" cy="' + Y(n) + '" r="5" fill="' + C.lime + '"/>';
-        s += '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y0 + '" y2="' + y0 + '" stroke="' + C.line + '"/>' + t(290, 224, "days →", { c: C.mut, fs: 10 }) + t(60, 22, v.log ? "log scale: each step up = ×10" : "ordinary scale", { c: C.mut, fs: 11, a: "start" });
-        const ticks = v.log ? Array.from({ length: Math.floor(lmax) + 1 }, (_, k) => Math.pow(10, k)).filter((_, k, a) => a.length <= 7 || k % Math.ceil(a.length / 6) === 0) : [0, maxN / 2, maxN];
-        for (const n2 of ticks) s += '<line x1="' + (x0 - 4) + '" x2="' + x0 + '" y1="' + Y(Math.max(1, n2)) + '" y2="' + Y(Math.max(1, n2)) + '" stroke="' + C.mut + '"/>' + t(x0 - 6, Y(Math.max(1, n2)) + 4, n2 < 1 ? "0" : big(n2).replace(" thousand", "k").replace(" million", "M").replace(" billion", "B").replace(" trillion", "T").replace("about ", ""), { c: C.mut, fs: 9, a: "end", fw: 600 });
-        return svg(560, 232, s, "Growth over 60 days on an ordinary or logarithmic scale");
+        let s = polyline(pts, C.cyan, 2.6) + '<line x1="' + X(v.d) + '" x2="' + X(v.d) + '" y1="30" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2"/><circle cx="' + X(v.d) + '" cy="' + Y(n) + '" r="5" fill="' + C.lime + '"/>';
+        s += '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y0 + '" y2="' + y0 + '" stroke="' + C.line + '"/>' + t(x0, y0 + 18, "day 0", { c: C.mut, fs: 12, a: "start" }) + t(x1, y0 + 18, "day 60", { c: C.mut, fs: 12, a: "end" }) + t(8, 16, v.log ? "log scale: each step up is ×10" : "ordinary scale", { c: C.mut, fs: 12, a: "start" });
+        const ticks = v.log ? Array.from({ length: Math.floor(lmax) + 1 }, (_, k) => Math.pow(10, k)).filter((_, k, a) => a.length <= 7 || k % Math.ceil(a.length / 6) === 0) : [0, maxN];
+        for (const n2 of ticks) s += '<line x1="' + (x0 - 4) + '" x2="' + x0 + '" y1="' + Y(Math.max(1, n2)) + '" y2="' + Y(Math.max(1, n2)) + '" stroke="' + C.mut + '"/>' + t(x0 - 6, Y(Math.max(1, n2)) + 4, n2 < 1 ? "0" : big(n2).replace(" thousand", "k").replace(" million", "M").replace(" billion", "B").replace(" trillion", "T").replace("about ", ""), { c: C.mut, fs: 12, a: "end", fw: 600 });
+        return svg(360, 246, s, "Growth over 60 days on an ordinary or logarithmic scale");
       },
       read(v) {
         const n = this.N(v.d, v.T, v.cap), end = this.N(60, v.T, v.cap);
@@ -196,12 +205,8 @@
         return s.charAt(0).toUpperCase() + s.slice(1);
       },
       draw(v) {
-        const s = this.text(v), words = s.split(/\s+/).length;
-        const lines = [];
-        let cur = "";
-        for (const w of s.split(" ")) (cur + " " + w).length > 62 ? (lines.push(cur), (cur = w)) : (cur = cur ? cur + " " + w : w);
-        lines.push(cur);
-        return svg(560, 60 + lines.length * 22, lines.map((l, i) => t(20, 34 + i * 22, l.replace(/&/g, "&amp;"), { a: "start", fs: 15, fw: 600 })).join("") + t(540, 34 + lines.length * 22 + 10, words + " words", { a: "end", c: words < 10 ? C.lime : C.amber, fs: 12 }), "The sentence as edited");
+        const s = this.text(v), words = s.split(/\s+/).length, L = wrap(s, 36);
+        return svg(360, 46 + L.length * 22, lines(10, 26, L, { a: "start", fs: 15, fw: 600 }, 22) + t(350, 26 + L.length * 22 + 8, words + " words", { a: "end", c: words < 10 ? C.lime : C.amber, fs: 13 }), "The sentence as edited");
       },
       read(v) {
         const n = this.text(v).split(/\s+/).length;
@@ -225,12 +230,13 @@
         ["Emergency patients wait for beds even at 98% on the 4-hour target", ["neck", "proxy"]],
       ],
       draw(v) {
-        let s = "";
+        let s = "", y = 6;
         this.S.forEach(([sym, by], i) => {
-          const ok = by.some((m) => v[m]), y = 10 + i * 42;
-          s += box(10, y, 540, 34, ok ? C.green : C.line) + t(30, y + 22, ok ? "✓" : "·", { c: ok ? C.green : C.mut, fs: 15, fw: 900 }) + t(50, y + 22, sym, { a: "start", fs: 12, fw: 600 });
+          const ok = by.some((m) => v[m]), L = wrap((i + 1) + ". " + sym, 40), h = 14 + L.length * 16;
+          s += box(6, y, 348, h, ok ? C.green : C.line) + t(24, y + h / 2 + 6, ok ? "✓" : "·", { c: ok ? C.green : C.mut, fs: 17, fw: 900 }) + lines(42, y + 19, L, { a: "start", fs: 12, fw: 600 });
+          y += h + 6;
         });
-        return svg(560, 222, s, "Five symptoms, and which are explained by the switched-on mechanisms");
+        return svg(360, y, s, "Five symptoms, and which are explained by the switched-on mechanisms");
       },
       read(v) {
         const on = ["proxy", "select", "loop", "base", "neck"].filter((m) => v[m]), n = this.S.filter(([, by]) => by.some((m) => v[m])).length;

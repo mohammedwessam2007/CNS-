@@ -16,82 +16,96 @@
   const polyline = (pts, c, w, dash) => '<polyline points="' + pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ") + '" fill="none" stroke="' + c + '" stroke-width="' + (w || 2.4) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : "") + "/>";
   const r1 = (x) => Math.round(x * 10) / 10;
 
+  // phone first: every canvas is 360 wide and no label is smaller than 12 units, so text stays ≥ 10 px on a 360-px phone
+  const wrap = (str, n) => {
+    const out = [];
+    let cur = "";
+    for (const w of String(str).split(" ")) (cur + " " + w).trim().length > n && cur ? (out.push(cur), (cur = w)) : (cur = (cur + " " + w).trim());
+    if (cur) out.push(cur);
+    return out;
+  };
+  const lines = (x, y, arr, o, dy) => arr.map((l, i) => t(x, y + i * (dy || 16), l, o)).join("");
+
   /* ═══════════════ VISUALS (drawn from the data they show) ═══════════════ */
   const visuals = {
     // Odysseus designs constraints now for the self he will be at the song
     sirens: () =>
-      svg(560, 210,
+      svg(360, 330,
         defs +
-          box(12, 40, 170, 120, C.cyan) + t(97, 64, "ODYSSEUS NOW", { c: C.cyan }) + t(97, 86, "calm; can see", { fw: 600 }) + t(97, 102, "the whole voyage", { fw: 600 }) + t(97, 132, "designs the rules", { c: C.lime }) +
-          box(206, 20, 150, 44, C.lime) + t(281, 47, "wax: crew can't hear", { fs: 11 }) +
-          box(206, 82, 150, 44, C.lime) + t(281, 109, "ropes: he can't steer", { fs: 11 }) +
-          box(206, 144, 150, 52, C.lime) + t(281, 166, "order: if I beg,", { fs: 11 }) + t(281, 182, "tie me tighter", { fs: 11 }) +
-          box(380, 40, 170, 120, C.pink) + t(465, 64, "ODYSSEUS AT THE SONG", { c: C.pink, fs: 11 }) + t(465, 90, "wants the rocks;", { fw: 600 }) + t(465, 106, "will beg, order,", { fw: 600 }) + t(465, 122, "promise anything", { fw: 600 }) +
-          arrow(182, 100, 204, 42) + arrow(182, 100, 204, 104) + arrow(182, 100, 204, 168) + arrow(356, 42, 380, 90) + arrow(356, 104, 380, 100) + arrow(356, 168, 380, 112),
-        "Odysseus now designs three constraints for Odysseus at the song"),
+          box(20, 8, 320, 58, C.cyan) + t(180, 31, "ODYSSEUS NOW", { c: C.cyan, fs: 14 }) + t(180, 53, "calm, sees the whole voyage: writes the rules", { fs: 12, fw: 600 }) +
+          arrow(180, 66, 180, 88) +
+          box(40, 90, 280, 38, C.lime) + t(180, 114, "wax: the crew can't hear the song", { fs: 13 }) +
+          box(40, 136, 280, 38, C.lime) + t(180, 160, "ropes: he can't steer to the rocks", { fs: 13 }) +
+          box(40, 182, 280, 38, C.lime) + t(180, 206, "order: if I beg, tie me tighter", { fs: 13 }) +
+          arrow(180, 220, 180, 250) + t(186, 240, "binds", { c: C.mut, fs: 12, a: "start" }) +
+          box(20, 252, 320, 68, C.pink) + t(180, 276, "ODYSSEUS AT THE SONG", { c: C.pink, fs: 14 }) + t(180, 298, "wants the rocks; will beg, order", { fs: 12, fw: 600 }) + t(180, 313, "and promise anything", { fs: 12, fw: 600 }),
+        "Odysseus now designs three constraints that bind Odysseus at the song"),
     // a natural-frequency tree for the screening example
-    tree: () =>
-      svg(560, 230,
+    tree: () => {
+      const two = (x, y, w, c, fill, a, b, ac) => box(x, y, w, 48, c, fill) + t(x + w / 2, y + 21, a, { c: ac || C.ink, fs: 13 }) + t(x + w / 2, y + 39, b, { fs: 12, fw: 600, c: C.mut });
+      return svg(360, 262,
         defs +
-          box(220, 10, 120, 40, C.cyan) + t(280, 35, "1,000 people") +
-          box(60, 80, 150, 40, C.pink) + t(135, 105, "10 have it (1%)") +
-          box(350, 80, 150, 40, C.green) + t(425, 105, "990 don't") +
-          box(10, 160, 120, 52, C.pink, "#3a1f2a") + t(70, 182, "9 test +", { c: C.pink }) + t(70, 200, "(90% of 10)", { fs: 10, fw: 600 }) +
-          box(140, 160, 110, 52, C.pink) + t(195, 182, "1 test −") + t(195, 200, "missed", { fs: 10, fw: 600 }) +
-          box(300, 160, 120, 52, C.amber, "#3a3320") + t(360, 182, "89 test +", { c: C.amber }) + t(360, 200, "(9% of 990)", { fs: 10, fw: 600 }) +
-          box(430, 160, 120, 52, C.green) + t(490, 182, "901 test −") +
-          arrow(260, 50, 150, 78) + arrow(300, 50, 410, 78) + arrow(120, 120, 72, 158) + arrow(150, 120, 192, 158) + arrow(410, 120, 362, 158) + arrow(440, 120, 488, 158) +
-          t(280, 226, "Positive: 9 + 89 = 98 people · sick among them: 9 → about 9%", { c: C.lime, fs: 12 }),
-        "Of 1000 people, 98 test positive and only 9 of them are sick"),
+          box(120, 6, 120, 36, C.cyan) + t(180, 29, "1,000 people", { fs: 13 }) +
+          box(14, 70, 150, 36, C.pink) + t(89, 93, "10 have it (1%)", { fs: 13 }) +
+          box(196, 70, 150, 36, C.green) + t(271, 93, "990 don't", { fs: 13 }) +
+          two(2, 140, 86, C.pink, "#3a1f2a", "9 test +", "90% of 10", C.pink) + two(92, 140, 84, C.pink, null, "1 test −", "missed") +
+          two(184, 140, 86, C.amber, "#3a3320", "89 test +", "9% of 990", C.amber) + two(274, 140, 84, C.green, null, "901 test −", "clear") +
+          arrow(160, 42, 100, 68) + arrow(200, 42, 260, 68) + arrow(70, 106, 46, 138) + arrow(108, 106, 132, 138) + arrow(252, 106, 228, 138) + arrow(290, 106, 314, 138) +
+          t(180, 222, "Positive: 9 + 89 = 98 people", { c: C.lime, fs: 13 }) + t(180, 242, "sick among them: 9 → about 9%", { c: C.lime, fs: 13 }),
+        "Of 1000 people, 98 test positive and only 9 of them are sick");
+    },
     // two loops: one corrects, one amplifies
     loops: () => {
-      const loop = (cx, title, a, b, sa, sb, col, kind) =>
-        '<circle cx="' + cx + '" cy="110" r="62" fill="none" stroke="' + col + '" stroke-width="2" stroke-dasharray="5 5"/>' +
-        box(cx - 70, 40, 140, 34, col) + t(cx, 62, a, { fs: 11 }) +
-        box(cx - 70, 146, 140, 34, col) + t(cx, 168, b, { fs: 11 }) +
-        t(cx + 82, 112, sa, { c: col, fs: 16, fw: 900 }) + t(cx - 82, 112, sb, { c: col, fs: 16, fw: 900 }) +
-        t(cx, 116, kind, { c: col, fs: 13, fw: 900 }) + t(cx, 204, title, { c: C.mut, fs: 11 });
-      return svg(560, 212, loop(140, "blood sugar after a meal", "glucose ↑", "insulin ↑", "+", "−", C.green, "B (balancing)") + loop(420, "a bank run", "withdrawals ↑", "fear of a run ↑", "+", "+", C.pink, "R (reinforcing)"), "A balancing loop and a reinforcing loop");
+      const loop = (cx, a, b, sa, sb, col, letter, kind, title) =>
+        '<circle cx="' + cx + '" cy="96" r="54" fill="none" stroke="' + col + '" stroke-width="2" stroke-dasharray="5 5"/>' +
+        box(cx - 64, 26, 128, 32, col) + t(cx, 47, a, { fs: 12 }) +
+        box(cx - 64, 134, 128, 32, col) + t(cx, 155, b, { fs: 12 }) +
+        t(cx + 68, 102, sa, { c: col, fs: 18, fw: 900 }) + t(cx - 68, 102, sb, { c: col, fs: 18, fw: 900 }) +
+        t(cx, 105, letter, { c: col, fs: 26, fw: 900 }) + t(cx, 192, kind, { c: col, fs: 13 }) + t(cx, 210, title, { c: C.mut, fs: 12 });
+      return svg(360, 220, loop(88, "glucose ↑", "insulin ↑", "+", "−", C.green, "B", "balancing", "blood sugar after a meal") + loop(272, "withdrawals ↑", "fear of a run ↑", "+", "+", C.pink, "R", "reinforcing", "a bank run"), "A balancing loop and a reinforcing loop");
     },
     // Semmelweis's two clinics, 1841–1846, deaths per 100 births (Loudon 2013 / James Lind Library)
     semmel: () => {
       const D = [[1841, 7.8, 3.5], [1842, 15.8, 7.6], [1843, 9.0, 6.0], [1844, 8.2, 2.3], [1845, 6.9, 2.0], [1846, 11.4, 2.8]];
-      let s = defs + t(280, 16, "Mothers who died, per 100 births · Vienna General Hospital", { c: C.mut, fs: 11 });
-      const y0 = 190, k = 9.5;
-      for (let g = 0; g <= 16; g += 4) s += '<line x1="40" x2="540" y1="' + (y0 - g * k) + '" y2="' + (y0 - g * k) + '" stroke="' + C.line + '"/>' + t(30, y0 - g * k + 4, g, { fs: 10, c: C.mut, a: "end" });
+      let s = t(180, 16, "Mothers who died per 100 births", { c: C.ink, fs: 13 }) + t(180, 33, "Vienna General Hospital, 1841–1846", { c: C.mut, fs: 12, fw: 600 });
+      const y0 = 206, k = 9;
+      for (let g = 0; g <= 16; g += 4) s += '<line x1="30" x2="354" y1="' + (y0 - g * k) + '" y2="' + (y0 - g * k) + '" stroke="' + C.line + '"/>' + t(24, y0 - g * k + 4, g, { fs: 12, c: C.mut, a: "end" });
       D.forEach(([y, a, b], i) => {
-        const x = 60 + i * 80;
-        s += '<rect x="' + x + '" y="' + (y0 - a * k) + '" width="28" height="' + a * k + '" fill="' + C.pink + '"/>' + t(x + 14, y0 - a * k - 4, a, { fs: 10 });
-        s += '<rect x="' + (x + 30) + '" y="' + (y0 - b * k) + '" width="28" height="' + b * k + '" fill="' + C.cyan + '"/>' + t(x + 44, y0 - b * k - 4, b, { fs: 10 });
-        s += t(x + 29, y0 + 16, y, { fs: 11, c: C.mut });
+        const x = 38 + i * 53;
+        s += '<rect x="' + x + '" y="' + (y0 - a * k) + '" width="22" height="' + a * k + '" fill="' + C.pink + '"/>' + t(x + 11, y0 - a * k - 5, a, { fs: 12 });
+        s += '<rect x="' + (x + 23) + '" y="' + (y0 - b * k) + '" width="22" height="' + b * k + '" fill="' + C.cyan + '"/>' + t(x + 34, y0 - b * k - 5, b, { fs: 12 });
+        s += t(x + 22, y0 + 18, y, { fs: 12, c: C.mut });
       });
-      s += '<rect x="360" y="30" width="12" height="12" fill="' + C.pink + '"/>' + t(378, 41, "First Clinic (doctors, students)", { a: "start", fs: 11 });
-      s += '<rect x="360" y="48" width="12" height="12" fill="' + C.cyan + '"/>' + t(378, 59, "Second Clinic (midwives)", { a: "start", fs: 11 });
-      return svg(560, 216, s, "First Clinic deaths 7 to 16 per 100 births; Second Clinic 2 to 8");
+      s += '<rect x="30" y="238" width="12" height="12" fill="' + C.pink + '"/>' + t(48, 249, "First Clinic (doctors, students)", { a: "start", fs: 12 });
+      s += '<rect x="30" y="258" width="12" height="12" fill="' + C.cyan + '"/>' + t(48, 269, "Second Clinic (midwives)", { a: "start", fs: 12 });
+      return svg(360, 278, s, "First Clinic deaths 7 to 16 per 100 births; Second Clinic 2 to 8");
     },
     // the 1847 intervention month by month (First Clinic)
     semmel47: () => {
       const D = [["Apr", 18.3], ["May*", 12.2], ["Jun", 2.2], ["Jul", 1.2], ["Aug", 1.9]];
-      let s = t(280, 16, "First Clinic, 1847: deaths per 100 births (*chlorine washing from mid-May)", { c: C.mut, fs: 11 });
-      const y0 = 170, k = 7.5;
+      let s = t(180, 16, "First Clinic, 1847: deaths per 100 births", { fs: 13 }) + t(180, 33, "* chlorine hand-washing from mid-May", { c: C.mut, fs: 12, fw: 600 });
+      const y0 = 196, k = 7;
       D.forEach(([m, v], i) => {
-        const x = 80 + i * 90;
-        s += '<rect x="' + x + '" y="' + (y0 - v * k) + '" width="44" height="' + v * k + '" fill="' + (i < 1 ? C.pink : i === 1 ? C.amber : C.green) + '"/>' + t(x + 22, y0 - v * k - 5, v) + t(x + 22, y0 + 16, m, { c: C.mut });
+        const x = 32 + i * 64;
+        s += '<rect x="' + x + '" y="' + (y0 - v * k) + '" width="40" height="' + v * k + '" fill="' + (i < 1 ? C.pink : i === 1 ? C.amber : C.green) + '"/>' + t(x + 20, y0 - v * k - 5, v, { fs: 13 }) + t(x + 20, y0 + 18, m, { c: C.mut, fs: 12 });
       });
-      s += '<line x1="40" x2="540" y1="' + (y0 - 1.33 * k) + '" y2="' + (y0 - 1.33 * k) + '" stroke="' + C.cyan + '" stroke-dasharray="4 4"/>' + t(540, y0 - 1.33 * k - 6, "Second Clinic level, 1848 (1.3)", { c: C.cyan, a: "end", fs: 10 });
-      return svg(560, 196, s, "After hand-washing, First Clinic deaths fell from 18.3 to about 2 per 100");
+      s += '<line x1="24" x2="350" y1="' + (y0 - 1.33 * k) + '" y2="' + (y0 - 1.33 * k) + '" stroke="' + C.cyan + '" stroke-dasharray="4 4"/>';
+      s += '<line x1="24" x2="48" y1="232" y2="232" stroke="' + C.cyan + '" stroke-width="2" stroke-dasharray="4 4"/>' + t(56, 236, "Second Clinic level, 1848 (1.3)", { c: C.cyan, a: "start", fs: 12 });
+      return svg(360, 246, s, "After hand-washing, First Clinic deaths fell from 18.3 to about 2 per 100");
     },
     // schematic of the pattern Bevan & Hood describe: reported ambulance times pile up just under the target
     target8: () => {
       const H = [3, 5, 8, 11, 13, 14, 15, 26, 4, 6, 5, 4, 3];
-      let s = t(280, 16, "Schematic, not real data: reported response times when 8 minutes is the target", { c: C.mut, fs: 11 });
-      const y0 = 170, k = 5;
+      let s = t(180, 16, "Schematic, not real data:", { c: C.amber, fs: 12 }) + t(180, 33, "reported response times, target 8 minutes", { c: C.mut, fs: 12, fw: 600 });
+      const y0 = 196, k = 5;
       H.forEach((v, i) => {
-        const x = 50 + i * 38;
-        s += '<rect x="' + x + '" y="' + (y0 - v * k) + '" width="30" height="' + v * k + '" fill="' + (i === 7 ? C.pink : C.cyan) + '"/>' + t(x + 15, y0 + 14, i + 1, { fs: 10, c: C.mut });
+        const x = 18 + i * 25.5;
+        s += '<rect x="' + x + '" y="' + (y0 - v * k) + '" width="21" height="' + v * k + '" fill="' + (i === 7 ? C.pink : C.cyan) + '"/>' + t(x + 10.5, y0 + 16, i + 1, { fs: 12, c: C.mut });
       });
-      s += '<line x1="' + (50 + 8 * 38 - 4) + '" x2="' + (50 + 8 * 38 - 4) + '" y1="30" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2" stroke-dasharray="5 4"/>' + t(50 + 8 * 38, 44, "target: 8 min", { c: C.lime, a: "start", fs: 11 }) + t(280, y0 + 30, "minutes (the spike just under 8 is the signature of reclassified times)", { c: C.mut, fs: 10 });
-      return svg(560, 206, s, "Schematic histogram with a spike just under the eight-minute target");
+      const xl = 18 + 8 * 25.5 - 2;
+      s += '<line x1="' + xl + '" x2="' + xl + '" y1="46" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2" stroke-dasharray="5 4"/>' + t(xl + 6, 64, "target: 8 min", { c: C.lime, a: "start", fs: 12 });
+      s += t(180, y0 + 36, "minutes · the spike just under 8 is the", { c: C.mut, fs: 12, fw: 600 }) + t(180, y0 + 52, "signature of reclassified times", { c: C.mut, fs: 12, fw: 600 });
+      return svg(360, 256, s, "Schematic histogram with a spike just under the eight-minute target");
     },
   };
 
@@ -105,7 +119,7 @@
         return expo ? A * Math.exp(-0.03 * D) : A / (1 + 0.1 * D);
       },
       draw(v) {
-        const W = 560, H = 240, x0 = 50, x1 = 540, y0 = 200, y1 = 30;
+        const W = 360, H = 286, x0 = 30, x1 = 350, y0 = 236, y1 = 62;
         const X = (D) => x1 - ((x1 - x0) * D) / 60,
           Y = (V) => y0 - ((y0 - y1) * V) / 110;
         const ss = [], ll = [];
@@ -114,14 +128,17 @@
           ll.push([X(D), Y(this.val(120, D + 7, v.expo))]);
         }
         let s = defs + '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y0 + '" y2="' + y0 + '" stroke="' + C.line + '"/>';
-        s += t(x0, 222, "60 days away", { c: C.mut, fs: 10, a: "start" }) + t(x1, 222, "the day itself", { c: C.mut, fs: 10, a: "end" }) + t(300, 236, "time passes →", { c: C.mut, fs: 10 });
+        s += t(x0, y0 + 18, "60 days away", { c: C.mut, fs: 12, a: "start" }) + t(x1, y0 + 18, "the day itself", { c: C.mut, fs: 12, a: "end" }) + t(190, y0 + 38, "time passes →", { c: C.mut, fs: 12 });
         s += polyline(ss, C.pink, 2.6) + polyline(ll, C.cyan, 2.6);
-        if (!v.expo) s += '<line x1="' + X(25) + '" x2="' + X(25) + '" y1="' + y1 + '" y2="' + y0 + '" stroke="' + C.amber + '" stroke-dasharray="4 4"/>' + t(X(25), y1 - 6, "the flip (~25 days out)", { c: C.amber, fs: 10 }) + t((x0 + X(25)) / 2, y0 - 50, "blue on top: you plan to wait", { c: C.cyan, fs: 11 }) + t((X(25) + x1) / 2, y0 - 50, "pink on top: you grab", { c: C.pink, fs: 11 });
-        else s += t(300, y0 - 50, "pink stays on top at every distance: no flip", { c: C.pink, fs: 11 });
+        if (!v.expo)
+          s += '<line x1="' + X(25) + '" x2="' + X(25) + '" y1="' + y1 + '" y2="' + y0 + '" stroke="' + C.amber + '" stroke-dasharray="4 4"/>' + t(X(25), y1 - 8, "the flip (~25 days out)", { c: C.amber, fs: 12 }) +
+            t((x0 + X(25)) / 2, 150, "blue on top:", { c: C.cyan, fs: 12 }) + t((x0 + X(25)) / 2, 166, "you plan to wait", { c: C.cyan, fs: 12 }) +
+            t((X(25) + x1) / 2 + 12, 204, "pink on top:", { c: C.pink, fs: 12 }) + t((X(25) + x1) / 2 + 12, 220, "you grab", { c: C.pink, fs: 12 });
+        else s += t(x0 + 6, 110, "pink stays on top", { c: C.pink, fs: 12, a: "start" }) + t(x0 + 6, 126, "at every distance:", { c: C.pink, fs: 12, a: "start" }) + t(x0 + 6, 142, "no flip", { c: C.pink, fs: 12, a: "start" });
         const a = this.val(100, v.d, v.expo), b = this.val(120, v.d + 7, v.expo);
         s += '<line x1="' + X(v.d) + '" x2="' + X(v.d) + '" y1="' + y1 + '" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2"/>';
         s += '<circle cx="' + X(v.d) + '" cy="' + Y(a) + '" r="5" fill="' + C.pink + '"/><circle cx="' + X(v.d) + '" cy="' + Y(b) + '" r="5" fill="' + C.cyan + '"/>';
-        s += t(70, 46, "100 EGP on the day", { c: C.pink, a: "start", fs: 11 }) + t(70, 62, "120 EGP a week later", { c: C.cyan, a: "start", fs: 11 });
+        s += t(x0, 16, "— 100 EGP on the day", { c: C.pink, a: "start", fs: 12 }) + t(x0, 33, "— 120 EGP a week later", { c: C.cyan, a: "start", fs: 12 });
         return svg(W, H, s, "Value of two rewards as the choice approaches");
       },
       read(v) {
@@ -164,17 +181,17 @@
         const pos = { wings: (a, b) => [a < 0.5 ? -22 + a * 16 : 8 + (a - 0.5) * 16, -2 + b * 6], fuselage: (a, b) => [-3 + a * 6, -16 + b * 30], tail: (a, b) => [-8 + a * 16, 17 + b * 4], engine: (a) => (a < 0.5 ? [-12, 0] : [12, 0]) };
         let s = "";
         F.forEach((p, i) => {
-          const cx = 40 + (i % 8) * 68, cy = 30 + Math.floor(i / 8) * 50;
+          const cx = 32 + (i % 6) * 59, cy = 28 + Math.floor(i / 6) * 50;
           if (p.down && !v.miss) return;
           const o = p.down ? 0.35 : 1;
           s += '<g opacity="' + o + '"><path d="M' + (cx - 3) + " " + (cy - 20) + " h6 v38 h-6 Z M" + (cx - 24) + " " + (cy - 3) + " h48 v6 h-48 Z M" + (cx - 9) + " " + (cy + 15) + ' h18 v4 h-18 Z" fill="#26405e"' + (p.down ? ' stroke="' + C.pink + '" stroke-dasharray="2 2"' : "") + '/><circle cx="' + (cx - 12) + '" cy="' + cy + '" r="3.2" fill="#3b5877"/><circle cx="' + (cx + 12) + '" cy="' + cy + '" r="3.2" fill="#3b5877"/>';
           for (const [r, a, b] of p.hits) {
             const [dx, dy] = pos[r](a, b);
-            s += '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="2.2" fill="' + (r === "engine" ? C.amber : C.pink) + '"/>';
+            s += '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="2.8" fill="' + (r === "engine" ? C.amber : C.pink) + '"/>';
           }
           s += "</g>";
         });
-        return svg(560, 310, s, "A fleet of planes with bullet holes; gaps are planes that did not return");
+        return svg(360, 406, s, "A fleet of planes with bullet holes; gaps are planes that did not return");
       },
       read(v) {
         const F = this.fleet(v.L), regs = ["wings", "fuselage", "tail", "engine"];
@@ -198,13 +215,13 @@
         const c = this.counts(v);
         let s = "", i = 0;
         const put = (n, fill, stroke) => {
-          for (let k = 0; k < n; k++, i++) s += '<circle cx="' + (14 + (i % 40) * 13.5) + '" cy="' + (12 + Math.floor(i / 40) * 12) + '" r="4.4" fill="' + fill + '"' + (stroke ? ' stroke="' + stroke + '" stroke-width="1.4"' : "") + "/>";
+          for (let k = 0; k < n; k++, i++) s += '<circle cx="' + (9 + (i % 40) * 8.7) + '" cy="' + (8 + Math.floor(i / 40) * 9.2) + '" r="3.4" fill="' + fill + '"' + (stroke ? ' stroke="' + stroke + '" stroke-width="1.2"' : "") + "/>";
         };
         put(c.tp, C.pink);
         put(c.fn, "none", C.pink);
         put(c.fp, C.amber);
         put(c.tn, "#26405e");
-        return svg(560, 312, s, "1000 people: sick and positive, sick and missed, healthy but flagged, healthy and clear");
+        return svg(360, 238, s, "1000 people: sick and positive, sick and missed, healthy but flagged, healthy and clear");
       },
       read(v) {
         const c = this.counts(v), pos = c.tp + c.fp;
@@ -227,11 +244,11 @@
         return T;
       },
       draw(v) {
-        const T = this.sim(v), x0 = 40, x1 = 540, y0 = 210, Y = (c) => y0 - ((c - 10) * 180) / 50, X = (i) => x0 + ((x1 - x0) * i) / 59;
-        let s = '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + Y(38) + '" y2="' + Y(38) + '" stroke="' + C.lime + '" stroke-dasharray="5 4"/>' + t(x1, Y(38) - 6, "wanted: 38 °C", { c: C.lime, a: "end", fs: 11 });
-        for (const g of [10, 20, 30, 40, 50, 60]) s += t(x0 - 6, Y(g) + 4, g, { c: C.mut, fs: 10, a: "end" });
-        s += polyline(T.map((c, i) => [X(i), Y(c)]), C.cyan, 2.6) + t(290, 232, "seconds →", { c: C.mut, fs: 10 });
-        return svg(560, 240, s, "Water temperature over one minute");
+        const T = this.sim(v), x0 = 34, x1 = 350, y0 = 214, Y = (c) => y0 - ((c - 10) * 180) / 50, X = (i) => x0 + ((x1 - x0) * i) / 59;
+        let s = '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + Y(38) + '" y2="' + Y(38) + '" stroke="' + C.lime + '" stroke-dasharray="5 4"/>' + t(x1, 18, "- - wanted: 38 °C", { c: C.lime, a: "end", fs: 12 }) + t(x0, 18, "°C", { c: C.mut, fs: 12, a: "start" });
+        for (const g of [10, 20, 30, 40, 50, 60]) s += t(x0 - 6, Y(g) + 4, g, { c: C.mut, fs: 12, a: "end" });
+        s += polyline(T.map((c, i) => [X(i), Y(c)]), C.cyan, 2.6) + t(192, y0 + 22, "seconds →", { c: C.mut, fs: 12 });
+        return svg(360, 244, s, "Water temperature over one minute");
       },
       read(v) {
         const T = this.sim(v), last = T.slice(-15), hi = Math.max(...T), lo = Math.min(...T.slice(5));
@@ -253,7 +270,7 @@
         return { M: real + 2 * game * (1 - a / 100), T: real, g };
       },
       draw(v) {
-        const x0 = 40, x1 = 540, y0 = 200, X = (p) => x0 + ((x1 - x0) * p) / 10, Y = (y) => y0 - (y * 160) / 5;
+        const x0 = 20, x1 = 350, y0 = 226, X = (p) => x0 + ((x1 - x0) * p) / 10, Y = (y) => y0 - (y * 160) / 5;
         const M = [], T = [];
         for (let p = 0; p <= 10; p += 0.25) {
           const r = this.at(p, v.a);
@@ -262,9 +279,9 @@
         }
         const r = this.at(v.p, v.a);
         let s = polyline(M, C.amber, 2.6) + polyline(T, C.green, 2.6);
-        s += '<line x1="' + X(v.p) + '" x2="' + X(v.p) + '" y1="30" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2"/><circle cx="' + X(v.p) + '" cy="' + Y(r.M) + '" r="5" fill="' + C.amber + '"/><circle cx="' + X(v.p) + '" cy="' + Y(r.T) + '" r="5" fill="' + C.green + '"/>';
-        s += t(60, 40, "the number that is rewarded", { c: C.amber, a: "start", fs: 11 }) + t(60, 56, "the real thing it was meant to track", { c: C.green, a: "start", fs: 11 }) + t(290, 226, "reward riding on the number →", { c: C.mut, fs: 10 });
-        return svg(560, 236, s, "A rewarded number and the real outcome as pressure rises");
+        s += '<line x1="' + X(v.p) + '" x2="' + X(v.p) + '" y1="48" y2="' + y0 + '" stroke="' + C.lime + '" stroke-width="2"/><circle cx="' + X(v.p) + '" cy="' + Y(r.M) + '" r="5" fill="' + C.amber + '"/><circle cx="' + X(v.p) + '" cy="' + Y(r.T) + '" r="5" fill="' + C.green + '"/>';
+        s += '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y0 + '" y2="' + y0 + '" stroke="' + C.line + '"/>' + t(x0, 16, "— the number that is rewarded", { c: C.amber, a: "start", fs: 12 }) + t(x0, 33, "— the real thing it was meant to track", { c: C.green, a: "start", fs: 12 }) + t(185, y0 + 20, "reward riding on the number →", { c: C.mut, fs: 12 });
+        return svg(360, 254, s, "A rewarded number and the real outcome as pressure rises");
       },
       read(v) {
         const r = this.at(v.p, v.a), base = this.at(0, v.a);
@@ -284,16 +301,14 @@
       O: ["The two clinics share one building and one city, and admit on alternate days, yet one kills about three times more mothers", "Women who gave birth in the street on the way in (not examined) rarely died", "When the hands were washed in chlorine (1847), First Clinic deaths fell to the midwives' level", "The difference is too large and steady to be chance (tens of thousands of births)"],
       draw(v) {
         const [name, fit] = this.H[v.h];
-        let s = t(280, 20, name, { c: C.lime, fs: 12 });
+        const head = wrap(name, 44);
+        let s = lines(180, 18, head, { c: C.lime, fs: 13 }, 17), y = 18 + head.length * 17;
         this.O.forEach((o, i) => {
-          const y = 44 + i * 46, ok = fit[i];
-          s += box(20, y, 520, 38, ok ? C.green : C.pink) + t(40, y + 24, ok ? "✓" : "✗", { c: ok ? C.green : C.pink, fs: 16, fw: 900 });
-          const words = o.split(" "), l1 = [], l2 = [];
-          let n = 0;
-          for (const w of words) (n += w.length + 1) < 72 ? l1.push(w) : l2.push(w);
-          s += t(60, y + (l2.length ? 16 : 24), l1.join(" "), { a: "start", fs: 11, fw: 600 }) + (l2.length ? t(60, y + 31, l2.join(" "), { a: "start", fs: 11, fw: 600 }) : "");
+          const ok = fit[i], L = wrap(o, 42), h = 14 + L.length * 16;
+          s += box(6, y, 348, h, ok ? C.green : C.pink) + t(22, y + h / 2 + 6, ok ? "✓" : "✗", { c: ok ? C.green : C.pink, fs: 17, fw: 900 }) + lines(38, y + 19, L, { a: "start", fs: 12, fw: 600 });
+          y += h + 8;
         });
-        return svg(560, 232, s, "Which observations an explanation can account for");
+        return svg(360, y, s, "Which observations an explanation can account for");
       },
       read(v) {
         const fit = this.H[v.h][1], n = fit.filter(Boolean).length;
