@@ -109,7 +109,7 @@ p .rnTerm{min-height:0;padding:1px 8px;margin:0 1px}
 .rnListenTxt p{margin:0}
 .rnDialog{display:grid;gap:8px;margin:10px 0 14px}
 .rnSay{padding:10px 12px;border-radius:14px;background:#0e1c2d;border:1px solid #26405e}
-.rnSay b{display:block;font:900 11px/1.2 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#ffd166;margin-bottom:4px}
+.rnSay b{display:block;font:900 12px/1.2 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#ffd166;margin-bottom:4px}
 .rnSay span{font:500 15px/1.5 Inter,system-ui,sans-serif}
 .rnReader{font:500 16px/1.7 Georgia,"Times New Roman",serif}
 .rnReader .rnLine{display:block;padding:2px 6px;border-radius:6px}

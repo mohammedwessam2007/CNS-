@@ -396,7 +396,8 @@ async function runToEnd(p) {
           const v0 = Object.fromEntries([...(m.controls || []).map((c) => [c.id, c.value]), ...(m.toggles || []).map((c) => [c.id, c.value])]);
           const variants = [...(m.controls || []).map((c) => Object.assign({}, v0, { [c.id]: c.value === c.min ? c.max : c.min })), ...(m.toggles || []).map((c) => Object.assign({}, v0, { [c.id]: !c.value }))];
           const d0 = m.draw(v0), r0 = m.read(v0);
-          if (!/<svg/.test(d0) || !r0) bad.push(z.id + ' model ' + id + ' draws nothing');
+          // text models (a reader, a register card) draw HTML text instead of a figure
+          if (!(m.text ? d0.replace(/<[^>]+>/g, '').trim().length > 40 : /<svg/.test(d0)) || !r0) bad.push(z.id + ' model ' + id + ' draws nothing');
           variants.forEach((v, i) => { if (m.draw(v) === d0 && m.read(v) === r0) bad.push(z.id + ' model ' + id + ' ignores control ' + i); });
         }
         const vocab = new Set(window.RENAISSANCE_SEASONS.flatMap((y) => y.sessions.flatMap((x) => Object.keys(x.vocab || {}))));
@@ -451,6 +452,19 @@ async function runToEnd(p) {
         }
         seen.push(where);
       };
+      // HTML text models: every text at least 12 px and nothing wider than the phone
+      const measureText = (html, where) => {
+        body.innerHTML = '<div class="rnModel"><div class="rnModelSvg">' + html + '</div></div>';
+        const root = body.querySelector('.rnModelSvg');
+        for (const el of root.querySelectorAll('*')) {
+          if (!el.childNodes.length || ![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
+          const px = parseFloat(getComputedStyle(el).fontSize);
+          minPx = Math.min(minPx, px);
+          if (px < 12) bad.push(where + ': text renders at ' + px + 'px');
+        }
+        if (root.scrollWidth > root.clientWidth + 1) bad.push(where + ': text wider than the phone');
+        seen.push(where);
+      };
       for (const z of window.RENAISSANCE_SEASONS) {
         const side = new Set();
         for (const ses of z.sessions) for (const st of ses.steps) {
@@ -464,7 +478,7 @@ async function runToEnd(p) {
           for (const c of m.controls || []) vs.push(Object.assign({}, v0, { [c.id]: c.min }), Object.assign({}, v0, { [c.id]: c.max }));
           for (const c of m.toggles || []) vs.push(Object.assign({}, v0, { [c.id]: !c.value }));
           if ((m.toggles || []).length > 1) vs.push(Object.assign({}, v0, Object.fromEntries(m.toggles.map((c) => [c.id, !c.value]))));
-          vs.forEach((v, i) => measure(m.draw(v), z.id + ' model ' + id + '#' + i, 'model'));
+          vs.forEach((v, i) => (m.text ? measureText : measure)(m.draw(v), z.id + ' model ' + id + '#' + i, 'model'));
         }
       }
       return { bad, n: seen.length, minPx: +minPx.toFixed(1) };
