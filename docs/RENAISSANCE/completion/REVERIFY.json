@@ -1,10 +1,10 @@
 {
  "at": "2026-09-26",
- "total": 178,
+ "total": 201,
  "counts": {
-  "slow": 83,
-  "stable": 67,
-  "medium": 26,
+  "slow": 98,
+  "stable": 71,
+  "medium": 30,
   "fast": 2
  },
  "due": [],
@@ -901,6 +901,167 @@
   },
   {
    "id": "zero:numerals",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "samarkand:observatory",
+   "class": "slow",
+   "year": "1428–1429",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "samarkand:fakhri",
+   "class": "medium",
+   "year": "1428–1429",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "samarkand:year",
+   "class": "slow",
+   "year": "c. 1437",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "samarkand:catalogue",
+   "class": "slow",
+   "year": "c. 1437",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "samarkand:fate",
+   "class": "slow",
+   "year": "1449 / 1908",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "samarkand:hyde",
+   "class": "stable",
+   "year": "1665",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "samarkand:eye",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "samarkand:vlbi",
+   "class": "slow",
+   "year": "2019",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "samarkand:scalecalc",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "wayfinding:hokulea",
+   "class": "slow",
+   "year": "1976",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wayfinding:sharp",
+   "class": "slow",
+   "year": "1956",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wayfinding:levison",
+   "class": "slow",
+   "year": "1973",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wayfinding:birds",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wayfinding:blocks",
+   "class": "slow",
+   "year": "1972",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wayfinding:ellipse",
+   "class": "slow",
+   "year": "2012–2021",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wayfinding:landcalc",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "maya:longcount",
+   "class": "medium",
+   "year": "36–32 BCE",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "maya:zeroamericas",
+   "class": "slow",
+   "year": "1st c. BCE–",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "maya:venus",
+   "class": "medium",
+   "year": "usually dated 11th–13th c.",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "maya:landa",
+   "class": "slow",
+   "year": "1562",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "maya:codices",
+   "class": "medium",
+   "year": "2016",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "maya:decipher",
+   "class": "slow",
+   "year": "1952 / 1960",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "maya:lccalc",
    "class": "stable",
    "year": "2026",
    "lastChecked": "2026-09-26",

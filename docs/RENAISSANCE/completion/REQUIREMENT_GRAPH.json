@@ -1,20 +1,20 @@
 {
- "generated": "2026-09-26T21:26:41.862Z",
- "log": "receipts/v18_2/full_regression.log",
+ "generated": "2026-09-26T23:53:35.453Z",
+ "log": "receipts/v18_3/full_regression.log",
  "inventory": {
   "seasons": 3,
-  "sessions": 28,
-  "steps": 252,
+  "sessions": 31,
+  "steps": 278,
   "quotes": 17,
-  "models": 28,
+  "models": 31,
   "visuals": 24,
-  "civNodes": 94,
+  "civNodes": 105,
   "atoms": 28,
   "source": 11,
   "docs": 42,
   "tests": {
    "rn": 39,
-   "v3": 57,
+   "v3": 58,
    "om": 11,
    "co": 10,
    "host": 16
@@ -3009,40 +3009,45 @@
    "id": "globalfloor",
    "cat": "organ",
    "kind": "guard",
-   "name": "No token regions (§26: \"do not build Europe + token world history\"): every region is the setting of a session of its own or is taught in at least two sessions",
+   "name": "No token regions (§26: \"do not build Europe + token world history\"): every region has a session of its own or is taught in at least two sessions",
    "why": "",
    "deps": [],
-   "status": "DESIGNED",
+   "status": "INTEGRATION-TESTED",
    "docs": [
     "docs/RENAISSANCE/v3/02_ORGANS.md"
    ],
-   "code": [],
-   "tests": [],
+   "code": [
+    "source/public/renaissance-s3b.js#id: \"samarkand\"",
+    "source/public/renaissance-s3b.js#id: \"wayfinding\"",
+    "source/public/renaissance-s3b.js#id: \"maya\""
+   ],
+   "tests": [
+    "v3:V12",
+    "v3:V6"
+   ],
    "bench": [],
    "effect": "",
    "blocker": null,
-   "evidence": "Opened on review before the v18.2 declaration: Central Asia is taught only in the wisdom session (Avicenna's birthplace) and Oceania only in one navigation item of the film session. Both pass the breadth guard (V3), which counts any teaching text, but one mention is close to token.",
+   "evidence": "Opened on review before the v18.2 declaration (Central Asia, the Americas and Oceania were each taught in one session with a mention or two). v18.3 adds a session of its own for each (Ulugh Beg's Samarkand, the Maya Long Count and the Dresden Codex, Pacific wayfinding), and V12 fails on the v18.2 content and passes on v18.3.",
    "sup": null,
    "reason": null,
    "due": null,
    "sources": [
     "M3.26"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
    "fails": [],
-   "open": [
-    "status DESIGNED: needs code and a passing test"
-   ],
-   "lastVerified": null,
+   "open": [],
+   "lastVerified": "2026-09-26",
    "registryCandidates": 0,
    "strongest": []
   },
   {
    "id": "globaldepth",
    "cat": "organ",
-   "kind": "frontier",
-   "name": "Global depth: a session of its own set in each of the ten regions (§26 read strictly)",
+   "kind": "guard",
+   "name": "Global depth: every region is the setting of a session of its own (§26 read strictly)",
    "why": "",
    "deps": [
     "global"
@@ -3056,7 +3061,7 @@
    "bench": [],
    "effect": "",
    "blocker": null,
-   "evidence": "",
+   "evidence": "Filed as frontier until v18.3. Moved to open, controllable work on review for the v18.3 report, by the same rule applied to language: once nine regions had a session of their own, the tenth (Southeast Asia) could be built at once.",
    "sup": null,
    "reason": null,
    "due": null,
@@ -3064,9 +3069,11 @@
     "M3.26"
    ],
    "closed": false,
-   "class": "frontier",
+   "class": "controllable",
    "fails": [],
-   "open": [],
+   "open": [
+    "status DESIGNED: needs code and a passing test"
+   ],
    "lastVerified": null,
    "registryCandidates": 0,
    "strongest": []
@@ -7018,8 +7025,8 @@
    "deps": [],
    "status": "IMPLEMENTED",
    "docs": [
-    "receipts/v18_2/full_regression.log",
-    "receipts/v18_2/RECEIPT.md"
+    "receipts/v18_3/full_regression.log",
+    "receipts/v18_3/RECEIPT.md"
    ],
    "code": [],
    "tests": [],
@@ -7057,7 +7064,7 @@
    "bench": [],
    "effect": "",
    "blocker": "Live verification needs an authorised read of what the live site serves. The Vercel connector can now list the project's deployments (state, target, commit), but cannot read a deployment's detail (404) or fetch its pages (no access); the sandbox egress policy blocks *.vercel.app; the GitHub connector has no commit-status or deployment tool. Production is READY on the v18.1 checkpoint 2c577a0; the v18.1 commit 23f58f0 produced no deployment. Remedy: the owner extends the Vercel connector to the project intellectuality-cns, or opens the live URL and checks the title reads v18.1.",
-   "evidence": "Preparatory work complete: the tested commit is pushed to the branch the project deploys from; the identical build (deploy/vercel/build.mjs, which fails if index.html names a missing file) is served locally, and every Renaissance suite and every CNS browser suite with a production variant ran against it as well as against the source (receipts/v18_2/full_regression.log).",
+   "evidence": "Preparatory work complete: the tested commit is pushed to the branch the project deploys from; the identical build (deploy/vercel/build.mjs, which fails if index.html names a missing file) is served locally, and every Renaissance suite and every CNS browser suite with a production variant ran against it as well as against the source (receipts/v18_3/full_regression.log).",
    "sup": null,
    "reason": null,
    "due": null,

@@ -184,6 +184,68 @@
     return svg(360, 256, h, "Timeline of zero from India and Cambodia through Baghdad to Pisa, 628 to 1202");
   }
 
+  // the finest angle a scale of radius R can mark, if you can tell marks w millimetres apart
+  const arcsec = (wMm, rM) => ((wMm / 1000) / rM) * 206265;
+  function scaleDraw(v) {
+    const a = arcsec(v.w, v.r), eye = 60;
+    const W = 300, x0 = 30, maxLog = Math.log10(3600), minLog = Math.log10(1);
+    const xOf = (s) => x0 + W * (Math.log10(Math.min(3600, Math.max(1, s))) - minLog) / (maxLog - minLog);
+    let h = t(180, 20, "A scale " + v.r + " m in radius, marks " + v.w + " mm apart", { c: C.mut, fs: 12, fw: 600 });
+    h += '<line x1="' + x0 + '" y1="70" x2="' + (x0 + W) + '" y2="70" stroke="' + C.line + '" stroke-width="3"/>';
+    for (const [s, lab] of [[1, "1″"], [10, "10″"], [60, "1′"], [600, "10′"], [3600, "1°"]]) h += '<line x1="' + xOf(s).toFixed(1) + '" y1="62" x2="' + xOf(s).toFixed(1) + '" y2="78" stroke="' + C.mut + '"/>' + t(xOf(s), 96, lab, { c: C.mut, fs: 12, fw: 600 });
+    h += '<circle cx="' + xOf(a).toFixed(1) + '" cy="70" r="8" fill="' + (a < eye ? C.green : C.pink) + '"/>' + t(xOf(a), 48, "this scale: " + (a < 1 ? a.toFixed(2) : a < 100 ? a.toFixed(1) : Math.round(a)) + "″", { c: a < eye ? C.green : C.pink, fs: 13 });
+    h += '<line x1="' + xOf(eye).toFixed(1) + '" y1="104" x2="' + xOf(eye).toFixed(1) + '" y2="118" stroke="' + C.amber + '" stroke-width="2"/>' + t(xOf(eye), 134, "the naked eye: about 1′", { c: C.amber, fs: 12, fw: 600 });
+    h += lines(180, 166, wrap("finest angle the scale can mark (smaller is sharper); the dot turns green when the scale is finer than the eye", 48), { c: C.mut, fs: 12, fw: 600 }, 16);
+    return svg(360, 206, h, "The finest angle a scale can mark, against the naked eye's limit, on a logarithmic line");
+  }
+
+  const erfA = (x) => { const s = x < 0 ? -1 : 1; x = Math.abs(x); const t1 = 1 / (1 + 0.3275911 * x); const y = 1 - (((((1.061405429 * t1 - 1.453152027) * t1) + 1.421413741) * t1 - 0.284496736) * t1 + 0.254829592) * t1 * Math.exp(-x * x); return s * y; };
+  const PhiA = (z) => 0.5 * (1 + erfA(z / Math.SQRT2));
+  // chance of making landfall: lateral miss ~ Normal(0, D·tan(err)); each island is found within its halo (sighting or birds)
+  function landfall(v) {
+    const sd = v.dist * Math.tan((v.err * Math.PI) / 180), halo = v.birds ? 32 : 16, gap = 80;
+    const iv = [];
+    for (let i = 0; i < v.n; i++) { const c = (i - (v.n - 1) / 2) * gap; iv.push([c - halo, c + halo]); }
+    const merged = [];
+    for (const [a, b] of iv) { if (merged.length && a <= merged[merged.length - 1][1]) merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], b); else merged.push([a, b]); }
+    const p = merged.reduce((s, [a, b]) => s + PhiA(b / sd) - PhiA(a / sd), 0);
+    return { sd, halo, p, width: merged.reduce((s, [a, b]) => s + b - a, 0) };
+  }
+  function landfallDraw(v) {
+    const L = landfall(v), scale = 150 / Math.max(3 * L.sd, (v.n - 1) * 40 + L.halo + 20);
+    const cx = 180, ty = 70;
+    let h = t(180, 20, v.dist + " km, heading off by up to about " + v.err + "°", { c: C.mut, fs: 12, fw: 600 });
+    // bell curve of where the canoe arrives along the line of islands
+    let pts = [];
+    for (let x = -165; x <= 165; x += 5) { const km = x / scale; pts.push([cx + x, ty + 44 - 40 * Math.exp(-(km * km) / (2 * L.sd * L.sd))]); }
+    h += '<polyline points="' + pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ") + '" fill="none" stroke="' + C.cyan + '" stroke-width="2"/>';
+    h += '<line x1="15" y1="' + (ty + 44) + '" x2="345" y2="' + (ty + 44) + '" stroke="' + C.line + '"/>';
+    for (let i = 0; i < v.n; i++) {
+      const c = cx + (i - (v.n - 1) / 2) * 80 * scale;
+      if (c < 10 || c > 350) continue;
+      h += '<rect x="' + (c - L.halo * scale).toFixed(1) + '" y="' + (ty + 38) + '" width="' + (2 * L.halo * scale).toFixed(1) + '" height="12" rx="6" fill="' + (v.birds ? C.green : C.amber) + '" opacity="0.55"/>' + '<circle cx="' + c.toFixed(1) + '" cy="' + (ty + 44) + '" r="4" fill="' + C.ink + '"/>';
+    }
+    h += t(180, 146, (v.birds ? "green: islands found by their birds (about 32 km)" : "amber: islands found by sight (about 16 km)"), { c: C.mut, fs: 12, fw: 600 });
+    h += t(180, 172, "blue: where the canoe may arrive", { c: C.cyan, fs: 12, fw: 600 });
+    h += t(180, 204, "chance of making landfall: " + Math.round(L.p * 100) + "%", { c: L.p > 0.5 ? C.green : C.pink, fs: 15 });
+    return svg(360, 220, h, "Where a canoe may arrive along a line of islands, and the chance it finds one");
+  }
+
+  const LC = [["bak'tun", 144000], ["k'atun", 7200], ["tun", 360], ["winal", 20], ["k'in", 1]];
+  const lcDigits = (days) => LC.map(([, v]) => { const d = Math.floor(days / v); days -= d * v; return d; });
+  function longCountDraw(v) {
+    const d = lcDigits(v.days);
+    let h = t(180, 20, v.days.toLocaleString("en-US") + " days, written as a Maya count", { c: C.mut, fs: 12, fw: 600 });
+    LC.forEach(([name, val], i) => {
+      const x = 14 + i * 67, empty = d[i] === 0;
+      h += box(x, 36, 61, 62, empty ? C.amber : C.cyan) + t(x + 30.5, 76, empty ? "shell" : String(d[i]), { c: empty ? C.amber : C.ink, fs: empty ? 13 : 20 });
+      h += t(x + 30.5, 116, name, { c: C.mut, fs: 12, fw: 600 }) + t(x + 30.5, 134, "×" + val.toLocaleString("en-US"), { c: C.mut, fs: 12, fw: 600 });
+    });
+    h += t(180, 164, d.join("."), { c: C.lime, fs: 16 });
+    h += lines(180, 190, wrap("each place is worth 20 of the next, except the tun: 18 winals, so a tun of 360 days is close to a year", 48), { c: C.mut, fs: 12, fw: 600 }, 16);
+    return svg(360, 226, h, "A number of days written in the five places of the Maya Long Count, with empty places marked by the shell sign");
+  }
+
   const visuals = {
     zeroLine: () => zeroLineDraw(),
     konig: () => konigDraw({ b1: 1, b2: 1, b3: 1, b4: 1, b5: 1, b6: 1, b7: 1 }),
@@ -234,6 +296,40 @@
 
   /* ═══════════════ MODELS ═══════════════ */
   const models = {
+    longcount: {
+      controls: [
+        { id: "days", label: "Days counted", min: 0, max: 1872000, step: 1, value: 1386720, unit: "" },
+      ],
+      draw: (v) => longCountDraw(v),
+      read(v) {
+        const d = lcDigits(v.days), empties = d.filter((x, i) => x === 0 && d.slice(0, i).some((y) => y)).length;
+        return "**" + v.days.toLocaleString("en-US") + " days is " + d.join(".") + " in the Long Count.** " + (empties ? "It has " + empties + " empty place" + (empties > 1 ? "s" : "") + " inside it, each marked with the shell sign: without it, the places would slide together, just as 408 would become 48." : "No empty place inside this count; try a round number of tuns or k'atuns to see the shell appear.") + " Every place is worth twenty of the next, except the tun (18 winals, 360 days), which the calendar bends to stay close to a year. A number line of five places covers more than 5,000 years.";
+      },
+    },
+    landfall: {
+      controls: [
+        { id: "dist", label: "Distance sailed (km)", min: 500, max: 4000, step: 500, value: 2000, unit: " km" },
+        { id: "err", label: "Heading error (degrees)", min: 1, max: 8, step: 1, value: 3, unit: "°" },
+        { id: "n", label: "Islands in the chain you aim for", min: 1, max: 5, step: 1, value: 1, unit: "" },
+      ],
+      toggles: [{ id: "birds", label: "Read the birds, not only the islands", value: false }],
+      draw: (v) => landfallDraw(v),
+      read(v) {
+        const L = landfall(v), one = landfall(Object.assign({}, v, { n: 1, birds: false }));
+        return "**A " + v.err + "° error over " + v.dist + " km scatters your arrival by about ±" + Math.round(L.sd) + " km. Aiming at " + (v.n === 1 ? "one island" : "a chain of " + v.n) + (v.birds ? " and reading its birds" : " by sight alone") + " gives a " + Math.round(L.p * 100) + "% chance of landfall**" + (v.n > 1 || v.birds ? " (one island by sight: " + Math.round(one.p * 100) + "%)" : "") + ". You cannot aim more precisely than your error; you can make the target wider. This model lets the error build up unchecked; real navigators corrected their course by stars and swells along the way, so it shows the logic, not their odds.";
+      },
+    },
+    scale: {
+      controls: [
+        { id: "r", label: "Radius of the scale (metres)", min: 1, max: 40, step: 1, value: 2, unit: " m" },
+        { id: "w", label: "How close two marks can be and still be told apart (mm)", min: 1, max: 5, step: 1, value: 2, unit: " mm" },
+      ],
+      draw: (v) => scaleDraw(v),
+      read(v) {
+        const a = arcsec(v.w, v.r);
+        return "**A " + v.r + "-metre scale with marks " + v.w + " mm apart can mark angles of about " + (a < 100 ? a.toFixed(1) : Math.round(a)) + " seconds of arc.** " + (a < 60 ? "That is finer than the naked eye's limit of about one minute: the instrument, not the eye, now sets the precision." : "That is coarser than the eye can resolve: the scale is the bottleneck, so make it bigger.") + " Doubling the radius halves the angle between marks, which is why Ulugh Beg built a curved scale about 36 metres in radius. In practice the blurred image of the sun and the builders' care set the real limit; size bought room.";
+      },
+    },
     place: {
       controls: [
         { id: "n", label: "The number", min: 1, max: 400, step: 1, value: 305, unit: "" },
@@ -776,6 +872,273 @@
       { title: "The satanic zero that never was", body: "Popular histories say medieval Europe feared zero as the devil's number and that the Church banned the new numerals. The historian Philipp Nothaft traced the story in 2020 and found it unsupported at nearly every step. What did exist were practical rules: a Florentine money-changers' guild restricted the new numerals in its account books in 1299; the usual explanation is that a 0 could be turned into a 6 or a 9 with one stroke." },
       { title: "Why 'algorithm' is a man's name", body: "Al-Khwarizmi's book on Hindu reckoning survives only in Latin, opening \"Algoritmi…\" (\"thus spoke al-Khwarizmi\"). Readers took the name for the method, and the method became the word." },
       { title: "Open question", body: "Was the Khmer dot of 683 part of the same Indian system, or a local variant? The inscription uses the Indian Śaka era, which suggests one family of numerals across South and Southeast Asia; how the zero moved within it is not settled." },
+    ],
+  });
+
+  sessions.push({
+    id: "samarkand", primitive: "measure", domain: "science", region: "Samarkand (Uzbekistan), Central Asia", works: ["zij-sultani"],
+    atoms: ["measure", "calib", "experiment", "represent"],
+    title: "A scale the size of a hill",
+    hook: "In the 1420s, astronomers in Samarkand measured the length of the year and were out by about a minute. They had no telescope. How?",
+    minutes: 24,
+    why: "Precision is not a gift of modern machines. A Timurid prince in Central Asia built an instrument you could walk inside, because the only way to read a smaller angle with the naked eye was to make the scale bigger. The same trade between size, repetition and hidden error decides how far you can trust every measurement you will ever take, including the ones on a ward.",
+    capability: "Tell resolution, random error and systematic error apart, predict how instrument size and repetition change each, and place Samarkand's observatory in the history of science.",
+    stakes: "A monitor that reads to one decimal place can still be wrong by ten. Knowing which kind of error you face tells you whether a better device, more readings, or a check against something independent will help.",
+    bridge: "The missing step: an angle is a distance divided by a radius. If your eye can only tell marks a millimetre apart, the only way to read smaller angles is to put the marks further from the centre.",
+    connection: "The wisdom session followed Greek astronomy into Baghdad. Five centuries later its heirs in Samarkand measured the sky better than anyone before the telescope, and their catalogue reached Europe too.",
+    vocab: {
+      resolution: { name: "resolution", h: "The smallest difference an instrument can show.", s: "أصغر فرق الجهاز يقدر يبيّنه: ميزان الأطفال بيقرا جرامات، ميزان العنبر بيقرا نص كيلو.", t: "The minimum distinguishable increment of a measuring system; for an angular scale, mark separation divided by radius." },
+      systematic: { name: "systematic error", h: "An error that pushes every reading the same way.", s: "غلط ثابت في اتجاه واحد: لو الميزان مضبوط غلط، كل الأوزان هتطلع أتقل.", t: "Bias: a consistent offset that repetition cannot average away; detected only by comparison with an independent reference." },
+      random: { name: "random error", h: "Scatter that goes both ways from reading to reading.", s: "لخبطة بتروح يمين وشمال، ولما تكرر القياس وتاخد المتوسط بتقل.", t: "Unbiased noise; the standard error of a mean falls as one over the square root of the number of readings." },
+    },
+    provenance: [
+      { id: "observatory", claim: "Ulugh Beg, the Timurid ruler of Samarkand and grandson of Timur, built an observatory on a hill near the city in 1428–1429: a round, three-storey building about 46 metres across.", source: "Histories of the Ulugh Beg observatory (e.g. the Utrecht Ulugh Beg pages; standard encyclopedia entries); checked by web search", year: "1428–1429", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "fakhri", claim: "Its main instrument, the Fakhri sextant, was a curved scale set along the meridian, with a radius usually given as about 36 metres (some sources say 40).", source: "As above; Ulugh Beg, 'Prince of Stars' (arXiv 1804.08352); checked by web search", year: "1428–1429", kind: "scholarship", license: "fact", grade: "A", contested: "The radius is given as 36 m in most accounts and 40 m in others." },
+      { id: "year", claim: "Ulugh Beg and his colleagues, including al-Kashi and Qadi Zada, gave the sidereal year as 365 days 6 hours 10 minutes 8 seconds, about 58 seconds longer than the modern value.", source: "Standard accounts of the observatory's results; checked by web search", year: "c. 1437", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "catalogue", claim: "The observatory's star catalogue, in the Zij-i Sultani, lists 1,018 stars.", source: "Standard accounts; checked by web search", year: "c. 1437", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "fate", claim: "Ulugh Beg was beheaded in 1449 on the order of his son Abd al-Latif, and the observatory was destroyed; the son was killed about six months later. The observatory's remains were found in 1908 by the archaeologist Vasily Vyatkin.", source: "Standard accounts of the Ulugh Beg observatory; checked by web search", year: "1449 / 1908", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "hyde", claim: "In 1665 Thomas Hyde, a young student of oriental languages at Oxford, printed Ulugh Beg's star catalogue in full with a Latin translation, one of the first Oxford books set in Arabic type.", source: "Hyde T., Tabulae Long. ac Lat. Stellarum Fixarum ex Observatione Ulugh Beighi (Oxford, 1665); checked by web search", year: "1665", kind: "primary", license: "public domain", grade: "A" },
+      { id: "eye", claim: "Normal human visual acuity resolves about one minute of arc.", source: "Standard optometry (20/20 vision corresponds to about 1′)", year: "—", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "vlbi", claim: "Radio telescopes far apart can be combined so that they act as one instrument as wide as the distance between them; the Event Horizon Telescope used dishes across the Earth to image the shadow of a black hole (published 2019).", source: "Event Horizon Telescope Collaboration, Astrophysical Journal Letters 875 (2019)", year: "2019", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "scalecalc", claim: "The scale model computes the angle between two marks as their separation divided by the radius; its readings are original teaching material.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "s1", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["fakhri", "eye"], atoms: ["measure"], stem: "Without a telescope, how could an astronomer in 1428 read the sun's position more finely than anyone before?", alt: "Your eye can tell two marks apart only if they are about a millimetre apart. Where would you put the marks?", options: [
+        { t: "Build the scale so large that a tiny angle spans a visible distance", ok: true, why: "An angle is a distance over a radius. Make the radius about 36 metres and a small angle becomes centimetres of marble you can read." },
+        { t: "Observe from the highest mountain, closer to the sky", bug: "irrelevant", why: "A few kilometres of height changes nothing about how finely a scale can be read." },
+        { t: "Ask many observers to guess, then take the average of all the guesses", bug: "linear", why: "Averaging helps with random scatter, but no amount of guessing makes a coarse scale finer." },
+        { t: "Use a more accurate clock", bug: "surface", why: "Timing matters for some observations, but the position was read off a scale; the scale was the limit." },
+      ] },
+      { id: "s2", type: "scene", stage: "reveal", min: 2.5, src: ["observatory", "fakhri", "year", "catalogue"], terms: ["resolution"], title: "An instrument you could walk inside", body: "On a hill outside Samarkand, Ulugh Beg, the grandson of Timur and ruler of the city, built a round observatory three storeys high and about 46 metres across (1428–1429). Its heart was cut into the hill: a curved track of marble set along the north–south line, about 36 metres in radius, the Fakhri sextant. At noon the sun's light fell through an opening onto the arc, and the astronomers read where it landed.\n\nThe size was the point. The finest angle a scale can mark is the gap between its marks divided by its radius: its [[resolution|resolution]]. With a radius dozens of times larger than a hand instrument, the same millimetre stood for a far smaller angle. The results: a catalogue of 1,018 stars, and a year of 365 days, 6 hours, 10 minutes and 8 seconds, about 58 seconds longer than the modern value.", reps: [{ kind: "analogy", label: "A longer ruler for angles", body: "A protractor the size of a coin can't show half a degree; one the size of a room can show a hundredth. Same eye, different radius." }, { kind: "counterexample", label: "Where size stops helping", body: "A bigger scale does nothing for errors that push every reading the same way: an arc set a little off the meridian, or the blur of the sun's own image." }] },
+      { id: "s3", type: "model", stage: "model", min: 3, model: "scale", src: ["scalecalc", "eye"], terms: ["resolution"], title: "How big must the scale be?", body: "Set the radius of the scale and how close two marks can be for your eye to tell them apart.", ask: "**Find** the smallest radius at which a 2 mm scale beats the naked eye, and what doubling the radius does to the finest angle." },
+      { id: "s4", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["scalecalc"], terms: ["systematic"], atoms: ["measure", "calib"], stem: "Suppose the arc had been laid a little off the true north–south line, so every noon reading came out slightly early. What fixes that?", options: [
+        { t: "Check it against something already known, like a known star", ok: true, why: "A systematic error pushes every reading the same way; only an independent reference shows it." },
+        { t: "Making the scale even larger", bug: "linear", why: "A bigger scale reads the same biased angle more finely." },
+        { t: "Taking many more readings every noon and averaging all of them", bug: "confirm", why: "Averaging cancels scatter in both directions; a bias in one direction survives any number of readings." },
+        { t: "Nothing: an error in every reading cancels itself out", bug: "inversion", why: "It is the one kind of error that never cancels." },
+      ] },
+      {
+        id: "s5", type: "contrast", stage: "contrast", min: 2.5, src: ["scalecalc"], terms: ["random", "systematic"], atoms: ["measure", "judgment"], title: "Three kinds of error, three remedies",
+        left: { title: "Too coarse, or too noisy", body: "The marks are too far apart for the angle you need (resolution), or readings scatter both ways from day to day ([[random|random error]]). A bigger scale fixes the first; repetition shrinks the second." },
+        right: { title: "Biased", body: "Every reading leans the same way: the arc slightly off line, or light bent by the air near the horizon. Neither size nor repetition touches it." },
+        q: { stem: "Which remedy works on which error?", options: [
+          { t: "Size for resolution, repetition for scatter, a reference for bias", ok: true, why: "Three different problems. Mixing up the remedies is how careful people end up precisely wrong." },
+          { t: "Repetition fixes all three if you take enough readings", bug: "linear", why: "Repetition cannot make a scale finer, and it cannot remove a bias." },
+          { t: "A bigger instrument fixes all three", bug: "surface", why: "Size sharpens the scale; it leaves scatter and bias alone." },
+          { t: "Bias only matters in old instruments; modern devices are free of it", bug: "authority", why: "Every instrument can be biased; that is why devices are calibrated against references." },
+        ] },
+      },
+      { id: "s6", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["scalecalc"], atoms: ["measure", "judgment"], stem: "A premature baby must gain about 15 g a day. The ward scale reads in steps of 50 g. What is the problem, and the fix?", options: [
+        { t: "The steps are too coarse for the change; use a scale that reads grams", ok: true, why: "Resolution must be small compared with the change you are looking for; a 50 g step hides three days of growth." },
+        { t: "Weigh the baby ten times in a row and average the readings on that scale", bug: "linear", why: "Averaging a coarse scale's readings gives a steadier coarse number; it cannot show changes smaller than its step." },
+        { t: "Weigh at the same time every day, before feeds, to remove the bias", bug: "surface", why: "Good practice for another error; it does not fix the step size." },
+        { t: "Nothing: 50 g is precise enough for any baby", bug: "rigid", why: "For a baby who should gain 15 g a day, it is not." },
+      ] },
+      { id: "s7", type: "q", kind: "far", stage: "far", min: 1.5, src: ["vlbi"], atoms: ["analogy", "measure"], stem: "In 2019 astronomers published an image of the shadow of a black hole, made by linking radio dishes on several continents. Why link dishes so far apart?", options: [
+        { t: "Together they act like one Earth-wide dish, which resolves smaller angles", ok: true, why: "Samarkand's principle at planetary scale: the wider the instrument, the finer the angles it can separate." },
+        { t: "To get closer to the black hole by spreading out over the planet", bug: "irrelevant", why: "A few thousand kilometres is nothing on that scale." },
+        { t: "So that if one dish fails or is clouded over, another can take over", bug: "surface", why: "Redundancy is useful, but it is not why the image became possible." },
+        { t: "To collect more light so that the image is brighter", bug: "linear", why: "More collecting area helps sensitivity; the separation of the dishes is what sharpens the image." },
+      ] },
+      {
+        id: "s8", type: "forge", stage: "forge", min: 3, title: "Measure one thing well", body: "Pick something you measure often (blood pressure, your weight, your study hours) and design how to measure it so you can trust the change.",
+        slots: [
+          { key: "res", label: "Resolution", options: [{ t: "a step small compared with the change I care about", grade: "good", note: "Samarkand's rule: the scale must be finer than the change.", say: "a step finer than the change" }, { t: "whatever the device happens to show", grade: "weak", note: "You may be reading noise, or missing the change.", say: "whatever the device shows" }] },
+          { key: "rep", label: "Repeats", options: [{ t: "two or three readings, averaged, at the same time of day", grade: "good", note: "Shrinks the random scatter.", say: "a few readings, averaged" }, { t: "one reading, taken whenever", grade: "bad", note: "One noisy reading can look like a change.", say: "one reading" }] },
+          { key: "ref", label: "Check for bias", options: [{ t: "compare against an independent reference now and then", grade: "good", note: "Only a reference catches a bias.", say: "a check against a reference" }, { t: "trust the device's display", grade: "bad", note: "A biased device displays its bias confidently.", say: "trusting the display" }] },
+          { key: "log", label: "Record", options: [{ t: "write each reading with its time", grade: "good", note: "The Samarkand catalogue is still used because it was written down.", say: "a written log" }, { t: "remember the trend", grade: "weak", note: "Memory smooths and flatters.", say: "memory" }] },
+        ],
+        template: "Measure with {res}, {rep}, **{ref}**, and keep {log}.",
+        critique: { stem: "A friend's home blood-pressure cuff reads 5 mmHg higher than the clinic's every single time. What should they do?", options: [{ t: "Treat it as bias, and correct or recalibrate it against a reference", ok: true, why: "A consistent offset is a systematic error; repetition will only confirm it." }, { t: "Take ten times more readings at home to average it away", bug: "confirm", why: "The same bias appears in every reading; averaging keeps it." }, { t: "Trust the clinic's reading every time because clinics are never wrong", bug: "authority", why: "The clinic's device can be biased too; the point is to compare against a known reference." }] },
+      },
+    ],
+    challenge: { stem: "Taking more readings reduces…", options: [{ t: "random scatter", ok: true }, { t: "a consistent bias", bug: "confirm" }, { t: "the coarseness of the scale", bug: "linear" }] },
+    hooks: [
+      { id: "samarkand.h1", gap: 1, q: { stem: "Why was the Fakhri sextant so large?", options: [{ t: "the same mark gap then means a smaller angle", ok: true }, { t: "so that it could be seen from anywhere in the city", bug: "irrelevant" }, { t: "to hold more astronomers at once", bug: "surface" }] } },
+      { id: "samarkand.h2", gap: 7, q: { stem: "A bias that pushes every reading the same way is found by…", options: [{ t: "checking it against something already known", ok: true }, { t: "averaging many more readings of the same thing", bug: "confirm" }, { t: "a bigger instrument", bug: "linear" }] } },
+      { id: "samarkand.h3", gap: 30, q: { stem: "Samarkand's year of 365 d 6 h 10 min 8 s was off by about…", options: [{ t: "a minute", ok: true }, { t: "a day", bug: "surface" }, { t: "an hour", bug: "surface" }] } },
+    ],
+    deeper: [
+      { title: "What happened to it", body: "In 1449 Ulugh Beg was beheaded on his son's order and the observatory was pulled down; the son was himself killed within about six months. The building disappeared so completely that its site was found only in 1908, by the archaeologist Vasily Vyatkin. The part of the great arc cut into the rock survived below ground and can be visited in Samarkand." },
+      { title: "The catalogue travelled", body: "Like the manuscripts of Timbuktu, the work survived in copies. Ulugh Beg's star tables were copied across the Islamic world, and in 1665 Thomas Hyde printed the catalogue at Oxford with a Latin translation, one of the first Oxford books set in Arabic type." },
+      { title: "Open question", body: "How precise were the Samarkand measurements in practice, star by star? Modern analyses compare the catalogue with today's positions; the answer depends on the star and on which copy of the tables is used." },
+    ],
+  });
+
+  sessions.push({
+    id: "wayfinding", primitive: "search", domain: "science", region: "Micronesia, Hawaiʻi and Tahiti (Oceania)", works: ["hokulea"],
+    atoms: ["prob", "strategy", "orient", "falsify"],
+    title: "Finding an island with no instruments",
+    hook: "In 1976 a double canoe sailed from Hawaiʻi to Tahiti, thousands of kilometres of open ocean, with no compass, chart or clock. How do you hit a speck of land when your aim is off by a few degrees?",
+    minutes: 24,
+    why: "The settlement of the Pacific is one of the great feats of human exploration, and for a long time outsiders called it an accident. The navigators' answer is a way of thinking you can use anywhere: when you cannot aim more precisely, make the target bigger.",
+    capability: "Explain how Pacific navigators turned small islands into large targets, weigh the drift and navigation explanations against the evidence, and tell an existence proof from a historical proof.",
+    stakes: "Every search under uncertainty, for a diagnosis, a missing patient, a job, is the same problem. Aiming harder at a point fails where widening the target succeeds.",
+    bridge: "The missing step: an island is not only the land you can see. Birds that fish from it, clouds that form over it and swells it bends all reach far beyond its shore, so the target is many times wider than the island.",
+    connection: "The film session met etak, the moving reference island of Micronesian navigators. Here are the navigators themselves, and the voyage that proved the old methods still worked.",
+    vocab: {
+      expand: { name: "expanding the target", h: "Making a small goal easier to hit by using the signs around it.", s: "بدل ما تنشن على نقطة صغيرة، وسّع الهدف بالعلامات اللي حواليه: الطيور والسحاب.", t: "Increasing the effective capture width of a destination with signs that extend beyond it (seabirds, cloud, swell), and aiming at island groups rather than single islands." },
+      existence: { name: "an existence proof", h: "Showing something can be done, not that it was done that way.", s: "إثبات إن الحاجة ممكنة، مش إثبات إن الناس زمان عملوها بالطريقة دي.", t: "A demonstration that a possibility is real; it removes an 'impossible' objection without establishing the historical route." },
+    },
+    provenance: [
+      { id: "hokulea", claim: "Hōkūleʻa, a double-hulled voyaging canoe of the Polynesian Voyaging Society, left Hawaiʻi on 1 May 1976, made landfall at Mataiva on 1 June and reached Papeʻete, Tahiti, on 4 June, where more than 17,000 people welcomed it. It was navigated without instruments by Mau Piailug of Satawal in Micronesia.", source: "Polynesian Voyaging Society (hokulea.com), 1976 voyage accounts; checked by web search", year: "1976", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "sharp", claim: "Andrew Sharp argued in Ancient Voyagers in the Pacific (1956) that the Pacific islands were settled by accidental drift voyages rather than deliberate navigation.", source: "Sharp A., Ancient Voyagers in the Pacific (1956); as discussed in reviews of Levison et al.; checked by web search", year: "1956", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "levison", claim: "Levison, Ward and Webb simulated more than 120,000 drift voyages with real winds and currents and found that the chance of a canoe drifting to Hawaiʻi from anywhere in Polynesia was nil.", source: "Levison M., Ward R. G. & Webb J. W., The Settlement of Polynesia: A Computer Simulation (1973); checked by web search", year: "1973", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "birds", claim: "Terns and noddies, which fly out from islands to fish, are found up to about twenty miles offshore, about twice the distance at which a low atoll can be seen; boobies range further. They give direction mainly at dawn, flying out, and at dusk, flying home.", source: "Te Ara Encyclopedia of New Zealand, 'Canoe navigation: locating land'; standard accounts of Pacific wayfinding; checked by web search", year: "—", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "blocks", claim: "Pacific navigators aimed at blocks of islands rather than single islands; once inside a block, signs of land led them to the one they wanted.", source: "Standard accounts of Pacific navigation (e.g. Lewis D., We, the Navigators, 1972); checked by web search", year: "1972", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "ellipse", claim: "Mars landers are targeted at a landing ellipse many kilometres long, chosen so the unavoidable errors of entry and descent still end on safe ground.", source: "NASA mission descriptions of landing ellipses (e.g. Curiosity, Perseverance)", year: "2012–2021", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "landcalc", claim: "The landfall model's numbers (16 km sighting, 32 km birds, 80 km between islands, errors that build up unchecked) are illustrative teaching material.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "w1", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["blocks", "birds"], atoms: ["strategy", "prob"], stem: "You must reach one small atoll 2,000 km away. Your heading may be off by a few degrees, and a low atoll can only be seen from about 16 km. What do you aim for?", alt: "Work out how far a 3° error puts you off after 2,000 km, then compare it with 16 km.", options: [
+        { t: "The whole island group, then its birds to find the one you want", ok: true, why: "A few degrees over 2,000 km can put you a hundred kilometres off. You cannot aim that well, so you aim at something that wide, then close in." },
+        { t: "The atoll itself, holding your course more carefully than anyone", bug: "rigid", why: "No care makes a few degrees of error vanish; a single atoll is too small a target at that distance." },
+        { t: "Nothing: let the currents carry you there", bug: "surface", why: "Drift is the theory the navigators disproved; currents go where they go, not where you need." },
+        { t: "Wait on the shore until you can see the atoll from the beach itself", bug: "irrelevant", why: "At 2,000 km no island is visible from another." },
+      ] },
+      { id: "w2", type: "scene", stage: "reveal", min: 2.5, src: ["birds", "blocks"], terms: ["expand"], title: "An island is bigger than its shore", body: "A low atoll is visible from perhaps 16 km. But terns and noddies fly out from it every morning to fish, up to about twenty miles, and fly home at dusk. Seeing them at dawn or dusk tells you which way the land lies, and so the island's real size, as a target, doubles. Clouds that stand over islands and the way islands bend the ocean swell reach further still.\n\nNavigators therefore aimed not at a single island but at a block of islands spread across their path. That is [[expand|expanding the target]]: when you cannot make your aim more precise, you make what you are aiming at wider, and add the precision at the end.", reps: [{ kind: "analogy", label: "Etak again", body: "The film session's etak kept the canoe's position in mind by imagining a reference island moving past. Expanding the target is its partner: know roughly where you are, then make where you are going impossible to miss." }, { kind: "counterexample", label: "Where it fails", body: "Birds give direction only when they fly out and home; at midday a flock tells you land is near, not where. An isolated island with no neighbours, like the Hawaiian chain seen from far south, offers no block to aim at." }] },
+      { id: "w3", type: "model", stage: "model", min: 3, model: "landfall", src: ["landcalc", "birds"], terms: ["expand"], title: "Widen the target", body: "Set the distance, how far off your heading may be, how many islands lie across your path, and whether you read the birds.", ask: "**Find** how much the chance of landfall rises when you read the birds, and when you aim at a chain of five instead of one island, at 2,000 km and 3°." },
+      { id: "w4", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["sharp", "levison"], atoms: ["falsify", "prob"], stem: "In 1956 a historian argued that the Pacific was settled by canoes drifting off course by accident. In 1973 researchers simulated over 120,000 drift voyages with real winds and currents. What did they find about drifting to Hawaiʻi?", options: [
+        { t: "The chance was nil: Hawaiʻi had to be reached on purpose", ok: true, why: "Drift carried canoes to some places, but not to the remotest islands such as Hawaiʻi, New Zealand or Easter Island; deliberate navigation is the explanation that fits." },
+        { t: "Drift reached Hawaiʻi often, confirming the accident theory", bug: "confirm", why: "The simulation found the opposite for Hawaiʻi." },
+        { t: "Computers cannot say anything about ancient voyages", bug: "rigid", why: "A simulation with real winds and currents tests what drift can and cannot do; that is exactly what the drift theory claimed." },
+        { t: "Drift and navigation are equally likely explanations", bug: "surface", why: "For the remotest islands the evidence was lopsided." },
+      ] },
+      { id: "w5", type: "scene", stage: "primary", min: 2, src: ["hokulea"], terms: ["existence"], title: "Hōkūleʻa, 1976", body: "On 1 May 1976 the voyaging canoe Hōkūleʻa left Hawaiʻi for Tahiti with no compass, no charts and no instruments. Its navigator was Mau Piailug, from the tiny atoll of Satawal in Micronesia, one of the last navigators trained in the old way. He read the rising and setting points of stars, the swells, the wind and the birds. On 1 June the crew made landfall at Mataiva in the Tuamotus; on 4 June more than 17,000 people welcomed the canoe into Papeʻete, one of the largest crowds ever gathered in Tahiti.\n\nThe voyage was built as a test: could the old methods carry a canoe that far, on purpose? They could. It is [[existence|an existence proof]]." },
+      {
+        id: "w6", type: "contrast", stage: "contrast", min: 2.5, src: ["hokulea", "levison"], terms: ["existence"], atoms: ["falsify", "judgment"], title: "What the voyage proves, and what it cannot",
+        left: { title: "It shows", body: "Deliberate navigation across thousands of kilometres with traditional methods is possible. The claim that it could not be done is dead." },
+        right: { title: "It cannot show", body: "Which routes the first settlers took, when, with which canoes, or how many voyages were lost. A modern crew with a master navigator is not the historical record." },
+        q: { stem: "What kind of evidence is the 1976 voyage?", options: [
+          { t: "Proof it could be done, not of how the first settlers did it", ok: true, why: "An existence proof removes the 'impossible' objection. The history still comes from archaeology, language, genetics and simulation, like the 1973 study." },
+          { t: "Final proof of exactly how and when every part of Polynesia was settled", bug: "confirm", why: "It shows possibility, not the historical route." },
+          { t: "No evidence at all, because it happened in modern times", bug: "rigid", why: "It is strong evidence against the claim that such voyages were impossible." },
+          { t: "Evidence for drift, since the canoe followed winds and currents", bug: "inversion", why: "It was navigated to a chosen island; that is the opposite of drift." },
+        ] },
+      },
+      { id: "w7", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["landcalc"], atoms: ["strategy", "prob"], stem: "On a busy ward you must not miss the patient who is quietly getting septic. The definitive test takes hours. What is the navigator's move?", options: [
+        { t: "Wait for the definitive test on every patient before acting on anything", bug: "rigid", why: "Aiming only at the certain result means arriving late." },
+        { t: "Watch the early signs that show up hours before the result", ok: true, why: "Widen the target: rising breathing rate, new confusion, a change in the obs are the birds, seen long before the island itself." },
+        { t: "Order the definitive test on every patient every hour to be precise", bug: "linear", why: "Precision on a narrow target, at huge cost; the early signs are wider and faster." },
+        { t: "Trust your first impression of each patient at the start of the shift", bug: "confirm", why: "One sighting, never updated: the opposite of reading signs as they appear." },
+      ] },
+      { id: "w8", type: "q", kind: "far", stage: "far", min: 1.5, src: ["ellipse"], atoms: ["analogy", "strategy"], stem: "Engineers landing a rover on Mars do not aim at a single point. They choose a landing ellipse many kilometres long. Why?", options: [
+        { t: "Because they do not care where on Mars the rover lands", bug: "surface", why: "They care a great deal: the ellipse is chosen to be safe and scientifically useful." },
+        { t: "Its errors can't be removed, so the target is made bigger than them", ok: true, why: "The navigators' logic on another planet: know your error, and pick a target larger than it." },
+        { t: "Because a bigger landing zone lets the rover land faster and more gently", bug: "irrelevant", why: "Speed of landing has nothing to do with it." },
+        { t: "Because pinpoint landing is forbidden by international law", bug: "authority", why: "No such law; the limit is physics and uncertainty." },
+      ] },
+      {
+        id: "w9", type: "forge", stage: "forge", min: 3, title: "Expand a target of your own", body: "Pick something hard to hit with an uncertain path (a residency place, a research question, a patient you are worried about) and plan how to find it.",
+        slots: [
+          { key: "aim", label: "Aim at", options: [{ t: "a block: several places or outcomes that would all work", grade: "good", note: "The island group, not the single atoll.", say: "a block of good outcomes" }, { t: "one exact outcome, nothing else", grade: "weak", note: "One speck in the ocean: the error decides.", say: "one exact outcome" }] },
+          { key: "signs", label: "Signs that reach further", options: [{ t: "early signs that show you are close, before you arrive", grade: "good", note: "The terns of your problem.", say: "early signs of nearness" }, { t: "only the final result", grade: "bad", note: "Seeing the atoll from 16 km, after the error has done its work.", say: "the final result only" }] },
+          { key: "when", label: "Read them", options: [{ t: "when they carry direction, and write down what they say", grade: "good", note: "Birds give direction at dawn and dusk; know when your signs mean something.", say: "when they point somewhere" }, { t: "whenever you remember", grade: "weak", note: "A flock at midday says 'near', not 'where'.", say: "whenever" }] },
+          { key: "fix", label: "Correct", options: [{ t: "adjust course each time a sign appears", grade: "good", note: "Small corrections stop the error building up.", say: "small corrections as signs appear" }, { t: "hold the first course no matter what", grade: "bad", note: "The drift theory's canoe.", say: "the first course, unchanged" }] },
+        ],
+        template: "Aim at {aim}, watch {signs}, read them {when}, and **make {fix}**.",
+        critique: { stem: "A friend says aiming at a block of outcomes is lowering your standards. What is the best answer?", options: [{ t: "Aim at what you can hit, then add precision at the end", ok: true, why: "The navigators still reached one island; they just did not bet everything on the first aim." }, { t: "Standards do not matter when the ocean is large", bug: "moral", why: "They do; the question is how to meet them under uncertainty." }, { t: "They are right: a real expert always aims at one single exact point", bug: "authority", why: "Real experts in uncertain searches do the opposite." }] },
+      },
+    ],
+    challenge: { stem: "When you cannot make your aim more precise, you can…", options: [{ t: "make the target wider", ok: true }, { t: "aim harder", bug: "rigid" }, { t: "stop correcting your course", bug: "inversion" }] },
+    hooks: [
+      { id: "wayfinding.h1", gap: 1, q: { stem: "Terns and noddies make an island a bigger target because…", options: [{ t: "they fly out from it about twenty miles to fish", ok: true }, { t: "they always fly straight towards the nearest passing ship", bug: "surface" }, { t: "they only ever nest on very large islands with high mountains", bug: "irrelevant" }] } },
+      { id: "wayfinding.h2", gap: 7, q: { stem: "The 1973 drift simulation found the chance of drifting to Hawaiʻi was…", options: [{ t: "small enough to call nil", ok: true }, { t: "about one voyage in two", bug: "confirm" }, { t: "impossible to estimate at all", bug: "rigid" }] } },
+      { id: "wayfinding.h3", gap: 30, q: { stem: "The 1976 voyage of Hōkūleʻa is best described as…", options: [{ t: "the historical route they used", bug: "confirm" }, { t: "proof it was possible", ok: true }, { t: "evidence for drift", bug: "inversion" }] } },
+    ],
+    deeper: [
+      { title: "What a navigator reads", body: "The rising and setting points of stars on the horizon, used as a compass; the direction and shape of ocean swells, and how islands bend them; the colour of the sea and the sky; clouds that stand over land; and birds at dawn and dusk. None of it needs an instrument, all of it needs years of training." },
+      { title: "Two voyages, one idea", body: "Samarkand's astronomers made their instrument larger to read smaller angles; Pacific navigators made their target larger because their aim could not get sharper. Both started by knowing the size of their error." },
+      { title: "Open question", body: "How did the first voyagers find isolated islands such as Hawaiʻi, with no block of neighbours to aim at? Routes, timing and how many voyages were lost are still debated by archaeologists, linguists, geneticists and navigators." },
+    ],
+  });
+
+  sessions.push({
+    id: "maya", primitive: "represent", domain: "mathematics", region: "Mesoamerica (Mexico, Guatemala, Belize)", works: ["dresden-codex"], requires: ["zero"],
+    atoms: ["represent", "compress", "measure", "model"],
+    title: "Counting days for five thousand years",
+    hook: "Across the ocean from India, with no contact at all, another people wrote a sign for 'nothing' and used it to count days across thousands of years. Who, and why did they need it?",
+    minutes: 24,
+    why: "The Americas built their own mathematics, astronomy and writing, and most schoolbooks give them a paragraph. The Maya invented a place-value count with a zero independently of India, tracked Venus for centuries, and wrote books that were burned almost to the last page. It is the same representation you met in the zero session, invented a second time for a different purpose.",
+    capability: "Read a Maya Long Count date, explain why a positional count needs a zero wherever it is invented, see how the Venus table corrects a small error before it grows, and weigh what four surviving books can tell us.",
+    stakes: "A small rounding error that no one corrects becomes a large one, in a calendar, a dosing schedule or a budget. And an archive that lost most of its books teaches you to ask what the survivors cannot say.",
+    bridge: "The missing step: a count of days that runs for millennia needs places, and places need a mark for 'none here'. Any people that builds such a count meets the zero, whether or not they ever hear of India.",
+    connection: "The zero session followed one zero from India through Baghdad to Pisa. Here is a second, invented on the other side of the world; and, as in Timbuktu, what survives shapes what we know.",
+    vocab: {
+      longcount: { name: "the Long Count", h: "A running count of days from a starting point thousands of years back.", s: "عدّاد أيام شغّال من نقطة بداية من آلاف السنين، مكتوب في خانات زي أرقامنا.", t: "A Mesoamerican positional day count with places of 1, 20, 360, 7,200 and 144,000 days (bak'tun.k'atun.tun.winal.k'in), anchored to a base date in 3114 BCE in the usual correlation." },
+      shell: { name: "the shell sign", h: "The Maya mark for an empty place.", s: "علامة الصدفة: كانت عند المايا زي الصفر عندنا، تقول الخانة دي فاضية.", t: "A shell-shaped glyph (and head variants) used as a positional zero in Long Count and other counts." },
+      venus: { name: "the Venus cycle", h: "How long Venus takes to return to the same place in the sky as seen from Earth.", s: "دورة الزهرة: المدة اللي بترجع فيها لنفس مكانها في سما الصبح أو المغرب.", t: "The synodic period of Venus, about 583.92 days on average; the Dresden Codex uses 584 with corrections." },
+    },
+    provenance: [
+      { id: "longcount", claim: "The Mesoamerican Long Count writes a date as a count of days in five places worth 144,000, 7,200, 360, 20 and 1 days; the third place is 18 × 20 rather than 20 × 20. Its earliest known dates are from the first century BCE, on monuments at Chiapa de Corzo (36 BCE) and Tres Zapotes (32 BCE) in present-day Mexico.", source: "Standard accounts of the Long Count calendar (e.g. Coe, Breaking the Maya Code; reference works on Maya numerals); checked by web search", year: "36–32 BCE", kind: "scholarship", license: "fact", grade: "A", contested: "Which monument shows the oldest positional zero is argued: the Chiapa de Corzo date is fragmentary, and the Long Count probably began with neighbours of the Maya rather than the Maya themselves." },
+      { id: "zeroamericas", claim: "The Maya, with the calendar tradition they inherited, used a positional zero written as a shell sign, invented independently of the Indian zero.", source: "Standard histories of numerals; checked by web search", year: "1st c. BCE–", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "venus", claim: "The Venus table of the Dresden Codex uses a Venus cycle of 584 days (the true average is about 583.92) and runs five cycles, 2,920 days, which equals eight 365-day years; the table includes corrections that keep it in step with Venus.", source: "Studies of the Dresden Codex Venus table (e.g. Lounsbury; Bricker & Bricker, Astronomy in the Maya Codices, 2011); checked by web search", year: "usually dated 11th–13th c.", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "landa", claim: "On 12 July 1562, at an auto-da-fé at Maní in Yucatán, the Franciscan Diego de Landa burned Maya books; by his own account he destroyed 27 hieroglyphic rolls and about 5,000 images.", source: "Landa's own report, as cited in histories of the Maní auto-da-fé; checked by web search", year: "1562", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "codices", claim: "Four Maya books survive: the Dresden, Madrid and Paris codices, and the Grolier Codex (Maya Codex of Mexico), whose authenticity was confirmed by a study published in 2016.", source: "Coe M. et al., 'The fourth Maya codex' (2016), and Brown University press release (2016); checked by web search", year: "2016", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "decipher", claim: "In 1952 Yuri Knorozov argued that many Maya signs stood for syllables; in 1960 Tatiana Proskouriakoff showed that the dates on the monuments of Piedras Negras marked the births, accessions and deaths of rulers, a sequence of seven rulers over about two centuries.", source: "Knorozov Y., 'Ancient writing of Central America', Sovetskaya Etnografiya (1952); Proskouriakoff T., American Antiquity 25:454 (1960); checked by web search", year: "1952 / 1960", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "lccalc", claim: "The Long Count converter computes the five places live; its examples are original teaching material.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "m1", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["longcount", "zeroamericas"], atoms: ["represent"], stem: "The Maya wrote dates as a count of days since a starting point thousands of years earlier, in five places. What must such a count have that Roman numerals lacked?", alt: "Think of a count that has passed exactly one k'atun and no winals yet. What goes in the empty places?", options: [
+        { t: "A sign that says a place is empty", ok: true, why: "Places need a mark for 'none here', or the other digits slide into the wrong columns: the zero, invented again." },
+        { t: "Bigger symbols for bigger numbers, like M for a thousand", bug: "surface", why: "That is the Roman solution, and it breaks down for counts in the millions." },
+        { t: "Ten digits, the same as ours", bug: "surface", why: "The Maya count used twenty as its main step, with their own digits; the base is not the point." },
+        { t: "Nothing special, since days can simply be tallied", bug: "linear", why: "A million tally marks cannot be carved on a stela." },
+      ] },
+      { id: "m2", type: "scene", stage: "reveal", min: 2.5, src: ["longcount", "zeroamericas"], terms: ["longcount", "shell"], title: "The same idea, across an ocean", body: "The [[longcount|Long Count]] writes a date as a number of days in five places: bak'tun (144,000 days), k'atun (7,200), tun (360), winal (20) and k'in (1). Each place is worth twenty of the next, except the tun, worth 18 winals, so that one tun of 360 days stays close to a year. Monuments of the first century BCE, in what is now southern Mexico, already carry such dates.\n\nA count like this is impossible without a way to write an empty place, and the Maya had one: [[shell|the shell sign]]. It is the same representation you met in the zero session, invented with no contact with India. Two peoples who needed to count far met the same idea.", reps: [{ kind: "analogy", label: "An odometer for days", body: "A car's odometer rolls each wheel over into the next; the Long Count does the same, except that one wheel rolls at 18 instead of 20." }, { kind: "counterexample", label: "Where it is not like ours", body: "It is not a clean base twenty: the tun breaks the pattern for the calendar's sake. A system can be positional without being pure." }] },
+      { id: "m3", type: "model", stage: "model", min: 3, model: "longcount", src: ["lccalc"], terms: ["longcount", "shell"], title: "Write days the Maya way", body: "Choose a number of days and see it in the five places, with the shell wherever a place is empty.", ask: "**Find** a count with an empty place in the middle, and the number of days one bak'tun holds." },
+      { id: "m4", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["longcount"], atoms: ["represent", "model"], stem: "In a pure base-twenty count the third place would be worth 400. In the Long Count it is worth 360. Why the change?", options: [
+        { t: "So one unit of that place stays close to a year", ok: true, why: "A tun of 360 days is near the 365-day year. The representation bends to fit what it is for, as clocks count sixty seconds, not a hundred." },
+        { t: "Because the Maya had not discovered the number 400", bug: "surface", why: "Four hundred appears in other Maya counts; the change is a choice." },
+        { t: "Because a scribe made a mistake that everyone then copied for centuries", bug: "authority", why: "It is used consistently across centuries and cities; it is a design." },
+        { t: "It makes no difference which value the third place has", bug: "irrelevant", why: "It changes every date; the value was chosen to track the year." },
+      ] },
+      { id: "m5", type: "scene", stage: "primary", min: 2.5, src: ["venus", "codices"], terms: ["venus"], title: "Venus in a book of bark", body: "One of the four Maya books that survive, the Dresden Codex, painted on bark paper, contains a table for the planet Venus. It treats the [[venus|Venus cycle]] as 584 days, and runs five cycles, 2,920 days, which is exactly eight 365-day years. The real average cycle is about 583.92 days, so the table slips a little each round; it carries corrections that pull it back into step, which is why it could be used across centuries.\n\nA round number that is almost right, corrected before the error grows: the same move the Samarkand astronomers made with their instruments, and the one every long-running schedule needs." },
+      {
+        id: "m6", type: "contrast", stage: "contrast", min: 2.5, src: ["landa", "codices"], atoms: ["judgment", "info"], title: "Four books, and a fire",
+        left: { title: "What survives", body: "The Dresden, Madrid and Paris codices, and the Grolier Codex, confirmed genuine in 2016: almanacs, astronomy and ritual." },
+        right: { title: "What burned", body: "At Maní in 1562 the friar Diego de Landa burned Maya books; by his own account, 27 hieroglyphic rolls. Others were lost to damp, war and time." },
+        q: { stem: "What can the four survivors tell us about the books the Maya wrote?", options: [
+          { t: "What survived, not what kinds of books were lost", ok: true, why: "Archive bias again, as in Timbuktu: four books may not be typical of a whole literature. Much of what we know comes from stone inscriptions instead." },
+          { t: "Everything, since four books are enough to judge a whole literature", bug: "selection", why: "Four chance survivors are the survivors, not a sample." },
+          { t: "That the Maya wrote only about astronomy and ritual", bug: "selection", why: "That is what survived in books; the monuments record history, as the decipherment showed." },
+          { t: "Nothing, because the survivors might be forgeries", bug: "rigid", why: "Their authenticity has been tested; the last doubts, about the Grolier, were settled in 2016." },
+        ] },
+      },
+      { id: "m7", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["venus"], atoms: ["measure", "model"], stem: "A clinic books a monthly injection as 'every four weeks'. Over a year, what happens, and what is the Venus-table fix?", options: [
+        { t: "Thirteen doses a year, not twelve; schedule by the real month", ok: true, why: "Four weeks is 28 days, a month about 30.4: a small rounding error that adds a dose a year. The Dresden table's answer is to correct before the drift grows." },
+        { t: "Nothing: four weeks and one month are exactly the same length", bug: "confirm", why: "They differ by two or three days, which is a whole dose in a year." },
+        { t: "The error cancels itself out over the year", bug: "inversion", why: "It always pushes the same way, so it adds up." },
+        { t: "Book every dose at random to spread the error", bug: "irrelevant", why: "The error is systematic; randomness does not remove it." },
+      ] },
+      { id: "m8", type: "q", kind: "far", stage: "far", min: 1.5, src: ["decipher"], atoms: ["model", "judgment"], stem: "For decades scholars held that Maya inscriptions recorded only calendars and gods. In 1960 Tatiana Proskouriakoff looked at the pattern of dates on the monuments of one city. What did she see?", options: [
+        { t: "Spans that fit human lives: rulers' births, accessions and deaths", ok: true, why: "Gaps of the right size told her the dates were biographies: seven rulers over about two centuries. A pattern in the numbers changed what the texts were understood to be." },
+        { t: "Dates that exactly matched eclipses, which proved they were astronomy", bug: "confirm", why: "That was the old reading; her pattern pointed the other way." },
+        { t: "Dates that were random, which proved the script was decoration", bug: "rigid", why: "The dates were regular, and meaningful." },
+        { t: "A Spanish translation that someone had carved next to each one", bug: "surface", why: "No such bilingual existed; she read the pattern itself." },
+      ] },
+      {
+        id: "m9", type: "forge", stage: "forge", min: 3, title: "A count that stays true", body: "Design a way to keep a long-running count honest: your revision schedule to the exam, a medication calendar, a savings plan.",
+        slots: [
+          { key: "unit", label: "Unit", options: [{ t: "the true unit (days), converted only for display", grade: "good", note: "The Long Count counted days; the calendar was built on top.", say: "the true unit, days" }, { t: "a round unit that is almost right", grade: "weak", note: "Four weeks is not a month.", say: "an almost-right unit" }] },
+          { key: "places", label: "Places", options: [{ t: "fixed places with an explicit zero when nothing happened", grade: "good", note: "An empty week written as 0 is information; a gap is not.", say: "fixed places with zeros" }, { t: "only write down when something happens", grade: "bad", note: "Gaps slide the record together, like 408 read as 48.", say: "entries only when things happen" }] },
+          { key: "correct", label: "Correction", options: [{ t: "a scheduled check against the real calendar", grade: "good", note: "The Venus table's corrections.", say: "a scheduled correction" }, { t: "fix it when it is obviously wrong", grade: "bad", note: "By then the drift is a dose or a week.", say: "fixing it when obvious" }] },
+          { key: "copy", label: "Keep", options: [{ t: "more than one copy, in different places", grade: "good", note: "Four books survived Maní; none survives with a single copy lost.", say: "copies in different places" }, { t: "one master copy", grade: "weak", note: "One fire.", say: "one master copy" }] },
+        ],
+        template: "Count in {unit}, with {places}, **{correct}**, and {copy}.",
+        critique: { stem: "A friend's revision plan counts 'weeks until the exam' but skips weeks they did nothing. What goes wrong?", options: [{ t: "Empty weeks vanish, so the plan shows more time than is left", ok: true, why: "An empty place not written as zero slides the count, exactly the problem the shell sign solved." }, { t: "Nothing, because weeks with no study at all simply do not count towards anything", bug: "confirm", why: "They count on the calendar; the exam does not move." }, { t: "The plan becomes too detailed to follow", bug: "irrelevant", why: "Too little detail is the problem, not too much." }] },
+      },
+    ],
+    challenge: { stem: "Any positional count that runs long enough needs…", options: [{ t: "a sign for an empty place", ok: true }, { t: "a base of ten", bug: "surface" }, { t: "a larger symbol for every larger number", bug: "surface" }] },
+    hooks: [
+      { id: "maya.h1", gap: 1, q: { stem: "The Maya sign for an empty place was…", options: [{ t: "a shell", ok: true }, { t: "a dot borrowed from India", bug: "surface" }, { t: "an empty circle, borrowed from the Spanish", bug: "surface" }] } },
+      { id: "maya.h2", gap: 7, q: { stem: "The Long Count's third place (the tun) is worth…", options: [{ t: "360 days, close to a year", ok: true }, { t: "400 days, which is twenty times twenty", bug: "linear" }, { t: "365 days exactly", bug: "surface" }] } },
+      { id: "maya.h3", gap: 30, poss: { "dresden-codex": "context" }, q: { stem: "The Dresden Codex's Venus table stays usable for centuries because it…", options: [{ t: "corrects its 584-day cycle before the error grows", ok: true }, { t: "uses the exact value of 583.92 days throughout", bug: "surface" }, { t: "was recopied by Spanish friars who fixed it", bug: "authority" }] } },
+    ],
+    deeper: [
+      { title: "How the script was read", body: "In 1952 Yuri Knorozov argued that many Maya signs stand for syllables, not whole ideas; the script turned out to mix word signs and syllable signs. In 1960 Tatiana Proskouriakoff showed that the monuments of Piedras Negras record the lives of rulers. Together these opened Maya history to reading, and most inscriptions can now be read." },
+      { title: "Three zeros", body: "Positional zero was invented in India (as the zero session showed), in Mesoamerica, and, as a placeholder, in late Babylonian astronomy. Each time the reason was the same: a count in places needs a way to say 'none here'." },
+      { title: "Open question", body: "What did the burned books contain? Histories, poetry, medicine? The surviving four are almanacs and astronomy; the stone inscriptions are history. Whether whole genres were lost cannot be known from what survived, and that is the point of asking." },
     ],
   });
 

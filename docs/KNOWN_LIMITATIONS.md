@@ -1,11 +1,18 @@
-# Known Limitations (v18.2 · MCQ exam + Renaissance)
+# Known Limitations (v18.3 · MCQ exam + Renaissance)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v18.3 Renaissance: no token regions (Samarkand, Pacific wayfinding, the Maya)
+
+- **Southeast Asia has no session of its own yet.** It is taught in several sessions (the Khmer zero, Angkor's vaults, the Hanoi rat bounty). The stricter requirement `globaldepth` is open, so no completion is declared for v18.3.
+- **One session per new region.** Central Asia, Oceania and the Americas each gain one session. The floor test (V12) counts mentions in teaching text; that is a proxy for depth, not a measure of it.
+- **Both new models are illustrative.** The Samarkand scale model gives the finest angle the marks allow, not the precision actually achieved. The landfall model lets heading errors build up unchecked, which real navigators prevented.
+- **The region patterns were widened** (Maya, Mexico and Guatemala for the Americas; Polynesia, Hawaiʻi and Tahiti for Oceania) so that the tests see the new sessions. These are real place names, not new keywords invented to pass.
 
 ## v18.2 Renaissance: zero, Timbuktu, and language as a portal
 
 - **One session per new area.** Place value and zero, the Timbuktu manuscripts, and language as a civilisation portal each have a single session. The language session teaches forms of address in Russian and Egyptian Arabic; it is a portal's first door, not a language course.
-- **Two regions are thin.** Central Asia is taught only in the wisdom session and Oceania only in one item of the film session. This is open as `globalfloor`, so no completion is declared for v18.2.
+- **Three regions were thin in v18.2**: Central Asia, Oceania and the Americas. The requirement was opened as `globalfloor` and closed in v18.3.
 - **The address model is a simplification.** Real usage varies with region, age, class and tone; the model says so in its reading.
 - **Contested points are taught as contested.** The Bakhshali manuscript's dates, the story that the Church feared zero (a myth), the Florentine guild's motive in 1299, the size of the Russian blues effect, and Ahmad Baba's library remark (from later retellings).
 - **The Timbuktu survival model assumes copies fail independently**, and says where that fails (a city-wide fire, copies of one faulty original).

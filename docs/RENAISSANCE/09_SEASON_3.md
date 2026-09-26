@@ -4,7 +4,7 @@ Code: `source/public/renaissance-s3a.js` (Karamazov, *Ozymandias*), `renaissance
 pattern, the cadence), `renaissance-s3c.js` (the medicine relay, the salon, the cut, the arch). Tests:
 `tests/renaissance_v3_test.js` (V1–V11, M1, Q1, S2–S3), `tests/renaissance_test.js` R20–R22, R32, R34–R35.
 
-## The sixteen sessions
+## The nineteen sessions
 
 | id | Session | Organ | Setting | Min | Work(s) | Live model | Sources |
 |---|---|---|---|---|---|---|---|
@@ -17,6 +17,9 @@ pattern, the cadence), `renaissance-s3c.js` (the medicine relay, the salon, the 
 | willow | Where does the mass go? | science | Flanders and Australia | 26 | van Helmont's willow | following the atoms | 7 |
 | pattern | A star from a hidden grid | art | Egypt, Iran | 25 | Ibn Tulun, Darb-i Imam | Hankin's method, drawn live | 6 |
 | cadence | The question and the answer | music | Germany, Austria, Egypt | 24 | *Ode to Joy*; maqam Rast | choose the last chord (heard) | 7 |
+| samarkand | A scale the size of a hill (v18.3) | science | Samarkand, Central Asia | 24 | Zij-i Sultani | the scale's radius against the eye | 8 |
+| wayfinding | Finding an island with no instruments (v18.3) | science | Micronesia, Hawaiʻi, Tahiti | 24 | Hōkūleʻa, 1976 | the chance of landfall | 7 |
+| maya | Counting days for five thousand years (v18.3) | mathematics | Mesoamerica | 24 | the Dresden Codex | the Long Count converter | 7 |
 | wisdom | Why did Baghdad translate the Greeks? | history | Iraq, Iran, Central Asia, Spain | 26 | the translation movement | weighing explanations | 8 |
 | timbuktu | What survives: the libraries of Timbuktu (v18.2) | history | Mali and the Sahara | 24 | Timbuktu's manuscripts | one store against scattered copies | 5 |
 | salon | The salon | conversation | Cairo, anywhere | 25 | — | one idea, four listeners | 6 |
@@ -98,6 +101,15 @@ Each major experience was read through six lenses. Findings, and what was done:
   by web search; the four English titles of *Nadryvy* are given with their translators; the Russian blues effect is
   given with its limits and the later study that questions its size; the address model is labelled a simplification;
   a counterexample was rewritten so it no longer implied an unverified line of Fyodor Pavlovich's.
+- Samarkand (v18.3): the Fakhri sextant's radius is given as about 36 m with the 40 m variant noted; the year of
+  365 d 6 h 10 min 8 s is compared with the sidereal year (about 58 s long); the scale model says that the sun's blurred
+  image and the builders' care, not the marks, set the real limit; Hyde's 1665 Oxford edition was checked.
+- Wayfinding (v18.3): dates of the 1976 voyage and the size of the Papeʻete crowd from the Polynesian Voyaging
+  Society; bird ranges from Te Ara; the landfall model states that it lets errors build up unchecked, which real
+  navigators prevented; the voyage is taught as an existence proof, not as the historical route.
+- Maya (v18.3): the oldest Long Count dates are given with the dispute over which shows the oldest zero, and with the
+  likelihood that the count began with the Maya's neighbours; Landa's figure of 27 books is his own report; the
+  Grolier Codex is counted as genuine after the 2016 study; the Venus table's 584 days are compared with 583.92.
 
 ## What season 3 does not do
 

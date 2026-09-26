@@ -106,6 +106,17 @@
     N("tv-distinction", "idea", "pronouns of power and solidarity (T and V)", "1960", "USA", "Brown and Gilman"),
     N("relativity", "idea", "language and thought (linguistic relativity)", "20th c.–", "—", "the strong claim unsupported, the weak one tested"),
     N("russian-blues", "work", "Winawer and colleagues, “Russian blues”", "2007", "USA", "language and colour discrimination"),
+    N("zij-sultani", "work", "Ulugh Beg's Zij-i Sultani", "c. 1437", "Samarkand", "a star catalogue of 1,018 stars; session samarkand"),
+    N("ulugh-beg", "person", "Ulugh Beg", "1394–1449", "Samarkand"),
+    N("samarkand-obs", "building", "Ulugh Beg's observatory", "1428–1449", "Samarkand, Uzbekistan", "found again in 1908"),
+    N("hokulea", "event", "Hōkūleʻa's voyage from Hawaiʻi to Tahiti", "1976", "Hawaiʻi and Tahiti", "navigated without instruments by Mau Piailug; session wayfinding"),
+    N("piailug", "person", "Mau Piailug", "1932–2010", "Satawal, Micronesia"),
+    N("levison-sim", "work", "Levison, Ward and Webb, The Settlement of Polynesia", "1973", "—", "120,000 simulated drift voyages"),
+    N("expand-target", "idea", "expanding the target", "—", "Oceania", "aim at blocks of islands; birds widen each island"),
+    N("dresden-codex", "work", "The Dresden Codex", "11th–13th c. (copy)", "Yucatán", "the Venus table; session maya"),
+    N("long-count", "idea", "the Long Count and the Maya zero", "1st c. BCE–", "Mesoamerica", "a positional day count with a shell sign for zero"),
+    N("proskouriakoff", "person", "Tatiana Proskouriakoff", "1909–1985", "USA"),
+    N("knorozov", "person", "Yuri Knorozov", "1922–1999", "Russia"),
   ]);
   const E = (a, rel, b) => ({ a, rel, b });
   const edges = [
@@ -127,6 +138,9 @@
     E("brahmagupta", "wrote", "brahmasphuta"), E("brahmasphuta", "defines", "place-value"), E("k127", "uses", "place-value"), E("khwarizmi", "transmitted", "place-value"), E("fibonacci", "wrote", "liber-abaci"), E("liber-abaci", "brought to Europe", "place-value"), E("khwarizmi", "part of", "translation-movement"),
     E("leo-africanus", "wrote", "description-africa"), E("description-africa", "describes", "timbuktu"), E("ahmad-baba", "scholar of", "timbuktu"), E("manuscript-rescue", "saved", "timbuktu"), E("timbuktu", "teaches", "archive-bias"),
     E("karamazov", "develops", "nadryv"), E("tv-distinction", "explains address in", "karamazov"), E("russian-blues", "tests", "relativity"),
+    E("ulugh-beg", "built", "samarkand-obs"), E("samarkand-obs", "produced", "zij-sultani"), E("translation-movement", "tradition continued in", "zij-sultani"),
+    E("piailug", "navigated", "hokulea"), E("hokulea", "demonstrates", "expand-target"), E("levison-sim", "tests", "expand-target"), E("etak", "partner of", "expand-target"),
+    E("dresden-codex", "uses", "long-count"), E("long-count", "parallel of", "place-value"), E("knorozov", "read signs in", "dresden-codex"), E("proskouriakoff", "read the history in", "long-count"),
   ];
   window.RENAISSANCE_CIV = { nodes, edges };
 })();

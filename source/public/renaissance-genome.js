@@ -74,9 +74,9 @@
   // keeps rival models side by side instead of forcing one grand theory. A layer with no session is a named gap.
   const world = {
     layers: {
-      matter: ["willow", "arch"],
+      matter: ["willow", "arch", "samarkand"],
       energy: ["willow"],
-      information: ["select", "base", "question", "km3", "zero", "timbuktu"],
+      information: ["select", "base", "question", "km3", "zero", "timbuktu", "samarkand", "wayfinding", "maya"],
       life: ["willow", "falsify", "snow"],
       evolution: [],
       mind: ["commit", "loop", "km1", "cadence", "host", "names"],
@@ -84,11 +84,11 @@
       society: ["proxy", "salon", "host", "km2", "names"],
       economics: ["proxy", "bottleneck", "question"],
       institutions: ["proxy", "km3", "wisdom", "timbuktu"],
-      technology: ["double", "cut", "arch", "pattern", "zero"],
-      history: ["wisdom", "falsify", "snow", "euler", "zero", "timbuktu"],
-      culture: ["km1", "ozy", "cadence", "pattern", "salon", "cut", "timbuktu", "names"],
+      technology: ["double", "cut", "arch", "pattern", "zero", "samarkand", "wayfinding"],
+      history: ["wisdom", "falsify", "snow", "euler", "zero", "timbuktu", "samarkand", "wayfinding", "maya"],
+      culture: ["km1", "ozy", "cadence", "pattern", "salon", "cut", "timbuktu", "names", "wayfinding", "maya"],
       art: ["pattern", "cadence", "ozy", "cut", "taste"],
-      meaning: ["km2", "ozy", "km1", "names"],
+      meaning: ["km2", "ozy", "km1", "names", "maya"],
       future: ["double", "commit"],
     },
     // sessions that keep two or more live models of the same thing (anti-monoculture)
@@ -102,6 +102,8 @@
       zero: "zero as a placeholder (a mark for an empty column) and zero as a number with its own arithmetic",
       timbuktu: "one well-kept store against many scattered copies; the archive's picture of the past against what existed",
       names: "the strong claim that language decides what you can see, against the weak claim that its obligatory choices speed some judgements",
+      maya: "zero as one people's invention against zero as an idea any long positional count arrives at",
+      wayfinding: "accidental drift against deliberate navigation, weighed on a simulation and a voyage",
       cadence: "‘in tune’ as physics against ‘in tune’ as a learned tradition (the 1932 Cairo debate)",
     },
   };

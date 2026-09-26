@@ -66,6 +66,14 @@ Checked through the Vercel connector (read only) after `e177767` was pushed at a
   creating a production build by hand is not the same action as the push the owner set up. The remedy is the
   owner's: check the Git connection for `intellectuality-cns` in Vercel, or redeploy the branch head.
 
+### Correction, added later on 26 Sep 2026
+
+The conclusion above was wrong. At 21:32:10 UTC, 24 seconds after the last check, Vercel created
+`dpl_A575GUHgdZ5MPDJXvbuwd9VsbZNR` from `fd60a0a` (this receipt's commit), **READY**, target production. The Git
+integration had not stopped: it was slow. The v18.1 commit `23f58f0` and the v18.2 commit `e177767` still have no
+deployment of their own in the listing; they may have been superseded by the next push. Production therefore serves
+v18.2 from `fd60a0a`. The pages themselves still cannot be fetched from here.
+
 ## Files
 
 - `full_regression.log`: the complete output, in run order, then the coverage-oracle suite and the ledger check.
