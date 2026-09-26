@@ -329,7 +329,7 @@
 
   /* ─── 22 · The salon ─── */
   sessions.push({
-    id: "salon", primitive: "salon", domain: "conversation", region: "Cairo, anywhere", works: [],
+    id: "salon", primitive: "salon", domain: "conversation", region: "Cairo, anywhere", works: [], talk: true,
     atoms: ["judgment", "question", "compress", "taste"],
     title: "The salon",
     hook: "At a dinner the talk jumps from a novel to interest rates to opera. You know one of the three. What do you say in each?",

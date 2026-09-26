@@ -188,6 +188,7 @@
     if (p && p.wait) return { open: false, why: "deepwait", msg: p.wait };
     if (!p) return { open: false, why: "seasondone", msg: "Every season written so far is complete. The next one is being built; nothing is due." };
     if (p.deep && !p.short) dose = DOSE.deep;
+    if (p.split) reasons.push("trial L4: this session is split over two days");
     return { open: true, dose, reasons, plan: p };
   }
 
@@ -228,13 +229,16 @@
       probes.forEach((pr) => steps.push(pr));
     }
     let partial = false;
+    // L4: a fresh ordinary session may be split over two days (arm 1); the second day resumes where the first stopped
+    const l4 = s && !short && !deep && !rec.at && !rec.start ? armOf(st, "L4", s.id) : null;
+    const split = l4 === 1;
     if (s) {
       const order = seq(s, st);
       const from = rec.at ? Math.max(0, order.findIndex((x) => x.id === rec.at)) : 0;
-      let budget = short ? DOSE.short - steps.reduce((a, x) => a + (x.min || 1), 0) - 1 : Infinity;
+      let budget = short ? DOSE.short - steps.reduce((a, x) => a + (x.min || 1), 0) - 1 : split ? Math.ceil(order.reduce((a, x) => a + (x.min || 1), 0) * 0.55) : Infinity;
       for (const x of order.slice(from)) {
         if (short && x.opt) continue;
-        if (short && budget < (x.min || 1) && steps.some((y) => y.stage !== "warm" && y.stage !== "probe")) {
+        if ((short || split) && budget < (x.min || 1) && steps.some((y) => y.stage !== "warm" && y.stage !== "probe")) {
           partial = true;
           break;
         }
@@ -242,10 +246,18 @@
         budget -= x.min || 1;
       }
     }
+    // L9: on arm 1 the returning ideas come after the new session instead of before it (never on a short day)
+    const hookSteps = steps.filter((x) => x.kind === "hook");
+    const l9 = s && hookSteps.length && !short ? armOf(st, "L9", s.id) : null;
+    if (l9 === 1) {
+      const rest = steps.filter((x) => x.kind !== "hook");
+      steps.length = 0;
+      steps.push(...rest, ...hookSteps);
+    }
     steps.push({ id: "close", type: "close", stage: "close", min: 1, partial });
     const start = 0;
     const minutes = Math.max(5, Math.round(steps.slice(start).reduce((a, x) => a + (x.min || 1), 0)));
-    return { sid: s ? s.id : null, steps, minutes, short, start, partial, deep, why: pick ? pick.why : "", mode: pick ? pick.mode : "review", ranked: pick ? pick.ranked || [] : [], arm: pick ? pick.arm : null };
+    return { sid: s ? s.id : null, steps, minutes, short, start, partial, deep, split, l4, l9, l11: pick && pick.mode === "compiled" ? pick.l11 : null, why: pick ? pick.why : "", mode: pick ? pick.mode : "review", ranked: pick ? pick.ranked || [] : [], arm: pick ? pick.arm : null };
   }
 
   /* ───────────── the session compiler ─────────────
@@ -287,15 +299,19 @@
     const cands = avail.filter((x) => !x.deep || deepOK);
     if (!cands.length) return avail.length ? { s: null, mode: "wait", wait: "The next session is a long one (a masterpiece or a boss world). It waits for the weekend, when there is time for it." } : null;
     const control = armOf(st, "L10", today) === 0;
-    const ranked = rank(st, cands, today);
+    const l11 = armOf(st, "L11", today);
+    const ranked = rank(st, cands, today, l11);
     if (control) {
       const s = cands[0];
       return { s, mode: "control", arm: 0, ranked, why: "Today keeps the written order on purpose (one compiled day in five), so the compiler's choices keep being checked against it." };
     }
     const top = ranked[0];
-    return { s: top.s, mode: "compiled", arm: 1, ranked, why: "Compiled for you: " + top.reasons.join("; ") + "." };
+    return { s: top.s, mode: "compiled", arm: 1, l11, ranked, why: "Compiled for you: " + top.reasons.join("; ") + "." };
   }
-  function rank(st, cands, today) {
+  // L11 trial: arm 1 weighs rotation across fields above capability gaps
+  const W11 = Object.assign({}, W, { gap: 1.5, rotate: 3 });
+  function rank(st, cands, today, l11) {
+    const Wt = l11 === 1 ? W11 : W;
     const A = atomStats(st),
       all = allSessions(),
       done = (id) => !!(st.sessions[id] && st.sessions[id].done);
@@ -324,7 +340,7 @@
       const leverage = all.filter((x) => (x.requires || []).includes(s.id) && !done(x.id)).length;
       const curious = Object.entries(st.deeper || {}).filter(([sid]) => domainOf(sessionById(sid) || {}) === domainOf(s)).reduce((a, [, n]) => a + n, 0);
       const parts = { gap: gap, errors: Math.min(1, errors / 6), culture, rotate, unknown, leverage: Math.min(1, leverage / 2), curious: Math.min(1, curious / 5) };
-      const score = Object.entries(parts).reduce((a, [k, v]) => a + W[k] * v, 0) - i * 0.001;
+      const score = Object.entries(parts).reduce((a, [k, v]) => a + Wt[k] * v, 0) - i * 0.001;
       const reasons = [];
       if (weak.length) reasons.push("it trains " + weak.slice(0, 2).map((k) => ATOMS[k] || k).join(" and ") + ", which your record has not shown yet on later, unaided questions");
       if (errors) reasons.push("it works on a mistake you have been making");
@@ -348,7 +364,7 @@
     if (!g.open) return g;
     const st = load(),
       p = g.plan;
-    P = { sid: p.sid, s: sessionById(p.sid), steps: p.steps, i: p.start, dose: g.dose, reasons: g.reasons, minutes: p.minutes, short: p.short, partial: p.partial, t0: Date.now(), acc: 0, qs: {}, rep: {}, shownRep: {}, gov: {}, sheet: null, used: {}, why: p.why, mode: p.mode, ranked: p.ranked, seen: {} };
+    P = { sid: p.sid, s: sessionById(p.sid), steps: p.steps, i: p.start, dose: g.dose, reasons: g.reasons, minutes: p.minutes, short: p.short, partial: p.partial, t0: Date.now(), acc: 0, qs: {}, rep: {}, shownRep: {}, gov: {}, sheet: null, used: {}, why: p.why, mode: p.mode, ranked: p.ranked, seen: {}, l9: p.l9 };
     const today = dayKey(at || new Date());
     if (p.sid) {
       const fresh0 = !st.sessions[p.sid];
@@ -357,6 +373,10 @@
       if (fresh0) {
         rec.mode = p.mode;
         if (p.arm != null) rec.l10 = p.arm;
+        if (p.l4 != null) rec.l4 = p.l4;
+        if (p.l11 != null) rec.l11 = p.l11;
+        const ses = sessionById(p.sid);
+        if (ses && ses.steps.some((x) => x.type === "passage")) rec.l8 = armOf(st, "L8", p.sid);
         st.picks.push({ t: Date.now(), day: today, sid: p.sid, mode: p.mode, arm: p.arm, top: (p.ranked || []).slice(0, 3).map((r) => r.s.id + ":" + r.score) });
         if (st.picks.length > 300) st.picks.splice(0, st.picks.length - 300);
       }
@@ -495,11 +515,14 @@
   function passageView(x) {
     P.seen[x.id] = P.seen[x.id] || Date.now();
     const qs = (x.quotes || []).map((id) => [id, quoteOf(id)]).filter(([, q]) => q);
+    // L8: on arm 1 the passage comes with its context and meaning beside it; on arm 0 they wait behind SHOW SOURCE
+    const l8 = P.sid ? (load().sessions[P.sid] || {}).l8 : null;
+    const ctx = (q) => (l8 === 1 && (q.context || q.meaning) ? '<div class="rnQctx">' + (q.context ? md("**Context:** " + q.context) : "") + (q.meaning ? md("**What it means:** " + q.meaning) : "") + "</div>" : "");
     return (
       '<div class="rnKind">' + E(x.label || "PRIMARY TEXT") + "</div>" +
       (x.title ? "<h2>" + E(x.title) + "</h2>" : "") +
       md(x.body) +
-      qs.map(([id, q]) => '<figure class="rnPassage" data-q="' + E(id) + '"><blockquote' + (q.verse ? ' class="verse"' : "") + ">" + (q.verse ? q.text.split("\n").map((l) => '<span class="rnLine">' + E(l) + "</span>").join("") : md(q.text)) + "</blockquote><figcaption>" + E(capOf(q)) + '</figcaption><button type="button" class="rnSrcBtn" data-rn="source" data-q="' + E(id) + '">SHOW SOURCE</button></figure>').join("") +
+      qs.map(([id, q]) => '<figure class="rnPassage" data-q="' + E(id) + '"><blockquote' + (q.verse ? ' class="verse"' : "") + ">" + (q.verse ? q.text.split("\n").map((l) => '<span class="rnLine">' + E(l) + "</span>").join("") : md(q.text)) + "</blockquote><figcaption>" + E(capOf(q)) + '</figcaption><button type="button" class="rnSrcBtn" data-rn="source" data-q="' + E(id) + '">SHOW SOURCE</button></figure>' + ctx(q)).join("") +
       (x.after ? md(x.after) : "") +
       listenView(x) +
       terms(x)
@@ -589,6 +612,11 @@
     if (step && step.kind !== "hook") h += visual(q.svg);
     if (q.panels) h += '<div class="rnPair">' + q.panels.map((pn) => '<div class="rnSide"><h3>' + E(pn.title) + "</h3>" + visual(pn.svg) + md(pn.body || "") + "</div>").join("") + "</div>";
     if (s.hint && q.alt) h += '<div class="rnRep" data-kind="alt"><div class="rnRepTag">Another way to see the question</div>' + md(q.alt) + "</div>";
+    // L7: on arm 1 a returning idea is recalled before its options are shown
+    if (step && step.kind === "hook") {
+      if (s.l7 == null) s.l7 = armOf(load(), "L7", step.hook + "#" + ((load().hooks[step.hook] || {}).n || 0));
+      if (s.l7 === 1 && !s.done && !s.revealed) return h + md("Bring the answer to mind first; the options appear when you have one.") + '<button type="button" class="rnBtn" data-rn="reveal">I HAVE AN ANSWER IN MIND</button>';
+    }
     // the challenge id repeats across sessions; salt it with the session so its right answer moves too
     h += '<div class="rnOpts">' + perm(id === "challenge" && P && P.sid ? P.sid + ":challenge" : id, q.options.length)
       .map((k, pos) => {
@@ -677,22 +705,39 @@
     else {
       h += '<div class="rnArtifact"><div class="rnRepTag">Your design</div>' + md(artifact(x, s)) + "</div>";
       if (x.critique) h += '<div class="rnCrit">' + qView(Object.assign({ kind: "check" }, x.critique), x.id + ":c", null) + "</div>";
+      h += forecastView(x);
     }
     return h;
+  }
+  // a real prediction, scored later (§97): optional, never blocks the session
+  function forecastView(x) {
+    const f = (load().forecasts || {})[P.sid || x.id];
+    if (f) return '<div class="rnForecast">' + md("**Your forecast:** " + f.p + "% that you will try it before you next open this app. It is checked at the start of your next session.") + "</div>";
+    return '<div class="rnForecast"><div class="rnKind">FORECAST</div>' + md("How likely is it that you will try this in real life before you next open this app? Optional; it is scored against what you report next time.") + '<div class="rnOpts rnRow">' + [10, 30, 50, 70, 90].map((p) => '<button type="button" class="rnOpt" data-rn="forecast" data-p="' + p + '"><span>' + p + "%</span></button>").join("") + "</div></div>";
   }
   const artifact = (x, s) => x.template.replace(/\{(\w+)\}/g, (m, k) => {
     const sl = x.slots.find((z) => z.key === k);
     return sl ? (sl.options[s.pick[k]].say || sl.options[s.pick[k]].t) : m;
   });
 
+  // real social feedback (§232): after a conversation session the question is about real talk; only the tap is kept
+  const TALK = [["well", "It came up and went well"], ["gap", "It showed me a gap"], ["question", "It raised a new question"], ["notyet", "It didn't come up"]];
+  const TALK_FB = { well: "Counted: the idea worked in a real conversation.", gap: "Useful: the gap you felt is what the next sessions on this will aim at.", question: "Good: a new question is the best outcome a conversation can leave.", notyet: "No debt. It stays on your record; it will not be asked again." };
   function realityView(x) {
     const st = load(),
       f = st.forge[x.fid];
     const s = qstate(x.id);
+    const talk = !!(sessionById(x.fid) || {}).talk;
+    const opts = talk ? TALK : [["used", "Used it"], ["notyet", "Not yet"], ["useless", "Tried it: not useful"]];
     return (
-      '<div class="rnKind">DID IT MEET REALITY?</div><h2>Last time you built something</h2>' + md((f && f.text ? "“" + f.text + "”" : "The device you built in “" + ((sessionById(x.fid) || {}).title || "your last session") + "”.") + "\n\nDid you use it?") +
-      '<div class="rnOpts">' + [["used", "Used it"], ["notyet", "Not yet"], ["useless", "Tried it: not useful"]].map(([k, t]) => '<button type="button" class="rnOpt' + (s.pick === k ? " picked" : "") + '" data-rn="reality" data-k="' + k + '"><span>' + t + "</span></button>").join("") + "</div>" +
-      (s.done ? '<div class="rnFb ok">' + md(s.pick === "used" ? "Counted: an idea that changed something outside this app." : s.pick === "notyet" ? "No debt. It stays on your record; it will not be asked again." : "Useful data: a design that failed in real life teaches the next one.") + "</div>" : "")
+      '<div class="rnKind">' + (talk ? "DID IT COME UP IN REAL TALK?" : "DID IT MEET REALITY?") + "</div><h2>" + (talk ? "Since your last session" : "Last time you built something") + "</h2>" + md((f && f.text ? "“" + f.text + "”" : "The device you built in “" + ((sessionById(x.fid) || {}).title || "your last session") + "”.") + "\n\n" + (talk ? "Did it come up in a real conversation? Only your tap is kept, never who or what was said." : "Did you use it?")) +
+      '<div class="rnOpts">' + opts.map(([k, t]) => '<button type="button" class="rnOpt' + (s.pick === k ? " picked" : "") + '" data-rn="reality" data-k="' + k + '"><span>' + t + "</span></button>").join("") + "</div>" +
+      (s.done ? '<div class="rnFb ok">' + md(talk ? TALK_FB[s.pick] || "" : s.pick === "used" ? "Counted: an idea that changed something outside this app." : s.pick === "notyet" ? "No debt. It stays on your record; it will not be asked again." : "Useful data: a design that failed in real life teaches the next one.") + (() => {
+        const fc = (st.forecasts || {})[x.fid];
+        if (!fc || fc.outcome == null) return "";
+        const c = calibration(st);
+        return md("You forecast **" + fc.p + "%** that you would try it; you " + (fc.outcome ? "did" : "did not") + ". " + (c.brier != null ? "Your real-world forecasts so far: Brier " + c.brier + " over " + c.n + " (0 is perfect, 0.25 is always saying 50%)." : c.note));
+      })() + "</div>" : "")
     );
   }
 
@@ -770,6 +815,14 @@
       if (s.steps.some((x, k) => x.type === "model" && s.steps[k + 1] && s.steps[k + 1].type === "contrast")) expLog(st, "L2", s.id, armOf(st, "L2", s.id), v);
       if (s.steps.some((x) => x.opt)) expLog(st, "L3", s.id, armOf(st, "L3", s.id), v);
       if (rec.l10 != null) expLog(st, "L10", s.id, rec.l10, v);
+      if (rec.l4 != null) expLog(st, "L4", s.id, rec.l4, v);
+      if (rec.l8 != null) expLog(st, "L8", s.id, rec.l8, v);
+      if (rec.l11 != null) expLog(st, "L11", s.id, rec.l11, v);
+    }
+    // L9 is judged on the returning ideas answered today
+    if (P.l9 != null) {
+      const hk = (st.answers || []).filter((a) => a.kind === "hook" && a.t >= P.t0);
+      if (hk.length) expLog(st, "L9", (s ? s.id : "review") + "@" + today, P.l9, hk.filter((a) => a.ok && a.conf !== "guess").length / hk.length);
     }
     save();
     close();
@@ -801,7 +854,10 @@
       (st.recovered ? md("**Note:** your earlier Renaissance record could not be read on " + pretty(dayKey(new Date(st.recovered))) + "; it was kept aside unchanged and a clean one started.") : "") +
       (srcs.length ? "<h3>Where this step's facts come from</h3>" + srcs.map((p) => '<div class="rnSrc"><b>' + E(p.grade) + "</b> " + md(p.source + " (" + p.year + ") — " + p.claim + (p.note ? " · " + p.note : "")) + "</div>").join("") : "") +
       "<h3>Your record so far</h3>" +
-      md("Predictions before explanations: " + rate((a) => a.kind === "predict") + " · Used in new cases: " + rate((a) => /transfer|far|alien|challenge/.test(a.kind)) + " · Came back days later, no hints: " + rate((a) => a.kind === "hook") + " · Calibration (Brier, 0 is perfect, 0.25 is coin-flipping): " + brier + " over " + A.length + " answers · Renaissance this week: " + Math.round(week) + " min.") +
+      md("Predictions before explanations: " + rate((a) => a.kind === "predict") + " · Used in new cases: " + rate((a) => /transfer|far|alien|challenge/.test(a.kind)) + " · Came back days later, no hints: " + rate((a) => a.kind === "hook") + " · Calibration (Brier, 0 is perfect, 0.25 is coin-flipping): " + brier + " over " + A.length + " answers · Renaissance this week: " + Math.round(week) + " min." + (() => {
+        const c = calibration(st);
+        return c.n || c.pending ? " · Real-world forecasts: " + c.n + " checked" + (c.brier != null ? " (Brier " + c.brier + ")" : "") + ", " + c.pending + " waiting." : "";
+      })()) +
       (x.atoms || (s && s.atoms) ? md("**This step trains:** " + (x.atoms || s.atoms).map((k) => ATOMS[k] || k).join(" · ") + ".") : "") +
       (() => {
         const rev = (st.beliefs || []).filter((b) => !b.ok && b.conf !== "guess").slice(-3).reverse();
@@ -830,6 +886,8 @@
           if (ses && ses.steps.some((y) => y.opt)) trials.push(["L3", armOf(st, "L3", ses.id)]);
           const rec = st.sessions[P.sid] || {};
           if (rec.l10 != null) trials.push(["L10", rec.l10]);
+          for (const k of ["l4", "l8", "l11"]) if (rec[k] != null) trials.push(["L" + k.slice(1), rec[k]]);
+          if (P.l9 != null) trials.push(["L9", P.l9]);
           for (const [id, arm] of trials) {
             const e = expState(st, id),
               [a0, a1] = expRates(e);
@@ -880,7 +938,7 @@
     const x = cur(),
       d = (x.deeper && x.deeper.length ? x.deeper : (P.s && P.s.deeper) || []);
     if (!d.length) return "<h3>Deeper</h3><p>Nothing deeper is written for this step yet.</p>";
-    return "<h3>Go deeper (optional)</h3>" + d.map((c) => '<div class="rnDeep"><h4>' + E(c.title) + "</h4>" + md(c.body) + "</div>").join("");
+    return "<h3>Go deeper (optional)</h3>" + d.map((c) => '<div class="rnDeep"><h4>' + E(c.title) + "</h4>" + md(c.body) + (c.quotes || []).filter(quoteOf).map((id) => '<button type="button" class="rnSrcBtn" data-rn="source" data-q="' + E(id) + '">THE FULL RECORD</button>').join("") + "</div>").join("");
   }
   /* ───────────── safe experiments: self-adjustment beyond picture order ─────────────
    * Each trial has the authored arm (0, the control) and one alternative (1). Units (a session, a prediction, a hook,
@@ -892,9 +950,14 @@
   const EXP = {
     L2: { level: 2, what: "step order: the two compared cases before the interactive model instead of after", unit: "session", arms: ["model first", "cases first"], minN: 6 },
     L3: { level: 3, what: "step length: optional depth steps kept or skipped", unit: "session", arms: ["kept", "skipped"], minN: 6 },
+    L4: { level: 4, what: "session length: a whole session in one sitting, or split over two days", unit: "session", arms: ["one sitting", "two days"], minN: 6 },
     L5: { level: 5, what: "difficulty: another way to see a prediction offered before you answer", unit: "item", arms: ["on request", "offered"], minN: 12 },
     L6: { level: 6, what: "retrieval interval: a remembered idea comes back ×2.5 or ×2 later", unit: "hook", arms: ["×2.5", "×2"], minN: 10 },
+    L7: { level: 7, what: "task type: a returning idea shown with its options, or recalled first with the options hidden until you have an answer", unit: "hook review", arms: ["options shown", "recall first"], minN: 10 },
+    L8: { level: 8, what: "source mix: a primary passage alone (its record on request), or with its context and meaning beside it", unit: "session", arms: ["passage alone", "with context"], minN: 6 },
+    L9: { level: 9, what: "session architecture: earlier ideas come back before the new session, or after it", unit: "session day", arms: ["review first", "review last"], minN: 6 },
     L10: { level: 10, what: "season order: the written order or the compiler's choice", unit: "day", arms: ["written order", "compiler"], minN: 6 },
+    L11: { level: 11, what: "capability priority: the compiler weighs capability gaps first, or rotation across fields first", unit: "session", arms: ["gaps first", "rotation first"], minN: 6 },
   };
   const EXPCFG = { margin: 0.15, floor: 0.4, controlEvery: 5, window: 400 };
   const expOff = () => safe(() => localStorage.getItem("renaissance_experiments") === "off", false);
@@ -1076,7 +1139,7 @@
     const forges = Object.values(st.forge || {}),
       good = forges.filter((f) => (f.grades || []).length && f.grades.every((g) => g === "good")).length;
     out.push({ id: "creation", name: "Creation (forges whose every part held up)", n: forges.length, ok: good, rate: forges.length >= 3 ? Math.round((100 * good) / forges.length) : null });
-    const used = Object.values(st.reality || {}).filter((r) => r.v === "used").length;
+    const used = Object.values(st.reality || {}).filter((r) => r.v === "used" || r.v === "well").length;
     out.push({ id: "reality", name: "Ideas used outside the app (your own report)", n: Object.keys(st.reality || {}).length, ok: used, rate: null });
     out.push({ id: "explanation", name: "Explaining to another person", n: 0, rate: null, note: "No instrument inside the app yet; counted only from salon reality taps." });
     return out;
@@ -1183,7 +1246,7 @@
       if (A.some((a) => (a.kind === "far" || a.kind === "alien") && a.ok)) states.push("transfers");
       if (hookA.some((a) => a.ok && a.conf !== "guess")) states.push("recalls later");
       if (st.forge[ses.id] && (st.forge[ses.id].grades || []).includes("good")) states.push("creates with");
-      if (st.reality[ses.id] && st.reality[ses.id].v === "used") states.push("uses in life");
+      if (st.reality[ses.id] && (st.reality[ses.id].v === "used" || st.reality[ses.id].v === "well")) states.push("uses in life");
       if (H.length && H.every((h) => h.retired)) states.push("assimilated");
       const flags = [];
       const recentBugs = A.filter((a) => a.bug).length;
@@ -1218,6 +1281,125 @@
     const gaps = Object.entries(byGap).filter(([, o]) => o.n >= 6);
     if (gaps.length >= 2) out.push({ rule: "Recall by gap: " + gaps.map(([g, o]) => g + " " + o.ok + "/" + o.n).join(" · "), test: "A forgetting curve predicts lower recall at longer gaps; if it stays flat, the gaps can grow faster.", status: "measured" });
     return out;
+  }
+
+  /* the capability genome (§60–62): the authored anatomy of each atom joined with what only the record and the content
+   * can say, the evidence (unaided later answers) and the learning cost (minutes of steps that train it) */
+  function genome(st) {
+    const Gm = window.RENAISSANCE_GENOME || { atoms: {}, compounds: [], table: null };
+    const ev = atomStats(st),
+      cost = {},
+      by = {};
+    for (const s of allSessions())
+      for (const x of s.steps || [])
+        for (const k of x.atoms || (/^(q|model|contrast|forge)$/.test(x.type) ? s.atoms || [] : [])) {
+          cost[k] = (cost[k] || 0) + (x.min || 1);
+          (by[k] = by[k] || new Set()).add(s.id);
+        }
+    const atoms = {};
+    for (const k of Object.keys(ATOMS)) {
+      const e = ev[k] || { n: 0, ok: 0 };
+      atoms[k] = Object.assign({ id: k, name: ATOMS[k] }, Gm.atoms[k] || {}, { evidence: { n: e.n, ok: e.ok, rate: e.n >= 5 ? +(e.ok / e.n).toFixed(2) : null }, cost: { minutes: +(cost[k] || 0).toFixed(1), sessions: [...(by[k] || [])] } });
+    }
+    const shown = (k) => atoms[k] && atoms[k].evidence.rate != null && atoms[k].evidence.rate >= 0.6;
+    const compounds = (Gm.compounds || []).map((c) => Object.assign({}, c, { shown: c.atoms.filter(shown).length, status: c.atoms.every(shown) ? "each atom shown on unaided questions" : "not yet shown" }));
+    return { atoms, compounds, table: Gm.table };
+  }
+
+  /* the media registry (§134–139): every visual, model, listening passage and quotation the seasons use, with its type,
+   * rights class, source, the thinking it does and the steps that use it */
+  function media() {
+    const R = window.RENAISSANCE_MEDIA || { visuals: {}, models: {}, listen: {}, data: {}, types: [], rights: [] };
+    const uses = {},
+      use = (k, w) => (uses[k] = uses[k] || []).includes(w) || uses[k].push(w);
+    const walk = (o, w) => {
+      if (!o || typeof o !== "object") return;
+      if (Array.isArray(o)) return o.forEach((y) => walk(y, w));
+      if (typeof o.svg === "string" && o.svg) use("visual:" + o.svg, w);
+      for (const v of Object.values(o)) walk(v, w);
+    };
+    const declared = [];
+    for (const z of seasons()) {
+      for (const k of Object.keys(z.visuals || {})) declared.push(["visual", k]);
+      for (const k of Object.keys(z.models || {})) declared.push(["model", k]);
+      for (const k of Object.keys(z.quotes || {})) declared.push(["quote", k]);
+      for (const s of z.sessions || [])
+        for (const x of s.steps || []) {
+          const w = s.id + "/" + x.id;
+          walk(x, w);
+          if (x.type === "model") use("model:" + x.model, w);
+          (x.listen || []).forEach((l, i) => {
+            const id = x.id + (i ? "#" + i : "");
+            if (!declared.some((d) => d[0] === "listen" && d[1] === id)) declared.push(["listen", id]);
+            use("listen:" + id, w);
+          });
+          for (const q of x.quotes || []) use("quote:" + q, w);
+          for (const r of x.src || []) if (/^q\./.test(r)) use("quote:" + r.slice(2), w);
+        }
+      for (const s of z.sessions || []) for (const c of s.deeper || []) for (const q of c.quotes || []) use("quote:" + q, s.id + "/deeper");
+    }
+    for (const k of Object.keys(uses)) {
+      const [kind, id] = [k.slice(0, k.indexOf(":")), k.slice(k.indexOf(":") + 1)];
+      if (!declared.some((d) => d[0] === kind && d[1] === id)) declared.push([kind, id]);
+    }
+    const bucket = { visual: R.visuals, model: R.models, listen: R.listen };
+    const out = declared.map(([kind, id]) => {
+      const key = kind + ":" + id;
+      if (kind === "quote") {
+        const q = quoteOf(id);
+        if (!q) return { key, kind, id, type: null, rights: null, source: null, job: null, uses: uses[key] || [] };
+        const pd = /public domain/i.test(q.rights || "");
+        return { key, kind, id, type: pd ? "primary document" : "text", rights: pd ? "public domain" : /short quotation/i.test(q.rights || "") ? "short quotation" : q.rights || null, source: [q.author, q.work, q.where].filter(Boolean).join(", "), job: q.matters || null, uses: uses[key] || [], provenance: { author: q.author, work: q.work, date: q.year || q.trYear || null, edition: q.edition || null, translation: q.translator ? q.translator + (q.trYear ? " (" + q.trYear + ")" : "") : "original language", rights: q.rights, claim: q.meaning, confidence: q.verified || null, contested: q.misattribution || null } };
+      }
+      const m = (bucket[kind] || {})[id];
+      return Object.assign({ key, kind, id, type: null, rights: null, source: null, job: null }, m || {}, { uses: uses[key] || [] });
+    });
+    for (const [id, m] of Object.entries(R.data || {})) out.push(Object.assign({ key: "data:" + id, kind: "data", id }, m, { uses: ["engine"] }));
+    return { types: R.types, rights: R.rights, objects: out };
+  }
+
+  /* the museum and concert tests (§31–32): does he see and hear more than before? For the art and music sessions,
+   * cold predictions (before any explanation) against later answers on new works in the same session, and against the
+   * returning ideas days later. Rates appear only from five answers. */
+  const PERCEPTION = { museum: ["pattern", "taste"], concert: ["cadence"] };
+  function perception(st) {
+    const out = {};
+    const r = (xs) => {
+      const ok = xs.filter((a) => a.ok && a.conf !== "guess").length;
+      return { n: xs.length, ok, rate: xs.length >= 5 ? +(ok / xs.length).toFixed(2) : null };
+    };
+    for (const [k, ids] of Object.entries(PERCEPTION)) {
+      const ses = ids.map(sessionById).filter(Boolean);
+      const A = (st.answers || []).filter((a) => ids.includes(a.sid));
+      const later = (st.answers || []).filter((a) => a.kind === "hook" && ses.some((s) => (s.hooks || []).some((h) => "hook:" + h.id === a.item)));
+      const cold = r(A.filter((a) => a.kind === "predict")),
+        after = r(A.filter((a) => /transfer|far|alien|challenge/.test(a.kind))),
+        days = r(later);
+      out[k] = { sessions: ids, cold, after, later: days, delta: cold.rate != null && after.rate != null ? +(after.rate - cold.rate).toFixed(2) : null };
+    }
+    return out;
+  }
+  // the world-model map (§98–99): layers with the sessions that model them, what he has done of them, rival models kept
+  function worldModel(st) {
+    const Wm = (window.RENAISSANCE_GENOME || {}).world || { layers: {}, plural: {} };
+    const done = (id) => !!(st.sessions[id] && st.sessions[id].done);
+    const layers = Object.fromEntries(Object.entries(Wm.layers).map(([k, ids]) => [k, { sessions: ids, done: ids.filter(done) }]));
+    return { layers, gaps: Object.keys(layers).filter((k) => !layers[k].sessions.length), plural: Wm.plural };
+  }
+
+  /* reality calibration (§97): after building something, the learner forecasts whether they will try it in real life
+   * before they next open the app; the next warm-up asks what happened and scores the forecast */
+  function calibration(st) {
+    const all = Object.entries(st.forecasts || {}),
+      done = all.filter(([, f]) => f.outcome === 0 || f.outcome === 1);
+    const brier = done.length ? done.reduce((a, [, f]) => a + Math.pow(f.p / 100 - f.outcome, 2), 0) / done.length : null;
+    const bins = {};
+    for (const [, f] of done) {
+      const b = (bins[f.p] = bins[f.p] || { n: 0, tried: 0 });
+      b.n++;
+      b.tried += f.outcome;
+    }
+    return { n: done.length, pending: all.length - done.length, brier: done.length >= 5 ? +brier.toFixed(3) : null, bins: done.length >= 5 ? bins : null, note: done.length >= 5 ? "" : "A score appears after five forecasts have been checked against what happened." };
   }
 
   /* ───────────── pedagogy governor ─────────────
@@ -1340,7 +1522,11 @@
     const step = cur();
     if (step && step.kind === "hook") {
       const h = st.hooks[step.hook] || (st.hooks[step.hook] = { gap: 1, n: 0, ok: 0 });
+      const l7prev = h.l7;
       h.n++;
+      // L7: the previous review's task type is judged by this later answer
+      if (l7prev != null && h.n > 1) expLog(st, "L7", step.hook + "#" + (h.n - 2), l7prev, a.ok && conf !== "guess" ? 1 : 0);
+      h.l7 = (P.qs[step.id] || {}).l7 != null ? P.qs[step.id].l7 : null;
       const today = dayKey(new Date());
       // L6: the stretch factor is a trial; the outcome of the previous stretch is this answer
       if (h.arm != null && h.n > 1) expLog(st, "L6", step.hook + "#" + (h.n - 1), h.arm, a.ok && conf !== "guess" ? 1 : 0);
@@ -1438,6 +1624,19 @@
       s.done = true;
       const st = load();
       st.reality[x.fid] = { t: Date.now(), v: s.pick };
+      const f = (st.forecasts || {})[x.fid];
+      if (f && f.outcome == null) {
+        f.outcome = s.pick === "notyet" ? 0 : 1;
+        f.resolved = Date.now();
+      }
+      save();
+      return redraw();
+    }
+    if (a === "forecast") {
+      const st = load(),
+        id = P.sid || x.id;
+      if (st.forecasts[id]) return;
+      st.forecasts[id] = { t: Date.now(), p: +b.dataset.p, q: "try before next open", outcome: null };
       save();
       return redraw();
     }
@@ -1452,6 +1651,10 @@
     }
     if (a === "why") return sheet(whySheet());
     if (a === "source") return sheet(sourceSheet(b.dataset.q || null));
+    if (a === "reveal") {
+      qstate(x.id).revealed = true;
+      return redraw();
+    }
     if (a === "play") {
       const l = (x.listen || [])[+b.dataset.l];
       if (l) {
@@ -1724,12 +1927,18 @@
     ATOMS,
     XRAY_OF,
     LADDER,
+    genome: () => genome(load()),
+    perception: () => perception(load()),
+    worldModel: () => worldModel(load()),
+    arm: (id, unit) => armOf(load(), id, unit),
+    media: () => media(),
+    calibration: () => calibration(load()),
     compile: (at) => {
       const t = at || new Date(),
         st = load(),
         today = dayKey(t);
       const c = choose(st, today, DOSE.full, t);
-      return c ? { sid: c.s ? c.s.id : null, mode: c.mode, why: c.why || c.wait, ranked: (c.ranked || []).map((r) => ({ sid: r.s.id, score: r.score, parts: r.parts, reasons: r.reasons })) } : null;
+      return c ? { sid: c.s ? c.s.id : null, mode: c.mode, why: c.why || c.wait, l11: c.l11 != null ? c.l11 : null, weights: Object.assign({}, c.l11 === 1 ? W11 : W), ranked: (c.ranked || []).map((r) => ({ sid: r.s.id, score: r.score, parts: r.parts, reasons: r.reasons })) } : null;
     },
     sessionObject: (id) => sessionObject(sessionById(id)),
     experiments: () => expReport(load()),

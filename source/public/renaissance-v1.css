@@ -114,3 +114,7 @@ p .rnTerm{min-height:0;padding:1px 8px;margin:0 1px}
 .rnReader{font:500 16px/1.7 Georgia,"Times New Roman",serif}
 .rnReader .rnLine{display:block;padding:2px 6px;border-radius:6px}
 .rnReader .rnLine.on{background:#2a2410;color:#fff}
+.rnForecast{margin:14px 0 4px;padding:12px 14px;border:1px solid #26405e;border-radius:14px}
+.rnOpts.rnRow{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.rnOpts.rnRow .rnOpt{min-height:44px;justify-content:center;text-align:center;padding:8px 4px}
+.rnQctx{margin:6px 0 14px;padding:8px 12px;border-left:3px solid #26405e;font-size:14px;line-height:1.5}

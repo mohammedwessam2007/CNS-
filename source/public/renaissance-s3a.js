@@ -465,6 +465,7 @@
     ],
     deeper: [
       { title: "Why Dostoevsky did not rig the argument", body: "He gave the Inquisitor his strongest case and then worried, in his letters, that Book VI might not answer it. Readers ever since have divided on whether it does. That refusal to make the opponent weak is a large part of why the chapter is read by people who have never read the novel." },
+      { title: "Book VI in one line", body: "The novel's answer to the Inquisitor is a life, not a rebuttal, and its most quoted sentence is the elder's definition of hell as “the suffering of being unable to love” (Book VI, ch. 3). It describes a state of the heart rather than a place. Ask whether it answers Ivan's children at all, or changes the question.", quotes: ["hell"] },
       { title: "Read it whole this week", body: "Book V, chapters 4 and 5: about an hour and a half in two sittings, in any printing of Constance Garnett's translation (it is public domain). The reader questions 30 days after the trial session will include these chapters." },
       { title: "Open question", body: "Can a life or a gesture answer an argument? Philosophers divide: some say only arguments answer arguments; others that some questions are settled by how one lives. The novel bets on the second and knows it may lose." },
     ],
@@ -476,7 +477,7 @@
     atoms: ["prob", "narrative", "falsify", "causal", "question"],
     title: "A judicial error",
     hook: "A man threatened to kill his father, was in the garden with a weapon that night, and had money the next morning. The jury convicted him. Why is the last book of the novel called “A Judicial Error”?",
-    minutes: 30,
+    minutes: 33,
     why: "The trial is the compiler's boss world: instead of a summary, a case you solve with every earlier tool (base rates, the decisive question, the filter, vivid stories, incentives). It is a weekend session because it is long, and it comes after the two sessions that make it mean something.",
     capability: "Weigh a case piece by piece, find the one piece of evidence the verdict really rests on, separate a story that fits from evidence that discriminates, and tell legal guilt from moral guilt.",
     stakes: "Doctors, juries and investors all convict on stories that fit. The novel shows exactly how an intelligent, fair-seeming court reaches a wrong verdict.",
@@ -497,6 +498,8 @@
       { id: "q.lawful2", claim: "“All things are lawful then” — Dmitri reporting his question to Rakitin, registered in the quote register.", source: "Garnett translation, Book XI ch. 4", year: "1912", kind: "primary", license: "public domain", grade: "A" },
       { id: "q.hurrah", claim: "“Hurrah for Karamazov!” — registered in the quote register.", source: "Garnett translation, Epilogue ch. 3", year: "1912", kind: "primary", license: "public domain", grade: "A" },
       { id: "weights", claim: "The weights in the trial model are illustrative teaching numbers, not figures from the novel.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+      { id: "q.freud", claim: "Freud called the novel “the most magnificent novel ever written” and grouped it with Oedipus Rex and Hamlet as three masterpieces that all deal with parricide.", source: "Freud S., “Dostoevsky and Parricide” (1928), English translation; checked by exact-phrase web search", year: "1928", kind: "scholarship", license: "short quotation", grade: "A" },
+      { id: "q.nabokov", claim: "In his lecture on Dostoevsky Nabokov called him “not a great writer, but a rather mediocre one”, objecting to melodrama and sentimentality.", source: "Nabokov V., Lectures on Russian Literature (1981); checked by exact-phrase web search", year: "1981", kind: "scholarship", license: "short quotation", grade: "A" },
     ],
     steps: [
       { id: "t1", type: "scene", stage: "hook", min: 3, src: ["night"], title: "What the court knew", body: "Dmitri owed Katerina 3,000 roubles and was desperate. That night he climbed into his father's garden with a brass pestle, knowing the secret knocks that told his father Grushenka had come. His father opened the window and looked out.\n\nThen Dmitri ran. The old servant Grigory, who had got up in the night, caught him on the fence; Dmitri struck him with the pestle and fled, bloodied. By morning the father lay murdered. On the floor lay a torn, empty envelope that had held 3,000 roubles, the money the father kept ready for Grushenka if she came to him. That night Dmitri spent money freely at an inn at Mokroe, where he was arrested.\n\nDmitri swore he never went into the house.", reps: [{ kind: "story", label: "The court", body: "A provincial courtroom, a jury of officials and peasants, a famous defence lawyer from Petersburg, a prosecutor with literary ambitions. Everyone expects a conviction." }] },
@@ -544,6 +547,13 @@
         { t: "Only with the leaders, since employees had no choice", bug: "agent", why: "Many employees refused; choice was constrained, not absent." },
         { t: "With the customers, who should have checked their statements", bug: "moral", why: "Victims noticing late does not make them the cause." },
       ] },
+      { id: "t12", type: "passage", stage: "primary", min: 1, src: ["q.freud", "q.nabokov"], quotes: ["freud", "nabokov"], label: "TWO VERDICTS", poss: { karamazov: "criticism" }, title: "Two great readers, opposite verdicts", body: "Freud, in 1928, set the novel beside Oedipus Rex and Hamlet: three masterpieces, he wrote, about the killing of a father, and he read all three through his own theory of guilt. Nabokov, lecturing on Russian literature in America, found Dostoevsky melodramatic and sentimental. Both were serious readers, and both had something to prove. Read the two verdicts." },
+      { id: "t13", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["q.nabokov", "q.freud"], atoms: ["judgment", "narrative"], poss: { karamazov: "discuss" }, stem: "At dinner a friend says: “Nabokov called Dostoevsky ‘not a great writer, but a rather mediocre one’, so that book is overrated.” What keeps the conversation worth having?", options: [
+        { t: "Ask which part his charge fits, the melodrama or the arguments", ok: true, why: "A verdict is answered by its reasons. The melodrama is real (scandals, fits, a murder plot); whether it touches Ivan's argument is the interesting question, and it keeps the talk open." },
+        { t: "Answer that Freud called it the most magnificent novel ever written", bug: "authority", why: "One great name against another settles nothing; both men had a theory or a taste to defend." },
+        { t: "Agree: a great novelist's verdict on another novelist settles it", bug: "authority", why: "Nabokov's verdict is evidence about his taste as well as about the book; it has to be weighed, not obeyed." },
+        { t: "Say he misread it, having only read it in English translation", bug: "irrelevant", why: "Nabokov was a native Russian speaker. And a verdict is answered by its reasons, not by guesses about its reader." },
+      ] },
       {
         id: "t11", type: "forge", stage: "forge", min: 3.5, title: "Your rule against a judicial error", body: "You will judge stories every day on the wards. Build your rule.",
         slots: [
@@ -564,7 +574,7 @@
     ],
     deeper: [
       { title: "The defence's own trick", body: "The famous defence lawyer wins the argument about the evidence and then overreaches: he suggests that a father who never behaved as a father is not really one, so even parricide would not be parricide. Book XII, chapter 13 is titled “A Corrupter of Thought”. Many readers think this, as much as the evidence, is why the jury of officials and peasants stood firm (chapter 14)." },
-      { title: "The ending you did not see", body: "After the verdict: Ivan lies ill; the escape to America with Grushenka that Ivan planned for Dmitri is discussed between Katerina and Alyosha; and the boy Ilyusha, whose father Dmitri once humiliated, dies. At the funeral Alyosha asks the boys to remember this day and one another. The last words are theirs: “Hurrah for Karamazov!” Read the Epilogue's last chapter whole." },
+      { title: "The ending you did not see", body: "After the verdict: Ivan lies ill; the escape to America with Grushenka that Ivan planned for Dmitri is discussed between Katerina and Alyosha; and the boy Ilyusha, whose father Dmitri once humiliated, dies. At the funeral Alyosha asks the boys to remember this day and one another. The last words are theirs: “Hurrah for Karamazov!” Read the Epilogue's last chapter whole.", quotes: ["hurrah"] },
       { title: "Open question", body: "Is Ivan guilty? He neither struck nor ordered. The book lets him feel guilty and lets the reader decide. The courts of most countries would acquit him; most readers do not." },
     ],
   });

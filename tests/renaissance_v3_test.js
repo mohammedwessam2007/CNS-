@@ -22,6 +22,7 @@ async function answerRight(p, conf) {
     if (!opts && c.id.startsWith('hook:')) { const hid = c.id.slice(5); for (const x of all) for (const h of x.hooks) if (h.id === hid) opts = h.q.options; }
     if (!opts && c.id.startsWith('probe:')) { const k = c.id.slice(6).split('@')[0]; opts = RENAISSANCE.unseal(k).options; }
     const k = opts.findIndex((o) => o.ok);
+    document.querySelector('#rnRoot [data-rn="reveal"]')?.click();
     document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
     document.querySelector('#rnRoot [data-rn="commit"][data-c="' + (conf || 'think') + '"]').click();
     return k;
@@ -257,6 +258,7 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
         let c = RENAISSANCE.current();
         while (c && c.id !== 'hook:' + hook.id) { RENAISSANCE.act.go(); c = RENAISSANCE.current(); }
         const k = hook.q.options.findIndex((o) => (a1 >= 0.5 ? o.ok : !o.ok));
+        document.querySelector('#rnRoot [data-rn="reveal"]')?.click();
         document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
         document.querySelector('#rnRoot [data-rn="commit"][data-c="sure"]').click();
         RENAISSANCE.close();
@@ -264,13 +266,15 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       }
       return res;
     });
-    check('E1', 'Trials (L2 step order, L3 step length, L5 hints, L6 spacing, L10 season order) each have a control arm, a minimum sample, a success margin and a no-harm floor; the judge adopts a clearly better arm, drops one that is not better, and stops one below the floor', judged.adopt.verdict === 'adopted' && judged.drop.verdict === 'dropped' && judged.harm.verdict === 'harm' && r.adopt.length === 5 && r.adopt.map((e) => e.level).join() === '2,3,5,6,10', { adopt: judged.adopt.verdict, drop: judged.drop.verdict, harm: judged.harm.verdict, levels: r.adopt.map((e) => e.level) });
+    check('E1', 'Trials (L2 step order, L3 step length, L4 session length, L5 hints, L6 spacing, L7 task type, L8 source mix, L9 session architecture, L10 season order, L11 capability priority) each have a control arm, a minimum sample, a success margin and a no-harm floor; the judge adopts a clearly better arm, drops one that is not better, and stops one below the floor', judged.adopt.verdict === 'adopted' && judged.drop.verdict === 'dropped' && judged.harm.verdict === 'harm' && r.adopt.length === 10 && r.adopt.map((e) => e.level).join() === '2,3,4,5,6,7,8,9,10,11', { adopt: judged.adopt.verdict, drop: judged.drop.verdict, harm: judged.harm.verdict, levels: r.adopt.map((e) => e.level) });
     // L2 order: a session on the "cases first" arm plays its contrast before its model
     const order = await p.evaluate(() => {
       const out = {};
       for (const sid of ['bottleneck', 'question', 'snow', 'double', 'taste', 'euler', 'willow', 'pattern', 'arch']) {
         const ses = window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions).find((x) => x.id === sid);
         const st = { v: 1, sessions: Object.fromEntries(window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions).filter((x) => x.id !== sid).map((x) => [x.id, { start: 1, done: true, end: 1, endDay: '2026-08-01' }])), days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, beliefs: [], gov: { log: [], off: false }, lastWarm: '', probe: { start: null, done: {} }, exp: {}, picks: [], reads: {}, deeper: {}, forecasts: {} };
+        // already started, so the session-length trial (L4, fresh sessions only) does not split it
+        st.sessions[sid] = { start: 1 };
         localStorage.setItem('renaissance_v1', JSON.stringify(st));
         RENAISSANCE.reload();
         const g = RENAISSANCE.gate(new Date('2026-09-28T19:00:00+03:00'));
@@ -307,7 +311,8 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       let c = RENAISSANCE.current();
       while (c && c.id !== 'hook:' + hook.id) { RENAISSANCE.act.go(); c = RENAISSANCE.current(); }
       const k = hook.q.options.findIndex((o) => !o.ok);
-      document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
+      document.querySelector('#rnRoot [data-rn="reveal"]')?.click();
+        document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
       document.querySelector('#rnRoot [data-rn="commit"][data-c="sure"]').click();
       RENAISSANCE.close();
       return RENAISSANCE.experiments().find((e) => e.id === 'L6');
@@ -352,7 +357,8 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       let c = RENAISSANCE.current();
       while (c && !c.id.startsWith('probe:W01a')) { RENAISSANCE.act.go(); c = RENAISSANCE.current(); }
       const opts = RENAISSANCE.unseal('W01a').options, k = opts.findIndex((o) => o.ok);
-      document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
+      document.querySelector('#rnRoot [data-rn="reveal"]')?.click();
+        document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
       document.querySelector('#rnRoot [data-rn="commit"][data-c="sure"]').click();
       const fb = document.querySelector('#rnRoot .rnFb')?.textContent || '';
       RENAISSANCE.close();
@@ -498,7 +504,8 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       RENAISSANCE.reload();
       RENAISSANCE.open(new Date('2026-09-28T19:00:00+03:00'));
       const k = hook.q.options.findIndex((o) => o.ok);
-      document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
+      document.querySelector('#rnRoot [data-rn="reveal"]')?.click();
+        document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
       document.querySelector('#rnRoot [data-rn="commit"][data-c="sure"]').click();
       RENAISSANCE.close();
       const h = RENAISSANCE.state().hooks[hook.id];
@@ -579,6 +586,262 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
     });
     check('A2', 'Performance (§159): opening a session takes under 300 ms and every model redraws in under 60 ms (the slowest is named)', perf.openMs < 300 && perf.slowest[1] < 60, perf);
     check('A3', 'No page errors in the review, accessibility and performance checks', s.log.errors.length === 0, s.log.errors.slice(0, 3));
+    await s.close();
+  }
+
+  // ── 8. capability genome, media registry, reality calibration ──
+  {
+    const s = await open({ time: '2026-09-26T19:00:00+03:00', state: null, localStorage: OFF });
+    const p = s.page;
+    const g = await p.evaluate(() => {
+      const G = RENAISSANCE.genome(), bad = [], ids = Object.keys(RENAISSANCE.ATOMS), comp = G.compounds.map((c) => c.id);
+      for (const k of ids) {
+        const a = G.atoms[k];
+        for (const f of ['components', 'prerequisites', 'synergies', 'conflicts', 'transfer', 'expressions', 'descendants']) if (!Array.isArray(a[f])) bad.push(k + ' lacks ' + f);
+        for (const f of ['components', 'transfer', 'expressions']) if (!(a[f] || []).length) bad.push(k + ' empty ' + f);
+        for (const r of (a.prerequisites || []).concat(a.synergies || [])) if (!ids.includes(r)) bad.push(k + ' unknown atom ' + r);
+        for (const r of a.descendants || []) if (!ids.includes(r) && !comp.includes(r)) bad.push(k + ' unknown descendant ' + r);
+        if (!a.evidence || !('rate' in a.evidence) || !a.cost || typeof a.cost.minutes !== 'number') bad.push(k + ' evidence/cost not computed');
+        if (!a.cost.minutes) bad.push(k + ' no step trains it');
+      }
+      for (const c of G.compounds) for (const k of c.atoms) if (!ids.includes(k)) bad.push('compound ' + c.id + ' unknown atom ' + k);
+      // prerequisites form no cycle
+      const seen = {}, cyc = [];
+      const dfs = (k, path) => { if (path.includes(k)) { cyc.push(path.concat(k).join('>')); return; } if (seen[k]) return; seen[k] = 1; for (const r of G.atoms[k].prerequisites) dfs(r, path.concat(k)); };
+      ids.forEach((k) => dfs(k, []));
+      const cells = G.table.cells.flat(2), dup = cells.filter((k, i) => cells.indexOf(k) !== i), missing = ids.filter((k) => !cells.includes(k));
+      const empty = G.table.cells.flatMap((row, i) => row.map((c, j) => (c.length ? null : G.table.rows[i] + '×' + G.table.cols[j]))).filter(Boolean);
+      const unpredicted = empty.filter((k) => !G.table.gaps[k]);
+      return { bad, cyc, dup, missing, unpredicted, compounds: G.compounds.length, empty: empty.length };
+    });
+    check('G1', 'Capability genome (§60–62): all 28 atoms carry components, prerequisites, synergies, conflicts, transfer edges, expressions and descendants; evidence and learning cost are computed; references resolve; prerequisites have no cycle; the periodic table places each atom once and every empty cell names a predicted atom; ≥ 7 compounds', g.bad.length === 0 && g.cyc.length === 0 && g.dup.length === 0 && g.missing.length === 0 && g.unpredicted.length === 0 && g.compounds >= 7, g);
+    const g2 = await p.evaluate(() => {
+      const st = RENAISSANCE.state();
+      const mk = (ok, i) => ({ t: 1000 + i, sid: 'commit', item: 'x' + i, kind: 'transfer', atoms: ['prob'], ok, conf: 'think' });
+      st.answers = [true, true, true, false, true, true].map(mk);
+      localStorage.setItem('renaissance_v1', JSON.stringify(st));
+      RENAISSANCE.reload();
+      const a = RENAISSANCE.genome().atoms;
+      const four = Object.assign({}, st, { answers: st.answers.slice(0, 4) });
+      localStorage.setItem('renaissance_v1', JSON.stringify(four));
+      RENAISSANCE.reload();
+      const b = RENAISSANCE.genome().atoms;
+      return { six: a.prob.evidence, four: b.prob.evidence, other: a.causal.evidence };
+    });
+    check('G2', 'Genome evidence comes from the record: 5 of 6 unaided answers gives 0.83; below five answers the rate is withheld; untouched atoms show none', g2.six.rate === 0.83 && g2.six.n === 6 && g2.four.rate === null && g2.other.n === 0, g2);
+    const m = await p.evaluate(() => {
+      const R = RENAISSANCE.media(), bad = [], slop = /\b(stunning|beautiful visual|decorative|eye-catching|engaging visual|immersive|vibrant|captivating)\b/i;
+      for (const o of R.objects) {
+        if (!R.types.includes(o.type)) bad.push(o.key + ' type ' + o.type);
+        if (!R.rights.includes(o.rights)) bad.push(o.key + ' rights ' + o.rights);
+        if (!o.source) bad.push(o.key + ' no source');
+        if (!o.job || o.job.split(/\s+/).length < 8) bad.push(o.key + ' no cognitive job');
+        if (o.job && slop.test(o.job)) bad.push(o.key + ' decorative job');
+        if (!o.uses.length) bad.push(o.key + ' used by no step (decoration or dead)');
+        if (o.kind === 'quote') for (const f of ['author', 'work', 'translation', 'rights', 'claim', 'confidence', 'contested']) if (!o.provenance[f]) bad.push(o.key + ' provenance lacks ' + f);
+      }
+      // every visual renders with an accessible name
+      const noName = [];
+      for (const z of window.RENAISSANCE_SEASONS) for (const [id, f] of Object.entries(z.visuals || {})) {
+        const d = document.createElement('div');
+        d.innerHTML = f();
+        const sv = d.querySelector('svg');
+        if (!sv || !(sv.getAttribute('aria-label') || '').trim()) noName.push(id);
+      }
+      const kinds = {};
+      R.objects.forEach((o) => (kinds[o.kind] = (kinds[o.kind] || 0) + 1));
+      return { bad, noName, kinds, n: R.objects.length, types: [...new Set(R.objects.map((o) => o.type))] };
+    });
+    check('M1', 'Media registry (§134–139): every visual, model, listening passage, quotation and data object has a §138 type, a §134 rights class, a source and a stated cognitive job, and is used by a step; quotations carry §135 provenance; every visual has an accessible name', m.bad.length === 0 && m.noName.length === 0 && m.kinds.visual >= 23 && m.kinds.model >= 24 && m.kinds.listen >= 3 && m.kinds.quote >= 17, m);
+    // reality calibration: forecast after a forge, scored at the next warm-up
+    await STOP(p);
+    await p.evaluate(() => { RENAISSANCE.reset(); RENAISSANCE.open(new Date('2026-09-26T19:00:00+03:00')); });
+    let fc = null;
+    for (let i = 0; i < 60; i++) {
+      const c = await cur(p);
+      if (!c) break;
+      if (c.type === 'q' || c.type === 'contrast') await answerRight(p);
+      if (c.type === 'forge') {
+        await forge(p);
+        const had = await p.evaluate(() => !!document.querySelector('#rnRoot [data-rn="forecast"][data-p="70"]'));
+        await p.evaluate(() => document.querySelector('#rnRoot [data-rn="forecast"][data-p="70"]')?.click());
+        fc = { had, sid: c.sid, rec: await p.evaluate((sid) => RENAISSANCE.state().forecasts[sid], c.sid), shown: await p.evaluate(() => /Your forecast/.test(document.querySelector('#rnRoot .rnForecast')?.textContent || '')) };
+      }
+      if (c.type === 'reality') await p.evaluate(() => document.querySelector('#rnRoot [data-rn="reality"]').click());
+      if (await p.evaluate(() => document.querySelector('#rnRoot [data-rn="go"]').disabled)) break;
+      await go(p);
+    }
+    await p.evaluate(() => { RENAISSANCE.close(); RENAISSANCE.open(new Date('2026-09-27T19:00:00+03:00')); });
+    const first = await cur(p);
+    await p.evaluate(() => document.querySelector('#rnRoot [data-rn="reality"][data-k="used"]')?.click());
+    const after = await p.evaluate((sid) => ({ f: RENAISSANCE.state().forecasts[sid], cal: RENAISSANCE.calibration(), text: document.querySelector('#rnRoot .rnFb')?.textContent || '' }), fc && fc.sid);
+    const five = await p.evaluate(() => {
+      RENAISSANCE.close();
+      const st = RENAISSANCE.state();
+      st.forecasts = { a: { p: 90, outcome: 1 }, b: { p: 90, outcome: 0 }, c: { p: 10, outcome: 0 }, d: { p: 50, outcome: 1 }, e: { p: 70, outcome: 1 }, f: { p: 30, outcome: null } };
+      localStorage.setItem('renaissance_v1', JSON.stringify(st));
+      RENAISSANCE.reload();
+      return RENAISSANCE.calibration();
+    });
+    check('F1', 'Reality calibration (§97): after building, the learner can forecast (optional) whether they will try it; the next warm-up checks it, scores it and says so; after five checked forecasts a Brier score is reported (0.234 for the fixture), none before', !!fc && fc.had && fc.rec && fc.rec.p === 70 && fc.rec.outcome === null && fc.shown && first.type === 'reality' && after.f.outcome === 1 && /You forecast 70%/.test(after.text) && after.cal.n === 1 && after.cal.brier === null && five.n === 5 && five.pending === 1 && five.brier === 0.234, { fc, first: first && first.id, after, five });
+    check('F2', 'No page errors in the genome, media and calibration checks', s.log.errors.length === 0, s.log.errors.slice(0, 3));
+    await s.close();
+  }
+
+  // ── 9. masterpiece quality, the idea immune system, texture; the new trials; laws, perception, world model, real talk ──
+  {
+    const s = await open({ time: '2026-09-26T19:00:00+03:00', state: null, localStorage: OFF });
+    const p = s.page;
+    const c = await p.evaluate(() => {
+      const Z = window.RENAISSANCE_SEASONS, all = Z.flatMap((z) => z.sessions), quotes = Object.assign({}, ...Z.map((z) => z.quotes || {}));
+      const km = all.filter((x) => /^km\d$/.test(x.id)), J = JSON.stringify(km);
+      const rungs = new Set(km.flatMap((x) => x.steps.concat(x.hooks).flatMap((y) => Object.values(y.poss || {}))));
+      const mq = {
+        primary: km.some((x) => x.steps.some((y) => y.type === 'passage' && (y.quotes || []).length)),
+        map: /"svg":"compileMap"/.test(J),
+        graph: /"svg":"familyMap"/.test(J) && km.some((x) => x.steps.some((y) => y.type === 'model' && y.model === 'relations')),
+        vocabulary: km.reduce((a, x) => a + Object.keys(x.vocab || {}).length, 0) >= 3,
+        context: rungs.has('context'),
+        criticism: rungs.has('criticism'),
+        quotations: km.some((x) => x.steps.some((y) => (y.quotes || []).length)) && rungs.has('quote'),
+        transfer: km.some((x) => x.steps.some((y) => /transfer|far|alien/.test(y.kind))),
+        discussion: rungs.has('discuss'),
+        memory: km.every((x) => (x.hooks || []).length >= 3),
+        readerTuring: (window.RENAISSANCE_SEALED.items || []).filter((it) => it.after === 'km3').length >= 8,
+      };
+      // idea immune system: every session meets an objection, a limit or an open question
+      const unguarded = all.filter((x) => { const j = JSON.stringify(x); return !(/"kind":"counterexample"/.test(j) || /Where it breaks/.test(j) || /Open question/.test(j)); }).map((x) => x.id);
+      const contested = all.flatMap((x) => (x.provenance || []).filter((pr) => pr.contested).map((pr) => x.id + ':' + pr.id));
+      const opposed = all.some((x) => x.steps.some((y) => (y.quotes || []).includes('freud') && (y.quotes || []).includes('nabokov')));
+      const plural = Object.keys((window.RENAISSANCE_GENOME.world || {}).plural || {}).filter((id) => all.some((x) => x.id === id));
+      // texture, not trivia
+      const tex = [];
+      for (const x of all) for (const y of x.steps) if ((y.quotes || []).length > 2) tex.push(x.id + ':' + y.id + ' shows ' + y.quotes.length + ' quotations');
+      for (const [id, q] of Object.entries(quotes)) {
+        if (!q.matters || !q.context) tex.push('quotation ' + id + ' lacks why it matters or its context');
+        if (!q.verse && q.text.split(/\s+/).length > 160) tex.push('quotation ' + id + ' is longer than 160 words');
+      }
+      const uses = {};
+      for (const x of all) for (const y of x.steps) for (const q of y.quotes || []) uses[q] = (uses[q] || 0) + 1;
+      for (const [q, n] of Object.entries(uses)) if (n > 2) tex.push('quotation ' + q + ' is shown in ' + n + ' steps');
+      for (const x of all) for (const h of x.hooks || []) if (/^(in )?(what|which) year|^who (wrote|painted|composed)|^when did/i.test(h.q.stem)) tex.push(h.id + ' asks for a bare date or name');
+      return { mq, unguarded, contested, opposed, plural, tex };
+    });
+    check('V9', 'Masterpiece experience quality (§217): the Karamazov track has primary text, a structural map, a character graph and model, vocabulary, context, criticism, quotations in context, transfer, discussion, memory hooks and sealed reader-Turing questions', Object.values(c.mq).every(Boolean), c.mq);
+    check('V10', 'Idea immune system and source conflict (§93, §96, §99, §137): every session meets a counterexample, a stated limit or an open question; contested claims are marked contested; opposing verdicts (Freud, Nabokov) are shown side by side; at least five sessions keep rival models alive', c.unguarded.length === 0 && c.contested.length >= 3 && c.opposed && c.plural.length >= 5, { unguarded: c.unguarded, contested: c.contested, opposed: c.opposed, plural: c.plural });
+    check('V11', 'Texture, not trivia (§227–229): no step dumps more than two quotations, no quotation is shown in more than two steps, every quotation carries its context and why it matters, prose quotations stay under 160 words, and no returning question asks for a bare date or name', c.tex.length === 0, c.tex);
+    // the new trials really change the lesson (experiments on)
+    const allIds = await p.evaluate(() => window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions).map((x) => x.id));
+    const tr = await p.evaluate(({ allIds, base }) => {
+      nextAction = () => ({ kind: 'STOP' });
+      localStorage.removeItem('renaissance_experiments');
+      const all = window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions);
+      const at = new Date('2026-09-28T19:00:00+03:00');
+      const only = (sid, extra) => {
+        const st = JSON.parse(JSON.stringify(base));
+        for (const id of allIds) if (id !== sid) st.sessions[id] = { start: 1, done: true, end: 1, endDay: '2026-08-01' };
+        Object.assign(st, extra || {});
+        localStorage.setItem('renaissance_v1', JSON.stringify(st));
+        RENAISSANCE.reload();
+      };
+      const simple = all.filter((x) => !x.deep && x.domain && x.domain !== 'primitives').map((x) => x.id);
+      const out = {};
+      // L4: split over two days
+      const s4 = [simple.find((id) => RENAISSANCE.arm('L4', id) === 1), simple.find((id) => RENAISSANCE.arm('L4', id) === 0)];
+      out.L4 = s4.map((sid) => { only(sid); const g = RENAISSANCE.gate(at); return { sid, arm: RENAISSANCE.arm('L4', sid), partial: g.plan.partial, reason: g.reasons.some((r) => /trial L4/.test(r)) }; });
+      // L8: passage with its context beside it
+      const withPassage = simple.filter((id) => all.find((x) => x.id === id).steps.some((y) => y.type === 'passage'));
+      const s8 = [withPassage.find((id) => RENAISSANCE.arm('L8', id) === 1), withPassage.find((id) => RENAISSANCE.arm('L8', id) === 0)];
+      out.L8 = s8.map((sid) => {
+        only(sid);
+        RENAISSANCE.open(at);
+        let c = RENAISSANCE.current(), guard = 0;
+        while (c && c.type !== 'passage' && guard++ < 40) { RENAISSANCE.act.go(); c = RENAISSANCE.current(); }
+        const ctx = !!document.querySelector('#rnRoot .rnQctx');
+        RENAISSANCE.close();
+        return { sid, arm: RENAISSANCE.arm('L8', sid), ctx, reached: !!c && c.type === 'passage' };
+      });
+      // L9 and L7: returning ideas after the session, recalled before their options
+      const hooks = all.filter((x) => x.domain === 'primitives' || !x.domain).flatMap((x) => x.hooks.map((h) => h.id));
+      const h7 = [hooks.find((id) => RENAISSANCE.arm('L7', id + '#0') === 1), hooks.find((id) => RENAISSANCE.arm('L7', id + '#0') === 0)];
+      const s9 = [simple.find((id) => RENAISSANCE.arm('L9', id) === 1), simple.find((id) => RENAISSANCE.arm('L9', id) === 0)];
+      out.L9 = s9.map((sid) => {
+        only(sid, { hooks: { [hooks[0]]: { due: '2026-09-20', gap: 1, n: 0, ok: 0 } } });
+        const steps = RENAISSANCE.gate(at).plan.steps.map((y) => y.kind === 'hook' ? 'hook' : y.stage);
+        return { sid, arm: RENAISSANCE.arm('L9', sid), hookAt: steps.indexOf('hook'), firstLesson: steps.findIndex((k) => k !== 'hook' && k !== 'warm' && k !== 'probe'), n: steps.length };
+      });
+      out.L7 = h7.map((hid) => {
+        only(simple[0], { hooks: { [hid]: { due: '2026-09-20', gap: 1, n: 0, ok: 0 } } });
+        RENAISSANCE.open(at);
+        let c = RENAISSANCE.current(), guard = 0;
+        while (c && c.id !== 'hook:' + hid && guard++ < 60) { RENAISSANCE.act.go(); c = RENAISSANCE.current(); }
+        const before = document.querySelectorAll('#rnRoot .rnBody [data-rn="pick"]').length, reveal = !!document.querySelector('#rnRoot [data-rn="reveal"]');
+        document.querySelector('#rnRoot [data-rn="reveal"]')?.click();
+        const after = document.querySelectorAll('#rnRoot .rnBody [data-rn="pick"]').length;
+        RENAISSANCE.close();
+        return { hid, arm: RENAISSANCE.arm('L7', hid + '#0'), reveal, before, after };
+      });
+      // L11: rotation-first weights on its days
+      const st11 = JSON.parse(JSON.stringify(base));
+      for (const z of window.RENAISSANCE_SEASONS) if (z.boot) for (const x of z.sessions) st11.sessions[x.id] = { start: 1, done: true, end: 1, endDay: '2026-08-01' };
+      localStorage.setItem('renaissance_v1', JSON.stringify(st11));
+      RENAISSANCE.reload();
+      const days = [...Array(40).keys()].map((i) => new Date(Date.UTC(2026, 8, 28 + i, 16)));
+      const cs = days.map((d) => RENAISSANCE.compile(d)).filter((x) => x && x.mode === 'compiled');
+      out.L11 = { rot: cs.find((x) => x.l11 === 1), gap: cs.find((x) => x.l11 === 0) };
+      out.L11 = { rot: out.L11.rot && out.L11.rot.weights, gap: out.L11.gap && out.L11.gap.weights };
+      localStorage.setItem('renaissance_experiments', 'off');
+      return out;
+    }, { allIds, base: doneState([]) });
+    const okL4 = tr.L4.every((x) => x.sid && x.partial === (x.arm === 1) && x.reason === (x.arm === 1));
+    const okL8 = tr.L8.every((x) => x.sid && x.reached && x.ctx === (x.arm === 1));
+    const okL9 = tr.L9.every((x) => x.sid && x.hookAt >= 0 && (x.arm === 1 ? x.hookAt > x.firstLesson : x.hookAt < x.firstLesson));
+    const okL7 = tr.L7.every((x) => x.hid && (x.arm === 1 ? x.reveal && x.before === 0 && x.after > 0 : !x.reveal && x.before > 0));
+    const okL11 = tr.L11.rot && tr.L11.gap && tr.L11.rot.rotate === 3 && tr.L11.rot.gap === 1.5 && tr.L11.gap.gap === 3;
+    check('E6', 'The trials beyond L6 change the lesson on their test arm and not on their control: L4 splits a session over two days (and says so), L7 hides the options until an answer is in mind, L8 puts the context beside the passage, L9 moves returning ideas after the session, L11 weighs rotation above gaps', okL4 && okL7 && okL8 && okL9 && okL11, tr);
+    // laws, perception, world model, real talk (pure record fixtures)
+    const lm = await p.evaluate((base) => {
+      const put = (st) => { localStorage.setItem('renaissance_v1', JSON.stringify(st)); RENAISSANCE.reload(); };
+      const st = JSON.parse(JSON.stringify(base));
+      st.reps = { a: { diagram: { shown: 10, then_ok: 8 }, story: { shown: 10, then_ok: 3 } } };
+      put(st);
+      const laws = RENAISSANCE.laws();
+      st.reps = { a: { diagram: { shown: 5, then_ok: 5 }, story: { shown: 5, then_ok: 0 } } };
+      put(st);
+      const thin = RENAISSANCE.laws();
+      const mk = (sid, kind, ok, i) => ({ t: 1000 + i, sid, item: sid + i, kind, ok, conf: 'think', atoms: ['taste'] });
+      st.answers = [0, 1, 0, 1, 0].map((o, i) => mk('pattern', 'predict', !!o, i)).concat([1, 1, 1, 0, 1].map((o, i) => mk('pattern', 'transfer', !!o, 10 + i))).concat([mk('cadence', 'predict', true, 20), mk('cadence', 'transfer', true, 21)]);
+      put(st);
+      const per = RENAISSANCE.perception();
+      st.sessions = { willow: { start: 1, done: true, end: 1, endDay: '2026-09-01' } };
+      put(st);
+      const wm = RENAISSANCE.worldModel();
+      return { laws, thin, per, wm };
+    }, doneState([]));
+    const cand = lm.laws.find((r) => /diagram/.test(r.rule) && /story/.test(r.rule));
+    check('L6', 'Personal intellectual physics (§74–75): a rule about this learner appears only with enough evidence (8+ per kind) and says how it would be refuted; below that there is no rule', !!cand && cand.status === 'candidate' && !!cand.test && lm.thin.length === 0, { laws: lm.laws, thin: lm.thin });
+    check('L7', 'Museum and concert tests (§31–32): cold predictions against later answers on new works for the art and music sessions, with the change; rates only from five answers', lm.per.museum.cold.rate === 0.4 && lm.per.museum.after.rate === 0.8 && lm.per.museum.delta === 0.4 && lm.per.concert.cold.rate === null, lm.per);
+    const L16 = ['matter', 'energy', 'information', 'life', 'evolution', 'mind', 'intelligence', 'society', 'economics', 'institutions', 'technology', 'history', 'culture', 'art', 'meaning', 'future'];
+    const layerIds = Object.values(lm.wm.layers).flatMap((l) => l.sessions);
+    check('L8', 'World-model map (§98–99): all sixteen layers of §98 are listed with the sessions that model them and what is done; empty layers are named as gaps, never hidden; rival models kept are listed', L16.every((k) => lm.wm.layers[k]) && layerIds.every((id) => allIds.includes(id)) && lm.wm.gaps.every((k) => !lm.wm.layers[k].sessions.length) && Object.values(lm.wm.layers).filter((l) => !l.sessions.length).length === lm.wm.gaps.length && lm.wm.layers.matter.done.includes('willow') && Object.keys(lm.wm.plural).length >= 5, { gaps: lm.wm.gaps, matter: lm.wm.layers.matter });
+    // real social feedback after the conversation session
+    const talk = await p.evaluate((base) => {
+      nextAction = () => ({ kind: 'STOP' });
+      const st = JSON.parse(JSON.stringify(base));
+      st.sessions.salon = { start: 1, done: true, end: 1, endDay: '2026-09-27' };
+      st.forge.salon = { t: 1, text: 'Ask one question; tell one story.', grades: ['good'] };
+      localStorage.setItem('renaissance_v1', JSON.stringify(st));
+      RENAISSANCE.reload();
+      RENAISSANCE.open(new Date('2026-09-28T19:00:00+03:00'));
+      const c = RENAISSANCE.current();
+      const opts = [...document.querySelectorAll('#rnRoot [data-rn="reality"]')].map((b) => b.dataset.k);
+      document.querySelector('#rnRoot [data-rn="reality"][data-k="gap"]')?.click();
+      const rec = RENAISSANCE.state().reality.salon;
+      RENAISSANCE.close();
+      return { first: c && c.type, opts, rec, keys: rec ? Object.keys(rec).sort().join() : '' };
+    }, doneState([...S1, ...S2]));
+    check('F3', 'Real social feedback (§232): after the conversation session the next warm-up asks whether it came up in real talk (went well, showed a gap, raised a question, did not come up); only the tap and its time are kept', talk.first === 'reality' && talk.opts.join() === 'well,gap,question,notyet' && talk.rec && talk.rec.v === 'gap' && talk.keys === 't,v', talk);
+    check('F4', 'No page errors in the masterpiece, immune-system, trial and learner-model checks', s.log.errors.length === 0, s.log.errors.slice(0, 3));
     await s.close();
   }
 
