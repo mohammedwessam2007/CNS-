@@ -52,6 +52,20 @@ contradicted. 3 are blocked externally (`deploy`, `L12`, `L13`), 12 are empirica
 perpetual frontier. Language (§34), open in v18.1, is closed by the session `names`. See
 `docs/RENAISSANCE/completion/COMPLETION_LEDGER.md` and `COMPLETION_REPORT.md`.
 
+## Deployment after the push
+
+Checked through the Vercel connector (read only) after `e177767` was pushed at about 21:27 UTC:
+
+- **No deployment was created** for `e177767` by 21:31 UTC. None was created for the v18.1 commit `23f58f0` either
+  (pushed 20:52 UTC).
+- Production is `dpl_FH791VyN3rgbK7ky1TxmUGXF2mCn`, **READY**, built from `2c577a0` (20:05 UTC, title v18.0). It is
+  the rollback point.
+- The Hobby limit is not the cause: the project made 12 deployments today, against a limit of 100. The connector
+  shows neither the project's Git settings nor a reason.
+- **A deployment was not forced.** The stop may be the owner's choice. The app is in daily use for an exam, and
+  creating a production build by hand is not the same action as the push the owner set up. The remedy is the
+  owner's: check the Git connection for `intellectuality-cns` in Vercel, or redeploy the branch head.
+
 ## Files
 
 - `full_regression.log`: the complete output, in run order, then the coverage-oracle suite and the ledger check.
