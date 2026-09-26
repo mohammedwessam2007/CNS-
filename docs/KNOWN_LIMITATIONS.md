@@ -1,6 +1,15 @@
-# Known Limitations (v18.1 · MCQ exam + Renaissance)
+# Known Limitations (v18.2 · MCQ exam + Renaissance)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v18.2 Renaissance: zero, Timbuktu, and language as a portal
+
+- **One session per new area.** Place value and zero, the Timbuktu manuscripts, and language as a civilisation portal each have a single session. The language session teaches forms of address in Russian and Egyptian Arabic; it is a portal's first door, not a language course.
+- **Two regions are thin.** Central Asia is taught only in the wisdom session and Oceania only in one item of the film session. This is open as `globalfloor`, so no completion is declared for v18.2.
+- **The address model is a simplification.** Real usage varies with region, age, class and tone; the model says so in its reading.
+- **Contested points are taught as contested.** The Bakhshali manuscript's dates, the story that the Church feared zero (a myth), the Florentine guild's motive in 1299, the size of the Russian blues effect, and Ahmad Baba's library remark (from later retellings).
+- **The Timbuktu survival model assumes copies fail independently**, and says where that fails (a city-wide fire, copies of one faulty original).
+- **Deployment is known, not fully verified.** The Vercel connector can now list the project's deployments (state, target, commit) but still cannot read a deployment's detail or fetch its pages. See `docs/DEPLOYMENT_VERCEL.md` for what is confirmed.
 
 ## v18.0–v18.1 Renaissance ABSOLUTE COMPLETION (season 3, the engine, the oracle)
 
@@ -8,13 +17,13 @@ v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuri
 - **The live site for v18.x is not confirmed from the build session.** The Vercel connector sees the team but not the project (403/404), `*.vercel.app` is blocked from the sandbox, and the GitHub connector has no status tool. Every suite ran against the identical local build. Open the site and check the tab reads **v18.1**.
 - **Explanation and writing are not measured.** Every instrument is multiple choice or a tap; free text would need a human or a model grader.
 - **The sealed items and the lessons share an author.** Leakage is prevented by mechanism (obfuscation, hashes registered before any answer, a six-word firewall), not by separate people; sealing stops accidental exposure, not a determined reader.
-- **Global depth.** Four regions have sessions of their own; six are taught as cases inside other sessions (tracked as the `globaldepth` frontier requirement).
+- **Global depth.** Six regions have sessions of their own since v18.2 (four before); four are taught as cases inside other sessions (tracked as the `globaldepth` frontier requirement).
 - **Media gaps.** No painting, sculpture, recorded performance, video or 3D: those need licensed, Creative Commons or lawful-embed sources, and those rights classes are empty. Music is synthesised from exact pitches (structure, not timbre or performance).
 - **Quotation wording** was checked by exact-phrase web search across several copies of the Garnett text, not against a scan: full texts could not be fetched from the build machine.
 - **L12–L13 (runtime generation of curriculum and pedagogy) are blocked** on a model credential and a budget the owner has not granted.
 - **The requirement graph is self-authored.** The oracle checks every claim against files, symbols and test results, and rejects fabricated claims (CO5), but the mapping of the 711 mission sections to requirements is a judgement, readable in `tools/renaissance/requirement_map.js`.
 - **Trials need data.** L1–L11 and L14 decide nothing until each reaches its minimum sample; until then every learner gets a mix of arms by stable assignment.
-- **Language (§34) is open.** No language experience exists yet. It had been filed as frontier and was moved back to open, controllable work on review for the completion report, which is why the ledger reads 173 of 174 and no completion is declared (`docs/RENAISSANCE/completion/COMPLETION_REPORT.md`).
+- **Language (§34) was open in v18.1.** It had been filed as frontier and was moved back to open, controllable work on review for the completion report, which is why the v18.1 ledger read 173 of 174. v18.2 builds the first language session.
 
 ## v17.5 Renaissance season 2 and OMEGA
 

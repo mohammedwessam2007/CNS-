@@ -190,6 +190,44 @@
     return svg(360, 300, h, "Six guests around a table; lines join people who can talk, green where they share an interest");
   }
 
+  function surviveStats(v) {
+    const p = v.risk / 100, alive = (k) => 1 - Math.pow(1 - Math.pow(1 - p, v.crises), k);
+    // one great store: a single copy; the family libraries: v.copies copies, each at the same risk per crisis
+    return { one: alive(1), many: alive(v.copies) };
+  }
+  function surviveDraw(v) {
+    const s = surviveStats(v);
+    const bar = (y, label, val, c) => t(24, y - 8, label, { c: C.ink, fs: 12.5, a: "start" }) + '<rect x="24" y="' + y + '" width="300" height="22" rx="6" fill="' + C.bg + '" stroke="' + C.line + '"/>' + '<rect x="24" y="' + y + '" width="' + Math.max(2, 300 * val) + '" height="22" rx="6" fill="' + c + '"/>' + t(334, y + 16, Math.round(val * 100) + "%", { c, fs: 13, a: "end" });
+    const cr = v.crises + (v.crises === 1 ? " crisis" : " crises");
+    let h = t(180, 18, cr + ", and in each one", { c: C.mut, fs: 12, fw: 600 }) + t(180, 34, "a given copy is destroyed " + v.risk + "% of the time", { c: C.mut, fs: 12, fw: 600 });
+    h += bar(58, "One great store (a single copy)", s.one, C.pink) + bar(118, v.copies + " family libraries, each with a copy", s.many, C.green);
+    h += t(180, 176, "chance the text survives " + (v.crises === 1 ? "the crisis" : "all " + cr), { c: C.mut, fs: 12, fw: 600 });
+    return svg(360, 190, h, "Chance a text survives: one central copy against many scattered copies");
+  }
+
+  // a teaching simplification of address in Russian and Egyptian Arabic; the model says so in its reading
+  function addressForms(v) {
+    const d = v.dist, p = v.power, cross = v.angry;
+    let ru, pro, eg, says;
+    if (cross && d <= 1) { ru = "Alyoshka"; pro = "ty"; eg = "enta, with his bare name"; says = "closeness used as a blade: the familiar form made rough"; }
+    else if (cross) { ru = "gospodin Karamazov"; pro = "vy"; eg = "ḥaḍritak, said coldly"; says = "distance used as a wall: ‘Mr Karamazov’, the polite form made cold"; }
+    else if (d === 0) { ru = p < 0 ? "Alyoshenka" : "Alyosha"; pro = "ty"; eg = p < 0 ? "ya ḥabibi, enta" : "his name, enta"; says = p < 0 ? "tenderness from above: an elder to a child" : "family: the everyday diminutive"; }
+    else if (d === 1) { ru = "Alyosha"; pro = "ty"; eg = "his name, enta"; says = "friendship: first names and the familiar you"; }
+    else if (d === 2) { ru = "Alexei Fyodorovich"; pro = "vy"; eg = p > 0 ? "ya doktor, ḥaḍritak" : "ya ostaz, ḥaḍritak"; says = "respect between acquaintances: name and father's name, the polite you"; }
+    else { ru = "Alexei Fyodorovich"; pro = "vy"; eg = p > 0 ? "ya basha, ḥaḍritak" : "ḥaḍritak"; says = "a stranger, or someone above you: the most formal forms"; }
+    return { ru, pro, eg, says };
+  }
+  function addressDraw(v) {
+    const f = addressForms(v);
+    const card = (y, head, main, sub, c) => box(20, y, 320, 74, c) + t(34, y + 22, head, { c: C.mut, fs: 12, fw: 600, a: "start" }) + t(34, y + 46, main, { c, fs: 16, a: "start" }) + t(34, y + 64, sub, { c: C.mut, fs: 12, fw: 600, a: "start" });
+    const DIST = ["family", "friend", "acquaintance", "stranger"], POW = { "-1": "below you", 0: "your equal", 1: "above you" };
+    let h = t(180, 22, "To Alexei: " + DIST[v.dist] + ", " + POW[String(v.power)] + (v.angry ? ", angry" : ""), { c: C.mut, fs: 12.5, fw: 600 });
+    h += card(38, "RUSSIAN", f.ru, "and the pronoun " + f.pro + (f.pro === "ty" ? " (familiar you)" : " (polite you)"), C.cyan);
+    h += card(124, "EGYPTIAN ARABIC, the same relation", f.eg, f.eg.indexOf("ḥaḍritak") >= 0 ? "ḥaḍritak, ‘your presence’: the polite you" : "enta: the familiar you", C.amber);
+    h += lines(180, 228, wrap("What it says: " + f.says, 46), { c: C.ink, fs: 12.5, fw: 600 }, 16);
+    return svg(360, 268, h, "Which form of address fits a relationship, in Russian and in Egyptian Arabic");
+  }
+
   const visuals = {
     // Galen's medicine through three languages
     relay: () => {
@@ -215,6 +253,30 @@
 
   /* ═══════════════ MODELS ═══════════════ */
   const models = {
+    address: {
+      controls: [
+        { id: "dist", label: "How close (0 family, 1 friend, 2 acquaintance, 3 stranger)", min: 0, max: 3, step: 1, value: 2, unit: "" },
+        { id: "power", label: "The listener is (−1 below you, 0 your equal, 1 above you)", min: -1, max: 1, step: 1, value: 0, unit: "" },
+      ],
+      toggles: [{ id: "angry", label: "Say it in anger", value: false }],
+      draw: (v) => addressDraw(v),
+      read(v) {
+        const f = addressForms(v);
+        return "**" + f.ru + ", with " + f.pro + "; in Cairo, " + f.eg + ".** " + f.says.charAt(0).toUpperCase() + f.says.slice(1) + ". Two languages that share no words share the same ladder: distance and power decide the form, and anger can climb it either way. This is a simplification: region, age, class and tone all shift real usage.";
+      },
+    },
+    survive: {
+      controls: [
+        { id: "copies", label: "Copies held by different families", min: 1, max: 20, step: 1, value: 5, unit: "" },
+        { id: "risk", label: "Chance a crisis destroys a given copy", min: 5, max: 60, step: 5, value: 30, unit: "%" },
+        { id: "crises", label: "Crises over the centuries (war, fire, flood, damp)", min: 1, max: 10, step: 1, value: 4, unit: "" },
+      ],
+      draw: (v) => surviveDraw(v),
+      read(v) {
+        const s = surviveStats(v);
+        return "**A single copy survives " + Math.round(s.one * 100) + "% of the time; " + v.copies + " copies in different hands, " + Math.round(s.many * 100) + "%.** Scattering beats size because the copies fail independently. " + (v.copies === 1 ? "With one copy the two bars are the same: nothing is gained." : "") + " The model assumes the copies fail independently; a fire that sweeps the whole city breaks that assumption, which is why moving the manuscripts out, in 2012, mattered as much as having many of them.";
+      },
+    },
     seating: {
       controls: [{ id: "plan", label: "Seating plan (1 as they arrived · 2 friends side by side · 3 designed)", min: 1, max: 3, step: 1, value: 1, fmt: (x) => ["", "as they arrived", "friends side by side", "designed"][x] }],
       draw: (v) => seatDraw(v),
@@ -737,6 +799,189 @@
       { title: "Go and see it", body: "New Gourna stands on Luxor's west bank, near the Theban necropolis; parts of Fathy's village survive, with its domes and vaults. In Cairo, the pointed arches of the Mosque of Ibn Tulun (876–879) stand on thick brick piers: look at how the piers take the sideways push." },
       { title: "Why the half-circle survived", body: "Roman builders used half-circles for millennia because they are easy to set out with a rope and a peg, and thick walls absorbed the difference. Easy to build can beat ideal." },
       { title: "Open question", body: "Could mud-brick vaults be a modern answer for hot cities, given their low cost and thermal mass? Advocates and critics still argue about maintenance, rain and social acceptance." },
+    ],
+  });
+
+  sessions.push({
+    id: "timbuktu", primitive: "select", domain: "history", region: "Timbuktu (Mali) and the Sahara", works: ["timbuktu"], requires: ["wisdom"],
+    atoms: ["info", "systems", "causal"],
+    title: "What survives: the libraries of Timbuktu",
+    hook: "In 1526 a traveller reported that one trade in Timbuktu made more profit than all other merchandise. Which trade?",
+    minutes: 24,
+    why: "West Africa had a written scholarly culture that most schoolbooks leave out: a city on the edge of the Sahara where families kept libraries of law, astronomy, medicine and poetry for centuries. The history is also a lesson in what survives and why: the manuscripts lasted because they were scattered, and our picture of the past depends on what was kept.",
+    capability: "Place Timbuktu's scholarship in its world, explain why scattered copies survive shocks that one great store does not, and read any archive's silence as weak evidence of absence.",
+    stakes: "Every hospital, family and institution keeps records it assumes are safe. The Timbuktu families knew something about survival that most backup plans forget.",
+    bridge: "The missing step: survival of a text is a probability, and copies held in different hands fail independently. And what survives is a biased sample of what existed.",
+    connection: "Season 1's missing planes taught that the survivors are not a random sample. Here the survivors are books, and the same bias shapes what we think Africa wrote.",
+    vocab: {
+      manuscript: { name: "a manuscript culture", h: "A society whose books are copied by hand and kept in homes and schools.", s: "مجتمع كتبه بتتنسخ بالإيد وتتحفظ في البيوت والمدارس.", t: "Knowledge transmitted through hand-copied texts, private and institutional libraries, and teaching chains of scholars." },
+      redundancy: { name: "redundancy", h: "Keeping several independent copies so one loss does not lose everything.", s: "تخلّي كذا نسخة في أماكن مختلفة، لو واحدة ضاعت التانية موجودة.", t: "Multiple independent carriers of the same information; reliability rises when their failures are independent." },
+      archivebias: { name: "archive bias", h: "What survives is not a random sample of what existed.", s: "اللي فاضل من الماضي مش عينة عادلة من اللي كان موجود.", t: "Survivorship bias applied to historical sources: preservation depends on who kept what, where, and through which disasters." },
+    },
+    provenance: [
+      { id: "leo", claim: "In his Description of Africa (1526), Leo Africanus reported that many hand-written books imported from the Maghreb were sold in Timbuktu and that more profit was made from this commerce than from all other merchandise.", source: "Leo Africanus, La descrittione dell'Africa (1526, printed 1550), in English translation; checked by web search", year: "1526", kind: "primary", license: "public domain", grade: "A" },
+      { id: "ahmadbaba", claim: "Ahmad Baba (1556–1627), one of Timbuktu's most celebrated scholars, was taken to Marrakesh after the Moroccan conquest (1591), exiled there from 1594, and allowed to return in 1608; he is reported to have told the sultan that his library, of 1,600 volumes, was the smallest among his friends'.", source: "Oxford Research Encyclopedia of African History, 'At-Timbuktî, Ahmed Bâba'; the library remark as reported in later accounts; checked by web search", year: "1556–1627", kind: "scholarship", license: "fact", grade: "B", contested: "The library remark comes to us through later retellings, not a document of the audience." },
+      { id: "haidara", claim: "During the 2012–13 occupation of Timbuktu, the librarian Abdel Kader Haidara and a network of families, librarians and couriers moved nearly 350,000 manuscripts from about 45 libraries to Bamako in small loads.", source: "National Geographic (2014); Hill Museum & Manuscript Library, 'A Decade in Mali'; checked by web search", year: "2012–2013", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "fire", claim: "Retreating militants set fire to manuscripts at the Ahmed Baba Institute in January 2013; about 4,200 were destroyed, out of an institute collection of tens of thousands.", source: "Contemporary reports and later accounts (e.g. HMML; National Geographic); checked by web search", year: "2013", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "survive", claim: "The survival model and its numbers are original teaching material; the independence assumption is stated in the model.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "b1", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["leo"], atoms: ["causal"], stem: "In 1526 the traveller Leo Africanus reported that in Timbuktu one trade made more profit than all other merchandise. Which was it?", alt: "Think about what a city of scholars, judges and teachers would pay most for.", options: [
+        { t: "Hand-written books from North Africa", ok: true, why: "A city of scholars, judges and teachers paid for texts; books were the scarce input of its main profession." },
+        { t: "Salt from the Saharan mines", bug: "surface", why: "Salt was a great Saharan trade, and the obvious guess; Leo singled out books." },
+        { t: "Gold from the forests further south", bug: "surface", why: "Gold made the region famous in Europe; it was not the trade he singled out." },
+        { t: "Cotton cloth from the Niger valley", bug: "irrelevant", why: "Cloth was traded, but not singled out." },
+      ] },
+      { id: "b2", type: "scene", stage: "reveal", min: 2.5, src: ["leo", "ahmadbaba"], terms: ["manuscript"], title: "A city of libraries", body: "From the fourteenth century Timbuktu, on the edge of the Sahara near the Niger, was a centre of Islamic learning: mosques that were also schools, judges and teachers, and families that kept libraries for generations. The manuscripts cover law and theology, but also astronomy, medicine, mathematics, grammar and poetry, many written locally.\n\nIts best-known scholar, Ahmad Baba (1556–1627), was carried off to Marrakesh after Morocco conquered the city in 1591; he is reported to have told the sultan that his 1,600 volumes made the smallest library among his friends. He came home in 1608 and taught until his death. It was a [[manuscript|manuscript culture]]: knowledge lived in copies and in the people who taught them.", reps: [{ kind: "story", label: "Books across the desert", body: "Paper came across the Sahara from North Africa; books were copied, sold and inherited. Leo Africanus, a traveller born in Granada, saw the book trade outprofit everything else in the market." }, { kind: "counterexample", label: "Where the story is thin", body: "The famous library remark comes to us through later retellings, not a record of the audience; it is repeated here as a report, not a fact." }] },
+      { id: "b3", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["haidara", "fire"], atoms: ["systems"], stem: "In 2012 armed groups took Timbuktu. By early 2013 nearly all of the city's manuscripts were safe in Bamako. How?", options: [
+        { t: "Families and couriers moved them south in small loads", ok: true, why: "A network led by the librarian Abdel Kader Haidara packed about 350,000 manuscripts from some 45 libraries into small shipments, by road and river, over months." },
+        { t: "They had all been digitised years before, so nothing was lost", bug: "omission", why: "Most were not digitised then; the originals themselves had to be moved." },
+        { t: "United Nations troops guarded the libraries throughout", bug: "authority", why: "There was no such guard; the rescue was organised by the owners." },
+        { t: "The occupiers had no interest in manuscripts at all", bug: "moral", why: "About 4,200 manuscripts were burned at the Ahmed Baba Institute as the militants left." },
+      ] },
+      { id: "b4", type: "model", stage: "model", min: 3, model: "survive", src: ["survive"], terms: ["redundancy"], title: "Why scattered copies last", body: "A text survives if at least one copy survives every crisis. Compare one great store with the same text held by several families.", ask: "**Find** how many scattered copies it takes to beat one store when each crisis is severe, and say which assumption of the model a city-wide fire would break." },
+      { id: "b5", type: "scene", stage: "reveal", min: 2, src: ["haidara", "fire", "survive"], terms: ["redundancy", "archivebias"], title: "What the survivors are not", body: "Timbuktu's manuscripts survived five centuries of war, damp and termites largely because they were scattered across family libraries and could be moved. That is [[redundancy|redundancy]]: many independent copies. Where manuscripts were still gathered in one building, at the Ahmed Baba Institute, about 4,200 were burned in one act as the militants left.\n\nThe second lesson is harder. For a long time Europeans wrote that Africa south of the Sahara had little written scholarship. The manuscripts were there; they were in family homes, not in the archives those writers read. What survives, and where, shapes what we believe existed: [[archivebias|archive bias]].", reps: [{ kind: "analogy", label: "Season 1's planes", body: "The bombers that came home showed where a plane can be hit and survive; the missing ones held the answer. The archives Europe read showed where African texts had travelled; the family libraries held the rest." }, { kind: "counterexample", label: "Where redundancy fails", body: "Copies protect only against losses that strike them separately. The same fire in every house, or copies all made from one faulty original, give no protection at all." }] },
+      {
+        id: "b6", type: "contrast", stage: "contrast", min: 2.5, src: ["haidara", "fire"], atoms: ["systems", "info"], title: "Two ways to hold texts in a crisis",
+        left: { title: "One building", body: "A modern institute with a catalogue and climate control; the manuscripts still inside it are all in one place when the crisis comes." },
+        right: { title: "Forty-five family libraries", body: "Uneven care, no single catalogue, and the texts spread across a city, able to leave in small loads." },
+        q: { stem: "What does 2013 show about keeping knowledge through a crisis?", options: [
+          { t: "Copies in many independent hands survive what one store cannot", ok: true, why: "The manuscripts still in the institute's building were lost together in one fire; the families' copies would have had to be found and destroyed forty-five times over." },
+          { t: "Private owners always look after books better than institutions", bug: "rigid", why: "In ordinary times the institute conserves better; the difference in a crisis is concentration, not care." },
+          { t: "The militants chose to spare the family libraries", bug: "agent", why: "They were not spared by choice; they had been moved." },
+          { t: "Small collections are simply more valuable than large ones", bug: "surface", why: "Value was not the difference; how the copies could fail was." },
+        ] },
+      },
+      { id: "b7", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["survive"], atoms: ["systems", "measure"], stem: "Your department keeps every scanned patient record on one server in the hospital basement, with a nightly copy to a second disk in the same room. What is the weakest point?", options: [
+        { t: "Both copies can be lost to the same flood or fire", ok: true, why: "Two copies in one room fail together; the second copy must be somewhere else, and a backup is proved only by restoring from it." },
+        { t: "The server is too old and needs replacing", bug: "irrelevant", why: "A new server in the same room has the same weakness." },
+        { t: "Only two copies exist; you need ten", bug: "linear", why: "Ten copies in one basement are one copy against a flood." },
+        { t: "Nothing: a nightly copy is exactly what best practice asks for", bug: "confirm", why: "Frequency is fine; the copies are not independent." },
+      ] },
+      { id: "b8", type: "q", kind: "far", stage: "far", min: 1.5, src: ["haidara"], atoms: ["info", "judgment"], stem: "A 1950s textbook says a region had \"no written history\" because none of its documents are in European archives. What is the soundest response?", options: [
+        { t: "Ask where its documents would have been kept, and by whom", ok: true, why: "Absence from one kind of archive is weak evidence of absence; Timbuktu's manuscripts were in family homes the textbook's authors never searched." },
+        { t: "Accept it: historians of the time had good access", bug: "authority", why: "They had access to the archives they knew; that was the problem." },
+        { t: "Reject it: every region in the world must have had written history", bug: "rigid", why: "Some societies kept knowledge orally; the question is empirical, not a matter of principle." },
+        { t: "Count the documents that did reach Europe", bug: "selection", why: "Those are exactly the survivors that produced the wrong picture." },
+      ] },
+      {
+        id: "b9", type: "forge", stage: "forge", min: 3, title: "Keep something that matters", body: "Choose one thing you could not bear to lose (notes, photographs, a family history) and design how it survives thirty years.",
+        slots: [
+          { key: "copies", label: "Copies", options: [{ t: "three, in three different places", grade: "good", note: "Independent failures: house, cloud, a relative's home.", say: "three copies in three places" }, { t: "two, both at home", grade: "bad", note: "One fire takes both.", say: "two copies at home" }] },
+          { key: "hands", label: "Held by", options: [{ t: "at least one other person who knows what it is", grade: "good", note: "Timbuktu's copies survived in people as well as places.", say: "at least one other person" }, { t: "only you", grade: "weak", note: "One person is one point of failure.", say: "only you" }] },
+          { key: "format", label: "Format", options: [{ t: "open and printable (plain text, PDF, paper)", grade: "good", note: "A format you can still read in thirty years.", say: "open, printable formats" }, { t: "whatever the current app uses", grade: "bad", note: "Apps die faster than paper.", say: "the current app's format" }] },
+          { key: "test", label: "Proved by", options: [{ t: "restoring one item from each copy once a year", grade: "good", note: "A backup never restored is a hope.", say: "restoring from each copy once a year" }, { t: "knowing the copies exist", grade: "bad", note: "Many lost archives had copies that could not be opened.", say: "knowing they exist" }] },
+        ],
+        template: "Keep {copies}, held by {hands}, in {format}, **proved by {test}**.",
+        critique: { stem: "A friend says one very good cloud service is enough. When is that true?", options: [{ t: "Only for losses that could never also strike that one service", ok: true, why: "One provider is one store: an account lockout, a closure or a mistake removes every copy at once." }, { t: "Always: large companies keep many data centres and never lose data", bug: "authority", why: "Accounts are lost, services close, and mistakes delete; the risk is concentrated, not zero." }, { t: "Never: the cloud is unsafe", bug: "rigid", why: "As one copy among several, it is a good one." }] },
+      },
+    ],
+    challenge: { stem: "Copies protect a text best when…", options: [{ t: "they can fail independently of one another", ok: true }, { t: "they are all kept in the best building", bug: "surface" }, { t: "there are as many as possible, wherever they are", bug: "linear" }] },
+    hooks: [
+      { id: "timbuktu.h1", gap: 1, q: { stem: "Why did most of Timbuktu's manuscripts survive 2013?", options: [{ t: "they were scattered, and could leave in small loads", ok: true }, { t: "they had been digitised years before the occupation", bug: "omission" }, { t: "the occupiers left them alone", bug: "moral" }] } },
+      { id: "timbuktu.h2", gap: 7, q: { stem: "A region's documents are missing from one great archive. That is…", options: [{ t: "weak evidence that they never existed", ok: true }, { t: "proof that they never existed", bug: "selection" }, { t: "irrelevant to the question", bug: "irrelevant" }] } },
+      { id: "timbuktu.h3", gap: 30, q: { stem: "A backup is proved by…", options: [{ t: "restoring from it", ok: true }, { t: "how often it runs", bug: "proxy" }, { t: "how much it cost", bug: "proxy" }] } },
+    ],
+    deeper: [
+      { title: "What the manuscripts contain", body: "Law and theology dominate, but the collections also hold astronomy, medicine, mathematics, grammar, poetry and letters, many written by West African scholars rather than copied from elsewhere. Cataloguing and digitising them is still under way." },
+      { title: "The same lesson in Baghdad", body: "The history session followed Greek medicine through Arabic into Latin. Here the chain runs across the Sahara. In both cases knowledge survived because it was copied into many hands, not because one library was large." },
+      { title: "Open question", body: "How much of the story of \"Africa without writing\" came from where Europeans looked rather than what existed? Historians now answer much, but how much of the manuscripts' content is local scholarship, and how much copied, is still being worked out as the catalogues grow." },
+    ],
+  });
+
+  sessions.push({
+    id: "names", primitive: "register", domain: "language", region: "Russia and Egypt", works: ["karamazov"], requires: ["km1"], talk: true,
+    atoms: ["narrative", "represent", "info", "judgment"],
+    title: "Alyosha, Alexei Fyodorovich, ya basha",
+    hook: "In one novel the same woman is called Agrafena Alexandrovna, Grushenka, Grusha and Grushka. She hasn't changed. What has?",
+    minutes: 24,
+    why: "A language is not a list of words. It is a set of choices that tell you who is speaking to whom, how close they are, who is above whom, what they refuse to say directly. Learn those choices and a translated novel, a subtitled film and your own ward round all start to say more than their words.",
+    capability: "Read forms of address as statements about a relationship, notice what translation and subtitles flatten, use one untranslatable word to open a book, and weigh what the evidence says about language and thought.",
+    stakes: "Every patient tells you how they see you by how they address you, and every novel in translation is missing some of this. Hearing it is the difference between knowing a language's words and knowing the people who speak it.",
+    bridge: "The missing step: a form of address carries two pieces of information that no dictionary lists, distance and power, and a change of form is an event.",
+    connection: "The Karamazov sessions gave you the family and the frame. Here the same people, by the names they use for each other, show you what the translation keeps quiet.",
+    vocab: {
+      patronymic: { name: "a patronymic", h: "A middle name made from your father's first name.", s: "اسم الأب جوه اسمك: أليكسي فيودوروفيتش يعني أليكسي ابن فيودور، وده الشكل المحترم.", t: "A name component derived from the father's given name (-ovich/-evich, -ovna/-evna); first name plus patronymic is the respectful form of address in Russian." },
+      diminutive: { name: "a diminutive", h: "A small, warm form of a name.", s: "دلع الاسم: أليوشا لأليكسي، زي ما بنقول ميدو لمحمد.", t: "A derived form (Alyosha, Grusha) signalling familiarity; suffixes such as -ka (Grushka) can be intimate or rough, -enka (Alyoshenka) tender; context decides." },
+      tv: { name: "the T and V forms", h: "The familiar you and the polite you.", s: "إنت وحضرتك: الفرق مش في المعنى، في المسافة اللي بينكم.", t: "Second-person pronouns of solidarity and power (Brown and Gilman 1960): Russian ty/vy, French tu/vous; in Egyptian Arabic, enta and ḥaḍritak do the same work." },
+      nadryv: { name: "nadryv", h: "Feeling strained until it tears, often in front of others.", s: "نَدريف: إحساس مشدود لحد ما يتقطع، وغالبًا قدام الناس.", t: "Russian 'tearing, strain'; Dostoevsky's title for Book IV (Nadryvy); the idiom 'to speak with nadryv' means to speak as if one's heart were breaking." },
+    },
+    provenance: [
+      { id: "grushenka", claim: "In The Brothers Karamazov Grushenka's full name is Agrafena Alexandrovna Svetlova, and she is called Grushenka, Grusha and Grushka; the youngest brother is Alexei Fyodorovich, called Alyosha.", source: "The novel (1879–80); character lists in standard study guides; checked by web search", year: "1880", kind: "primary", license: "public domain", grade: "A" },
+      { id: "rusnames", claim: "In Russian, first name plus patronymic is the respectful form of address; diminutives such as Alyosha and Grusha are familiar; forms in -ka can be intimate or dismissive and forms in -enka tender, depending on who speaks and how.", source: "Standard descriptions of Russian naming and address", year: "—", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "browngilman", claim: "Brown and Gilman named the familiar and polite second-person pronouns T and V and argued that their use is governed by power and solidarity, with power dominant in Europe until the twentieth century and solidarity after.", source: "Brown R. & Gilman A., 'The pronouns of power and solidarity', in Sebeok T. A. (ed.), Style in Language, MIT Press (1960), pp. 253–276; checked by web search", year: "1960", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "snegiryov", claim: "In Book IV, chapter 7, Captain Snegiryov, offered two hundred roubles by Katerina Ivanovna through Alyosha after Dmitri's public humiliation of him, crumples the notes, throws them on the sand and grinds them under his heel; he says he cannot sell his honour, and could not tell his son Ilyusha he had taken money for his disgrace. Alyosha picks the notes up afterwards.", source: "The novel, Book IV ch. 7; summaries checked by web search", year: "1880", kind: "primary", license: "public domain", grade: "A" },
+      { id: "nadryvy", claim: "Dostoevsky titled Book IV Nadryvy; translators render it Lacerations (Garnett; Katz), Strains (Pevear and Volokhonsky), Crises (Avsey) and Crack-Ups (McDuff); 'to speak with nadryv' means to speak as if one's heart were breaking.", source: "The translations named; discussions of the title checked by web search", year: "1912–1990", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "blues", claim: "Russian speakers, whose language obliges a choice between goluboy (lighter blue) and siniy (darker blue), were faster to tell apart two blues that fell on different sides of that boundary; the advantage disappeared when they did a verbal task at the same time, but not a spatial one, and was largest for hard discriminations. English speakers showed no such effect.", source: "Winawer J., Witthoft N., Frank M. C., Wu L., Wade A. R. & Boroditsky L., 'Russian blues reveal effects of language on color discrimination', PNAS 104:7780–7785 (2007); checked by web search", year: "2007", kind: "scholarship", license: "fact", grade: "A", contested: "How far language shapes perception is still argued: later work reports limits to it (a 2020 study is titled 'Russian blues reveal the limits of language influencing colour discrimination'). Nobody finds that a language stops its speakers seeing a colour." },
+      { id: "titles", claim: "After the 1952 revolution the Revolutionary Command Council abolished civil titles such as pasha and bey; the words survive in everyday Egyptian speech as forms of address.", source: "Library of Congress Country Studies, Egypt, 'The Revolution and the Early Years of the New Government: 1952–56'; checked by web search", year: "1952", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "addressmodel", claim: "The address model and its examples are original teaching material and a simplification; real usage varies with region, age, class and tone.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "n1", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["grushenka", "rusnames"], atoms: ["narrative", "info"], poss: { karamazov: "structure" }, stem: "In The Brothers Karamazov the same woman is Agrafena Alexandrovna, Grushenka, Grusha and Grushka. What changes from one form to the next?", alt: "Think of how your family, your professors and a stranger each say your name.", options: [
+        { t: "How the speaker stands towards her, from respect to contempt", ok: true, why: "The person is the same; the form is a statement about the relation. Agrafena Alexandrovna keeps distance, Grushenka and Grusha are familiar, Grushka can be rough." },
+        { t: "Official papers use one form and ordinary speech the others", bug: "surface", why: "Documents do use the full name, but the novel's characters switch forms in speech, and the switch is the point." },
+        { t: "They are different women with similar names", bug: "surface", why: "One woman; the four names are four relationships." },
+        { t: "The translator was inconsistent with a hard name", bug: "authority", why: "The forms are Dostoevsky's; a translator who kept them was being faithful, not careless." },
+      ] },
+      { id: "n2", type: "scene", stage: "reveal", min: 2.5, src: ["rusnames", "browngilman", "grushenka"], terms: ["patronymic", "diminutive", "tv"], title: "A name is a sentence about two people", body: "A Russian name comes in layers. Alexei Fyodorovich, first name and [[patronymic|patronymic]] (son of Fyodor), is what you say to someone you respect or do not know well. Alyosha, a [[diminutive|diminutive]], is what his family and friends say. Grushka, with its -ka, can be intimate or can be a slap, depending on who says it and how.\n\nUnder the names sits the pronoun: ty, the familiar you, or vy, the polite you. The social psychologists Roger Brown and Albert Gilman called these [[tv|T and V]] in 1960 and showed that they encode two things, power (who may say ty to whom without hearing it back) and solidarity (who is close). A switch from vy to ty is an event: a declaration of love, of friendship, or of contempt.", reps: [{ kind: "analogy", label: "The same ladder in Cairo", body: "Egyptian Arabic has its own V: ḥaḍritak, literally ‘your presence’, against enta. A student says ḥaḍritak to a professor; a friend who says it to you is joking or angry." }, { kind: "counterexample", label: "Where the rule breaks", body: "No form has one fixed meaning. The same -ka ending can be affection from a parent and an insult from a rival. The ladder tells you what to listen for, not what you will hear." }] },
+      { id: "n3", type: "model", stage: "model", min: 3, model: "address", src: ["addressmodel", "browngilman"], terms: ["tv"], title: "Climb the ladder", body: "Set how close you are to Alexei, whether he is above or below you, and whether you are angry. See the Russian form, the pronoun, and the Egyptian Arabic that says the same thing.", ask: "**Find** the two ways anger moves a speaker on the ladder, and the one relation where Russian and Egyptian Arabic both reach for a title." },
+      { id: "n4", type: "q", kind: "predict", stage: "primary", min: 2, src: ["snegiryov", "nadryvy"], terms: ["nadryv"], atoms: ["narrative", "judgment"], poss: { karamazov: "primary" }, stem: "Captain Snegiryov is poor, publicly humiliated by Dmitri, and his son is ill. Offered two hundred roubles, he crumples the notes, throws them on the sand and grinds them under his heel. Dostoevsky titled this whole book with one word for moments like this. What does it name?", options: [
+        { t: "Pride and pain strained until they tear, and shown to others", ok: true, why: "Nadryv: a tearing, a strain past bearing, often performed. He needs the money; refusing it in front of Alyosha is the only thing he still owns." },
+        { t: "Plain anger at the man who had humiliated him in front of everyone", bug: "surface", why: "Anger is there, but the notes come from Katerina Ivanovna through Alyosha, not from Dmitri; he is destroying help, not hitting back." },
+        { t: "A sudden fit of madness", bug: "posthoc", why: "He knows exactly what he is doing and says why: he cannot sell his honour, or tell Ilyusha he did." },
+        { t: "The Russian word for poverty", bug: "surface", why: "Poverty is the setting; the word names what the pressure does to feeling." },
+      ] },
+      {
+        id: "n5", type: "contrast", stage: "contrast", min: 2.5, src: ["nadryvy"], terms: ["nadryv"], atoms: ["represent", "judgment"], poss: { karamazov: "compare" }, title: "Four translators, one word",
+        left: { title: "Lacerations", body: "Constance Garnett (1912), and Katz: the tearing, the wound." },
+        right: { title: "Strains · Crises · Crack-Ups", body: "Pevear and Volokhonsky; Avsey; McDuff: the pressure, the turning point, the breaking." },
+        q: { stem: "Why can no English title do the job of Nadryvy?", options: [
+          { t: "It bundles tearing, strain and a show of suffering, and each title keeps one part", ok: true, why: "Each translator chose which part to save. Knowing the word lets you read all four titles as one thing seen from four sides." },
+          { t: "Russian has more words than English", bug: "linear", why: "Word counts are not the issue; one Russian word bundles meanings English keeps apart." },
+          { t: "The translators misunderstood the Russian and each guessed at a different meaning", bug: "authority", why: "They understood it; English simply has no single word with all its parts." },
+          { t: "Titles are never translated faithfully", bug: "rigid", why: "Many titles translate cleanly; this one does not, and that is informative." },
+        ] },
+      },
+      { id: "n6", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["blues"], atoms: ["experiment", "calib"], stem: "Russian obliges its speakers to call a blue either goluboy (lighter) or siniy (darker). Researchers timed Russian and English speakers telling two blues apart. What did they find?", options: [
+        { t: "Russians were quicker only across their blue boundary, and a verbal task erased it", ok: true, why: "A real effect of language on a perceptual judgement, which vanished when the language system was kept busy (Winawer and colleagues, 2007). Small, fast and specific." },
+        { t: "English speakers could not see the difference at all", bug: "rigid", why: "Everyone saw it; the Russian speakers were only quicker across their boundary. No language blinds its speakers." },
+        { t: "No difference: language never touches perception", bug: "confirm", why: "The cross-boundary advantage was measured, and removed by verbal interference, which points to language at work." },
+        { t: "Russians were faster at telling every pair of colours apart, being better trained at it", bug: "surface", why: "The advantage was only for pairs that crossed their language's boundary." },
+      ] },
+      { id: "n7", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["browngilman", "addressmodel"], atoms: ["judgment", "info"], stem: "A patient in his sixties calls you \"ya doktor\" and \"ḥaḍritak\" for a week. On the day he goes home he says \"ya ibni\" (my son) and \"enta\". What has he told you?", options: [
+        { t: "That you have become close, and the familiar form is a gift", ok: true, why: "Distance shrank, and he moved down the ladder on purpose. From an older patient, \"my son\" is warmth, not a loss of respect." },
+        { t: "That he has stopped respecting you as his doctor now he is well", bug: "rigid", why: "The ladder has two dimensions: less distance is not less respect." },
+        { t: "That he is confused, and you should check his orientation", bug: "posthoc", why: "A deliberate, fitting change of register is a sign of a clear mind." },
+        { t: "Nothing: Egyptians use the two forms interchangeably", bug: "confirm", why: "You would notice at once if a stranger called you enta; the difference is real." },
+      ] },
+      { id: "n8", type: "q", kind: "far", stage: "far", min: 1.5, src: ["titles"], atoms: ["narrative", "info"], stem: "A Cairo shopkeeper calls a ten-year-old boy \"ya basha\". Pasha was a real rank, abolished after the 1952 revolution. Why is the phrase warm and funny?", options: [
+        { t: "A title far above the listener, given in play, so the gap is the joke", ok: true, why: "Humour by register mismatch. The rank's history is what makes it land: the word kept its height after the rank was gone." },
+        { t: "Shopkeepers are still required by law to address customers with titles", bug: "authority", why: "The titles were abolished; nobody is required to use them." },
+        { t: "It means the boy's family is rich", bug: "surface", why: "It is said to every boy; that is part of the joke." },
+        { t: "It is an insult disguised as politeness", bug: "inversion", why: "Mock-politeness can wound, but to a child from a shopkeeper it is affection." },
+      ] },
+      {
+        id: "n9", type: "forge", stage: "forge", min: 3, title: "A portal, not a word list", body: "Plan how you will start a language you want (Russian for Dostoevsky, classical Arabic for the poets, any other) so it opens its people and books, not only its dictionary.",
+        slots: [
+          { key: "first", label: "Learn first", options: [{ t: "how people address each other, and when they switch", grade: "good", note: "The ladder of names and pronouns opens every conversation, novel and film.", say: "the forms of address and their switches" }, { t: "the 500 most common words", grade: "weak", note: "Useful, and silent about who is speaking to whom.", say: "the 500 commonest words" }] },
+          { key: "word", label: "One word worth a chapter", options: [{ t: "an untranslatable word from a work you love, learnt in its scene", grade: "good", note: "Nadryv, learnt with Snegiryov, opens a whole book.", say: "one untranslatable word learnt in its scene" }, { t: "a list of fifty untranslatable words from the internet", grade: "bad", note: "Words without scenes are trivia.", say: "a list of untranslatable words" }] },
+          { key: "film", label: "Film", options: [{ t: "watch a scene twice, and listen for the moment the form of address changes", grade: "good", note: "Subtitles write ‘you’ both times; your ear catches the switch.", say: "a scene twice, listening for the switch" }, { t: "subtitles only", grade: "weak", note: "You get the plot and lose the relationships.", say: "subtitles only" }] },
+          { key: "proof", label: "Proof you are learning", options: [{ t: "you can say why a character changed how they address someone", grade: "good", note: "A test of the language's people, not its vocabulary.", say: "explaining a switch of address" }, { t: "the length of your app streak", grade: "bad", note: "A count of days, not of understanding.", say: "the streak" }] },
+        ],
+        template: "Start with {first}, add {word}, watch {film}, and **measure it by {proof}**.",
+        critique: { stem: "A friend has a 300-day streak in a language app. What would show the language has opened for them?", options: [{ t: "That they can hear what a switch from vy to ty means", ok: true, why: "It tests the relationships the words carry, which is what §34 asks a language to open." }, { t: "The streak itself: 300 days is dedication", bug: "proxy", why: "Dedication, yes; the streak counts days, not what the language lets them hear." }, { t: "Their vocabulary score in the app, which counts known words", bug: "proxy", why: "A word count again: necessary, and silent about people." }] },
+      },
+    ],
+    challenge: { stem: "In a translated film, two characters switch from vy to ty and the subtitles show ‘you’ both times. What has been lost?", options: [{ t: "a change in their relationship", ok: true }, { t: "nothing of importance", bug: "confirm" }, { t: "a grammar mistake in the original", bug: "authority" }] },
+    hooks: [
+      { id: "names.h1", gap: 1, q: { stem: "\"Alexei Fyodorovich\" is…", options: [{ t: "first name and patronymic, a form of respect", ok: true }, { t: "his full surname", bug: "surface" }, { t: "a nickname that only his family uses at home, like Alyosha", bug: "inversion" }] } },
+      { id: "names.h2", gap: 7, q: { stem: "In the Russian blues study, the cross-boundary advantage vanished when speakers…", options: [{ t: "did a verbal task at the same time", ok: true }, { t: "did a spatial task at the same time", bug: "confound" }, { t: "saw colours far apart", bug: "inversion" }] } },
+      { id: "names.h3", gap: 30, poss: { karamazov: "context" }, q: { stem: "Snegiryov grinding the notes under his heel is an example of…", options: [{ t: "nadryv, feeling strained until it tears", ok: true }, { t: "simple greed for the money he was offered", bug: "inversion" }, { t: "a sudden fit of madness in front of Alyosha", bug: "posthoc" }] } },
+    ],
+    deeper: [
+      { title: "What the names do in the novel", body: "Watch the forms of address as you read. Who calls Grushenka Grushka, and when? When does a character drop the patronymic? Garnett kept the Russian forms, which is one reason her English still carries some of the relationships a smoother translation would lose." },
+      { title: "The strong claim and the weak one", body: "The strong claim, that your language decides what you can see or think, is not supported: Russians and English speakers see the same blues. The weak claim, that a language's obligatory choices speed some judgements and draw attention to some differences, has experimental support, and argument continues over how large and how general it is." },
+      { title: "Open question", body: "Does learning a second language's forms of address change how you hear your own? Bilingual speakers often report it; careful studies of it are few." },
     ],
   });
 

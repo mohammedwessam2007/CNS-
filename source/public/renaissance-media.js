@@ -34,6 +34,7 @@
     phrases: V("music", "Shows that two phrases differ only in their last notes, so the ear's question and answer can be seen.", "Beethoven, Ninth Symphony (1824), melody public domain, drawn as notation by the project"),
     relay: V("timeline", "Traces one line of medicine through Greek, Arabic and Latin, so the transmission reads as a chain of named people.", "Standard histories of medicine (see the session's sources), drawn by the project"),
     axis: V("diagram", "Shows the 180-degree line from above, so the rule behind screen direction becomes a matter of geometry.", "Standard film grammar, drawn by the project"),
+    zeroLine: V("timeline", "Places five dated steps of the zero, from India and Cambodia through Baghdad to Pisa, on one line, so the idea's route is read as a chain of named people and places.", "The session's cited sources (MacTutor, Aczel, Britannica, Liber Abaci), drawn by the project"),
     chainArch: V("diagram", "Puts a hanging chain above its flipped image, so the reader sees why a hanging shape stands in compression.", "Hooke (1675) and the funicular principle, drawn by the project"),
   };
   const M = (job, source) => ({ type: "interactive", job, source: source || "a model built by the project; its numbers are stated in the step", rights: ORIG });
@@ -62,6 +63,9 @@
     register: M("Lets the reader keep one mechanism fixed while the listener changes, so register is separated from content."),
     axis: M("Lets the reader walk the camera round two actors and see when screen direction flips."),
     chain: M("Lets the reader sag, load and flip a chain and compare it with a half-circle arch."),
+    place: M("Lets the reader write any number in any base from 2 to 10, see what each column is worth, compare the Roman numeral, and switch the zero off.", "computed live from the number chosen; the Roman numeral follows the standard subtractive rules"),
+    survive: M("Lets the reader set the number of copies, the risk per crisis and the number of crises, and compare how often one store and scattered copies keep a text.", "invented numbers; the model assumes copies fail independently and says so"),
+    address: M("Lets the reader set closeness, power and anger and see the Russian name form and pronoun, and the Egyptian Arabic that says the same thing.", "a teaching simplification of standard descriptions of Russian and Egyptian Arabic address; it says so in its reading"),
     seating: M("Lets the reader try three seating plans and see which conversations start, whether the big talkers can dominate, and whether the quietest guest is left alone.", "an invented dinner; the rules (shared interests start conversations, dominant voices crowd out others) follow the session's cited studies"),
   };
   const L = (type, job, source, rights) => ({ type, job, source, rights });

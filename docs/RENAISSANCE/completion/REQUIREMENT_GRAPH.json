@@ -1,14 +1,14 @@
 {
- "generated": "2026-09-26T20:52:39.365Z",
- "log": "receipts/v18_1/full_regression.log",
+ "generated": "2026-09-26T21:26:41.862Z",
+ "log": "receipts/v18_2/full_regression.log",
  "inventory": {
   "seasons": 3,
-  "sessions": 25,
-  "steps": 225,
+  "sessions": 28,
+  "steps": 252,
   "quotes": 17,
-  "models": 25,
-  "visuals": 23,
-  "civNodes": 78,
+  "models": 28,
+  "visuals": 24,
+  "civNodes": 94,
   "atoms": 28,
   "source": 11,
   "docs": 42,
@@ -2632,7 +2632,7 @@
    "id": "math",
    "cat": "organ",
    "kind": "build",
-   "name": "Mathematics organ (§17): Euler's bridges as intuition, representation, proof and beauty",
+   "name": "Mathematics organ (§17): Euler's bridges as intuition, representation, proof and beauty; place value and zero as a representation",
    "why": "",
    "deps": [],
    "status": "INTEGRATION-TESTED",
@@ -2640,7 +2640,8 @@
     "docs/RENAISSANCE/v3/02_ORGANS.md"
    ],
    "code": [
-    "source/public/renaissance-s3b.js#id: \"euler\""
+    "source/public/renaissance-s3b.js#id: \"euler\"",
+    "source/public/renaissance-s3b.js#id: \"zero\""
    ],
    "tests": [
     "v3:V1",
@@ -2704,7 +2705,7 @@
    "id": "history",
    "cat": "organ",
    "kind": "build",
-   "name": "History organ (§19): one line of medicine from Galen to Europe through Arabic; chronology, institutions, transmission",
+   "name": "History organ (§19): one line of medicine from Galen to Europe through Arabic; chronology, institutions, transmission; what survives and archive bias (Timbuktu)",
    "why": "",
    "deps": [],
    "status": "INTEGRATION-TESTED",
@@ -2712,7 +2713,8 @@
     "docs/RENAISSANCE/v3/02_ORGANS.md"
    ],
    "code": [
-    "source/public/renaissance-s3c.js#id: \"wisdom\""
+    "source/public/renaissance-s3c.js#id: \"wisdom\"",
+    "source/public/renaissance-s3c.js#id: \"timbuktu\""
    ],
    "tests": [
     "v3:V1",
@@ -3001,6 +3003,39 @@
    "open": [],
    "lastVerified": "2026-09-26",
    "registryCandidates": 9,
+   "strongest": []
+  },
+  {
+   "id": "globalfloor",
+   "cat": "organ",
+   "kind": "guard",
+   "name": "No token regions (§26: \"do not build Europe + token world history\"): every region is the setting of a session of its own or is taught in at least two sessions",
+   "why": "",
+   "deps": [],
+   "status": "DESIGNED",
+   "docs": [
+    "docs/RENAISSANCE/v3/02_ORGANS.md"
+   ],
+   "code": [],
+   "tests": [],
+   "bench": [],
+   "effect": "",
+   "blocker": null,
+   "evidence": "Opened on review before the v18.2 declaration: Central Asia is taught only in the wisdom session (Avicenna's birthplace) and Oceania only in one navigation item of the film session. Both pass the breadth guard (V3), which counts any teaching text, but one mention is close to token.",
+   "sup": null,
+   "reason": null,
+   "due": null,
+   "sources": [
+    "M3.26"
+   ],
+   "closed": false,
+   "class": "controllable",
+   "fails": [],
+   "open": [
+    "status DESIGNED: needs code and a passing test"
+   ],
+   "lastVerified": null,
+   "registryCandidates": 0,
    "strongest": []
   },
   {
@@ -3373,29 +3408,33 @@
    "name": "Language as a civilisation portal (§34): language learning that unlocks literature, humour, history, film, social codes, idiom and thought, not vocabulary",
    "why": "",
    "deps": [],
-   "status": "DESIGNED",
+   "status": "INTEGRATION-TESTED",
    "docs": [
     "docs/RENAISSANCE/v3/02_ORGANS.md"
    ],
-   "code": [],
-   "tests": [],
+   "code": [
+    "source/public/renaissance-s3c.js#id: \"names\"",
+    "source/public/renaissance-s3c.js#address: {"
+   ],
+   "tests": [
+    "v3:V1",
+    "v3:V6"
+   ],
    "bench": [],
    "effect": "",
    "blocker": null,
-   "evidence": "Reclassified from frontier to controllable on review (v18.1): a language experience can be built now, so leaving it as frontier would have kept it out of the denominator.",
+   "evidence": "Reclassified from frontier to controllable on review (v18.1) and built in v18.2: the names session reads forms of address in Russian and Egyptian Arabic as statements about a relationship, and opens literature (the Karamazovs by their names, nadryv), humour (ya basha), history (titles abolished in 1952), film (subtitles that flatten ty and vy), social codes, idiom and thought (the Russian blues study, with its limits).",
    "sup": null,
    "reason": null,
    "due": null,
    "sources": [
     "M3.34"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
    "fails": [],
-   "open": [
-    "status DESIGNED: needs code and a passing test"
-   ],
-   "lastVerified": null,
+   "open": [],
+   "lastVerified": "2026-09-26",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6979,8 +7018,8 @@
    "deps": [],
    "status": "IMPLEMENTED",
    "docs": [
-    "receipts/v18_1/full_regression.log",
-    "receipts/v18_1/RECEIPT.md"
+    "receipts/v18_2/full_regression.log",
+    "receipts/v18_2/RECEIPT.md"
    ],
    "code": [],
    "tests": [],
@@ -7017,8 +7056,8 @@
    "tests": [],
    "bench": [],
    "effect": "",
-   "blocker": "Live verification needs an authorised read of the Vercel project, and none exists in this session: the Vercel connector can see the team but not the project (list deployments 403, deployment by URL 404, fetch: no access); the sandbox egress policy blocks *.vercel.app; the GitHub connector has no commit-status or deployment tool. Remedy: the owner extends the Vercel connector to the project intellectuality-cns, or opens the live URL and checks the title reads v18.1.",
-   "evidence": "Preparatory work complete: the tested commit is pushed to the branch the project deploys from; the identical build (deploy/vercel/build.mjs, which fails if index.html names a missing file) is served locally, and every Renaissance suite and every CNS browser suite with a production variant ran against it as well as against the source (receipts/v18_1/full_regression.log).",
+   "blocker": "Live verification needs an authorised read of what the live site serves. The Vercel connector can now list the project's deployments (state, target, commit), but cannot read a deployment's detail (404) or fetch its pages (no access); the sandbox egress policy blocks *.vercel.app; the GitHub connector has no commit-status or deployment tool. Production is READY on the v18.1 checkpoint 2c577a0; the v18.1 commit 23f58f0 produced no deployment. Remedy: the owner extends the Vercel connector to the project intellectuality-cns, or opens the live URL and checks the title reads v18.1.",
+   "evidence": "Preparatory work complete: the tested commit is pushed to the branch the project deploys from; the identical build (deploy/vercel/build.mjs, which fails if index.html names a missing file) is served locally, and every Renaissance suite and every CNS browser suite with a production variant ran against it as well as against the source (receipts/v18_2/full_regression.log).",
    "sup": null,
    "reason": null,
    "due": null,
@@ -11511,7 +11550,8 @@
    "line": 1287,
    "nodes": [
     "global",
-    "globaldepth"
+    "globaldepth",
+    "globalfloor"
    ]
   },
   {

@@ -1,0 +1,30 @@
+{
+ "when": "2026-09-26T21:24:26.907Z",
+ "source": "renaissance_v3_test S3 (source :8787)",
+ "ok": true,
+ "detail": {
+  "over": [],
+  "per": {
+   "s1": {
+    "n": 60,
+    "chance": 0.308,
+    "max": 0.392
+   },
+   "s2": {
+    "n": 62,
+    "chance": 0.312,
+    "max": 0.378
+   },
+   "s3": {
+    "n": 166,
+    "chance": 0.291,
+    "max": 0.341
+   },
+   "sealed": {
+    "n": 52,
+    "chance": 0.25,
+    "max": 0.333
+   }
+  }
+ }
+}

@@ -157,7 +157,35 @@
   }
 
   /* ═══════════════ VISUALS ═══════════════ */
+  const ROMAN = [[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"], [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
+  const roman = (n) => ROMAN.reduce((s, [v, r]) => { while (n >= v) { s += r; n -= v; } return s; }, "");
+  const digitsIn = (n, b) => { const d = []; do { d.unshift(n % b); n = Math.floor(n / b); } while (n > 0); return d; };
+  function placeDraw(v) {
+    const n = v.n, b = v.base, d = digitsIn(n, b), k = d.length;
+    const w = Math.min(40, Math.floor(320 / k)), x0 = 180 - (w * k) / 2;
+    let h = t(180, 22, n + " written in base " + b, { c: C.mut, fs: 13 });
+    d.forEach((dg, i) => {
+      const x = x0 + i * w, place = Math.pow(b, k - 1 - i), blank = v.nozero && dg === 0;
+      h += box(x + 2, 40, w - 4, 52, blank ? C.pink : C.cyan) + (blank ? "" : t(x + w / 2, 74, String(dg), { c: C.ink, fs: 20 })) + t(x + w / 2, 110, String(place), { c: C.mut, fs: 12, fw: 600 });
+    });
+    h += t(180, 132, "each column is worth " + b + " times the one to its right", { c: C.mut, fs: 12, fw: 600 });
+    const r = roman(n);
+    h += t(180, 168, "Roman: " + r, { c: C.amber, fs: 14 }) + t(180, 188, r.length + (r.length === 1 ? " symbol" : " symbols") + ", and no column", { c: C.mut, fs: 12, fw: 600 }) + t(180, 204, "tells you what a symbol is worth", { c: C.mut, fs: 12, fw: 600 });
+    if (v.nozero && d.includes(0)) h += t(180, 226, "without a zero the page shows: " + d.filter((x) => x).join(" "), { c: C.pink, fs: 13 });
+    return svg(360, 240, h, "A number shown as place-value columns in a chosen base, with its Roman numeral below");
+  }
+  function zeroLineDraw() {
+    const E = [["628", "Brahmagupta: zero as a number", "India"], ["683", "a dot for zero, dated, in stone", "Cambodia (inscription K-127)"], ["c. 825", "al-Khwarizmi on Hindu reckoning", "Baghdad"], ["876", "“270” with a round zero", "Gwalior, India"], ["1202", "Fibonacci's Liber Abaci", "Pisa"]];
+    let h = '<line x1="70" y1="20" x2="70" y2="244" stroke="' + C.line + '" stroke-width="2"/>';
+    E.forEach(([y, a, p], i) => {
+      const yy = 30 + i * 46;
+      h += '<circle cx="70" cy="' + (yy + 4) + '" r="5" fill="' + C.lime + '"/>' + t(60, yy + 9, y, { c: C.lime, fs: 13, a: "end" }) + t(84, yy + 8, a, { c: C.ink, fs: 12.5, a: "start" }) + t(84, yy + 26, p, { c: C.mut, fs: 12, fw: 600, a: "start" });
+    });
+    return svg(360, 256, h, "Timeline of zero from India and Cambodia through Baghdad to Pisa, 628 to 1202");
+  }
+
   const visuals = {
+    zeroLine: () => zeroLineDraw(),
     konig: () => konigDraw({ b1: 1, b2: 1, b3: 1, b4: 1, b5: 1, b6: 1, b7: 1 }),
     // the same city as four dots and seven lines, with the count at each dot
     graph4: () => {
@@ -206,6 +234,19 @@
 
   /* ═══════════════ MODELS ═══════════════ */
   const models = {
+    place: {
+      controls: [
+        { id: "n", label: "The number", min: 1, max: 400, step: 1, value: 305, unit: "" },
+        { id: "base", label: "The base (how many symbols)", min: 2, max: 10, step: 1, value: 10, unit: "" },
+      ],
+      toggles: [{ id: "nozero", label: "Write it without a symbol for zero", value: false }],
+      draw: (v) => placeDraw(v),
+      read(v) {
+        const d = digitsIn(v.n, v.base), r = roman(v.n);
+        const noz = d.filter((x) => x).join("");
+        return "**In base " + v.base + ", " + v.n + " needs " + d.length + " digit" + (d.length > 1 ? "s" : "") + "**, and each digit's worth comes from its column alone. The Roman numeral " + r + " takes " + r.length + " symbols and has no columns, which is why Romans calculated on counting boards and only wrote the answer. " + (v.nozero && d.includes(0) ? "**Without a zero the columns collapse:** the page shows " + d.filter((x) => x).join(" ") + ", which reads just as well as " + noz + " (in base " + v.base + "). The empty place needs a mark of its own." : v.nozero ? "This number has no empty column, so it survives without a zero; try " + (v.base === 10 ? "305" : "a number with an empty column") + "." : "Switch off the zero to see what the empty column was doing.");
+      },
+    },
     bridges: {
       toggles: BR.map((b) => ({ id: b.id, label: b.id === "b8" ? "A new bridge 8 (south–north, west end)" : "Bridge " + b.label + " (" + b.a + "–" + b.b + ")", value: b.id !== "b8" })),
       draw: (v) => konigDraw(v),
@@ -643,6 +684,98 @@
       { title: "What the model simplifies", body: "Real cadences depend on rhythm, melody and context as well as the chords; the synthesised tones have none of an orchestra's colour. The point here is the pull of the endings, which survives even in plain tones." },
       { title: "Cairo, 1932", body: "The Congress of Arab Music gathered performers and scholars from the Arab world and Europe. Its sharpest debate was whether to fix the scale to 24 equal quarter tones (convenient for notation and instruments) or keep the flexible intervals musicians actually play. Bartók and colleagues also made hundreds of recordings of the performing groups." },
       { title: "Open question", body: "How much of what feels “natural” in music is universal and how much learned? Research finds some near-universals (octave equivalence is widely shared) and a great deal that is learned; the boundary is still argued over." },
+    ],
+  });
+
+  sessions.push({
+    id: "zero", primitive: "represent", domain: "mathematics", region: "India, Cambodia, Baghdad and Pisa", works: ["brahmasphuta", "liber-abaci"], requires: ["euler"],
+    atoms: ["represent", "abstr", "compress"],
+    title: "A symbol for nothing",
+    hook: "Multiply XLVIII by XII without turning them into ordinary numbers. Where do you get stuck?",
+    minutes: 24,
+    why: "Place value with a zero is the most successful representation humans have invented: it turned calculation from a craft on counting boards into something anyone can do on paper, and it came to the world from South Asia, through Baghdad. It is mathematics as a representation you can feel, and history you can check.",
+    capability: "Explain why position plus a symbol for an empty place makes arithmetic cheap, trace how the idea travelled from India and Cambodia through Baghdad to Europe, and spot where a missing or misplaced zero still causes real errors.",
+    stakes: "Every tenfold medication error that comes from a lost decimal point or a missing zero is this session's subject, still happening.",
+    bridge: "The missing step: the digits did not change arithmetic; position did. And position needs a way to say 'nothing in this column', or 48 and 408 look the same.",
+    connection: "Season 2 showed that the log scale is a new sense. Place value is an older one: a representation that makes large numbers small enough to handle, and Euler's bridges showed how much a good representation hides and reveals.",
+    vocab: {
+      placevalue: { name: "place value", h: "A digit's worth depends on its column.", s: "قيمة الرقم على حسب مكانه: ٥ في خانة الآحاد غير ٥ في خانة المية.", t: "A positional numeral system: each position is worth a power of the base, and a digit multiplies that power." },
+      placeholder: { name: "a placeholder zero", h: "A mark that says 'this column is empty'.", s: "الصفر هنا بيقول: الخانة دي فاضية، ما تشيلهاش.", t: "Zero used to keep positions apart (4_5 vs 405); distinct from zero as a number with its own arithmetic." },
+      algorithm: { name: "algorithm", h: "A step-by-step method that always works.", s: "خطوات ثابتة لو مشيت عليها توصل للحل، والكلمة جاية من اسم الخوارزمي.", t: "A finite procedure; the word comes from 'Algoritmi', the Latin form of al-Khwarizmi's name." },
+    },
+    provenance: [
+      { id: "brahmagupta", claim: "In the Brahmasphutasiddhanta (628 CE) Brahmagupta gave rules for computing with zero as a number (a number plus or minus zero is itself; a number times zero is zero) and stated, wrongly, that zero divided by zero is zero.", source: "MacTutor History of Mathematics, 'Brahmagupta'; checked by web search", year: "628", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "k127", claim: "The Khmer inscription K-127 from Sambor on the Mekong is dated 605 of the Śaka era (683 CE) and writes that year with a dot for zero; lost during the Khmer Rouge years, it was found again by Amir Aczel in 2013.", source: "Aczel A., Finding Zero (2015); Smithsonian Magazine and the Mathematical Association of America on the Cambodian zero; checked by web search", year: "683", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "gwalior", claim: "An inscription of 876 CE at the Chaturbhuj temple in Gwalior writes 270 and 50 with a round zero, often cited as the oldest dated round zero carved in stone in India.", source: "Standard histories of the numerals; descriptions of the Chaturbhuj temple inscription; checked by web search", year: "876", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "bakhshali", claim: "Radiocarbon dating commissioned by the Bodleian Library (2017) gave three different ranges for three folios of the Bakhshali manuscript (224–383, 680–779 and 885–993 CE); scholars including Plofker, Keller, Hayashi, Montelle and Wujastyk argued that the text should be dated by the latest folio, not the earliest.", source: "Bodleian Library announcement (2017); Plofker K. et al., 'The Bakhshālī Manuscript: A Response to the Bodleian Library's Radiocarbon Dating', History of Science in South Asia 5 (2017); checked by web search", year: "2017", kind: "scholarship", license: "fact", grade: "A", contested: "The date of the manuscript, and so whether it holds the oldest written zero, is disputed." },
+      { id: "khwarizmi", claim: "Al-Khwarizmi wrote a treatise on calculating with Hindu numerals around 825 in Baghdad; it survives in a 12th-century Latin translation beginning 'Algoritmi…', from which the word 'algorithm' comes.", source: "Encyclopaedia Britannica, 'al-Khwarizmi'; checked by web search", year: "c. 825", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "fibonacci", claim: "Leonardo of Pisa (Fibonacci) introduced the Hindu-Arabic numerals and place value to European readers in the Liber Abaci of 1202, calling them the 'modus Indorum'.", source: "Standard histories; Liber Abaci (1202); checked by web search", year: "1202", kind: "primary", license: "public domain", grade: "A" },
+      { id: "nothaft", claim: "The popular story that medieval Europe feared zero as satanic and that the Church banned the new numerals is unsupported at nearly every level; what did exist were practical restrictions, such as the Florentine money-changers' guild rule of 1299 on the numerals in account books.", source: "Nothaft C.P.E., 'Medieval Europe's satanic ciphers: on the genesis of a modern myth', British Journal for the History of Mathematics 35(2):107–136 (2020); checked by web search", year: "2020", kind: "scholarship", license: "fact", grade: "A", contested: "Popular histories still repeat the myth." },
+      { id: "donotuse", claim: "The Joint Commission's 'Do Not Use' list forbids trailing zeros (X.0 mg) and the lack of a leading zero (.X mg) in medication orders, because a missed decimal point can cause a tenfold dosing error.", source: "The Joint Commission, Official 'Do Not Use' List; checked by web search", year: "2004–present", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "spreadsheet", claim: "Spreadsheet programs store an entry that looks like a number as a number, so leading zeros in codes (postal codes, phone numbers, IDs) disappear unless the cell is set to text.", source: "Documented spreadsheet behaviour (e.g. Microsoft Excel help on keeping leading zeros)", year: "2020s", kind: "scholarship", license: "fact", grade: "B" },
+      { id: "numerals", claim: "The design exercise and the numbers in the model are original teaching material.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "z1", type: "q", kind: "predict", stage: "predict", min: 2, src: ["numerals"], atoms: ["represent"], stem: "Multiply XLVIII by XII using only Roman numerals, without converting them. What makes it so hard?", alt: "In 48 × 12 you multiply 8 by 2 and know the answer goes in the ones column. What in XLVIII tells you which column anything belongs to?", options: [
+        { t: "No symbol tells you which column it belongs to", ok: true, why: "In XLVIII the X is ten only because of what surrounds it; nothing gives each symbol a column. Written place value gives every digit its column, so multiplication becomes a small table plus bookkeeping." },
+        { t: "Romans never learned their multiplication tables", bug: "surface", why: "They calculated well, on counting boards with pebbles in columns. The difficulty was writing, not knowing." },
+        { t: "The Roman numerals for these numbers are simply too long to handle", bug: "scale", why: "Length is a symptom; 408 and CDVIII differ less in length than in what each symbol tells you." },
+        { t: "There is no Roman numeral for five", bug: "irrelevant", why: "V is five; the trouble is elsewhere." },
+      ] },
+      { id: "z2", type: "scene", stage: "reveal", min: 2.5, src: ["numerals"], terms: ["placevalue", "placeholder"], title: "Position does the work", body: "In 408 each digit is worth its column: 4 hundreds, 0 tens, 8 ones. The digits are just labels; [[placevalue|position]] does the arithmetic. To multiply, you only need a table of single digits and a rule for carrying.\n\nBut position creates a new problem. If a column is empty, 408 and 48 look the same. Something has to hold the empty place: a [[placeholder|placeholder zero]]. Later came the harder step: treating zero as a number you can add, subtract and multiply.", reps: [{ kind: "story", label: "The counting board", body: "Roman and medieval merchants did have place value, on the counting board: pebbles in columns for ones, tens and hundreds. An empty column was simply empty. Only when calculation moved onto paper did the empty column need a written mark." }, { kind: "counterexample", label: "Place value without a zero", body: "Babylonian scribes wrote numbers in base 60 with place value long before any of this, and for centuries had no mark for an empty place: context had to tell the reader whether a number meant 1, 60 or 3,600. Position without zero works, badly." }] },
+      { id: "z3", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["brahmagupta"], atoms: ["abstr"], stem: "In 628, the astronomer Brahmagupta wrote rules for calculating with zero as a number. Which of his rules would a mathematician today reject?", options: [
+        { t: "Zero divided by zero is zero", ok: true, why: "Brahmagupta's one wrong rule, and an honest one: division by zero has no consistent answer, which took centuries more to see. His other rules are the ones you use today." },
+        { t: "A number plus zero is the same number", bug: "rigid", why: "Correct, and still the rule: only division by zero breaks. Suspecting every rule that involves zero is the mistake." },
+        { t: "A number multiplied by zero gives zero", bug: "rigid", why: "Correct, and still the rule: only division by zero breaks." },
+        { t: "Zero subtracted from zero leaves zero", bug: "rigid", why: "Correct, and still the rule: only division by zero breaks." },
+      ] },
+      { id: "z4", type: "scene", stage: "reveal", min: 3, src: ["brahmagupta", "k127", "gwalior", "bakhshali", "khwarizmi", "fibonacci"], terms: ["algorithm"], title: "How nothing travelled", body: "Brahmagupta's rules (628) are the first known arithmetic of zero as a number. The oldest dated zero carved in stone is a dot in a Khmer inscription from the Mekong, dated 683; the oldest round zero carved in India is at Gwalior in 876, in the numbers 270 and 50.\n\nIn Baghdad around 825, al-Khwarizmi wrote a book on calculating with the Hindu numerals; its Latin translation began \"Algoritmi…\", and his name became the word [[algorithm|algorithm]]. In 1202 Leonardo of Pisa, Fibonacci, brought the \"method of the Indians\" to European merchants in his *Liber Abaci*.", reps: [{ kind: "diagram", label: "Five dates", svg: "zeroLine", body: "From India and Cambodia through Baghdad to Pisa." }, { kind: "counterexample", label: "A contested manuscript", body: "In 2017 the Bodleian Library announced that radiocarbon dating put the Bakhshali manuscript, full of zeros, in the 3rd or 4th century. Other scholars answered that the three folios tested gave three different dates, centuries apart, and that a manuscript is dated by its latest part. The claim of the \"oldest zero\" is disputed; both sides are on record." }] },
+      { id: "z5", type: "model", stage: "model", min: 3, model: "place", src: ["numerals"], title: "Columns, and what the zero holds", body: "Choose a number and a base. Each column is worth the base times the column to its right. Then switch the zero off.", ask: "**Find** a number that survives without a zero and one that does not, and say what the difference is." },
+      {
+        id: "z6", type: "contrast", stage: "contrast", min: 2.5, src: ["nothaft", "numerals"], atoms: ["represent", "judgment"], title: "Two ways to add in Florence, 1300",
+        left: { title: "The counting board", body: "Pebbles in columns on a lined board. Fast in skilled hands; when the sum is done, the pebbles are swept away and only the answer is written, in Roman numerals." },
+        right: { title: "The new numerals on paper", body: "Each step of the sum stays on the page in Hindu-Arabic digits. Anyone can check it later, line by line." },
+        q: { stem: "What did the written method add that the counting board already had in its columns?", options: [
+          { t: "A record of the working that someone else can check", ok: true, why: "The board had place value; paper kept the calculation. That record had a risk too: the usual explanation for a Florentine guild's 1299 restriction of the new numerals in account books is that a 0 is easily turned into a 6 or a 9." },
+          { t: "The idea of place value itself, which nobody had used before", bug: "omission", why: "The board already had columns; place value was in the pebbles." },
+          { t: "Speed: paper was always faster than the board", bug: "surface", why: "Skilled board users were fast; the gain was the written record." },
+          { t: "Protection from the Church, which feared zero", bug: "authority", why: "A popular myth: there was no church ban and no general fear of zero; the recorded restrictions were practical." },
+        ] },
+      },
+      { id: "z7", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["donotuse"], atoms: ["represent", "judgment"], stem: "A handwritten order reads \".5 mg\" and another \"5.0 mg\". What does a safe prescriber write instead?", options: [
+        { t: "“0.5 mg” and “5 mg”", ok: true, why: "A leading zero and no trailing zero, from the Joint Commission's list: a missed decimal point in .5 or 5.0 becomes a tenfold overdose (5 or 50)." },
+        { t: "“.5 mg” and “5.0 mg”, written more neatly", bug: "surface", why: "Neater handwriting still loses the point on a fax, a crease or a tired reading." },
+        { t: "“½ mg” and “5.0 mg”, avoiding the decimal point", bug: "irrelevant", why: "Fractions bring their own misreadings, and the trailing zero stays." },
+        { t: "“0.50 mg” and “5.00 mg”, for precision", bug: "pretension", why: "Trailing zeros are exactly what the rule forbids in orders." },
+      ] },
+      { id: "z8", type: "q", kind: "far", stage: "far", min: 1.5, src: ["spreadsheet"], atoms: ["represent", "mech"], stem: "A clinic's spreadsheet shows patient ID 00731 as 731, and two records merge. What happened?", options: [
+        { t: "The ID was stored as a number, so its zeros meant nothing", ok: true, why: "In a number, zeros on the left hold no place and are dropped. The ID is a label that only looks like a number: store it as text." },
+        { t: "Someone typed the ID wrongly and should be retrained on data entry", bug: "agent", why: "It was typed correctly; the representation lost it, every time." },
+        { t: "The file was damaged and needs restoring", bug: "posthoc", why: "Nothing broke; the program did what numbers do." },
+        { t: "The program rounds all large numbers", bug: "linear", why: "731 is not large, and nothing was rounded: the zeros were never kept." },
+      ] },
+      {
+        id: "z9", type: "forge", stage: "forge", min: 3, title: "A dose chart nobody can misread", body: "Four decisions for a chart the night nurse reads at 3 a.m.",
+        slots: [
+          { key: "lead", label: "Below one", options: [{ t: "always a leading zero: 0.5 mg", grade: "good", note: "The zero holds the point where it can't be missed.", say: "always a leading zero" }, { t: "the decimal alone: .5 mg", grade: "bad", note: "The Joint Commission forbids it.", say: "the bare decimal" }] },
+          { key: "trail", label: "Whole numbers", options: [{ t: "never a trailing zero: 5 mg", grade: "good", note: "5.0 read without its point is 50.", say: "never a trailing zero" }, { t: "one decimal for neatness: 5.0 mg", grade: "bad", note: "Neat and dangerous.", say: "one decimal place" }] },
+          { key: "units", label: "Units", options: [{ t: "written out where they could be confused (micrograms, units)", grade: "good", note: "Abbreviations like U and µg are misread too.", say: "units written out" }, { t: "the shortest abbreviation", grade: "weak", note: "Saves a second, risks a tenfold error.", say: "short abbreviations" }] },
+          { key: "check", label: "Before giving", options: [{ t: "read the dose aloud with its unit", grade: "good", note: "A second representation, the spoken one, catches what the eye skipped.", say: "read the dose aloud with its unit" }, { t: "trust the chart", grade: "bad", note: "The chart is what fails.", say: "trust the chart" }] },
+        ],
+        template: "Below one: {lead}. Whole numbers: {trail}. Units: {units}. Before giving: **{check}**.",
+        critique: { stem: "A colleague says the leading-zero rule is fussy: “everyone knows .5 means a half.” What is the best reply?", options: [{ t: "“Everyone who sees the point does; the rule is for the time it's missed”", ok: true, why: "Representations are designed for the worst reading, not the best." }, { t: "“It's the rule, so we follow it”", bug: "authority", why: "True, and it teaches nothing; the reason is what makes people keep it." }, { t: "“You're right, it's only for beginners”", bug: "confirm", why: "Experienced staff miss decimal points too; the errors are on record." }] },
+      },
+    ],
+    challenge: { stem: "The zero in 408 is doing what job?", options: [{ t: "keeping the tens column empty", ok: true }, { t: "making the number bigger", bug: "surface" }, { t: "nothing: 408 and 48 are the same", bug: "omission" }] },
+    hooks: [
+      { id: "zero.h1", gap: 1, q: { stem: "What made written arithmetic cheap?", options: [{ t: "position, with a mark for an empty place", ok: true }, { t: "shorter symbols", bug: "surface" }, { t: "better multiplication tables, learned by heart", bug: "irrelevant" }] } },
+      { id: "zero.h2", gap: 7, q: { stem: "Which of Brahmagupta's rules was wrong?", options: [{ t: "zero divided by zero is zero", ok: true }, { t: "a number times zero is zero", bug: "rigid" }, { t: "a number plus zero is itself", bug: "rigid" }] } },
+      { id: "zero.h3", gap: 30, q: { stem: "A safe order for half a milligram reads…", options: [{ t: "0.5 mg", ok: true }, { t: ".5 mg", bug: "surface" }, { t: "0.50 mg", bug: "pretension" }] } },
+    ],
+    deeper: [
+      { title: "The satanic zero that never was", body: "Popular histories say medieval Europe feared zero as the devil's number and that the Church banned the new numerals. The historian Philipp Nothaft traced the story in 2020 and found it unsupported at nearly every step. What did exist were practical rules: a Florentine money-changers' guild restricted the new numerals in its account books in 1299; the usual explanation is that a 0 could be turned into a 6 or a 9 with one stroke." },
+      { title: "Why 'algorithm' is a man's name", body: "Al-Khwarizmi's book on Hindu reckoning survives only in Latin, opening \"Algoritmi…\" (\"thus spoke al-Khwarizmi\"). Readers took the name for the method, and the method became the word." },
+      { title: "Open question", body: "Was the Khmer dot of 683 part of the same Indian system, or a local variant? The inscription uses the Indian Śaka era, which suggests one family of numerals across South and Southeast Asia; how the zero moved within it is not settled." },
     ],
   });
 

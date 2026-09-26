@@ -1,11 +1,11 @@
 {
  "at": "2026-09-26",
- "total": 155,
+ "total": 178,
  "counts": {
-  "slow": 72,
-  "stable": 60,
-  "medium": 22,
-  "fast": 1
+  "slow": 83,
+  "stable": 67,
+  "medium": 26,
+  "fast": 2
  },
  "due": [],
  "noYear": [],
@@ -837,6 +837,76 @@
    "reverifyBy": null
   },
   {
+   "id": "zero:brahmagupta",
+   "class": "slow",
+   "year": "628",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "zero:k127",
+   "class": "slow",
+   "year": "683",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "zero:gwalior",
+   "class": "slow",
+   "year": "876",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "zero:bakhshali",
+   "class": "fast",
+   "year": "2017",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2028-09-26"
+  },
+  {
+   "id": "zero:khwarizmi",
+   "class": "slow",
+   "year": "c. 825",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "zero:fibonacci",
+   "class": "stable",
+   "year": "1202",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "zero:nothaft",
+   "class": "medium",
+   "year": "2020",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "zero:donotuse",
+   "class": "slow",
+   "year": "2004–present",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "zero:spreadsheet",
+   "class": "slow",
+   "year": "2020s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "zero:numerals",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
    "id": "wisdom:gutas",
    "class": "slow",
    "year": "1998",
@@ -1090,6 +1160,97 @@
   },
   {
    "id": "arch:chaincalc",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "timbuktu:leo",
+   "class": "stable",
+   "year": "1526",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "timbuktu:ahmadbaba",
+   "class": "medium",
+   "year": "1556–1627",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "timbuktu:haidara",
+   "class": "slow",
+   "year": "2012–2013",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "timbuktu:fire",
+   "class": "slow",
+   "year": "2013",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "timbuktu:survive",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "names:grushenka",
+   "class": "stable",
+   "year": "1880",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "names:rusnames",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "names:browngilman",
+   "class": "slow",
+   "year": "1960",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "names:snegiryov",
+   "class": "stable",
+   "year": "1880",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "names:nadryvy",
+   "class": "slow",
+   "year": "1912–1990",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "names:blues",
+   "class": "medium",
+   "year": "2007",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "names:titles",
+   "class": "medium",
+   "year": "1952",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "names:addressmodel",
    "class": "stable",
    "year": "2026",
    "lastChecked": "2026-09-26",

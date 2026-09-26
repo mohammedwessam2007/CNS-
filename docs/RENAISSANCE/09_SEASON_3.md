@@ -4,7 +4,7 @@ Code: `source/public/renaissance-s3a.js` (Karamazov, *Ozymandias*), `renaissance
 pattern, the cadence), `renaissance-s3c.js` (the medicine relay, the salon, the cut, the arch). Tests:
 `tests/renaissance_v3_test.js` (V1–V11, M1, Q1, S2–S3), `tests/renaissance_test.js` R20–R22, R32, R34–R35.
 
-## The thirteen sessions
+## The sixteen sessions
 
 | id | Session | Organ | Setting | Min | Work(s) | Live model | Sources |
 |---|---|---|---|---|---|---|---|
@@ -13,12 +13,15 @@ pattern, the cadence), `renaissance-s3c.js` (the medicine relay, the salon, the 
 | km3 | A judicial error (deep, weekend) | evidence | Russia | 33 | same | the jury's arithmetic | 12 |
 | ozy | A boast in the sand | poetry | England and Egypt | 24 | *Ozymandias* | reading by voice | 7 |
 | euler | Seven bridges | mathematics | Königsberg (now Kaliningrad) | 26 | Euler 1736 | bridges and degrees | 9 |
+| zero | A symbol for nothing (v18.2) | mathematics | India, Cambodia, Baghdad, Pisa | 24 | Brahmasphutasiddhanta; *Liber Abaci* | columns, bases, the zero switched off | 10 |
 | willow | Where does the mass go? | science | Flanders and Australia | 26 | van Helmont's willow | following the atoms | 7 |
 | pattern | A star from a hidden grid | art | Egypt, Iran | 25 | Ibn Tulun, Darb-i Imam | Hankin's method, drawn live | 6 |
 | cadence | The question and the answer | music | Germany, Austria, Egypt | 24 | *Ode to Joy*; maqam Rast | choose the last chord (heard) | 7 |
 | wisdom | Why did Baghdad translate the Greeks? | history | Iraq, Iran, Central Asia, Spain | 26 | the translation movement | weighing explanations | 8 |
+| timbuktu | What survives: the libraries of Timbuktu (v18.2) | history | Mali and the Sahara | 24 | Timbuktu's manuscripts | one store against scattered copies | 5 |
 | salon | The salon | conversation | Cairo, anywhere | 25 | — | one idea, four listeners | 6 |
 | host | An evening at your table | cultivation | Cairo, Tokyo, anywhere | 25 | — | plan the table | 6 |
+| names | Alyosha, Alexei Fyodorovich, ya basha (v18.2) | language | Russia and Egypt | 24 | *The Brothers Karamazov* | the ladder of address | 8 |
 | cut | Meaning made by the cut | film | Russia, Japan, Micronesia | 25 | *Tokyo Story* | the 180-degree line | 8 |
 | arch | Why an arch stands | architecture | England, Spain, Egypt | 26 | New Gourna | hang, flip, load | 7 |
 
@@ -83,6 +86,18 @@ Each major experience was read through six lenses. Findings, and what was done:
 - Fat loss: Meerman and Brown (2014) for the 84% exhaled as carbon dioxide.
 - Euler: presented 1735/1736, printed in the Commentarii for 1736 (published 1741).
 - Hooke's anagram: the decoded sentence was published by his executor in 1705.
+- Zero (v18.2): the Bakhshali manuscript's 2017 radiocarbon dates are given as three ranges, with the scholars who
+  argued the text must be dated by the latest folio; the story that the medieval Church feared or banned zero is
+  taught as a myth (Nothaft 2020); the Florentine guild's 1299 restriction is given with its *usual* explanation, not as
+  a known motive; Gwalior (876) is "often cited as" the oldest dated round zero in stone in India.
+- Timbuktu (v18.2): Leo Africanus's remark about the book trade is reported from his 1526 description; Ahmad Baba's
+  1,600-volume remark is marked as coming from later retellings; the 2013 fire is given as about 4,200 manuscripts
+  still in the Ahmed Baba Institute's building, not as the loss of the city's collections; the rescue as about 350,000
+  manuscripts from some 45 libraries. The survival model states its independence assumption and where it fails.
+- Names (v18.2): Grushenka's name forms and the Snegiryov scene (Book IV, chapter 7) were checked against summaries
+  by web search; the four English titles of *Nadryvy* are given with their translators; the Russian blues effect is
+  given with its limits and the later study that questions its size; the address model is labelled a simplification;
+  a counterexample was rewritten so it no longer implied an unverified line of Fyodor Pavlovich's.
 
 ## What season 3 does not do
 

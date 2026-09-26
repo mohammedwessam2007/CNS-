@@ -9,9 +9,9 @@ one complete experience; breadth is the perpetual frontier (last section), count
 | Organ (§) | Session | What he actually does | Tests |
 |---|---|---|---|
 | Literature (§16) | km1–km3, ozy | reads passages and a whole poem, maps a family and a frame, argues, catches misquotations, meets hostile criticism | V1, V5, V6, V9 |
-| Mathematics (§17) | euler | reduces a city to four dots and seven lines, counts degrees, proves no route exists without trying one; beauty as a one-sentence proof | V6 |
+| Mathematics (§17) | euler, zero | reduces a city to four dots and seven lines, counts degrees, proves no route exists without trying one; beauty as a one-sentence proof (euler). Multiplies in Roman numerals and feels position do the work, writes any number in any base and switches the zero off, meets Brahmagupta's one wrong rule, follows the zero from India and Cambodia through Baghdad to Pisa, and catches a missing leading zero on a dose chart (zero) | V6 |
 | Science (§18) | willow (+ seasons 1–2) | predicts where a tree's mass comes from, follows the atoms of lost fat out through the lungs; world-model building, not facts | V6 |
-| History (§19) | wisdom | weighs three explanations of the Baghdad translation movement against six pieces of evidence; follows one line of medicine from Galen to Toledo | V6 |
+| History (§19) | wisdom, timbuktu | weighs three explanations of the Baghdad translation movement against six pieces of evidence; follows one line of medicine from Galen to Toledo (wisdom). Meets a city whose most profitable trade was books, the 2012–13 rescue of its manuscripts, a model of why scattered copies outlast one store, and the archive bias that let Europeans write Africa out of written history (timbuktu) | V6 |
 | Philosophy (§20) | km2 | meets theodicy and the Inquisitor as a problem: the argument as four premises he switches off | V6 |
 | Art (§21) | pattern (+ taste, season 2) | finds the hidden grid under a girih star and grows the pattern from one angle; blind comparisons before names | V6, R29 |
 | Music (§22) | cadence | hears a question and its answer in *Ode to Joy*, chooses and hears last chords, meets a note between major and minor | V6, V7 |
@@ -20,6 +20,7 @@ one complete experience; breadth is the perpetual frontier (last section), count
 | Religion and civilisation (§25) | km2, km1, wisdom | theodicy, the Inquisitor's use of the temptations, the elder Zosima, the monastery at Optina, the House of Wisdom; textual seriousness without preaching or mockery | V6 |
 | Arabic and Islamic civilisation (§27) | wisdom, pattern, cadence, arch | Hunayn ibn Ishaq and the translators, Avicenna's *Canon*, paper in Baghdad, girih geometry (Isfahan, 1453), maqam Rast and the 1932 Cairo Congress, Hassan Fathy | V3, V7 |
 | High cultivation (§28, §230–231) | salon, ozy, km1 | range without status anxiety: one idea told to four different listeners, pretension diagnosed as an error | V6, Q1 |
+| Language (§34) | names | reads forms of address as statements about distance and power in Russian and Egyptian Arabic, climbs the ladder in a live model, meets *nadryv* in Snegiryov's scene and in four translations, and weighs the Russian blues study against the strong claim | V1, V6 |
 | High-society navigation (§29) | salon, host | range, register and graceful disagreement (salon); introductions that attach meaning to names, seating for conversation, drawing out the quiet guest, dining customs by watching and asking (Cairo, Tokyo), dress codes as respect, and reading an evening without the liking gap (host) | V6, F3 |
 
 ## 2. The cultivation tests (§30–33)
@@ -39,27 +40,37 @@ Rates in every instrument are withheld below five answers (no fake precision, §
 |---|---|---|
 | Europe and Russia | km1–km3, euler, willow (Flanders), cut (Russia), arch (England, Spain) | many |
 | North Africa | pattern (Cairo, Ibn Tulun), arch (New Gourna), salon (Cairo), cadence (Cairo 1932) | — |
-| Middle East | wisdom (Baghdad), pattern (Isfahan) | — |
+| Middle East | wisdom (Baghdad), pattern (Isfahan) | zero (al-Khwarizmi in Baghdad) |
 | Central Asia | — | wisdom (Avicenna, born near Bukhara) |
 | East Asia | cut (*Tokyo Story*) | — |
-| Sub-Saharan Africa | — | wisdom (Timbuktu's manuscript libraries) |
-| South Asia | — | euler (the sikku kolam of Tamil Nadu: one line around the dots) |
-| Southeast Asia | — | arch (Angkor's corbelled vaults: stone without the true arch); proxy (the Hanoi rat bounty) |
+| Sub-Saharan Africa | timbuktu (the manuscript libraries, Ahmad Baba, the 2012–13 rescue) | wisdom |
+| South Asia | zero (Brahmagupta, 628; Gwalior, 876) | euler (the sikku kolam of Tamil Nadu: one line around the dots) |
+| Southeast Asia | — | zero (the Khmer inscription K-127, 683: the oldest dated zero in stone); arch (Angkor's corbelled vaults); proxy (the Hanoi rat bounty) |
 | The Americas | — | commit, taste, km1 (García Márquez), km3, arch |
 | Oceania | — | cut (Puluwat navigation) |
 
-Four regions have sessions of their own; six are taught as cases inside other sessions (the test counts teaching text only, never a citation or a region label). Breadth, a contribution from every region taught, is met and tested (V3). Depth, a session of its own set in each region, is kept as a separate frontier requirement (`globaldepth`) so the gap stays visible in the ledger. The next sessions to deepen it (planned, not
-built): the manuscripts of Timbuktu and the Mali scholars (Sub-Saharan Africa, history); place value and zero
-(Brahmagupta, 628, South Asia, mathematics); Pacific wayfinding (Oceania, science and navigation); Maya astronomy and
+Six regions have sessions of their own; four are taught as cases inside other sessions. Two of those four are thin (Central Asia appears only in the wisdom session, Oceania only in one item of the film session), so a floor is now required (`globalfloor`: a session of its own, or teaching in at least two sessions) and is open until Samarkand and Pacific wayfinding are built (the test counts teaching text only, never a citation or a region label). Breadth, a contribution from every region taught, is met and tested (V3). Depth, a session of its own set in each region, is kept as a separate frontier requirement (`globaldepth`) so the gap stays visible in the ledger. Built in v18.2: the manuscripts of Timbuktu (Sub-Saharan Africa, history) and place value and zero (South Asia, mathematics). The next sessions to deepen it (planned, not built): Pacific wayfinding (Oceania, science and navigation); Maya astronomy and
 the Dresden Codex (the Americas); water engineering at Angkor (Southeast Asia, architecture and systems); and Ulugh Beg's observatory at Samarkand (Central Asia, astronomy and measurement).
 
-## 4. Language as a civilisation portal (§34) — open
+## 4. Language as a civilisation portal (§34) — built (v18.2)
 
-Moved from the frontier to open, controllable work on review in v18.1: §34 is a rule for how language is learned, and a
-first language experience can be built now, so calling it frontier would have hidden it from the ledger. No language
-organ is built yet. When one is, it follows §34: language unlocks literature, humour, film and idiom, not
-vocabulary lists. The first candidate is classical Arabic through poetry he already half-knows by ear (the maqam
-session gives the entry), then Russian through the Karamazov passages he now possesses in English.
+Moved from the frontier to open, controllable work on review in v18.1 (§34 is a rule for how language is learned, and
+a first language experience could be built at once), then built in v18.2 as the session **names** ("Alyosha, Alexei
+Fyodorovich, ya basha"). It teaches a language's choices, not its words. Forms of address and the T and V pronouns
+(Brown and Gilman 1960) are read as statements about distance and power, in Russian and in the Egyptian Arabic he
+already speaks, with a live model of the ladder. Through them it opens:
+
+- literature: the Karamazovs by their names, and *nadryv* with Snegiryov's two hundred roubles, then the four
+  English titles of Book IV;
+- humour: *ya basha* said to a boy;
+- history: titles abolished in 1952 and surviving in speech;
+- film: subtitles that write "you" for both ty and vy;
+- social codes: a patient who moves from *ḥaḍritak* to *enta*;
+- idiom: "to speak with nadryv";
+- thought: the Russian blues study, with its limits.
+
+Beyond this first session, a full language course follows the same rule. The first candidate is classical Arabic through poetry he already half-knows by ear (the maqam
+session gives the entry), then Russian through the Karamazov passages he has read in English.
 
 ## 5. At scale (§235) — the perpetual frontier
 

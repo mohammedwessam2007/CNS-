@@ -110,7 +110,7 @@ reduction is plausible, not proven.
 | Lossy compression | compile map names what is not read; V11 texture rules |
 | Shallow source research, unverified claims | quotation records say how each was checked; half-life re-verification (CO10) |
 | Too many agents, too many abstractions | one engine file, one requirement graph; no agents used in this build |
-| No real content | thirteen playable season-3 sessions, each run to the end (V6) |
+| No real content | sixteen playable season-3 sessions, each run to the end (V6) |
 | Weak UX | phone runs, contrast, keyboard, 44-px targets (V4, A1, R24) |
 | Simulated tests that don't reflect humans | stated: every test is a machine test; the human outcomes are in the empirical queue |
 | Optimising what is easy to measure | nothing is optimised on in-session scores; trials are judged on transfer and later recall |

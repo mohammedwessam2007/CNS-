@@ -1,0 +1,1209 @@
+{
+ "when": "2026-09-26T21:24:54.082Z",
+ "results": [
+  {
+   "id": "V1",
+   "what": "Season 3 has 16 sessions covering literature, poetry, philosophy, evidence, mathematics, science, art, music, history, conversation, cultivation, language, film and architecture; every work, rung, requirement and quotation it names exists; every quotation record is complete and rights-classed",
+   "ok": true,
+   "detail": {
+    "bad": [],
+    "n": 16,
+    "domains": [
+     "literature",
+     "philosophy",
+     "evidence",
+     "poetry",
+     "mathematics",
+     "science",
+     "art",
+     "music",
+     "history",
+     "conversation",
+     "cultivation",
+     "film",
+     "architecture",
+     "language"
+    ],
+    "edgesOk": true,
+    "nodes": 94,
+    "edges": 80,
+    "deep": [
+     "km3"
+    ],
+    "quotes": 17
+   }
+  },
+  {
+   "id": "V2",
+   "what": "The civilisation graph links works, people, ideas and places with no dangling edge; only the trial (a boss world) is a deep session",
+   "ok": true,
+   "detail": {
+    "nodes": 94,
+    "edges": 80,
+    "deep": [
+     "km3"
+    ]
+   }
+  },
+  {
+   "id": "V3",
+   "what": "Global reach: every one of the ten world regions appears in the content at least as a case (depth is uneven; the coverage oracle tracks which regions have a session of their own), and every one of the 21 bootloader primitives is trained somewhere",
+   "ok": true,
+   "detail": {
+    "missingRegions": [],
+    "regions": {
+     "Middle East": 5,
+     "North Africa": 8,
+     "Sub-Saharan Africa": 4,
+     "South Asia": 3,
+     "East Asia": 2,
+     "Central Asia": 1,
+     "Southeast Asia": 5,
+     "Europe": 9,
+     "Americas": 2,
+     "Oceania": 1
+    },
+    "prims": {
+     "causality": 26,
+     "feedback": 8,
+     "selection": 10,
+     "incentives": 7,
+     "uncertainty": 1,
+     "probability": 10,
+     "information": 14,
+     "networks": 6,
+     "constraints": 4,
+     "optimization": 7,
+     "equilibrium": 1,
+     "emergence": 3,
+     "recursion": 1,
+     "scale": 10,
+     "representation": 7,
+     "counterfactuals": 3,
+     "model selection": 6,
+     "mechanism": 14,
+     "measurement": 15,
+     "evidence": 17,
+     "signal and noise": 7
+    }
+   }
+  },
+  {
+   "id": "V4",
+   "what": "Every season-3 session in the first five compiled days runs end to end on a phone (predictions, primary text, model, contrast, transfer, forge, receipt) with no page error",
+   "ok": true,
+   "detail": {
+    "seen": [
+     "km1",
+     "km2",
+     "euler",
+     "willow",
+     "arch"
+    ],
+    "errors": [],
+    "pageErrors": []
+   }
+  },
+  {
+   "id": "V5",
+   "what": "Primary text: passages render whole with speaker, place and rights; SHOW SOURCE opens the quotation record (exact words, rights, misattribution risk, how it was checked); synthesised listening plays; dialogue renders",
+   "ok": true,
+   "detail": {
+    "passages": 6,
+    "sourceRecords": 6,
+    "plays": 0,
+    "dialogues": 0,
+    "sessions": [
+     "km1",
+     "km2",
+     "euler",
+     "willow",
+     "arch"
+    ],
+    "errors": []
+   }
+  },
+  {
+   "id": "V6",
+   "what": "Each season-3 session completes when it is the one left, and works that the session teaches appear in its receipt with a rung of the possession ladder",
+   "ok": true,
+   "detail": {
+    "bad": [],
+    "km1": "**Possession:** The Brothers Karamazov — knows the structure (next: knows primary material).",
+    "ozy": "**Possession:** “Ozymandias” — recognises (next: knows the basic context)."
+   }
+  },
+  {
+   "id": "V7",
+   "what": "Listening is synthesised from exact pitches: the maqam example plays E, E-flat and the neutral third between them (a quarter-tone above E-flat)",
+   "ok": true,
+   "detail": {
+    "n": 15,
+    "neutral": true,
+    "major": true,
+    "minor": true
+   }
+  },
+  {
+   "id": "V8",
+   "what": "No page errors while completing every season-3 session",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "C1",
+   "what": "After the bootloader (seasons 1–2) the compiler scores the remaining sessions from capability gaps, errors, unpossessed works, rotation and dependants, and says why",
+   "ok": true,
+   "detail": {
+    "mode": "compiled",
+    "why": "Compiled for you: it trains narrative reasoning and compression, which your record has not shown yet on later, unaided questions; it adds a work you do not yet possess; it moves away from primitives; later sessions build on it.",
+    "top": [
+     {
+      "sid": "km1",
+      "score": 8,
+      "parts": {
+       "gap": 1,
+       "errors": 0,
+       "culture": 1,
+       "rotate": 1,
+       "unknown": 0,
+       "leverage": 1,
+       "curious": 0
+      },
+      "reasons": [
+       "it trains narrative reasoning and compression, which your record has not shown yet on later, unaided questions",
+       "it adds a work you do not yet possess",
+       "it moves away from primitives",
+       "later sessions build on it"
+      ]
+     },
+     {
+      "sid": "euler",
+      "score": 7.498,
+      "parts": {
+       "gap": 1,
+       "errors": 0,
+       "culture": 1,
+       "rotate": 1,
+       "unknown": 0,
+       "leverage": 0.5,
+       "curious": 0
+      },
+      "reasons": [
+       "it trains abstraction and finding the minimum sufficient model, which your record has not shown yet on later, unaided questions",
+       "it adds a work you do not yet possess",
+       "it moves away from primitives",
+       "later sessions build on it"
+      ]
+     },
+     {
+      "sid": "wisdom",
+      "score": 7.494,
+      "parts": {
+       "gap": 1,
+       "errors": 0,
+       "culture": 1,
+       "rotate": 1,
+       "unknown": 0,
+       "leverage": 0.5,
+       "curious": 0
+      },
+      "reasons": [
+       "it trains model selection and causal reasoning, which your record has not shown yet on later, unaided questions",
+       "it adds a work you do not yet possess",
+       "it moves away from primitives",
+       "later sessions build on it"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "C2",
+   "what": "Trial L10: one compiled day in about five keeps the written order as a control; the rest follow the compiler",
+   "ok": true,
+   "detail": {
+    "controlDays": 8,
+    "compiled": 32
+   }
+  },
+  {
+   "id": "C3",
+   "what": "Deep sessions (the trial, a boss world) are compiled only on the weekend, with a 45-minute dose; on a weekday the door says it waits for the weekend",
+   "ok": true,
+   "detail": {
+    "mon": {
+     "open": false,
+     "why": "deepwait",
+     "msg": "The next session is a long one (a masterpiece or a boss world). It waits for the weekend, when there is time for it."
+    },
+    "fri": {
+     "open": true,
+     "sid": "km3",
+     "dose": 45
+    }
+   }
+  },
+  {
+   "id": "C4",
+   "what": "A started session always continues first; nothing is compiled in the middle of one",
+   "ok": true,
+   "detail": {
+    "sid": "euler",
+    "mode": "resume",
+    "why": "It continues the session you started; nothing else is chosen until it ends.",
+    "l11": null,
+    "weights": {
+     "gap": 3,
+     "errors": 1.5,
+     "culture": 2,
+     "rotate": 2,
+     "unknown": 1.5,
+     "leverage": 1,
+     "curious": 0.5
+    },
+    "ranked": []
+   }
+  },
+  {
+   "id": "C5",
+   "what": "Every session of every season compiles to the full session object (§161): capabilities, sources, irreducible experiences, tasks, misconception branches, transfer, forge, hooks, minutes, stop condition, rights",
+   "ok": true,
+   "detail": {
+    "n": 28,
+    "incomplete": []
+   }
+  },
+  {
+   "id": "E1",
+   "what": "Trials (L2 step order, L3 step length, L4 session length, L5 hints, L6 spacing, L7 task type, L8 source mix, L9 session architecture, L10 season order, L11 capability priority) each have a control arm, a minimum sample, a success margin and a no-harm floor; the judge adopts a clearly better arm, drops one that is not better, and stops one below the floor",
+   "ok": true,
+   "detail": {
+    "adopt": "adopted",
+    "drop": "dropped",
+    "harm": "harm",
+    "levels": [
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   }
+  },
+  {
+   "id": "E2",
+   "what": "Trial L2 really changes the lesson: some sessions play the two compared cases before the model and others keep the written order, by a stable per-session assignment",
+   "ok": true,
+   "detail": {
+    "bottleneck": "model>contrast",
+    "question": "contrast>model",
+    "snow": "model>contrast",
+    "double": "model>contrast",
+    "taste": "model>contrast",
+    "euler": "model>contrast",
+    "willow": "contrast>model",
+    "pattern": "contrast>model",
+    "arch": "model>contrast"
+   }
+  },
+  {
+   "id": "E3",
+   "what": "Rollback: renaissance_experiments = \"off\" returns every trial to the written lesson at once",
+   "ok": true,
+   "detail": {
+    "off": "model>contrast"
+   }
+  },
+  {
+   "id": "E4",
+   "what": "Level 14 (the judge judged): an adopted arm that later does worse than its monitoring control is rolled back, and that trial then needs a larger sample (caution ×1.5)",
+   "ok": true,
+   "detail": {
+    "id": "L6",
+    "level": 6,
+    "what": "retrieval interval: a remembered idea comes back ×2.5 or ×2 later",
+    "arms": [
+     "×2.5",
+     "×2"
+    ],
+    "verdict": "running",
+    "caution": 1.5,
+    "n": [
+     0,
+     0
+    ],
+    "rate": [
+     null,
+     null
+    ],
+    "history": [
+     {
+      "t": 1000,
+      "to": "adopted"
+     },
+     {
+      "t": 1790611201766,
+      "from": "adopted",
+      "to": "rolled back",
+      "a0": {
+       "n": 5,
+       "rate": 1
+      },
+      "a1": {
+       "n": 10,
+       "rate": 0.45
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "E5",
+   "what": "No page errors in the trial checks",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "P1",
+   "what": "Day 0: the baseline form opens the first day (two sealed items before the session), unlabelled, with every helper off",
+   "ok": true,
+   "detail": {
+    "d0": [
+     "probe:A01@0",
+     "probe:A02@0",
+     "c1",
+     "c2"
+    ],
+    "first": {
+     "c": {
+      "sid": "commit",
+      "i": 0,
+      "n": 13,
+      "id": "probe:A01@0",
+      "type": "q",
+      "stage": "probe",
+      "kind": "probe",
+      "short": false,
+      "sheet": false
+     },
+     "banner": "Measuring where you are, to compare later. No hints, and no right/wrong until the comparison is done.",
+     "tag": "MEASURED · NO LABELS",
+     "dis": [
+      true,
+      true,
+      true
+     ]
+    }
+   }
+  },
+  {
+   "id": "P2",
+   "what": "A form item gives no right/wrong feedback (it returns at day 90), and the stored record keeps only its id and outcome, never its words",
+   "ok": true,
+   "detail": {
+    "fb": "Recorded. No feedback on this one: it may come back to measure change, and knowing the answer now would spoil the compar"
+   }
+  },
+  {
+   "id": "P3",
+   "what": "Schedule: this week's unknown problem arrives on day 7; the parallel form B on day 30; nothing in exam week (short dose); a window missed by more than two weeks is skipped, not owed",
+   "ok": true,
+   "detail": {
+    "d7": [
+     "probe:W01a@7",
+     "probe:W01b@7"
+    ],
+    "d30": [
+     "probe:B01@30",
+     "probe:B02@30"
+    ],
+    "examWeek": [],
+    "d50": [
+     "probe:W06a@42",
+     "probe:W06b@42"
+    ]
+   }
+  },
+  {
+   "id": "P4",
+   "what": "A weekly unknown problem is used once, so it explains itself after you commit; results feed the orientation dimension of the capability vector, never the in-session rates",
+   "ok": true,
+   "detail": {
+    "fb": "✓ Right.A quorum rule: many independent checks, and a threshold before committing, protects against one scout's mistake.",
+    "rep": {
+     "A": {
+      "n": 8,
+      "ok": 8
+     },
+     "alien": {
+      "n": 1,
+      "ok": 1
+     }
+    },
+    "vec": {
+     "id": "orientation",
+     "name": "Orienting in a domain you were never taught",
+     "n": 2,
+     "ok": 2,
+     "rate": null
+    }
+   }
+  },
+  {
+   "id": "P5",
+   "what": "Reader-Turing questions for The Brothers Karamazov arrive 30 days after its last session, and not before",
+   "ok": true,
+   "detail": {
+    "before": [
+     "probe:W04a@28",
+     "probe:W04b@28"
+    ],
+    "on": [
+     "probe:RT01@30",
+     "probe:RT02@30"
+    ]
+   }
+  },
+  {
+   "id": "P6",
+   "what": "No page errors in the sealed-measurement checks",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "S1",
+   "what": "Pre-registration: all 52 sealed items (8 baseline, 8 thirty-day, 24 weekly unknowns, 12 reader questions) match the SHA-256 registered before any answer; any later edit fails here",
+   "ok": true,
+   "detail": {
+    "n": 52,
+    "changed": []
+   }
+  },
+  {
+   "id": "S2",
+   "what": "Leak firewall: no run of six words from any sealed item appears anywhere in the lessons, hooks, visuals, models or quotation register; the sealed file carries no item text in the clear (not in content, metadata, file name or order)",
+   "ok": true,
+   "detail": {
+    "leaks": [],
+    "plainInFile": []
+   }
+  },
+  {
+   "id": "S3",
+   "what": "Counterfeit learners, extended (§152–153): longest, shortest, most words, punctuation, hedges, jargon, no absolutes, overlap with the question, odd length, most typical option, positive words, first shown, last shown: each stays within 0.12 of chance in every season and on the sealed items",
+   "ok": true,
+   "detail": {
+    "over": [],
+    "per": {
+     "s1": {
+      "n": 60,
+      "chance": 0.308,
+      "max": 0.392
+     },
+     "s2": {
+      "n": 62,
+      "chance": 0.312,
+      "max": 0.378
+     },
+     "s3": {
+      "n": 166,
+      "chance": 0.291,
+      "max": 0.341
+     },
+     "sealed": {
+      "n": 52,
+      "chance": 0.25,
+      "max": 0.333
+     }
+    }
+   }
+  },
+  {
+   "id": "L1",
+   "what": "Functional-capability vector (§38): separate dimensions, each with its n and no composite score; rates are hidden below five answers (no fake precision)",
+   "ok": true,
+   "detail": [
+    {
+     "id": "orientation",
+     "name": "Orienting in a domain you were never taught",
+     "n": 0,
+     "ok": 0,
+     "rate": null
+    },
+    {
+     "id": "questions",
+     "name": "Choosing the question that changes the decision",
+     "n": 0,
+     "ok": 0,
+     "rate": null
+    },
+    {
+     "id": "compression",
+     "name": "Compressing to the load-bearing structure",
+     "n": 64,
+     "ok": 47,
+     "rate": 73
+    },
+    {
+     "id": "causal",
+     "name": "Causal reasoning",
+     "n": 0,
+     "ok": 0,
+     "rate": null
+    }
+   ]
+  },
+  {
+   "id": "L2",
+   "what": "Transformation velocity (§45–46): the weekly slope of delayed, unaided accuracy is computed with its weeks and n; acceleration only once six such weeks exist",
+   "ok": true,
+   "detail": {
+    "weeks": [
+     {
+      "w": 0,
+      "n": 8,
+      "rate": 38
+     },
+     {
+      "w": 1,
+      "n": 8,
+      "rate": 50
+     },
+     {
+      "w": 2,
+      "n": 8,
+      "rate": 63
+     },
+     {
+      "w": 3,
+      "n": 8,
+      "rate": 75
+     },
+     {
+      "w": 4,
+      "n": 8,
+      "rate": 75
+     },
+     {
+      "w": 5,
+      "n": 8,
+      "rate": 88
+     },
+     {
+      "w": 6,
+      "n": 8,
+      "rate": 100
+     },
+     {
+      "w": 7,
+      "n": 9,
+      "rate": 100
+     }
+    ],
+    "tv": 9.1,
+    "accel": -0.9,
+    "note": ""
+   }
+  },
+  {
+   "id": "L3",
+   "what": "Multiplex (§36–37): only capability atoms with a later or unaided success count, per hour; tags alone never do",
+   "ok": true,
+   "detail": {
+    "atoms": [
+     "abstr",
+     "minimal"
+    ],
+    "perHour": null,
+    "minutes": 24,
+    "rule": "Only atoms with a later or unaided success count; tags alone never do."
+   }
+  },
+  {
+   "id": "L4",
+   "what": "Cultural-possession ladder (§162): each rung is earned by evidence (a read passage counts only at reading speed), a rung counts only if the rungs below it are earned, and the top rung needs the sealed reader questions",
+   "ok": true,
+   "detail": {
+    "level": 6,
+    "evidence": {
+     "1": "door",
+     "2": "ozy",
+     "3": "later, unaided: ozy.h3",
+     "4": "o1",
+     "5": "read o2",
+     "6": "o3",
+     "10": "o6",
+     "11": "o7"
+    },
+    "label": "knows the arguments",
+    "next": "knows the criticism"
+   }
+  },
+  {
+   "id": "L5",
+   "what": "The twin (§163) tracks each idea from seen to assimilated, and flags what went backwards",
+   "ok": true,
+   "detail": {
+    "euler": {
+     "title": "Seven bridges",
+     "state": "transfers",
+     "states": [
+      "seen",
+      "transfers"
+     ],
+     "flags": []
+    },
+    "ozy": {
+     "title": "A boast in the sand",
+     "state": "recalls later",
+     "states": [
+      "seen",
+      "recognises",
+      "understands",
+      "recalls later"
+     ],
+     "flags": []
+    }
+   }
+  },
+  {
+   "id": "D1",
+   "what": "Device independence: the whole record exports as one JSON (renaissance.state/1) and imports on another device, merging sessions and answers; a foreign file is refused",
+   "ok": true,
+   "detail": {
+    "schema": "renaissance.state/1",
+    "bad": {
+     "ok": false,
+     "why": "not a Renaissance export"
+    },
+    "good": {
+     "ok": true,
+     "answersAdded": 69
+    },
+    "sessions": 2,
+    "answers": 69
+   }
+  },
+  {
+   "id": "D2",
+   "what": "Voice-ready: the current step reads as plain speech (question, lettered options; a passage with its speaker and source), with no markup, for earbuds or a screen reader",
+   "ok": true,
+   "detail": {
+    "a": "Before you read it: a 14-line poem about a ruined statue of a king. How many voices do you expect to speak in it? Option A: Two: the poet and the king. Option B",
+    "b": "“Ozymandias”. I met a traveller from an antique land, Who said—“Two vast and trunkless legs of stone Stand in the desert. . . . Near them, on the sand, Half sun"
+   }
+  },
+  {
+   "id": "D3",
+   "what": "Failure recovery (§247): an unreadable record is kept aside unchanged, a clean one starts, the organ still opens, and WHY THIS? says what happened",
+   "ok": true,
+   "detail": {
+    "recovered": true,
+    "kept": 1,
+    "open": true,
+    "why": true
+   }
+  },
+  {
+   "id": "D4",
+   "what": "Garbage collection of drills (§101–103): after three sure recalls, an idea whose next gap would pass half a year retires as assimilated and is not asked again",
+   "ok": true,
+   "detail": {
+    "h": {
+     "due": "2027-04-16",
+     "gap": 200,
+     "n": 4,
+     "ok": 3,
+     "l7": 0,
+     "arm": 0,
+     "retired": "assimilated",
+     "retiredAt": "2026-09-28"
+    },
+    "dueAgain": false
+   }
+  },
+  {
+   "id": "D5",
+   "what": "No page errors in the learner-model and device checks",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "Q1",
+   "what": "No-slop reviewer (§15, §139, §220): no generic theme-talk, vague praise or AI filler in any teaching text (allowed only inside a wrong option diagnosed as pretension); no repeated step text; every figure is used and says what it shows",
+   "ok": true,
+   "detail": {
+    "hits": [],
+    "dups": [],
+    "orphans": []
+   }
+  },
+  {
+   "id": "A1",
+   "what": "Accessibility (§158): body text, buttons and labels meet WCAG AA contrast (4.5:1); every control is a native button or input (keyboard-operable); the organ is a labelled dialog; Enter on a focused CONTINUE advances",
+   "ok": true,
+   "detail": {
+    "a11y": {
+     "low": [],
+     "nonNative": 0,
+     "role": "dialog",
+     "label": "Renaissance"
+    },
+    "before": "k1",
+    "after": "k1"
+   }
+  },
+  {
+   "id": "A2",
+   "what": "Performance (§159): opening a session takes under 300 ms and every model redraws in under 60 ms (the slowest is named)",
+   "ok": true,
+   "detail": {
+    "openMs": 2,
+    "slowest": [
+     "s3:hankin",
+     2.4
+    ]
+   }
+  },
+  {
+   "id": "A3",
+   "what": "No page errors in the review, accessibility and performance checks",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "G1",
+   "what": "Capability genome (§60–62): all 28 atoms carry components, prerequisites, synergies, conflicts, transfer edges, expressions and descendants; evidence and learning cost are computed; references resolve; prerequisites have no cycle; the periodic table places each atom once and every empty cell names a predicted atom; ≥ 7 compounds",
+   "ok": true,
+   "detail": {
+    "bad": [],
+    "cyc": [],
+    "dup": [],
+    "missing": [],
+    "unpredicted": [],
+    "compounds": 8,
+    "empty": 7
+   }
+  },
+  {
+   "id": "G2",
+   "what": "Genome evidence comes from the record: 5 of 6 unaided answers gives 0.83; below five answers the rate is withheld; untouched atoms show none",
+   "ok": true,
+   "detail": {
+    "six": {
+     "n": 6,
+     "ok": 5,
+     "rate": 0.83
+    },
+    "four": {
+     "n": 4,
+     "ok": 3,
+     "rate": null
+    },
+    "other": {
+     "n": 0,
+     "ok": 0,
+     "rate": null
+    }
+   }
+  },
+  {
+   "id": "M1",
+   "what": "Media registry (§134–139): every visual, model, listening passage, quotation and data object has a §138 type, a §134 rights class, a source and a stated cognitive job, and is used by a step; quotations carry §135 provenance; every visual has an accessible name",
+   "ok": true,
+   "detail": {
+    "bad": [],
+    "noName": [],
+    "kinds": {
+     "visual": 24,
+     "model": 28,
+     "quote": 17,
+     "listen": 3,
+     "data": 2
+    },
+    "n": 74,
+    "types": [
+     "diagram",
+     "data",
+     "interactive",
+     "map",
+     "image",
+     "timeline",
+     "music",
+     "primary document",
+     "text",
+     "audio"
+    ]
+   }
+  },
+  {
+   "id": "F1",
+   "what": "Reality calibration (§97): after building, the learner can forecast (optional) whether they will try it; the next warm-up checks it, scores it and says so; after five checked forecasts a Brier score is reported (0.234 for the fixture), none before",
+   "ok": true,
+   "detail": {
+    "fc": {
+     "had": true,
+     "sid": "commit",
+     "rec": {
+      "t": 1790438401869,
+      "p": 70,
+      "q": "try before next open",
+      "outcome": null
+     },
+     "shown": true
+    },
+    "first": "reality",
+    "after": {
+     "f": {
+      "t": 1790438401869,
+      "p": 70,
+      "q": "try before next open",
+      "outcome": 1,
+      "resolved": 1790438401899
+     },
+     "cal": {
+      "n": 1,
+      "pending": 0,
+      "brier": null,
+      "bins": null,
+      "note": "A score appears after five forecasts have been checked against what happened."
+     },
+     "text": "Counted: an idea that changed something outside this app.You forecast 70% that you would try it; you did. A score appears after five forecasts have been checked against what happened."
+    },
+    "five": {
+     "n": 5,
+     "pending": 1,
+     "brier": 0.234,
+     "bins": {
+      "10": {
+       "n": 1,
+       "tried": 0
+      },
+      "50": {
+       "n": 1,
+       "tried": 1
+      },
+      "70": {
+       "n": 1,
+       "tried": 1
+      },
+      "90": {
+       "n": 2,
+       "tried": 1
+      }
+     },
+     "note": ""
+    }
+   }
+  },
+  {
+   "id": "F2",
+   "what": "No page errors in the genome, media and calibration checks",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "V9",
+   "what": "Masterpiece experience quality (§217): the Karamazov track has primary text, a structural map, a character graph and model, vocabulary, context, criticism, quotations in context, transfer, discussion, memory hooks and sealed reader-Turing questions",
+   "ok": true,
+   "detail": {
+    "primary": true,
+    "map": true,
+    "graph": true,
+    "vocabulary": true,
+    "context": true,
+    "criticism": true,
+    "quotations": true,
+    "transfer": true,
+    "discussion": true,
+    "memory": true,
+    "readerTuring": true
+   }
+  },
+  {
+   "id": "V10",
+   "what": "Idea immune system and source conflict (§93, §96, §99, §137): every session meets a counterexample, a stated limit or an open question; contested claims are marked contested; opposing verdicts (Freud, Nabokov) are shown side by side; at least five sessions keep rival models alive",
+   "ok": true,
+   "detail": {
+    "unguarded": [],
+    "contested": [
+     "pattern:lusteinhardt",
+     "zero:bakhshali",
+     "zero:nothaft",
+     "wisdom:dream",
+     "wisdom:toledo",
+     "cut:barratt",
+     "timbuktu:ahmadbaba",
+     "names:blues"
+    ],
+    "opposed": true,
+    "plural": [
+     "km1",
+     "km2",
+     "km3",
+     "willow",
+     "falsify",
+     "wisdom",
+     "zero",
+     "timbuktu",
+     "names",
+     "cadence"
+    ]
+   }
+  },
+  {
+   "id": "V11",
+   "what": "Texture, not trivia (§227–229): no step dumps more than two quotations, no quotation is shown in more than two steps, every quotation carries its context and why it matters, prose quotations stay under 160 words, and no returning question asks for a bare date or name",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "E6",
+   "what": "The trials beyond L6 change the lesson on their test arm and not on their control: L4 splits a session over two days (and says so), L7 hides the options until an answer is in mind, L8 puts the context beside the passage, L9 moves returning ideas after the session, L11 weighs rotation above gaps",
+   "ok": true,
+   "detail": {
+    "L4": [
+     {
+      "sid": "km2",
+      "arm": 1,
+      "partial": true,
+      "reason": true
+     },
+     {
+      "sid": "km1",
+      "arm": 0,
+      "partial": false,
+      "reason": false
+     }
+    ],
+    "L8": [
+     {
+      "sid": "km2",
+      "arm": 1,
+      "ctx": true,
+      "reached": true
+     },
+     {
+      "sid": "km1",
+      "arm": 0,
+      "ctx": false,
+      "reached": true
+     }
+    ],
+    "L9": [
+     {
+      "sid": "km1",
+      "arm": 1,
+      "hookAt": 12,
+      "firstLesson": 0,
+      "n": 14
+     },
+     {
+      "sid": "km2",
+      "arm": 0,
+      "hookAt": 0,
+      "firstLesson": 1,
+      "n": 8
+     }
+    ],
+    "L7": [
+     {
+      "hid": "commit.h1",
+      "arm": 1,
+      "reveal": true,
+      "before": 0,
+      "after": 3
+     },
+     {
+      "hid": "commit.h2",
+      "arm": 0,
+      "reveal": false,
+      "before": 3,
+      "after": 3
+     }
+    ],
+    "L11": {
+     "rot": {
+      "gap": 1.5,
+      "errors": 1.5,
+      "culture": 2,
+      "rotate": 3,
+      "unknown": 1.5,
+      "leverage": 1,
+      "curious": 0.5
+     },
+     "gap": {
+      "gap": 3,
+      "errors": 1.5,
+      "culture": 2,
+      "rotate": 2,
+      "unknown": 1.5,
+      "leverage": 1,
+      "curious": 0.5
+     }
+    }
+   }
+  },
+  {
+   "id": "L6",
+   "what": "Personal intellectual physics (§74–75): a rule about this learner appears only with enough evidence (8+ per kind) and says how it would be refuted; below that there is no rule",
+   "ok": true,
+   "detail": {
+    "laws": [
+     {
+      "rule": "After a diagram a right answer followed more often than after a story",
+      "a": "8/10",
+      "b": "3/10",
+      "test": "Holds only if the gap survives the control days of the picture chooser.",
+      "status": "candidate"
+     }
+    ],
+    "thin": []
+   }
+  },
+  {
+   "id": "L7",
+   "what": "Museum and concert tests (§31–32): cold predictions against later answers on new works for the art and music sessions, with the change; rates only from five answers",
+   "ok": true,
+   "detail": {
+    "museum": {
+     "sessions": [
+      "pattern",
+      "taste"
+     ],
+     "cold": {
+      "n": 5,
+      "ok": 2,
+      "rate": 0.4
+     },
+     "after": {
+      "n": 5,
+      "ok": 4,
+      "rate": 0.8
+     },
+     "later": {
+      "n": 0,
+      "ok": 0,
+      "rate": null
+     },
+     "delta": 0.4
+    },
+    "concert": {
+     "sessions": [
+      "cadence"
+     ],
+     "cold": {
+      "n": 1,
+      "ok": 1,
+      "rate": null
+     },
+     "after": {
+      "n": 1,
+      "ok": 1,
+      "rate": null
+     },
+     "later": {
+      "n": 0,
+      "ok": 0,
+      "rate": null
+     },
+     "delta": null
+    }
+   }
+  },
+  {
+   "id": "L8",
+   "what": "World-model map (§98–99): all sixteen layers of §98 are listed with the sessions that model them and what is done; empty layers are named as gaps, never hidden; rival models kept are listed",
+   "ok": true,
+   "detail": {
+    "gaps": [
+     "evolution",
+     "intelligence"
+    ],
+    "matter": {
+     "sessions": [
+      "willow",
+      "arch"
+     ],
+     "done": [
+      "willow"
+     ]
+    }
+   }
+  },
+  {
+   "id": "F3",
+   "what": "Real social feedback (§232): after the conversation session the next warm-up asks whether it came up in real talk (went well, showed a gap, raised a question, did not come up); only the tap and its time are kept",
+   "ok": true,
+   "detail": {
+    "first": "reality",
+    "opts": [
+     "well",
+     "gap",
+     "question",
+     "notyet"
+    ],
+    "rec": {
+     "t": 1790438401845,
+     "v": "gap"
+    },
+    "keys": "t,v"
+   }
+  },
+  {
+   "id": "C6",
+   "what": "Sovereignty (§197): on a compiled day WHY THIS? offers the runners-up; choosing one replaces the compiler's pick before any answer, leaves the abandoned session untouched, and is recorded as his choice",
+   "ok": true,
+   "detail": {
+    "first": "km1",
+    "btns": [
+     "euler",
+     "wisdom"
+    ],
+    "now": "euler",
+    "oldRec": null,
+    "choice": {
+     "sid": "euler",
+     "day": "2026-09-26",
+     "over": "km1"
+    },
+    "lastPick": {
+     "t": 1790438401860,
+     "day": "2026-09-26",
+     "sid": "euler",
+     "mode": "chosen",
+     "top": []
+    }
+   }
+  },
+  {
+   "id": "F5",
+   "what": "Click events (§84): a prediction that was wrong before the explanation, then the idea used rightly on an unseen case, is logged as a click for that session",
+   "ok": true,
+   "detail": {
+    "clicks": [
+     {
+      "t": 1790438401898,
+      "sid": "commit"
+     }
+    ],
+    "done": [
+     "commit"
+    ],
+    "wrongDone": true
+   }
+  },
+  {
+   "id": "F4",
+   "what": "No page errors in the masterpiece, immune-system, trial and learner-model checks",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

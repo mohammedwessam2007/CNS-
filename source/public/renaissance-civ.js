@@ -89,7 +89,23 @@
     N("optina", "place", "Optina monastery", "1878 visit", "Russia"),
     N("ramesseum", "place", "the Ramesseum, Luxor", "13th c. BCE", "Egypt"),
     N("toledo", "place", "Toledo's translators", "12th c.", "Spain"),
-    N("timbuktu", "place", "Timbuktu's manuscript libraries", "13th–20th c.", "Mali"),
+    N("timbuktu", "place", "Timbuktu's manuscript libraries", "13th–20th c.", "Mali", "session timbuktu"),
+    N("brahmasphuta", "work", "Brahmagupta's Brahmasphutasiddhanta", "628", "India", "the first arithmetic of zero; session zero"),
+    N("liber-abaci", "work", "Fibonacci's Liber Abaci", "1202", "Pisa", "the new numerals for European merchants"),
+    N("brahmagupta", "person", "Brahmagupta", "598–after 665", "India"),
+    N("khwarizmi", "person", "al-Khwarizmi", "c. 780–c. 850", "Baghdad"),
+    N("fibonacci", "person", "Leonardo of Pisa (Fibonacci)", "c. 1170–c. 1250", "Pisa"),
+    N("k127", "work", "Khmer inscription K-127", "683", "Sambor, Cambodia", "the oldest dated zero in stone"),
+    N("place-value", "idea", "place value and zero", "", "", "a representation that made arithmetic cheap"),
+    N("leo-africanus", "person", "Leo Africanus (al-Hasan al-Wazzan)", "c. 1494–c. 1554", "Granada, Fez and Rome"),
+    N("description-africa", "work", "Leo Africanus's Description of Africa", "1526 (printed 1550)", "Rome / Venice", "the book trade of Timbuktu"),
+    N("ahmad-baba", "person", "Ahmad Baba al-Timbukti", "1556–1627", "Timbuktu"),
+    N("manuscript-rescue", "event", "The evacuation of Timbuktu's manuscripts", "2012–2013", "Timbuktu to Bamako", "about 350,000 manuscripts moved in small loads; session timbuktu"),
+    N("archive-bias", "idea", "survivorship and archive bias", "1943–", "—", "what survives is not a sample of what existed"),
+    N("nadryv", "idea", "nadryv: feeling strained until it tears", "1880", "Russia", "the title of Book IV; session names"),
+    N("tv-distinction", "idea", "pronouns of power and solidarity (T and V)", "1960", "USA", "Brown and Gilman"),
+    N("relativity", "idea", "language and thought (linguistic relativity)", "20th c.–", "—", "the strong claim unsupported, the weak one tested"),
+    N("russian-blues", "work", "Winawer and colleagues, “Russian blues”", "2007", "USA", "language and colour discrimination"),
   ]);
   const E = (a, rel, b) => ({ a, rel, b });
   const edges = [
@@ -108,6 +124,9 @@
     E("avicenna", "wrote", "canon"), E("translation-movement", "made possible", "canon"), E("gerard", "translated", "canon"), E("toledo", "home of", "gerard"), E("timbuktu", "parallel of", "translation-movement"),
     E("ozu", "directed", "tokyo-story"), E("tokyo-story", "breaks", "axis-rule"), E("kuleshov", "claimed", "kuleshov-effect"), E("axis-rule", "same job as", "radiology-convention"), E("axis-rule", "same job as", "etak"), E("east-big-bird", "describes", "etak"),
     E("hooke", "stated", "funicular"), E("gaudi", "used", "funicular"), E("gaudi", "designed", "colonia-guell"), E("fathy", "built", "new-gourna"), E("new-gourna", "uses", "nubian-vault"), E("nubian-vault", "relies on", "funicular"),
+    E("brahmagupta", "wrote", "brahmasphuta"), E("brahmasphuta", "defines", "place-value"), E("k127", "uses", "place-value"), E("khwarizmi", "transmitted", "place-value"), E("fibonacci", "wrote", "liber-abaci"), E("liber-abaci", "brought to Europe", "place-value"), E("khwarizmi", "part of", "translation-movement"),
+    E("leo-africanus", "wrote", "description-africa"), E("description-africa", "describes", "timbuktu"), E("ahmad-baba", "scholar of", "timbuktu"), E("manuscript-rescue", "saved", "timbuktu"), E("timbuktu", "teaches", "archive-bias"),
+    E("karamazov", "develops", "nadryv"), E("tv-distinction", "explains address in", "karamazov"), E("russian-blues", "tests", "relativity"),
   ];
   window.RENAISSANCE_CIV = { nodes, edges };
 })();

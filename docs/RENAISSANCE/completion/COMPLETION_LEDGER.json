@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-26T20:52:39.365Z",
- "log": "receipts/v18_1/full_regression.log",
+ "generated": "2026-09-26T21:26:41.862Z",
+ "log": "receipts/v18_2/full_regression.log",
  "suitesInLog": {
   "host": 1,
   "rn": 2,
@@ -9,13 +9,13 @@
   "co": 1
  },
  "sections": 711,
- "requirements": 191,
- "controllable": 171,
- "completed": 170,
+ "requirements": 192,
+ "controllable": 172,
+ "completed": 171,
  "open": [
   {
-   "id": "language",
-   "name": "Language as a civilisation portal (§34): language learning that unlocks literature, humour, history, film, social codes, idiom and thought, not vocabulary",
+   "id": "globalfloor",
+   "name": "No token regions (§26: \"do not build Europe + token world history\"): every region is the setting of a session of its own or is taught in at least two sessions",
    "status": "DESIGNED",
    "why": "status DESIGNED: needs code and a passing test"
   }
@@ -37,8 +37,8 @@
   {
    "id": "deploy",
    "name": "Deployment through an authorised path, verified (§188)",
-   "blocker": "Live verification needs an authorised read of the Vercel project, and none exists in this session: the Vercel connector can see the team but not the project (list deployments 403, deployment by URL 404, fetch: no access); the sandbox egress policy blocks *.vercel.app; the GitHub connector has no commit-status or deployment tool. Remedy: the owner extends the Vercel connector to the project intellectuality-cns, or opens the live URL and checks the title reads v18.1.",
-   "prep": "Preparatory work complete: the tested commit is pushed to the branch the project deploys from; the identical build (deploy/vercel/build.mjs, which fails if index.html names a missing file) is served locally, and every Renaissance suite and every CNS browser suite with a production variant ran against it as well as against the source (receipts/v18_1/full_regression.log)."
+   "blocker": "Live verification needs an authorised read of what the live site serves. The Vercel connector can now list the project's deployments (state, target, commit), but cannot read a deployment's detail (404) or fetch its pages (no access); the sandbox egress policy blocks *.vercel.app; the GitHub connector has no commit-status or deployment tool. Production is READY on the v18.1 checkpoint 2c577a0; the v18.1 commit 23f58f0 produced no deployment. Remedy: the owner extends the Vercel connector to the project intellectuality-cns, or opens the live URL and checks the title reads v18.1.",
+   "prep": "Preparatory work complete: the tested commit is pushed to the branch the project deploys from; the identical build (deploy/vercel/build.mjs, which fails if index.html names a missing file) is served locally, and every Renaissance suite and every CNS browser suite with a production variant ran against it as well as against the source (receipts/v18_2/full_regression.log)."
   }
  ],
  "empiricalFuture": [
@@ -174,8 +174,8 @@
   "unattached": 0
  },
  "structuralErrors": [],
- "controllableIncludingDispositions": 174,
- "completedIncludingDispositions": 173,
+ "controllableIncludingDispositions": 175,
+ "completedIncludingDispositions": 174,
  "percentControllable": 99.4,
  "declaration": "not declared: 1 open, 0 contradicted, 0 structural errors"
 }
