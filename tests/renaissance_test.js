@@ -279,11 +279,23 @@ async function runToEnd(p) {
       const lazy = /what do you think|reflect on|discuss this|write about|explore the implications|how did this make you feel|research (this|it)|go to wikipedia|read chapter/i.exec(all);
       const links = /https?:\/\//.exec(all);
       const slop = /\b(streak bonus|XP|leaderboard|badges?|earn(ed)? points|\+\d+ points)\b/.exec(all);
-      return { bad, per, lazy: lazy && lazy[0], links: links && links[0], slop: slop && slop[0], n: S.sessions.length };
+      // test-wise counterfeit learners (§130, §143): strategies that never read for meaning; ties resolve at chance
+      const items = [];
+      for (const ses of S.sessions) for (const [, q] of qs(ses)) if (q && q.options) items.push(q.options);
+      const pick = (o, score) => { const v = o.map(score), m = Math.max(...v), top = o.filter((x, i) => v[i] === m); return top.filter((x) => x.ok).length / top.length; };
+      const strat = {
+        longest: (o) => pick(o, (x) => x.t.length), shortest: (o) => pick(o, (x) => -x.t.length), mostWords: (o) => pick(o, (x) => x.t.split(/\s+/).length),
+        punctuated: (o) => pick(o, (x) => (/[:;—]/.test(x.t) ? 1 : 0)), hedged: (o) => pick(o, (x) => (/\b(not|only|usually|about|may|most|often|some)\b/i.test(x.t) ? 1 : 0)),
+        jargon: (o) => pick(o, (x) => (x.t.match(/\b[a-z]{10,}\b/gi) || []).length), noAbsolutes: (o) => pick(o, (x) => (/\b(always|never|all|every|nothing|no one|entirely|simply)\b/i.test(x.t) ? 0 : 1)),
+      };
+      const chance = items.reduce((a, o) => a + 1 / o.length, 0) / items.length;
+      const counterfeit = Object.fromEntries(Object.entries(strat).map(([k, f]) => [k, +(items.reduce((a, o) => a + f(o), 0) / items.length).toFixed(3)]));
+      return { bad, per, lazy: lazy && lazy[0], links: links && links[0], slop: slop && slop[0], n: S.sessions.length, counterfeit, chance: +chance.toFixed(3), nItems: items.length };
     });
     check('R20', 'Every task is precise: one right option, every wrong option pre-diagnosed with a named misconception and a repair; every cited source exists; quotations are registered and cited', audit.bad.length === 0, audit.bad.slice(0, 10));
     const shapes = Object.entries(audit.per).filter(([, v]) => !(v.predict >= 2 && v.transfer >= 1 && v.far >= 1 && v.contrast === 1 && v.model === 1 && v.forge === 1 && v.hooks >= 3 && v.min <= 30));
     check('R21', 'Every session of every season has the full arc: ≥2 committed predictions (unlabelled items count), a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min', audit.n >= 12 && shapes.length === 0, { n: audit.n, per: audit.per, shapes });
+    check('R35', 'Test-wise counterfeit learners fail: picking the longest, shortest, wordiest, punctuated, hedged, jargon-heavy or absolute-free option scores within 0.12 of chance on every item of every season', Object.values(audit.counterfeit).every((v) => v <= audit.chance + 0.12), { chance: audit.chance, n: audit.nItems, counterfeit: audit.counterfeit });
     check('R22', 'No open-ended thinking tax ("what do you think", "reflect", "research…"), no links out, no points/badges', !audit.lazy && !audit.links && !audit.slop, audit);
 
     // right answers are not in a predictable place; buttons are big enough to tap
@@ -395,7 +407,7 @@ async function runToEnd(p) {
             for (const v of [st.svg, ...(st.reps || []).map((r) => r.svg), ...(st.panels || []).map((r) => r.svg), st.left && st.left.svg, st.right && st.right.svg].filter((x) => typeof x === 'string')) if (!(z.visuals || {})[v]) bad.push(ses.id + ':' + st.id + ' missing visual ' + v);
           }
         }
-        if (z.id !== 's1' && !z.sessions.every((x) => (x.atoms || []).length)) bad.push(z.id + ' has a session without atoms');
+        if (!z.sessions.every((x) => (x.atoms || []).length)) bad.push(z.id + ' has a session without atoms');
       }
       return bad;
     });
