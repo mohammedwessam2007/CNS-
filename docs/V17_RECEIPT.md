@@ -294,3 +294,35 @@ Season 1 (six sessions): tying your own hands (commitment devices), the planes t
 - Nothing shows yet that Renaissance makes him more capable; the instruments exist, the months of delayed data do not.
 - Taste, literature, art and music are not in season 1 (their lawful primary material could not be fetched from the build machine).
 - The live deploy could not be confirmed from the build session: the Vercel connector now answers 403/404 for this project. The identical build passed every suite locally.
+
+## v17.5: Renaissance season 2, phone-first figures, honest items, and OMEGA
+
+The owner asked (26 Sep 2026): *"Once you're done with the latest prompt, execute this too and don't stop till you're done."* (with the full Renaissance Singularity OMEGA constitution).
+
+### Season 2 · Seeing structure (after season 1)
+
+Six sessions: **three boxes** (find the constraint in a flow; Little's law), **the decisive question** (value of information), **London 1854** (reasoning inside the era's knowledge; Snow's natural experiment, 315 vs 37 deaths per 10,000 houses), **a new sense for doubling** (log scale, rule of 70), **which is better, and why?** (blind comparisons of sentences, charts and labels, then a testable criterion) and **the hospital that got faster and worse** (an unlabelled world: no session names, five symptoms, find the fewest mechanisms that explain them). Audit: `docs/RENAISSANCE/08_SEASON_2.md`.
+
+Engine: seasons chain; side-by-side blind panels; unlabelled items; a **belief ledger** (every committed answer given before teaching, kept with what replaced it, shown in WHY THIS?); **capability atoms** declared by every session and shown per step.
+
+**A pedagogy governor, two levels.** Level 1: when one kind of picture (diagram, story, analogy, numbers…) has preceded right answers clearly more often for him (at least 6 showings each, +15 points), it is shown first; one day in five the usual order is kept as a control. Level 2: after 20 choices the chooser must beat that control arm or it switches itself off. WHY THIS? says which picture was chosen and why, and how the chooser is doing. Tests R36–R38.
+
+### Three measurement problems found and fixed
+
+| Problem | Found by | Fix | Guard |
+|---|---|---|---|
+| Picking the longest option scored **0.90** on the 122 Renaissance items (chance 0.31) | counterfeit-learner simulation (OMEGA red teams §130, §143) | 312 option texts rewritten (166 season 1, 146 season 2): reasons moved to the feedback line, wrong options in the same register → every test-wise strategy 0.30–0.37 | **R35** |
+| Every wide figure rendered its labels at 6–7 px on a 360-px phone | screenshots at phone width | 21 figures and models redrawn on a 360-unit canvas, 4 panels enlarged; desktop capped at 520 px | **R34** (74 figure states: size ≥ 10 px, nothing cut off, no label collisions) |
+| Season 1 declared no capability atoms; unlabelled answers were not beliefs | OMEGA prompt v2 used as a checklist | atoms added; unlabelled answers enter the ledger | **R32**, **R31** |
+
+Also: the reality tap falls back to the session's title when a stored device has no text; generic "he/his" in two season-1 lines made neutral.
+
+### OMEGA research (`docs/RENAISSANCE/omega/`)
+
+A **1,160-candidate registry** (1,003 distinct after deduplication) with the 13 identity fields per candidate, 100 second-generation mechanisms bred from a recorded strongest-200 selection, 54 primitives, 23 generators, 13 ontologies, sixth and seventh escapes; an attack on the mission (14 generators, checked on a random sample that first failed 16/20 and was repaired); mission v2 → v3 → final, each used against the build; objective v0 → v3 and an adversary for every metric; the capability genome (5 of 28 atoms untrained → season 3) and a periodic table with seven predicted gaps; every engine with its status label; the engine's real plan for one day; ten years. `tests/omega_registry_test.js` checks the registry and the counts quoted in the docs.
+
+**Final status**: ARCHITECTURAL RENAISSANCE SINGULARITY is **not declared** — art/music/literature/mathematics seasons, self-improving pedagogy and its meta level are missing (`omega/00_README.md`). No empirical claim is made.
+
+### Evidence (`receipts/v17_5/`)
+
+*Pending: the full regression on the final code is running; its results replace this line.*

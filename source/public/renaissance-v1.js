@@ -560,7 +560,10 @@
           v = govVerdict(st);
         let h = "";
         if (d) {
-          const lab = (k) => ((x.reps || []).find((r) => r.kind === k) || {}).label || k;
+          const lab = (k) => {
+            const l = ((x.reps || []).find((r) => r.kind === k) || {}).label;
+            return "the " + k + (l && l.toLowerCase() !== k ? " “" + l + "”" : "");
+          };
           h += d.explore
             ? md("**Picture order:** the usual first picture was kept this time on purpose (one time in five), so the choice below keeps being checked.")
             : md("**Picture chosen for you:** " + lab(d.chosen) + " first. For you, this kind of picture preceded a right answer " + Math.round(d.rates[1] * 100) + "% of " + d.n[1] + " times, the usual first one " + Math.round(d.rates[0] * 100) + "% of " + d.n[0] + ".");
