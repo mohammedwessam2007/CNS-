@@ -2,7 +2,7 @@
 
 Every failure the two mission prompts named (§124, §205 of the first; §129–§144 of OMEGA), plus the ones found while
 building. For each: the structural defense and where it is tested. "Test" names a check in
-`tests/renaissance_test.js` (R1–R27) or a document-level check. Where there is only a design, it says **no test yet**.
+`tests/renaissance_test.js` (R1–R38) or a document-level check. Where there is only a design, it says **no test yet**.
 
 | # | Failure | Structural defense (as built) | Test |
 |---|---|---|---|

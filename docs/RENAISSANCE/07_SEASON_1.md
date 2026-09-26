@@ -8,7 +8,7 @@ schema any future season must satisfy (the tests enforce it).
 
 | # | id | Door question | Capability (what he can do after) | Primary experience | Interactive model | Contrast | Far transfer |
 |---|---|---|---|---|---|---|---|
-| 1 | commit | Why would a rational person deliberately tie his own hands? | spot a future-self conflict and build a constraint that holds | Odysseus and the Sirens (paraphrase of *Odyssey* XII) | hyperbolic vs exponential discounting; find the flip | Save More Tomorrow (USA) vs CARES (Philippines) | central-bank independence (Kydland & Prescott) |
+| 1 | commit | Why would a rational person deliberately tie their own hands? | spot a future-self conflict and build a constraint that holds | Odysseus and the Sirens (paraphrase of *Odyssey* XII) | hyperbolic vs exponential discounting; find the flip | Save More Tomorrow (USA) vs CARES (Philippines) | central-bank independence (Kydland & Prescott) |
 | 2 | select | Bombers came home full of holes… where does the armour go? | ask what filter produced the data | Wald's problem (SRG 1943) | the fleet with and without the lost planes | "drop out" advice vs "old buildings were better" | Berkson's paradox in admissions |
 | 3 | base | A test is 90% accurate. Positive. How worried? | turn percentages into counts; read a positive | Eddy's physicians (graded C) | 1,000 people, three sliders | screening clinic vs the Sally Clark trial | same test in a symptomatic clinic |
 | 4 | loop | Why does the shower swing from freezing to scalding? | predict settle / swing / run-away from loop structure | Sterman's Beer Game (1989) | shower with delay and gain | blood sugar (balancing) vs bank run (reinforcing) | microphone howl |

@@ -95,7 +95,7 @@
   const pretty = (key) => new Date(key + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 
   /* ───────────── storage (never the CNS state) ───────────── */
-  const fresh = () => ({ v: 1, sessions: {}, days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, beliefs: [], lastWarm: "" });
+  const fresh = () => ({ v: 1, sessions: {}, days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, beliefs: [], gov: { log: [], off: false }, lastWarm: "" });
   let ST = null;
   function load() {
     if (ST) return ST;
@@ -222,7 +222,7 @@
     if (!g.open) return g;
     const st = load(),
       p = g.plan;
-    P = { sid: p.sid, s: sessionById(p.sid), steps: p.steps, i: p.start, dose: g.dose, reasons: g.reasons, minutes: p.minutes, short: p.short, partial: p.partial, t0: Date.now(), acc: 0, qs: {}, rep: {}, sheet: null, used: {} };
+    P = { sid: p.sid, s: sessionById(p.sid), steps: p.steps, i: p.start, dose: g.dose, reasons: g.reasons, minutes: p.minutes, short: p.short, partial: p.partial, t0: Date.now(), acc: 0, qs: {}, rep: {}, shownRep: {}, gov: {}, sheet: null, used: {} };
     if (p.sid) {
       const rec = (st.sessions[p.sid] = st.sessions[p.sid] || { start: Date.now() });
       rec.short = p.short;
@@ -316,6 +316,11 @@
     const r = document.getElementById("rnRoot");
     if (!r || !P) return;
     const x = cur();
+    if (x.type === "scene" && x.reps && x.reps.length && !P.shownRep[x.id]) {
+      safe(() => chooseRep(x));
+      P.shownRep[x.id] = 1;
+      logRep(x, "first");
+    }
     let body = "";
     if (x.type === "scene") body = sceneView(x);
     else if (x.type === "q") body = qView(x, x.id, x);
@@ -449,7 +454,7 @@
       f = st.forge[x.fid];
     const s = qstate(x.id);
     return (
-      '<div class="rnKind">DID IT MEET REALITY?</div><h2>Last time you built something</h2>' + md("“" + (f ? f.text : "") + "”\n\nDid you use it?") +
+      '<div class="rnKind">DID IT MEET REALITY?</div><h2>Last time you built something</h2>' + md((f && f.text ? "“" + f.text + "”" : "The device you built in “" + ((sessionById(x.fid) || {}).title || "your last session") + "”.") + "\n\nDid you use it?") +
       '<div class="rnOpts">' + [["used", "Used it"], ["notyet", "Not yet"], ["useless", "Tried it: not useful"]].map(([k, t]) => '<button type="button" class="rnOpt' + (s.pick === k ? " picked" : "") + '" data-rn="reality" data-k="' + k + '"><span>' + t + "</span></button>").join("") + "</div>" +
       (s.done ? '<div class="rnFb ok">' + md(s.pick === "used" ? "Counted: an idea that changed something outside this app." : s.pick === "notyet" ? "No debt. It stays on your record; it will not be asked again." : "Useful data: a design that failed in real life teaches the next one.") + "</div>" : "")
     );
@@ -483,7 +488,7 @@
       Object.keys(bugs).length ? "**Still weak:** " + Object.entries(bugs).map(([b, n]) => BUGS[b] + (n > 1 ? " ×" + n : "")).join(" · ") + ". These return first." : "**Still weak:** nothing showed today; the delayed hooks are the real test.",
       hooks.length ? "**Comes back (no hints):** " + hooks.map((h) => pretty(h.due)).join(" · ") + "." : "",
       s.connection ? "**New connection:** " + s.connection : "",
-      st.forge[s.id] ? "**Use it this week:** " + st.forge[s.id].text : "",
+      st.forge[s.id] && st.forge[s.id].text ? "**Use it this week:** " + st.forge[s.id].text : "",
     ].filter(Boolean);
     return { lines, click };
   }
@@ -549,6 +554,21 @@
         const rev = (st.beliefs || []).filter((b) => !b.ok && b.conf !== "guess").slice(-3).reverse();
         return rev.length ? "<h3>Beliefs you revised</h3>" + rev.map((b) => '<div class="rnSrc">' + md("You committed (" + b.conf + "): “" + b.held + "” → revised to “" + b.revisedTo + "” · " + pretty(dayKey(new Date(b.t)))) + "</div>").join("") : "";
       })() +
+      (() => {
+        const d = P.gov[x.id],
+          g = govState(st),
+          v = govVerdict(st);
+        let h = "";
+        if (d) {
+          const lab = (k) => ((x.reps || []).find((r) => r.kind === k) || {}).label || k;
+          h += d.explore
+            ? md("**Picture order:** the usual first picture was kept this time on purpose (one time in five), so the choice below keeps being checked.")
+            : md("**Picture chosen for you:** " + lab(d.chosen) + " first. For you, this kind of picture preceded a right answer " + Math.round(d.rates[1] * 100) + "% of " + d.n[1] + " times, the usual first one " + Math.round(d.rates[0] * 100) + "% of " + d.n[0] + ".");
+        }
+        if (g.off) h += md("**The picture chooser is switched off:** " + g.offReason + ". Pictures come in the authored order.");
+        else if (v.chooser.n) h += md("**Checking the chooser:** after its choices, right " + v.chooser.ok + "/" + v.chooser.n + "; with the usual order kept, right " + v.control.ok + "/" + v.control.n + ". It switches itself off if it stops doing better.");
+        return h ? "<h3>How this app is adjusting to you</h3>" + h : "";
+      })() +
       md("No combined score is shown on purpose: one number invites optimising the number (that is session 5).")
     );
   }
@@ -593,6 +613,74 @@
     if (!d.length) return "<h3>Deeper</h3><p>Nothing deeper is written for this step yet.</p>";
     return "<h3>Go deeper (optional)</h3>" + d.map((c) => '<div class="rnDeep"><h4>' + E(c.title) + "</h4>" + md(c.body) + "</div>").join("");
   }
+  /* ───────────── pedagogy governor ─────────────
+   * Level 1 improves teaching: when one kind of representation has preceded right answers clearly more often for this
+   * learner, it is shown first. Level 2 judges level 1: one eligible scene in five keeps the authored order as a control
+   * arm, and once the chooser has made enough choices it must beat that arm or it switches itself off. */
+  const GOV = { minN: 6, margin: 0.15, exploreEvery: 5, judgeAfter: 20, minControl: 5 };
+  const hashNum = (str) => {
+    let h = 2166136261;
+    for (const ch of String(str)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+    return h;
+  };
+  function kindStats(st) {
+    const k = {};
+    for (const pr of Object.values(st.reps || {}))
+      for (const [kind, r] of Object.entries(pr)) {
+        const o = (k[kind] = k[kind] || { shown: 0, ok: 0 });
+        o.shown += r.shown || 0;
+        o.ok += r.then_ok || 0;
+      }
+    return k;
+  }
+  function govState(st) {
+    st.gov = st.gov || { log: [], off: false };
+    st.gov.log = st.gov.log || [];
+    return st.gov;
+  }
+  function govVerdict(st) {
+    const done = govState(st).log.filter((d) => d.ok === true || d.ok === false);
+    const arm = (control) => {
+      const a = done.filter((d) => !!d.explore === control);
+      return { n: a.length, ok: a.filter((d) => d.ok).length };
+    };
+    return { chooser: arm(false), control: arm(true) };
+  }
+  function judgeGovernor(st) {
+    const g = govState(st);
+    if (g.off) return;
+    const v = govVerdict(st);
+    if (v.chooser.n >= GOV.judgeAfter && v.control.n >= GOV.minControl && v.chooser.ok / v.chooser.n <= v.control.ok / v.control.n) {
+      g.off = true;
+      g.offAt = Date.now();
+      g.offReason = "over " + v.chooser.n + " choices it did no better (" + v.chooser.ok + "/" + v.chooser.n + ") than keeping the usual order (" + v.control.ok + "/" + v.control.n + ")";
+    }
+  }
+  function chooseRep(x) {
+    if (!x.reps || x.reps.length < 2 || P.rep[x.id] != null) return;
+    const st = load(),
+      g = govState(st);
+    judgeGovernor(st);
+    if (g.off) return save();
+    const ks = kindStats(st),
+      rate = (k) => (ks[k] && ks[k].shown >= GOV.minN ? ks[k].ok / ks[k].shown : null),
+      base = rate(x.reps[0].kind);
+    if (base == null) return;
+    let best = 0;
+    x.reps.forEach((r, i) => {
+      const v = rate(r.kind);
+      if (i > 0 && v != null && v >= base + GOV.margin && v > (best ? rate(x.reps[best].kind) : -1)) best = i;
+    });
+    if (!best) return;
+    const explore = hashNum((P.sid || "") + ":" + x.id + ":" + dayKey(new Date())) % GOV.exploreEvery === 0;
+    P.rep[x.id] = explore ? 0 : best;
+    const d = { t: Date.now(), step: (P.sid || "") + ":" + x.id, usual: x.reps[0].kind, chosen: x.reps[best].kind, explore, rates: [+base.toFixed(2), +rate(x.reps[best].kind).toFixed(2)], n: [ks[x.reps[0].kind].shown, ks[x.reps[best].kind].shown], ok: null };
+    g.log.push(d);
+    if (g.log.length > 300) g.log.splice(0, g.log.length - 300);
+    P.gov[x.id] = d;
+    P.govPending = d;
+    save();
+  }
   function logRep(x, how) {
     const st = load(),
       pr = (P.s && P.s.primitive) || "warm",
@@ -620,6 +708,10 @@
       if (st.beliefs.length > 200) st.beliefs.splice(0, st.beliefs.length - 200);
     }
     if (a.bug) st.bugs[a.bug] = (st.bugs[a.bug] || 0) + 1;
+    if (P.govPending) {
+      P.govPending.ok = a.ok;
+      P.govPending = null;
+    }
     if (P.lastRep && a.ok) {
       const r = st.reps[P.lastRep.pr]?.[P.lastRep.kind];
       if (r) r.then_ok++;
@@ -882,6 +974,7 @@
       ST = fresh();
       save();
     },
+    governor: () => ({ state: JSON.parse(JSON.stringify(govState(load()))), verdict: govVerdict(load()), config: Object.assign({}, GOV) }),
     reload: () => {
       ST = null;
       return load();

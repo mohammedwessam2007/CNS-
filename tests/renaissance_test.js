@@ -62,7 +62,7 @@ async function runToEnd(p) {
       const e = document.querySelector('#player .rnEntry'), r = e && e.getBoundingClientRect();
       return { open: e?.dataset.rnState, q: e?.querySelector('.rnEntryQ')?.textContent, go: !!e?.querySelector('[data-rn-open]'), top: r ? Math.round(r.top) : null, vh: innerHeight, stop: /STOP MEDICINE/.test(document.querySelector('#player').textContent) };
     });
-    check('R2', 'When medicine says STOP, one door appears under "STOP MEDICINE": today\'s question and CONTINUE, visible without scrolling', door.open === 'open' && /tie his own hands/.test(door.q || '') && door.go && door.stop && door.top != null && door.top < door.vh, door);
+    check('R2', 'When medicine says STOP, one door appears under "STOP MEDICINE": today\'s question and CONTINUE, visible without scrolling', door.open === 'open' && /tie their own hands/.test(door.q || '') && door.go && door.stop && door.top != null && door.top < door.vh, door);
 
     const cnsBefore = await p.evaluate(() => Object.fromEntries(Object.keys(localStorage).filter((k) => k !== 'renaissance_v1').map((k) => [k, localStorage.getItem(k)])));
     await p.evaluate(() => document.querySelector('[data-rn-open]').click());
@@ -467,6 +467,56 @@ async function runToEnd(p) {
       return { bad, n: seen.length, minPx: +minPx.toFixed(1) };
     });
     check('R34', 'On a 360-px phone every label of every figure and every model state is at least 10 px, inside its canvas, and does not sit on another label', res.bad.length === 0 && res.n > 60, { n: res.n, minPx: res.minPx, bad: res.bad.slice(0, 12), more: res.bad.length });
+    await s.close();
+  }
+
+  // ── 8. the pedagogy governor: level 1 acts on the learner's record, level 2 judges level 1 against a control arm ──
+  {
+    const days = ['2026-09-26', '2026-09-27', '2026-09-28', '2026-09-29', '2026-09-30', '2026-10-01'];
+    const seedAndOpen = async (p, gov) => p.evaluate((gov) => {
+      const reps = gov === 'none' ? {} : { select: { diagram: { shown: 10, then_ok: 3 }, story: { shown: 10, then_ok: 9 } } };
+      const g = gov === 'failing' ? { off: false, log: [...Array(20)].map((_, i) => ({ explore: false, ok: i < 8 })).concat([...Array(5)].map(() => ({ explore: true, ok: true }))) } : { off: false, log: [] };
+      localStorage.setItem('renaissance_v1', JSON.stringify({ v: 1, sessions: {}, days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps, clicks: [], forge: {}, reality: {}, beliefs: [], gov: g, lastWarm: '' }));
+      RENAISSANCE.reload();
+      nextAction = () => ({ kind: 'STOP' });
+      render();
+      document.querySelector('[data-rn-open]').click();
+      const c = RENAISSANCE.current();
+      const shown = document.querySelector('#rnRoot .rnBody .rnRep')?.dataset.kind || null;
+      document.querySelector('#rnRoot [data-rn="why"]').click();
+      const why = document.querySelector('#rnRoot .rnSheet')?.textContent || '';
+      document.querySelector('#rnRoot [data-rn="unsheet"]').click();
+      const G = RENAISSANCE.governor();
+      return { id: c.id, shown, why, last: G.state.log.slice(-1)[0] || null, off: G.state.off, n: G.state.log.length };
+    }, gov);
+
+    // no record yet: the authored order stays and nothing is logged as a choice
+    let s = await open({ v16: true, time: days[0] + 'T19:00:00+03:00', state: null, settle: 1200 });
+    const fresh = await seedAndOpen(s.page, 'none');
+    await s.close();
+    // a record that favours stories: the chooser puts the story first, except on control days, and says so
+    const seen = [];
+    for (const d of days) {
+      s = await open({ v16: true, time: d + 'T19:00:00+03:00', state: null, settle: 1200 });
+      const r = await seedAndOpen(s.page, 'favour');
+      if (r.last && !r.last.explore) {
+        await answer(s.page, 'right', 'think').catch(() => null);
+        await go(s.page);
+        await answer(s.page, 'right', 'think').catch(() => null);
+        r.after = await s.page.evaluate(() => RENAISSANCE.governor().state.log.slice(-1)[0]);
+      }
+      seen.push(r);
+      await s.close();
+      if (seen.some((x) => x.last && !x.last.explore) && seen.some((x) => x.last && x.last.explore)) break;
+    }
+    const chose = seen.find((x) => x.last && !x.last.explore), kept = seen.find((x) => x.last && x.last.explore);
+    check('R36', 'Pedagogy governor, level 1: with no record the authored picture comes first; when one kind of picture has preceded right answers clearly more often for this learner it is shown first, except on control days when the usual order is kept; WHY THIS? says which and why; the outcome is logged', fresh.id === 'c1' && fresh.shown === 'diagram' && fresh.n === 0 && chose && chose.shown === 'story' && /Picture chosen for you/.test(chose.why) && chose.after && typeof chose.after.ok === 'boolean' && (!kept || (kept.shown === 'diagram' && /kept this time on purpose/.test(kept.why))), { fresh: { id: fresh.id, shown: fresh.shown, n: fresh.n }, seen: seen.map((x) => ({ shown: x.shown, last: x.last, after: x.after })) });
+
+    // level 2: a chooser that has not beaten its control arm switches itself off and says so
+    s = await open({ v16: true, time: days[0] + 'T19:00:00+03:00', state: null, settle: 1200 });
+    const failing = await seedAndOpen(s.page, 'failing');
+    check('R37', 'Pedagogy governor, level 2: after 20 choices that did no better than the control arm (8/20 vs 5/5), the chooser switches itself off, pictures return to the authored order, and WHY THIS? explains it', failing.off === true && failing.shown === 'diagram' && /switched off/.test(failing.why), { off: failing.off, shown: failing.shown, why: failing.why.slice(-300) });
+    check('R38', 'No page errors in the governor checks', s.log.errors.length === 0, s.log.errors.slice(0, 3));
     await s.close();
   }
 

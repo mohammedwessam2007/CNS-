@@ -326,7 +326,7 @@
     primitive: "commit",
     atoms: ["selfmodel", "strategy", "constraint"],
     title: "Tying your own hands",
-    hook: "Why would a rational person deliberately tie his own hands?",
+    hook: "Why would a rational person deliberately tie their own hands?",
     minutes: 24,
     why: "First because you can use it **tonight** (your own study, sleep and phone), it crosses economics, psychology, history and politics, and its evidence base is strong: two field experiments with real money.",
     capability: "Spot when your future self will want something your present self does not, and build a constraint that holds.",
@@ -396,10 +396,10 @@
         critique: { stem: "Three weeks in, the device annoys you and you want to cancel it at midnight. What does today's idea say?", options: [{ t: "That's the self it was built against: change rules only at a calm time", ok: true, why: "For example, only on Sunday morning, never at night. Decide rules when you can see the whole voyage, never at the song." }, { t: "Cancel it: a rule that annoys you every night is a badly designed rule", bug: "inversion", why: "Annoyance at the moment of temptation is the device working." }, { t: "Replace it with a stronger promise that you repeat to yourself each evening", bug: "willpower", why: "A promise is the weakest device there is." }] },
       },
     ],
-    challenge: { stem: "Why do some people put their alarm clock across the room?", options: [{ t: "So the sleepy morning self must get up: the evening self binds him", ok: true }, { t: "Because an alarm sounds louder and clearer from across the room", bug: "surface" }, { t: "To build willpower by making mornings deliberately a little harder", bug: "willpower" }] },
+    challenge: { stem: "Why do some people put their alarm clock across the room?", options: [{ t: "So the sleepy morning self must get up: the evening self decided", ok: true }, { t: "Because an alarm sounds louder and clearer from across the room", bug: "surface" }, { t: "To build willpower by making mornings deliberately a little harder", bug: "willpower" }] },
     hooks: [
       { id: "commit.h1", gap: 1, q: { stem: "Why does a plan made far ahead often flip when the moment arrives?", options: [{ t: "Up close, the nearer reward gains weight much faster than the later one", ok: true }, { t: "Because new information about the rewards always arrives as the day nears", bug: "omission" }, { t: "Because people get lazier as a deadline approaches and grab the easy option", bug: "moral" }], after: "The distance changed, not the rewards." } },
-      { id: "commit.h2", gap: 7, q: { stem: "Many people buy a monthly gym contract, then go so rarely that pay-per-visit would have been cheaper. Which idea explains it best?", options: [{ t: "They paid for a future self who would go often; he didn't", ok: true, why: "The self who signs up plans to go; the self on a cold evening prefers the sofa. DellaVigna & Malmendier (2006) found this pattern in real gym data." }, { t: "Gyms hide the real price in fees, so members misjudge what they pay", bug: "agent" }, { t: "People don't care about money once they've signed a monthly contract", bug: "moral" }] } },
+      { id: "commit.h2", gap: 7, q: { stem: "Many people buy a monthly gym contract, then go so rarely that pay-per-visit would have been cheaper. Which idea explains it best?", options: [{ t: "They paid for a future self who would go often; that self rarely went", ok: true, why: "The self who signs up plans to go; the self on a cold evening prefers the sofa. DellaVigna & Malmendier (2006) found this pattern in real gym data." }, { t: "Gyms hide the real price in fees, so members misjudge what they pay", bug: "agent" }, { t: "People don't care about money once they've signed a monthly contract", bug: "moral" }] } },
       { id: "commit.h3", gap: 30, q: { stem: "A good commitment device has an exit that is…", options: [{ t: "narrow and costly, agreed in advance", ok: true }, { t: "absent, so it can never be broken", bug: "rigid" }, { t: "easy to switch off, so it never annoys you", bug: "cheapexit" }] } },
     ],
     deeper: [

@@ -230,7 +230,7 @@ New in OMEGA (each generates a family; the generating passes in brackets):
 
 v1 (1–11): 1. **Misconception miner** 2. **Representation evolver** 3. **Case finder** 4. **Session linter / compiler**
 5. **Hook-gap tuner** 6. **Dose tuner** 7. **Simulated-learner harness** 8. **Transfer-distance generator**
-9. **Provenance checker** 10. **Pedagogy A/B governor** 11. **Registry of mechanisms**
+9. **Provenance checker** 10. **Pedagogy A/B governor** (IMPLEMENTED for picture order: R36–R37) 11. **Registry of mechanisms**
 
 New in OMEGA:
 

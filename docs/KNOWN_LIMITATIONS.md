@@ -1,6 +1,16 @@
-# Known Limitations (v17.3 · MCQ exam)
+# Known Limitations (v17.5 · MCQ exam + Renaissance)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v17.5 Renaissance season 2 and OMEGA
+
+- Season 2 opens only after all six season-1 sessions are finished; nothing in it is validated on the learner yet. The first delayed evidence is the 30-day hooks (late October 2026).
+- Six references in season 2 are cited from knowledge and marked "not re-checked in this build" in the app (Goldratt & Cox 1984, Pacini/Koch, the E. coli doubling time, Gopen & Swan 1990, Tufte 1983, Cleveland & McGill 1984).
+- The hospital boss world is a fictional composite (labelled as such); each mechanism in it is documented elsewhere, the hospital is not.
+- The anti-guessing check (R35) bounds seven test-wise strategies; a cleverer guesser (for example one that reads distractor diagnoses from other items) is not simulated.
+- The OMEGA registry's 520 v1 rows share five identity fields per pass (marked `[pass]`), and their links and merge targets were computed by word overlap (marked `[computed]`).
+- The capability periodic table and its seven gap predictions are a design hypothesis, untested.
+- Art, music, literature and mathematics seasons do not exist; self-improving pedagogy (the governor) is designed, not built. ARCHITECTURAL RENAISSANCE SINGULARITY is therefore not declared (`docs/RENAISSANCE/omega/00_README.md`).
 
 ## v17.4 answer figures and Renaissance v1
 
@@ -8,7 +18,7 @@ v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuri
 - Renaissance stores its learner model only on this device (`localStorage["renaissance_v1"]`), not in the cloud save: clearing site data erases it. Intentional for the first release (isolation from medicine).
 - Renaissance appears only when medicine returns STOP for the day; on days medicine is never finished, it never appears (intended before the exam).
 - Season 1 has six sessions; after them only hooks come back until season 2 is authored. Taste, literature, art and music are not yet in it.
-- Four references in season 1 are marked "not re-checked in this build" in the app (Kirby & Herrnstein 1995, Kydland & Prescott 1977, DellaVigna & Malmendier 2006, Diamond & Dybvig 1983, Berkson 1946, MRC 1948).
+- Six references in season 1 are marked "not re-checked in this build" in the app (Kirby & Herrnstein 1995, Kydland & Prescott 1977, DellaVigna & Malmendier 2006, Diamond & Dybvig 1983, Berkson 1946, MRC 1948).
 - The Odyssey scene is a paraphrase: Project Gutenberg is blocked from the build machine and nothing was quoted from memory.
 - The live deployment could not be verified from the build session (Vercel connector 403/404).
 
