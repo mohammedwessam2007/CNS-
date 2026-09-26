@@ -1,0 +1,1335 @@
+{
+ "at": "2026-09-26T20:45:45.815Z",
+ "results": [
+  {
+   "id": "R1",
+   "what": "While the medicine day is unfinished Renaissance stays shut: no door, gate says \"cns\"",
+   "ok": true,
+   "detail": {
+    "why": "cns",
+    "entry": false,
+    "kind": "SEGMENT"
+   }
+  },
+  {
+   "id": "R2",
+   "what": "When medicine says STOP, one door appears under \"STOP MEDICINE\": today's question and CONTINUE, visible without scrolling",
+   "ok": true,
+   "detail": {
+    "open": "open",
+    "q": "Why would a rational person deliberately tie their own hands?",
+    "go": true,
+    "top": 738,
+    "vh": 1180,
+    "stop": true
+   }
+  },
+  {
+   "id": "R3",
+   "what": "CONTINUE opens the session with CONTINUE, WHY THIS?, SHOW ME DIFFERENTLY, I ALREADY GET THIS, THIS DIDN'T CLICK, GO DEEPER and DONE",
+   "ok": true,
+   "detail": {
+    "c": {
+     "sid": "commit",
+     "i": 0,
+     "n": 11,
+     "id": "c1",
+     "type": "scene",
+     "stage": "hook",
+     "kind": "",
+     "short": false,
+     "sheet": false
+    },
+    "root": true,
+    "buttons": [
+     "CONTINUE",
+     "WHY THIS?",
+     "SHOW ME DIFFERENTLY",
+     "I ALREADY GET THIS",
+     "THIS DIDN'T CLICK",
+     "GO DEEPER",
+     "DONE"
+    ]
+   }
+  },
+  {
+   "id": "R4",
+   "what": "SHOW ME DIFFERENTLY swaps the representation (e.g. diagram → story), not the wording",
+   "ok": true,
+   "detail": {
+    "rep0": "diagram",
+    "rep1": "story"
+   }
+  },
+  {
+   "id": "R5",
+   "what": "THIS DIDN'T CLICK asks what is in the way (word / picture / step / why care) and repairs that cause: the missing step, or HUMAN / STICKY / TECHNICAL vocabulary",
+   "ok": true,
+   "detail": {
+    "xr": {
+     "causes": [
+      "word",
+      "picture",
+      "step",
+      "care"
+     ]
+    },
+    "xstep": "The missing stepThe missing step: your preference between the same two things changes as they get closer. Far away, you ",
+    "xword": "The words, three wayspresent biasHUMANThe reward in front of you looks bigger than it really is to you.STICKYاللي قدامك دلوقتي دايمًا شكله أحلى من حجمه الحقيقي.TECHNICALOver-weighting of immediate out"
+   }
+  },
+  {
+   "id": "R6",
+   "what": "A prediction must be committed (with SURE / THINK SO / GUESSING) before CONTINUE; a wrong one names the misconception, explains it and shows the answer; the answer is logged with confidence and bug",
+   "ok": true,
+   "detail": {
+    "locked": true,
+    "fb": {
+     "text": "✗ Not this one. Wrong actorThe crew have wax in their ears and no reason to act. The risk at the song is him.The answer: He knows he'll change his mind, so he decides now which self to obey. The rope alone is not enough: he is the captain and could order it untied. The order removes his own authority at the moment it will be misused.This is the whole idea in one scene: a present self who can see clearly, a future self who will want something else, and a rule built now to bind the later self.",
+     "bug": "Wrong actor",
+     "go": true
+    },
+    "logged": {
+     "t": 1790438402730,
+     "sid": "commit",
+     "item": "c2",
+     "kind": "predict",
+     "ok": false,
+     "conf": "sure",
+     "ms": 38,
+     "bug": "agent",
+     "hinted": false,
+     "atoms": [
+      "selfmodel",
+      "strategy",
+      "constraint"
+     ]
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "what": "WHY THIS? explains the choice, the dose, where the facts come from (graded) and the record (with Brier calibration); GO DEEPER opens optional depth",
+   "ok": true,
+   "detail": {
+    "why": "Why this, todayFirst because you can use it tonight (your own study, sleep and phone), it crosses economics, psychology, history and politics, and its evidence base is strong: two field experiments with real money.Capability: Spot when your future self will want something your present self does not,",
+    "deep": "Go deeper (optional)The formal versionExponential discounting: value = A·e^(−rD). Two options keep the same ranking at e"
+   }
+  },
+  {
+   "id": "R8",
+   "what": "I ALREADY GET THIS gives one question from further ahead; right and not guessed → skips to where the idea is used (transfer / far / forge)",
+   "ok": true,
+   "detail": {
+    "at0": {
+     "sid": "commit",
+     "i": 2,
+     "n": 11,
+     "id": "c3",
+     "type": "scene",
+     "stage": "reveal",
+     "kind": "",
+     "short": false,
+     "sheet": false
+    },
+    "at1": {
+     "sid": "commit",
+     "i": 7,
+     "n": 11,
+     "id": "c8",
+     "type": "q",
+     "stage": "transfer",
+     "kind": "transfer",
+     "short": false,
+     "sheet": false
+    }
+   }
+  },
+  {
+   "id": "R9",
+   "what": "DONE stops at once (\"Nothing is owed\"), returns to the app; the next CONTINUE resumes at the same step, even after a skip",
+   "ok": true,
+   "detail": {
+    "done": "Stopped. Nothing is owed.Minutes so far are counted. Next time starts where you ",
+    "closed": {
+     "root": false,
+     "door": "open",
+     "mins": 0
+    },
+    "resumed": {
+     "sid": "commit",
+     "i": 0,
+     "n": 4,
+     "id": "c8",
+     "type": "q",
+     "stage": "transfer",
+     "kind": "transfer",
+     "short": false,
+     "sheet": false
+    },
+    "at1": {
+     "sid": "commit",
+     "i": 7,
+     "n": 11,
+     "id": "c8",
+     "type": "q",
+     "stage": "transfer",
+     "kind": "transfer",
+     "short": false,
+     "sheet": false
+    }
+   }
+  },
+  {
+   "id": "R10",
+   "what": "Finishing writes a receipt (what changed, evidence, what comes back) and schedules the hooks 1, 7 and 30 days out",
+   "ok": true,
+   "detail": {
+    "ended": true,
+    "rec": [
+     "**What changed:** Spot when your future self will want something your present self does not, and build a constraint that holds.",
+     "**Evidence:** predictions before the explanation 0/1 · after it, used in new cases 3/3 (somewhere new: 1/1) · when you said SURE you were right 1/2.",
+     "**A click:** you got a prediction wrong before the explanation and then used the idea correctly on a case you had not seen. That reorganisation is what this is for.",
+     "**Still weak:** Wrong actor (likely cause: causal direction). These return first.",
+     "**What changed in your model:** “He doesn't trust the crew, so he takes charge of the ropes himself” → “He knows he'll change his mind, so he decides now which self to obey”.",
+     "**New connection:** Session 4 (feedback loops): a late-night habit is a reinforcing loop; a commitment device is how you cut the loop at its cheapest point.",
+     "**Use it this week:** Protecting being more productive: an app limit is on; nobody checks; exception: only for a real emergency, reported to my friend."
+    ],
+    "hooks": {
+     "commit.h1": {
+      "due": "2026-09-27",
+      "gap": 1,
+      "n": 0,
+      "ok": 0
+     },
+     "commit.h2": {
+      "due": "2026-10-03",
+      "gap": 7,
+      "n": 0,
+      "ok": 0
+     },
+     "commit.h3": {
+      "due": "2026-10-26",
+      "gap": 30,
+      "n": 0,
+      "ok": 0
+     }
+    }
+   }
+  },
+  {
+   "id": "R11",
+   "what": "One session a day: after it the door says today is done and nothing more is owed (the stop rule)",
+   "ok": true,
+   "detail": {
+    "gate": "spent",
+    "door": "RENAISSANCEToday's session is done. Nothing more is owed; the rest of the day is yours."
+   }
+  },
+  {
+   "id": "R12",
+   "what": "Isolation: a whole Renaissance session changes no CNS storage; its own state lives only under \"renaissance_v1\"",
+   "ok": true,
+   "detail": {
+    "changed": []
+   }
+  },
+  {
+   "id": "R13",
+   "what": "No page errors during the session",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "R14",
+   "what": "Next day: \"did you use it?\" first, then yesterday's hook without hints (no picture; SHOW ME DIFFERENTLY / DIDN'T CLICK / I ALREADY GET THIS off); a right, sure answer pushes it further out",
+   "ok": true,
+   "detail": {
+    "first": {
+     "sid": "select",
+     "i": 0,
+     "n": 12,
+     "id": "reality",
+     "type": "reality",
+     "stage": "warm",
+     "kind": "",
+     "short": false,
+     "sheet": false
+    },
+    "hook": {
+     "c": {
+      "sid": "select",
+      "i": 1,
+      "n": 12,
+      "id": "hook:commit.h1",
+      "type": "q",
+      "stage": "warm",
+      "kind": "hook",
+      "short": false,
+      "sheet": false
+     },
+     "banner": "From an earlier session · no hints this time",
+     "vis": false,
+     "dis": [
+      true,
+      true,
+      true
+     ]
+    },
+    "h": {
+     "due": "2026-09-30",
+     "gap": 3,
+     "n": 1,
+     "ok": 1,
+     "l7": 0,
+     "arm": 0
+    }
+   }
+  },
+  {
+   "id": "R15",
+   "what": "The next session follows (selection), never two sessions in one day",
+   "ok": true,
+   "detail": {
+    "sid": "select"
+   }
+  },
+  {
+   "id": "R16",
+   "what": "Life first: exam weekend → shut; 01:00–05:00 → shut (sleep); exam week → a real 10-minute dose (the session continues another day)",
+   "ok": true,
+   "detail": {
+    "exam": {
+     "open": false,
+     "why": "exam"
+    },
+    "late": {
+     "open": false,
+     "why": "sleep"
+    },
+    "week": {
+     "open": true,
+     "dose": 10,
+     "short": true,
+     "n": 5,
+     "min": 9,
+     "reasons": [
+      "exam week"
+     ]
+    },
+    "full": {
+     "open": true,
+     "dose": 25,
+     "short": false,
+     "n": 11,
+     "min": 23,
+     "reasons": []
+    }
+   }
+  },
+  {
+   "id": "R17",
+   "what": "Human-life test: when Renaissance takes too much of the week it shrinks itself (≥245 min → 10-min dose) and then rests (≥300 min → shut)",
+   "ok": true,
+   "detail": {
+    "heavy": {
+     "open": false,
+     "why": "week"
+    },
+    "warm": {
+     "open": true,
+     "dose": 10,
+     "short": true,
+     "n": 5,
+     "min": 9,
+     "reasons": [
+      "a heavy week (252 min)"
+     ]
+    }
+   }
+  },
+  {
+   "id": "R18",
+   "what": "No backlog: after 12 missed days the door offers one ordinary session (one or two warm-ups, normal length) and never says \"behind\", \"missed\" or \"streak\"",
+   "ok": true,
+   "detail": {
+    "open": true,
+    "sid": "select",
+    "warm": 1,
+    "min": 22,
+    "door": "RENAISSANCE · TODAY · 22 MINBombers came home full of holes: wings, body, tail, few in the engines. You have armour for one area. Where?CONTINUE WHY THIS?"
+   }
+  },
+  {
+   "id": "R27",
+   "what": "A 10-minute day ends with a short receipt and does not close the session; the next day continues from the next step",
+   "ok": true,
+   "detail": {
+    "ended": true,
+    "day1": {
+     "st": {
+      "start": 1794326401670,
+      "short": true,
+      "mode": "bootloader",
+      "at": "c5",
+      "endDay": "2026-11-10",
+      "shortDays": 1
+     },
+     "gate": "spent"
+    },
+    "next": {
+     "sid": "commit",
+     "first": "c5"
+    }
+   }
+  },
+  {
+   "id": "R19",
+   "what": "Kill switches: ?renaissance=off or localStorage \"renaissance_off\" = 1 → no door, not even booted, and the CNS STOP screen is unchanged",
+   "ok": true,
+   "detail": {
+    "offq": {
+     "why": "off",
+     "door": false,
+     "booted": false
+    },
+    "offl": {
+     "why": "off",
+     "door": false,
+     "stop": true
+    }
+   }
+  },
+  {
+   "id": "R20",
+   "what": "Every task is precise: one right option, every wrong option pre-diagnosed with a named misconception and a repair; every cited source exists; quotations are registered and cited",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "R21",
+   "what": "Every session of every season has the full arc: ≥2 committed predictions (unlabelled items count), a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min",
+   "ok": true,
+   "detail": {
+    "n": 25,
+    "per": {
+     "commit": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21.5,
+      "minShort": 20
+     },
+     "select": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19,
+      "minShort": 19
+     },
+     "base": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 18,
+      "minShort": 18
+     },
+     "loop": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 17.5,
+      "minShort": 17.5
+     },
+     "proxy": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 17,
+      "minShort": 17
+     },
+     "falsify": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21.5,
+      "minShort": 21.5
+     },
+     "bottleneck": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 17,
+      "minShort": 17
+     },
+     "question": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 16.5,
+      "minShort": 16.5
+     },
+     "snow": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19.5,
+      "minShort": 19.5
+     },
+     "double": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 16,
+      "minShort": 16
+     },
+     "taste": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 16,
+      "minShort": 16
+     },
+     "boss": {
+      "predict": 5,
+      "transfer": 1,
+      "far": 5,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21.5,
+      "minShort": 21.5
+     },
+     "km1": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 24.5,
+      "minShort": 24.5
+     },
+     "km2": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20.5,
+      "minShort": 20.5
+     },
+     "km3": {
+      "predict": 4,
+      "transfer": 2,
+      "far": 4,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 30,
+      "minShort": 30
+     },
+     "ozy": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20.5,
+      "minShort": 20.5
+     },
+     "euler": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19,
+      "minShort": 19
+     },
+     "willow": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 2,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20.5,
+      "minShort": 20.5
+     },
+     "pattern": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19.5,
+      "minShort": 19.5
+     },
+     "cadence": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19.5,
+      "minShort": 19.5
+     },
+     "wisdom": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20,
+      "minShort": 20
+     },
+     "salon": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 18.5,
+      "minShort": 18.5
+     },
+     "host": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21,
+      "minShort": 21
+     },
+     "cut": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21,
+      "minShort": 21
+     },
+     "arch": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19,
+      "minShort": 19
+     }
+    },
+    "shapes": []
+   }
+  },
+  {
+   "id": "R35",
+   "what": "Test-wise counterfeit learners fail: picking the longest, shortest, wordiest, punctuated, hedged, jargon-heavy or absolute-free option scores within 0.12 of chance on every item of every season",
+   "ok": true,
+   "detail": {
+    "chance": 0.3,
+    "n": 257,
+    "counterfeit": {
+     "longest": 0.264,
+     "shortest": 0.205,
+     "mostWords": 0.325,
+     "punctuated": 0.35,
+     "hedged": 0.315,
+     "jargon": 0.277,
+     "noAbsolutes": 0.336
+    }
+   }
+  },
+  {
+   "id": "R22",
+   "what": "No open-ended thinking tax (\"what do you think\", \"reflect\", \"research…\"), no links out, no points/badges",
+   "ok": true,
+   "detail": {
+    "bad": [],
+    "per": {
+     "commit": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21.5,
+      "minShort": 20
+     },
+     "select": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19,
+      "minShort": 19
+     },
+     "base": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 18,
+      "minShort": 18
+     },
+     "loop": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 17.5,
+      "minShort": 17.5
+     },
+     "proxy": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 17,
+      "minShort": 17
+     },
+     "falsify": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21.5,
+      "minShort": 21.5
+     },
+     "bottleneck": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 17,
+      "minShort": 17
+     },
+     "question": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 16.5,
+      "minShort": 16.5
+     },
+     "snow": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19.5,
+      "minShort": 19.5
+     },
+     "double": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 16,
+      "minShort": 16
+     },
+     "taste": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 16,
+      "minShort": 16
+     },
+     "boss": {
+      "predict": 5,
+      "transfer": 1,
+      "far": 5,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21.5,
+      "minShort": 21.5
+     },
+     "km1": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 24.5,
+      "minShort": 24.5
+     },
+     "km2": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20.5,
+      "minShort": 20.5
+     },
+     "km3": {
+      "predict": 4,
+      "transfer": 2,
+      "far": 4,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 30,
+      "minShort": 30
+     },
+     "ozy": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20.5,
+      "minShort": 20.5
+     },
+     "euler": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19,
+      "minShort": 19
+     },
+     "willow": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 2,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20.5,
+      "minShort": 20.5
+     },
+     "pattern": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19.5,
+      "minShort": 19.5
+     },
+     "cadence": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19.5,
+      "minShort": 19.5
+     },
+     "wisdom": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 20,
+      "minShort": 20
+     },
+     "salon": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 18.5,
+      "minShort": 18.5
+     },
+     "host": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21,
+      "minShort": 21
+     },
+     "cut": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 21,
+      "minShort": 21
+     },
+     "arch": {
+      "predict": 2,
+      "transfer": 1,
+      "far": 1,
+      "contrast": 1,
+      "model": 1,
+      "forge": 1,
+      "hooks": 3,
+      "min": 19,
+      "minShort": 19
+     }
+    },
+    "lazy": null,
+    "links": null,
+    "slop": null,
+    "n": 25,
+    "counterfeit": {
+     "longest": 0.264,
+     "shortest": 0.205,
+     "mostWords": 0.325,
+     "punctuated": 0.35,
+     "hedged": 0.315,
+     "jargon": 0.277,
+     "noAbsolutes": 0.336
+    },
+    "chance": 0.3,
+    "nItems": 257
+   }
+  },
+  {
+   "id": "R23",
+   "what": "The interactive model answers its controls (moving a slider redraws the picture and the numbers)",
+   "ok": true,
+   "detail": {
+    "before": "Seen from today, with the choice 60 days away: 100 EGP feels worth 14.3, 120 EGP",
+    "afterM": "Seen from today, with the choice 0 days away: 100 EGP feels worth 100, 120 EGP a"
+   }
+  },
+  {
+   "id": "R24",
+   "what": "Every Renaissance button is at least 44 px tall",
+   "ok": true
+  },
+  {
+   "id": "R25",
+   "what": "Right answers sit in different positions (the order is shuffled per item, stable across redraws)",
+   "ok": true,
+   "detail": {
+    "pos": [
+     1,
+     0,
+     3,
+     1,
+     1
+    ]
+   }
+  },
+  {
+   "id": "R26",
+   "what": "No page errors in content checks",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "R28",
+   "what": "Season 2 follows season 1: six new sessions with unique ids; when season 1 is done the door asks season 2's first question and opens it",
+   "ok": true,
+   "detail": {
+    "seasons": [
+     {
+      "id": "s1",
+      "n": 6,
+      "ids": [
+       "commit",
+       "select",
+       "base",
+       "loop",
+       "proxy",
+       "falsify"
+      ]
+     },
+     {
+      "id": "s2",
+      "n": 6,
+      "ids": [
+       "bottleneck",
+       "question",
+       "snow",
+       "double",
+       "taste",
+       "boss"
+      ]
+     },
+     {
+      "id": "s3",
+      "n": 13,
+      "ids": [
+       "km1",
+       "km2",
+       "km3",
+       "ozy",
+       "euler",
+       "willow",
+       "pattern",
+       "cadence",
+       "wisdom",
+       "salon",
+       "host",
+       "cut",
+       "arch"
+      ]
+     }
+    ],
+    "door": {
+     "q": "A clinic registers 30 patients an hour, its doctors see 12, its pharmacy serves 20. It hires two more receptionists. How many more patients are treated per hour?",
+     "state": "open"
+    },
+    "c0": {
+     "sid": "bottleneck",
+     "i": 0,
+     "n": 9,
+     "id": "n1",
+     "type": "q",
+     "stage": "predict",
+     "kind": "predict",
+     "short": false,
+     "sheet": false
+    }
+   }
+  },
+  {
+   "id": "R29",
+   "what": "Blind comparison: the taste session opens on two versions side by side; a confident wrong pick is kept in the belief ledger (what was held → what replaced it) and WHY THIS? shows it with the capability atoms the step trains",
+   "ok": true,
+   "detail": {
+    "ct": {
+     "sid": "taste",
+     "i": 0,
+     "n": 9,
+     "id": "t1",
+     "type": "q",
+     "stage": "predict",
+     "kind": "predict",
+     "short": false,
+     "sheet": false
+    },
+    "pair": [
+     159,
+     46
+    ],
+    "wrong": {
+     "k": 1,
+     "bug": "pretension"
+    },
+    "led": {
+     "t": 1790438401719,
+     "sid": "taste",
+     "item": "t1",
+     "held": "Left: it sounds more professional for a report",
+     "conf": "sure",
+     "ok": false,
+     "revisedTo": "Right: the same claim, every word working"
+    },
+    "why": "n-flipping): 0.81 over 1 answers · Renaissance this week: 0 min.This step trains: aesthetic discrimination · compression.Beliefs you revisedYou committed (sure): “Left: it sounds more professional for a report” → revised to “Right: the same claim, every word working” · Sat, 26 SeptNo combined score is shown on purpose: one number invites optimising the number (that is session 5).BACK TO THE LESSON"
+   }
+  },
+  {
+   "id": "R30",
+   "what": "A chart comparison draws both charts from the same numbers, side by side",
+   "ok": true,
+   "detail": {
+    "svgPanels": 2
+   }
+  },
+  {
+   "id": "R31",
+   "what": "The boss world is unlabelled: its items name no session and are recorded as their own kind (far transfer, and a belief on record)",
+   "ok": true,
+   "detail": {
+    "cb": {
+     "sid": "boss",
+     "i": 0,
+     "n": 11,
+     "id": "x1",
+     "type": "scene",
+     "stage": "hook",
+     "kind": "",
+     "short": false,
+     "sheet": false
+    },
+    "tag": "NO LABELS: WHICH IDEA IS THIS?",
+    "lastA": {
+     "t": 1790438401766,
+     "sid": "boss",
+     "item": "x2",
+     "kind": "alien",
+     "ok": true,
+     "conf": "think",
+     "ms": 7,
+     "bug": null,
+     "hinted": false,
+     "atoms": [
+      "orient",
+      "measure"
+     ]
+    }
+   }
+  },
+  {
+   "id": "R32",
+   "what": "Every model in every season reacts to each of its controls; every atom, term, model and picture a step names exists",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "R33",
+   "what": "No page errors in the season 2 checks",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "R34",
+   "what": "On a 360-px phone every label of every figure and every model state is at least 10 px, inside its canvas, and does not sit on another label",
+   "ok": true,
+   "detail": {
+    "n": 163,
+    "minPx": 10.2,
+    "bad": [],
+    "more": 0
+   }
+  },
+  {
+   "id": "R36",
+   "what": "Pedagogy governor, level 1: with no record the authored picture comes first; when one kind of picture has preceded right answers clearly more often for this learner it is shown first, except on control days when the usual order is kept; WHY THIS? says which and why; the outcome is logged",
+   "ok": true,
+   "detail": {
+    "fresh": {
+     "id": "c1",
+     "shown": "diagram",
+     "n": 0
+    },
+    "seen": [
+     {
+      "shown": "story",
+      "last": {
+       "t": 1790438401734,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": null
+      },
+      "after": {
+       "t": 1790438401734,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": true
+      }
+     },
+     {
+      "shown": "story",
+      "last": {
+       "t": 1790524801672,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": null
+      },
+      "after": {
+       "t": 1790524801672,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": false,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": true
+      }
+     },
+     {
+      "shown": "diagram",
+      "last": {
+       "t": 1790611201667,
+       "step": "commit:c1",
+       "usual": "diagram",
+       "chosen": "story",
+       "explore": true,
+       "rates": [
+        0.3,
+        0.9
+       ],
+       "n": [
+        10,
+        10
+       ],
+       "ok": null
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "R37",
+   "what": "Pedagogy governor, level 2: after 20 choices that did no better than the control arm (8/20 vs 5/5), the chooser switches itself off, pictures return to the authored order, and WHY THIS? explains it",
+   "ok": true,
+   "detail": {
+    "off": true,
+    "shown": "diagram",
+    "why": ".How this app is adjusting to youThe picture chooser is switched off: over 20 choices it did no better (8/20) than keeping the usual order (5/5). Pictures come in the authored order.No combined score is shown on purpose: one number invites optimising the number (that is session 5).BACK TO THE LESSON"
+   }
+  },
+  {
+   "id": "R38",
+   "what": "No page errors in the governor checks",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

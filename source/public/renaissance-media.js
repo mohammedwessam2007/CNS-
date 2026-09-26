@@ -62,6 +62,7 @@
     register: M("Lets the reader keep one mechanism fixed while the listener changes, so register is separated from content."),
     axis: M("Lets the reader walk the camera round two actors and see when screen direction flips."),
     chain: M("Lets the reader sag, load and flip a chain and compare it with a half-circle arch."),
+    seating: M("Lets the reader try three seating plans and see which conversations start, whether the big talkers can dominate, and whether the quietest guest is left alone.", "an invented dinner; the rules (shared interests start conversations, dominant voices crowd out others) follow the session's cited studies"),
   };
   const L = (type, job, source, rights) => ({ type, job, source, rights });
   const listen = {

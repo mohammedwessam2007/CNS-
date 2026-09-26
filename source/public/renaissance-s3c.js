@@ -153,6 +153,43 @@
   }
 
   /* ═══════════════ VISUALS ═══════════════ */
+  // the dinner-table model: six guests, three plans; a bridge is a shared interest between two people who can talk
+  const GUESTS = { Nour: ["surgery", "football"], Karim: ["engines", "film"], Salma: ["buildings", "film"], Omar: ["markets", "football"], Hana: ["novels", "history"], Youssef: ["history", "buildings"] };
+  const LOUD = ["Omar", "Karim"], QUIET = "Hana";
+  const PLANS = [
+    { name: "as they arrived", seats: ["Omar", "Karim", "Nour", "Hana", "Salma", "Youssef"] },
+    { name: "friends side by side", seats: ["Karim", "Salma", "Youssef", "Omar", "Nour", "Hana"] },
+    { name: "designed", seats: ["Youssef", "Salma", "Omar", "Hana", "Karim", "Nour"] },
+  ];
+  const TALK = [[0, 1], [1, 2], [3, 4], [4, 5], [0, 3], [1, 4], [2, 5]];
+  const shared = (a, b) => GUESTS[a].filter((x) => GUESTS[b].includes(x));
+  function seatingStats(plan) {
+    const P = PLANS[plan - 1].seats;
+    const bridges = TALK.filter(([a, b]) => shared(P[a], P[b]).length).map(([a, b]) => [P[a], P[b], shared(P[a], P[b])[0]]);
+    const loud = TALK.some(([a, b]) => LOUD.includes(P[a]) && LOUD.includes(P[b]));
+    const quiet = bridges.some((x) => x[0] === QUIET || x[1] === QUIET);
+    return { P, bridges, loud, quiet };
+  }
+  function seatDraw(v) {
+    const { P, loud } = seatingStats(v.plan);
+    const X = [64, 180, 296], Y = [54, 214];
+    const pos = (i) => [X[i % 3], Y[i < 3 ? 0 : 1]];
+    let h = '<rect x="24" y="104" width="312" height="56" rx="10" fill="' + C.bg + '" stroke="' + C.line + '" stroke-width="1.6"/>' + t(180, 137, "plan: " + PLANS[v.plan - 1].name, { c: C.mut, fs: 13 });
+    for (const [a, b] of TALK) {
+      const [x1, y1] = pos(a), [x2, y2] = pos(b);
+      const sh = shared(P[a], P[b]).length, both = LOUD.includes(P[a]) && LOUD.includes(P[b]);
+      const c = both ? C.pink : sh ? C.green : C.line;
+      const dy = (y) => y + (y < 100 ? 34 : -34);
+      h += '<line x1="' + x1 + '" y1="' + (y1 === y2 ? y1 : dy(y1)) + '" x2="' + x2 + '" y2="' + (y1 === y2 ? y2 : dy(y2)) + '" stroke="' + c + '" stroke-width="' + (sh || both ? 3.2 : 1.2) + '"' + (sh || both ? "" : ' stroke-dasharray="4 4"') + "/>";
+    }
+    P.forEach((g, i) => {
+      const [x, y] = pos(i), c = LOUD.includes(g) ? C.pink : g === QUIET ? C.cyan : C.ink;
+      h += box(x - 54, y - 34, 108, 68, c) + t(x, y - 12, g + (LOUD.includes(g) ? " (loud)" : g === QUIET ? " (quiet)" : ""), { c, fs: 13 }) + t(x, y + 6, GUESTS[g][0], { c: C.mut, fs: 12, fw: 600 }) + t(x, y + 22, GUESTS[g][1], { c: C.mut, fs: 12, fw: 600 });
+    });
+    h += t(180, 272, "green line: a shared interest", { c: C.green, fs: 12, fw: 600 }) + t(180, 290, loud ? "pink line: the two loud guests can reach each other" : "the two loud guests sit out of reach", { c: loud ? C.pink : C.mut, fs: 12, fw: 600 });
+    return svg(360, 300, h, "Six guests around a table; lines join people who can talk, green where they share an interest");
+  }
+
   const visuals = {
     // Galen's medicine through three languages
     relay: () => {
@@ -178,6 +215,14 @@
 
   /* ═══════════════ MODELS ═══════════════ */
   const models = {
+    seating: {
+      controls: [{ id: "plan", label: "Seating plan (1 as they arrived · 2 friends side by side · 3 designed)", min: 1, max: 3, step: 1, value: 1, fmt: (x) => ["", "as they arrived", "friends side by side", "designed"][x] }],
+      draw: (v) => seatDraw(v),
+      read(v) {
+        const s = seatingStats(v.plan);
+        return "**" + s.bridges.length + " of 7 conversations start with a shared interest** (" + (s.bridges.map((b) => b[0] + " and " + b[1] + ": " + b[2]).join("; ") || "none") + "). " + (s.loud ? "**The two big talkers can reach each other**, so the table becomes their conversation. " : "The two big talkers sit apart, each next to someone who can hold their own. ") + (s.quiet ? "Hana, the quietest guest, has someone to talk to about what she loves." : "**Hana, the quietest guest, shares nothing with anyone within reach.**") + (v.plan === 2 ? " Counting bridges alone is not hosting: this plan has as many as the designed one, and one loud conversation." : "");
+      },
+    },
     explain: {
       toggles: EV.map(([id, txt]) => ({ id, label: txt.split(" (")[0].split(":")[0], value: id === "e1" || id === "e2" })),
       draw: (v) => explainDraw(v),
@@ -258,6 +303,7 @@
       { id: "gutas", claim: "The Graeco-Arabic translation movement was a society-wide, two-century phenomenon supported by many patrons for practical and ideological reasons; it began under al-Mansur (r. 754–775), not with al-Ma'mun.", source: "Gutas D., Greek Thought, Arabic Culture: The Graeco-Arabic Translation Movement in Baghdad and Early 'Abbasid Society (Routledge)", year: "1998", kind: "scholarship", license: "fact", grade: "A" },
       { id: "dream", claim: "Ibn al-Nadim's Fihrist (10th century) reports that the caliph al-Ma'mun dreamt of Aristotle; Gutas reads the story as political propaganda for al-Ma'mun.", source: "Ibn al-Nadim, al-Fihrist (987), as discussed in Gutas (1998)", year: "987", kind: "scholarship", license: "fact", grade: "A", contested: "Historians differ on how much weight to give al-Ma'mun and the 'House of Wisdom'; whether it was an academy or mainly a library is debated." },
       { id: "hunayn", claim: "Hunayn ibn Ishaq (d. 873) listed in his letter (Risala) the Galen translations of his time; he translated about 129 works himself, collated several Greek manuscripts where he could, and travelled to find missing texts.", source: "Hunayn ibn Ishaq, Risala; ed. and tr. Lamoreaux (2016); checked by web search", year: "9th c.", kind: "primary", license: "fact", grade: "A" },
+      { id: "avicenna", claim: "Ibn Sina (Avicenna) was born around 980 near Bukhara, in Central Asia; his Canon of Medicine built on Galen and, in Latin translation, became a standard medical textbook in Europe.", source: "Standard biographies (e.g. Encyclopaedia Iranica, 'Avicenna'); checked by web search", year: "c. 1025 (the Canon)", kind: "scholarship", license: "fact", grade: "A" },
       { id: "banumusa", claim: "The Banu Musa brothers, mathematicians in Baghdad, paid translators including Hunayn ibn Ishaq and Thabit ibn Qurra and sent for manuscripts from abroad.", source: "Standard history of science (e.g. MacTutor biography); checked by web search", year: "9th c.", kind: "scholarship", license: "fact", grade: "B" },
       { id: "paper", claim: "Paper-making spread from Central Asia into the Islamic world after the mid-8th century; a paper mill is recorded in Baghdad in the 790s.", source: "Standard history of paper (checked by web search)", year: "790s", kind: "scholarship", license: "fact", grade: "B" },
       { id: "toledo", claim: "In 12th-century Toledo, Gerard of Cremona and his circle translated dozens of Arabic scientific and medical works into Latin; the Latin Canon of Avicenna is traditionally credited to this circle, and it was a standard medical textbook in European universities for centuries.", source: "Standard history of medicine (checked by web search)", year: "12th c.", kind: "scholarship", license: "fact", grade: "B", contested: "Some scholars attribute the Canon's translation to a later Gerard; attributions within Gerard's circle are uncertain." },
@@ -271,7 +317,7 @@
         { t: "How good the translations were", bug: "irrelevant", why: "Quality says nothing about why the work was paid for." },
         { t: "Whether Aristotle is still read today", bug: "irrelevant", why: "True and beside the point: it concerns his influence, not the cause." },
       ] },
-      { id: "h2", type: "scene", stage: "reveal", min: 3, src: ["gutas", "banumusa", "paper", "dream"], terms: ["movement", "patron"], title: "Follow the money and the paper", body: "The evidence historians have gathered, notably Dimitri Gutas (1998):\n\n**It began early.** Translation was under way under al-Mansur (r. 754–775), decades before al-Ma'mun (r. 813–833).\n\n**Many paid.** Caliphs, viziers, physicians and families of scholars were [[patron|patrons]]; the Banu Musa brothers, mathematicians themselves, paid translators and sent for manuscripts from abroad.\n\n**Useful subjects came first:** medicine, astronomy, mathematics.\n\n**Paper arrived.** Paper-making reached Baghdad from Central Asia; a mill is recorded there in the 790s, and books became cheaper to copy.\n\nThe dream story is real, reported in the 10th-century Fihrist. Gutas reads it as propaganda for al-Ma'mun. Other historians give the court a larger role. Keep the disagreement; weigh the evidence.", reps: [{ kind: "diagram", label: "One line of medicine", svg: "relay", body: "Galen wrote in Greek; Hunayn ibn Ishaq and his circle put him into Arabic; Avicenna built on that in his Canon; Toledo's translators put Avicenna into Latin; Europe's medical schools taught from it for centuries." }, { kind: "story", label: "Hunayn, the translator", body: "Hunayn ibn Ishaq, a Christian physician from al-Hira, wrote a letter listing the Galen translations of his day; about 129 were his own. Where he could, he gathered several Greek manuscripts of a text and compared them before translating; he once searched Mesopotamia, Syria, Palestine and Egypt for a lost Galen work." }] },
+      { id: "h2", type: "scene", stage: "reveal", min: 3, src: ["gutas", "banumusa", "paper", "dream", "avicenna"], terms: ["movement", "patron"], title: "Follow the money and the paper", body: "The evidence historians have gathered, notably Dimitri Gutas (1998):\n\n**It began early.** Translation was under way under al-Mansur (r. 754–775), decades before al-Ma'mun (r. 813–833).\n\n**Many paid.** Caliphs, viziers, physicians and families of scholars were [[patron|patrons]]; the Banu Musa brothers, mathematicians themselves, paid translators and sent for manuscripts from abroad.\n\n**Useful subjects came first:** medicine, astronomy, mathematics.\n\n**Paper arrived.** Paper-making reached Baghdad from Central Asia; a mill is recorded there in the 790s, and books became cheaper to copy.\n\nThe dream story is real, reported in the 10th-century Fihrist. Gutas reads it as propaganda for al-Ma'mun. Other historians give the court a larger role. Keep the disagreement; weigh the evidence.", reps: [{ kind: "diagram", label: "One line of medicine", svg: "relay", body: "Galen wrote in Greek; Hunayn ibn Ishaq and his circle put him into Arabic; Avicenna, born near Bukhara in Central Asia around 980, built on that in his Canon; Toledo's translators put Avicenna into Latin; Europe's medical schools taught from it for centuries." }, { kind: "story", label: "Hunayn, the translator", body: "Hunayn ibn Ishaq, a Christian physician from al-Hira, wrote a letter listing the Galen translations of his day; about 129 were his own. Where he could, he gathered several Greek manuscripts of a text and compared them before translating; he once searched Mesopotamia, Syria, Palestine and Egypt for a lost Galen work." }] },
       { id: "h3", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["hunayn"], atoms: ["measure", "falsify"], stem: "Hunayn often gathered several Greek manuscripts of one book before translating it. Why?", options: [
         { t: "Copies differ; comparing them recovers what the author wrote", ok: true, why: "Every hand-copied manuscript has errors. Collating several lets the errors cancel out: textual criticism, a thousand years before the word existed." },
         { t: "To split the work among several translators and finish sooner", bug: "surface", why: "The copies were of the same book; the point was accuracy, not speed." },
@@ -415,6 +461,102 @@
     ],
   });
 
+  /* ─── 22b · An evening at your table ─── */
+  sessions.push({
+    id: "host", primitive: "host", domain: "cultivation", region: "Cairo, Tokyo, anywhere", works: [], talk: true, requires: ["salon"],
+    atoms: ["selfmodel", "question", "strategy", "represent"],
+    title: "An evening at your table",
+    hook: "After a first conversation with a stranger, do people think they were liked more or less than they really were?",
+    minutes: 25,
+    why: "The salon trained what you say. Hosting is the other half of social range: introductions that give strangers a first question, a table where the quiet guest has someone to talk to, customs you follow without fuss, and an honest reading of how the evening went. It is taught from research on real conversations, not from etiquette trivia.",
+    capability: "Introduce people so they have something to say, plan a table so conversations start and no one is left out, follow an unfamiliar custom by watching and asking, and judge an evening by what others said rather than by your worry.",
+    stakes: "Most people leave a gathering underestimating how much they were liked, and most hosts leave the quietest guest to fend for themselves. Both are fixable, and the fixes carry over to ward rounds, meetings and interviews.",
+    bridge: "The missing step: a host's job is not to shine but to make other people's conversations start and keep going. Every move below is judged by that.",
+    connection: "The salon's rule (judge a move by what the next person says) becomes a design problem: seating, introductions and questions are how a host sets up many good next sentences at once.",
+    vocab: {
+      likinggap: { name: "the liking gap", h: "After talking with someone new, we think they liked us less than they did.", s: "بعد ما تتكلم مع حد جديد بتفتكر إنه ما حبّكش، وهو في الحقيقة حبّك أكتر مما فاكر.", t: "A systematic underestimate of how much a conversation partner liked us and enjoyed our company (Boothby et al., 2018)." },
+      followup: { name: "a follow-up question", h: "A question about what the other person just said.", s: "سؤال عن الكلام اللي لسه قايله، مش موضوع جديد.", t: "A question that builds on the partner's previous turn; in studies of first conversations it predicts being liked more than other questions do." },
+      bridgeintro: { name: "a bridge introduction", h: "Introducing two people with one thing that gives them a first question.", s: "تعرّف اتنين على بعض بحاجة تخليهم يلاقوا أول سؤال.", t: "An introduction that attaches meaning to a name (an occupation, an interest), which is remembered far better than a bare name (the Baker/baker effect)." },
+    },
+    provenance: [
+      { id: "likinggap", claim: "After conversations between strangers, in the laboratory, among first-year dorm mates and in a workshop, people systematically underestimated how much their partners liked them and enjoyed their company.", source: "Boothby E.J., Cooney G., Sandstrom G.M. & Clark M.S., 'The liking gap in conversations', Psychological Science 29(11):1742–1756; checked by web search", year: "2018", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "followups", claim: "In getting-acquainted conversations and a field study of speed dating, people who asked more questions, especially follow-up questions, were liked more by their partners.", source: "Huang K., Yeomans M., Brooks A.W., Minson J. & Gino F., 'It doesn't hurt to ask: Question-asking increases liking', Journal of Personality and Social Psychology 113(3):430–452; checked by web search", year: "2017", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "bakerbaker", claim: "People shown faces with surnames and occupations recalled the occupation better than the surname, even for the same word (Baker, baker): a name attached to meaning is remembered better.", source: "McWeeny K.H., Young A.W., Hay D.C. & Ellis A.W., 'Putting names to faces', British Journal of Psychology 78:143–149; checked by web search", year: "1987", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "chopsticks", claim: "In Japan, chopsticks stood upright in a bowl of rice (tsukitate-bashi) recall the offering placed beside the dead at a Buddhist funeral, and doing it at the table makes people uncomfortable.", source: "Nippon.com, 'A Japanese glossary of chopsticks faux pas'; standard etiquette guides; checked by web search", year: "2020s", kind: "scholarship", license: "fact", grade: "B" },
+      { id: "insist", claim: "In many Egyptian homes a guest first declines another helping and the host insists, sometimes two or three times, before the guest accepts; the insisting is the hospitality. Iran's taarof is a related custom.", source: "Cultural Atlas (SBS), 'Egyptian culture: etiquette'; descriptions of taarof; checked by web search", year: "2020s", kind: "scholarship", license: "fact", grade: "B" },
+      { id: "evening", claim: "The guests, their interests and the seating plans are invented for teaching; the research findings are real and cited.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "v1", type: "q", kind: "predict", stage: "predict", min: 2, src: ["likinggap"], atoms: ["selfmodel", "calib"], stem: "Two strangers talk for five minutes. Afterwards each rates how much they liked the other, and guesses how much the other liked them. What do the guesses look like?", alt: "Think of the last time you replayed a conversation on the way home. Were you replaying your best moments or your awkward ones?", options: [
+        { t: "They guess they were liked less than they were", ok: true, why: "That is the liking gap: people read their own awkward moments as the other person's verdict, and miss the signals of liking the other person gave." },
+        { t: "They guess about right", bug: "independence", why: "The errors do not cancel out; they lean one way, toward thinking we were liked less." },
+        { t: "They flatter themselves and guess too high, as people usually do", bug: "consistency", why: "True for some judgements of ourselves, but after conversations with strangers the error runs the other way." },
+        { t: "Only shy people guess low; confident people guess too high", bug: "surface", why: "The gap appeared across personalities, in the laboratory, among new dorm mates and in a workshop." },
+      ] },
+      { id: "v2", type: "scene", stage: "reveal", min: 2.5, src: ["likinggap", "evening"], terms: ["likinggap"], title: "You were liked more than you think", body: "In 2018 Erica Boothby and colleagues paired strangers for conversations, then asked each person two things: how much they liked their partner, and how much they thought their partner liked them. People consistently underestimated how much they were liked. It held for students in the laboratory, for first-year dorm mates over months, and for adults at a workshop. The researchers call it [[likinggap|the liking gap]].\n\nFor a host this matters twice. Your own replay of the evening is biased toward your awkward moments. And your quiet guest is probably leaving with the same wrong verdict about themselves, unless someone gave them a good conversation.", reps: [{ kind: "story", label: "The walk home", body: "The replay that runs in your head after a dinner is made of the moments you noticed: the joke that fell flat, the pause. The other person noticed different moments: that you listened, that you asked about their sister. Your replay is real evidence about your attention, weak evidence about their opinion." }, { kind: "counterexample", label: "Where it breaks", body: "The gap is an average, not a guarantee. The better signal than your worry is the other person's behaviour: did they ask you questions back, extend the conversation, suggest meeting again?" }] },
+      { id: "v3", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["followups"], atoms: ["question"], terms: ["followup"], stem: "In first conversations and at speed-dating events, which habit most reliably made people like the person who did it?", options: [
+        { t: "Asking follow-up questions about what was just said", ok: true, why: "Huang and colleagues (2017) found that people who asked more questions, especially follow-ups, were liked more, and at speed dating were more often chosen for a second date. A follow-up proves you listened." },
+        { t: "Sharing personal stories early, so they seem open and warm to the other person", bug: "surface", why: "Some disclosure helps, but the measured effect was for questions, and above all follow-ups." },
+        { t: "Covering as many topics as possible to find common ground", bug: "omission", why: "Switching topics is a question that ignores the last answer; the follow-up was the one that mattered." },
+        { t: "Agreeing warmly with everything", bug: "confirm", why: "Agreement is cheap and easy to spot; attention is not." },
+      ] },
+      { id: "v4", type: "scene", stage: "reveal", min: 2.5, src: ["bakerbaker", "followups"], terms: ["bridgeintro", "followup"], title: "Introductions that give people a first question", body: "Names are hard to remember because a name means nothing. In a 1987 study people remembered that a face belonged to a *baker* far better than to a Mr *Baker*: the job brought bread, ovens and early mornings with it; the surname brought nothing.\n\nSo a host introduces people with meaning attached, and with something they can ask each other: \"Nour, this is Salma. She designs the buildings you drive past every morning, and she has opinions about films.\" That is a [[bridgeintro|bridge introduction]]: two things to remember and at least one first question. Then the host's own best move is the one from the research: a [[followup|follow-up question]] to whoever has said least.", reps: [{ kind: "analogy", label: "Like a good hook", body: "A bare name is a hook with nothing on it. An occupation or an interest is the thing that makes it catch." }, { kind: "counterexample", label: "Where it breaks", body: "Some people do not want their job to be their introduction (a doctor at a party, someone between jobs). Ask what they'd like to be introduced by, or use an interest instead." }] },
+      { id: "v5", type: "model", stage: "model", min: 3, model: "seating", src: ["evening"], title: "Plan the table", body: "Six guests, each with two interests. Omar and Karim are big talkers; Hana is quiet. Lines join the people who can talk to each other: neighbours and the person opposite. Try the three plans.", ask: "**Find** why the plan with friends side by side is not the best one even though it starts as many conversations as the designed plan." },
+      {
+        id: "v6", type: "contrast", stage: "contrast", min: 2.5, src: ["insist", "chopsticks"], atoms: ["judgment", "represent"], title: "Two tables, two customs",
+        left: { title: "A dinner in Cairo", body: "You are offered more food. You decline politely; your host insists; you decline again; your host insists again. You accept a little. The insisting is the hospitality." },
+        right: { title: "A dinner in Tokyo", body: "Between bites you rest your chopsticks upright in the rice. The table goes quiet: chopsticks standing in rice recall the bowl set beside the dead at a funeral." },
+        q: { stem: "What carries over from both tables to a table whose customs you don't know?", options: [
+          { t: "Watch the host, follow their lead, and ask quietly when unsure", ok: true, why: "The customs are local and cannot all be learned in advance; the courtesy underneath (making your hosts comfortable) is the same everywhere, and asking is itself a courtesy." },
+          { t: "Learn a complete list of rules for every country before you travel there", bug: "rigid", why: "There are too many, they vary by family and region, and a list cannot tell you when the host breaks their own custom." },
+          { t: "Behave as at home", bug: "surface", why: "The Cairo guest who accepts at once and the Tokyo guest with upright chopsticks both had good manners at home." },
+          { t: "Say nothing and eat as little as possible, to avoid any mistake", bug: "omission", why: "In Cairo that reads as not liking the food; avoiding the table is its own discourtesy." },
+        ] },
+      },
+      { id: "v7", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["followups", "evening"], atoms: ["strategy", "question"], dialogue: [{ who: "A senior consultant, to the whole table", say: "…which is why I've always said surgeons make the worst patients." }], stem: "You are hosting a department dinner. The consultant has talked for twenty minutes; two junior doctors have said nothing. What is your best move as host?", options: [
+        { t: "Ask a junior a follow-up about something they said earlier", ok: true, why: "It gives the table a new voice without contradicting anyone, and a follow-up shows the junior you were listening." },
+        { t: "Tell the consultant, politely, that others would like to speak too", bug: "moral", why: "Right in spirit, and it turns a dinner into a reprimand in front of his juniors." },
+        { t: "Wait for the juniors to speak up", bug: "omission", why: "They are waiting for permission that only the host can give." },
+        { t: "Change the subject to something the whole table can discuss equally", bug: "irrelevant", why: "A new subject still goes to whoever talks most; a direct question to someone does not." },
+      ] },
+      { id: "v8", type: "q", kind: "far", stage: "far", min: 1.5, src: ["likinggap"], atoms: ["selfmodel", "calib"], stem: "Your first week as a new doctor on a ward. The senior nurses seemed cold in handover, and you leave convinced they dislike you. What should you conclude?", options: [
+        { t: "Less than it feels; watch what they do over the next week", ok: true, why: "Your sense of being disliked after a new encounter runs low (the liking gap applies at work as much as at dinner), and busy people show liking in actions, help and questions back, more than in warmth." },
+        { t: "They dislike you: first impressions are usually accurate, so act on it", bug: "confirm", why: "First impressions of others can be informative; your guess about their impression of you is the part that runs low." },
+        { t: "Nothing at all: you can never really know what others think of you", bug: "rigid", why: "You can; the evidence is in their behaviour over the next days, not in the first handover." },
+        { t: "Be as agreeable as possible", bug: "surface", why: "Agreement is cheap; competence and a genuine question do more." },
+      ] },
+      { id: "v9", type: "q", kind: "check", stage: "transfer", min: 1, src: ["evening"], atoms: ["judgment"], stem: "The invitation says \"smart casual\" and you don't know the place or the people. What is the sensible reading?", options: [
+        { t: "Ask the host, or dress a notch more formally than you'd guess", ok: true, why: "A dress code is a signal of respect for the occasion and the host. Slightly over reads as respect; under reads as indifference; asking is never wrong." },
+        { t: "Wear the most expensive thing you own, just to be on the safe side", bug: "pretension", why: "Expensive is not the same as appropriate, and overdressing to impress is its own mistake." },
+        { t: "Copy a celebrity", bug: "authority", why: "Their event, their role, their stylist: it tells you little about this dinner." },
+        { t: "Wear whatever you like, since clothes are superficial anyway", bug: "moral", why: "The clothes are not the point; what they say to the people who invited you is." },
+      ] },
+      {
+        id: "v10", type: "forge", stage: "forge", min: 3, title: "Your plan for an evening you host", body: "Five decisions, made before the first guest arrives.",
+        slots: [
+          { key: "intro", label: "Introduce each guest with", options: [{ t: "one thing about them and one shared interest", grade: "good", note: "Meaning makes the name stick; the interest is the first question.", say: "one thing about them and one shared interest" }, { t: "their name and job title", grade: "weak", note: "Better than a bare name, but it gives no first question.", say: "their name and job title" }] },
+          { key: "seat", label: "Seat people so that", options: [{ t: "every neighbour shares something, the big talkers are apart, the quietest has a friend near", grade: "good", note: "The designed plan.", say: "everyone has a bridge, the big talkers are apart and the quietest has someone near" }, { t: "friends sit together so everyone is comfortable", grade: "bad", note: "Comfort for the friends, a closed table for everyone else.", say: "friends sit together" }] },
+          { key: "first", label: "In the first ten minutes, you", options: [{ t: "ask each quiet guest one follow-up question", grade: "good", note: "The single most effective move in the research.", say: "ask each quiet guest one follow-up" }, { t: "tell your best story to set the tone", grade: "weak", note: "Good later; first, give others the floor.", say: "tell your best story" }] },
+          { key: "custom", label: "If you are unsure of a custom", options: [{ t: "watch the host (or the eldest) and ask quietly", grade: "good", note: "Courtesy transfers where rules do not.", say: "watch and ask quietly" }, { t: "carry on as at home", grade: "bad", note: "The upright chopsticks.", say: "carry on as at home" }] },
+          { key: "after", label: "Afterwards, judge the evening by", options: [{ t: "what others said and asked, not by your replay", grade: "good", note: "The liking gap makes your replay a poor judge.", say: "what others said and asked" }, { t: "how many compliments you received", grade: "bad", note: "A proxy for the wrong thing.", say: "the compliments" }] },
+        ],
+        template: "Introduce with {intro}. Seat so that {seat}. First ten minutes: **{first}**. Unsure of a custom: {custom}. Judge the evening by {after}.",
+        critique: { stem: "Walking home you feel the evening went badly because you talked too little. What is the best next step?", options: [{ t: "Check the evidence: did guests stay, ask, want to meet again?", ok: true, why: "The liking gap makes your replay run low; the behaviour of your guests is the better record." }, { t: "Apologise to each guest the next day for being such a dull host", bug: "consistency", why: "An apology for a problem that probably didn't exist makes one." }, { t: "Talk more next time", bug: "linear", why: "More talking by the host is rarely what a table lacks." }] },
+      },
+    ],
+    challenge: { stem: "A host's first job at a table is…", options: [{ t: "to get other people's conversations started", ok: true }, { t: "to be the most interesting and memorable person there", bug: "pretension" }, { t: "to follow etiquette", bug: "rigid" }] },
+    hooks: [
+      { id: "host.h1", gap: 1, q: { stem: "After meeting someone new, people usually think they were liked…", options: [{ t: "less than they actually were", ok: true }, { t: "more than they were, as people flatter themselves", bug: "consistency" }, { t: "about right", bug: "independence" }] } },
+      { id: "host.h2", gap: 7, q: { stem: "The question that most reliably makes a new acquaintance like you is…", options: [{ t: "a follow-up about what they just said", ok: true }, { t: "a new topic you might both enjoy talking about", bug: "omission" }, { t: "a clever question", bug: "pretension" }] } },
+      { id: "host.h3", gap: 30, q: { stem: "A seating plan is good when…", options: [{ t: "neighbours share something and loud guests sit apart", ok: true }, { t: "friends sit together so everyone feels at ease all evening", bug: "surface" }, { t: "by rank, nearest the host", bug: "authority" }] } },
+    ],
+    deeper: [
+      { title: "Why names slip", body: "The Baker/baker effect has a simple lesson for the host: say a guest's name with something that means something (their work, the town they grew up in), and say it twice in the first minute. You are giving everyone else the hook." },
+      { title: "Customs as information", body: "In a Cairo home the refusal-and-insistence ritual tells the guest how welcome they are; in Iran, taarof does similar work. Following a custom badly but warmly is almost always forgiven; ignoring it is noticed." },
+      { title: "Open question", body: "Is hosting a skill or a temperament? Some born hosts break every rule above and their tables are the best in town. The research describes averages; the open question is how much of the rest can be learned." },
+    ],
+  });
+
   /* ─── 23 · Meaning made by the cut (film) ─── */
   sessions.push({
     id: "cut", primitive: "frame2", domain: "film", region: "Russia, Japan, Micronesia", works: ["tokyo-story"],
@@ -529,6 +671,7 @@
       { id: "q.hooke", claim: "“ut pendet continuum flexile, sic stabit contiguum rigidum inversum” — registered in the quote register.", source: "Hooke (1675/1705)", year: "1675", kind: "primary", license: "public domain", grade: "A" },
       { id: "heyman", claim: "A semicircular masonry arch under its own weight needs a thickness of roughly a tenth of its radius (about 0.106–0.108 of the radius) to stand.", source: "Heyman J., 'The safety of masonry arches', International Journal of Mechanical Sciences 11:363 (1969), and later corrections", year: "1969", kind: "scholarship", license: "fact", grade: "A" },
       { id: "gaudi", claim: "For the church of the Colònia Güell, Gaudí built a hanging model of strings weighted with small sacks at 1:10 scale, photographed it and inverted the image.", source: "Standard accounts of Gaudí's method (checked by web search)", year: "1898–1908", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "angkor", claim: "Khmer temples at Angkor (9th–12th centuries) were roofed with corbelled vaults rather than true arches, which limited the width of interior spaces; Angkor Wat groups many small rooms joined by galleries, and much of it has stood for more than eight centuries.", source: "Standard accounts of Khmer architecture (e.g. the corbel-arch literature; architectural histories of Angkor Wat); checked by web search", year: "12th century (Angkor Wat)", kind: "scholarship", license: "fact", grade: "B" },
       { id: "fathy", claim: "Hassan Fathy built New Gourna near Luxor in the 1940s with Nubian vaults and domes of mud brick, built without timber centring, and described the project in Gourna: A Tale of Two Villages (1969), republished as Architecture for the Poor (1973).", source: "Fathy H. (1969/1973); checked by web search", year: "1940s", kind: "scholarship", license: "fact", grade: "A" },
       { id: "cable", claim: "A cable carrying a load spread evenly along the horizontal (like a suspension bridge's deck) hangs close to a parabola; a chain loaded only by its own weight hangs in a catenary.", source: "Standard statics", year: "—", kind: "scholarship", license: "fact", grade: "A" },
       { id: "chaincalc", claim: "The chain in the model is computed live as a hanging chain of 24 links; the rooftop and egg examples are for teaching.", source: "Original", year: "2026", kind: "original", license: "original", grade: "A" },
@@ -541,7 +684,7 @@
         { t: "Any shape at all, if the stones are heavy enough", bug: "surface", why: "Weight without the right shape only adds to the push that breaks it." },
       ] },
       { id: "a2", type: "passage", stage: "primary", min: 1, src: ["q.hooke", "hooke"], quotes: ["hooke"], label: "PRIMARY SOURCE", title: "Hooke's anagram, 1675", body: "Hooke hid his discovery as a scrambled Latin sentence, a way of claiming it without giving it away. Decoded by his executor in 1705, it reads:" },
-      { id: "a3", type: "scene", stage: "reveal", min: 2.5, src: ["hooke", "gaudi"], terms: ["compression", "funicular"], title: "A physical computer", body: "A chain can only pull, so under its own weight it settles into the one shape in which every link pulls straight along the chain: its [[funicular|funicular shape]]. Turn that shape upside down and every stone pushes straight along the curve: pure [[compression|compression]], which stone and brick carry easily.\n\nAntoni Gaudí used this as a design method. For the church of the Colònia Güell he hung strings weighted with little sacks, at a tenth of full size, photographed them, and turned the photographs upside down. Gravity did the calculation.", reps: [{ kind: "diagram", label: "Chain and arch", svg: "chainArch", body: "The chain above, the same curve flipped below. The next step lets you add a weight and compare with a half-circle." }, { kind: "analogy", label: "In your hand", body: "Hold a necklace by its two ends and look at the curve. Now imagine it frozen and flipped: that is the arch that needs the least stone." }] },
+      { id: "a3", type: "scene", stage: "reveal", min: 2.5, src: ["hooke", "gaudi", "angkor"], terms: ["compression", "funicular"], title: "A physical computer", body: "A chain can only pull, so under its own weight it settles into the one shape in which every link pulls straight along the chain: its [[funicular|funicular shape]]. Turn that shape upside down and every stone pushes straight along the curve: pure [[compression|compression]], which stone and brick carry easily.\n\nAntoni Gaudí used this as a design method. For the church of the Colònia Güell he hung strings weighted with little sacks, at a tenth of full size, photographed them, and turned the photographs upside down. Gravity did the calculation.", reps: [{ kind: "diagram", label: "Chain and arch", svg: "chainArch", body: "The chain above, the same curve flipped below. The next step lets you add a weight and compare with a half-circle." }, { kind: "analogy", label: "In your hand", body: "Hold a necklace by its two ends and look at the curve. Now imagine it frozen and flipped: that is the arch that needs the least stone." }, { kind: "counterexample", label: "Angkor: stone without the arch", body: "The Khmer builders of Angkor (9th–12th centuries) roofed their galleries with corbelled vaults: each course of stone steps a little further in until the two sides meet at the top. A corbel does not turn its load into thrust the way a true arch does, so the spans stay narrow; Angkor Wat gets its size from many small rooms joined by galleries. The vaults have still stood for more than eight centuries." }] },
       { id: "a4", type: "model", stage: "model", min: 3.5, model: "chain", src: ["chaincalc", "heyman"], terms: ["thrust"], title: "Hang, flip, load", body: "Change how far the chain sags, hang a weight at its middle, and compare with a half-circle.", ask: "**Find** what a heavy weight at the middle does to the ideal arch's shape, and where the half-circle departs from the chain's curve most." },
       { id: "a5", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["chaincalc"], atoms: ["mech", "predict"], stem: "Now a heavy statue stands on the arch's crown. How should the ideal shape change?", options: [
         { t: "It becomes pointed at the top, like a chain with a weight hung at its middle", ok: true, why: "A concentrated load bends the chain into a point; the arch that carries it without bending is pointed too." },

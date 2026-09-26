@@ -1,0 +1,606 @@
+started 11506
+[build] 80 app scripts/styles present
+=== v16_test (public)
+PASS M1   After the lesson notes the next step is a block of that lesson's past-paper MCQs (≤ 8), each owned by the lesson just taught; no draw-from-memory step, no v14 primer, no picture before answering; options ≥ 48 px  · {"b":{"l":"T003","ids":["EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-7","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-4","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-
+PASS M2   A wrong answer is explained on the spot: verdict, the key row, "your answer" row, a reason under every option when the item has a tutor note, the teaching note, and Next buttons ≥ 44 px  · {"hand":true,"rows":4,"opts":4,"key":1,"mine":1,"whys":4,"verdict":"✗ غلط Not this one+4 XP🪤 trap spotted: it comes back as a rematch","note":true,"next":[44,48]}
+PASS M2b  A reload keeps the answered item and its explanation on screen  · {"cur":true,"rows":4}
+PASS M3   The day runs lesson → past-paper block → … → today's MCQ round → STOP with an MCQ summary; the written boss and visual boss never appear; every question segment is completed by its block  · {"kinds":["V16_BLOCK","SEGMENT","V16_ROUND"],"stop":{"kind":"STOP","sum":"Today: 36 past-paper MCQs · 67% right · 12 mistakes come back tomorrow as changed questions","boss":"{\"visual\":true,\"written\":true,\"writtenRevealed\":false,\"v16skip\":true}","qsegs":true}}
+PASS M3b  No page errors  · []
+PASS M4   A doubtful bank key accepts the standard answer too (CSF: "4th ventricle communicates directly"); an also-defensible option is accepted; ordinary items accept only the key  · {"csf5":["a","c"],"flag":"c","men8":["d","a"],"plain":["a"]}
+PASS M5   A missed past paper comes back the next day as a CHANGED item on the same fact (retest law); once that is answered, the exact item is due 3 days later  · {"missed":{"id":"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6","st":{"n":1,"k":0,"b":0,"f":3,"lp":1,"l":3,"r":"w","x":1,"d":4}},"tomorrow":{"day":4,"kind":["EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-2","chg:EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANI
+PASS M5b  Three days later the exact past-paper item is back in the round ("back again")  · {"day":7,"kind":"again"}
+PASS M5c  No page errors  · []
+PASS M6   Weekend mock: a sealed, timed exam of held-out past papers from lessons already learned — no pictures, notes or explanations before submission  · {"start":{"day":7,"ct":"WEEKLY_MOCK","kind":"V16_MOCK_START","n":29,"text":"Progress counts planned steps; it is not study time or proven mastery. The minute figures are estimates.\nWEEKLY SEALED MOCK\n29 MCQs · 29 min\n29 past-paper MCQs you have never seen\n131 / 1,410 past-pap"},"sealed":{"kind":
+PASS M6d  Held-out firewall: while a mock question is open none of its hand-written explanation is on screen; after submission every mock item shows its own written reason  · {"fw":{"asked":29,"leaks":[]},"whys":29,"n":29}
+PASS M6b  After the last answer: score, and every question explained; saving sends every miss into tomorrow's changed-question retests and continues to today's round  · {"res":{"kind":"V16_MOCK_RESULT","revs":29,"rows":116,"whys":29,"n":29,"pct":"69%"},"after":{"kind":"V16_ROUND","hist":1,"misses":9,"mocks":1}}
+PASS M6c  No page errors  · []
+PASS M10  Every usable past paper (practice and held-out) has a hand-written explanation with a key line and a reason for every wrong option; the 4 options the source PDF glued together are shown as separate a–d options (bank unchanged); ordinary items are untouched  · {"c":{"practice":1011,"heldout":399,"explained":1011,"heldExplained":399},"gaps":[],"nGaps":0,"glued":[{"id":"EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-2","n":4,"keys":"abcd","glue":false,"bank":3},{"id":"EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-7","n":4,"keys":"abcd","g
+PASS M10b No page errors  · []
+PASS M11  MCQ focus holds on the MCQ exam day (15 Nov); from 16 Nov the full flow (written, practical) is back without any setting; an explicit "ALL" always wins  · {"onExam":{"focus":"MCQ","kind":"SEGMENT"},"after":{"focus":"ALL","kind":"SEGMENT","date":"2026-11-16"},"forced":"ALL"}
+PASS M11b No page errors  · []
+PASS M8   With focus "ALL" the full v15 flow is back (draw-from-memory step, then the v15/v14 question view)  · ["SEGMENT:visual","SEGMENT:visual","SEGMENT:teach","SEGMENT:teach","SEGMENT:teach","SEGMENT:teach","SEGMENT:teach","SEGMENT:reconstruct","SEGMENT:question"]
+PASS M9   An open v14 repair migrates into the MCQ engine: the error is closed (kept, marked) and its past-paper item is due now as a changed-question retest  · {"e":{"resolved":true,"v16":"migrated"},"st":{"n":1,"k":0,"b":0,"f":1,"lp":1,"x":1,"d":3,"r":"w","l":3},"today":3,"kind":"SEGMENT"}
+PASS M9b  No page errors  · []
+PASS M7   Full course to 15 Nov: every auto-scored practice past paper is answered by the end of teaching (day 47), and every held-out one is used in a mock by the last sprint day  · {"practice":1011,"seenP":1011,"lastPracticeFirstDay":47,"held":399,"usedH":399,"wrong":574,"reasked":574,"stateKB":891,"mocks":14,"pred":{"n":340,"k":236,"p":0.6941176470588235,"lo":0.6612215458215173,"hi":0.725147247745943}}
+PASS M7b  Every simulated mistake is asked again before the exam  · {"wrong":574,"reasked":574}
+PASS M7c  Time: about 2 h a day or less on average, no day above 2.5 h; saved progress stays under 1.2 MB (cloud limit 1.5 MB)  · {"avg":109,"max":140,"stateKB":891,"perDay":"3:140 4:138 5:132 6:67 7:82 8:110 9:122 10:121 11:121 12:122 13:72 14:101 15:120 16:122 17:122 18:122 19:72 20:72 21:101 22:122 23:121 24:121 25:121 26:121 27:72 28:101 29:120 30:121 31:122 32:123 33:121 34:72 35:101 36:121 37:122 38:108 39:115 40:113 41:
+PASS M7d  Mock predictions come from unseen first attempts with an interval  · {"n":340,"k":236,"p":0.6941176470588235,"lo":0.6612215458215173,"hi":0.725147247745943}
+PASS M7e  No page errors over the whole course  · {"errors":[],"other":[]}
+25/25 v16 checks passed (230s)
+=== v16_test (owner device, key present)
+PASS M1   After the lesson notes the next step is a block of that lesson's past-paper MCQs (≤ 8), each owned by the lesson just taught; no draw-from-memory step, no v14 primer, no picture before answering; options ≥ 48 px  · {"b":{"l":"T003","ids":["EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-7","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-4","EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-
+PASS M2   A wrong answer is explained on the spot: verdict, the key row, "your answer" row, a reason under every option when the item has a tutor note, the teaching note, and Next buttons ≥ 44 px  · {"hand":true,"rows":4,"opts":4,"key":1,"mine":1,"whys":4,"verdict":"✗ غلط Not this one+4 XP🪤 trap spotted: it comes back as a rematch","note":true,"next":[44,48]}
+PASS M2b  A reload keeps the answered item and its explanation on screen  · {"cur":true,"rows":4}
+PASS M3   The day runs lesson → past-paper block → … → today's MCQ round → STOP with an MCQ summary; the written boss and visual boss never appear; every question segment is completed by its block  · {"kinds":["V16_BLOCK","SEGMENT","V16_ROUND"],"stop":{"kind":"STOP","sum":"Today: 37 past-paper MCQs · 68% right · 12 mistakes come back tomorrow as changed questions","boss":"{\"visual\":true,\"written\":true,\"writtenRevealed\":false,\"v16skip\":true}","qsegs":true}}
+PASS M3b  No page errors  · []
+PASS M4   A doubtful bank key accepts the standard answer too (CSF: "4th ventricle communicates directly"); an also-defensible option is accepted; ordinary items accept only the key  · {"csf5":["a","c"],"flag":"c","men8":["d","a"],"plain":["a"]}
+PASS M5   A missed past paper comes back the next day as a CHANGED item on the same fact (retest law); once that is answered, the exact item is due 3 days later  · {"missed":{"id":"EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-6","st":{"n":1,"k":0,"b":0,"f":3,"lp":1,"l":3,"r":"w","x":1,"d":4}},"tomorrow":{"day":4,"kind":["EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANISM-OF-SYNAPTIC-TRANSMISSION-MCQ-2","chg:EHSAN-PHYS-ANATOMY-OF-SYNAPSES-MECHANI
+PASS M5b  Three days later the exact past-paper item is back in the round ("back again")  · {"day":7,"kind":"again"}
+PASS M5c  No page errors  · []
+PASS M6   Weekend mock: a sealed, timed exam of held-out past papers from lessons already learned — no pictures, notes or explanations before submission  · {"start":{"day":7,"ct":"WEEKLY_MOCK","kind":"V16_MOCK_START","n":29,"text":"Progress counts planned steps; it is not study time or proven mastery. The minute figures are estimates.\nWEEKLY SEALED MOCK\n29 MCQs · 29 min\n29 past-paper MCQs you have never seen\n136 / 1,460 past-pap"},"sealed":{"kind":
+PASS M6d  Held-out firewall: while a mock question is open none of its hand-written explanation is on screen; after submission every mock item shows its own written reason  · {"fw":{"asked":29,"leaks":[]},"whys":29,"n":29}
+PASS M6b  After the last answer: score, and every question explained; saving sends every miss into tomorrow's changed-question retests and continues to today's round  · {"res":{"kind":"V16_MOCK_RESULT","revs":29,"rows":116,"whys":29,"n":29,"pct":"69%"},"after":{"kind":"V16_ROUND","hist":1,"misses":9,"mocks":1}}
+PASS M6c  No page errors  · []
+PASS M10  Every usable past paper (practice and held-out) has a hand-written explanation with a key line and a reason for every wrong option; the 4 options the source PDF glued together are shown as separate a–d options (bank unchanged); ordinary items are untouched  · {"c":{"practice":1061,"heldout":399,"explained":1061,"heldExplained":399},"gaps":[],"nGaps":0,"glued":[{"id":"EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-2","n":4,"keys":"abcd","glue":false,"bank":3},{"id":"EHSAN-ANAT-MAXILLARY-ARTERY-PTERYGOID-VENOUS-PLEXUS-MCQ-7","n":4,"keys":"abcd","g
+PASS M10b No page errors  · []
+PASS M11  MCQ focus holds on the MCQ exam day (15 Nov); from 16 Nov the full flow (written, practical) is back without any setting; an explicit "ALL" always wins  · {"onExam":{"focus":"MCQ","kind":"SEGMENT"},"after":{"focus":"ALL","kind":"SEGMENT","date":"2026-11-16"},"forced":"ALL"}
+PASS M11b No page errors  · []
+PASS M8   With focus "ALL" the full v15 flow is back (draw-from-memory step, then the v15/v14 question view)  · ["SEGMENT:visual","SEGMENT:visual","SEGMENT:teach","SEGMENT:teach","SEGMENT:teach","SEGMENT:teach","SEGMENT:teach","SEGMENT:reconstruct","SEGMENT:question"]
+PASS M9   An open v14 repair migrates into the MCQ engine: the error is closed (kept, marked) and its past-paper item is due now as a changed-question retest  · {"e":{"resolved":true,"v16":"migrated"},"st":{"n":1,"k":0,"b":0,"f":1,"lp":1,"x":1,"d":3,"r":"w","l":3},"today":3,"kind":"SEGMENT"}
+PASS M9b  No page errors  · []
+PASS M7   Full course to 15 Nov: every auto-scored practice past paper is answered by the end of teaching (day 47), and every held-out one is used in a mock by the last sprint day  · {"practice":1061,"seenP":1061,"lastPracticeFirstDay":47,"held":399,"usedH":399,"wrong":614,"reasked":614,"stateKB":900,"mocks":14,"pred":{"n":340,"k":222,"p":0.6529411764705882,"lo":0.6191907697885196,"hi":0.6852210069616006}}
+PASS M7b  Every simulated mistake is asked again before the exam  · {"wrong":614,"reasked":614}
+PASS M7c  Time: about 2 h a day or less on average, no day above 2.5 h; saved progress stays under 1.2 MB (cloud limit 1.5 MB)  · {"avg":109,"max":141,"stateKB":900,"perDay":"3:141 4:138 5:132 6:71 7:87 8:117 9:122 10:121 11:121 12:122 13:72 14:101 15:120 16:122 17:122 18:122 19:72 20:72 21:101 22:122 23:121 24:121 25:121 26:121 27:72 28:101 29:120 30:121 31:122 32:123 33:121 34:72 35:101 36:121 37:122 38:108 39:115 40:113 41:
+PASS M7d  Mock predictions come from unseen first attempts with an interval  · {"n":340,"k":222,"p":0.6529411764705882,"lo":0.6191907697885196,"hi":0.6852210069616006}
+PASS M7e  No page errors over the whole course  · {"errors":[],"other":[]}
+25/25 v16 checks passed (233s)
+=== certify
+PASS C5    v13 Learning Twin ingests the evidence; v14 ledger attributes visual/command/depth  · {"twinEv":2,"ledger":2,"mod":{"mic":{"n":1,"ok":1},"dia":{"n":1,"ok":1}},"cmd":{"lookalike":{"n":1,"ok":1},"tissue":{"n":1,"ok":1}}}
+PASS N0    No page errors during fresh + correct flow  · []
+PASS D1    Confident wrong → REPAIR with error genome "confident misconception"  · {"kind":"REPAIR","autopsy":true,"choice":"a","head":"ليه إجابتك غلط بصريًا؟","diff":"The words that decide it — key: web, fixe, neurotransmitter, receptor; yours: synaptic, cleft, chemical, 20. Rebuild the model: Histolo
+PASS D2    Visual autopsy maps the selected option (data + text) and shows الفرق الفاصل + command  · {"kind":"REPAIR","autopsy":true,"choice":"a","head":"ليه إجابتك غلط بصريًا؟","diff":"The words that decide it — key: web, fixe, neurotransmitter, receptor; yours: synaptic, cleft, chemical, 20. Rebuild the model: Histolo
+PASS D3    Repair is gated behind a no-options reconstruction; topic wallpaper suppressed  · {"kind":"REPAIR","autopsy":true,"choice":"a","head":"ليه إجابتك غلط بصريًا؟","diff":"The words that decide it — key: web, fixe, neurotransmitter, receptor; yours: synaptic, cleft, chemical, 20. Rebuild the model: Histolo
+PASS D3b   Autopsy sides hydrate (visual or honest note), no wallpaper companions; autopsy → reconstruction → button order  · {"skeletons":0,"companions":0,"order":true,"wrongSide":"YOUR CHOICE · CHEMICAL SYNAPSE · LABELED DIAGRAM\nChemical synapse, labeled diagram\nPublic domain · Mock atlas · Wikipedi"}
+PASS D4    Blocked until reconstruction typed; typing unlocks  · {"still":"REPAIR","unlocked":true}
+PASS D5    Changed source retest: practice split, different stem, not a near-duplicate, stable across renders  · {"rt":{"kind":"RETEST","qid":"DEPT-SA-HIST-MCQ-10","chip":"CHANGED SOURCE RETEST"},"rtq":{"split":"practice","sameStem":false,"near":false,"chapter":true}}
+PASS E1    Second miss → another targeted visual repair on the retest item; gate re-armed  · {"kind":"REPAIR","autopsyQ":"DEPT-SA-HIST-MCQ-10","disabled":true}
+PASS E2    Repair loop guard: after 3 changed misses the error is parked to spaced repair (no infinite loop)  · {"kind":"FATIGUE_RESET","parked":1,"notice":"PARKED FOR SPACED REPAIR\nNeurons and synapses: three changed items in a row still missed. More drilling now has low yield — it returns as spaced repair tomorrow.","unresolved
+PASS N1    No page errors during wrong/autopsy/retest flow  · []
+PASS J1    Held-out mock item: no primer, no cue, no companion/answer image, confidence kept  · {"primer":false,"cmd":false,"comp":0,"vis":0,"conf":3,"opts":4,"banner":false}
+PASS J2    Mock uses held-out split only and excludes the 60 leak-audited items  · {"items":5,"leaked":[]}
+PASS J3    No Commons query built from the held-out key  · []
+PASS J4    Post-submission: visual autopsy for the consumed miss only  · {"autopsies":1,"result":true}
+PASS J5    Mock miss repair retests on a practice item, never a future held-out item  · {"e":{"src":"EHSAN-ANAT-SPINAL-CORD-MCQ-21","kind":"REPAIR"},"rq":{"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-20","split":"practice"}}
+PASS N2    No page errors during mock flow  · []
+PASS F1    Histology items route to طلّع شبيهه برّه / فرّق النسيج  · ["طلّع شبيهه برّه · Regarding the peripheral nerve","طلّع شبيهه برّه · Regarding degeneration of nerves, which answer is correct?","طلّع شبيهه برّه · Unmyelinated nerve fibers with Schwann cells are found in","طلّع شبيهه
+PASS G1    Tract items route to امشي المسار  · ["امشي المسار · Axons of the lateral corticospinal tract synapse mainly with","امشي المسار · Decussation of internal arcuate fibres takes place in","امشي المسار · Trigeminal lemniscus is present in","امشي المسار · Latera
+PASS H1    Lesion items route to حدّد الإصابة  · ["حدّد الإصابة · Patient came to ER with LMNL of the hypoglossal nerve on the right sid","حدّد الإصابة · In case of right corticonuclear tract injury above the level of the mo","حدّد الإصابة · Lesion of the internal caps
+PASS I1    Physiology mechanism items route to شغّل الميكانيزم / perturb / receptor start  · ["شغّل الميكانيزم · The Release of neurotransmitters at a chemical synapse in the CNS is d","مين بدأ؟ · Action potentials recorded after stimulation of thermal receptors show","مين بدأ؟ · Which of the following is correc
+PASS K2    Visual-diversity engine (mocked Commons, 60 items): exact repeat <10%, adjacent 0  · {"n":60,"primaryCoveragePct":95,"uniqueVisualPct":100,"exactRepeatPct":0,"adjacentRepeatPct":0,"noVisualPct":5,"irrelevantPct":"requires human review of rows[].primary"}
+PASS L1    Network concurrency cap: ≤2 Commons requests in flight (all layers share one queue)  · {"maxInFlight":2,"requests":90}
+PASS L2    Re-running INTELLECTUALITY_V14_INIT does not double-wrap  · true
+PASS L3    Cloud payload bounded (S < 1.5 MB API cap, v14 slice small)  · {"S":28657,"v14":2022}
+PASS N3    No page errors in engine/perf probes  · []
+PASS L4    Cold load does not prefetch the question bank visuals (Commons requests on first screen ≤ 12)  · {"commonsOnLoad":0}
+PASS M-iphoneResponsive 390×844: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":390,"iw":390,"ok":true},"o2":{"sw":390,"iw":390,"ok":true},"o3":{"sw":390,"iw":390,"ok":true},"tap":67.296875}
+PASS M-ipad-portraitResponsive 820×1180: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":820,"iw":820,"ok":true},"o2":{"sw":820,"iw":820,"ok":true},"o3":{"sw":820,"iw":820,"ok":true},"tap":67.296875}
+PASS M-ipad-pro-portraitResponsive 1024×1366: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":1024,"iw":1024,"ok":true},"o2":{"sw":1024,"iw":1024,"ok":true},"o3":{"sw":1024,"iw":1024,"ok":true},"tap":67.296875}
+PASS M-ipad-landscapeResponsive 1180×820: no horizontal overflow; gate ≥44px; Arabic readable  · {"o1":{"sw":1180,"iw":1180,"ok":true},"o2":{"sw":1180,"iw":1180,"ok":true},"o3":{"sw":1180,"iw":1180,"ok":true},"tap":67.296875}
+PASS N4    v9 real visual bank, v11 shell, v12 brain, v13 twin, content integrity gate, Resume learning  · {"v9":true,"v11":true,"v12":true,"v13":true,"integrity":true,"resume":"Resume learning"}
+PASS N5    Autopilot brain drawer (v12 + v13 addon) still opens  · true
+PASS N6    Written wave, practical wave, weekly mock, retention bridge and commute views render  · {"WRITTEN_WAVE":true,"PRACTICAL_WAVE":true,"WEEKLY_MOCK":true,"RETENTION_BRIDGE":true,"commute":true}
+PASS N7    No page errors on cold load + drawers  · []
+PASS L5    Legacy v53/v14 state migrates in place (evidence kept, answer-derived assignments dropped)  · {"schema":2,"segs":1,"va":false,"vc":1,"legacy":{"from":"14.0","droppedAssignments":1,"primersSeen":3,"migratedAt":"2026-09-22T07:00:00.597Z"},"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"}
+PASS N8    No page errors on legacy migration  · []
+PASS L6    Remote image host down: primer text + gate still work; pictures bundled in the app still show, otherwise an honest no-visual state  · {"primer":true,"model":207,"missing":true,"gate":true,"bundled":0,"remote":0}
+PASS N9    No page errors when Commons is unreachable  · []
+62/62 checks passed (99s)
+=== spread_test
+PASS S1   Fresh on Wed 23 Sep: starts from today (Day 3), real date kept, chip names the moved lessons  · {"chip":"TODAY · WED 23 SEP · +4 FROM MON 21 + TUE 22","day":3}
+PASS S1b  Nothing lost or duplicated: every lesson of Mon 21–Fri 25 appears exactly once in Wed 23–Fri 25; Mon 21 and Tue 22 are empty  · {"wed":["T003@1","T006@2","T009@3","T001@1","T002@1"],"thu":["T007@2","T008@2","T010@3","T004@1","T005@2","T011@3"],"fri":["T012@4","T013@4","T014@4","T015@5","T016@5","T017@5"]}
+PASS S1c  Placed where relevant: synapse physiology before sensory receptors, brainstem before cerebellum and 4th ventricle, PNS nerves before neuroglia and nerve endings  · T003 T006 T009 T001 T002 T007 T008 T010 T004 T005 T011 T012 T013 T014 T015 T016 T017
+PASS S1d  The department's order within each subject is kept (anatomy: spinal cord → brainstem → cerebellum → …)  · {"ANAT":["T001","T002","T007","T008","T010","T012","T013","T015"],"PHYS":["T003","T006","T009","T014","T016","T017"],"HIST":["T004","T005","T011"]}
+PASS S1e  Load is balanced over the catch-up days (each ≤ 207 planned min incl. the daily boss); the weekend review and mock are untouched  · {"est":[170,192,172],"sat":{"day":6,"mode":"CONTINUITY","est":35,"ls":[]},"sun":{"day":7,"mode":"CONTINUITY","est":35,"ls":[]}}
+PASS S1f  Today starts with a moved lesson that says where it came from and why it sits here  · 📅 From Mon 21 Sep · placed just before “Sensory receptors and afferents”, the lesson it matters most for
+PASS S1g  The course rail tags each moved lesson with its original date  · ["PHYSIOLOGY Introduction to synapse FROM MON 21 SEP","PHYSIOLOGY Synaptic potentials and transmission FROM TUE 22 SEP","PHYSIOLOGY Sensory receptors and afferents","ANATOMY Spinal cord I FROM MON 21 SEP","ANATOMY Spinal cord II FROM MON 21 SEP"]
+PASS S1h  No page errors  · []
+PASS S3   Reload re-applies the same plan (no second spread, same order)  · {"spreads":1}
+PASS S7   A moved lesson teaches normally (LEARN lecture) and its progress is saved under its original day  · {"lesson":"T003","from":1,"key":"d1:T003:s1","learn":true,"h":"Structure: knob, cleft, receptors","segs":["d1:T003:s0"]}
+PASS S8   A mock after the spread only asks about lessons already scheduled on or before today  · {"n":21,"outside":0}
+PASS S2   Work already done is kept: same completed steps, and the started lesson continues first today  · {"was":["d1:T001:s0"],"now":["d1:T001:s0"],"first":"T001@1","next":{"kind":"SEGMENT","l":"T001","key":"d1:T001:s1"},"moved":"📅 From Mon 21 Sep · you had started it, so it continues first"}
+PASS S4   "Keep the original order instead" restores every lesson to its own day and the carryover label; progress kept; choice survives reload  · {"chip":"TODAY · WED 23 SEP · 2 DAYS CARRYOVER","day":1,"reload":{"day":1,"chip":"TODAY · WED 23 SEP · 2 DAYS CARRYOVER"}}
+PASS S4b  The carryover banner offers the spread; choosing it spreads again from today  · {"hasOffer":true,"day":3,"chip":"TODAY · WED 23 SEP · +4 FROM MON 21 + TUE 22"}
+PASS S5   A spread-out day counts as done once all of its lessons are done (Mon 21 yes, Tue 22 not yet)  · [1]
+PASS S5b  No page errors across undo/redo  · []
+PASS S6   Midnight with a question on screen: the answer screen stays; the spread happens at the next non-question step  · {"mid":{"day":1,"finish":true,"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER"},"between":{"day":1,"q":"question"},"after":{"day":2,"rec":true,"chip":"TODAY · TUE 22 SEP · +3 FROM MON 21"}}
+PASS S6b  No page errors across midnight  · []
+PASS S9   Five days behind on a Saturday: today teaches the missed lessons instead of reviewing nothing; nothing lost across the course  · {"day":6,"sat":{"day":6,"mode":"TEACHING","est":170,"ls":["T001@1","T002@1","T003@1","T006@2","T009@3"]},"chip":"TODAY · SAT 26 SEP · +5 FROM MON 21–WED 23"}
+PASS S9b  No page errors after a multi-day gap  · []
+PASS S11  A lesson moved from Mon 21 and answered on a later day keeps its question pinned (the answer screen never swaps items)  · {"setup":{"day":4,"l":"T004","from":1},"q":{"id":"EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-1","key":"b","l":"T004","from":1},"after":{"id":"EHSAN-HIST-NERVOUS-TISSUE-DEPARTMENT-1","pins":["1:T004:0","1:T004:1"]}}
+PASS S11b No page errors  · []
+PASS S10  390 px: no horizontal overflow with the spread banner; its button and all player buttons ≥ 44 px  · {"sw":390,"iw":390,"btn":44,"small":[]}
+23/23 spread checks passed (29s)
+=== learn_test
+PASS L1   Teach step = LEARN lecture: whole-picture intro, section 1/N, Egyptian command, no MCQ, no topic wallpaper  · {"k":"SEGMENT:teach:T001","lesson":"T001","n":4,"big":true,"h":"Extent: where the cord begins and ends","top":"SECTION 1 / 4","figs":2,"hydrated":2,"licensed":2,"via":["Wikipedia · Conus medullaris","Wikipedia · Spinal cord"],"lin
+PASS L2   Each section picture is shown for its exact term (Wikipedia article → free Commons file, licence shown), inside the app: no link to press  · {"lesson":"T001","n":4,"big":true,"h":"Extent: where the cord begins and ends","top":"SECTION 1 / 4","figs":2,"hydrated":2,"licensed":2,"via":["Wikipedia · Conus medullaris","Wikipedia · Spinal cord"],"links":0,"local":0,"bundle":
+PASS L2b  No Wikipedia request on the first (home) screen: pictures load only when their page is shown  · {"wikiOnHome":0}
+PASS L2d  Tap a picture → it opens large inside the app (2× on tap, closes on tap outside); no navigation  · {"z":{"img":"https://upload.wikimedia.org/mock/File%3AConus%20medullaris%20labeled%20diagram.svg","cap":"Conus medullaris · LABELED DIAGRAM\nConus medullaris, labeled","h":48},"big":true,"closed":true}
+PASS L3   Back/next paging works and the page survives a reload (saved position)  · {"back":"SECTION 1 / 4","afterReload":"SECTION 1 / 4"}
+PASS L4   A recall rated "not yet" comes back once on a FINAL RECALL page before practice  · {"missed":"✗ It comes back once before practice.","pages":4,"finalRecall":"One more pass on what did not come back\nرجّعها من دماغك\nPull it from memory\nرجّعها من دماغك\nCOVER IT · ANSWER IN YOUR HE"}
+PASS L4b  LESSON LEARNED → PRACTICE finishes the teach segment and moves on  · {"kind":"SEGMENT","seg":"video","method":"","segs":2}
+PASS L4c  No page errors in the lecture flow  · []
+PASS L5   Teach before test: questions whose note is in a not-yet-learned lesson are held back, and return once that lesson is learned  · {"lesson":"T001","raw":18,"rawLater":10,"pool":8,"later":0,"pool2":18,"later2":10}
+PASS L6   Nothing from v15 appears before the answer (no note card, no exact option pictures)  · {"note":0,"exact":0}
+PASS L7   After a wrong answer the autopsy links back to the note section that teaches the question  · {"note":"ارجع للنوتة\n📖 FROM YOUR NOTES · Filum terminale and cauda equina"}
+PASS L8   Option pictures use the exact words of the option: every exact-term picture names a term whose words are all in that option  · {"exact":1,"cells":["DENTICULATE LIGAMENTS · LABELED DIAGRAM ⇐ Denticulate ligament are lateral extension of arac"," ⇐ The adult spinal cord terminates at intervertebral"]}
+PASS L8b  No page errors after answering  · []
+PASS L8c  After answering: no picture card is an outside link (options, autopsy, note card, topic pictures)  · {"outside":[],"cards":3,"local":0}
+PASS L9   Picture sources down: each figure says so honestly (no links); the lecture text is intact  · {"figs":2,"shown":0,"notes":["No free picture of exactly “Conus medullaris” yet.\nThe words above carry it: bui","No free picture of exactly “Spinal cord” yet.\nThe words above carry it: build th"],"links":0,"text":496}
+PASS L10  390 px: no horizontal overflow on a lecture page; every lecture button ≥ 44 px tall  · {"sw":390,"iw":390,"small":[]}
+PASS L11  Held-out pool is not filtered or re-ordered by v15  · {"held":11,"heldRaw":11,"sample":50}
+17/17 LEARN checks passed (23s)
+=== hostile_test
+PASS X1   Five days missed: real date (SAT 26 SEP), today teaches the missed lessons (each labelled with its date), Day-1 work kept  · {"chip":"TODAY · SAT 26 SEP · +5 FROM MON 21–WED 23","day":6,"banner":"CAUGHT UP BY SPREADING · REAL DATE KEPT\nToday is Sat 26 Sep (Day 6). The Mon 21 Sep and Tue 22 Sep and Wed 23 Sep and Thu 24 Sep and Fri 25 Sep less
+PASS X1b  No page errors after a multi-day gap  · []
+PASS X1i  Original-order choice, five days missed: "5 DAYS CARRYOVER", Day-1 work kept, never relabelled as today  · {"chip":"TODAY · SAT 26 SEP · 5 DAYS CARRYOVER","day":1,"banner":"CARRYOVER · REAL DATE KEPT\nToday is Sat 26 Sep. This is unfinished Mon 21 Sep work, carried forward deliberately (5 days behind plan). ~133 planned min i
+PASS X2   Far ahead (Day 6 on Tue 22 Sep): "4 DAYS AHEAD", day never regresses  · {"chip":"TODAY · TUE 22 SEP · 4 DAYS AHEAD","day":6}
+PASS X3   Device set to New York (still Mon evening there): Cairo date (Tue 22 Sep) is used  · TODAY · TUE 22 SEP · +4 FROM MON 21
+PASS X4   Overnight resume: chip rolls to Tue 22 Sep (1 day carryover while the question is on screen) without yanking the open question; answer recorded  · {"before":"TODAY · MON 21 SEP","mid":{"chip":"TODAY · TUE 22 SEP · 1 DAY CARRYOVER","stillQ":4},"after":{"rec":true,"same":true}}
+PASS X4b  No page errors across midnight  · []
+PASS Y1   Malformed state (corrupt JSON): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"},"a":{"reached":true,"id":"EHSAN-HIST-NERVOUS-TISSUE-SOURCE-BASED-9","recorded":true},"saved":true,"errors":[]}
+PASS Y2   Malformed state (v14 is a string): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-14","recorded":true},"saved":true,"errors":[]}
+PASS Y3   Malformed state (v14 fields wrong types): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-14","recorded":true},"saved":true,"errors":[]}
+PASS Y4   Malformed state (no v12/v13/v14 (v4.1 era)): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-14","recorded":true},"saved":true,"errors":[]}
+PASS Y5   Malformed state (v13 null, v12 evidence not an array): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-14","recorded":true},"saved":true,"errors":[]}
+PASS Y6   Malformed state (future schema v14): app loads, a question can be answered and saved, no page errors  · {"shell":{"player":true,"chip":"TODAY · TUE 22 SEP · +4 FROM MON 21"},"a":{"reached":true,"id":"EHSAN-ANAT-SPINAL-CORD-MCQ-14","recorded":true},"saved":true,"errors":[]}
+PASS Z1   Twelve taps on the gate and twelve alternating option taps count as ONE answer (the first)  · {"ev0":0,"ev":1,"ledger":1,"result":true}
+PASS Z2   Double-tap on NEXT advances exactly one step  · {"seg0":"d1:T004:s3","seg1":"d2:T005:s0"}
+PASS Z3   No page errors under rapid taps  · []
+PASS W1   Image search hanging 9 s: primer text and gate are usable immediately (not blocked on images)  · {"primer":true,"gate":true,"text":1201,"ms":948}
+PASS W2   Offline mid-session: a wrong answer still opens repair and is saved on the device  · {"a":{"reached":true,"id":"EHSAN-HIST-NERVOUS-TISSUE-SOURCE-BASED-9","recorded":true},"persisted":1,"errors":[]}
+PASS W3-390Huge 6000×6000 image at 390px: rendered inside the viewport, no horizontal scroll  · {"big":2,"maxW":338,"sw":390,"iw":390}
+PASS W3-820Huge 6000×6000 image at 820px: rendered inside the viewport, no horizontal scroll  · {"big":2,"maxW":222,"sw":820,"iw":820}
+PASS S1   Day evidence green: explicit STOP view with stop-study intelligence and a single next button (plus at most one Renaissance CONTINUE)  · {"kind":"STOP","stop":true,"intel":true,"text":"STOP-STUDY INTELLIGENCE: Marginal mark-gain is now low. Stop studying.","buttons":1,"rnDoor":1}
+PASS M1   No held-out item was ever pinned to a primer/practice slot  · {"heldOut":400,"pinned":0,"primersOnHeld":0}
+PASS B1   Backup download: one dated JSON with all progress keys (not the gap probe)  · {"name":"intellectuality-backup-2026-09-26.json","day":1,"keys":2}
+PASS B2   Restore: progress replaced from the file, previous copy kept as a local backup, back to the course  · {"day":6,"todayDay":6,"segs":1,"xp":8,"prev":"other","url":"/"}
+PASS B3   A file that is not a backup is refused with a message; nothing overwritten  · {"same":true,"msg":"That file could not be restored: not an INTELLECTUALITY backup"}
+PASS B4   No page errors on the sync/backup page  · []
+26/26 hostile checks passed (79s)
+=== v153_test
+PASS P6   Notes plus: every addition found its section, original section ids unchanged, new sections complete (facts, why, trap, recall, pictures)  · {"missed":[],"kept":240,"base":240,"added":17,"bullets":406}
+PASS P1   Lecture shows the chapter exam tier and the past-paper weight of the section (batches from practice items only)  · {"kicker":"THE WHOLE PICTURE · SPINAL CORD · EXAM TIER A (10 sources)","hy":"🔥🔥 4 bank questions · past exams: 196 · 194 · 193 · 192"}
+PASS P2   A lecture section carries the written (essay) question the department asks about it  · السؤال المقالي
+PASS P2b  Written boss: after the reveal, a model-answer outline built from the notes (headings + points) sits above the scaffold  · {"kind":"DAY_WRITTEN_BOSS","prompt":"Discuss the mechanism of synaptic transmission","heads":["Structure: knob, cleft, receptors","Termination, and the resting membrane","Types of synapses and transmitters"],"pts":12}
+PASS P2c  No page errors  · []
+PASS P3   Zoom offers "✗ Wrong picture — show another" (≥ 44 px); tapping it swaps in a different picture and the rejection survives a reload  · {"before":{"term":"Conus medullaris","key":"exact:File:Conus medullaris labeled diagram.svg"},"after":{"key":"exact:File:Conus medullaris histology micrograph.jpg","note":"","ban":["File:Conus medullaris labeled diagram.svg"],"zoom":false},"reload":{"key":"exa
+PASS P3b  No page errors  · []
+PASS P4   Personal pace: after 8+ timed steps at twice the plan, the pace is ≈ 2× and "minutes remaining" is shown at the learner's pace  · {"plan0":140,"ratio":2.00088283297,"n":12,"meta":"Visual-first teaching mission · ~140 min ceiling · ~116 min remaining at your pace (×2.0) · NORMAL ENERGY · ZERO LECTURES","remain":116}
+PASS P4b  No page errors  · []
+PASS P5   Offline: after one online visit, the app and today's lecture open with no network, bundled pictures included  · {"controlled":true,"online":["/pics/8eb17fd9f802d5.svg","/pics/bf2780c9c6cd6c.svg"],"off":{"title":"INTELLECTUALITY CNS v18.1 · MCQ EXAM","learn":true,"h":"Extent: where the cord begins and ends","imgs":[{"src":"/pics/8eb17fd9f802d5.svg","ok":true},{"src":"/pi
+10/10 v15.3 checks passed (110s)
+=== vercel_host_test
+PASS H1   Fresh device gets a private 26-char sync code and a session  · {"code":"R4JC7ABGRUY76VND5A4YRU7HSM","btn":"☁ SYNCED 10:00","link":true,"title":"INTELLECTUALITY CNS v18.1 · MCQ EXAM"}
+PASS H2   First cloud save happens automatically (no sign-in step)  · {"status":200,"v":1,"btn":"☁ SYNCED 10:00"}
+PASS H3   Cloud button shows sync state; sync-code link is offered under it  · {"btn":"☁ SYNCED 10:00","link":true}
+PASS H4   Every action saves on the device immediately  · {"local1":"A-1"}
+PASS H5   Cloud writes are batched, then land (≤ gap)  · {"beforeGap":null,"afterGap":"A-1","v":2}
+PASS H6   Hiding the app saves to the cloud immediately  · {"v":3}
+PASS H7   Second device via link restores the same progress; code removed from the URL  · {"code":"R4JC7ABGRUY76VND5A4YRU7HSM","marker":"A-hide","hash":""}
+PASS H8   Device B studies; its progress reaches the cloud  · {"v":5,"xp":30}
+PASS H9   An idle device reopening later loads the newer progress and never overwrites it  · {"aNow":{"marker":"B-learned","xp":30,"v":6},"cloud":"B-learned","cloudXp":30}
+PASS H10  A device that studied keeps its progress over a housekeeping-only cloud change  · {"v":8,"xp":50}
+PASS H14  Both studied: the copy with more learning wins, the other is kept as a backup  · {"aAfter":{"marker":"B-learned-2","backup":"newer-cloud-copy"},"cloud":"B-learned-2"}
+PASS H11  Sync page shows the code formatted and rejects an invalid code  · {"shown":"R4JC-7ABG-RUY7-6VND-5A4Y-RU7H-SM","perr":"That is not a valid sync code (26 letters/digits 2–7)."}
+PASS H12  Server: no code → 401, oversize → 413, vision → graceful 503  · {"bad":401,"big":413,"vis":503}
+PASS H13  No page errors on either device or the sync page  · []
+14/14 host checks passed
+=== options_gallery_test
+PASS O1   Before answering (primer, and options shown): no option pictures at all  · {"pre1":0,"pre2":{"gal":0,"opts":4}}
+PASS O2   Correct answer: every option has its own card (✓ correct marked)  · {"which":"all","cells":[{"opt":"a","pic":"exact:File:Chemical synapse labeled diagram.svg","missing":false,"skeleton":false,"tag":"✗"},{"opt":"b","pic":"exact:File:Electrical synapse labeled diagram.svg","missing":false,"skeleton":false,"ta
+PASS O3   Each option card shows a picture or an honest 'no trustworthy picture' note; none repeated on screen  · {"cells":["pic","pic","pic","pic"],"dup":0}
+PASS O4   Wrong answer: the autopsy pictures the OTHER options (key + your pick are already side by side)  · {"g2":{"which":"others","cells":[{"opt":"b","pic":"exact:File:Electrical synapse labeled diagram.svg","missing":false,"skeleton":false,"tag":"✗"},{"opt":"c","pic":"exact:File:Chemical synapse histology micrograph.jpg","missing":false,"skele
+PASS O5   Autopsy option cards hydrate; no image repeats across compare panel and option cards  · {"dup":0}
+PASS O6   40-item sample: no item repeats an image across its options  · {"items":40,"options":164,"pictured":121,"pct":73.8,"dupInItem":0}
+PASS O7   No page errors  · {"err1":[],"err2":[],"err3":[]}
+7/7 option-gallery checks passed · pictured 121/164 options in the 40-item sample
+=== leak_audit
+ "n": 1011,
+ "textLeaks": 0,
+ "queryLeaks": [],
+ERRORS []
+=== rollback_probe
+node:internal/process/promises:394    triggerUncaughtException(err, true /* fromPromise */);    ^page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8788/Call log:[2m  - navigating to "http://127.0.0.1:8788/", waiting until "load"[22m    at Object.open (/home/user/CNS-/tests/harness.js:104:14)    at async /home/user/CNS-/tests/rollback_probe.js:17:7 {  name: 'Error'}Node.js v22.22.2
+=== dept_figs_test (source :8787)
+PASS D1 Locked (no key): no drawing is shown, and every drawing file on the public site is sealed (not a readable JPEG)
+PASS D1b No page errors
+PASS D2 A wrong key link is refused (nothing stored, the link is removed from the address bar, the learner is told)
+PASS D3 The owner's link unlocks: key kept on the device AND in the saved learner state (so the sync code carries it to other devices); the link is removed from the address bar
+PASS D4 Lesson section: its department drawings are decrypted and shown first (2 open, the rest one tap away), each a real image
+PASS D5 After an answer: the one drawing that fits the question is shown (internal jugular vein question → the IJV drawing)
+PASS D6 Tap a drawing → full screen; tap → back
+PASS D6b No page errors
+PASS D7 Every one of the drawings decrypts to a picture with the owner's key
+PASS D8 A second device that only has the synced state (restored with the sync code) shows the drawings and keeps a device copy of the key
+PASS D9 With the key on the device the 50 figure items (9 department CNS-levels figures + the Nov 2024 paper's Section B figure, 5 labels each) join the practice bank, each explained (key + a reason for every other option), each tied to its figure
+PASS D10 A drill question shows its department figure above the stem BEFORE answering, with the answers hidden
+PASS D11 After answering, the same figure carries the department answers for all 5 labels (not repeated inside the explanation)
+PASS D11b No page errors
+PASS D12 Locked: a section with drawings shows one "paste your unlock link" line (no drawing); pasting the link unlocks in place and the drawings appear
+PASS D12b No page errors
+ALL 16 PASSED
+=== dept_figs_test (Vercel build :8790)
+PASS D1 Locked (no key): no drawing is shown, and every drawing file on the public site is sealed (not a readable JPEG)
+PASS D1b No page errors
+PASS D2 A wrong key link is refused (nothing stored, the link is removed from the address bar, the learner is told)
+PASS D3 The owner's link unlocks: key kept on the device AND in the saved learner state (so the sync code carries it to other devices); the link is removed from the address bar
+PASS D4 Lesson section: its department drawings are decrypted and shown first (2 open, the rest one tap away), each a real image
+PASS D5 After an answer: the one drawing that fits the question is shown (internal jugular vein question → the IJV drawing)
+PASS D6 Tap a drawing → full screen; tap → back
+PASS D6b No page errors
+PASS D7 Every one of the drawings decrypts to a picture with the owner's key
+PASS D8 A second device that only has the synced state (restored with the sync code) shows the drawings and keeps a device copy of the key
+PASS D9 With the key on the device the 50 figure items (9 department CNS-levels figures + the Nov 2024 paper's Section B figure, 5 labels each) join the practice bank, each explained (key + a reason for every other option), each tied to its figure
+PASS D10 A drill question shows its department figure above the stem BEFORE answering, with the answers hidden
+PASS D11 After answering, the same figure carries the department answers for all 5 labels (not repeated inside the explanation)
+PASS D11b No page errors
+PASS D12 Locked: a section with drawings shows one "paste your unlock link" line (no drawing); pasting the link unlocks in place and the drawings appear
+PASS D12b No page errors
+ALL 16 PASSED
+=== atlas_game_test (source :8787)
+PASS A1 Every diagram draws, every state applies with its explanation, every named part is drawn and tappable, every drill target exists
+PASS A2 Every lesson section a diagram is assigned to exists in the notes; at least 60 sections carry a diagram
+PASS A3 After an answer the diagram opens in the state that question tests (hemisection → cord cut, bitemporal → chiasma lesion, Argyll Robertson → pretectal, Huntington → striatum lost …)
+PASS A4 A large share of practice questions get a live diagram after they are answered (reported)
+PASS A5 Tap a tract → its name and meaning; Spot-it drill runs 5 prompts, a clean sweep earns XP (+3 each, +10 bonus, +30 more if it completes a quest); full screen opens and closes
+PASS A6 Simulators work: left optic nerve cut → no reaction to light in the left eye, both react to the right; VI palsy → right eye cannot abduct; right UMN facial lesion → only the LEFT lower face; two EPSPs together fire the neuron (spatial summation)
+PASS A7 Reduce-motion: diagrams stop moving (static trails instead of animation)
+PASS A9 Held-out firewall: no sealed-mock question shares a 7-word run with the diagrams' text
+PASS A8 No page errors
+PASS L1 Lesson: the live diagram opens its section, before the department drawings and the photos, and fits the screen
+PASS G1 The progress bar is on screen; learning sections already earned XP and counted towards the learn quest; game XP is kept apart (the app's own S.xp is never changed by it)
+PASS G2 Every answer pays at once: an XP pop on the verdict (+12 right, +4 wrong, never a loss), and a sprint dot fills
+PASS G3 After the 8th answer and "next": a sprint-cleared card (score, XP, minutes) with "Keep going" and an optional move break; the sprint resets
+PASS G4 Move break: a 2-minute visual countdown with three movement ideas; "Back to it" returns straight to the questions
+PASS G5 Quests panel: three daily quests with progress, the settings (game on/off, vibration, sound, calm mode) and the research reasons
+PASS G6 No page errors in the whole lesson → MCQ → sprint → break flow
+PASS G7 Forgiving streak: next day +1; a gap covered by freezes keeps it; a longer gap restarts at 1 with a welcome (no shame screen); 7 days in a row earns a freeze (max 3)
+PASS G8 Quests: finishing each pays +30 XP; all three open the daily chest (+50)
+PASS G9 Sealed mock = boss fight: no diagrams, no XP pop, and the bar shows no score while it runs (nothing leaks whether an answer was right)
+PASS G10 Game layer can be switched off (bar gone, nothing else changes) and back on
+PASS G11 A broken or foreign S.game is repaired without errors, and the saved game state stays small
+PASS G12 No page errors
+ALL 22 PASSED
+=== atlas_game_test (Vercel build :8790)
+PASS A1 Every diagram draws, every state applies with its explanation, every named part is drawn and tappable, every drill target exists
+PASS A2 Every lesson section a diagram is assigned to exists in the notes; at least 60 sections carry a diagram
+PASS A3 After an answer the diagram opens in the state that question tests (hemisection → cord cut, bitemporal → chiasma lesion, Argyll Robertson → pretectal, Huntington → striatum lost …)
+PASS A4 A large share of practice questions get a live diagram after they are answered (reported)
+PASS A5 Tap a tract → its name and meaning; Spot-it drill runs 5 prompts, a clean sweep earns XP (+3 each, +10 bonus, +30 more if it completes a quest); full screen opens and closes
+PASS A6 Simulators work: left optic nerve cut → no reaction to light in the left eye, both react to the right; VI palsy → right eye cannot abduct; right UMN facial lesion → only the LEFT lower face; two EPSPs together fire the neuron (spatial summation)
+PASS A7 Reduce-motion: diagrams stop moving (static trails instead of animation)
+PASS A9 Held-out firewall: no sealed-mock question shares a 7-word run with the diagrams' text
+PASS A8 No page errors
+PASS L1 Lesson: the live diagram opens its section, before the department drawings and the photos, and fits the screen
+PASS G1 The progress bar is on screen; learning sections already earned XP and counted towards the learn quest; game XP is kept apart (the app's own S.xp is never changed by it)
+PASS G2 Every answer pays at once: an XP pop on the verdict (+12 right, +4 wrong, never a loss), and a sprint dot fills
+PASS G3 After the 8th answer and "next": a sprint-cleared card (score, XP, minutes) with "Keep going" and an optional move break; the sprint resets
+PASS G4 Move break: a 2-minute visual countdown with three movement ideas; "Back to it" returns straight to the questions
+PASS G5 Quests panel: three daily quests with progress, the settings (game on/off, vibration, sound, calm mode) and the research reasons
+PASS G6 No page errors in the whole lesson → MCQ → sprint → break flow
+PASS G7 Forgiving streak: next day +1; a gap covered by freezes keeps it; a longer gap restarts at 1 with a welcome (no shame screen); 7 days in a row earns a freeze (max 3)
+PASS G8 Quests: finishing each pays +30 XP; all three open the daily chest (+50)
+PASS G9 Sealed mock = boss fight: no diagrams, no XP pop, and the bar shows no score while it runs (nothing leaks whether an answer was right)
+PASS G10 Game layer can be switched off (bar gone, nothing else changes) and back on
+PASS G11 A broken or foreign S.game is repaired without errors, and the saved game state stays small
+PASS G12 No page errors
+ALL 22 PASSED
+=== course_map_test (source :8787)
+PASS M1 The map opens from the top bar: every day up to the MCQ exam as a card and a tile with its real weekday and date; "you are here" on today's work day; the exam day marked
+PASS M2 Days whose lessons were moved by the start-from-today spread show as moved (↪), not as missing
+PASS M3 Read any lesson from any day now: its note sections, points and live diagrams, read-only (nothing marked done by reading)
+PASS M4 "Mark learned" (after reading ahead) completes the learning steps but keeps the lesson's own past-paper block for its day
+PASS M5 Skip a lesson (after a one-line confirm that says its past papers still come): the app moves straight on to the next lesson, and the skipped lesson's past papers go to the daily rounds instead of being lost
+PASS M6 ↩ Undo restores the lesson exactly as it was (the app is back on it)
+PASS M7 Skip a mock (its questions move to later mocks), skip a whole future day, and jump ahead: the days in between are marked passed and the app starts the chosen day
+PASS M8 Skipping the round of the day you are on closes it, so the day can be certified; its unseen past papers wait for the next round
+PASS M9 While a sealed mock runs, skipping and jumping are refused
+PASS M10 The map's saved record stays small, and there are no page errors
+PASS M11 On a phone (390 px) the map fits without sideways scrolling
+ALL 11 PASSED
+=== course_map_test (Vercel build :8790)
+PASS M1 The map opens from the top bar: every day up to the MCQ exam as a card and a tile with its real weekday and date; "you are here" on today's work day; the exam day marked
+PASS M2 Days whose lessons were moved by the start-from-today spread show as moved (↪), not as missing
+PASS M3 Read any lesson from any day now: its note sections, points and live diagrams, read-only (nothing marked done by reading)
+PASS M4 "Mark learned" (after reading ahead) completes the learning steps but keeps the lesson's own past-paper block for its day
+PASS M5 Skip a lesson (after a one-line confirm that says its past papers still come): the app moves straight on to the next lesson, and the skipped lesson's past papers go to the daily rounds instead of being lost
+PASS M6 ↩ Undo restores the lesson exactly as it was (the app is back on it)
+PASS M7 Skip a mock (its questions move to later mocks), skip a whole future day, and jump ahead: the days in between are marked passed and the app starts the chosen day
+PASS M8 Skipping the round of the day you are on closes it, so the day can be certified; its unseen past papers wait for the next round
+PASS M9 While a sealed mock runs, skipping and jumping are refused
+PASS M10 The map's saved record stays small, and there are no page errors
+PASS M11 On a phone (390 px) the map fits without sideways scrolling
+ALL 11 PASSED
+=== audio_options_test (source :8787)
+PASS A1 Fresh start on a drive day: commute mode is OFF, the professor's robot read-aloud button is hidden, and the app never routes to the commute screen
+PASS A2 While off, nothing can switch the commute screen on or make the device speak
+PASS A3 Study mode → Commute mode (one tap) turns it on: the commute screen opens with its trip button and a voice menu (best voice = the Premium one; novelty and non-English voices left out); the read-aloud button is back
+PASS A4 ▶ Test speaks with the best voice on the device (not the default compact one)
+PASS A5 A picked voice and speed are used and saved
+PASS A6 The hands-free trip speaks with the chosen voice and speed
+PASS A7 "Turn commute mode off" stops the voice at once, hides it all again, and stays off after a reload (the picked voice is remembered)
+PASS A8 The progress panel's settings have the same switch (turning it on there does not jump into the commute screen; Study mode then offers it)
+PASS A9 No page errors
+PASS A10 An old save left in commute mode opens in the course (commute mode off), with nothing lost
+PASS A11 On a phone (390 px) the voice menu fits the screen
+PASS A12 When the device's voice list arrives late (iPad Safari), the open voice menu fills in by itself
+ALL 12 PASSED
+=== audio_options_test (Vercel build :8790)
+PASS A1 Fresh start on a drive day: commute mode is OFF, the professor's robot read-aloud button is hidden, and the app never routes to the commute screen
+PASS A2 While off, nothing can switch the commute screen on or make the device speak
+PASS A3 Study mode → Commute mode (one tap) turns it on: the commute screen opens with its trip button and a voice menu (best voice = the Premium one; novelty and non-English voices left out); the read-aloud button is back
+PASS A4 ▶ Test speaks with the best voice on the device (not the default compact one)
+PASS A5 A picked voice and speed are used and saved
+PASS A6 The hands-free trip speaks with the chosen voice and speed
+PASS A7 "Turn commute mode off" stops the voice at once, hides it all again, and stays off after a reload (the picked voice is remembered)
+PASS A8 The progress panel's settings have the same switch (turning it on there does not jump into the commute screen; Study mode then offers it)
+PASS A9 No page errors
+PASS A10 An old save left in commute mode opens in the course (commute mode off), with nothing lost
+PASS A11 On a phone (390 px) the voice menu fits the screen
+PASS A12 When the device's voice list arrives late (iPad Safari), the open voice menu fills in by itself
+ALL 12 PASSED
+=== answer_figure_test (source :8787)
+PASS F1 Coverage: ≥ 90% of all options and ≥ 97% of right answers are marked on a diagram; ≥ 98% of questions get one
+PASS F2 An answered question opens "✅ This answer": the right answer green, wrong options red, a letter badge on each marked part, one legend row per option
+PASS F3 Value answers sit on the thing the stem asks about ("electrical reaction unchanged"), the legend says "about", and the LMN contrasts in the explanation are blue, not green
+PASS F4 "All of the above" is pictured by the options it points at, and says so (= A + B + C)
+PASS F5 Bare names like "Lips" are weak aliases; in the somatosensory-map question they land on the S1 strip
+PASS F6 Diagrams drawn for the question's own lesson win ties (REM-sleep question → the sleep diagram)
+PASS F7 No page errors while planning and drawing answer figures
+PASS F8 In the real lesson flow every answered question in the block shows the answer figure
+PASS F9 Photos after an answer: each labelled with its option letter and ✓/✗, the right answer's first, never a wrong option's photo alone
+PASS F10 No page errors in the answer flow
+ALL 10 PASSED
+=== answer_figure_test (Vercel build :8790)
+PASS F1 Coverage: ≥ 90% of all options and ≥ 97% of right answers are marked on a diagram; ≥ 98% of questions get one
+PASS F2 An answered question opens "✅ This answer": the right answer green, wrong options red, a letter badge on each marked part, one legend row per option
+PASS F3 Value answers sit on the thing the stem asks about ("electrical reaction unchanged"), the legend says "about", and the LMN contrasts in the explanation are blue, not green
+PASS F4 "All of the above" is pictured by the options it points at, and says so (= A + B + C)
+PASS F5 Bare names like "Lips" are weak aliases; in the somatosensory-map question they land on the S1 strip
+PASS F6 Diagrams drawn for the question's own lesson win ties (REM-sleep question → the sleep diagram)
+PASS F7 No page errors while planning and drawing answer figures
+PASS F8 In the real lesson flow every answered question in the block shows the answer figure
+PASS F9 Photos after an answer: each labelled with its option letter and ✓/✗, the right answer's first, never a wrong option's photo alone
+PASS F10 No page errors in the answer flow
+ALL 10 PASSED
+=== renaissance_test (source :8787)
+PASS R1 While the medicine day is unfinished Renaissance stays shut: no door, gate says "cns"
+PASS R2 When medicine says STOP, one door appears under "STOP MEDICINE": today's question and CONTINUE, visible without scrolling
+PASS R3 CONTINUE opens the session with CONTINUE, WHY THIS?, SHOW ME DIFFERENTLY, I ALREADY GET THIS, THIS DIDN'T CLICK, GO DEEPER and DONE
+PASS R4 SHOW ME DIFFERENTLY swaps the representation (e.g. diagram → story), not the wording
+PASS R5 THIS DIDN'T CLICK asks what is in the way (word / picture / step / why care) and repairs that cause: the missing step, or HUMAN / STICKY / TECHNICAL vocabulary
+PASS R6 A prediction must be committed (with SURE / THINK SO / GUESSING) before CONTINUE; a wrong one names the misconception, explains it and shows the answer; the answer is logged with confidence and bug
+PASS R7 WHY THIS? explains the choice, the dose, where the facts come from (graded) and the record (with Brier calibration); GO DEEPER opens optional depth
+PASS R8 I ALREADY GET THIS gives one question from further ahead; right and not guessed → skips to where the idea is used (transfer / far / forge)
+PASS R9 DONE stops at once ("Nothing is owed"), returns to the app; the next CONTINUE resumes at the same step, even after a skip
+PASS R10 Finishing writes a receipt (what changed, evidence, what comes back) and schedules the hooks 1, 7 and 30 days out
+PASS R11 One session a day: after it the door says today is done and nothing more is owed (the stop rule)
+PASS R12 Isolation: a whole Renaissance session changes no CNS storage; its own state lives only under "renaissance_v1"
+PASS R13 No page errors during the session
+PASS R14 Next day: "did you use it?" first, then yesterday's hook without hints (no picture; SHOW ME DIFFERENTLY / DIDN'T CLICK / I ALREADY GET THIS off); a right, sure answer pushes it further out
+PASS R15 The next session follows (selection), never two sessions in one day
+PASS R16 Life first: exam weekend → shut; 01:00–05:00 → shut (sleep); exam week → a real 10-minute dose (the session continues another day)
+PASS R17 Human-life test: when Renaissance takes too much of the week it shrinks itself (≥245 min → 10-min dose) and then rests (≥300 min → shut)
+PASS R18 No backlog: after 12 missed days the door offers one ordinary session (one or two warm-ups, normal length) and never says "behind", "missed" or "streak"
+PASS R27 A 10-minute day ends with a short receipt and does not close the session; the next day continues from the next step
+PASS R19 Kill switches: ?renaissance=off or localStorage "renaissance_off" = 1 → no door, not even booted, and the CNS STOP screen is unchanged
+PASS R20 Every task is precise: one right option, every wrong option pre-diagnosed with a named misconception and a repair; every cited source exists; quotations are registered and cited
+PASS R21 Every session of every season has the full arc: ≥2 committed predictions (unlabelled items count), a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min
+PASS R35 Test-wise counterfeit learners fail: picking the longest, shortest, wordiest, punctuated, hedged, jargon-heavy or absolute-free option scores within 0.12 of chance on every item of every season
+PASS R22 No open-ended thinking tax ("what do you think", "reflect", "research…"), no links out, no points/badges
+PASS R23 The interactive model answers its controls (moving a slider redraws the picture and the numbers)
+PASS R24 Every Renaissance button is at least 44 px tall
+PASS R25 Right answers sit in different positions (the order is shuffled per item, stable across redraws)
+PASS R26 No page errors in content checks
+PASS R28 Season 2 follows season 1: six new sessions with unique ids; when season 1 is done the door asks season 2's first question and opens it
+PASS R29 Blind comparison: the taste session opens on two versions side by side; a confident wrong pick is kept in the belief ledger (what was held → what replaced it) and WHY THIS? shows it with the capability atoms the step trains
+PASS R30 A chart comparison draws both charts from the same numbers, side by side
+PASS R31 The boss world is unlabelled: its items name no session and are recorded as their own kind (far transfer, and a belief on record)
+PASS R32 Every model in every season reacts to each of its controls; every atom, term, model and picture a step names exists
+PASS R33 No page errors in the season 2 checks
+PASS R34 On a 360-px phone every label of every figure and every model state is at least 10 px, inside its canvas, and does not sit on another label
+PASS R36 Pedagogy governor, level 1: with no record the authored picture comes first; when one kind of picture has preceded right answers clearly more often for this learner it is shown first, except on control days when the usual order is kept; WHY THIS? says which and why; the outcome is logged
+PASS R37 Pedagogy governor, level 2: after 20 choices that did no better than the control arm (8/20 vs 5/5), the chooser switches itself off, pictures return to the authored order, and WHY THIS? explains it
+PASS R38 No page errors in the governor checks
+ALL 38 PASSED
+=== renaissance_test (Vercel build :8790)
+PASS R1 While the medicine day is unfinished Renaissance stays shut: no door, gate says "cns"
+PASS R2 When medicine says STOP, one door appears under "STOP MEDICINE": today's question and CONTINUE, visible without scrolling
+PASS R3 CONTINUE opens the session with CONTINUE, WHY THIS?, SHOW ME DIFFERENTLY, I ALREADY GET THIS, THIS DIDN'T CLICK, GO DEEPER and DONE
+PASS R4 SHOW ME DIFFERENTLY swaps the representation (e.g. diagram → story), not the wording
+PASS R5 THIS DIDN'T CLICK asks what is in the way (word / picture / step / why care) and repairs that cause: the missing step, or HUMAN / STICKY / TECHNICAL vocabulary
+PASS R6 A prediction must be committed (with SURE / THINK SO / GUESSING) before CONTINUE; a wrong one names the misconception, explains it and shows the answer; the answer is logged with confidence and bug
+PASS R7 WHY THIS? explains the choice, the dose, where the facts come from (graded) and the record (with Brier calibration); GO DEEPER opens optional depth
+PASS R8 I ALREADY GET THIS gives one question from further ahead; right and not guessed → skips to where the idea is used (transfer / far / forge)
+PASS R9 DONE stops at once ("Nothing is owed"), returns to the app; the next CONTINUE resumes at the same step, even after a skip
+PASS R10 Finishing writes a receipt (what changed, evidence, what comes back) and schedules the hooks 1, 7 and 30 days out
+PASS R11 One session a day: after it the door says today is done and nothing more is owed (the stop rule)
+PASS R12 Isolation: a whole Renaissance session changes no CNS storage; its own state lives only under "renaissance_v1"
+PASS R13 No page errors during the session
+PASS R14 Next day: "did you use it?" first, then yesterday's hook without hints (no picture; SHOW ME DIFFERENTLY / DIDN'T CLICK / I ALREADY GET THIS off); a right, sure answer pushes it further out
+PASS R15 The next session follows (selection), never two sessions in one day
+PASS R16 Life first: exam weekend → shut; 01:00–05:00 → shut (sleep); exam week → a real 10-minute dose (the session continues another day)
+PASS R17 Human-life test: when Renaissance takes too much of the week it shrinks itself (≥245 min → 10-min dose) and then rests (≥300 min → shut)
+PASS R18 No backlog: after 12 missed days the door offers one ordinary session (one or two warm-ups, normal length) and never says "behind", "missed" or "streak"
+PASS R27 A 10-minute day ends with a short receipt and does not close the session; the next day continues from the next step
+PASS R19 Kill switches: ?renaissance=off or localStorage "renaissance_off" = 1 → no door, not even booted, and the CNS STOP screen is unchanged
+PASS R20 Every task is precise: one right option, every wrong option pre-diagnosed with a named misconception and a repair; every cited source exists; quotations are registered and cited
+PASS R21 Every session of every season has the full arc: ≥2 committed predictions (unlabelled items count), a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min
+PASS R35 Test-wise counterfeit learners fail: picking the longest, shortest, wordiest, punctuated, hedged, jargon-heavy or absolute-free option scores within 0.12 of chance on every item of every season
+PASS R22 No open-ended thinking tax ("what do you think", "reflect", "research…"), no links out, no points/badges
+PASS R23 The interactive model answers its controls (moving a slider redraws the picture and the numbers)
+PASS R24 Every Renaissance button is at least 44 px tall
+PASS R25 Right answers sit in different positions (the order is shuffled per item, stable across redraws)
+PASS R26 No page errors in content checks
+PASS R28 Season 2 follows season 1: six new sessions with unique ids; when season 1 is done the door asks season 2's first question and opens it
+PASS R29 Blind comparison: the taste session opens on two versions side by side; a confident wrong pick is kept in the belief ledger (what was held → what replaced it) and WHY THIS? shows it with the capability atoms the step trains
+PASS R30 A chart comparison draws both charts from the same numbers, side by side
+PASS R31 The boss world is unlabelled: its items name no session and are recorded as their own kind (far transfer, and a belief on record)
+PASS R32 Every model in every season reacts to each of its controls; every atom, term, model and picture a step names exists
+PASS R33 No page errors in the season 2 checks
+PASS R34 On a 360-px phone every label of every figure and every model state is at least 10 px, inside its canvas, and does not sit on another label
+PASS R36 Pedagogy governor, level 1: with no record the authored picture comes first; when one kind of picture has preceded right answers clearly more often for this learner it is shown first, except on control days when the usual order is kept; WHY THIS? says which and why; the outcome is logged
+PASS R37 Pedagogy governor, level 2: after 20 choices that did no better than the control arm (8/20 vs 5/5), the chooser switches itself off, pictures return to the authored order, and WHY THIS? explains it
+PASS R38 No page errors in the governor checks
+ALL 38 PASSED
+=== renaissance_v3_test (source :8787)
+PASS V1 Season 3 has 13 sessions covering literature, poetry, philosophy, evidence, mathematics, science, art, music, history, conversation, cultivation, film and architecture; every work, rung, requirement and quotation it names exists; every quotation record is complete and rights-classed
+PASS V2 The civilisation graph links works, people, ideas and places with no dangling edge; only the trial (a boss world) is a deep session
+PASS V3 Global reach: every one of the ten world regions appears in the content at least as a case (depth is uneven; the coverage oracle tracks which regions have a session of their own), and every one of the 21 bootloader primitives is trained somewhere
+PASS V4 Every season-3 session in the first five compiled days runs end to end on a phone (predictions, primary text, model, contrast, transfer, forge, receipt) with no page error
+PASS V5 Primary text: passages render whole with speaker, place and rights; SHOW SOURCE opens the quotation record (exact words, rights, misattribution risk, how it was checked); synthesised listening plays; dialogue renders
+PASS V6 Each season-3 session completes when it is the one left, and works that the session teaches appear in its receipt with a rung of the possession ladder
+PASS V7 Listening is synthesised from exact pitches: the maqam example plays E, E-flat and the neutral third between them (a quarter-tone above E-flat)
+PASS V8 No page errors while completing every season-3 session
+PASS C1 After the bootloader (seasons 1–2) the compiler scores the remaining sessions from capability gaps, errors, unpossessed works, rotation and dependants, and says why
+PASS C2 Trial L10: one compiled day in about five keeps the written order as a control; the rest follow the compiler
+PASS C3 Deep sessions (the trial, a boss world) are compiled only on the weekend, with a 45-minute dose; on a weekday the door says it waits for the weekend
+PASS C4 A started session always continues first; nothing is compiled in the middle of one
+PASS C5 Every session of every season compiles to the full session object (§161): capabilities, sources, irreducible experiences, tasks, misconception branches, transfer, forge, hooks, minutes, stop condition, rights
+PASS E1 Trials (L2 step order, L3 step length, L4 session length, L5 hints, L6 spacing, L7 task type, L8 source mix, L9 session architecture, L10 season order, L11 capability priority) each have a control arm, a minimum sample, a success margin and a no-harm floor; the judge adopts a clearly better arm, drops one that is not better, and stops one below the floor
+PASS E2 Trial L2 really changes the lesson: some sessions play the two compared cases before the model and others keep the written order, by a stable per-session assignment
+PASS E3 Rollback: renaissance_experiments = "off" returns every trial to the written lesson at once
+PASS E4 Level 14 (the judge judged): an adopted arm that later does worse than its monitoring control is rolled back, and that trial then needs a larger sample (caution ×1.5)
+PASS E5 No page errors in the trial checks
+PASS P1 Day 0: the baseline form opens the first day (two sealed items before the session), unlabelled, with every helper off
+PASS P2 A form item gives no right/wrong feedback (it returns at day 90), and the stored record keeps only its id and outcome, never its words
+PASS P3 Schedule: this week's unknown problem arrives on day 7; the parallel form B on day 30; nothing in exam week (short dose); a window missed by more than two weeks is skipped, not owed
+PASS P4 A weekly unknown problem is used once, so it explains itself after you commit; results feed the orientation dimension of the capability vector, never the in-session rates
+PASS P5 Reader-Turing questions for The Brothers Karamazov arrive 30 days after its last session, and not before
+PASS P6 No page errors in the sealed-measurement checks
+PASS S1 Pre-registration: all 52 sealed items (8 baseline, 8 thirty-day, 24 weekly unknowns, 12 reader questions) match the SHA-256 registered before any answer; any later edit fails here
+PASS S2 Leak firewall: no run of six words from any sealed item appears anywhere in the lessons, hooks, visuals, models or quotation register; the sealed file carries no item text in the clear (not in content, metadata, file name or order)
+PASS S3 Counterfeit learners, extended (§152–153): longest, shortest, most words, punctuation, hedges, jargon, no absolutes, overlap with the question, odd length, most typical option, positive words, first shown, last shown: each stays within 0.12 of chance in every season and on the sealed items
+PASS L1 Functional-capability vector (§38): separate dimensions, each with its n and no composite score; rates are hidden below five answers (no fake precision)
+PASS L2 Transformation velocity (§45–46): the weekly slope of delayed, unaided accuracy is computed with its weeks and n; acceleration only once six such weeks exist
+PASS L3 Multiplex (§36–37): only capability atoms with a later or unaided success count, per hour; tags alone never do
+PASS L4 Cultural-possession ladder (§162): each rung is earned by evidence (a read passage counts only at reading speed), a rung counts only if the rungs below it are earned, and the top rung needs the sealed reader questions
+PASS L5 The twin (§163) tracks each idea from seen to assimilated, and flags what went backwards
+PASS D1 Device independence: the whole record exports as one JSON (renaissance.state/1) and imports on another device, merging sessions and answers; a foreign file is refused
+PASS D2 Voice-ready: the current step reads as plain speech (question, lettered options; a passage with its speaker and source), with no markup, for earbuds or a screen reader
+PASS D3 Failure recovery (§247): an unreadable record is kept aside unchanged, a clean one starts, the organ still opens, and WHY THIS? says what happened
+PASS D4 Garbage collection of drills (§101–103): after three sure recalls, an idea whose next gap would pass half a year retires as assimilated and is not asked again
+PASS D5 No page errors in the learner-model and device checks
+PASS Q1 No-slop reviewer (§15, §139, §220): no generic theme-talk, vague praise or AI filler in any teaching text (allowed only inside a wrong option diagnosed as pretension); no repeated step text; every figure is used and says what it shows
+PASS A1 Accessibility (§158): body text, buttons and labels meet WCAG AA contrast (4.5:1); every control is a native button or input (keyboard-operable); the organ is a labelled dialog; Enter on a focused CONTINUE advances
+PASS A2 Performance (§159): opening a session takes under 300 ms and every model redraws in under 60 ms (the slowest is named)
+PASS A3 No page errors in the review, accessibility and performance checks
+PASS G1 Capability genome (§60–62): all 28 atoms carry components, prerequisites, synergies, conflicts, transfer edges, expressions and descendants; evidence and learning cost are computed; references resolve; prerequisites have no cycle; the periodic table places each atom once and every empty cell names a predicted atom; ≥ 7 compounds
+PASS G2 Genome evidence comes from the record: 5 of 6 unaided answers gives 0.83; below five answers the rate is withheld; untouched atoms show none
+PASS M1 Media registry (§134–139): every visual, model, listening passage, quotation and data object has a §138 type, a §134 rights class, a source and a stated cognitive job, and is used by a step; quotations carry §135 provenance; every visual has an accessible name
+PASS F1 Reality calibration (§97): after building, the learner can forecast (optional) whether they will try it; the next warm-up checks it, scores it and says so; after five checked forecasts a Brier score is reported (0.234 for the fixture), none before
+PASS F2 No page errors in the genome, media and calibration checks
+PASS V9 Masterpiece experience quality (§217): the Karamazov track has primary text, a structural map, a character graph and model, vocabulary, context, criticism, quotations in context, transfer, discussion, memory hooks and sealed reader-Turing questions
+PASS V10 Idea immune system and source conflict (§93, §96, §99, §137): every session meets a counterexample, a stated limit or an open question; contested claims are marked contested; opposing verdicts (Freud, Nabokov) are shown side by side; at least five sessions keep rival models alive
+PASS V11 Texture, not trivia (§227–229): no step dumps more than two quotations, no quotation is shown in more than two steps, every quotation carries its context and why it matters, prose quotations stay under 160 words, and no returning question asks for a bare date or name
+PASS E6 The trials beyond L6 change the lesson on their test arm and not on their control: L4 splits a session over two days (and says so), L7 hides the options until an answer is in mind, L8 puts the context beside the passage, L9 moves returning ideas after the session, L11 weighs rotation above gaps
+PASS L6 Personal intellectual physics (§74–75): a rule about this learner appears only with enough evidence (8+ per kind) and says how it would be refuted; below that there is no rule
+PASS L7 Museum and concert tests (§31–32): cold predictions against later answers on new works for the art and music sessions, with the change; rates only from five answers
+PASS L8 World-model map (§98–99): all sixteen layers of §98 are listed with the sessions that model them and what is done; empty layers are named as gaps, never hidden; rival models kept are listed
+PASS F3 Real social feedback (§232): after the conversation session the next warm-up asks whether it came up in real talk (went well, showed a gap, raised a question, did not come up); only the tap and its time are kept
+PASS C6 Sovereignty (§197): on a compiled day WHY THIS? offers the runners-up; choosing one replaces the compiler's pick before any answer, leaves the abandoned session untouched, and is recorded as his choice
+PASS F5 Click events (§84): a prediction that was wrong before the explanation, then the idea used rightly on an unseen case, is logged as a click for that session
+PASS F4 No page errors in the masterpiece, immune-system, trial and learner-model checks
+ALL 57 PASSED
+=== renaissance_v3_test (Vercel build :8790)
+PASS V1 Season 3 has 13 sessions covering literature, poetry, philosophy, evidence, mathematics, science, art, music, history, conversation, cultivation, film and architecture; every work, rung, requirement and quotation it names exists; every quotation record is complete and rights-classed
+PASS V2 The civilisation graph links works, people, ideas and places with no dangling edge; only the trial (a boss world) is a deep session
+PASS V3 Global reach: every one of the ten world regions appears in the content at least as a case (depth is uneven; the coverage oracle tracks which regions have a session of their own), and every one of the 21 bootloader primitives is trained somewhere
+PASS V4 Every season-3 session in the first five compiled days runs end to end on a phone (predictions, primary text, model, contrast, transfer, forge, receipt) with no page error
+PASS V5 Primary text: passages render whole with speaker, place and rights; SHOW SOURCE opens the quotation record (exact words, rights, misattribution risk, how it was checked); synthesised listening plays; dialogue renders
+PASS V6 Each season-3 session completes when it is the one left, and works that the session teaches appear in its receipt with a rung of the possession ladder
+PASS V7 Listening is synthesised from exact pitches: the maqam example plays E, E-flat and the neutral third between them (a quarter-tone above E-flat)
+PASS V8 No page errors while completing every season-3 session
+PASS C1 After the bootloader (seasons 1–2) the compiler scores the remaining sessions from capability gaps, errors, unpossessed works, rotation and dependants, and says why
+PASS C2 Trial L10: one compiled day in about five keeps the written order as a control; the rest follow the compiler
+PASS C3 Deep sessions (the trial, a boss world) are compiled only on the weekend, with a 45-minute dose; on a weekday the door says it waits for the weekend
+PASS C4 A started session always continues first; nothing is compiled in the middle of one
+PASS C5 Every session of every season compiles to the full session object (§161): capabilities, sources, irreducible experiences, tasks, misconception branches, transfer, forge, hooks, minutes, stop condition, rights
+PASS E1 Trials (L2 step order, L3 step length, L4 session length, L5 hints, L6 spacing, L7 task type, L8 source mix, L9 session architecture, L10 season order, L11 capability priority) each have a control arm, a minimum sample, a success margin and a no-harm floor; the judge adopts a clearly better arm, drops one that is not better, and stops one below the floor
+PASS E2 Trial L2 really changes the lesson: some sessions play the two compared cases before the model and others keep the written order, by a stable per-session assignment
+PASS E3 Rollback: renaissance_experiments = "off" returns every trial to the written lesson at once
+PASS E4 Level 14 (the judge judged): an adopted arm that later does worse than its monitoring control is rolled back, and that trial then needs a larger sample (caution ×1.5)
+PASS E5 No page errors in the trial checks
+PASS P1 Day 0: the baseline form opens the first day (two sealed items before the session), unlabelled, with every helper off
+PASS P2 A form item gives no right/wrong feedback (it returns at day 90), and the stored record keeps only its id and outcome, never its words
+PASS P3 Schedule: this week's unknown problem arrives on day 7; the parallel form B on day 30; nothing in exam week (short dose); a window missed by more than two weeks is skipped, not owed
+PASS P4 A weekly unknown problem is used once, so it explains itself after you commit; results feed the orientation dimension of the capability vector, never the in-session rates
+PASS P5 Reader-Turing questions for The Brothers Karamazov arrive 30 days after its last session, and not before
+PASS P6 No page errors in the sealed-measurement checks
+PASS S1 Pre-registration: all 52 sealed items (8 baseline, 8 thirty-day, 24 weekly unknowns, 12 reader questions) match the SHA-256 registered before any answer; any later edit fails here
+PASS S2 Leak firewall: no run of six words from any sealed item appears anywhere in the lessons, hooks, visuals, models or quotation register; the sealed file carries no item text in the clear (not in content, metadata, file name or order)
+PASS S3 Counterfeit learners, extended (§152–153): longest, shortest, most words, punctuation, hedges, jargon, no absolutes, overlap with the question, odd length, most typical option, positive words, first shown, last shown: each stays within 0.12 of chance in every season and on the sealed items
+PASS L1 Functional-capability vector (§38): separate dimensions, each with its n and no composite score; rates are hidden below five answers (no fake precision)
+PASS L2 Transformation velocity (§45–46): the weekly slope of delayed, unaided accuracy is computed with its weeks and n; acceleration only once six such weeks exist
+PASS L3 Multiplex (§36–37): only capability atoms with a later or unaided success count, per hour; tags alone never do
+PASS L4 Cultural-possession ladder (§162): each rung is earned by evidence (a read passage counts only at reading speed), a rung counts only if the rungs below it are earned, and the top rung needs the sealed reader questions
+PASS L5 The twin (§163) tracks each idea from seen to assimilated, and flags what went backwards
+PASS D1 Device independence: the whole record exports as one JSON (renaissance.state/1) and imports on another device, merging sessions and answers; a foreign file is refused
+PASS D2 Voice-ready: the current step reads as plain speech (question, lettered options; a passage with its speaker and source), with no markup, for earbuds or a screen reader
+PASS D3 Failure recovery (§247): an unreadable record is kept aside unchanged, a clean one starts, the organ still opens, and WHY THIS? says what happened
+PASS D4 Garbage collection of drills (§101–103): after three sure recalls, an idea whose next gap would pass half a year retires as assimilated and is not asked again
+PASS D5 No page errors in the learner-model and device checks
+PASS Q1 No-slop reviewer (§15, §139, §220): no generic theme-talk, vague praise or AI filler in any teaching text (allowed only inside a wrong option diagnosed as pretension); no repeated step text; every figure is used and says what it shows
+PASS A1 Accessibility (§158): body text, buttons and labels meet WCAG AA contrast (4.5:1); every control is a native button or input (keyboard-operable); the organ is a labelled dialog; Enter on a focused CONTINUE advances
+PASS A2 Performance (§159): opening a session takes under 300 ms and every model redraws in under 60 ms (the slowest is named)
+PASS A3 No page errors in the review, accessibility and performance checks
+PASS G1 Capability genome (§60–62): all 28 atoms carry components, prerequisites, synergies, conflicts, transfer edges, expressions and descendants; evidence and learning cost are computed; references resolve; prerequisites have no cycle; the periodic table places each atom once and every empty cell names a predicted atom; ≥ 7 compounds
+PASS G2 Genome evidence comes from the record: 5 of 6 unaided answers gives 0.83; below five answers the rate is withheld; untouched atoms show none
+PASS M1 Media registry (§134–139): every visual, model, listening passage, quotation and data object has a §138 type, a §134 rights class, a source and a stated cognitive job, and is used by a step; quotations carry §135 provenance; every visual has an accessible name
+PASS F1 Reality calibration (§97): after building, the learner can forecast (optional) whether they will try it; the next warm-up checks it, scores it and says so; after five checked forecasts a Brier score is reported (0.234 for the fixture), none before
+PASS F2 No page errors in the genome, media and calibration checks
+PASS V9 Masterpiece experience quality (§217): the Karamazov track has primary text, a structural map, a character graph and model, vocabulary, context, criticism, quotations in context, transfer, discussion, memory hooks and sealed reader-Turing questions
+PASS V10 Idea immune system and source conflict (§93, §96, §99, §137): every session meets a counterexample, a stated limit or an open question; contested claims are marked contested; opposing verdicts (Freud, Nabokov) are shown side by side; at least five sessions keep rival models alive
+PASS V11 Texture, not trivia (§227–229): no step dumps more than two quotations, no quotation is shown in more than two steps, every quotation carries its context and why it matters, prose quotations stay under 160 words, and no returning question asks for a bare date or name
+PASS E6 The trials beyond L6 change the lesson on their test arm and not on their control: L4 splits a session over two days (and says so), L7 hides the options until an answer is in mind, L8 puts the context beside the passage, L9 moves returning ideas after the session, L11 weighs rotation above gaps
+PASS L6 Personal intellectual physics (§74–75): a rule about this learner appears only with enough evidence (8+ per kind) and says how it would be refuted; below that there is no rule
+PASS L7 Museum and concert tests (§31–32): cold predictions against later answers on new works for the art and music sessions, with the change; rates only from five answers
+PASS L8 World-model map (§98–99): all sixteen layers of §98 are listed with the sessions that model them and what is done; empty layers are named as gaps, never hidden; rival models kept are listed
+PASS F3 Real social feedback (§232): after the conversation session the next warm-up asks whether it came up in real talk (went well, showed a gap, raised a question, did not come up); only the tap and its time are kept
+PASS C6 Sovereignty (§197): on a compiled day WHY THIS? offers the runners-up; choosing one replaces the compiler's pick before any answer, leaves the abandoned session untouched, and is recorded as his choice
+PASS F5 Click events (§84): a prediction that was wrong before the explanation, then the idea used rightly on an unseen case, is logged as a click for that session
+PASS F4 No page errors in the masterpiece, immune-system, trial and learner-model checks
+ALL 57 PASSED
+=== omega_registry_test
+PASS O1 The registry has the thirteen identity fields of §119 (plus id, pass and verdict) as columns
+PASS O2 At least 1,000 distinct candidates remain after renamed duplicates are merged or rejected (§118, §120)
+PASS O3 Ids and names are unique (no candidate counted twice under the same name)
+PASS O4 Every kept or merged candidate has every identity field filled (a shared per-pass field is marked [pass])
+PASS O5 Every related link and every merge points at a real, different candidate
+PASS O6 Verdicts, rejection codes, novelty labels and friction/cost grades use only the declared vocabularies
+PASS O7 Novelty is claimed sparingly: most kept candidates name an ancestor (KNOWN or COMBO); UNCLEAR stays under 15%
+PASS O8 The summary file matches the registry
+PASS O9 omega/02_REGISTRY.md quotes the registry's own counts (total, distinct, kept, merged, rejected)
+PASS O10 Later generations meet §121–§124: ≥ 100 second-generation, ≥ 50 primitives, ≥ 20 generators, ≥ 12 ontologies
+PASS O11 Every second-generation parent comes from the strongest-200 selection (§121), and every id the doc cites exists
+ALL 11 PASSED
+=== strict coverage
+STRICT practice taught 1009/1009 (100.0%)
+STRICT held-out taught 213/398 (53.5%)  [counts only]
+=== ALL DONE
+=== rollback_probe (rerun: the run above died connecting to :8788 because the regression script did not start the v53 tree server; started from its pidfile and run once more)
+{ "v142": {  "schema": 2,  "qa": 0,  "errors": [] }, "v53": {  "title": "INTELLECTUALITY CNS v14 · UNDERSTAND FIRST",  "day": 2,  "v14keys": [   "auto",   "calendar",   "feed",   "ledger",   "legacy",   "parked",   "pins",   "preds",   "primed",   "qa",   "schema",   "seq",   "stats",   "vc",   "version",   "vh",   "visualAssignments",   "visualRecent",   "visualUsed",   "vstats"  ],  "hasVA": true,  "segs": 0,  "body": 1670,  "renderErr": null,  "errors": [] }, "back": {  "title": "INTELLECTUALITY CNS v18.1 · MCQ EXAM",  "schema": 2,  "primed": 1,  "v53FieldsDropped": true,  "errors": [] }, "pass": true}
+=== coverage_oracle_test
+PASS CO1 Zero silent omissions (§5): all 711 numbered sections of the three missions (226 + 184 + 301) are parsed and each maps to at least one requirement; every requirement names its source sections
+PASS CO2 Requirement graph schema (§4): every requirement has id, name, source, rationale, category, dependencies, status, artifact, code, test and benchmark locations, user effect, blocker, evidence and supersession; statuses come from the allowed list; merges, rejections, blocks and empirical items carry what they must
+PASS CO3 No claim beyond its evidence: every file, symbol and test that a requirement relies on exists and every named test passed in the regression log the oracle read
+PASS CO4 Registry ingested (§3, §177): all 1,160 first-generation candidates are read; every kept candidate attaches to an existing requirement through its pass theme; merged and rejected counts match the registry summary
+PASS CO5 The oracle cannot be fooled (§151, §218, §264): a claimed empirical validation, a live verification without a receipt, a test that does not exist, a failed test, a missing symbol, a tested component with no code (a placeholder) and a blocker without preparatory work are each reported as contradicted; an honest claim passes
+PASS CO6 Provider neutrality and no self-granted authority (§246, §248–249): no Renaissance file makes a network request, evaluates code or names a model supplier; every adaptive change is chosen among authored arms and can be switched off
+PASS CO7 No brain-hack nonsense or neuromyths (§47–48): no teaching text claims plasticity ends, IQ boosters, brain training, nootropics, supplement stacks, “10% of the brain” or left/right-brain people
+PASS CO8 Completion ledger (§191–192): its counts add up (controllable = completed + open + contradicted); it reports blocked, empirical, frontier, merged and rejected requirements separately; the percentage is completed over controllable; 100% is declared only when nothing controllable is open or contradicted
+PASS CO9 The 50 required artifacts (§214): the index lists every one in order with at least one location, and every location exists
+PASS CO10 Knowledge half-life and re-verification (§100, §133): every provenance claim has a year and a class (stable, slow, medium, fast) with its re-verification date; the committed schedule matches the claims in the seasons
+ALL 10 PASSED
+=== ledger_check
+PASS LEDGER the committed completion ledger equals a fresh oracle run on receipts/v18_1/full_regression.log

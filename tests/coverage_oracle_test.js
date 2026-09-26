@@ -38,7 +38,9 @@ for (const n of nodes) {
 check('CO2', 'Requirement graph schema (§4): every requirement has id, name, source, rationale, category, dependencies, status, artifact, code, test and benchmark locations, user effect, blocker, evidence and supersession; statuses come from the allowed list; merges, rejections, blocks and empirical items carry what they must', bad.length === 0 && nodes.length >= 150, { n: nodes.length, bad: bad.slice(0, 10) });
 
 // CO3 evidence exists for every claim; no claim is contradicted
-check('CO3', 'No claim beyond its evidence: every file, symbol and test that a requirement relies on exists and every named test passed in the regression log the oracle read', L.failed.length === 0, L.failed.slice(0, 8));
+// this suite's own results cannot be in the log it is reading yet; only those references are excused
+const contradicted = L.failed.map((f) => Object.assign({}, f, { fails: f.fails.filter((x) => !/^test co:CO\d+ was not run/.test(x)) })).filter((f) => f.fails.length);
+check('CO3', 'No claim beyond its evidence: every file, symbol and test that a requirement relies on exists and every named test passed in the regression log the oracle read', contradicted.length === 0, contradicted.slice(0, 8));
 
 // CO4 the registry is ingested (§3, §177)
 const summary = JSON.parse(read('docs/RENAISSANCE/omega/registry/gen1_summary.json'));
@@ -78,12 +80,12 @@ const myths = /neuroplasticity (ends|stops)|IQ[- ]boost|brain[- ]training|nootro
 const hits = files.filter((f) => !/sealed/.test(f)).filter((f) => myths.test(read('source/public/' + f)));
 check('CO7', 'No brain-hack nonsense or neuromyths (§47–48): no teaching text claims plasticity ends, IQ boosters, brain training, nootropics, supplement stacks, “10% of the brain” or left/right-brain people', hits.length === 0, hits);
 
-// CO8 the ledger on disk is the oracle's own output, not a hand edit (§191–192, §277)
-const disk = fs.existsSync(path.join(ROOT, 'docs/RENAISSANCE/completion/COMPLETION_LEDGER.json')) ? JSON.parse(read('docs/RENAISSANCE/completion/COMPLETION_LEDGER.json')) : null;
-const fresh = disk ? oracle.run({ log: disk.log }).ledger : null;
-const strip = (x) => JSON.stringify(Object.assign({}, x, { generated: null }));
-const mdDisk = fs.existsSync(path.join(ROOT, 'docs/RENAISSANCE/completion/COMPLETION_LEDGER.md')) ? read('docs/RENAISSANCE/completion/COMPLETION_LEDGER.md') : '';
-check('CO8', 'Completion ledger (§191–192): the committed ledger equals a fresh oracle run on the regression log it names; its counts add up; 100% is declared only when nothing controllable is open or contradicted', !!disk && strip(disk) === strip(fresh) && mdDisk.includes('Controllable completion: ' + disk.percentControllable + '%') && disk.controllableIncludingDispositions === disk.completedIncludingDispositions + disk.open.length + disk.failed.filter((f) => ['controllable', 'merged', 'superseded', 'rejected'].includes((out.graph.find((n) => n.id === f.id) || {}).class)).length && (/^100% CONTROLLABLE/.test(disk.declaration) === (disk.open.length === 0 && disk.failed.length === 0)), disk ? { disk: disk.percentControllable, fresh: fresh.percentControllable, open: disk.open.length, failed: disk.failed.length } : 'no ledger on disk');
+// CO8 the ledger's arithmetic and its declaration rule (§191–192, §277); that the committed ledger equals a fresh run
+// on its own log is checked after it is written, by `oracle.js --check` at the end of the regression
+const cls = (id) => (out.graph.find((n) => n.id === id) || {}).class;
+const failedCtl = L.failed.filter((f) => ['controllable', 'merged', 'superseded', 'rejected'].includes(cls(f.id))).length;
+const md = oracle.mdLedger(out);
+check('CO8', 'Completion ledger (§191–192): its counts add up (controllable = completed + open + contradicted); it reports blocked, empirical, frontier, merged and rejected requirements separately; the percentage is completed over controllable; 100% is declared only when nothing controllable is open or contradicted', L.controllableIncludingDispositions === L.completedIncludingDispositions + L.open.length + failedCtl && L.percentControllable === +((100 * L.completedIncludingDispositions) / L.controllableIncludingDispositions).toFixed(1) && md.includes('Controllable completion: ' + L.percentControllable + '%') && ['Blocked external', 'Empirical future', 'Perpetual frontier'].every((h) => md.includes(h)) && (/^100% CONTROLLABLE/.test(L.declaration) === (L.open.length === 0 && L.failed.length === 0 && L.structuralErrors.length === 0)), { controllable: L.controllableIncludingDispositions, completed: L.completedIncludingDispositions, open: L.open.length, failed: L.failed.length, pct: L.percentControllable, declaration: L.declaration });
 
 // CO9 the 50 required artifacts (§214) are each located
 const ARTIFACTS = ['REQUIREMENT_GRAPH', 'COVERAGE_ORACLE', 'COMPLETION_LEDGER', 'CULTURAL_POSSESSION_SPEC', 'MASTERPIECE_COMPILER_SPEC', 'BROTHERS_KARAMAZOV_PROTOTYPE', 'READER_TURING_BENCHMARK', 'QUOTE_ENGINE', 'PRIMARY_EXPERIENCE_ENGINE', 'LITERATURE_ORGAN', 'MATHEMATICS_ORGAN', 'SCIENCE_ORGAN', 'HISTORY_ORGAN', 'PHILOSOPHY_ORGAN', 'ART_ORGAN', 'MUSIC_ORGAN', 'FILM_ORGAN', 'ARCHITECTURE_ORGAN', 'CULTIVATION_ORGAN', 'SALON_TEST', 'MUSEUM_TEST', 'CONCERT_TEST', 'COGNITIVE_BOOTLOADER', 'MULTIPLEX_ENGINE', 'FUNCTIONAL_INTELLIGENCE_VECTOR', 'GENIUS_DELTA_BENCHMARK', 'ALIEN_PROBLEM_SUITE', 'TRANSFORMATION_METRICS', 'CAPABILITY_GENOME', 'CAPABILITY_PERIODIC_TABLE', 'REPRESENTATION_EVOLUTION', 'PERSONAL_PEDAGOGY_GENOME', 'COGNITIVE_XRAY', 'WORLD_MODEL', 'IDEA_IMMUNE_SYSTEM', 'UNKNOWN_UNKNOWN_ENGINE', 'CREATION_ENGINE', 'INVENTION_ENGINE', 'REALITY_BRIDGE', 'MEMORY_ASSIMILATION', 'UBERBOND_COUPLING_SPEC', 'EXOCORTEX_SPEC', 'FUTURE_INTERFACE_SPEC', 'NEURAL_SAFETY_CONSTITUTION', 'RIGHTS_ARCHITECTURE', 'MEDIA_REGISTRY', 'BENCHMARK_LAB', 'HOSTILE_TEST_MATRIX', 'LONGITUDINAL_PROTOCOL', 'FINAL_EVOLVED_META_MISSION'];

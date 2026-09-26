@@ -1,6 +1,20 @@
-# Known Limitations (v17.5 · MCQ exam + Renaissance)
+# Known Limitations (v18.1 · MCQ exam + Renaissance)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
+
+## v18.0–v18.1 Renaissance ABSOLUTE COMPLETION (season 3, the engine, the oracle)
+
+- **Nothing is empirically validated.** Every Renaissance test is a machine test of behaviour and content; effects on the learner wait for the dates in `docs/RENAISSANCE/completion/EMPIRICAL_QUEUE.md` (first: 30-day recall from late October 2026; form B at day 30; the 90-day delta).
+- **The live site for v18.x is not confirmed from the build session.** The Vercel connector sees the team but not the project (403/404), `*.vercel.app` is blocked from the sandbox, and the GitHub connector has no status tool. Every suite ran against the identical local build. Open the site and check the tab reads **v18.1**.
+- **Explanation and writing are not measured.** Every instrument is multiple choice or a tap; free text would need a human or a model grader.
+- **The sealed items and the lessons share an author.** Leakage is prevented by mechanism (obfuscation, hashes registered before any answer, a six-word firewall), not by separate people; sealing stops accidental exposure, not a determined reader.
+- **Global depth.** Four regions have sessions of their own; six are taught as cases inside other sessions (tracked as the `globaldepth` frontier requirement).
+- **Media gaps.** No painting, sculpture, recorded performance, video or 3D: those need licensed, Creative Commons or lawful-embed sources, and those rights classes are empty. Music is synthesised from exact pitches (structure, not timbre or performance).
+- **Quotation wording** was checked by exact-phrase web search across several copies of the Garnett text, not against a scan: full texts could not be fetched from the build machine.
+- **L12–L13 (runtime generation of curriculum and pedagogy) are blocked** on a model credential and a budget the owner has not granted.
+- **The requirement graph is self-authored.** The oracle checks every claim against files, symbols and test results, and rejects fabricated claims (CO5), but the mapping of the 711 mission sections to requirements is a judgement, readable in `tools/renaissance/requirement_map.js`.
+- **Trials need data.** L1–L11 and L14 decide nothing until each reaches its minimum sample; until then every learner gets a mix of arms by stable assignment.
+- **Language (§34) is open.** No language experience exists yet. It had been filed as frontier and was moved back to open, controllable work on review for the completion report, which is why the ledger reads 173 of 174 and no completion is declared (`docs/RENAISSANCE/completion/COMPLETION_REPORT.md`).
 
 ## v17.5 Renaissance season 2 and OMEGA
 

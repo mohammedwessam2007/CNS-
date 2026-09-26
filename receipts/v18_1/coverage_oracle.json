@@ -1,0 +1,154 @@
+{
+ "when": "2026-09-26T20:50:25.543Z",
+ "results": [
+  {
+   "id": "CO1",
+   "what": "Zero silent omissions (§5): all 711 numbered sections of the three missions (226 + 184 + 301) are parsed and each maps to at least one requirement; every requirement names its source sections",
+   "ok": true,
+   "detail": {
+    "counts": {
+     "M1": 226,
+     "M2": 184,
+     "M3": 301
+    },
+    "unmapped": [],
+    "unsourced": [],
+    "errors": []
+   }
+  },
+  {
+   "id": "CO2",
+   "what": "Requirement graph schema (§4): every requirement has id, name, source, rationale, category, dependencies, status, artifact, code, test and benchmark locations, user effect, blocker, evidence and supersession; statuses come from the allowed list; merges, rejections, blocks and empirical items carry what they must",
+   "ok": true,
+   "detail": {
+    "n": 191,
+    "bad": []
+   }
+  },
+  {
+   "id": "CO3",
+   "what": "No claim beyond its evidence: every file, symbol and test that a requirement relies on exists and every named test passed in the regression log the oracle read",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "CO4",
+   "what": "Registry ingested (§3, §177): all 1,160 first-generation candidates are read; every kept candidate attaches to an existing requirement through its pass theme; merged and rejected counts match the registry summary",
+   "ok": true,
+   "detail": {
+    "total": 1160,
+    "kept": 863,
+    "merged": 148,
+    "rejected": 149,
+    "rejectedBy": {
+     "EVID": 29,
+     "UNTEST": 7,
+     "SLOP": 31,
+     "DUP": 9,
+     "COPY": 7,
+     "TAX": 16,
+     "COST": 15,
+     "SCOPE": 17,
+     "ADDICT": 6,
+     "TRUTH": 9,
+     "GUILT": 3
+    },
+    "attachedToRequirements": 863,
+    "unattached": 0
+   }
+  },
+  {
+   "id": "CO5",
+   "what": "The oracle cannot be fooled (§151, §218, §264): a claimed empirical validation, a live verification without a receipt, a test that does not exist, a failed test, a missing symbol, a tested component with no code (a placeholder) and a blocker without preparatory work are each reported as contradicted; an honest claim passes",
+   "ok": true,
+   "detail": {
+    "fabricated": [
+     [
+      "p-empirical",
+      "claims empirical validation without a data receipt"
+     ],
+     [
+      "p-deployed",
+      "claims LIVE-VERIFIED without a deployment receipt"
+     ],
+     [
+      "p-notest",
+      "test rn:R999 is not declared in tests/renaissance_test.js"
+     ],
+     [
+      "p-failed",
+      "test rn:R2 FAILED in /tmp/oracle-RKAVYS/log"
+     ],
+     [
+      "p-nocode",
+      "code: missing “function doesNotExist(” in source/public/renaissance-v1.js"
+     ],
+     [
+      "p-placeholder",
+      "tested build with no code location"
+     ],
+     [
+      "p-blocked",
+      "blocked without the preparatory work (§277)"
+     ]
+    ],
+    "honest": []
+   }
+  },
+  {
+   "id": "CO6",
+   "what": "Provider neutrality and no self-granted authority (§246, §248–249): no Renaissance file makes a network request, evaluates code or names a model supplier; every adaptive change is chosen among authored arms and can be switched off",
+   "ok": true,
+   "detail": {
+    "net": [],
+    "files": 10
+   }
+  },
+  {
+   "id": "CO7",
+   "what": "No brain-hack nonsense or neuromyths (§47–48): no teaching text claims plasticity ends, IQ boosters, brain training, nootropics, supplement stacks, “10% of the brain” or left/right-brain people",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "CO8",
+   "what": "Completion ledger (§191–192): its counts add up (controllable = completed + open + contradicted); it reports blocked, empirical, frontier, merged and rejected requirements separately; the percentage is completed over controllable; 100% is declared only when nothing controllable is open or contradicted",
+   "ok": true,
+   "detail": {
+    "controllable": 174,
+    "completed": 166,
+    "open": 1,
+    "failed": 7,
+    "pct": 95.4,
+    "declaration": "not declared: 1 open, 7 contradicted, 0 structural errors"
+   }
+  },
+  {
+   "id": "CO9",
+   "what": "The 50 required artifacts (§214): the index lists every one in order with at least one location, and every location exists",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "CO10",
+   "what": "Knowledge half-life and re-verification (§100, §133): every provenance claim has a year and a class (stable, slow, medium, fast) with its re-verification date; the committed schedule matches the claims in the seasons",
+   "ok": true,
+   "detail": {
+    "total": 155,
+    "counts": {
+     "slow": 72,
+     "stable": 60,
+     "medium": 22,
+     "fast": 1
+    },
+    "disk": {
+     "slow": 72,
+     "stable": 60,
+     "medium": 22,
+     "fast": 1
+    },
+    "noYear": []
+   }
+  }
+ ]
+}

@@ -118,3 +118,4 @@ p .rnTerm{min-height:0;padding:1px 8px;margin:0 1px}
 .rnOpts.rnRow{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
 .rnOpts.rnRow .rnOpt{min-height:44px;justify-content:center;text-align:center;padding:8px 4px}
 .rnQctx{margin:6px 0 14px;padding:8px 12px;border-left:3px solid #26405e;font-size:14px;line-height:1.5}
+.rnSwap{margin:10px 0 4px}.rnSwap .rnSrcBtn{display:block;margin:6px 0}

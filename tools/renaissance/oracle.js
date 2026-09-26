@@ -185,11 +185,14 @@ function run(opts = {}) {
       return p;
     };
     if (n.kind === 'rollup') {
+      // §277: a dependency blocked by a documented external constraint, with its preparatory work done, is excluded
       const sub = n.deps.map((d) => [d, evaluate(byId[d], seen)]);
-      const notClosed = sub.filter(([, e]) => !e.closed).map(([d]) => d);
+      const excluded = sub.filter(([, e]) => e.cls === 'external' && !e.fails.length).map(([d]) => d);
+      const notClosed = sub.filter(([d, e]) => !e.closed && !excluded.includes(d)).map(([d]) => d);
       closed = notClosed.length === 0;
       status = closed ? 'IMPLEMENTED' : 'DESIGNED';
       if (!closed) open.push('waits on ' + notClosed.join(', '));
+      if (excluded.length) n.rollupExcluded = excluded;
     } else if (n.status === 'REJECTED-WITH-REASON') {
       cls = 'rejected';
       if (!n.reason) fails.push('rejected without a documented reason');
@@ -318,6 +321,15 @@ if (require.main === module) {
     for (const e of L.structuralErrors) console.log('ERROR ' + e);
     for (const f of L.failed) console.log('FAILED ' + f.id + ': ' + f.fails.join('; '));
     for (const o of L.open) console.log('OPEN ' + o.id + ' (' + o.status + ') ' + o.why);
+  }
+  // --check: the ledger on disk must be exactly what the oracle computes from the log it names (never hand-edited)
+  if (a.includes('--check')) {
+    const f = rel('docs/RENAISSANCE/completion/COMPLETION_LEDGER.json');
+    const disk = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : null;
+    const strip = (x) => JSON.stringify(Object.assign({}, x, { generated: null }));
+    const same = !!disk && strip(disk) === strip(run({ log: disk.log }).ledger) && fs.readFileSync(rel('docs/RENAISSANCE/completion/COMPLETION_LEDGER.md'), 'utf8') === mdLedger(run({ log: disk.log }));
+    console.log((same ? 'PASS' : 'FAIL') + ' LEDGER the committed completion ledger equals a fresh oracle run on ' + (disk ? disk.log : '(no ledger)'));
+    process.exit(same ? 0 : 1);
   }
   process.exit(L.structuralErrors.length || L.failed.length || (a.includes('--strict') && L.open.length) ? 1 : 0);
 }

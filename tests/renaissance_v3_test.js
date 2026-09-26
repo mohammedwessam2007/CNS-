@@ -84,13 +84,14 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       const deep = z3.sessions.filter((x) => x.deep).map((x) => x.id);
       return { bad, n: z3.sessions.length, domains, edgesOk, nodes: Object.keys(CIV.nodes).length, edges: CIV.edges.length, deep, quotes: Object.keys(quotes).length };
     });
-    check('V1', 'Season 3 has 12 sessions covering literature, poetry, philosophy, evidence, mathematics, science, art, music, history, conversation, film and architecture; every work, rung, requirement and quotation it names exists; every quotation record is complete and rights-classed', st.n === 12 && st.bad.length === 0 && ['literature', 'poetry', 'philosophy', 'evidence', 'mathematics', 'science', 'art', 'music', 'history', 'conversation', 'film', 'architecture'].every((d) => st.domains.includes(d)), st);
+    check('V1', 'Season 3 has 13 sessions covering literature, poetry, philosophy, evidence, mathematics, science, art, music, history, conversation, cultivation, film and architecture; every work, rung, requirement and quotation it names exists; every quotation record is complete and rights-classed', st.n === 13 && st.bad.length === 0 && ['literature', 'poetry', 'philosophy', 'evidence', 'mathematics', 'science', 'art', 'music', 'history', 'conversation', 'cultivation', 'film', 'architecture'].every((d) => st.domains.includes(d)), st);
     check('V2', 'The civilisation graph links works, people, ideas and places with no dangling edge; only the trial (a boss world) is a deep session', st.edgesOk && st.nodes >= 60 && st.edges >= 50 && st.deep.join() === 'km3', { nodes: st.nodes, edges: st.edges, deep: st.deep });
     const cov = await p.evaluate(() => {
       const all = window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions.map((x) => Object.assign({ season: z.id }, x)));
-      const text = (x) => JSON.stringify(x).toLowerCase();
+      // teaching text only: citations (provenance) and the session's region label do not count as content
+      const text = (x) => JSON.stringify(Object.assign({}, x, { provenance: [], region: '' })).toLowerCase();
       // §26 global coverage: each region must be the setting of real content somewhere
-      const REG = { 'Middle East': /baghdad|isfahan|iraq|iran|abbasid/, 'North Africa': /cairo|egypt|luxor|nubian/, 'Sub-Saharan Africa': /timbuktu|mali/, 'South Asia': /india/, 'East Asia': /japan|ozu|tokyo/, 'Central Asia': /samarkand|bukhara|central asia/, 'Southeast Asia': /hanoi|philippines/, Europe: /vienna|london|russia|seville|toledo/, Americas: /us physicians|wells fargo|colombia|american/, Oceania: /micronesia|puluwat|pacific/ };
+      const REG = { 'Middle East': /baghdad|isfahan|iraq|iran|abbasid/, 'North Africa': /cairo|egypt|luxor|nubian/, 'Sub-Saharan Africa': /timbuktu|mali/, 'South Asia': /india/, 'East Asia': /japan|ozu|tokyo/, 'Central Asia': /samarkand|bukhara|central asia/, 'Southeast Asia': /angkor|khmer|hanoi|philippines/, Europe: /vienna|london|russia|seville|toledo/, Americas: /us physicians|wells fargo|colombia|american/, Oceania: /micronesia|puluwat|pacific/ };
       const regions = Object.fromEntries(Object.entries(REG).map(([k, re]) => [k, all.filter((x) => re.test(text(x))).map((x) => x.id)]));
       // §35 bootloader primitives: each must be trained by at least one session
       const PRIM = { causality: /caus/, feedback: /feedback|loop/, selection: /selection|filter|survivor/, incentives: /incentive|reward|target/, uncertainty: /uncertain/, probability: /probab|base rate/, information: /information|decisive question/, networks: /graph|bridges|network/, constraints: /constraint|slowest/, optimization: /least material|minimum|optimi/, equilibrium: /equilibrium|balance/, emergence: /grows from|emerg|whole wall/, recursion: /recursion|recursive/, scale: /scale|doubling|exponential/, representation: /representation|picture/, counterfactuals: /counterfactual|suppose|had not/, 'model selection': /explanations|rival stor|model selection/, mechanism: /mechanism/, measurement: /measure/, evidence: /evidence/, 'signal and noise': /noise|signal|false alarm/ };
@@ -98,7 +99,7 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       return { regions, prims };
     });
     const missingRegions = Object.entries(cov.regions).filter(([, v]) => !v.length).map(([k]) => k);
-    check('V3', 'Global coverage: every one of the ten world regions is the setting of real content (not Europe plus tokens), and every one of the 21 bootloader primitives is trained somewhere', missingRegions.length === 0 && Object.values(cov.prims).every((n) => n > 0), { missingRegions, regions: Object.fromEntries(Object.entries(cov.regions).map(([k, v]) => [k, v.length])), prims: cov.prims });
+    check('V3', 'Global reach: every one of the ten world regions appears in the content at least as a case (depth is uneven; the coverage oracle tracks which regions have a session of their own), and every one of the 21 bootloader primitives is trained somewhere', missingRegions.length === 0 && Object.values(cov.prims).every((n) => n > 0), { missingRegions, regions: Object.fromEntries(Object.entries(cov.regions).map(([k, v]) => [k, v.length])), prims: cov.prims });
     await s.close();
   }
 
@@ -141,9 +142,10 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
   // ── 3. every season-3 session, opened directly: it completes, its receipt names possession, and its audio has the right notes ──
   {
     const bad = [], receipts = {};
-    const order = ['km1', 'km2', 'km3', 'ozy', 'euler', 'willow', 'pattern', 'cadence', 'wisdom', 'salon', 'cut', 'arch'];
     const s = await open({ time: '2026-09-28T19:00:00+03:00', state: null, localStorage: OFF });
     const p = s.page;
+    // every season-3 session, read from the season itself so a new session is played through too
+    const order = await p.evaluate(() => window.RENAISSANCE_SEASONS.find((z) => z.id === 's3').sessions.map((x) => x.id));
     for (const sid of order) {
       const when = sid === 'km3' ? '2026-10-03T19:00:00+03:00' : '2026-09-28T19:00:00+03:00';
       await p.clock.setFixedTime(new Date(when));
@@ -168,7 +170,7 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       const hz = (m) => +(440 * Math.pow(2, (m - 69) / 12)).toFixed(2);
       return { n: sch.length, neutral: sch.some((x) => Math.abs(x.f - hz(63.5)) < 0.02), major: sch.some((x) => Math.abs(x.f - hz(64)) < 0.02), minor: sch.some((x) => Math.abs(x.f - hz(63)) < 0.02) };
     });
-    check('V6', 'Each of the 12 season-3 sessions completes when it is the one left, and works that the session teaches appear in its receipt with a rung of the possession ladder', bad.length === 0 && /Possession/.test(receipts.km1 || '') && /Brothers Karamazov/.test(receipts.km1 || ''), { bad, km1: receipts.km1, ozy: receipts.ozy });
+    check('V6', 'Each season-3 session completes when it is the one left, and works that the session teaches appear in its receipt with a rung of the possession ladder', bad.length === 0 && /Possession/.test(receipts.km1 || '') && /Brothers Karamazov/.test(receipts.km1 || ''), { bad, km1: receipts.km1, ozy: receipts.ozy });
     check('V7', 'Listening is synthesised from exact pitches: the maqam example plays E, E-flat and the neutral third between them (a quarter-tone above E-flat)', aud.n === 15 && aud.neutral && aud.major && aud.minor, aud);
     check('V8', 'No page errors while completing every season-3 session', s.log.errors.length === 0, s.log.errors.slice(0, 3));
     await s.close();
@@ -198,7 +200,8 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       const st = RENAISSANCE.state();
       st.sessions.km1 = { start: 1, done: true, end: 1, endDay: '2026-09-01' };
       st.sessions.km2 = { start: 1, done: true, end: 2, endDay: '2026-09-02' };
-      for (const id of ['ozy', 'euler', 'willow', 'pattern', 'cadence', 'wisdom', 'salon', 'cut', 'arch']) st.sessions[id] = { start: 1, done: true, end: 3, endDay: '2026-09-03' };
+      // every other season-3 session finished, so only the deep one is left
+      for (const x of window.RENAISSANCE_SEASONS.find((z) => z.id === 's3').sessions) if (!x.deep && !st.sessions[x.id]) st.sessions[x.id] = { start: 1, done: true, end: 3, endDay: '2026-09-03' };
       localStorage.setItem('renaissance_v1', JSON.stringify(st));
       RENAISSANCE.reload();
       const mon = RENAISSANCE.gate(new Date('2026-09-28T19:00:00+03:00')), fri = RENAISSANCE.gate(new Date('2026-10-02T19:00:00+03:00'));
@@ -841,6 +844,59 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       return { first: c && c.type, opts, rec, keys: rec ? Object.keys(rec).sort().join() : '' };
     }, doneState([...S1, ...S2]));
     check('F3', 'Real social feedback (§232): after the conversation session the next warm-up asks whether it came up in real talk (went well, showed a gap, raised a question, did not come up); only the tap and its time are kept', talk.first === 'reality' && talk.opts.join() === 'well,gap,question,notyet' && talk.rec && talk.rec.v === 'gap' && talk.keys === 't,v', talk);
+    // sovereignty: he can take a runner-up instead of the compiler's pick, until he has answered anything
+    const sw = await p.evaluate((base) => {
+      nextAction = () => ({ kind: 'STOP' });
+      const st = JSON.parse(JSON.stringify(base));
+      for (const z of window.RENAISSANCE_SEASONS) if (z.boot) for (const x of z.sessions) st.sessions[x.id] = { start: 1, done: true, end: 1, endDay: '2026-08-01' };
+      const put = () => { localStorage.setItem('renaissance_v1', JSON.stringify(st)); RENAISSANCE.reload(); };
+      put();
+      const days = [...Array(20).keys()].map((i) => new Date(Date.UTC(2026, 8, 28 + i, 16)));
+      const day = days.find((d) => { const c = RENAISSANCE.compile(d); return c && c.mode === 'compiled'; });
+      RENAISSANCE.open(day);
+      const first = RENAISSANCE.current().sid;
+      document.querySelector('#rnRoot [data-rn="why"]').click();
+      const btns = [...document.querySelectorAll('#rnRoot [data-rn="swap"]')].map((b) => b.dataset.s);
+      document.querySelector('#rnRoot [data-rn="swap"]')?.click();
+      const now = RENAISSANCE.current();
+      const S = RENAISSANCE.state();
+      RENAISSANCE.close();
+      return { first, btns, now: now && now.sid, oldRec: S.sessions[first] || null, choice: S.choice, lastPick: (S.picks || []).slice(-1)[0] };
+    }, doneState([]));
+    check('C6', 'Sovereignty (§197): on a compiled day WHY THIS? offers the runners-up; choosing one replaces the compiler\'s pick before any answer, leaves the abandoned session untouched, and is recorded as his choice', sw.btns.length >= 1 && sw.now === sw.btns[0] && sw.now !== sw.first && sw.oldRec === null && sw.choice && sw.choice.sid === sw.now && sw.lastPick && sw.lastPick.mode === 'chosen', sw);
+    // click events (§84): a wrong prediction followed by a right answer on an unseen case is logged as a click
+    const clk = await p.evaluate(() => {
+      nextAction = () => ({ kind: 'STOP' });
+      RENAISSANCE.reset();
+      RENAISSANCE.open(new Date('2026-09-26T19:00:00+03:00'));
+      const all = window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions);
+      let wrongDone = false;
+      for (let i = 0; i < 60; i++) {
+        const c = RENAISSANCE.current();
+        if (!c) break;
+        const ses = all.find((x) => x.id === c.sid), step = ses && ses.steps.find((x) => x.id === c.id);
+        if (c.type === 'q' || c.type === 'contrast') {
+          const opts = step.type === 'contrast' ? step.q.options : step.options;
+          const k = !wrongDone && c.kind === 'predict' ? opts.findIndex((o) => !o.ok) : opts.findIndex((o) => o.ok);
+          if (!wrongDone && c.kind === 'predict') wrongDone = true;
+          document.querySelector('#rnRoot [data-rn="reveal"]')?.click();
+          document.querySelector('#rnRoot .rnBody [data-rn="pick"][data-k="' + k + '"]').click();
+          document.querySelector('#rnRoot [data-rn="commit"][data-c="sure"]').click();
+        }
+        if (c.type === 'forge') {
+          const keys = [...new Set([...document.querySelectorAll('#rnRoot [data-rn="slot"]')].map((b) => b.dataset.s))];
+          for (const k of keys) document.querySelector('#rnRoot [data-rn="slot"][data-s="' + k + '"]')?.click();
+          document.querySelector('#rnRoot [data-rn="forge"]')?.click();
+          document.querySelector('#rnRoot .rnCrit [data-rn="pick"]')?.click();
+          document.querySelector('#rnRoot .rnCrit [data-rn="commit"][data-c="sure"]')?.click();
+        }
+        if (document.querySelector('#rnRoot [data-rn="go"]').disabled) break;
+        document.querySelector('#rnRoot [data-rn="go"]').click();
+      }
+      const S = RENAISSANCE.state();
+      return { clicks: S.clicks, done: Object.entries(S.sessions).filter(([, r]) => r.done).map(([k]) => k), wrongDone };
+    });
+    check('F5', 'Click events (§84): a prediction that was wrong before the explanation, then the idea used rightly on an unseen case, is logged as a click for that session', clk.wrongDone && clk.done.includes('commit') && clk.clicks.some((x) => x.sid === 'commit'), clk);
     check('F4', 'No page errors in the masterpiece, immune-system, trial and learner-model checks', s.log.errors.length === 0, s.log.errors.slice(0, 3));
     await s.close();
   }

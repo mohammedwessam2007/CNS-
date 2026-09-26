@@ -1,0 +1,181 @@
+{
+ "generated": "2026-09-26T20:52:39.365Z",
+ "log": "receipts/v18_1/full_regression.log",
+ "suitesInLog": {
+  "host": 1,
+  "rn": 2,
+  "v3": 2,
+  "om": 1,
+  "co": 1
+ },
+ "sections": 711,
+ "requirements": 191,
+ "controllable": 171,
+ "completed": 170,
+ "open": [
+  {
+   "id": "language",
+   "name": "Language as a civilisation portal (§34): language learning that unlocks literature, humour, history, film, social codes, idiom and thought, not vocabulary",
+   "status": "DESIGNED",
+   "why": "status DESIGNED: needs code and a passing test"
+  }
+ ],
+ "failed": [],
+ "blockedExternal": [
+  {
+   "id": "L12",
+   "name": "L12 curriculum generation strategy",
+   "blocker": "Runtime generation of curriculum or pedagogy needs a content-generating model in the loop: an API credential and a spending budget the owner has not granted, and a review step so that generated culture meets §136.",
+   "prep": "Preparatory work complete: generated sessions would face the same schema and quality gates as authored ones (R20–R22, C5, V9–V11, M1, S2–S3) and would enter as arms of the existing trial machinery (E1–E6), judged by the same judge and switched off by the same kill switch; author-side, the same levels run as documented tournaments (09_SEASON_3.md)."
+  },
+  {
+   "id": "L13",
+   "name": "L13 pedagogy generation strategy",
+   "blocker": "Runtime generation of curriculum or pedagogy needs a content-generating model in the loop: an API credential and a spending budget the owner has not granted, and a review step so that generated culture meets §136.",
+   "prep": "Preparatory work complete: generated sessions would face the same schema and quality gates as authored ones (R20–R22, C5, V9–V11, M1, S2–S3) and would enter as arms of the existing trial machinery (E1–E6), judged by the same judge and switched off by the same kill switch; author-side, the same levels run as documented tournaments (09_SEASON_3.md)."
+  },
+  {
+   "id": "deploy",
+   "name": "Deployment through an authorised path, verified (§188)",
+   "blocker": "Live verification needs an authorised read of the Vercel project, and none exists in this session: the Vercel connector can see the team but not the project (list deployments 403, deployment by URL 404, fetch: no access); the sandbox egress policy blocks *.vercel.app; the GitHub connector has no commit-status or deployment tool. Remedy: the owner extends the Vercel connector to the project intellectuality-cns, or opens the live URL and checks the title reads v18.1.",
+   "prep": "Preparatory work complete: the tested commit is pushed to the branch the project deploys from; the identical build (deploy/vercel/build.mjs, which fails if index.html names a missing file) is served locally, and every Renaissance suite and every CNS browser suite with a production variant ran against it as well as against the source (receipts/v18_1/full_regression.log)."
+  }
+ ],
+ "empiricalFuture": [
+  {
+   "id": "possibility",
+   "name": "Human possibility engine, optionality and possible futures (M1 §80, M1 §101–103, M1 §169–170, M1 §219, M2 §81–83)",
+   "due": "years",
+   "protocol": "P(t) protocol written; needs real life outcomes over years."
+  },
+  {
+   "id": "e-hooks30",
+   "name": "Delayed unaided recall at 30 days (first hooks of seasons 1–3)",
+   "due": "2026-10-26",
+   "protocol": "Hook records with gap ≥ 30 days; report rate with n."
+  },
+  {
+   "id": "e-formB",
+   "name": "Parallel form B at day 30 against form A at day 0",
+   "due": "day 30 after first open",
+   "protocol": "Sealed forms; raw scores with n; no composite."
+  },
+  {
+   "id": "e-formA90",
+   "name": "Form A repeated at day 90 (genius delta)",
+   "due": "day 90 after first open",
+   "protocol": "Same items as day 0, sealed; change with n and chance level."
+  },
+  {
+   "id": "e-alien12",
+   "name": "Twelve weekly unknown problems: orientation over weeks 1–12",
+   "due": "day 84",
+   "protocol": "Orientation dimension of the vector; slope once ≥ 3 weeks of ≥ 5 answers."
+  },
+  {
+   "id": "e-rt",
+   "name": "Reader Turing questions on The Brothers Karamazov",
+   "due": "30 days after km3",
+   "protocol": "Twelve sealed items; possession rung 12 needs ≥ 8 answers at ≥ 75%."
+  },
+  {
+   "id": "e-velocity",
+   "name": "Transformation velocity and acceleration",
+   "due": "6 weeks of data (acceleration)",
+   "protocol": "Weekly slope of delayed unaided accuracy; acceleration after six weeks."
+  },
+  {
+   "id": "e-trials",
+   "name": "Trial verdicts for L1–L14 (adopt, drop, harm)",
+   "due": "as samples reach their minimum",
+   "protocol": "Each trial judged on its own minimum sample and margin; nothing is adopted before."
+  },
+  {
+   "id": "e-calib",
+   "name": "Real-world forecast calibration",
+   "due": "after five checked forecasts",
+   "protocol": "Brier score of forge forecasts against reported use."
+  },
+  {
+   "id": "e-bench",
+   "name": "Equal-time benchmarks against reading, summaries, textbooks and tutors",
+   "due": "after the exam (Nov 2026) and at 6 and 12 months",
+   "protocol": "Protocol in 05_BENCHMARKS; needs real sessions of the alternatives."
+  },
+  {
+   "id": "e-compound",
+   "name": "Compounding: later works and domains cost less time to possess",
+   "due": "6 and 12 months",
+   "protocol": "Minutes to reach a possession rung, per work, over time."
+  },
+  {
+   "id": "e-year",
+   "name": "Six- and twelve-month transformation (functional vector, possession, real use)",
+   "due": "2027-03 and 2027-09",
+   "protocol": "Longitudinal protocol; raw scores with n."
+  }
+ ],
+ "frontier": [
+  {
+   "id": "globaldepth",
+   "name": "Global depth: a session of its own set in each of the ten regions (§26 read strictly)",
+   "status": "DESIGNED",
+   "plan": [
+    "docs/RENAISSANCE/v3/02_ORGANS.md"
+   ]
+  },
+  {
+   "id": "atscale",
+   "name": "Cultural possession at scale and organ breadth (§235, §16–25 \"eventually\"): thousands of works, every form and medium",
+   "status": "DESIGNED",
+   "plan": [
+    "docs/RENAISSANCE/v3/02_ORGANS.md"
+   ]
+  }
+ ],
+ "superseded": [],
+ "merged": [
+  {
+   "id": "canon",
+   "into": "compiler",
+   "reason": "The compiler already prices works for this learner (unpossessed works, leverage, dependants); the anti-canon lives in the possession ladder's criticism rung (hostile verdicts such as Nabokov's)."
+  },
+  {
+   "id": "zoom",
+   "into": "reps",
+   "reason": "Implemented as representations: the log scale (doubling), the map versus the graph (Königsberg), the overhead view (film); SHOW ME DIFFERENTLY switches them."
+  }
+ ],
+ "rejected": [
+  {
+   "id": "faculty",
+   "reason": "Simulated speech put in the mouths of real people is fabricated quotation (§136). Replaced by registered quotations in their scenes and dialogue built only from attributed lines (quotes, V5)."
+  }
+ ],
+ "registry": {
+  "total": 1160,
+  "kept": 863,
+  "merged": 148,
+  "rejected": 149,
+  "rejectedBy": {
+   "EVID": 29,
+   "UNTEST": 7,
+   "SLOP": 31,
+   "DUP": 9,
+   "COPY": 7,
+   "TAX": 16,
+   "COST": 15,
+   "SCOPE": 17,
+   "ADDICT": 6,
+   "TRUTH": 9,
+   "GUILT": 3
+  },
+  "attachedToRequirements": 863,
+  "unattached": 0
+ },
+ "structuralErrors": [],
+ "controllableIncludingDispositions": 174,
+ "completedIncludingDispositions": 173,
+ "percentControllable": 99.4,
+ "declaration": "not declared: 1 open, 0 contradicted, 0 structural errors"
+}

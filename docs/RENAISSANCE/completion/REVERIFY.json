@@ -1,0 +1,1099 @@
+{
+ "at": "2026-09-26",
+ "total": 155,
+ "counts": {
+  "slow": 72,
+  "stable": 60,
+  "medium": 22,
+  "fast": 1
+ },
+ "due": [],
+ "noYear": [],
+ "claims": [
+  {
+   "id": "commit:odyssey",
+   "class": "slow",
+   "year": "c. 8th c. BCE",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "commit:smart",
+   "class": "slow",
+   "year": "2004",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "commit:cares",
+   "class": "slow",
+   "year": "2010",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "commit:kirby",
+   "class": "slow",
+   "year": "1995",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "commit:kydland",
+   "class": "slow",
+   "year": "1977",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "commit:gym",
+   "class": "slow",
+   "year": "2006",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "commit:cortes",
+   "class": "slow",
+   "year": "1519",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "select:wald",
+   "class": "stable",
+   "year": "1943",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": null
+  },
+  {
+   "id": "select:waldpic",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "select:berkson",
+   "class": "medium",
+   "year": "1946",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2031-09-24"
+  },
+  {
+   "id": "base:gh95",
+   "class": "slow",
+   "year": "1995",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "base:eddy",
+   "class": "slow",
+   "year": "1982",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "base:clark",
+   "class": "stable",
+   "year": "1999–2003",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": null
+  },
+  {
+   "id": "loop:sterman",
+   "class": "slow",
+   "year": "1989",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "loop:dd",
+   "class": "slow",
+   "year": "1983",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "loop:showerex",
+   "class": "slow",
+   "year": "2000",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "proxy:vann",
+   "class": "slow",
+   "year": "2003",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "proxy:goodhart",
+   "class": "stable",
+   "year": "1975",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": null
+  },
+  {
+   "id": "proxy:strathern",
+   "class": "stable",
+   "year": "1997",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": null
+  },
+  {
+   "id": "proxy:bevan",
+   "class": "medium",
+   "year": "2006",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2031-09-24"
+  },
+  {
+   "id": "proxy:cobra",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "falsify:loudon",
+   "class": "medium",
+   "year": "1861 / 2013",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2031-09-24"
+  },
+  {
+   "id": "falsify:wash",
+   "class": "slow",
+   "year": "1847–48",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "falsify:kolletschka",
+   "class": "slow",
+   "year": "1847",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "falsify:tested",
+   "class": "medium",
+   "year": "1861",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2031-09-24"
+  },
+  {
+   "id": "falsify:mrc",
+   "class": "medium",
+   "year": "1948",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2031-09-24"
+  },
+  {
+   "id": "falsify:reject",
+   "class": "slow",
+   "year": "1861–65",
+   "lastChecked": "2026-09-24",
+   "reverifyBy": "2036-09-24"
+  },
+  {
+   "id": "bottleneck:little",
+   "class": "slow",
+   "year": "1961",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "bottleneck:goldratt",
+   "class": "slow",
+   "year": "1984",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "bottleneck:clinic",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": null
+  },
+  {
+   "id": "question:howard",
+   "class": "slow",
+   "year": "1966",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "question:q20",
+   "class": "slow",
+   "year": "1948",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "question:qex",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": null
+  },
+  {
+   "id": "snow:soho",
+   "class": "medium",
+   "year": "1854",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2031-09-25"
+  },
+  {
+   "id": "snow:decline",
+   "class": "medium",
+   "year": "1854–55",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2031-09-25"
+  },
+  {
+   "id": "snow:grand",
+   "class": "medium",
+   "year": "1855",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2031-09-25"
+  },
+  {
+   "id": "snow:koch",
+   "class": "medium",
+   "year": "1854; 1883–84",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2031-09-25"
+  },
+  {
+   "id": "double:moore",
+   "class": "stable",
+   "year": "1965; 1975",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": null
+  },
+  {
+   "id": "double:ecoli",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "double:math",
+   "class": "stable",
+   "year": "—",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": null
+  },
+  {
+   "id": "taste:gopen",
+   "class": "slow",
+   "year": "1990",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "taste:tufte",
+   "class": "slow",
+   "year": "1983",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "taste:cleveland",
+   "class": "slow",
+   "year": "1984",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2036-09-25"
+  },
+  {
+   "id": "taste:pairs",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": null
+  },
+  {
+   "id": "boss:fict",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": null
+  },
+  {
+   "id": "boss:bevan2",
+   "class": "medium",
+   "year": "2006",
+   "lastChecked": "2026-09-25",
+   "reverifyBy": "2031-09-25"
+  },
+  {
+   "id": "km1:garnett",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km1:books",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km1:life",
+   "class": "slow",
+   "year": "1878–1881",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km1:preface",
+   "class": "stable",
+   "year": "1880",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km1:idiot",
+   "class": "stable",
+   "year": "1869",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km1:marquez",
+   "class": "slow",
+   "year": "1981",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km1:fischhoff",
+   "class": "slow",
+   "year": "1975",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km1:optina",
+   "class": "slow",
+   "year": "1878",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km1:q.first",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km1:q.lie",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km1:q.bow",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km1:q.beauty",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km2:garnett2",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km2:setting",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km2:pobedonostsev",
+   "class": "slow",
+   "year": "1879",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km2:oken",
+   "class": "medium",
+   "year": "1961",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "km2:novack",
+   "class": "medium",
+   "year": "1979",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "km2:sartre",
+   "class": "slow",
+   "year": "1945",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km2:q.ticket",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km2:q.powers",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km2:q.kiss",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km2:q.lawful",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km2:patient",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:night",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:door",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:confess",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:letter",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:becket",
+   "class": "slow",
+   "year": "1170–1174",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km3:wells",
+   "class": "slow",
+   "year": "2016",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "km3:q.lawful",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:q.lawful2",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:q.hurrah",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:weights",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:q.freud",
+   "class": "stable",
+   "year": "1928",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "km3:q.nabokov",
+   "class": "stable",
+   "year": "1981",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "ozy:shelley",
+   "class": "stable",
+   "year": "1818",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "ozy:diodorus",
+   "class": "stable",
+   "year": "1st c. BCE",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "ozy:rhyme",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "ozy:smith",
+   "class": "stable",
+   "year": "1818",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "ozy:ramesseum",
+   "class": "slow",
+   "year": "13th c. BCE",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "ozy:q.ozy",
+   "class": "stable",
+   "year": "1818",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "ozy:startup",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "euler:euler1736",
+   "class": "stable",
+   "year": "1736",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "euler:kolam",
+   "class": "slow",
+   "year": "1974",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "euler:q.euler",
+   "class": "stable",
+   "year": "1988",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "euler:city",
+   "class": "slow",
+   "year": "1736",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "euler:today",
+   "class": "fast",
+   "year": "2020s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2028-09-26"
+  },
+  {
+   "id": "euler:hierholzer",
+   "class": "slow",
+   "year": "1873",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "euler:pevzner",
+   "class": "slow",
+   "year": "2001",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "euler:tsp",
+   "class": "slow",
+   "year": "1972",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "euler:nikolaus",
+   "class": "stable",
+   "year": "—",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "euler:museum",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "willow:helmont",
+   "class": "stable",
+   "year": "1648",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "willow:q.helmont",
+   "class": "stable",
+   "year": "1648",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "willow:gas",
+   "class": "slow",
+   "year": "17th c.",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "willow:saussure",
+   "class": "slow",
+   "year": "1779–1804",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "willow:meerman",
+   "class": "medium",
+   "year": "2014",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "willow:wegener",
+   "class": "slow",
+   "year": "1912–1960s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "willow:detox",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "pattern:hankin",
+   "class": "slow",
+   "year": "1925",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "pattern:kaplan",
+   "class": "slow",
+   "year": "2005",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "pattern:lusteinhardt",
+   "class": "medium",
+   "year": "2007",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "pattern:penrose",
+   "class": "slow",
+   "year": "1974",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "pattern:ibntulun",
+   "class": "slow",
+   "year": "876–879",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "pattern:patgen",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "cadence:beethoven",
+   "class": "stable",
+   "year": "1824",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "cadence:meyer",
+   "class": "slow",
+   "year": "1956",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "cadence:huron",
+   "class": "slow",
+   "year": "2006",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "cadence:cairo1932",
+   "class": "slow",
+   "year": "1932",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "cadence:dmitri",
+   "class": "stable",
+   "year": "1912",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "cadence:synth",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "cadence:talk",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "wisdom:gutas",
+   "class": "slow",
+   "year": "1998",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wisdom:dream",
+   "class": "medium",
+   "year": "987",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "wisdom:hunayn",
+   "class": "stable",
+   "year": "9th c.",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "wisdom:avicenna",
+   "class": "medium",
+   "year": "c. 1025 (the Canon)",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "wisdom:banumusa",
+   "class": "slow",
+   "year": "9th c.",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wisdom:paper",
+   "class": "slow",
+   "year": "790s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wisdom:toledo",
+   "class": "medium",
+   "year": "12th c.",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "wisdom:checklist",
+   "class": "slow",
+   "year": "2009",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "wisdom:timbuktu",
+   "class": "medium",
+   "year": "2012–2013",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "salon:aida",
+   "class": "slow",
+   "year": "1871",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "salon:friedman",
+   "class": "slow",
+   "year": "1959",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "salon:nietzsche",
+   "class": "stable",
+   "year": "1882",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "salon:sartre2",
+   "class": "slow",
+   "year": "1945",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "salon:fathy",
+   "class": "slow",
+   "year": "1940s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "salon:dinner",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "host:likinggap",
+   "class": "slow",
+   "year": "2018",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "host:followups",
+   "class": "medium",
+   "year": "2017",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "host:bakerbaker",
+   "class": "slow",
+   "year": "1987",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "host:chopsticks",
+   "class": "slow",
+   "year": "2020s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "host:insist",
+   "class": "slow",
+   "year": "2020s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "host:evening",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "cut:rule",
+   "class": "slow",
+   "year": "1979–",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "cut:ozu",
+   "class": "slow",
+   "year": "1953",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "cut:kul",
+   "class": "slow",
+   "year": "c. 1918–1921",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "cut:prince",
+   "class": "medium",
+   "year": "1992",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "cut:barratt",
+   "class": "medium",
+   "year": "2016",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "cut:radio",
+   "class": "medium",
+   "year": "—",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "cut:etak",
+   "class": "slow",
+   "year": "1970",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "cut:phone",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "arch:hooke",
+   "class": "stable",
+   "year": "1675",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "arch:q.hooke",
+   "class": "stable",
+   "year": "1675",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "arch:heyman",
+   "class": "slow",
+   "year": "1969",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "arch:gaudi",
+   "class": "slow",
+   "year": "1898–1908",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "arch:angkor",
+   "class": "slow",
+   "year": "12th century (Angkor Wat)",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "arch:fathy",
+   "class": "slow",
+   "year": "1940s",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "arch:cable",
+   "class": "slow",
+   "year": "—",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "arch:chaincalc",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  }
+ ]
+}

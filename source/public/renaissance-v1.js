@@ -287,6 +287,9 @@
       done = (id) => !!(st.sessions[id] && st.sessions[id].done);
     const started = all.find((x) => st.sessions[x.id] && st.sessions[x.id].start && !done(x.id));
     if (started) return { s: started, why: "It continues the session you started; nothing else is chosen until it ends.", mode: "resume" };
+    // sovereignty (§197): a session he chose over the compiler's pick today comes first
+    const ch = st.choice && st.choice.day === today ? all.find((x) => x.id === st.choice.sid && !done(x.id) && (x.requires || []).every(done)) : null;
+    if (ch) return { s: ch, why: "You chose it over the compiler's pick; the compiler's reasons are kept below for comparison.", mode: "chosen" };
     for (const z of seasons())
       if (z.boot) {
         const nx = (z.sessions || []).find((x) => !done(x.id));
@@ -742,6 +745,8 @@
   }
 
   /* ───────────── receipts ───────────── */
+  // a compiled session can be swapped for a runner-up until its first answer
+  const canSwap = () => !!(P && P.sid && P.mode === "compiled" && !sessionAnswers(P.sid).length && !(load().sessions[P.sid] || {}).at);
   function sessionAnswers(sid) {
     const st = load(),
       since = st.sessions[sid]?.start || 0;
@@ -850,7 +855,7 @@
       "<h3>Why this, today</h3>" +
       (s ? md(s.why) + md("**Capability:** " + s.capability) : md("Review only: earlier ideas coming back without hints.")) +
       md("**Chosen by:** " + (P.why || "due hooks from earlier sessions: ideas coming back without hints.") + " Due hooks from earlier sessions open it. **Dose:** " + P.dose + " minutes" + (P.reasons.length ? " (shortened: " + P.reasons.join(", ") + ")" : "") + ".") +
-      (P.ranked && P.ranked.length > 1 && P.mode === "compiled" ? md("**Also considered:** " + P.ranked.slice(1, 3).map((r) => "“" + r.s.title + "” (" + r.score + ")").join(" · ") + " against “" + P.ranked[0].s.title + "” (" + P.ranked[0].score + ").") : "") +
+      (P.ranked && P.ranked.length > 1 && P.mode === "compiled" ? md("**Also considered:** " + P.ranked.slice(1, 3).map((r) => "“" + r.s.title + "” (" + r.score + ")").join(" · ") + " against “" + P.ranked[0].s.title + "” (" + P.ranked[0].score + ").") + (canSwap() ? '<div class="rnSwap">' + md("You decide. If another one serves you better today:") + P.ranked.slice(1, 3).map((r) => '<button type="button" class="rnSrcBtn" data-rn="swap" data-s="' + E(r.s.id) + '">DO “' + E(r.s.title.toUpperCase()) + "” INSTEAD</button>").join("") + "</div>" : "") : "") +
       (st.recovered ? md("**Note:** your earlier Renaissance record could not be read on " + pretty(dayKey(new Date(st.recovered))) + "; it was kept aside unchanged and a clean one started.") : "") +
       (srcs.length ? "<h3>Where this step's facts come from</h3>" + srcs.map((p) => '<div class="rnSrc"><b>' + E(p.grade) + "</b> " + md(p.source + " (" + p.year + ") — " + p.claim + (p.note ? " · " + p.note : "")) + "</div>").join("") : "") +
       "<h3>Your record so far</h3>" +
@@ -1669,6 +1674,18 @@
       return;
     }
     if (a === "term") return sheet(termSheet(b.dataset.k));
+    if (a === "swap") {
+      if (!canSwap()) return;
+      const st = load(),
+        today = dayKey(new Date()),
+        old = P.sid;
+      delete st.sessions[old];
+      st.choice = { sid: b.dataset.s, day: today, over: old };
+      st.lastWarm = "";
+      save();
+      close();
+      return open();
+    }
     if (a === "deeper") {
       if (P.sid) {
         const st = load();
