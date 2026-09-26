@@ -41,6 +41,21 @@
     independence: "Independence assumed",
     scale: "Wrong scale",
     confound: "Confound left in",
+    pretension: "Sounds clever, says less",
+    linear: "Linear thinking about growth",
+    posthoc: "After it, so because of it",
+    irrelevant: "An answer that would change nothing",
+    notconstraint: "Improving a step that isn't the constraint",
+  };
+  // capability atoms (docs/RENAISSANCE/omega/01_GENOME.md): what a step trains, in plain words
+  const ATOMS = {
+    causal: "causal reasoning", mech: "mechanistic decomposition", prob: "probabilistic thinking", counter: "counterfactual simulation",
+    model: "model selection", scale: "scaling and growth", abstr: "abstraction", compress: "compression", analogy: "analogy that keeps mechanism",
+    falsify: "falsification", calib: "calibration", predict: "prediction", synth: "synthesis", represent: "representation switching",
+    strategy: "strategic reasoning", narrative: "narrative reasoning", taste: "aesthetic discrimination", question: "question selection",
+    recomb: "creative recombination", experiment: "experimental design", constraint: "constraint reasoning", systems: "systems thinking",
+    info: "information reasoning", judgment: "judgment", selfmodel: "modelling your future self", measure: "measurement design",
+    orient: "orienting in an unknown domain", minimal: "finding the minimum sufficient model",
   };
 
   const safe = (f, d) => {
@@ -80,7 +95,7 @@
   const pretty = (key) => new Date(key + "T12:00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 
   /* ───────────── storage (never the CNS state) ───────────── */
-  const fresh = () => ({ v: 1, sessions: {}, days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, lastWarm: "" });
+  const fresh = () => ({ v: 1, sessions: {}, days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, beliefs: [], lastWarm: "" });
   let ST = null;
   function load() {
     if (ST) return ST;
@@ -94,11 +109,18 @@
   }
 
   /* ───────────── content ───────────── */
-  const season = () => (window.RENAISSANCE_SEASONS || [])[0] || null;
-  const sessionById = (id) => (season()?.sessions || []).find((s) => s.id === id) || null;
+  const seasons = () => window.RENAISSANCE_SEASONS || [];
+  const season = () => seasons()[0] || null;
+  const allSessions = () => seasons().flatMap((z) => z.sessions || []);
+  const seasonOf = (sid) => seasons().find((z) => (z.sessions || []).some((s) => s.id === sid)) || null;
+  const sessionById = (id) => allSessions().find((s) => s.id === id) || null;
+  const lookup = (kind, id) => {
+    const own = P && P.sid ? seasonOf(P.sid)?.[kind]?.[id] : null;
+    return own || seasons().map((z) => z[kind] && z[kind][id]).find(Boolean) || null;
+  };
   const allHooks = () => {
     const out = {};
-    for (const s of season()?.sessions || []) for (const h of s.hooks || []) out[h.id] = Object.assign({ sid: s.id }, h);
+    for (const s of allSessions()) for (const h of s.hooks || []) out[h.id] = Object.assign({ sid: s.id }, h);
     return out;
   };
 
@@ -143,7 +165,7 @@
     }
     if (spentToday >= dose + 10) return { open: false, why: "spent", msg: "You have given Renaissance " + Math.round(spentToday) + " minutes today. That is the dose; the rest of the day is yours." };
     const p = plan(st, dose, today);
-    if (!p) return { open: false, why: "seasondone", msg: "Season 1 is complete. The next season is being built; nothing is due." };
+    if (!p) return { open: false, why: "seasondone", msg: "Every season written so far is complete. The next one is being built; nothing is due." };
     return { open: true, dose, reasons, plan: p };
   }
 
@@ -156,7 +178,7 @@
       .map(([id]) => H[id]);
   }
   function plan(st, dose, today) {
-    const s = (season().sessions || []).find((x) => !(st.sessions[x.id] && st.sessions[x.id].done));
+    const s = allSessions().find((x) => !(st.sessions[x.id] && st.sessions[x.id].done));
     const due = dueHooks(st, today);
     if (!s && !due.length) return null;
     const short = dose <= DOSE.short;
@@ -250,11 +272,11 @@
     safe(() => inject(true));
   }
 
-  const vocab = (k) => (P && P.s && P.s.vocab && P.s.vocab[k]) || safe(() => Object.values(season().sessions).map((s) => s.vocab && s.vocab[k]).find(Boolean), null);
+  const vocab = (k) => (P && P.s && P.s.vocab && P.s.vocab[k]) || safe(() => allSessions().map((s) => s.vocab && s.vocab[k]).find(Boolean), null);
   const prov = (id) => (P && P.s ? (P.s.provenance || []).find((x) => x.id === id) : null);
   const visual = (v) => {
     if (!v) return "";
-    const f = typeof v === "function" ? v : season()?.visuals?.[v];
+    const f = typeof v === "function" ? v : lookup("visuals", v);
     return f ? '<div class="rnVis">' + safe(() => f(), "") + "</div>" : "";
   };
 
@@ -330,9 +352,10 @@
   function qView(q, id, step) {
     const s = qstate(id),
       hookBanner = step && step.kind === "hook" ? '<div class="rnBanner">From an earlier session · no hints this time</div>' : "";
-    const tag = { predict: "PREDICT FIRST", check: "CHECK", transfer: "USE IT", far: "SOMEWHERE NEW", hook: "REMEMBER", challenge: "PROVE IT" }[q.kind || "check"] || "";
+    const tag = { predict: "PREDICT FIRST", check: "CHECK", transfer: "USE IT", far: "SOMEWHERE NEW", alien: "NO LABELS: WHICH IDEA IS THIS?", hook: "REMEMBER", challenge: "PROVE IT" }[q.kind || "check"] || "";
     let h = hookBanner + (tag ? '<div class="rnKind">' + tag + "</div>" : "") + (q.title ? "<h2>" + E(q.title) + "</h2>" : "") + md(q.stem);
     if (step && step.kind !== "hook") h += visual(q.svg);
+    if (q.panels) h += '<div class="rnPair">' + q.panels.map((pn) => '<div class="rnSide"><h3>' + E(pn.title) + "</h3>" + visual(pn.svg) + md(pn.body || "") + "</div>").join("") + "</div>";
     if (s.hint && q.alt) h += '<div class="rnRep" data-kind="alt"><div class="rnRepTag">Another way to see the question</div>' + md(q.alt) + "</div>";
     h += '<div class="rnOpts">' + perm(id, q.options.length)
       .map((k, pos) => {
@@ -356,7 +379,7 @@
   }
 
   function modelView(x) {
-    const m = season()?.models?.[x.model];
+    const m = lookup("models", x.model);
     if (!m) return "<p>Model missing.</p>";
     const v = (P.qs["m:" + x.id] = P.qs["m:" + x.id] || Object.fromEntries([...(m.controls || []).map((c) => [c.id, c.value]), ...(m.toggles || []).map((c) => [c.id, c.value])]));
     return (
@@ -371,7 +394,7 @@
     );
   }
   function drawModel(x) {
-    const m = season()?.models?.[x.model],
+    const m = lookup("models", x.model),
       root = document.querySelector("#rnRoot .rnModel");
     if (!m || !root) return;
     const v = P.qs["m:" + x.id];
@@ -445,8 +468,8 @@
     const A = sessionAnswers(s.id);
     const by = (k) => A.filter((a) => a.kind === k);
     const pr = by("predict"),
-      tr = A.filter((a) => a.kind === "transfer" || a.kind === "far" || a.kind === "challenge"),
-      far = by("far");
+      tr = A.filter((a) => a.kind === "transfer" || a.kind === "far" || a.kind === "alien" || a.kind === "challenge"),
+      far = A.filter((a) => a.kind === "far" || a.kind === "alien");
     const bugs = {};
     A.filter((a) => !a.ok && a.bug).forEach((a) => (bugs[a.bug] = (bugs[a.bug] || 0) + 1));
     const sure = A.filter((a) => a.conf === "sure"),
@@ -520,7 +543,12 @@
       md("**Chosen by:** the first unfinished session of Season 1, in an order that alternates between kinds of idea; due hooks from earlier sessions open it. **Dose:** " + P.dose + " minutes" + (P.reasons.length ? " (shortened: " + P.reasons.join(", ") + ")" : "") + ".") +
       (srcs.length ? "<h3>Where this step's facts come from</h3>" + srcs.map((p) => '<div class="rnSrc"><b>' + E(p.grade) + "</b> " + md(p.source + " (" + p.year + ") — " + p.claim + (p.note ? " · " + p.note : "")) + "</div>").join("") : "") +
       "<h3>Your record so far</h3>" +
-      md("Predictions before explanations: " + rate((a) => a.kind === "predict") + " · Used in new cases: " + rate((a) => /transfer|far|challenge/.test(a.kind)) + " · Came back days later, no hints: " + rate((a) => a.kind === "hook") + " · Calibration (Brier, 0 is perfect, 0.25 is coin-flipping): " + brier + " over " + A.length + " answers · Renaissance this week: " + Math.round(week) + " min.") +
+      md("Predictions before explanations: " + rate((a) => a.kind === "predict") + " · Used in new cases: " + rate((a) => /transfer|far|alien|challenge/.test(a.kind)) + " · Came back days later, no hints: " + rate((a) => a.kind === "hook") + " · Calibration (Brier, 0 is perfect, 0.25 is coin-flipping): " + brier + " over " + A.length + " answers · Renaissance this week: " + Math.round(week) + " min.") +
+      (x.atoms || (s && s.atoms) ? md("**This step trains:** " + (x.atoms || s.atoms).map((k) => ATOMS[k] || k).join(" · ") + ".") : "") +
+      (() => {
+        const rev = (st.beliefs || []).filter((b) => !b.ok && b.conf !== "guess").slice(-3).reverse();
+        return rev.length ? "<h3>Beliefs you revised</h3>" + rev.map((b) => '<div class="rnSrc">' + md("You committed (" + b.conf + "): “" + b.held + "” → revised to “" + b.revisedTo + "” · " + pretty(dayKey(new Date(b.t)))) + "</div>").join("") : "";
+      })() +
       md("No combined score is shown on purpose: one number invites optimising the number (that is session 5).")
     );
   }
@@ -581,8 +609,16 @@
     const st = load(),
       s = qstate(id),
       o = q.options[k];
-    const a = { t: Date.now(), sid: P.sid || "warm", item: id, kind: kind || q.kind || "check", ok: !!o.ok, conf, ms: Date.now() - s.shown, bug: o.ok ? null : o.bug || null, hinted: !!s.hint };
+    const stepNow = cur();
+    const atoms = (stepNow && stepNow.atoms) || (P.s && P.s.atoms) || [];
+    const a = { t: Date.now(), sid: P.sid || "warm", item: id, kind: kind || q.kind || "check", ok: !!o.ok, conf, ms: Date.now() - s.shown, bug: o.ok ? null : o.bug || null, hinted: !!s.hint, atoms };
     st.answers.push(a);
+    // a committed answer given before any teaching (a prediction, or an unlabelled item) is a belief on record
+    if (a.kind === "predict" || a.kind === "alien") {
+      st.beliefs = st.beliefs || [];
+      st.beliefs.push({ t: a.t, sid: a.sid, item: id, held: o.t, conf, ok: a.ok, revisedTo: a.ok ? null : (q.options.find((x) => x.ok) || {}).t || null });
+      if (st.beliefs.length > 200) st.beliefs.splice(0, st.beliefs.length - 200);
+    }
     if (a.bug) st.bugs[a.bug] = (st.bugs[a.bug] || 0) + 1;
     if (P.lastRep && a.ok) {
       const r = st.reps[P.lastRep.pr]?.[P.lastRep.kind];
@@ -860,6 +896,7 @@
       },
     },
     BUGS,
+    ATOMS,
   };
   if (!off()) boot();
 })();

@@ -11,7 +11,7 @@ const STOP = () => { nextAction = () => ({ kind: 'STOP' }); render(); };
 // pick an option by its original index and commit with a confidence
 async function answer(p, which, conf) {
   return p.evaluate(([which, conf]) => {
-    const c = RENAISSANCE.current(), S = window.RENAISSANCE_SEASONS[0];
+    const c = RENAISSANCE.current(), S = { sessions: window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions) };
     const ses = S.sessions.find((x) => x.id === c.sid);
     const step = ses && ses.steps.find((x) => x.id === c.id);
     let opts = step ? (step.type === 'contrast' ? step.q.options : step.options) : null;
@@ -239,7 +239,7 @@ async function runToEnd(p) {
     const s = await open({ v16: true, time: '2026-09-26T19:00:00+03:00', state: null, settle: 1200 });
     const p = s.page;
     const audit = await p.evaluate(() => {
-      const S = window.RENAISSANCE_SEASONS[0], B = RENAISSANCE.BUGS, bad = [];
+      const S = { sessions: window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions) }, B = RENAISSANCE.BUGS, bad = [];
       const qs = (ses) => {
         const out = [];
         for (const st of ses.steps) {
@@ -256,7 +256,7 @@ async function runToEnd(p) {
       for (const ses of S.sessions) {
         const ids = new Set(ses.provenance.map((x) => x.id));
         const kinds = ses.steps.map((x) => x.kind || x.type);
-        per[ses.id] = { predict: kinds.filter((k) => k === 'predict').length, transfer: kinds.filter((k) => k === 'transfer').length, far: kinds.filter((k) => k === 'far').length, contrast: kinds.filter((k) => k === 'contrast').length, model: kinds.filter((k) => k === 'model').length, forge: kinds.filter((k) => k === 'forge').length, hooks: ses.hooks.length, min: ses.steps.reduce((a, x) => a + (x.min || 1), 0), minShort: ses.steps.filter((x) => !x.opt).reduce((a, x) => a + (x.min || 1), 0) };
+        per[ses.id] = { predict: kinds.filter((k) => k === 'predict' || k === 'alien').length, transfer: kinds.filter((k) => k === 'transfer').length, far: kinds.filter((k) => k === 'far' || k === 'alien').length, contrast: kinds.filter((k) => k === 'contrast').length, model: kinds.filter((k) => k === 'model').length, forge: kinds.filter((k) => k === 'forge').length, hooks: ses.hooks.length, min: ses.steps.reduce((a, x) => a + (x.min || 1), 0), minShort: ses.steps.filter((x) => !x.opt).reduce((a, x) => a + (x.min || 1), 0) };
         for (const st of ses.steps) for (const id of st.src || []) if (!ids.has(id)) bad.push(ses.id + ':' + st.id + ' cites missing ' + id);
         for (const [id, q] of qs(ses)) {
           if (!q || !q.options) { bad.push(ses.id + ':' + id + ' has no options'); continue; }
@@ -283,7 +283,7 @@ async function runToEnd(p) {
     });
     check('R20', 'Every task is precise: one right option, every wrong option pre-diagnosed with a named misconception and a repair; every cited source exists; quotations are registered and cited', audit.bad.length === 0, audit.bad.slice(0, 10));
     const shapes = Object.entries(audit.per).filter(([, v]) => !(v.predict >= 2 && v.transfer >= 1 && v.far >= 1 && v.contrast === 1 && v.model === 1 && v.forge === 1 && v.hooks >= 3 && v.min <= 30));
-    check('R21', 'Every session has the full arc: ≥2 committed predictions, a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min', audit.n === 6 && shapes.length === 0, { per: audit.per, shapes });
+    check('R21', 'Every session of every season has the full arc: ≥2 committed predictions (unlabelled items count), a model, two cases compared, near and far transfer, a forge, ≥3 hooks; ≤30 min', audit.n >= 12 && shapes.length === 0, { n: audit.n, per: audit.per, shapes });
     check('R22', 'No open-ended thinking tax ("what do you think", "reflect", "research…"), no links out, no points/badges', !audit.lazy && !audit.links && !audit.slop, audit);
 
     // right answers are not in a predictable place; buttons are big enough to tap
@@ -295,7 +295,7 @@ async function runToEnd(p) {
       if (!c) break;
       if (c.type === 'q' || c.type === 'contrast') {
         const where = await p.evaluate(() => {
-          const c = RENAISSANCE.current(), S = window.RENAISSANCE_SEASONS[0], ses = S.sessions.find((x) => x.id === c.sid), st = ses.steps.find((x) => x.id === c.id);
+          const c = RENAISSANCE.current(), ses = window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions).find((x) => x.id === c.sid), st = ses.steps.find((x) => x.id === c.id);
           const opts = st.type === 'contrast' ? st.q.options : st.options, k = opts.findIndex((o) => o.ok);
           return [...document.querySelectorAll('#rnRoot .rnBody [data-rn="pick"]')].findIndex((b) => +b.dataset.k === k);
         });
@@ -316,6 +316,91 @@ async function runToEnd(p) {
     if (!results.some((r) => r.id === 'R24')) check('R24', 'Every Renaissance button is at least 44 px tall', true);
     check('R25', 'Right answers sit in different positions (the order is shuffled per item, stable across redraws)', new Set(pos).size >= 3, { pos });
     check('R26', 'No page errors in content checks', s.log.errors.length === 0, s.log.errors.slice(0, 3));
+    await s.close();
+  }
+
+  // ── 6. season 2 (OMEGA): order across seasons, side-by-side blind comparisons, unlabelled items, the belief ledger,
+  //       capability atoms, every model reacting, every term resolving ──
+  {
+    const s = await open({ v16: true, time: '2026-09-26T19:00:00+03:00', state: null, settle: 1200 });
+    const p = s.page;
+    const S1 = ['commit', 'select', 'base', 'loop', 'proxy', 'falsify'];
+    const seed = (done) => p.evaluate((done) => {
+      const st = { v: 1, sessions: Object.fromEntries(done.map((id) => [id, { done: true }])), days: {}, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, beliefs: [], lastWarm: '' };
+      localStorage.setItem('renaissance_v1', JSON.stringify(st));
+      RENAISSANCE.reload();
+      nextAction = () => ({ kind: 'STOP' });
+      render();
+      const e = document.querySelector('.rnEntry');
+      return { q: e?.querySelector('.rnEntryQ')?.textContent || '', state: e?.dataset.rnState || null };
+    }, done);
+    const openDoor = () => p.evaluate(() => { document.querySelector('[data-rn-open]').click(); return RENAISSANCE.current(); });
+
+    const seasons = await p.evaluate(() => window.RENAISSANCE_SEASONS.map((z) => ({ id: z.id, n: z.sessions.length, ids: z.sessions.map((x) => x.id) })));
+    const allIds = seasons.flatMap((z) => z.ids);
+    const door = await seed(S1);
+    const hook2 = await p.evaluate(() => window.RENAISSANCE_SEASONS[1].sessions[0].hook);
+    const c0 = await openDoor();
+    check('R28', 'Season 2 follows season 1: six new sessions with unique ids; when season 1 is done the door asks season 2\'s first question and opens it', seasons.length >= 2 && seasons[1].n === 6 && new Set(allIds).size === allIds.length && door.state === 'open' && door.q === hook2 && c0 && c0.sid === seasons[1].ids[0], { seasons, door, c0 });
+    await p.evaluate(() => RENAISSANCE.close && RENAISSANCE.close());
+
+    // blind taste: two unlabelled versions side by side, a committed pick, the belief recorded and shown back
+    await seed(S1.concat(['bottleneck', 'question', 'snow', 'double']));
+    const ct = await openDoor();
+    const pair = await p.evaluate(() => [...document.querySelectorAll('#rnRoot .rnBody .rnPair .rnSide')].map((x) => x.textContent.trim().length));
+    const wrong = await answer(p, 'wrong', 'sure');
+    const led = await p.evaluate(() => RENAISSANCE.state().beliefs.slice(-1)[0] || null);
+    await p.evaluate(() => document.querySelector('#rnRoot [data-rn="why"]').click());
+    const why = await p.evaluate(() => document.querySelector('#rnRoot .rnSheet')?.textContent || '');
+    await p.evaluate(() => document.querySelector('#rnRoot [data-rn="unsheet"]').click());
+    check('R29', 'Blind comparison: the taste session opens on two versions side by side; a confident wrong pick is kept in the belief ledger (what was held → what replaced it) and WHY THIS? shows it with the capability atoms the step trains', ct.sid === 'taste' && pair.length === 2 && pair.every((n) => n > 20) && led && led.conf === 'sure' && !led.ok && led.held && led.revisedTo && /Beliefs you revised/.test(why) && /This step trains:/.test(why), { ct, pair, wrong, led, why: why.slice(-400) });
+    let svgPanels = 0;
+    for (let i = 0; i < 6 && !svgPanels; i++) {
+      await go(p);
+      const c = await cur(p);
+      if (c && c.id === 't4') svgPanels = await p.evaluate(() => document.querySelectorAll('#rnRoot .rnBody .rnPair .rnSide svg').length);
+    }
+    check('R30', 'A chart comparison draws both charts from the same numbers, side by side', svgPanels === 2, { svgPanels });
+    await p.evaluate(() => RENAISSANCE.close && RENAISSANCE.close());
+
+    // the boss world: unlabelled items say only "which idea is this?", and count as far transfer and as beliefs
+    await seed(allIds.filter((x) => x !== 'boss'));
+    const cb = await openDoor();
+    await go(p);
+    const tag = await p.evaluate(() => document.querySelector('#rnRoot .rnBody .rnKind')?.textContent || '');
+    await answer(p, 'right', 'think');
+    const lastA = await p.evaluate(() => RENAISSANCE.state().answers.slice(-1)[0] || null);
+    check('R31', 'The boss world is unlabelled: its items name no session and are recorded as their own kind (far transfer, and a belief on record)', cb.sid === 'boss' && /NO LABELS/.test(tag) && lastA && lastA.kind === 'alien' && lastA.ok && (lastA.atoms || []).length > 0, { cb, tag, lastA });
+    await p.evaluate(() => RENAISSANCE.close && RENAISSANCE.close());
+
+    // static checks over every season: models react, atoms and terms resolve
+    const stat = await p.evaluate(() => {
+      const bad = [], A = RENAISSANCE.ATOMS;
+      for (const z of window.RENAISSANCE_SEASONS) {
+        for (const [id, m] of Object.entries(z.models || {})) {
+          const v0 = Object.fromEntries([...(m.controls || []).map((c) => [c.id, c.value]), ...(m.toggles || []).map((c) => [c.id, c.value])]);
+          const variants = [...(m.controls || []).map((c) => Object.assign({}, v0, { [c.id]: c.value === c.min ? c.max : c.min })), ...(m.toggles || []).map((c) => Object.assign({}, v0, { [c.id]: !c.value }))];
+          const d0 = m.draw(v0), r0 = m.read(v0);
+          if (!/<svg/.test(d0) || !r0) bad.push(z.id + ' model ' + id + ' draws nothing');
+          variants.forEach((v, i) => { if (m.draw(v) === d0 && m.read(v) === r0) bad.push(z.id + ' model ' + id + ' ignores control ' + i); });
+        }
+        const vocab = new Set(window.RENAISSANCE_SEASONS.flatMap((y) => y.sessions.flatMap((x) => Object.keys(x.vocab || {}))));
+        for (const ses of z.sessions) {
+          for (const k of ses.atoms || []) if (!A[k]) bad.push(ses.id + ' unknown atom ' + k);
+          for (const st of ses.steps) {
+            for (const k of st.atoms || []) if (!A[k]) bad.push(ses.id + ':' + st.id + ' unknown atom ' + k);
+            for (const k of st.terms || []) if (!vocab.has(k)) bad.push(ses.id + ':' + st.id + ' unknown term ' + k);
+            for (const m of JSON.stringify(st).matchAll(/\[\[(.+?)(?:\|.+?)?\]\]/g)) if (!vocab.has(m[1])) bad.push(ses.id + ':' + st.id + ' unknown term link ' + m[1]);
+            if (st.type === 'model' && !(z.models || {})[st.model]) bad.push(ses.id + ':' + st.id + ' missing model ' + st.model);
+            for (const v of [st.svg, ...(st.reps || []).map((r) => r.svg), ...(st.panels || []).map((r) => r.svg), st.left && st.left.svg, st.right && st.right.svg].filter((x) => typeof x === 'string')) if (!(z.visuals || {})[v]) bad.push(ses.id + ':' + st.id + ' missing visual ' + v);
+          }
+        }
+        if (z.id !== 's1' && !z.sessions.every((x) => (x.atoms || []).length)) bad.push(z.id + ' has a session without atoms');
+      }
+      return bad;
+    });
+    check('R32', 'Every model in every season reacts to each of its controls; every atom, term, model and picture a step names exists', stat.length === 0, stat.slice(0, 10));
+    check('R33', 'No page errors in the season 2 checks', s.log.errors.length === 0, s.log.errors.slice(0, 3));
     await s.close();
   }
 
