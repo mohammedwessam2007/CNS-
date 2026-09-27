@@ -8,7 +8,7 @@ The owner uploaded the book's figures as "205_NEU_Labeled_Drawings_and_Pictures"
 - **59 are not**: 30 because the same drawing was already in the app from the department notes (the sharper copy was kept), the rest because they add nothing on their own: a text box, a label fragment, an unlabelled sketch, a repeated page, or a photograph repeated without its caption. The full list is at the end.
 - Where a department drawing and a book figure were the same picture, the higher-resolution copy won. The book's copy replaced `nf-subclavian-branches` (three times the pixels), and the book's two separate vertebral-artery figures (157, 158) replaced the combined `nf-vertebral`. Everywhere else the department copy was as sharp or sharper and stays, now also shown in the sections its book twin was mapped to.
 - Figures printed sideways (105, 109, 117, 123, 221) were turned upright. The neighbouring page's caption strips (227, 325, 348, 349, 378) were cropped off, and stray words (319, 372, 378) were painted out.
-- The figures are encrypted like the department drawings, with the same key (`k1`), so the owner's devices show them with nothing to do and nobody else can open them. The colour plates the book reproduces are included this time: they are part of the official book, and they stay private.
+- v18.5 shipped them encrypted with the department key. Since v18.6, at the owner's request, they are ordinary pictures that every device shows with no key or link (and anyone with the site's address can see). The colour plates the book reproduces are included: they are part of the official book.
 - In a LEARN section the official drawings now come first: two open, the rest one tap away, each labelled "KASR AL AINY BOOK · FIG n". The section's web photo folds behind a tap underneath them. After an answer, the one drawing that best fits the question is shown, as before.
 
 ## Coverage
@@ -483,4 +483,4 @@ Sections still without one (56). Most are in the physiology chapters Part 04B sh
 | 350 | a small text table |
 | 365 | outline drawings without labels |
 
-Source of truth: `scripts/dept-figs/map.json` (the entries with `book`). To rebuild, run `python scripts/dept-figs/prepare_book.py <folder with the Part PDFs> <out>`, and `prepare.py` for the department drawings into the same folder. Then run `IX_DEPT_KEY=<kid>.<key> node scripts/dept-figs/encrypt.mjs <out>`. Unchanged pictures re-encrypt to identical bytes.
+Source of truth: `scripts/dept-figs/map.json` (the entries with `book`). To rebuild, run `python scripts/dept-figs/prepare_book.py <folder with the Part PDFs> <out>`, and `prepare.py` for the department drawings into the same folder. Then run `node scripts/dept-figs/publish.mjs <out>` (plain pictures, v18.6).

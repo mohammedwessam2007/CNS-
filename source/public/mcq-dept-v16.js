@@ -99,7 +99,9 @@
       { sourceTag: "197 EOM (Section B)", authority: ["HISTORICAL_TAG"], sourceWeight: 1.12, sourceFile: "NEU 205 EOM 197_answers.pdf", provenance: "OWNER_UPLOAD_EOM_197_ANSWERED" }],
   ];
   const LV = { subject: "HISTOLOGY", chapter: "Central Nervous System", group: "Department", lessonIds: ["T028"], unlockDay: 11, courseTopic: "Cerebrum, meninges and blood-brain barrier", dimension: "spatial", failureType: "spatial", sourceTag: "Department book: CNS levels", authority: ["DEPARTMENT"], sourceWeight: 1.25, sourceFile: "HISTOLOGY MCQ 2nd Year.pdf", provenance: "OWNER_UPLOAD_DEPT_HIST_BOOK" };
+  // v18.6: the drawings are plain pictures now (the owner removed the lock), so the figure items are for every device
   const hasDrawingsKey = (() => {
+    if (window.INTELLECTUALITY_DEPT_FIGS?.plain !== false) return true;
     try {
       return !!JSON.parse(localStorage.getItem("intellectuality_dept_keys_v1") || "{}").k1;
     } catch (_) {

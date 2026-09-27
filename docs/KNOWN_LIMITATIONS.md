@@ -1,4 +1,8 @@
-# Known Limitations (v18.5 · MCQ exam + Renaissance)
+# Known Limitations (v18.6 · MCQ exam + Renaissance)
+
+## v18.6 the drawings are unlocked
+
+- **The lock is gone, at the owner's request (27 Sep 2026).** The department drawings and the Kasr Al Ainy book figures are ordinary pictures (`dept/<id>.jpg`), shown on every device with no key or link, and the 50 CNS-levels figure questions are in every device's bank. The site is public, so anyone with its address can see them too. `scripts/dept-figs/publish.mjs` publishes them; `encrypt.mjs` stays as the earlier locked way.
 
 ## v18.5 Kasr Al Ainy book figures, and the Renaissance door in Tools
 

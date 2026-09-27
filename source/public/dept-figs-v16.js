@@ -13,7 +13,9 @@
 (function () {
   "use strict";
   const D = window.INTELLECTUALITY_DEPT_FIGS;
-  if (!D || !Array.isArray(D.figs) || !(window.crypto && crypto.subtle)) return;
+  // v18.6: the owner removed the lock; a plain manifest serves ordinary JPEGs (dept/<id>.jpg) with no key
+  const PLAIN = !!(D && D.plain);
+  if (!D || !Array.isArray(D.figs) || !(PLAIN || (window.crypto && crypto.subtle))) return;
   const LS = "intellectuality_dept_keys_v1";
   const E = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
   const bytes = (b64) => {
@@ -55,7 +57,7 @@
     const u = new Uint8Array(buf);
     return crypto.subtle.decrypt({ name: "AES-GCM", iv: u.slice(0, 12) }, k, u.slice(12));
   }
-  const unlocked = () => !!keys()[D.kid];
+  const unlocked = () => PLAIN || !!keys()[D.kid];
 
   function toast(msg) {
     const t = document.createElement("div");
@@ -130,6 +132,7 @@
   /* ───────── rendering ───────── */
   const URLS = new Map();
   function url(f) {
+    if (PLAIN) return Promise.resolve("/dept/" + f.id + ".jpg");
     if (!URLS.has(f.id)) {
       const p = fetch("/dept/" + f.id + ".bin")
         .then((r) => {
@@ -176,6 +179,8 @@
         .then((u) => {
           const box = fig.querySelector(".ixDeptImg");
           if (box) box.innerHTML = '<img src="' + u + '" alt="' + E(f.cap) + '">';
+          const im = box && box.querySelector("img");
+          if (im) im.onerror = () => fig.remove();
         })
         .catch(() => fig.remove());
     });
