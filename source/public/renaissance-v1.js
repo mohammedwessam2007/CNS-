@@ -1776,6 +1776,7 @@
   document.addEventListener("click", (ev) => {
     const b = ev.target.closest('[data-rn="leave"]');
     if (b) close();
+    if (ev.target.closest("#rnToolsBtn:not([data-rn-open])")) return void toolsWhy();
     const e = ev.target.closest("[data-rn-open]");
     if (e) {
       ev.preventDefault();
@@ -1804,7 +1805,42 @@
       '<button type="button" class="rnEntryGo" data-rn-open="1">CONTINUE</button> <button type="button" class="rnEntryLink" data-rn-why="1">WHY THIS?</button><div class="rnEntryWhy"></div></div>'
     );
   }
+  // the same door in Tools, so Renaissance can always be found: it says when it opens and why
+  let doorAt = 0,
+    doorCd = false;
+  function toolsDoor() {
+    const c = document.getElementById("commuteBtn");
+    if (!c) return;
+    let b = document.getElementById("rnToolsBtn");
+    // before the CNS is done the gate answers at once; after it, it plans a session, so at most every 3 s
+    const cd = cnsDone();
+    if (b && cd && doorCd && Date.now() - doorAt < 3000) return;
+    doorAt = Date.now();
+    doorCd = cd;
+    if (!b) {
+      c.insertAdjacentHTML("afterend", '<button id="rnToolsBtn" class="wide" type="button"></button><div id="rnToolsWhy" class="rnToolsWhy" hidden></div>');
+      b = document.getElementById("rnToolsBtn");
+    }
+    const g = gate();
+    b.dataset.rnState = g.open ? "open" : g.why;
+    if (g.open) b.setAttribute("data-rn-open", "1");
+    else b.removeAttribute("data-rn-open");
+    b.textContent = g.open ? "🏛 Renaissance: open · " + g.plan.minutes + " min today" : g.why === "cns" ? "🏛 Renaissance · opens after today's CNS" : g.why === "off" ? "🏛 Renaissance: off on this device" : g.why === "nocontent" ? "🏛 Renaissance: not loaded" : "🏛 Renaissance: resting · tap for why";
+  }
+  function toolsWhy() {
+    const g = gate(),
+      box = document.getElementById("rnToolsWhy");
+    if (!box || g.open) return;
+    box.hidden = false;
+    box.innerHTML =
+      g.why === "cns"
+        ? "Medicine comes first. Renaissance opens on the screen that says today's CNS work is done, and then here too."
+        : g.why === "off"
+          ? "It is switched off on this device (" + (/[?&]renaissance=off\b/.test(location.search) ? "the address has ?renaissance=off" : "the renaissance_off setting") + "). Nothing else changes."
+          : md(g.msg || "Nothing is due now.");
+  }
   function inject(force) {
+    safe(toolsDoor);
     const p = document.getElementById("player");
     if (!p) return;
     const has = p.querySelector(".rnEntry");

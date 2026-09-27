@@ -1,5 +1,5 @@
 {
- "_": "Department line drawings from the owner's uploads (CERVICAL FASCIA.pdf, GREAT VESSELS OF THE NECK.pdf), mapped to LEARN note sections. Captions are ours. Colour atlas plates copied from published atlases are left out. prepare.py crops them (embedded images, or a y-band of a scanned page for the CNS-levels figures) into ./out (never committed); encrypt.mjs writes the encrypted copies to source/public/dept/ and the manifest to source/public/dept-figs-v16.js.",
+ "_": "Department drawings mapped to LEARN note sections. (1) Line drawings from the owner's uploads CERVICAL FASCIA.pdf and GREAT VESSELS OF THE NECK.pdf and the CNS-levels scans: prepare.py crops them (embedded images, or a y-band of a scanned page). (2) Figures of the Kasr Al Ainy NEU 205 book (205_NEU_Published.pdf, as the owner's 'Labeled Drawings and Pictures' Part PDFs; entries with 'book' = its figure number): prepare_book.py extracts them, including the book's colour plates, since they are part of the official book. Book figures that repeat a drawing already here keep one copy, the sharper; figures left out are listed in docs/KNOWN_LIMITATIONS.md. Captions are ours, from the labels on each figure. Both scripts write plain JPEGs into one folder outside the repo; encrypt.mjs writes the encrypted copies to source/public/dept/ and the manifest to source/public/dept-figs-v16-data.js.",
  "figs": [
   {
    "id": "nf-deep-fascia",
@@ -53,7 +53,8 @@
    "pdf": "CERVICAL FASCIA.pdf",
    "img": "p012_0",
    "sec": [
-    "an-sternomastoid#1"
+    "an-sternomastoid#1",
+    "an-cervical-plexus#1"
    ],
    "cap": "Muscles deep to the sternomastoid"
   },
@@ -86,21 +87,12 @@
   },
   {
    "id": "nf-subclavian-branches",
-   "pdf": "CERVICAL FASCIA.pdf",
-   "img": "p015_1",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 153,
    "sec": [
     "an-subclavian#0"
    ],
    "cap": "Subclavian branches: vertebral, internal thoracic and the thyrocervical trunk (inferior thyroid, transverse cervical, suprascapular)"
-  },
-  {
-   "id": "nf-vertebral",
-   "pdf": "CERVICAL FASCIA.pdf",
-   "img": "p017_0",
-   "sec": [
-    "an-subclavian#1"
-   ],
-   "cap": "Vertebral artery: its four parts and its relations"
   },
   {
    "id": "nf-infrahyoid-table",
@@ -199,7 +191,8 @@
    "pdf": "GREAT VESSELS OF THE NECK.pdf",
    "img": "p011_2",
    "sec": [
-    "an-submandibular#2"
+    "an-submandibular#2",
+    "an-carotid-triangle#2"
    ],
    "cap": "Lingual artery: its three parts in relation to hyoglossus, with the dorsal lingual, sublingual and deep arteries of the tongue"
   },
@@ -244,7 +237,8 @@
    "pdf": "GREAT VESSELS OF THE NECK.pdf",
    "img": "p031_0",
    "sec": [
-    "an-submandibular#3"
+    "an-submandibular#3",
+    "an-submandibular#2"
    ],
    "cap": "Submandibular duct and the lingual nerve on hyoglossus"
   },
@@ -521,6 +515,3218 @@
    "drill": 10,
    "cap": "Nov 2024 exam · Section B, figure C (spinal cord), the paper's own drawing",
    "ans": "Answers on the owner's answered copy: 1 gracile tract · 2 main sensory nucleus (MSN) · 3 sulcomarginal tract · 4 lateral vestibulospinal tract · 5 Lissauer's tract"
+  },
+  {
+   "id": "kaa-001",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 1,
+   "sec": [
+    "an-spinal-cord#0",
+    "an-spinal-cord#1"
+   ],
+   "cap": "Figure 1.1: External features of the spinal cord: cerebrum to filum terminale, the cervical and lumbar enlargements, and a cross-section"
+  },
+  {
+   "id": "kaa-002",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 2,
+   "sec": [
+    "an-spinal-cord#1",
+    "an-spinal-cord#2"
+   ],
+   "cap": "Figure 1.2: The spinal cord inside the vertebral column, the 31 pairs of spinal nerves by level, and the cauda equina"
+  },
+  {
+   "id": "kaa-003",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 3,
+   "sec": [
+    "an-spinal-cord#4",
+    "an-spinal-cord#5"
+   ],
+   "cap": "Figure 1.3: Meninges of the spinal cord, the epidural and subarachnoid spaces, and the denticulate ligament"
+  },
+  {
+   "id": "kaa-004",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 4,
+   "sec": [
+    "an-spinal-cord#7"
+   ],
+   "cap": "Figure 1.4: Blood supply of the spinal cord: anterior and posterior spinal arteries, radicular arteries and the venous plexuses"
+  },
+  {
+   "id": "kaa-005",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 5,
+   "sec": [
+    "an-brain-stem#0"
+   ],
+   "cap": "Figure 2.1: Parts of the brain stem (midbrain, pons, medulla), anterior and posterior aspects"
+  },
+  {
+   "id": "kaa-006",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 6,
+   "sec": [
+    "an-brain-stem#0",
+    "an-brain-stem#1"
+   ],
+   "cap": "Figure 2.2: External features of the medulla oblongata, anterolateral and posterolateral aspects"
+  },
+  {
+   "id": "kaa-007",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 7,
+   "sec": [
+    "an-brain-stem#2"
+   ],
+   "cap": "Figure 2.3: External features of the pons, anterior and posterior aspects"
+  },
+  {
+   "id": "kaa-008",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 8,
+   "sec": [
+    "an-brain-stem#3"
+   ],
+   "cap": "Figure 2.4: External features of the midbrain, anterior, posterior and lateral aspects"
+  },
+  {
+   "id": "kaa-009",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 9,
+   "sec": [
+    "an-brain-stem#3"
+   ],
+   "cap": "Figure 2.5: Structures related to the lateral surface of the midbrain (optic tract, trochlear nerve, posterior cerebral and superior cerebellar arteries, basal vein)"
+  },
+  {
+   "id": "kaa-010",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 10,
+   "sec": [
+    "an-cerebellum#0"
+   ],
+   "cap": "Figure 3.1: Site of the cerebellum in the posterior cranial fossa, under the tentorium"
+  },
+  {
+   "id": "kaa-011",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 11,
+   "sec": [
+    "an-cerebellum#1"
+   ],
+   "cap": "Figure 3.2: Parts of the cerebellum seen from above: hemispheres, superior vermis and the notches"
+  },
+  {
+   "id": "kaa-012",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 12,
+   "sec": [
+    "an-cerebellum#1"
+   ],
+   "cap": "Figure 3.3: External features of the cerebellum, superior and inferior surfaces, lobes and fissures"
+  },
+  {
+   "id": "kaa-013",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 13,
+   "sec": [
+    "an-brain-blood#0"
+   ],
+   "cap": "Figure 3.4: Arterial supply of the cerebellum: superior, anterior inferior and posterior inferior cerebellar arteries"
+  },
+  {
+   "id": "kaa-014",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 14,
+   "sec": [
+    "an-fourth-ventricle#0"
+   ],
+   "cap": "Figure 3.5: Site and boundaries of the fourth ventricle, sagittal section and dorsal aspect"
+  },
+  {
+   "id": "kaa-015",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 15,
+   "sec": [
+    "an-fourth-ventricle#0",
+    "an-brain-stem#2"
+   ],
+   "cap": "Figure 3.6: Floor of the fourth ventricle: median sulcus, medial eminence, facial colliculus, hypoglossal and vagal trigones, vestibular area"
+  },
+  {
+   "id": "kaa-016",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 16,
+   "sec": [
+    "an-fourth-ventricle#0"
+   ],
+   "cap": "Figure 3.7: Roof of the fourth ventricle: superior and inferior medullary vela, tela choroidea and choroid plexus"
+  },
+  {
+   "id": "kaa-017",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 17,
+   "sec": [
+    "an-fourth-ventricle#1"
+   ],
+   "cap": "Figure 3.8: Communications of the fourth ventricle: the aqueduct, the foramina of Magendie and Luschka, the central canal"
+  },
+  {
+   "id": "kaa-018",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 18,
+   "sec": [
+    "an-diencephalon#0"
+   ],
+   "cap": "Figure 4.1: Parts of the diencephalon: thalamus, hypothalamus, epithalamus and subthalamus"
+  },
+  {
+   "id": "kaa-019",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 19,
+   "sec": [
+    "an-diencephalon#1"
+   ],
+   "cap": "Figure 4.2: Relations of the thalamus"
+  },
+  {
+   "id": "kaa-020",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 20,
+   "sec": [
+    "an-third-ventricle#0"
+   ],
+   "cap": "Figure 4.3: Lateral, anterior and posterior walls of the third ventricle"
+  },
+  {
+   "id": "kaa-021",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 21,
+   "sec": [
+    "an-third-ventricle#0"
+   ],
+   "cap": "Figure 4.4: Roof and floor of the third ventricle"
+  },
+  {
+   "id": "kaa-022",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 22,
+   "sec": [
+    "an-third-ventricle#1"
+   ],
+   "cap": "Figure 4.5: Recesses and communications of the third ventricle"
+  },
+  {
+   "id": "kaa-023",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 23,
+   "sec": [
+    "an-sulci-gyri#0"
+   ],
+   "cap": "Figure 5.1: The cerebral hemispheres from above, with the median longitudinal fissure between them"
+  },
+  {
+   "id": "kaa-024",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 24,
+   "sec": [
+    "an-sulci-gyri#0"
+   ],
+   "cap": "Figure 5.2: Coronal section of the hemispheres: surfaces and borders"
+  },
+  {
+   "id": "kaa-025",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 25,
+   "sec": [
+    "an-sulci-gyri#0"
+   ],
+   "cap": "Figure 5.3: The central, lateral and parieto-occipital sulci and the imaginary lines that divide the lobes"
+  },
+  {
+   "id": "kaa-026",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 26,
+   "sec": [
+    "an-white-matter#0"
+   ],
+   "cap": "Figure 5.5: Distribution of grey and white matter in the cerebral hemispheres"
+  },
+  {
+   "id": "kaa-027",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 27,
+   "sec": [
+    "an-sulci-gyri#0"
+   ],
+   "cap": "Figure 5.4: Lobes and poles of the cerebral hemisphere"
+  },
+  {
+   "id": "kaa-028",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 28,
+   "sec": [
+    "an-sulci-gyri#0",
+    "an-sulci-gyri+functional-areas-which-area-which-defici"
+   ],
+   "cap": "Figure 5.6: Sulci and gyri of the frontal lobe"
+  },
+  {
+   "id": "kaa-029",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 29,
+   "sec": [
+    "an-sulci-gyri#0"
+   ],
+   "cap": "Figure 5.7: Sulci and gyri of the parietal lobe"
+  },
+  {
+   "id": "kaa-030",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 30,
+   "sec": [
+    "an-sulci-gyri#1"
+   ],
+   "cap": "Figure 5.9: Site and shape of the insula, and the middle cerebral artery on it"
+  },
+  {
+   "id": "kaa-031",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 31,
+   "sec": [
+    "an-sulci-gyri#0"
+   ],
+   "cap": "Figure 5.8: Sulci and gyri of the temporal (A) and occipital (B) lobes"
+  },
+  {
+   "id": "kaa-032",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 32,
+   "sec": [
+    "an-sulci-gyri#3"
+   ],
+   "cap": "Figure 5.10: Inferior surface of the hemisphere: sulci and gyri of the orbital part"
+  },
+  {
+   "id": "kaa-033",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 33,
+   "sec": [
+    "an-sulci-gyri#2",
+    "an-sulci-gyri#3"
+   ],
+   "cap": "Figure 5.11: Sulci and gyri of the medial and tentorial surfaces of the hemisphere"
+  },
+  {
+   "id": "kaa-034",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 34,
+   "sec": [
+    "an-base-of-brain#0",
+    "an-base-of-brain#1"
+   ],
+   "cap": "Figure 5.12: The interpeduncular fossa and the anterior perforated substance"
+  },
+  {
+   "id": "kaa-035",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 35,
+   "sec": [
+    "an-white-matter#0"
+   ],
+   "cap": "Figure 5.13: Short and long association fibres"
+  },
+  {
+   "id": "kaa-036",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 36,
+   "sec": [
+    "an-white-matter#0"
+   ],
+   "cap": "Figure 5.14: The anterior, posterior and habenular commissures"
+  },
+  {
+   "id": "kaa-037",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 37,
+   "sec": [
+    "an-white-matter#0"
+   ],
+   "cap": "Figure 5.15: The hippocampal commissure"
+  },
+  {
+   "id": "kaa-038",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 38,
+   "sec": [
+    "an-white-matter#0"
+   ],
+   "cap": "Figure 5.16: Parts of the corpus callosum"
+  },
+  {
+   "id": "kaa-039",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 39,
+   "sec": [
+    "an-brain-blood#2"
+   ],
+   "cap": "Figure 5.17: Arterial supply of the corpus callosum"
+  },
+  {
+   "id": "kaa-040",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 40,
+   "sec": [
+    "an-white-matter#1"
+   ],
+   "cap": "Figure 5.18: Site, parts and relations of the internal capsule"
+  },
+  {
+   "id": "kaa-041",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 41,
+   "sec": [
+    "an-white-matter#2"
+   ],
+   "cap": "Figure 5.19: Fibres running in each part of the internal capsule"
+  },
+  {
+   "id": "kaa-042",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 42,
+   "sec": [
+    "an-lateral-ventricle#0",
+    "an-lateral-ventricle#1"
+   ],
+   "cap": "Figure 5.20: Site and parts of the lateral ventricle, and the relations of its anterior horn and central part"
+  },
+  {
+   "id": "kaa-043",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 43,
+   "sec": [
+    "an-basal-ganglia#1"
+   ],
+   "cap": "Figure 5.21: Relations of the caudate nucleus to the lateral ventricle"
+  },
+  {
+   "id": "kaa-044",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 44,
+   "sec": [
+    "an-lateral-ventricle#2"
+   ],
+   "cap": "Figure 5.23: Coronal sections showing the boundaries of the posterior and inferior horns of the lateral ventricle"
+  },
+  {
+   "id": "kaa-045",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 45,
+   "sec": [
+    "an-lateral-ventricle#1"
+   ],
+   "cap": "Figure 5.22: Coronal sections showing the boundaries of the anterior horn and central part of the lateral ventricle"
+  },
+  {
+   "id": "kaa-046",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 46,
+   "sec": [
+    "an-basal-ganglia#0"
+   ],
+   "cap": "Figure 5.24: Parts of the basal nuclei"
+  },
+  {
+   "id": "kaa-047",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 47,
+   "sec": [
+    "an-basal-ganglia#0"
+   ],
+   "cap": "Figure 5.25: Relations of the lentiform nucleus"
+  },
+  {
+   "id": "kaa-048",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 48,
+   "sec": [
+    "an-sulci-gyri#2"
+   ],
+   "cap": "Figure 5.26: Parts of the limbic lobe"
+  },
+  {
+   "id": "kaa-049",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 49,
+   "sec": [
+    "an-meninges#0"
+   ],
+   "cap": "Figure 6.1: The cerebral meninges"
+  },
+  {
+   "id": "kaa-050",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 50,
+   "sec": [
+    "an-meninges#1"
+   ],
+   "cap": "Figure 6.2: The meninges and the spaces between them"
+  },
+  {
+   "id": "kaa-051",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 51,
+   "sec": [
+    "an-csf#0"
+   ],
+   "cap": "Figure 6.3: Tela choroidea of the fourth, third and lateral ventricles"
+  },
+  {
+   "id": "kaa-052",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 52,
+   "sec": [
+    "an-meninges#2",
+    "an-csf#1"
+   ],
+   "cap": "Figure 6.4: Subarachnoid cisterns and arachnoid granulations"
+  },
+  {
+   "id": "kaa-053",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 53,
+   "sec": [
+    "an-csf#1"
+   ],
+   "cap": "Figure 6.5: Circulation of CSF through the ventricles and the subarachnoid space"
+  },
+  {
+   "id": "kaa-054",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 54,
+   "sec": [
+    "an-brain-blood#0",
+    "an-brain-blood#1"
+   ],
+   "cap": "Figure 7.1: Vertebrobasilar and carotid arterial supply of the brain"
+  },
+  {
+   "id": "kaa-055",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 55,
+   "sec": [
+    "an-brain-blood#0",
+    "an-brain-stem#5"
+   ],
+   "cap": "Figure 7.2: Course and branches of the vertebral and basilar arteries"
+  },
+  {
+   "id": "kaa-056",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 56,
+   "sec": [
+    "an-brain-blood#2",
+    "an-brain-blood#3",
+    "an-brain-blood#4"
+   ],
+   "cap": "Figure 7.4: Cortical territories of the anterior, middle and posterior cerebral arteries"
+  },
+  {
+   "id": "kaa-057",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 57,
+   "sec": [
+    "an-brain-blood#4"
+   ],
+   "cap": "Figure 7.3: Course of the posterior cerebral artery"
+  },
+  {
+   "id": "kaa-058",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 58,
+   "sec": [
+    "an-brain-blood#2"
+   ],
+   "cap": "Figure 7.5: Course of the anterior cerebral artery"
+  },
+  {
+   "id": "kaa-059",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 59,
+   "sec": [
+    "an-brain-blood#3"
+   ],
+   "cap": "Figure 7.6: Course of the middle cerebral artery"
+  },
+  {
+   "id": "kaa-060",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 60,
+   "sec": [
+    "an-brain-blood#5"
+   ],
+   "cap": "Figure 7.8: Veins of the brain"
+  },
+  {
+   "id": "kaa-061",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 61,
+   "sec": [
+    "an-brain-blood#1"
+   ],
+   "cap": "Figure 7.7: The circle of Willis (circulus arteriosus)"
+  },
+  {
+   "id": "kaa-062",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 62,
+   "sec": [
+    "an-brain-blood#5",
+    "an-meninges#0"
+   ],
+   "cap": "Figure 7.9: The sagittal sinuses and the great cerebral vein"
+  },
+  {
+   "id": "kaa-063",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 63,
+   "sec": [
+    "an-embryology-cns#0"
+   ],
+   "cap": "Figure 8.1: Development of the neural tube and neural crest"
+  },
+  {
+   "id": "kaa-064",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 64,
+   "sec": [
+    "an-embryology-cns#0",
+    "an-embryology-cns#3"
+   ],
+   "cap": "Figure 8.2: Neuropores and the fate of the neural tube"
+  },
+  {
+   "id": "kaa-065",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 65,
+   "sec": [
+    "an-embryology-cns#1"
+   ],
+   "cap": "Figure 8.3: Differentiation of the wall of the neural tube: mantle and marginal layers, alar and basal plates"
+  },
+  {
+   "id": "kaa-066",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 66,
+   "sec": [
+    "an-embryology-cns#2"
+   ],
+   "cap": "Figure 8.4: Age changes in the level of the lower end of the spinal cord: 3rd fetal month, birth, adult"
+  },
+  {
+   "id": "kaa-067",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 67,
+   "sec": [
+    "an-embryology-cns#2"
+   ],
+   "cap": "Figure 8.5: Grades of spina bifida: occulta, meningocele, myelomeningocele"
+  },
+  {
+   "id": "kaa-068",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 68,
+   "sec": [
+    "an-embryology-cns#3"
+   ],
+   "cap": "Figure 8.6: Development of the brain vesicles and their flexures"
+  },
+  {
+   "id": "kaa-069",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 69,
+   "sec": [
+    "an-embryology-cns#3"
+   ],
+   "cap": "Figure 8.7: Development of the cerebral sulci and gyri"
+  },
+  {
+   "id": "kaa-070",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 70,
+   "sec": [
+    "an-embryology-cns#3",
+    "an-csf#2"
+   ],
+   "cap": "Figure 8.8: Hydrocephalus (A), microcephaly (B) and meningo-encephalocele (C)"
+  },
+  {
+   "id": "kaa-071",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 71,
+   "sec": [
+    "an-embryology-cns#3"
+   ],
+   "cap": "Figure 8.9: Arnold–Chiari malformation (A), schizencephaly (B) and holoprosencephaly (C)"
+  },
+  {
+   "id": "kaa-073",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 73,
+   "sec": [
+    "an-scalp#1",
+    "an-face#0"
+   ],
+   "cap": "Sensory nerves of the scalp and face: supratrochlear, supraorbital, zygomaticotemporal, auriculotemporal, greater, lesser and third occipital, great auricular"
+  },
+  {
+   "id": "kaa-074",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 74,
+   "sec": [
+    "an-scalp#0"
+   ],
+   "cap": "Layers of the scalp and meninges: skin, connective tissue, aponeurosis, loose areolar tissue, pericranium, with emissary veins and the superior sagittal sinus"
+  },
+  {
+   "id": "kaa-075",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 75,
+   "sec": [
+    "an-scalp#1",
+    "an-face#2",
+    "an-face#3"
+   ],
+   "cap": "Arteries and veins of the scalp and face: supratrochlear, supraorbital, superficial temporal, posterior auricular, occipital, facial"
+  },
+  {
+   "id": "kaa-076",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 76,
+   "sec": [
+    "an-face#1"
+   ],
+   "cap": "Muscles of facial expression, lateral view"
+  },
+  {
+   "id": "kaa-077",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 77,
+   "sec": [
+    "an-face#1",
+    "an-cranial-nerves#0"
+   ],
+   "cap": "Motor nerve supply of the face: the five terminal branches of the facial nerve fanning out from the parotid"
+  },
+  {
+   "id": "kaa-078",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 78,
+   "sec": [
+    "an-face#0"
+   ],
+   "cap": "Table: skin supplied by the ophthalmic (V1), maxillary (V2) and mandibular (V3) nerves and their branches"
+  },
+  {
+   "id": "kaa-079",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 79,
+   "sec": [
+    "an-face#0"
+   ],
+   "cap": "The sensory nerves of the face and scalp: territories of V1, V2, V3 and the cervical nerves"
+  },
+  {
+   "id": "kaa-080",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 80,
+   "sec": [
+    "an-face#3",
+    "an-cranial-cavity#3"
+   ],
+   "cap": "The dangerous area of the face: facial vein, deep facial vein, pterygoid plexus and the cavernous sinus"
+  },
+  {
+   "id": "kaa-081",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 81,
+   "sec": [
+    "an-scalp#1",
+    "an-nose#6"
+   ],
+   "cap": "Lymphatic drainage of the scalp and face: occipital, retro-auricular, parotid, buccal, submandibular and submental nodes"
+  },
+  {
+   "id": "kaa-082",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 82,
+   "sec": [
+    "an-face#1",
+    "an-face#2"
+   ],
+   "cap": "Front of the face dissected: muscles of facial expression with the facial, angular and supraorbital vessels and nerves"
+  },
+  {
+   "id": "kaa-085",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 85,
+   "sec": [
+    "an-parotid#3"
+   ],
+   "cap": "Nerve supply of the parotid gland: inferior salivary nucleus, tympanic branch of IX, lesser petrosal nerve, otic ganglion, auriculotemporal nerve"
+  },
+  {
+   "id": "kaa-086",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 86,
+   "sec": [
+    "an-parotid#0",
+    "an-parotid#1"
+   ],
+   "cap": "The parotid gland and its relations, with the structures inside it (facial nerve, retromandibular vein, external carotid artery)"
+  },
+  {
+   "id": "kaa-087",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 87,
+   "sec": [
+    "an-parotid#0"
+   ],
+   "cap": "Horizontal section of the parotid region: the gland wrapped by deep fascia between ramus, mastoid and styloid, with the carotid sheath deep to it"
+  },
+  {
+   "id": "kaa-088",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 88,
+   "sec": [
+    "an-parotid#2"
+   ],
+   "cap": "Surface anatomy of the parotid duct: from the tragus to a point midway between the ala of the nose and the red margin of the upper lip"
+  },
+  {
+   "id": "kaa-089",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 89,
+   "sec": [
+    "an-parotid#0"
+   ],
+   "cap": "Surface anatomy of the parotid gland: upper end, anterior and posterior borders, lower end 2 cm below and behind the angle of the mandible"
+  },
+  {
+   "id": "kaa-090",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 90,
+   "sec": [
+    "an-parotid#1"
+   ],
+   "cap": "Structures inside the parotid: facial nerve (superficial), retromandibular vein, external carotid artery (deepest), deep parotid nodes"
+  },
+  {
+   "id": "kaa-091",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 91,
+   "sec": [
+    "an-parotid#1",
+    "an-cranial-nerves#0"
+   ],
+   "cap": "The parotid dissected with the facial nerve's branches fanning out from its anterior border"
+  },
+  {
+   "id": "kaa-092",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 92,
+   "sec": [
+    "an-mastication#1",
+    "an-tmj#0"
+   ],
+   "cap": "Lateral and medial pterygoid muscles on the skull, with the articular disc of the temporomandibular joint"
+  },
+  {
+   "id": "kaa-093",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 93,
+   "sec": [
+    "an-mastication#0"
+   ],
+   "cap": "Temporalis and masseter on the skull, with the facial muscles"
+  },
+  {
+   "id": "kaa-094",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 94,
+   "sec": [
+    "an-mastication#1"
+   ],
+   "cap": "The pterygoid muscles and their relations: maxillary artery, lingual and inferior alveolar nerves, buccal nerve, deep temporal vessels"
+  },
+  {
+   "id": "kaa-095",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 95,
+   "sec": [
+    "an-tmj#0"
+   ],
+   "cap": "Sagittal section of the temporomandibular joint: articular disc, mandibular fossa, articular tubercle, lateral pterygoid"
+  },
+  {
+   "id": "kaa-096",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 96,
+   "sec": [
+    "an-tmj#0"
+   ],
+   "cap": "Ligaments of the temporomandibular joint (lateral, sphenomandibular, stylomandibular) and the vessels and nerves beside it"
+  },
+  {
+   "id": "kaa-097",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 97,
+   "sec": [
+    "an-trigeminal#0"
+   ],
+   "cap": "The maxillary nerve (V2) dissected: foramen rotundum, pterygopalatine ganglion, zygomatic and infraorbital nerves, superior alveolar nerves"
+  },
+  {
+   "id": "kaa-098",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 98,
+   "sec": [
+    "an-trigeminal#0"
+   ],
+   "cap": "Course of the maxillary nerve: middle cranial fossa, foramen rotundum, pterygopalatine fossa, inferior orbital fissure, infraorbital groove and canal"
+  },
+  {
+   "id": "kaa-100",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 100,
+   "sec": [
+    "an-trigeminal#1"
+   ],
+   "cap": "The pterygopalatine (sphenopalatine) ganglion: its roots (greater and deep petrosal nerves, sensory root) and branches (orbital, nasal, palatine, pharyngeal)"
+  },
+  {
+   "id": "kaa-102",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 102,
+   "sec": [
+    "an-trigeminal#1"
+   ],
+   "cap": "Branches of the pterygopalatine ganglion from the maxillary nerve in the pterygopalatine fossa: orbital, nasal, greater and lesser palatine, pharyngeal"
+  },
+  {
+   "id": "kaa-103",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 103,
+   "sec": [
+    "an-nose#1"
+   ],
+   "cap": "Nerves of the nasal septum: medial nasal branches and the nasopalatine nerve"
+  },
+  {
+   "id": "kaa-104",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 104,
+   "sec": [
+    "an-nose#0",
+    "an-trigeminal#1"
+   ],
+   "cap": "Nerves of the lateral wall of the nose: lateral nasal branches and the greater and lesser palatine nerves"
+  },
+  {
+   "id": "kaa-105",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 105,
+   "sec": [
+    "an-trigeminal#0",
+    "an-trigeminal#1"
+   ],
+   "cap": "The maxillary nerve and the pterygopalatine ganglion dissected from the side",
+   "rot": 90
+  },
+  {
+   "id": "kaa-106",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 106,
+   "sec": [
+    "an-trigeminal#2",
+    "an-trigeminal#3"
+   ],
+   "cap": "The mandibular nerve (V3): sensory and motor roots, trunk, anterior and posterior divisions"
+  },
+  {
+   "id": "kaa-107",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 107,
+   "sec": [
+    "an-trigeminal#2",
+    "an-trigeminal#3"
+   ],
+   "cap": "The mandibular nerve and its branches: nervus spinosus, nerves to medial and lateral pterygoid, masseter, deep temporal, buccal, auriculotemporal, lingual, inferior alveolar"
+  },
+  {
+   "id": "kaa-109",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 109,
+   "sec": [
+    "an-trigeminal#2",
+    "an-trigeminal#3"
+   ],
+   "cap": "The mandibular nerve dissected from the side",
+   "rot": 90
+  },
+  {
+   "id": "kaa-110",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 110,
+   "sec": [
+    "an-parotid#3",
+    "an-trigeminal#3"
+   ],
+   "cap": "The otic ganglion and its connections: tympanic plexus, lesser petrosal nerve, auriculotemporal nerve to the parotid, nerves to tensor tympani and tensor palati"
+  },
+  {
+   "id": "kaa-111",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 111,
+   "sec": [
+    "an-trigeminal#2",
+    "an-trigeminal#3"
+   ],
+   "cap": "The mandibular nerve, lateral view, with the chorda tympani joining the lingual nerve"
+  },
+  {
+   "id": "kaa-112",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 112,
+   "sec": [
+    "an-nose#1",
+    "an-maxillary-artery#0"
+   ],
+   "cap": "Arteries of the nasal cavity: sphenopalatine artery and the greater and lesser palatine arteries"
+  },
+  {
+   "id": "kaa-113",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 113,
+   "sec": [
+    "an-maxillary-artery#0"
+   ],
+   "cap": "The maxillary artery dissected: its three parts and branches around the pterygoid muscles"
+  },
+  {
+   "id": "kaa-114",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 114,
+   "sec": [
+    "an-maxillary-artery#0"
+   ],
+   "cap": "The third part of the maxillary artery in the pterygopalatine fossa: posterior superior alveolar, infraorbital, greater palatine, sphenopalatine and pharyngeal branches"
+  },
+  {
+   "id": "kaa-115",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 115,
+   "sec": [
+    "an-maxillary-artery#1"
+   ],
+   "cap": "Surface anatomy of the middle meningeal artery: anterior branch at the pterion, posterior branch towards the lambda"
+  },
+  {
+   "id": "kaa-116",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 116,
+   "sec": [
+    "an-maxillary-artery#1"
+   ],
+   "cap": "Surface marking of the middle meningeal artery and its branches, with the landmark points listed"
+  },
+  {
+   "id": "kaa-117",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 117,
+   "sec": [
+    "an-maxillary-artery#2"
+   ],
+   "cap": "The pterygoid venous plexus and its connections (deep facial vein, maxillary and retromandibular veins, emissary veins to the cavernous sinus)",
+   "rot": 90
+  },
+  {
+   "id": "kaa-118",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 118,
+   "sec": [
+    "an-cranial-cavity#0",
+    "an-cranial-cavity#1"
+   ],
+   "cap": "Folds of the dura mater: falx cerebri, tentorium cerebelli, falx cerebelli, diaphragma sellae; the tentorium from above"
+  },
+  {
+   "id": "kaa-119",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 119,
+   "sec": [
+    "an-cranial-cavity#0",
+    "an-cranial-cavity#1"
+   ],
+   "cap": "Dural folds and venous sinuses in sagittal section: superior and inferior sagittal, straight, transverse, sigmoid, occipital sinuses"
+  },
+  {
+   "id": "kaa-120",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 120,
+   "sec": [
+    "an-cranial-cavity#0",
+    "an-cranial-cavity#1"
+   ],
+   "cap": "Folds of the dura mater and the single sinuses: superior and inferior sagittal, straight, occipital, and the confluence"
+  },
+  {
+   "id": "kaa-121",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 121,
+   "sec": [
+    "an-cranial-cavity#0",
+    "an-meninges#0"
+   ],
+   "cap": "Dural folds and venous sinuses in coronal section, with arachnoid granulations in the superior sagittal sinus"
+  },
+  {
+   "id": "kaa-122",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 122,
+   "sec": [
+    "an-cranial-cavity#1",
+    "an-cranial-cavity#3"
+   ],
+   "cap": "The paired dural venous sinuses on the cranial base: cavernous, superior and inferior petrosal, sphenoparietal, transverse, sigmoid"
+  },
+  {
+   "id": "kaa-123",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 123,
+   "sec": [
+    "an-cranial-cavity#1",
+    "an-cranial-cavity#2"
+   ],
+   "cap": "The paired dural venous sinuses and the cranial nerves on the cranial base, colour",
+   "rot": 90
+  },
+  {
+   "id": "kaa-124",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 124,
+   "sec": [
+    "an-cranial-cavity#3"
+   ],
+   "cap": "Communications of the cavernous sinus: ophthalmic veins, sphenoparietal sinus, petrosal sinuses, emissary veins to the pterygoid and pharyngeal plexuses"
+  },
+  {
+   "id": "kaa-125",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 125,
+   "sec": [
+    "an-cranial-cavity#2"
+   ],
+   "cap": "The cavernous sinus in coronal section: III, IV, V1 and V2 in its lateral wall, the internal carotid artery and VI inside it"
+  },
+  {
+   "id": "kaa-126",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 126,
+   "sec": [
+    "an-cranial-cavity#3"
+   ],
+   "cap": "Venous sinuses and emissary veins, with the foramina they pass through"
+  },
+  {
+   "id": "kaa-127",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 127,
+   "sec": [
+    "an-orbit#0"
+   ],
+   "cap": "The extraocular muscles from the side: recti, obliques and levator palpebrae superioris, the common annular tendon"
+  },
+  {
+   "id": "kaa-128",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 128,
+   "sec": [
+    "hi-eye#7",
+    "an-orbit#3"
+   ],
+   "cap": "The eyelid skeleton: superior and inferior tarsi and the medial and lateral palpebral ligaments"
+  },
+  {
+   "id": "kaa-129",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 129,
+   "sec": [
+    "an-orbit#0"
+   ],
+   "cap": "Actions of the extraocular muscles: the elevation, depression, abduction and adduction chart"
+  },
+  {
+   "id": "kaa-130",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 130,
+   "sec": [
+    "an-orbit#3",
+    "hi-eye#7"
+   ],
+   "cap": "The lacrimal apparatus: lacrimal gland, ducts, puncta, canaliculi, lacrimal sac and nasolacrimal duct"
+  },
+  {
+   "id": "kaa-131",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 131,
+   "sec": [
+    "an-orbit#3"
+   ],
+   "cap": "The lacrimal passages: from the conjunctival sac through punctum and canaliculus to the sac, and the nasolacrimal duct opening in the inferior meatus"
+  },
+  {
+   "id": "kaa-132",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 132,
+   "sec": [
+    "an-orbit#2"
+   ],
+   "cap": "The ophthalmic artery and its branches from above, with a section of the optic nerve and the central retinal artery"
+  },
+  {
+   "id": "kaa-134",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 134,
+   "sec": [
+    "an-orbit#2"
+   ],
+   "cap": "Sensory nerves of the orbit: frontal, lacrimal and nasociliary nerves from the ophthalmic nerve"
+  },
+  {
+   "id": "kaa-135",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 135,
+   "sec": [
+    "ph-color-vision#1"
+   ],
+   "cap": "The optic nerve, chiasma and tract: nasal fibres cross, temporal fibres do not"
+  },
+  {
+   "id": "kaa-136",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 136,
+   "sec": [
+    "an-orbit#1"
+   ],
+   "cap": "Motor nerves of the orbit (III, IV, VI) and the ciliary ganglion with its roots and short ciliary nerves"
+  },
+  {
+   "id": "kaa-137",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 137,
+   "sec": [
+    "an-posterior-triangle#2",
+    "an-sternomastoid#1"
+   ],
+   "cap": "The superficial neck: platysma, sternomastoid, external jugular vein and the superficial lymph nodes"
+  },
+  {
+   "id": "kaa-138",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 138,
+   "sec": [
+    "an-cervical-plexus#0"
+   ],
+   "cap": "Cutaneous branches of the cervical plexus: lesser occipital, great auricular, transverse cervical and supraclavicular nerves"
+  },
+  {
+   "id": "kaa-141",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 141,
+   "sec": [
+    "an-cervical-fascia#1"
+   ],
+   "cap": "Contents of the carotid sheath: common and internal carotid arteries, internal jugular vein, vagus nerve"
+  },
+  {
+   "id": "kaa-142",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 142,
+   "sec": [
+    "an-cervical-fascia#1"
+   ],
+   "cap": "The carotid sheath in its full length, with the lower four cranial nerves at its top"
+  },
+  {
+   "id": "kaa-143",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 143,
+   "sec": [
+    "an-posterior-triangle#0",
+    "an-posterior-triangle#1"
+   ],
+   "cap": "The posterior triangle: its floor, its arteries and lymph nodes, and the nerves crossing it"
+  },
+  {
+   "id": "kaa-150",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 150,
+   "sec": [
+    "an-subclavian#0"
+   ],
+   "cap": "Surface anatomy of the subclavian artery: an arch from the sternoclavicular joint to the midclavicular point"
+  },
+  {
+   "id": "kaa-151",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 151,
+   "sec": [
+    "an-subclavian#0"
+   ],
+   "cap": "Branches of the subclavian artery: vertebral, internal thoracic, thyrocervical trunk, costocervical trunk, dorsal scapular"
+  },
+  {
+   "id": "kaa-152",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 152,
+   "sec": [
+    "an-subclavian#0"
+   ],
+   "cap": "Origins of the right and left subclavian arteries, from the brachiocephalic trunk and the arch of the aorta"
+  },
+  {
+   "id": "kaa-154",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 154,
+   "sec": [
+    "an-subclavian#0"
+   ],
+   "cap": "Parts of the subclavian artery in front of and behind scalenus anterior, and their relations"
+  },
+  {
+   "id": "kaa-155",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 155,
+   "sec": [
+    "an-subclavian#0"
+   ],
+   "cap": "Anterior relations of the subclavian arteries: vagus and phrenic nerves, internal jugular vein, ansa subclavia, thoracic duct on the left"
+  },
+  {
+   "id": "kaa-156",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 156,
+   "sec": [
+    "an-subclavian#0"
+   ],
+   "cap": "Posterior relations of the subclavian artery: the suprapleural membrane and the apex of the lung over the first rib"
+  },
+  {
+   "id": "kaa-157",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 157,
+   "sec": [
+    "an-subclavian#1"
+   ],
+   "cap": "The four parts of the vertebral artery: from the subclavian, through the transverse foramina of C6–C1, over the atlas, to the basilar artery"
+  },
+  {
+   "id": "kaa-158",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 158,
+   "sec": [
+    "an-subclavian#1"
+   ],
+   "cap": "Relations of the first two parts of the vertebral artery: scalenus anterior, inferior thyroid artery, the sympathetic trunk and its ganglia"
+  },
+  {
+   "id": "kaa-159",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 159,
+   "sec": [
+    "an-cervical-plexus#1"
+   ],
+   "cap": "The scalene muscles: anterior, medius and posterior, from the cervical transverse processes to the first and second ribs"
+  },
+  {
+   "id": "kaa-160",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 160,
+   "sec": [
+    "an-cervical-plexus#1"
+   ],
+   "cap": "Relations of scalenus anterior: phrenic nerve in front, subclavian artery and brachial plexus behind, subclavian vein in front of its insertion"
+  },
+  {
+   "id": "kaa-162",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 162,
+   "sec": [
+    "an-cervical-plexus#1"
+   ],
+   "cap": "The prevertebral muscles: longus colli, longus capitis, rectus capitis anterior and lateralis"
+  },
+  {
+   "id": "kaa-163",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 163,
+   "sec": [
+    "an-posterior-triangle#0",
+    "an-carotid-triangle#0"
+   ],
+   "cap": "The triangles of the neck, numbered with their key: occipital and supraclavicular; digastric, carotid, muscular and submental"
+  },
+  {
+   "id": "kaa-164",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 164,
+   "sec": [
+    "an-posterior-triangle#0",
+    "an-submandibular#0"
+   ],
+   "cap": "The triangles of the neck from the side, with every muscle that bounds them"
+  },
+  {
+   "id": "kaa-165",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 165,
+   "sec": [
+    "an-posterior-triangle#0",
+    "an-carotid-triangle#0"
+   ],
+   "cap": "Triangles of the neck: posterior (occipital, supraclavicular) and anterior (digastric, submental, carotid, muscular)"
+  },
+  {
+   "id": "kaa-166",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 166,
+   "sec": [
+    "an-submandibular#1"
+   ],
+   "cap": "The digastric and mylohyoid on the mandible, with hyoglossus"
+  },
+  {
+   "id": "kaa-167",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 167,
+   "sec": [
+    "an-submandibular#0"
+   ],
+   "cap": "Contents of the submandibular triangle: submandibular gland and nodes, facial artery and vein, hypoglossal and mylohyoid nerves"
+  },
+  {
+   "id": "kaa-168",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 168,
+   "sec": [
+    "an-submandibular#0",
+    "an-carotid-triangle#0"
+   ],
+   "cap": "Contents of the digastric and carotid triangles dissected in colour"
+  },
+  {
+   "id": "kaa-169",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 169,
+   "sec": [
+    "an-muscular-triangle-thyroid#0",
+    "an-submandibular#1"
+   ],
+   "cap": "The suprahyoid and infrahyoid muscles from the front"
+  },
+  {
+   "id": "kaa-170",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 170,
+   "sec": [
+    "an-submandibular#1"
+   ],
+   "cap": "The digastric muscle: two bellies, intermediate tendon and fibrous loop, facial nerve and nerve to mylohyoid"
+  },
+  {
+   "id": "kaa-171",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 171,
+   "sec": [
+    "an-submandibular#0"
+   ],
+   "cap": "Boundaries of the submandibular (digastric) triangle, with the submandibular gland in it"
+  },
+  {
+   "id": "kaa-172",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 172,
+   "sec": [
+    "an-submandibular#1",
+    "an-carotid-triangle#0"
+   ],
+   "cap": "Relations of the posterior belly of the digastric: internal and external carotid arteries, internal jugular vein, XI and XII"
+  },
+  {
+   "id": "kaa-173",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 173,
+   "sec": [
+    "an-submandibular#0"
+   ],
+   "cap": "The submental triangle: anterior bellies of the digastric, mylohyoid, submental nodes and artery"
+  },
+  {
+   "id": "kaa-174",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 174,
+   "sec": [
+    "an-submandibular#1"
+   ],
+   "cap": "The mylohyoid muscles from above: the floor of the mouth and the mylohyoid raphe"
+  },
+  {
+   "id": "kaa-175",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 175,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "The floor of the mouth from above: sublingual and submandibular glands, lingual nerve, geniohyoid"
+  },
+  {
+   "id": "kaa-178",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 178,
+   "sec": [
+    "an-oral-cavity#0"
+   ],
+   "cap": "Muscles of the tongue in sagittal section: genioglossus, hyoglossus, styloglossus, palatoglossus"
+  },
+  {
+   "id": "kaa-182",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 182,
+   "sec": [
+    "an-submandibular#3",
+    "an-parotid#0"
+   ],
+   "cap": "The three salivary glands dissected: parotid and its duct, submandibular and sublingual glands, with nerves and vessels"
+  },
+  {
+   "id": "kaa-187",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 187,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "Relations of the lateral and medial surfaces of the submandibular gland"
+  },
+  {
+   "id": "kaa-188",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 188,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "Relations of the inferolateral surface of the submandibular gland: facial vein, cervical branch of VII, submandibular nodes, facial artery"
+  },
+  {
+   "id": "kaa-189",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 189,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "The submandibular gland wrapped around the mylohyoid, its duct, the sublingual gland and the lingual nerve"
+  },
+  {
+   "id": "kaa-190",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 190,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "Relations of the sublingual gland in coronal section: mylohyoid below, genioglossus, lingual nerve and submandibular duct medial"
+  },
+  {
+   "id": "kaa-191",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 191,
+   "sec": [
+    "an-submandibular#3",
+    "an-cranial-nerves#5"
+   ],
+   "cap": "The submandibular ganglion: chorda tympani via the lingual nerve, sympathetic roots, secretomotor fibres to the submandibular and sublingual glands"
+  },
+  {
+   "id": "kaa-192",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 192,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "The submandibular ganglion dissected in colour with the mandibular nerve's branches"
+  },
+  {
+   "id": "kaa-193",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 193,
+   "sec": [
+    "an-muscular-triangle-thyroid#1"
+   ],
+   "cap": "The thyroid gland from the front, over the trachea and larynx, with the common carotid arteries"
+  },
+  {
+   "id": "kaa-194",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 194,
+   "sec": [
+    "an-muscular-triangle-thyroid#1"
+   ],
+   "cap": "The thyroid gland: surfaces, parts, shape and level (lobes, isthmus over the 2nd–4th tracheal rings)"
+  },
+  {
+   "id": "kaa-195",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 195,
+   "sec": [
+    "an-muscular-triangle-thyroid#1",
+    "an-muscular-triangle-thyroid#2"
+   ],
+   "cap": "Relations of the medial surface of the thyroid: larynx and trachea, pharynx and oesophagus, cricothyroid, recurrent laryngeal nerve"
+  },
+  {
+   "id": "kaa-196",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 196,
+   "sec": [
+    "an-muscular-triangle-thyroid#1"
+   ],
+   "cap": "Relations of the anterolateral and posterior surfaces of the thyroid: strap muscles, sternomastoid, carotid sheath, sympathetic chain"
+  },
+  {
+   "id": "kaa-197",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 197,
+   "sec": [
+    "an-muscular-triangle-thyroid#1",
+    "an-muscular-triangle-thyroid#2"
+   ],
+   "cap": "Blood supply of the thyroid gland: superior and inferior thyroid arteries and the three thyroid veins, with the laryngeal nerves"
+  },
+  {
+   "id": "kaa-198",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 198,
+   "sec": [
+    "an-muscular-triangle-thyroid#1"
+   ],
+   "cap": "Venous and lymphatic drainage of the thyroid: superior, middle and inferior thyroid veins; deep cervical, prelaryngeal and pretracheal nodes"
+  },
+  {
+   "id": "kaa-199",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 199,
+   "sec": [
+    "an-muscular-triangle-thyroid#1",
+    "an-muscular-triangle-thyroid#2"
+   ],
+   "cap": "Branches of the superior and inferior thyroid arteries, numbered with their key"
+  },
+  {
+   "id": "kaa-200",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 200,
+   "sec": [
+    "an-cervical-fascia#0",
+    "an-cervical-fascia#1"
+   ],
+   "cap": "Transverse section of the neck: the layers of deep fascia, carotid sheath, thyroid gland and the recurrent laryngeal nerve"
+  },
+  {
+   "id": "kaa-211",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 211,
+   "sec": [
+    "an-carotid-triangle#4",
+    "an-face#3"
+   ],
+   "cap": "Veins of the head and neck: facial, retromandibular, internal and external jugular veins and their tributaries"
+  },
+  {
+   "id": "kaa-212",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 212,
+   "sec": [
+    "an-carotid-triangle#4"
+   ],
+   "cap": "Superficial and deep relations of the internal jugular vein"
+  },
+  {
+   "id": "kaa-218",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 218,
+   "sec": [
+    "an-nose#4",
+    "an-cranial-nerves#3"
+   ],
+   "cap": "Nerves of the larynx on a dissection: internal and external laryngeal nerves, recurrent laryngeal nerve, cricothyroid"
+  },
+  {
+   "id": "kaa-221",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 221,
+   "sec": [
+    "an-carotid-triangle#0",
+    "an-cranial-nerves#4"
+   ],
+   "cap": "The side of the neck dissected: carotid arteries, internal jugular vein, IX, X, XI, XII, ansa cervicalis and the digastric",
+   "rot": 270
+  },
+  {
+   "id": "kaa-222",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 222,
+   "sec": [
+    "an-cranial-nerves#4"
+   ],
+   "cap": "The ansa cervicalis and the hypoglossal nerve in colour, with the cervical spinal nerves"
+  },
+  {
+   "id": "kaa-223",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 223,
+   "sec": [
+    "an-cranial-nerves#5"
+   ],
+   "cap": "The cervical sympathetic trunk: superior, middle and inferior ganglia, their position, relations and branches"
+  },
+  {
+   "id": "kaa-224",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 224,
+   "sec": [
+    "an-oral-cavity#0"
+   ],
+   "cap": "Coronal section through the mouth: vestibule, cheek and buccinator, tongue and its muscles, sublingual structures"
+  },
+  {
+   "id": "kaa-225",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 225,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "Floor of the mouth under the tongue: frenulum, deep lingual vein, fimbriated fold, sublingual fold (the sublingual gland) and the sublingual papilla with the opening of the submandibular duct"
+  },
+  {
+   "id": "kaa-227",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 227,
+   "sec": [
+    "an-submandibular#2"
+   ],
+   "cap": "The floor of the mouth from the side: hyoglossus and its relations (styloglossus, lingual nerve, deep part of the submandibular gland and its duct, hypoglossal nerve, lingual artery)",
+   "crop": [
+    0,
+    0.045,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "kaa-228",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 228,
+   "sec": [
+    "an-oral-cavity#1"
+   ],
+   "cap": "Parts of the tongue: anterior two thirds and posterior third divided by the sulcus terminalis, foramen caecum, hard and soft palate"
+  },
+  {
+   "id": "kaa-229",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 229,
+   "sec": [
+    "an-submandibular#3"
+   ],
+   "cap": "Ventral surface of the tongue in colour: frenulum, deep lingual vessels and lingual nerve, sublingual fold and papilla"
+  },
+  {
+   "id": "kaa-230",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 230,
+   "sec": [
+    "an-oral-cavity#1"
+   ],
+   "cap": "Dorsum of the tongue: root and body, vallate, foliate, fungiform and filiform papillae, sulcus terminalis, foramen caecum, lingual tonsil"
+  },
+  {
+   "id": "kaa-232",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 232,
+   "sec": [
+    "an-oral-cavity#0"
+   ],
+   "cap": "Extrinsic muscles of the tongue: genioglossus, hyoglossus, styloglossus and palatoglossus"
+  },
+  {
+   "id": "kaa-233",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 233,
+   "sec": [
+    "an-oral-cavity#0"
+   ],
+   "cap": "Intrinsic muscles of the tongue: superior and inferior longitudinal, vertical and transverse"
+  },
+  {
+   "id": "kaa-234",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 234,
+   "sec": [
+    "an-submandibular#2",
+    "an-oral-cavity#1"
+   ],
+   "cap": "Vessels and nerves of the tongue: lingual artery deep to hyoglossus, lingual nerve with the submandibular ganglion, hypoglossal nerve and its venae comitantes"
+  },
+  {
+   "id": "kaa-235",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 235,
+   "sec": [
+    "an-oral-cavity#1",
+    "an-nose#6"
+   ],
+   "cap": "Lymph drainage of the tongue: tip to submental, sides to submandibular, back to jugulodigastric, and the jugulo-omohyoid node"
+  },
+  {
+   "id": "kaa-236",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 236,
+   "sec": [
+    "an-nose#6",
+    "an-oral-cavity#1"
+   ],
+   "cap": "Lymphatic drainage of the tongue in colour: submental, submandibular, jugulodigastric and jugulo-omohyoid nodes"
+  },
+  {
+   "id": "kaa-237",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 237,
+   "sec": [
+    "an-oral-cavity#2"
+   ],
+   "cap": "Muscles of the soft palate in sagittal section and from behind: tensor and levator palati, palatoglossus, palatopharyngeus, musculus uvulae"
+  },
+  {
+   "id": "kaa-238",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 238,
+   "sec": [
+    "an-oral-cavity#2"
+   ],
+   "cap": "The soft palate from behind: tensor palati around the pterygoid hamulus, levator palati, palatine aponeurosis, uvula"
+  },
+  {
+   "id": "kaa-239",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 239,
+   "sec": [
+    "an-pharynx#0"
+   ],
+   "cap": "The pharynx: its parts and relations (prevertebral muscles and fascia, retropharyngeal nodes, pharyngobasilar fascia) from the skull base to C6"
+  },
+  {
+   "id": "kaa-240",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 240,
+   "sec": [
+    "an-pharynx#0",
+    "an-pharynx#1"
+   ],
+   "cap": "Relations of the pharynx, the constrictors from behind, the structures above the superior constrictor and the five layers of the wall"
+  },
+  {
+   "id": "kaa-241",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 241,
+   "sec": [
+    "an-pharynx#0"
+   ],
+   "cap": "Muscles of the pharynx from the side: the three constrictors, stylopharyngeus, pterygomandibular raphe, and the thyropharyngeus and cricopharyngeus parts of the inferior constrictor"
+  },
+  {
+   "id": "kaa-242",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 242,
+   "sec": [
+    "an-pharynx#1"
+   ],
+   "cap": "Gaps in the pharyngeal wall and what passes through each: above the superior constrictor, between superior and middle, middle and inferior, and below the inferior constrictor"
+  },
+  {
+   "id": "kaa-244",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 244,
+   "sec": [
+    "an-pharynx#0"
+   ],
+   "cap": "Longitudinal muscles of the pharynx: stylopharyngeus, palatopharyngeus and salpingopharyngeus"
+  },
+  {
+   "id": "kaa-245",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 245,
+   "sec": [
+    "an-pharynx#0",
+    "an-pharynx#2"
+   ],
+   "cap": "The pharynx in sagittal section: nasopharynx, oropharynx and laryngopharynx, with the tubal elevation, nasopharyngeal and palatine tonsils"
+  },
+  {
+   "id": "kaa-247",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 247,
+   "sec": [
+    "an-pharynx#2"
+   ],
+   "cap": "Relations of the palatine tonsil: capsule, paratonsillar vein, superior constrictor, pharyngobasilar fascia, facial and internal carotid arteries"
+  },
+  {
+   "id": "kaa-248",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 248,
+   "sec": [
+    "an-pharynx#2"
+   ],
+   "cap": "Waldeyer's ring: nasopharyngeal, tubal, palatine and lingual tonsils"
+  },
+  {
+   "id": "kaa-249",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 249,
+   "sec": [
+    "an-nose#0"
+   ],
+   "cap": "Lateral wall of the nose: the three conchae and meatuses, sphenoethmoidal recess, sphenoid sinus"
+  },
+  {
+   "id": "kaa-250",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 250,
+   "sec": [
+    "an-nose#0",
+    "an-nose#2"
+   ],
+   "cap": "Openings in the lateral wall of the nose: frontal, ethmoidal, sphenoidal and maxillary sinuses, hiatus semilunaris, nasolacrimal duct"
+  },
+  {
+   "id": "kaa-251",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 251,
+   "sec": [
+    "an-nose#1"
+   ],
+   "cap": "Nerve supply of the nasal septum: olfactory nerves, anterior ethmoidal nerve, nasopalatine nerve"
+  },
+  {
+   "id": "kaa-252",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 252,
+   "sec": [
+    "an-nose#0",
+    "an-nose#1"
+   ],
+   "cap": "Nerve supply of the lateral wall of the nose: olfactory, anterior ethmoidal, short sphenopalatine and greater palatine nerves"
+  },
+  {
+   "id": "kaa-253",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 253,
+   "sec": [
+    "an-nose#1"
+   ],
+   "cap": "Arteries of the lateral wall of the nasal cavity: anterior and posterior ethmoidal, sphenopalatine, septal branch of the superior labial"
+  },
+  {
+   "id": "kaa-254",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 254,
+   "sec": [
+    "an-nose#1"
+   ],
+   "cap": "Arteries of the nasal septum meeting at Little's area: anterior ethmoidal, sphenopalatine, greater palatine, septal branch of the superior labial"
+  },
+  {
+   "id": "kaa-255",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 255,
+   "sec": [
+    "an-nose#2"
+   ],
+   "cap": "The paranasal sinuses in coronal section: frontal, ethmoidal and maxillary sinuses, the ethmoidal infundibulum and the maxillary opening"
+  },
+  {
+   "id": "kaa-257",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 257,
+   "sec": [
+    "an-nose#2"
+   ],
+   "cap": "The maxillary sinus in coronal section of the skull: its opening into the middle meatus, the orbit above and the alveolar process below"
+  },
+  {
+   "id": "kaa-258",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 258,
+   "sec": [
+    "an-trigeminal#0",
+    "an-nose#2"
+   ],
+   "cap": "The maxillary nerve with the sphenopalatine ganglion, greater palatine nerve and the posterior, middle and anterior superior alveolar nerves over the maxillary sinus"
+  },
+  {
+   "id": "kaa-259",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 259,
+   "sec": [
+    "an-cranial-cavity#2"
+   ],
+   "cap": "Coronal section through the cavernous sinuses: internal carotid artery and abducent nerve inside, III, IV, V1 and V2 in the lateral wall, pituitary and sphenoidal sinus between"
+  },
+  {
+   "id": "kaa-260",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 260,
+   "sec": [
+    "an-nose#0"
+   ],
+   "cap": "The sphenoid sinus and its relations: sphenoethmoidal recess, pituitary gland above, basilar artery and pons behind"
+  },
+  {
+   "id": "kaa-261",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 261,
+   "sec": [
+    "an-nose#3"
+   ],
+   "cap": "The skeleton of the larynx: epiglottis, hyoid, thyrohyoid membrane, thyroid, arytenoid, corniculate and cricoid cartilages, vocal ligament"
+  },
+  {
+   "id": "kaa-262",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 262,
+   "sec": [
+    "an-nose#3"
+   ],
+   "cap": "The larynx in sagittal section: cartilages, membranes and ligaments (hyoepiglottic, thyroepiglottic, cricothyroid, vocal)"
+  },
+  {
+   "id": "kaa-263",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 263,
+   "sec": [
+    "an-nose#3",
+    "an-nose#4"
+   ],
+   "cap": "The larynx from the side: thyrohyoid membrane pierced by the internal laryngeal nerve and superior laryngeal vessels, cricothyroid and cricotracheal ligaments"
+  },
+  {
+   "id": "kaa-264",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 264,
+   "sec": [
+    "an-nose#3"
+   ],
+   "cap": "Membranes of the larynx: the quadrangular membrane (vestibular fold) and the cricovocal ligament (vocal fold)"
+  },
+  {
+   "id": "kaa-265",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 265,
+   "sec": [
+    "an-nose#3"
+   ],
+   "cap": "Transverse and oblique arytenoid muscles and the aryepiglottic muscles"
+  },
+  {
+   "id": "kaa-266",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 266,
+   "sec": [
+    "an-nose#3"
+   ],
+   "cap": "Cavity of the larynx in coronal section: inlet, vestibule, vestibular and vocal folds, sinus and saccule, rima glottidis, infraglottic part"
+  },
+  {
+   "id": "kaa-267",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 267,
+   "sec": [
+    "an-nose#3"
+   ],
+   "cap": "Cricothyroid, thyroarytenoid, lateral and posterior cricoarytenoid muscles, with what each does to the vocal cords"
+  },
+  {
+   "id": "kaa-268",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 268,
+   "sec": [
+    "an-nose#4",
+    "an-muscular-triangle-thyroid#2"
+   ],
+   "cap": "Nerves of the larynx: superior laryngeal nerve with its internal and external branches, cricothyroid, and the recurrent laryngeal nerve under the inferior constrictor"
+  },
+  {
+   "id": "kaa-270",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 270,
+   "sec": [
+    "hi-ear#0"
+   ],
+   "cap": "The external ear (auricle): helix, antihelix, tragus, antitragus, concha, lobule"
+  },
+  {
+   "id": "kaa-271",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 271,
+   "sec": [
+    "hi-ear#1",
+    "an-nose#5"
+   ],
+   "cap": "External, middle and internal ear in section: external acoustic meatus, tympanic membrane, ossicles, cochlea, pharyngotympanic tube"
+  },
+  {
+   "id": "kaa-272",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 272,
+   "sec": [
+    "hi-ear#0",
+    "an-nose#5"
+   ],
+   "cap": "The tympanic membrane: pars flaccida and tensa, malleolar folds, handle of malleus, umbo, cone of light"
+  },
+  {
+   "id": "kaa-273",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 273,
+   "sec": [
+    "an-nose#5"
+   ],
+   "cap": "The middle ear as a box: roof (tegmen tympani), floor (jugular bulb), anterior wall (carotid canal, auditory tube), posterior wall (aditus, pyramid), medial wall (promontory, oval and round windows, facial canal)"
+  },
+  {
+   "id": "kaa-274",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 274,
+   "sec": [
+    "an-nose#5"
+   ],
+   "cap": "Walls of the middle ear in section: tegmen tympani, mastoid antrum and aditus, facial canal, auditory tube, carotid canal, tympanic branch of the glossopharyngeal nerve"
+  },
+  {
+   "id": "kaa-275",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 275,
+   "sec": [
+    "hi-ear#1",
+    "an-nose#5"
+   ],
+   "cap": "The middle ear in colour: tympanic membrane, malleus, incus and stapes, and the pharyngotympanic tube"
+  },
+  {
+   "id": "kaa-276",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 276,
+   "sec": [
+    "hi-ear#1",
+    "ph-middle-ear#1"
+   ],
+   "cap": "The ossicles (malleus, incus, stapes) and the muscles of the middle ear: tensor tympani and stapedius"
+  },
+  {
+   "id": "kaa-277",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 277,
+   "sec": [
+    "hi-ear#2"
+   ],
+   "cap": "The inner ear: semicircular canals and ducts, utricle, saccule, cochlea with scala vestibuli, cochlear duct and scala tympani"
+  },
+  {
+   "id": "kaa-278",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 278,
+   "sec": [
+    "hi-ear#2"
+   ],
+   "cap": "The membranous labyrinth: cochlear duct, saccule, utricle, semicircular ducts, endolymphatic duct and sac, with the maculae"
+  },
+  {
+   "id": "kaa-279",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 279,
+   "sec": [
+    "hi-ear#2",
+    "ph-inner-ear+the-auditory-pathway-sound-localization-"
+   ],
+   "cap": "The vestibulocochlear nerve (VIII): cochlear and vestibular parts from the inner ear through the internal acoustic meatus to the brain stem"
+  },
+  {
+   "id": "kaa-280",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 280,
+   "sec": [
+    "an-nose#6"
+   ],
+   "cap": "Lymph nodes of the head and neck: superficial ring (occipital, mastoid, parotid, facial, submandibular, submental) and the deep cervical chain"
+  },
+  {
+   "id": "kaa-281",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 281,
+   "sec": [
+    "an-muscular-triangle-thyroid#1"
+   ],
+   "cap": "Veins and lymph of the thyroid gland: superior, middle and inferior thyroid veins; prelaryngeal, pretracheal and deep cervical nodes"
+  },
+  {
+   "id": "kaa-283",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 283,
+   "sec": [
+    "an-nose#6",
+    "an-subclavian#1"
+   ],
+   "cap": "The posterior atlanto-occipital membrane and its arch for the vertebral artery and the first cervical nerve"
+  },
+  {
+   "id": "kaa-284",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 284,
+   "sec": [
+    "an-nose#6"
+   ],
+   "cap": "Atlanto-occipital and atlanto-axial joints from behind: membrana tectoria, apical and alar ligaments, capsules"
+  },
+  {
+   "id": "kaa-285",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 285,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "The embryo at the pharyngeal arch stage: arches, clefts, otic and lens placodes, heart bulge"
+  },
+  {
+   "id": "kaa-286",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 286,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "Nerves of the pharyngeal arches: trigeminal (1st), facial (2nd), glossopharyngeal (3rd) and vagus (4th and 6th)"
+  },
+  {
+   "id": "kaa-287",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 287,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "Cartilages of the pharyngeal arches and what they become: Meckel's (malleus, incus), Reichert's (stapes, styloid, hyoid), 3rd, 4th and 6th (hyoid, laryngeal cartilages)"
+  },
+  {
+   "id": "kaa-288",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 288,
+   "sec": [
+    "an-nose#7",
+    "an-nose#8"
+   ],
+   "cap": "The parts of each pharyngeal arch: cartilage, aortic arch, nerve, muscle, with the pouch inside and the cleft outside"
+  },
+  {
+   "id": "kaa-289",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 289,
+   "sec": [
+    "an-nose#8"
+   ],
+   "cap": "The pharyngeal pouches and clefts and what each pouch becomes: tympanic cavity and auditory tube, palatine tonsil, parathyroids and thymus, ultimobranchial body"
+  },
+  {
+   "id": "kaa-290",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 290,
+   "sec": [
+    "an-nose#8"
+   ],
+   "cap": "Pouch derivatives migrating: inferior parathyroid and thymus from the 3rd pouch, superior parathyroid from the 4th, ultimobranchial body, and the thyroid from the foramen caecum"
+  },
+  {
+   "id": "kaa-291",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 291,
+   "sec": [
+    "an-nose#8"
+   ],
+   "cap": "Branchial anomalies: external branchial fistula, lateral cervical cyst, internal fistula into the tonsil, and where they lie along the sternomastoid"
+  },
+  {
+   "id": "kaa-292",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 292,
+   "sec": [
+    "an-nose#9"
+   ],
+   "cap": "Development of the face (1): frontonasal, maxillary and mandibular processes around the stomodeum, nasal placodes and pits"
+  },
+  {
+   "id": "kaa-293",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 293,
+   "sec": [
+    "an-nose#9"
+   ],
+   "cap": "Development of the face (2): medial and lateral nasal prominences, the intermaxillary segment, and where a cleft lip forms"
+  },
+  {
+   "id": "kaa-295",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 295,
+   "sec": [
+    "an-nose#9"
+   ],
+   "cap": "Development of the palate (1): palatine shelves beside the tongue, then fused shelves with the nasal septum, incisive foramen"
+  },
+  {
+   "id": "kaa-296",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 296,
+   "sec": [
+    "an-nose#9"
+   ],
+   "cap": "Development of the palate (2): palatine shelves rising above the tongue to meet the primary palate and the nasal septum"
+  },
+  {
+   "id": "kaa-297",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 297,
+   "sec": [
+    "an-nose#9"
+   ],
+   "cap": "Cleft lip and cleft palate in infants: unilateral and bilateral cleft lip, cleft palate, oblique facial cleft"
+  },
+  {
+   "id": "kaa-298",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 298,
+   "sec": [
+    "an-nose#9"
+   ],
+   "cap": "Types of cleft of the lip and palate relative to the incisive foramen: anterior, posterior and complete clefts"
+  },
+  {
+   "id": "kaa-300",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 300,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "Bifid tongue: a developmental anomaly of the tongue"
+  },
+  {
+   "id": "kaa-302",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 302,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "Tongue tie (ankyloglossia): a short frenulum linguae"
+  },
+  {
+   "id": "kaa-304",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 304,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "Macroglossia: an abnormally large tongue"
+  },
+  {
+   "id": "kaa-306",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 306,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "Microglossia: an abnormally small tongue"
+  },
+  {
+   "id": "kaa-308",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 308,
+   "sec": [
+    "an-nose#7"
+   ],
+   "cap": "Development of the tongue: lateral lingual swellings and tuberculum impar (1st arch) form the body, the copula and hypobranchial eminence (3rd and 4th arches) form the root, with the foramen caecum between"
+  },
+  {
+   "id": "kaa-310",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 310,
+   "sec": [
+    "ph-synapse-mechanism+types-of-synapses-and-transmitters",
+    "ph-synapse-mechanism#0"
+   ],
+   "cap": "Chemical synapse (vesicles, neurotransmitter, ionotropic and metabotropic receptors) compared with an electrical synapse (gap junction channels)"
+  },
+  {
+   "id": "kaa-311",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 311,
+   "sec": [
+    "ph-synapse-mechanism#0"
+   ],
+   "cap": "Structure of a chemical synapse: presynaptic knob with vesicles and voltage-gated Ca2+ channels, synaptic cleft, receptors on the postsynaptic neuron"
+  },
+  {
+   "id": "kaa-312",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 312,
+   "sec": [
+    "ph-synapse-mechanism#2"
+   ],
+   "cap": "Ionotropic receptor (the transmitter opens a channel) and metabotropic receptor (the transmitter acts through a G protein and adenyl cyclase)"
+  },
+  {
+   "id": "kaa-313",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 313,
+   "sec": [
+    "ph-synapse-mechanism#1"
+   ],
+   "cap": "Steps of chemical transmission: action potential, Ca2+ entry, vesicle docking and release, transmitter binding, graded postsynaptic potential"
+  },
+  {
+   "id": "kaa-314",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 314,
+   "sec": [
+    "ph-synaptic-potentials#1"
+   ],
+   "cap": "IPSP: activation of an inhibitory synapse moves the membrane away from threshold (hyperpolarisation)"
+  },
+  {
+   "id": "kaa-315",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 315,
+   "sec": [
+    "ph-synaptic-potentials#0"
+   ],
+   "cap": "EPSP: activation of an excitatory synapse gives a small depolarisation below threshold"
+  },
+  {
+   "id": "kaa-316",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 316,
+   "sec": [
+    "ph-synaptic-potentials#1"
+   ],
+   "cap": "Summation: three synapses firing together (spatial, top) or one synapse firing repeatedly (temporal, bottom) bring the neuron to threshold"
+  },
+  {
+   "id": "kaa-317",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 317,
+   "sec": [
+    "ph-synaptic-potentials#2"
+   ],
+   "cap": "Presynaptic facilitation (serotonin neuron) and presynaptic inhibition (GABA neuron) acting on the terminal of the presynaptic cell"
+  },
+  {
+   "id": "kaa-318",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 318,
+   "sec": [
+    "ph-synaptic-potentials#2"
+   ],
+   "cap": "Presynaptic facilitation and inhibition through an axoaxonic synapse: one neuron changes the effect of another on a third"
+  },
+  {
+   "id": "kaa-319",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 319,
+   "sec": [
+    "ph-memory#1"
+   ],
+   "cap": "LTP and LTD at a glutamate synapse: high-frequency stimulation gives a large Ca2+ surge through NMDA receptors, CaMKII and more AMPA receptors; low frequency gives a small surge, phosphatases and fewer AMPA receptors",
+   "fill": [
+    [
+     0.0,
+     0.7,
+     0.29,
+     0.85
+    ]
+   ]
+  },
+  {
+   "id": "kaa-320",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 320,
+   "sec": [
+    "ph-synaptic-potentials#1"
+   ],
+   "cap": "Types of inhibition by inhibitory interneurons: lateral inhibition, recurrent (Renshaw) inhibition of the motor neuron, and reciprocal inhibition of the antagonist"
+  },
+  {
+   "id": "kaa-321",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 321,
+   "sec": [
+    "ph-synapse-properties#0"
+   ],
+   "cap": "Neuronal pools: divergence, convergence and the excitation field (discharge and facilitated zones)"
+  },
+  {
+   "id": "kaa-322",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 322,
+   "sec": [
+    "ph-synapse-properties#0"
+   ],
+   "cap": "Neuronal circuits: facilitation and inhibition within a pool, input to output"
+  },
+  {
+   "id": "kaa-323",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 323,
+   "sec": [
+    "ph-synapse-properties#0"
+   ],
+   "cap": "A parallel after-discharge circuit: the input reaches the output neuron through chains of different lengths, prolonging the output"
+  },
+  {
+   "id": "kaa-324",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 324,
+   "sec": [
+    "ph-sensory-code#0"
+   ],
+   "cap": "The sensory unit, its receptive field and the labelled line to the brain"
+  },
+  {
+   "id": "kaa-325",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 325,
+   "sec": [
+    "ph-sensory-receptors#0"
+   ],
+   "cap": "Receptor potential in a Pacinian corpuscle: the deformed area depolarises and local current fires an action potential at the first node of Ranvier",
+   "crop": [
+    0.0,
+    0.09,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "id": "kaa-326",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 326,
+   "sec": [
+    "ph-sensory-receptors#1"
+   ],
+   "cap": "Generator potential amplitude rises with stimulus strength, steeply at first and then levelling off"
+  },
+  {
+   "id": "kaa-327",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 327,
+   "sec": [
+    "ph-sensory-receptors#1"
+   ],
+   "cap": "A larger generator potential above threshold fires action potentials at a higher frequency"
+  },
+  {
+   "id": "kaa-328",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 328,
+   "sec": [
+    "ph-sensory-pathways#0"
+   ],
+   "cap": "Dorsal column–medial lemniscus pathway: first-order neurons in the gracile and cuneate fasciculi, second-order in the gracile and cuneate nuclei, third-order in the thalamus to the somatosensory cortex"
+  },
+  {
+   "id": "kaa-329",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 329,
+   "sec": [
+    "ph-sensory-pathways#0",
+    "an-face#0"
+   ],
+   "cap": "The trigeminal sensory pathway: V1, V2 and V3 through the trigeminal ganglion to the brain stem nuclei, thalamus and somatosensory cortex"
+  },
+  {
+   "id": "kaa-330",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 330,
+   "sec": [
+    "ph-sensory-pathways#1"
+   ],
+   "cap": "The lateral (temperature and pain) and anterior (crude touch and pressure) spinothalamic tracts, with first-, second- and third-order neurons"
+  },
+  {
+   "id": "kaa-331",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 331,
+   "sec": [
+    "ph-sensory-pathways#3"
+   ],
+   "cap": "Somatosensory areas I and II and the body map on area I"
+  },
+  {
+   "id": "kaa-332",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 332,
+   "sec": [
+    "ph-sensory-pathways#3"
+   ],
+   "cap": "The sensory homunculus on the postcentral gyrus: large areas for the face, lips and hand"
+  },
+  {
+   "id": "kaa-333",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 333,
+   "sec": [
+    "ph-sensory-code#3"
+   ],
+   "cap": "Discharge of cold-pain, cold, warmth and heat-pain receptors across skin temperature"
+  },
+  {
+   "id": "kaa-334",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 334,
+   "sec": [
+    "ph-pain+pain-chemistry-the-dorsal-horn-laminae-a",
+    "ph-pain#0"
+   ],
+   "cap": "Chemistry of pain at a wound: bradykinin, prostaglandins, K+, histamine from mast cells, and substance P released back from the nerve ending"
+  },
+  {
+   "id": "kaa-335",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 335,
+   "sec": [
+    "ph-pain#4"
+   ],
+   "cap": "Primary and secondary hyperalgesia and allodynia: sensitised nociceptors in the injured area and touch fibres driving pain neurons around it"
+  },
+  {
+   "id": "kaa-336",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 336,
+   "sec": [
+    "ph-pain#4"
+   ],
+   "cap": "Herpes zoster: the virus in a dorsal root ganglion gives pain and a rash along one dermatome"
+  },
+  {
+   "id": "kaa-337",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 337,
+   "sec": [
+    "ph-pain+referred-pain-the-map-examiners-use"
+   ],
+   "cap": "Referred pain: where pain from the heart, liver and gallbladder, stomach, appendix, kidney and ureter, bladder and other organs is felt on the body surface"
+  },
+  {
+   "id": "kaa-338",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 338,
+   "sec": [
+    "ph-pain#3"
+   ],
+   "cap": "Why visceral pain is referred: the convergence theory and the facilitation theory"
+  },
+  {
+   "id": "kaa-339",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 339,
+   "sec": [
+    "ph-pain-control#0",
+    "ph-pain-control#1"
+   ],
+   "cap": "The analgesia system (periaqueductal grey, raphe magnus, enkephalin neurons) and gate control in the substantia gelatinosa"
+  },
+  {
+   "id": "kaa-340",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 340,
+   "sec": [
+    "ph-sensory-lesions#0"
+   ],
+   "cap": "Brown-Séquard syndrome: lost fine touch, vibration and position sense on the side of the lesion, lost pain and temperature on the opposite side, complete loss at the level"
+  },
+  {
+   "id": "kaa-342",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 342,
+   "sec": [
+    "ph-voluntary-movement#0",
+    "ph-spinal-reflexes#2"
+   ],
+   "cap": "Motor control: motor cortex (upper motor neuron), basal ganglia, cerebellum and reticular formation acting on the alpha and gamma motor neurons and the muscle spindle"
+  },
+  {
+   "id": "kaa-343",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 343,
+   "sec": [
+    "ph-spinal-reflexes#3"
+   ],
+   "cap": "The stretch reflex: muscle spindle, sensory nerve, motor nerve back to the same muscle"
+  },
+  {
+   "id": "kaa-344",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 344,
+   "sec": [
+    "ph-spinal-reflexes#0"
+   ],
+   "cap": "The reflex arc: receptor, sensory neuron, relay neuron, motor neuron and effector"
+  },
+  {
+   "id": "kaa-345",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 345,
+   "sec": [
+    "ph-spinal-reflexes#1"
+   ],
+   "cap": "The muscle spindle: nuclear bag and nuclear chain fibres, primary (Ia) and secondary (II) endings, dynamic and static gamma efferents"
+  },
+  {
+   "id": "kaa-346",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 346,
+   "sec": [
+    "ph-spinal-reflexes#2"
+   ],
+   "cap": "Spindle discharge when the muscle is stretched, with more gamma discharge, with alpha discharge alone, and with alpha-gamma coactivation"
+  },
+  {
+   "id": "kaa-347",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 347,
+   "sec": [
+    "ph-spinal-reflexes#3"
+   ],
+   "cap": "The damping function of the stretch reflex: an 8-per-second signal gives a smooth contraction with the spindles intact (A) and a jerky one after the dorsal roots are cut (B)"
+  },
+  {
+   "id": "kaa-348",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 348,
+   "sec": [
+    "ph-spinal-reflexes#2"
+   ],
+   "cap": "Supraspinal centres that facilitate the gamma motor neurons: cerebral cortex, facilitatory reticular formation, cerebellum, vestibular nucleus",
+   "crop": [
+    0,
+    0.022,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "kaa-349",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 349,
+   "sec": [
+    "ph-spinal-reflexes#2"
+   ],
+   "cap": "Supraspinal centres that inhibit the gamma motor neurons: area 4s, basal ganglia, palaeocerebellum and the ventromedial medullary reticular formation",
+   "crop": [
+    0,
+    0.045,
+    0,
+    0
+   ]
+  },
+  {
+   "id": "kaa-351",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 351,
+   "sec": [
+    "ph-spinal-reflexes#7"
+   ],
+   "cap": "Decerebrate rigidity: rigid extended legs, pointed toes, straight tense arms beside the body, flexed wrists and curled fingers"
+  },
+  {
+   "id": "kaa-352",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 352,
+   "sec": [
+    "ph-spinal-reflexes#5"
+   ],
+   "cap": "Withdrawal and crossed extensor reflexes: the stimulated leg flexes to withdraw and the opposite leg extends to support"
+  },
+  {
+   "id": "kaa-353",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 353,
+   "sec": [
+    "ph-spinal-reflexes#4"
+   ],
+   "cap": "The Golgi tendon organ lies in series with the muscle and the muscle spindle in parallel, with their afferents and the alpha and gamma motor neurons"
+  },
+  {
+   "id": "kaa-354",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 354,
+   "sec": [
+    "ph-arousal#0"
+   ],
+   "cap": "The reticular activating system: collaterals from sensory, visual and auditory pathways feed the reticular formation, which radiates to the whole cerebral cortex"
+  },
+  {
+   "id": "kaa-355",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 355,
+   "sec": [
+    "ph-vestibular#0",
+    "hi-ear#4"
+   ],
+   "cap": "The vestibular apparatus: semicircular canals with the crista in each ampulla, utricle and saccule with their maculae, type I and type II hair cells"
+  },
+  {
+   "id": "kaa-356",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 356,
+   "sec": [
+    "ph-vestibular#2"
+   ],
+   "cap": "The planes of the semicircular canals: anterior and posterior (vertical) and lateral (horizontal), on both sides"
+  },
+  {
+   "id": "kaa-357",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 357,
+   "sec": [
+    "ph-vestibular#2",
+    "hi-ear#4"
+   ],
+   "cap": "The crista ampullaris: hair cells with stereocilia and a kinocilium embedded in the gelatinous cupula"
+  },
+  {
+   "id": "kaa-358",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 358,
+   "sec": [
+    "ph-vestibular#0"
+   ],
+   "cap": "Morphological polarisation of vestibular hair cells: bending toward the kinocilium depolarises, bending away hyperpolarises"
+  },
+  {
+   "id": "kaa-359",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 359,
+   "sec": [
+    "ph-vestibular#0"
+   ],
+   "cap": "How a hair cell transduces: bending toward the kinocilium opens K+ channels (endolymph is high in K+), Ca2+ enters and transmitter is released; bending away closes them"
+  },
+  {
+   "id": "kaa-360",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 360,
+   "sec": [
+    "ph-vestibular#2",
+    "ph-vestibular#3"
+   ],
+   "cap": "Rotation and the horizontal canals: endolymph lag bends the cupulae, stimulating one side and inhibiting the other, and the reverse when rotation stops"
+  },
+  {
+   "id": "kaa-361",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 361,
+   "sec": [
+    "ph-vestibular+vestibular-reflexes-pathways-tests-and-m"
+   ],
+   "cap": "Vestibular nuclei and their connections: medial longitudinal fasciculus to the eye muscle nuclei (III, IV, VI), lateral and medial vestibulospinal tracts, cerebellum, thalamus"
+  },
+  {
+   "id": "kaa-362",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 362,
+   "sec": [
+    "ph-vestibular#1"
+   ],
+   "cap": "Orientation of the maculae: hair cells of the utricle lie horizontal and those of the saccule vertical"
+  },
+  {
+   "id": "kaa-363",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 363,
+   "sec": [
+    "ph-vestibular#1"
+   ],
+   "cap": "The maculae and linear acceleration: the otolithic membrane lags on starting and runs on when stopping, bending the hair cells"
+  },
+  {
+   "id": "kaa-364",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 364,
+   "sec": [
+    "ph-vestibular#1",
+    "hi-ear#4"
+   ],
+   "cap": "Structure of the macula of the utricle and saccule: hair cells and supporting cells under the otolithic membrane with its otoliths"
+  },
+  {
+   "id": "kaa-366",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 366,
+   "sec": [
+    "ph-umn-lmn#0"
+   ],
+   "cap": "Upper motor neuron (motor cortex to the anterior horn) and lower motor neuron (anterior horn to the muscle)"
+  },
+  {
+   "id": "kaa-367",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 367,
+   "sec": [
+    "an-sulci-gyri+functional-areas-which-area-which-defici",
+    "ph-motor-cortex#1"
+   ],
+   "cap": "Functional areas of the cerebral cortex: primary motor, premotor, primary sensory and association, visual, auditory, olfactory and gustatory areas"
+  },
+  {
+   "id": "kaa-368",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 368,
+   "sec": [
+    "ph-motor-cortex#0"
+   ],
+   "cap": "The motor homunculus on the primary motor cortex: large areas for the hand, face, tongue and larynx"
+  },
+  {
+   "id": "kaa-369",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 369,
+   "sec": [
+    "ph-motor-cortex#1",
+    "ph-motor-cortex+motor-areas-map-and-the-pyramidal-tract-"
+   ],
+   "cap": "Motor areas on the lateral surface: primary motor cortex with its body map, premotor and supplementary areas (hand skills, head rotation), frontal eye field, Broca's area"
+  },
+  {
+   "id": "kaa-370",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 370,
+   "sec": [
+    "ph-motor-cortex#2"
+   ],
+   "cap": "The corticospinal and corticobulbar tracts from the motor cortex through the midbrain, pons and medulla, the pyramidal decussation, and the lateral and anterior corticospinal tracts"
+  },
+  {
+   "id": "kaa-371",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 371,
+   "sec": [
+    "ph-basal-ganglia#0",
+    "an-basal-ganglia#0"
+   ],
+   "cap": "The basal ganglia in the hemisphere: caudate nucleus and putamen (striatum), globus pallidus, subthalamic nucleus, substantia nigra"
+  },
+  {
+   "id": "kaa-372",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 372,
+   "sec": [
+    "ph-basal-ganglia#0"
+   ],
+   "cap": "Output of the basal ganglia: neostriatum, globus pallidus, subthalamic nuclei and substantia nigra to the brain stem reticular formation and the rubrospinal, vestibulospinal and reticulospinal tracts",
+   "fill": [
+    [
+     0.0,
+     0.85,
+     0.18,
+     1.0
+    ]
+   ]
+  },
+  {
+   "id": "kaa-373",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 373,
+   "sec": [
+    "ph-basal-ganglia+direct-and-indirect-pathways-and-parkins"
+   ],
+   "cap": "The direct and indirect pathways: cortex, neostriatum, globus pallidus, subthalamic nucleus, thalamus, and dopamine from the substantia nigra"
+  },
+  {
+   "id": "kaa-374",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 374,
+   "sec": [
+    "ph-basal-ganglia#1"
+   ],
+   "cap": "Parkinsonism: rigidity and tremor of the head and limbs, forward tilt of the trunk, reduced arm swing, shuffling gait with short steps"
+  },
+  {
+   "id": "kaa-375",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 375,
+   "sec": [
+    "ph-basal-ganglia+direct-and-indirect-pathways-and-parkins",
+    "ph-basal-ganglia#2"
+   ],
+   "cap": "Basal ganglia circuits in normal, parkinsonism, hemiballismus and chorea: which link is lost and which pathway takes over"
+  },
+  {
+   "id": "kaa-376",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 376,
+   "sec": [
+    "ph-cerebellum+cerebellar-circuitry-and-its-timing-role",
+    "hi-cns#3"
+   ],
+   "cap": "The cerebellar circuit: mossy fibres through granule cells and climbing fibres from the inferior olive to Purkinje cells, which inhibit the deep nuclei"
+  },
+  {
+   "id": "kaa-377",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 377,
+   "sec": [
+    "ph-cerebellum#0",
+    "an-cerebellum#2"
+   ],
+   "cap": "Functional parts of the cerebellum: vestibulocerebellum (flocculonodular lobe), spinocerebellum and cerebrocerebellum, and what each controls"
+  },
+  {
+   "id": "kaa-378",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 378,
+   "sec": [
+    "an-cerebellum#3",
+    "ph-cerebellum+cerebellar-circuitry-and-its-timing-role"
+   ],
+   "cap": "Afferent tracts to the cerebellum through its three peduncles: spinocerebellar, pontocerebellar, olivocerebellar and vestibulocerebellar",
+   "crop": [
+    0,
+    0.03,
+    0,
+    0
+   ],
+   "fill": [
+    [
+     0.0,
+     0.17,
+     0.19,
+     0.31
+    ]
+   ]
+  },
+  {
+   "id": "kaa-379",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 379,
+   "sec": [
+    "an-cerebellum#3",
+    "ph-cerebellum+cerebellar-circuitry-and-its-timing-role"
+   ],
+   "cap": "Efferent tracts from the cerebellum: dentate to the red nucleus and thalamus (cerebellothalamocortical), fastigial to the reticular formation and vestibular nuclei"
+  },
+  {
+   "id": "kaa-380",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 380,
+   "sec": [
+    "ph-cerebellum#1"
+   ],
+   "cap": "The intermediate cerebellum compares intention with performance: motor cortex, spinocerebellar feedback, red nucleus and thalamus back to the cortex"
+  },
+  {
+   "id": "kaa-381",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 381,
+   "sec": [
+    "ph-voluntary-movement#0",
+    "ph-cerebellum+cerebellar-circuitry-and-its-timing-role"
+   ],
+   "cap": "Planning and executing a movement: association cortex, basal ganglia and lateral cerebellum plan; premotor and motor cortex with the intermediate cerebellum execute"
+  },
+  {
+   "id": "kaa-382",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 382,
+   "sec": [
+    "an-diencephalon#0",
+    "an-third-ventricle#1"
+   ],
+   "cap": "The diencephalon in sagittal section: thalamus and interthalamic adhesion, hypothalamus (optic chiasma, infundibulum, tuber cinereum, mamillary body), epithalamus (habenula, pineal body)"
+  },
+  {
+   "id": "kaa-383",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 383,
+   "sec": [
+    "ph-sleep#0"
+   ],
+   "cap": "EEG waves: alpha, beta, theta and delta"
+  },
+  {
+   "id": "kaa-384",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 384,
+   "sec": [
+    "ph-sleep#0"
+   ],
+   "cap": "Alpha block: alpha waves with the eyes closed are replaced by fast low-voltage waves when the eyes open"
+  },
+  {
+   "id": "kaa-385",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 385,
+   "sec": [
+    "ph-sleep#1"
+   ],
+   "cap": "EEG through the stages of sleep: relaxed wakefulness (alpha), stage 1 (theta), stage 2 (sleep spindles and K-complexes), stages 3 and 4 (delta), and REM sleep"
+  },
+  {
+   "id": "kaa-386",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 386,
+   "sec": [
+    "ph-speech+the-language-circuit-and-the-other-aphas",
+    "ph-speech#0"
+   ],
+   "cap": "Language areas: Broca's area (word formation), Wernicke's area (language comprehension), the naming and visual processing of words, and the limbic association area"
+  },
+  {
+   "id": "kaa-387",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 387,
+   "sec": [
+    "ph-optics#0"
+   ],
+   "cap": "The three coats of the eye: outer (cornea and sclera), middle (choroid, ciliary body, iris) and inner (retina, its photosensitive and non-visual parts)"
+  },
+  {
+   "id": "kaa-388",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 388,
+   "sec": [
+    "ph-optics#0",
+    "hi-eye#2"
+   ],
+   "cap": "The eyeball in section: cornea, anterior and posterior chambers, iris, lens with the zonular fibres, ciliary body, vitreous, retina, choroid, sclera, fovea, optic nerve"
+  },
+  {
+   "id": "kaa-389",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 389,
+   "sec": [
+    "ph-optics#0"
+   ],
+   "cap": "Focal length: parallel rays converge through a convex lens to the focal point"
+  },
+  {
+   "id": "kaa-390",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 390,
+   "sec": [
+    "ph-refraction#0"
+   ],
+   "cap": "A lens with sharply curved sides has a short focal length and one with gently curved sides a long one: the basis of accommodation"
+  },
+  {
+   "id": "kaa-391",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 391,
+   "sec": [
+    "ph-eye-fluid#0"
+   ],
+   "cap": "Aqueous drainage at the normal angle: from the posterior chamber through the pupil to the trabecular meshwork"
+  },
+  {
+   "id": "kaa-392",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 392,
+   "sec": [
+    "ph-eye-fluid#1"
+   ],
+   "cap": "Glaucoma: an open angle where fluid drains, and a closed angle where the iris blocks the trabecular meshwork and the canal of Schlemm"
+  },
+  {
+   "id": "kaa-393",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 393,
+   "sec": [
+    "an-cranial-nerves#1",
+    "an-orbit#2"
+   ],
+   "cap": "The corneal reflex: afferent through the ophthalmic division of V, efferent through the facial nuclei and nerve to orbicularis oculi on both sides"
+  },
+  {
+   "id": "kaa-394",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 394,
+   "sec": [
+    "hi-eye#1",
+    "ph-eye-fluid#0"
+   ],
+   "cap": "The iridocorneal angle: canal of Schlemm, spaces of Fontana, ciliary body and the suspensory ligament of the lens"
+  },
+  {
+   "id": "kaa-395",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 395,
+   "sec": [
+    "ph-refraction#0",
+    "hi-eye#3"
+   ],
+   "cap": "The ciliary muscle (meridional and circular fibres) and the suspensory ligaments holding the lens"
+  },
+  {
+   "id": "kaa-396",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 396,
+   "sec": [
+    "ph-refraction#1",
+    "ph-uveal#0"
+   ],
+   "cap": "The pupillary light reflex: optic nerve to the pretectal area, Edinger-Westphal nucleus, oculomotor nerve and ciliary ganglion to the sphincter pupillae, on both sides"
+  },
+  {
+   "id": "kaa-397",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 397,
+   "sec": [
+    "ph-refraction#3"
+   ],
+   "cap": "Myopia (light focused in front of the retina, corrected with a concave lens) and hypermetropia (behind the retina, corrected with a convex lens)"
+  },
+  {
+   "id": "kaa-398",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 398,
+   "sec": [
+    "ph-optics+the-eye-as-a-camera-image-pupil-and-acui"
+   ],
+   "cap": "Spherical aberration: peripheral rays focus nearer the lens than central rays"
+  },
+  {
+   "id": "kaa-399",
+   "pdf": "205_NEU_Published.pdf (Kasr Al Ainy)",
+   "book": 399,
+   "sec": [
+    "ph-optics+the-eye-as-a-camera-image-pupil-and-acui"
+   ],
+   "cap": "Chromatic aberration: blue light focuses nearer the lens than yellow and red"
   }
  ]
 }

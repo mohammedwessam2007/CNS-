@@ -33,6 +33,30 @@ const inject = ([secId, qid]) => {
     check('D1b', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
     await s.close();
   }
+  // ── D1c: the whole set on the site, including the Kasr Al Ainy book figures (v18.5) ──
+  {
+    const s = await open({ v16: true, time: T, state: null, settle: 1500 });
+    const r = await s.page.evaluate(async () => {
+      const D = window.INTELLECTUALITY_DEPT_FIGS,
+        secs = new Set((window.INTELLECTUALITY_LEARN_NOTES?.chapters || []).flatMap((c) => (c.s || []).map((x, i) => x.id || c.id + '#' + i))),
+        bad = [], ids = new Set(), books = new Set();
+      for (const f of D.figs) {
+        if (ids.has(f.id)) bad.push(f.id + ':dup');
+        ids.add(f.id);
+        for (const x of f.sec || []) if (!secs.has(x)) bad.push(f.id + ':' + x);
+        if (!(f.sec || []).length || !f.cap || f.cap.length < 20) bad.push(f.id + ':cap/sec');
+        if (f.book) {
+          if (books.has(f.book) || !(f.book >= 1 && f.book <= 501)) bad.push(f.id + ':book');
+          books.add(f.book);
+        }
+        const res = await fetch('/dept/' + f.id + '.bin'), b = new Uint8Array(await res.arrayBuffer());
+        if (!res.ok || b.length < 1000 || (b[0] === 0xff && b[1] === 0xd8)) bad.push(f.id + ':file');
+      }
+      return { n: D.figs.length, book: books.size, secs: new Set(D.figs.flatMap((f) => f.sec)).size, notes: secs.size, nBad: bad.length, bad: bad.slice(0, 8) };
+    });
+    check('D1c', 'The whole set on the site (with the Kasr Al Ainy NEU 205 book figures): every file sealed, every drawing placed in a LEARN section that exists and captioned, no book figure twice', r.book >= 330 && r.secs >= 190 && r.notes >= 250 && r.nBad === 0, r);
+    await s.close();
+  }
   // ── D2: a wrong key link is refused and removed from the address bar ──
   {
     const s = await open({ v16: true, time: T, state: null, settle: 1500, path: '#ixk=k1.' + 'A'.repeat(43) });
@@ -68,6 +92,14 @@ const inject = ([secId, qid]) => {
     await s.page.click('.ixDeptZoom');
     const z2 = await s.page.evaluate(() => !!document.querySelector('.ixDeptZoom'));
     check('D6', 'Tap a drawing → full screen; tap → back', z1 && !z2, { z1, z2 });
+    // D13: a physiology section opens with the book's figures; its web photo folds behind a tap below them
+    await s.page.evaluate(() => document.getElementById('player').insertAdjacentHTML('beforeend', '<div class="v15Sec" data-v15-sec="ph-vestibular#0"><div class="v15Head"><h3>t</h3></div><div class="v15Pics"><figure class="v15Pic" data-v15-done="1"><img alt="web photo"></figure></div><ul class="v15Pts"><li>x</li></ul></div>'));
+    await s.page.waitForTimeout(1500);
+    const b = await s.page.evaluate(() => {
+      const sec = document.querySelector('.v15Sec[data-v15-sec="ph-vestibular#0"]');
+      return { lab: sec.querySelector('.ixDeptLab')?.textContent || '', imgs: [...sec.querySelectorAll('.ixDept img')].filter((i) => i.naturalWidth > 100).length, folded: !!sec.querySelector(':scope > .v15Pics > details.ixWebPic:not([open]) figure.v15Pic'), order: !!sec.querySelector(':scope > .ixDeptWrap + .v15Pics') };
+    });
+    check('D13', 'A physiology section (vestibular hair cells) opens with the Kasr Al Ainy book figures, labelled with the book\'s figure number; the section\'s web photo folds behind a tap below them', /KASR AL AINY BOOK · FIG \d+/.test(b.lab) && b.imgs >= 1 && b.folded && b.order, b);
     check('D6b', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
     // D7: every mapped drawing decrypts with the owner's key
     const all = await s.page.evaluate(async () => {

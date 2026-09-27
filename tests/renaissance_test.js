@@ -58,6 +58,13 @@ async function runToEnd(p) {
     const p = s.page;
     const before = await p.evaluate(() => ({ why: RENAISSANCE.gate().why, entry: !!document.querySelector('.rnEntry'), kind: nextAction().kind }));
     check('R1', 'While the medicine day is unfinished Renaissance stays shut: no door, gate says "cns"', before.kind !== 'STOP' && before.why === 'cns' && !before.entry, before);
+    const tools0 = await p.evaluate(() => {
+      const b = document.getElementById('rnToolsBtn');
+      b?.click();
+      const w = document.getElementById('rnToolsWhy');
+      return { text: b?.textContent || '', why: w && !w.hidden ? w.textContent : '', session: !!RENAISSANCE.current() };
+    });
+    check('R1b', 'Renaissance can always be found: Tools has its door, which before today\'s CNS reads "opens after today\'s CNS" and, tapped, says why and opens nothing', /opens after today's CNS/.test(tools0.text) && /Medicine comes first/.test(tools0.why) && !tools0.session, tools0);
 
     await p.evaluate(STOP);
     await p.waitForTimeout(250);
@@ -65,6 +72,8 @@ async function runToEnd(p) {
       const e = document.querySelector('#player .rnEntry'), r = e && e.getBoundingClientRect();
       return { open: e?.dataset.rnState, q: e?.querySelector('.rnEntryQ')?.textContent, go: !!e?.querySelector('[data-rn-open]'), top: r ? Math.round(r.top) : null, vh: innerHeight, stop: /STOP MEDICINE/.test(document.querySelector('#player').textContent) };
     });
+    const tools1 = await p.evaluate(() => ({ text: document.getElementById('rnToolsBtn')?.textContent || '', open: !!document.getElementById('rnToolsBtn')?.hasAttribute('data-rn-open') }));
+    check('R2b', 'When medicine says STOP, the Tools door opens too ("open · N min today")', /Renaissance: open · \d+ min today/.test(tools1.text) && tools1.open, tools1);
     check('R2', 'When medicine says STOP, one door appears under "STOP MEDICINE": today\'s question and CONTINUE, visible without scrolling', door.open === 'open' && /tie their own hands/.test(door.q || '') && door.go && door.stop && door.top != null && door.top < door.vh, door);
 
     const cnsBefore = await p.evaluate(() => Object.fromEntries(Object.keys(localStorage).filter((k) => k !== 'renaissance_v1').map((k) => [k, localStorage.getItem(k)])));

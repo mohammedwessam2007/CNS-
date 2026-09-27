@@ -44,7 +44,7 @@ for (const f of map.figs) {
   const buf = readFileSync(join(src, f.id + ".jpg"));
   writeFileSync(join(out, f.id + ".bin"), seal(buf));
   const { w, h } = jpegSize(buf);
-  figs.push({ id: f.id, sec: f.sec, cap: f.cap, ...(f.ans ? { ans: f.ans } : {}), ...(f.drill ? { drill: f.drill } : {}), w, h, src: f.pdf });
+  figs.push({ id: f.id, sec: f.sec, cap: f.cap, ...(f.ans ? { ans: f.ans } : {}), ...(f.drill ? { drill: f.drill } : {}), ...(f.book ? { book: f.book } : {}), w, h, src: f.pdf });
 }
 const data = { kid, probe: seal(Buffer.from("intellectuality-dept-ok")).toString("base64"), figs };
 writeFileSync(

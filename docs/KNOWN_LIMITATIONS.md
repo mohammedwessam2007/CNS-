@@ -1,4 +1,13 @@
-# Known Limitations (v18.4 · MCQ exam + Renaissance)
+# Known Limitations (v18.5 · MCQ exam + Renaissance)
+
+## v18.5 Kasr Al Ainy book figures, and the Renaissance door in Tools
+
+- **Figures 400 to 500 are missing.** Only Parts 01, 02, 03 and 04A of the book's figures were uploaded (figures 1 to 399). Part 04B holds the rest of the physiology chapters, so the retina, colour vision, hearing and sleep sections still have no official drawing. When it arrives it goes through the same pipeline (`docs/KASR_AL_AINY_FIGURES.md`).
+- **Captions and placements are judgements.** Each caption is written from the labels on the figure (OCR read the book's own caption lines for figures 1 to 71 only). Each figure sits in the section it teaches best, 442 placements for 340 figures. A misplaced figure is a one-line fix in `scripts/dept-figs/map.json`.
+- **59 book figures are left out**: 30 repeat a department drawing already in the app, and the rest add nothing on their own. They are listed with reasons in `docs/KASR_AL_AINY_FIGURES.md`.
+- **Web photos are folded, not judged one by one.** In a section with official drawings, the web photo sits behind a tap under them. No web photo was deleted, and the per-option photo gallery after an answer is unchanged.
+- **A drawing works offline only after it has been opened once online.** The site now serves 388 encrypted drawings (32 MB). Each loads when its section opens and is then cached on the device.
+- **The Renaissance door in Tools** sits in the side rail (☰ on a phone) under ⚙ Study mode, just below Commute mode. It opens only when the door on the STOP MEDICINE screen would. At other times it says why it is shut.
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
 

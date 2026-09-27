@@ -1,6 +1,9 @@
 /* INTELLECTUALITY v16.2 · DEPARTMENT DRAWINGS (private to the owner)
  * The department's own line drawings of the neck (cervical fascia, great vessels, glands, cranial
- * nerves IX–XII) are shown in the LEARN section they belong to and after an answer on that topic.
+ * nerves IX–XII) and, since v18.5, the figures of the Kasr Al Ainy NEU 205 book (neuroanatomy, head and
+ * neck, ear, embryology, and the physiology chapters) are shown in the LEARN section they belong to and
+ * after an answer on that topic. Where a section has official drawings they come first and the section's
+ * web photo folds behind a tap: still there, no longer in the way.
  * The site is public, so the drawings are shipped ENCRYPTED (AES-256-GCM, dept/<id>.bin). The key
  * reaches the owner's app once, through a link (#ixk=<kid>.<key>), or pasted in the app from the lock line
  * shown where drawings belong; it is kept on the device and in
@@ -92,7 +95,7 @@
     CK.delete(kid);
     keys(); // copies it into the synced state and saves
     const drill = (window.EHSAN_QBANK?.questions || []).some((q) => /^DEPT-LEVELS-/.test(q.id));
-    toast("Department drawings unlocked. They now appear in the neck and histology lessons and after answers, and reach your other devices with your sync code." + (drill ? "" : " Close and reopen the app once to add the 50 figure questions."));
+    toast("Department drawings unlocked, with the Kasr Al Ainy book figures. They now appear in the anatomy, histology and physiology lessons and after answers, and reach your other devices with your sync code." + (drill ? "" : " Close and reopen the app once to add the 50 figure questions."));
     document.querySelectorAll(".ixDeptLock").forEach((b) => b.remove());
     document.querySelectorAll("#player [data-ix-dept]").forEach((el) => delete el.dataset.ixDept);
     schedule();
@@ -143,7 +146,8 @@
   // quiz = the figure of a question not yet answered: its answers stay hidden
   function card(f, quiz) {
     return (
-      '<figure class="ixDept" data-ix-dept="' + E(f.id) + '"><div class="ixDeptLab"><span lang="ar" dir="rtl">رسمة القسم</span> DEPARTMENT DRAWING</div>' +
+      '<figure class="ixDept" data-ix-dept="' + E(f.id) + '"><div class="ixDeptLab">' +
+      (f.book ? '<span lang="ar" dir="rtl">كتاب القصر العيني</span> KASR AL AINY BOOK · FIG ' + E(f.book) : '<span lang="ar" dir="rtl">رسمة القسم</span> DEPARTMENT DRAWING') + "</div>" +
       '<div class="ixDeptImg" style="aspect-ratio:' + (f.w || 4) + " / " + (f.h || 3) + '"><div class="v14Skeleton"><span></span></div></div>' +
       "<figcaption>" + E(f.cap) + (f.ans && !quiz ? '<span class="ixDeptAns">' + E(f.ans) + "</span>" : "") + "</figcaption></figure>"
     );
@@ -153,7 +157,7 @@
       b = list.slice(show);
     return (
       '<div class="ixDeptRow">' + a.map((f) => card(f)).join("") + "</div>" +
-      (b.length ? '<details class="ixDeptMore"><summary>' + b.length + " more department drawing" + (b.length > 1 ? "s" : "") + '</summary><div class="ixDeptRow">' + b.map((f) => card(f)).join("") + "</div></details>" : "")
+      (b.length ? '<details class="ixDeptMore"><summary>' + b.length + " more official drawing" + (b.length > 1 ? "s" : "") + '</summary><div class="ixDeptRow">' + b.map((f) => card(f)).join("") + "</div></details>" : "")
     );
   }
   function hydrate(root) {
@@ -194,6 +198,7 @@
         at = el.querySelector(".v15Pics") || el.querySelector(".v15Pts");
       if (at) at.insertAdjacentHTML("beforebegin", html);
       else el.insertAdjacentHTML("beforeend", html);
+      foldWebPhoto(el);
     });
     // CNS-levels drill: the figure goes above the question (answers hidden until it is answered)
     player.querySelectorAll("h3.v16Stem:not([data-ix-dept])").forEach((h) => {
@@ -213,6 +218,17 @@
       else el.insertAdjacentHTML("beforeend", html);
     });
     hydrate(player);
+  }
+  // the section's web photo moves inside a closed <details> (the node itself moves, so a picture that is
+  // already loading lands in place; one not yet loaded waits for the tap, as learn-v15 does for details)
+  function foldWebPhoto(sec) {
+    const pics = sec.querySelector(":scope > .v15Pics");
+    if (!pics || pics.querySelector(".ixWebPic") || !pics.querySelector("figure")) return;
+    const d = document.createElement("details");
+    d.className = "ixWebPic";
+    d.innerHTML = "<summary>Web photo · the official drawings above come first</summary>";
+    while (pics.firstChild) d.appendChild(pics.firstChild);
+    pics.appendChild(d);
   }
   let queued = false;
   function schedule() {

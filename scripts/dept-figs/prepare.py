@@ -1,4 +1,5 @@
 """Crop the mapped department drawings out of the owner's PDFs (repo root) into an output folder.
+(The Kasr Al Ainy book figures, entries with "book", come from prepare_book.py into the same folder.)
 
 Usage: python scripts/dept-figs/prepare.py <out_dir>   (needs pypdf + pillow)
 Each figure is the PDF's own embedded image (full resolution), trimmed of white margins and
@@ -28,6 +29,8 @@ def main(out):
     m = json.load(open(os.path.join(os.path.dirname(__file__), "map.json"), encoding="utf8"))
     readers = {}
     for f in m["figs"]:
+        if "book" in f:  # the Kasr Al Ainy book figures: prepare_book.py
+            continue
         r = readers.get(f["pdf"]) or readers.setdefault(f["pdf"], pypdf.PdfReader(os.path.join(ROOT, f["pdf"])))
         if "img" in f:
             page, idx = f["img"][1:].split("_")

@@ -73,6 +73,7 @@
 .ixDept figcaption { font-size: 13px; line-height: 1.35; color: #c9d6e6; margin-top: 6px }
 .ixDeptMore { margin-top: 8px }
 .ixDeptMore summary { cursor: pointer; font-size: 13px; font-weight: 750; color: var(--cyan); padding: 6px 0 }
+.ixWebPic > summary { cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--muted, #8a93a6); padding: 6px 0 }
 .ixDeptZoom { position: fixed; inset: 0; z-index: 9999; background: rgba(4, 8, 14, .96); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; touch-action: pinch-zoom; overflow: auto }
 .ixDeptZoom img { max-width: 100%; max-height: calc(100vh - 60px); background: #fff; border-radius: 6px }
 .ixDeptZoomCap { color: #c9d6e6; font-size: 13px; margin-top: 8px; text-align: center; max-width: 900px }
