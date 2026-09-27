@@ -464,7 +464,11 @@
   };
 
   // Passive only: read existing evidence. No network, no curriculum mutation.
-  if (!off()) scan();
+  // Load first, so a corrupt saved state is preserved and recovered at startup, not only on first use.
+  if (!off()) {
+    load();
+    scan();
+  }
 
   // If another tab records Renaissance answers, rescan. No writes to Renaissance.
   safe(() => window.addEventListener("storage", (e) => {
