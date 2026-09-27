@@ -59,16 +59,38 @@ the current code-level evidence. The workflow remains in the branch so a later r
 - The integrated build-injection commit still requires a fresh preview before merge.
 - Nothing in this branch has been promoted to production.
 
-## Promotion rule
+## Final integration evidence and external blockers
 
-Do not merge merely because the concept is attractive.
+The canonical branch source now contains exactly one `/axis-forge-v1.js` loader immediately after
+`renaissance-v1.js`. The Vercel build code has a duplicate guard, so the build cannot inject a second copy.
 
-Merge only after:
+The existing READY branch preview from commit `beca2e7` independently proves that Vercel serves
+`/axis-forge-v1.js` with HTTP 200. That preview predates the later loader integration and therefore is **not**
+claimed as an integrated-head preview.
 
-1. the latest branch head receives a READY Vercel preview;
-2. the preview HTML contains `/axis-forge-v1.js`;
-3. the asset is fetchable;
-4. production remains on the v18.4 parent until the merge decision.
+The latest head cannot currently receive a fresh preview because Vercel's GitHub status reports exactly:
+
+> Deployment rate limited — retry in 24 hours.
+
+This is an external quota condition, not a source failure. Production remains the verified v18.4 deployment.
+
+GitHub Actions is also not source evidence here: its jobs terminate before runner allocation (runner_id 0, zero
+steps). The exact current Axis Forge module was therefore executed directly against the hostile cases instead and
+passed 20/20.
+
+## Source merge rule
+
+Source may be merged under the project's source-vs-infrastructure distinction when all of the following hold:
+
+1. exact-module hostile verification is green (20/20);
+2. canonical source contains exactly one loader after Renaissance;
+3. the module asset has already been served successfully by Vercel on the branch;
+4. the PR is mergeable against the unchanged verified v18.4 base;
+5. the deployment quota failure remains explicitly classified as external;
+6. no claim is made that production contains Axis Forge until a production deployment is actually observed.
+
+The merge does **not** turn a future deployment into verified production. Deployment verification remains a separate
+truth claim.
 
 ## Empirical frontier
 
