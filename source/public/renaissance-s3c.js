@@ -228,6 +228,34 @@
     return svg(360, 268, h, "Which form of address fits a relationship, in Russian and in Egyptian Arabic");
   }
 
+  // an illustrative chain of ten channels, normal flow 1, capacity 1.5; a breached channel passes its whole flow on and
+  // leaves silt that cuts the next channel's capacity by a fifth; a spillway (modular design) sheds half of any overflow
+  function cascade(v) {
+    const n = 10, state = [];
+    let flow = v.flood, cap = 1.5;
+    for (let i = 0; i < n; i++) {
+      const breach = flow > cap;
+      state.push(breach);
+      if (breach) {
+        cap = 1.5 * 0.8;
+        if (v.spill) flow = 1 + (flow - 1) / 2;
+      } else { cap = 1.5; flow = Math.max(1, flow - 0.1); }
+    }
+    return { state, broken: state.filter(Boolean).length };
+  }
+  function cascadeDraw(v) {
+    const c = cascade(v);
+    let h = t(180, 20, "a flood " + v.flood.toFixed(1) + " × the normal flow" + (v.spill ? ", with spillways" : ""), { c: C.mut, fs: 12, fw: 600 });
+    c.state.forEach((b, i) => {
+      const x = 14 + i * 34;
+      h += rect(x, 44, 28, 40, b ? C.pink : C.green, 6) + (i < 9 ? '<path d="M' + (x + 28) + " 64 L" + (x + 34) + ' 64" stroke="' + C.mut + '" stroke-width="2"/>' : "");
+    });
+    h += t(180, 108, "channels, from the reservoir downstream", { c: C.mut, fs: 12, fw: 600 });
+    h += t(180, 140, c.broken + " of 10 channels breached", { c: c.broken ? C.pink : C.green, fs: 16 });
+    h += lines(180, 168, wrap("green: holding; pink: breached. Each breach leaves silt that weakens the next channel down.", 46), { c: C.mut, fs: 12, fw: 600 }, 16);
+    return svg(360, 206, h, "A chain of ten channels after a flood, showing which breach and how failure spreads downstream");
+  }
+
   const visuals = {
     // Galen's medicine through three languages
     relay: () => {
@@ -253,6 +281,15 @@
 
   /* ═══════════════ MODELS ═══════════════ */
   const models = {
+    cascade: {
+      controls: [{ id: "flood", label: "Flood, as a multiple of the normal flow", min: 1, max: 3, step: 0.1, value: 1.4, unit: "×" }],
+      toggles: [{ id: "spill", label: "Build spillways that shed half of any overflow", value: false }],
+      draw: (v) => cascadeDraw(v),
+      read(v) {
+        const c = cascade(v), lower = cascade(Object.assign({}, v, { flood: Math.max(1, v.flood - 0.2) }));
+        return "**At " + v.flood.toFixed(1) + "× the normal flow, " + c.broken + " of 10 channels breach**" + (lower.broken !== c.broken ? " (at " + Math.max(1, v.flood - 0.2).toFixed(1) + "×, " + lower.broken + ")" : "") + ". Below the channels' capacity nothing happens; just above it, one breach weakens the next and failure runs down the chain. " + (v.spill ? "Spillways shed part of each overflow, so the cascade stops sooner: modular design contains failure." : "Switch on spillways to see a modular design contain it.") + " The model is an illustration; Penny and colleagues modelled Angkor's real network and found the same abrupt behaviour.";
+      },
+    },
     address: {
       controls: [
         { id: "dist", label: "How close (0 family, 1 friend, 2 acquaintance, 3 stranger)", min: 0, max: 3, step: 1, value: 2, unit: "" },
@@ -982,6 +1019,100 @@
       { title: "What the names do in the novel", body: "Watch the forms of address as you read. Who calls Grushenka Grushka, and when? When does a character drop the patronymic? Garnett kept the Russian forms, which is one reason her English still carries some of the relationships a smoother translation would lose." },
       { title: "The strong claim and the weak one", body: "The strong claim, that your language decides what you can see or think, is not supported: Russians and English speakers see the same blues. The weak claim, that a language's obligatory choices speed some judgements and draw attention to some differences, has experimental support, and argument continues over how large and how general it is." },
       { title: "Open question", body: "Does learning a second language's forms of address change how you hear your own? Bilingual speakers often report it; careful studies of it are few." },
+    ],
+  });
+
+  sessions.push({
+    id: "angkor", primitive: "network", domain: "history", region: "Angkor, Cambodia (Southeast Asia)", works: ["angkor-network"],
+    atoms: ["systems", "causal", "model", "scale"],
+    title: "A city that ran on water",
+    hook: "In 2012 a laser flown over the Cambodian forest found a city around Angkor Wat that no one had mapped. Its water system made it one of the largest cities of its age. Could the same system have helped bring it down?",
+    minutes: 24,
+    why: "Angkor was not a set of temples in a jungle but a vast city built around water, one of the great engineering works of the pre-industrial world, in Southeast Asia. Its end is also a lesson that reaches every hospital and power grid: a network built for normal conditions can turn one failure into many.",
+    capability: "Describe Angkor as a city and a water network, explain how drought and flood together can break a tightly connected system, and design systems whose failures stay local.",
+    stakes: "Hospitals, oxygen lines, power grids and rotas are networks too. Knowing why failures cascade, and how modularity stops them, is the difference between one closed ward and a closed hospital.",
+    bridge: "The missing step: in a connected network, the failure of one part changes the load on the next. When the extra load pushes the next part past its limit, failure runs on by itself.",
+    connection: "Timbuktu showed that copies in many hands fail independently. Angkor is the opposite case: parts so connected that one failure became many.",
+    vocab: {
+      cascade: { name: "a cascading failure", h: "One failure that causes the next, and the next.", s: "عطل بيجرّ عطل: قناة تنهار فتحمّل اللي بعدها لحد ما تنهار هي كمان.", t: "Failure propagation in a coupled network, where each failed component shifts load onto neighbours beyond their capacity." },
+      modularity: { name: "modularity", h: "Building a system in sections that can fail on their own.", s: "تقسيم النظام لأجزاء، لو جزء وقع الباقي يفضل شغال.", t: "Partitioning a network with limited, controllable connections (valves, spillways, firebreaks) so failures are contained locally." },
+      hydraulic: { name: "the hydraulic city", h: "A city organised around storing and moving water.", s: "مدينة متبنية حوالين تخزين المية وتوزيعها.", t: "Groslier's term for Angkor (1979): a settlement integrated with reservoirs, canals and embankments across its whole landscape." },
+    },
+    provenance: [
+      { id: "lidar", claim: "In 2012 an airborne laser (lidar) survey imaged about 370 km² around Angkor in roughly 20 hours of flight and revealed a formally planned urban landscape of roads, ponds and canals around the temples, and the early capital Mahendraparvata on Phnom Kulen; by the 13th century greater Angkor was a low-density city of about 1,000 km².", source: "Evans D. et al., 'Uncovering archaeological landscapes at Angkor using lidar', PNAS 110:12595 (2013); checked by web search", year: "2013", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "baray", claim: "The West Baray, the largest of Angkor's reservoirs, measures about 7.8 by 2.1 km.", source: "Standard descriptions of the West Baray; checked by web search", year: "11th c.", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "hydraulic", claim: "Bernard-Philippe Groslier called Angkor a 'hydraulic city' (1979); whether its great reservoirs irrigated rice fields at scale, or served mainly other purposes, was argued for decades.", source: "Groslier B.-P. (1979) and the debate that followed, as summarised in Evans et al. (2013) and Penny et al. (2018); checked by web search", year: "1979", kind: "scholarship", license: "fact", grade: "A", contested: "The purpose of the barays (irrigation, urban water, religious symbolism) is still debated." },
+      { id: "drought", claim: "Tree rings from southern Vietnam show sharp weakenings of the summer monsoon from 1362 to 1392 and from 1415 to 1440, interspersed with years of intense monsoon rain.", source: "Buckley B. M. et al., 'Climate as a contributing factor in the demise of Angkor, Cambodia', PNAS 107:6748 (2010); checked by web search", year: "2010", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "cascade", claim: "A model of Angkor's water network built from archaeological maps showed that floods after drought could set off cascading damage, and that the likelihood and extent of failure grow abruptly with the size of the flood; the authors note that redundancy and modularity make networks more resilient.", source: "Penny D. et al., 'The demise of Angkor: systemic vulnerability of urban infrastructure to climatic variations', Science Advances 4:eaau4029 (2018); checked by web search", year: "2018", kind: "scholarship", license: "fact", grade: "A", contested: "Climate and infrastructure are one explanation among several; political and economic shifts, including the move of the royal centre south, are also argued." },
+      { id: "blackout", claim: "On 14 August 2003 a failure in Ohio cascaded into a blackout affecting about 50 million people in the north-eastern United States and Ontario.", source: "U.S.–Canada Power System Outage Task Force, Final Report (2004)", year: "2003", kind: "scholarship", license: "fact", grade: "A" },
+      { id: "cascadecalc", claim: "The cascade model (ten channels, capacity 1.5 × normal flow, silt and spillway rules) is illustrative teaching material.", source: "Original teaching material", year: "2026", kind: "original", license: "original", grade: "A" },
+    ],
+    steps: [
+      { id: "k1", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["lidar"], atoms: ["scale", "model"], stem: "In 2012 archaeologists flew a laser scanner over the forest around Angkor Wat. The laser sees the ground through the trees. What did it find?", alt: "Temples need people: where did the people who built and served them live?", options: [
+        { t: "A planned city of roads, ponds and canals around the temples", ok: true, why: "The temples sat inside a low-density city of about a thousand square kilometres, most of it invisible under the forest until the laser." },
+        { t: "That the great temples were built centuries later than historians had thought", bug: "surface", why: "The survey mapped the landscape; it did not overturn the temples' dates." },
+        { t: "Nothing, because a laser cannot see anything through a forest", bug: "rigid", why: "Enough pulses slip through the canopy to map the ground beneath it." },
+        { t: "Only more temples, each standing alone in the forest", bug: "confirm", why: "It found temples, but inside a city; the old picture of isolated temples was what changed." },
+      ] },
+      { id: "k2", type: "scene", stage: "reveal", min: 2.5, src: ["lidar", "baray", "hydraulic"], terms: ["hydraulic"], title: "A city built around water", body: "The laser survey of 2012 showed Angkor as a city: grids of roads, house mounds and ponds spread across the plain, about 1,000 square kilometres by the 13th century, and an older capital, Mahendraparvata, etched into the Kulen hills. Water tied it together: canals, embankments and vast reservoirs, the barays. The largest, the West Baray, is about 7.8 by 2.1 km.\n\nThe archaeologist Bernard-Philippe Groslier called Angkor [[hydraulic|a hydraulic city]]. How much the reservoirs irrigated rice, and how much they served the city and its gods, was argued for decades; that the whole landscape was engineered around water is not in doubt.", reps: [{ kind: "analogy", label: "A body's circulation", body: "Reservoirs as hearts and canals as vessels: the city lived by moving water in the dry season and getting rid of it in the monsoon." }, { kind: "counterexample", label: "Where the picture is uncertain", body: "A laser shows earthworks, not their purpose. Whether a baray fed fields or temples is argued from other evidence." }] },
+      { id: "k3", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["drought"], atoms: ["causal", "systems"], stem: "Tree rings from Vietnam show two long droughts, 1362–1392 and 1415–1440, with years of intense monsoon rain between them. What would that do to a city built for normal rains?", options: [
+        { t: "Strain it both ways: silting in drought, then floods too big", ok: true, why: "A system built for average conditions is tested by both extremes, and each makes the other worse." },
+        { t: "Only the droughts would matter, since a water city can store floods", bug: "omission", why: "Storage has limits; floods beyond them break embankments and channels." },
+        { t: "Nothing, because a few decades are far too short to matter to a whole city", bug: "rigid", why: "Thirty years of failed monsoons is a generation of failed harvests and repairs." },
+        { t: "It would prove that climate alone destroyed Angkor", bug: "confirm", why: "Climate is a strain; whether it breaks a city depends on the city's design and politics too." },
+      ] },
+      { id: "k4", type: "model", stage: "model", min: 3, model: "cascade", src: ["cascadecalc", "cascade"], terms: ["cascade", "modularity"], title: "One breach, then the next", body: "A flood enters a chain of ten channels built for normal flow. Raise the flood, and switch on spillways.", ask: "**Find** the flood at which the chain goes from no breach to many, and what spillways change." },
+      { id: "k5", type: "q", kind: "predict", stage: "predict", min: 1.5, src: ["cascade"], terms: ["cascade"], atoms: ["systems", "model"], stem: "In the model of Angkor's real network, how did the damage grow as floods got bigger?", options: [
+        { t: "Abruptly: little damage, then a sudden jump past a threshold", ok: true, why: "A cascade has a tipping point: below it the network absorbs the flood, above it one failure drives the next." },
+        { t: "Steadily: twice the flood, twice the damage", bug: "linear", why: "The defining feature of a cascade is that it is not proportional." },
+        { t: "It fell, because bigger floods washed the silt out of the channels", bug: "inversion", why: "Bigger floods broke more of the network, not less." },
+        { t: "Not at all, since the network was built for monsoons", bug: "confirm", why: "Built for normal monsoons; the extremes were the problem." },
+      ] },
+      {
+        id: "k6", type: "contrast", stage: "contrast", min: 2.5, src: ["drought", "cascade"], terms: ["modularity"], atoms: ["causal", "judgment"], title: "Climate, or the network?",
+        left: { title: "The climate story", body: "Decades of failed monsoons and violent floods in the 14th and 15th centuries broke Angkor's water supply and its harvests." },
+        right: { title: "The network story", body: "A water system so connected that local damage spread through it; the same climate would have done less to a more [[modularity|modular]] city." },
+        q: { stem: "What do the tree rings and the network model support together?", options: [
+          { t: "A strain from outside meeting a system that let failure spread", ok: true, why: "Climate supplied the shock and the network's design amplified it; politics and trade moving south are argued too. One cause is rarely enough." },
+          { t: "Climate alone, since the droughts are dated in the tree rings", bug: "confirm", why: "Dated droughts show a strain; they do not show why the city could not absorb it." },
+          { t: "The network alone, since cities do not care about the weather", bug: "rigid", why: "Without the extreme rains the network's weakness would not have been tested." },
+          { t: "Neither, because the causes of a city's decline can never be studied", bug: "rigid", why: "They can be weighed, as these studies do, even if never settled." },
+        ] },
+      },
+      { id: "k7", type: "q", kind: "transfer", stage: "transfer", min: 1.5, src: ["cascade"], atoms: ["systems", "strategy"], stem: "A hospital's piped oxygen runs through valves that can shut off one ward's supply without touching the others. Why build it that way?", options: [
+        { t: "So a leak or fire in one ward can be shut off on its own", ok: true, why: "Zone valves are Angkor's missing spillways: they make the network modular, so one failure stays in one ward." },
+        { t: "To let each ward take more oxygen than the others whenever it wants to", bug: "irrelevant", why: "The valves are for isolation in emergencies, not for sharing supply." },
+        { t: "Because a single pipe to all wards would be cheaper to maintain", bug: "surface", why: "It might be cheaper, and it would let one failure reach every ward." },
+        { t: "There is no reason; it is a tradition from older hospitals", bug: "authority", why: "It is a safety design, for exactly the reason Angkor teaches." },
+      ] },
+      { id: "k8", type: "q", kind: "far", stage: "far", min: 1.5, src: ["blackout"], atoms: ["systems", "analogy"], stem: "On 14 August 2003 a failure in Ohio spread until about 50 million people in the United States and Canada lost power. What does Angkor's network say about how that happened?", options: [
+        { t: "Failed lines pushed their load onto others, which then failed", ok: true, why: "The same mechanism as the channels: each failure moved its load to neighbours until the chain ran across a continent." },
+        { t: "Fifty million people all switched on too much electricity at the same moment", bug: "surface", why: "Demand was ordinary; the failure spread through the grid." },
+        { t: "The power stations in Canada were attacked at the same time", bug: "posthoc", why: "No attack; the investigation traced it to a cascade." },
+        { t: "A grid that large must fail all at once or never", bug: "rigid", why: "It failed piece by piece, very fast; that is what a cascade is." },
+      ] },
+      {
+        id: "k9", type: "forge", stage: "forge", min: 3, title: "Build something that fails small", body: "Pick a system you depend on (your revision plan, a ward's handover, your savings) and design it so one failure stays one failure.",
+        slots: [
+          { key: "mods", label: "Sections", options: [{ t: "split it into parts that can fail on their own", grade: "good", note: "Modularity: a missed week of one subject should not sink the rest.", say: "separate sections" }, { t: "one plan where everything depends on everything", grade: "bad", note: "Angkor's weakness.", say: "one connected plan" }] },
+          { key: "spill", label: "Spillways", options: [{ t: "a buffer that absorbs overflow (a spare day a week)", grade: "good", note: "Slack is the spillway.", say: "a weekly buffer" }, { t: "every hour already allocated", grade: "bad", note: "The first overflow breaches the next channel.", say: "no slack" }] },
+          { key: "warn", label: "Early warning", options: [{ t: "a sign that shows strain before failure", grade: "good", note: "Silt before breach: falling scores before a missed exam.", say: "a strain signal" }, { t: "wait until something breaks", grade: "weak", note: "By then it is spreading.", say: "waiting for a break" }] },
+          { key: "test", label: "Test", options: [{ t: "imagine the worst week and trace what it breaks", grade: "good", note: "A flood rehearsal on paper.", say: "a worst-week rehearsal" }, { t: "plan for an average week only", grade: "bad", note: "Angkor was built for average rains.", say: "average weeks only" }] },
+        ],
+        template: "Build it in {mods}, with {spill}, watch {warn}, and **test it with {test}**.",
+        critique: { stem: "A friend says a buffer day is wasted time. When is that true?", options: [{ t: "Only if nothing ever overflows, which never lasts", ok: true, why: "A spillway looks wasted until the flood; then it is the only thing that works." }, { t: "Always, because real efficiency means every single hour is used", bug: "linear", why: "Full use leaves no room to absorb a shock." }, { t: "Never, since more buffer days are always better than fewer", bug: "rigid", why: "Too much slack wastes real time; the aim is enough to absorb the likely overflow." }] },
+      },
+    ],
+    challenge: { stem: "Failures stay local in a network that is…", options: [{ t: "modular, with limited connections", ok: true }, { t: "as connected as it can possibly be", bug: "inversion" }, { t: "built only for average conditions", bug: "surface" }] },
+    hooks: [
+      { id: "angkor.h1", gap: 1, q: { stem: "The 2012 laser survey showed Angkor to be…", options: [{ t: "a planned city around the temples", ok: true }, { t: "a set of temples standing alone in a forest", bug: "confirm" }, { t: "much younger than historians had thought", bug: "surface" }] } },
+      { id: "angkor.h2", gap: 7, q: { stem: "In a cascade, damage grows with the size of the shock…", options: [{ t: "abruptly, past a threshold", ok: true }, { t: "in proportion to the size of the shock", bug: "linear" }, { t: "not at all", bug: "rigid" }] } },
+      { id: "angkor.h3", gap: 30, q: { stem: "Spillways, firebreaks and zone valves all make a network…", options: [{ t: "modular, so failures stay local", ok: true }, { t: "cheaper to build and much cheaper to run", bug: "surface" }, { t: "more tightly connected", bug: "inversion" }] } },
+    ],
+    deeper: [
+      { title: "Angkor Wat itself", body: "The best-known temple, Angkor Wat, was built in the first half of the 12th century. Earlier in this season the architecture session showed its corbelled vaults, stone without the true arch; here it is one building in a city of a thousand square kilometres." },
+      { title: "The opposite of Timbuktu", body: "Timbuktu's manuscripts survived because their copies failed independently. Angkor's water network suffered because its parts were so connected. The same question, how failures are linked, decides both." },
+      { title: "Open question", body: "Why did Angkor's elite move south in the 15th century: water, war with Ayutthaya, or trade shifting to the rivers and the coast? Each has evidence; how much each mattered is still argued." },
     ],
   });
 

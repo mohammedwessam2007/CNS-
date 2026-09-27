@@ -1,10 +1,10 @@
 {
  "at": "2026-09-26",
- "total": 201,
+ "total": 208,
  "counts": {
-  "slow": 98,
-  "stable": 71,
-  "medium": 30,
+  "slow": 102,
+  "stable": 72,
+  "medium": 32,
   "fast": 2
  },
  "due": [],
@@ -1412,6 +1412,55 @@
   },
   {
    "id": "names:addressmodel",
+   "class": "stable",
+   "year": "2026",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": null
+  },
+  {
+   "id": "angkor:lidar",
+   "class": "slow",
+   "year": "2013",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "angkor:baray",
+   "class": "slow",
+   "year": "11th c.",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "angkor:hydraulic",
+   "class": "medium",
+   "year": "1979",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "angkor:drought",
+   "class": "slow",
+   "year": "2010",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "angkor:cascade",
+   "class": "medium",
+   "year": "2018",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2031-09-26"
+  },
+  {
+   "id": "angkor:blackout",
+   "class": "slow",
+   "year": "2003",
+   "lastChecked": "2026-09-26",
+   "reverifyBy": "2036-09-26"
+  },
+  {
+   "id": "angkor:cascadecalc",
    "class": "stable",
    "year": "2026",
    "lastChecked": "2026-09-26",

@@ -1,10 +1,17 @@
-# Known Limitations (v18.3 · MCQ exam + Renaissance)
+# Known Limitations (v18.4 · MCQ exam + Renaissance)
 
 v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuristic, and what could still go wrong. The evidence lives in `docs/V14_CERTIFICATION_RECEIPT.md` and `docs/VISUAL_QBANK_AUDIT.md`.
 
+## v18.4 Renaissance: global depth (Angkor)
+
+- **What "100% controllable completion" means here.** Every requirement in the self-authored graph that can be built and tested now has a code location and a passing test, or its documents. It says nothing about effects on the learner: all twelve empirical items are still open. The architectural declaration (§282) is not made.
+- **Every region now has one session set there, and most have only one.** Depth beyond that is the perpetual frontier (`atscale`). V12 and V13 count mentions in teaching text, a proxy for depth rather than a measure of it.
+- **The cascade model is illustrative**: ten channels with invented capacities. The study it echoes modelled Angkor's real network.
+- **Why Angkor declined is argued**: climate, the network, politics, and trade moving south. The session teaches the first two with the others named.
+
 ## v18.3 Renaissance: no token regions (Samarkand, Pacific wayfinding, the Maya)
 
-- **Southeast Asia has no session of its own yet.** It is taught in several sessions (the Khmer zero, Angkor's vaults, the Hanoi rat bounty). The stricter requirement `globaldepth` is open, so no completion is declared for v18.3.
+- **Southeast Asia had no session of its own in v18.3.** `globaldepth` was open then; v18.4 closes it with Angkor.
 - **One session per new region.** Central Asia, Oceania and the Americas each gain one session. The floor test (V12) counts mentions in teaching text; that is a proxy for depth, not a measure of it.
 - **Both new models are illustrative.** The Samarkand scale model gives the finest angle the marks allow, not the precision actually achieved. The landfall model lets heading errors build up unchecked, which real navigators prevented.
 - **The region patterns were widened** (Maya, Mexico and Guatemala for the Americas; Polynesia, Hawaiʻi and Tahiti for Oceania) so that the tests see the new sessions. These are real place names, not new keywords invented to pass.

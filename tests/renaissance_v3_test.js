@@ -84,7 +84,7 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       const deep = z3.sessions.filter((x) => x.deep).map((x) => x.id);
       return { bad, n: z3.sessions.length, domains, edgesOk, nodes: Object.keys(CIV.nodes).length, edges: CIV.edges.length, deep, quotes: Object.keys(quotes).length };
     });
-    check('V1', 'Season 3 has 19 sessions covering literature, poetry, philosophy, evidence, mathematics, science, art, music, history, conversation, cultivation, language, film and architecture; every work, rung, requirement and quotation it names exists; every quotation record is complete and rights-classed', st.n === 19 && st.bad.length === 0 && ['literature', 'poetry', 'philosophy', 'evidence', 'mathematics', 'science', 'art', 'music', 'history', 'conversation', 'cultivation', 'language', 'film', 'architecture'].every((d) => st.domains.includes(d)), st);
+    check('V1', 'Season 3 has 20 sessions covering literature, poetry, philosophy, evidence, mathematics, science, art, music, history, conversation, cultivation, language, film and architecture; every work, rung, requirement and quotation it names exists; every quotation record is complete and rights-classed', st.n === 20 && st.bad.length === 0 && ['literature', 'poetry', 'philosophy', 'evidence', 'mathematics', 'science', 'art', 'music', 'history', 'conversation', 'cultivation', 'language', 'film', 'architecture'].every((d) => st.domains.includes(d)), st);
     check('V2', 'The civilisation graph links works, people, ideas and places with no dangling edge; only the trial (a boss world) is a deep session', st.edgesOk && st.nodes >= 60 && st.edges >= 50 && st.deep.join() === 'km3', { nodes: st.nodes, edges: st.edges, deep: st.deep });
     const cov = await p.evaluate(() => {
       const all = window.RENAISSANCE_SEASONS.flatMap((z) => z.sessions.map((x) => Object.assign({ season: z.id }, x)));
@@ -98,12 +98,17 @@ const OFF = { renaissance_probes: 'off', renaissance_experiments: 'off' };
       const prims = Object.fromEntries(Object.entries(PRIM).map(([k, re]) => [k, all.filter((x) => re.test(text(x))).length]));
       // §26 floor (globalfloor): mentions of each region in each session's teaching text (a region label does not count)
       const mentions = Object.fromEntries(Object.entries(REG).map(([k, re]) => [k, Object.fromEntries(all.map((x) => [x.id, (text(x).match(new RegExp(re.source, 'g')) || []).length]).filter(([, n]) => n))]));
-      return { regions, prims, mentions };
+      // §26 depth (globaldepth): sessions whose own setting (the region label) names the region
+      const setIn = Object.fromEntries(Object.entries(REG).map(([k, re]) => [k, all.filter((x) => re.test(String(x.region || '').toLowerCase())).map((x) => x.id)]));
+      return { regions, prims, mentions, setIn };
     });
     const missingRegions = Object.entries(cov.regions).filter(([, v]) => !v.length).map(([k]) => k);
     check('V3', 'Global reach: every one of the ten world regions appears in the content at least as a case (depth is uneven; the coverage oracle tracks which regions have a session of their own), and every one of the 21 bootloader primitives is trained somewhere', missingRegions.length === 0 && Object.values(cov.prims).every((n) => n > 0), { missingRegions, regions: Object.fromEntries(Object.entries(cov.regions).map(([k, v]) => [k, v.length])), prims: cov.prims });
     // a session of its own: at least five mentions in one session's teaching text; otherwise at least two sessions with two or more
     const thin = Object.keys(cov.mentions).filter((k) => { const n = Object.values(cov.mentions[k]); return !(Math.max(0, ...n) >= 5 || n.filter((x) => x >= 2).length >= 2); });
+    // depth: some session is set in the region (its label names it) and teaches it (five or more mentions in its teaching text)
+    const shallow = Object.keys(cov.mentions).filter((k) => !cov.setIn[k].some((sid) => (cov.mentions[k][sid] || 0) >= 5));
+    check('V13', 'Global depth (§26 read strictly): every one of the ten regions is the named setting of a session that teaches it (five or more mentions in that session\'s teaching text)', shallow.length === 0, { shallow, setIn: cov.setIn });
     check('V12', 'No token regions (§26 floor): every one of the ten regions has a session of its own (five or more mentions in its teaching text) or is taught in at least two sessions (two or more mentions each); region labels and citations do not count', thin.length === 0, { thin, mentions: cov.mentions });
     await s.close();
   }

@@ -117,6 +117,9 @@
     N("long-count", "idea", "the Long Count and the Maya zero", "1st c. BCE–", "Mesoamerica", "a positional day count with a shell sign for zero"),
     N("proskouriakoff", "person", "Tatiana Proskouriakoff", "1909–1985", "USA"),
     N("knorozov", "person", "Yuri Knorozov", "1922–1999", "Russia"),
+    N("angkor-network", "place", "Angkor's water network", "9th–15th c.", "Cambodia", "canals, embankments and barays; session angkor"),
+    N("mahendraparvata", "place", "Mahendraparvata, on Phnom Kulen", "8th–9th c.", "Cambodia", "found in the lidar survey"),
+    N("cascade-failure", "idea", "cascading failure and modularity", "—", "—", "one failure shifting load onto the next"),
   ]);
   const E = (a, rel, b) => ({ a, rel, b });
   const edges = [
@@ -141,6 +144,7 @@
     E("ulugh-beg", "built", "samarkand-obs"), E("samarkand-obs", "produced", "zij-sultani"), E("translation-movement", "tradition continued in", "zij-sultani"),
     E("piailug", "navigated", "hokulea"), E("hokulea", "demonstrates", "expand-target"), E("levison-sim", "tests", "expand-target"), E("etak", "partner of", "expand-target"),
     E("dresden-codex", "uses", "long-count"), E("long-count", "parallel of", "place-value"), E("knorozov", "read signs in", "dresden-codex"), E("proskouriakoff", "read the history in", "long-count"),
+    E("angkor-network", "shows", "cascade-failure"), E("mahendraparvata", "precedes", "angkor-network"), E("timbuktu", "opposite case of", "cascade-failure"),
   ];
   window.RENAISSANCE_CIV = { nodes, edges };
 })();

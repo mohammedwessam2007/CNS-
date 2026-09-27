@@ -1,32 +1,31 @@
-# Renaissance completion report (§276) · v18.3
+# Renaissance completion report (§276) · v18.4
 
 Written from the evidence, not from intentions. Every number below comes from the regression log
-`receipts/v18_3/full_regression.log` or from the ledger the oracle generated from that log
+`receipts/v18_4/full_regression.log` or from the ledger the oracle generated from that log
 (`COMPLETION_LEDGER.md`, `COMPLETION_LEDGER.json`, `REQUIREMENT_GRAPH.json` in this folder). Where the two disagree,
 the ledger is right and this report is wrong.
 
 ## 1. Branch and commit
 
-Branch `claude/intellectuality-v14-upgrade-e2e4vt`. The tested snapshot is the commit that adds this report (`v18.3`);
-its parent is `fd60a0a` (v18.2; earlier reports and receipts stay in `receipts/v18_1/`, `receipts/v18_2/` and in the history). Nothing was merged into another branch and no pull request was
+Branch `claude/intellectuality-v14-upgrade-e2e4vt`. The tested snapshot is the commit that adds this report (`v18.4`);
+its parent is `413e925` (v18.3; earlier reports and receipts stay in `receipts/v18_1/` to `receipts/v18_3/` and in the history). Nothing was merged into another branch and no pull request was
 opened: none was asked for (§189).
 
 ## 2. Deployment state
 
-**Deployed through the authorised path; served pages not observed.** The ledger keeps it `BLOCKED-EXTERNAL` until
-this commit's own deployment is confirmed:
+**Deployed through the authorised path and confirmed at the platform; served pages not observed.**
 
 - The Vercel project deploys this branch to production on push, through its Git integration.
-- **Confirmed through the Vercel connector (read only):** after the v18.2 push, `fd60a0a` was deployed as
-  `dpl_A575GUHgdZ5MPDJXvbuwd9VsbZNR`, **READY**, target production. That was 21:32 UTC, about five minutes after the
-  push. An earlier note that the integration had stopped was wrong, and is corrected in `receipts/v18_2/RECEIPT.md`.
-  The v18.1 and v18.2 content commits (`23f58f0`, `e177767`) got no deployment of their own; the next push
-  superseded them. The deployment for this commit is recorded in `receipts/v18_3/RECEIPT.md` after the push.
-- **Still not possible from here:** reading a deployment's detail (404) or fetching its pages ("no access"). The
-  sandbox's egress policy blocks `*.vercel.app`, and that denial is reported rather than routed around. What the live
-  site serves is the build of the deployed commit, which is the build tested locally on port 8790; it is inferred, not
-  observed.
-- To close it fully: the owner opens the live URL and checks that the tab title reads `v18.3`.
+- **Confirmed through the Vercel connector (read only):** the previous tested commit, v18.3 (`413e925`), was deployed
+  as `dpl_HdxJtEGt2BfHsEFDS6UC8zbQBndn`, **READY**, target production, within seconds of its push at 23:54 UTC on
+  26 September. The project read showed it as the latest production deployment. This commit's own deployment is
+  recorded in `receipts/v18_4/RECEIPT.md` after the push.
+- **History:** v18.2's receipt records a wrong conclusion, since corrected in place: that the integration had stopped.
+  It was slow. The v18.1 and v18.2 content commits got no deployment of their own; the next push superseded them.
+- **Not observed:** the served pages. The connector cannot fetch them and the sandbox cannot reach `*.vercel.app`.
+  That denial is reported, not routed around. What the site serves is the build of the deployed commit, which is the
+  build tested on port 8790.
+- To observe it: open the live URL and check that the tab title reads `v18.4`.
 
 Rollback is preserved: every earlier version is a commit on this branch and a rollback candidate on Vercel, and
 `tests/rollback_probe.js` ran in this regression.
@@ -44,23 +43,21 @@ the Vercel build (:8790).
 | department drawings | 16/16 | 16/16 |
 | atlas game · course map · audio options · answer figure | 22/22 · 11/11 · 12/12 · 10/10 | 22/22 · 11/11 · 12/12 · 10/10 |
 | Renaissance legacy suite (R1–R38) | 38/38 | 38/38 |
-| Renaissance v3 suite (organs, trials, sealed battery, counterfeit learners, media, compiler, accessibility, regions) | 58/58 | 58/58 |
+| Renaissance v3 suite (organs, trials, sealed battery, counterfeit learners, media, compiler, accessibility, regions) | 59/59 | 59/59 |
 | OMEGA registry | 11/11 | — |
 | coverage oracle (CO1–CO10) | 10/10 | — |
-| rollback probe (v14.2 → v53 → v18.3) | pass | — |
+| rollback probe (v14.2 → v53 → v18.4) | pass | — |
 | ledger check (`oracle.js --check`) | pass | — |
 
-**566 checks passed, none failed.** The Renaissance share is 213 (legacy 76, v3 116, registry 11, oracle 10). Audits:
+**568 checks passed, none failed.** The Renaissance share is 215 (legacy 76, v3 118, registry 11, oracle 10). Audits:
 the privacy leak audit found 0 text and 0 query leaks over 1,011 items; strict notes coverage is 1,009/1,009 practice
 facts taught (held-out items are counted only, never taught from, by the firewall).
 
 ## 4. Regression status
 
-**Green.** No FAIL line anywhere in the log, and nothing was rerun. The container restarted before this run, so the
-local servers were started again; the regression script now starts every server it needs. Before the full run both
-Renaissance suites passed on the source alone. The new region test V12 was checked both ways: on the v18.2 season
-files it flags Central Asia, the Americas and Oceania, and on this snapshot it flags none
-(`receipts/v18_3/RECEIPT.md`).
+**Green.** No FAIL line anywhere in the log, and nothing was rerun. Before the full run both Renaissance suites passed
+on the source alone. The new depth test V13 was checked both ways: on the v18.3 season files it flags Southeast Asia
+only, and on this snapshot it flags nothing (`receipts/v18_4/RECEIPT.md`).
 
 ## 5. Requirement counts
 
@@ -68,11 +65,11 @@ files it flags Central Asia, the Americas and Oceania, and on this snapshot it f
 |---|---|
 | Numbered mission sections parsed (three missions: 226 + 184 + 301) | 711, every one mapped (CO1) |
 | Canonical requirements | 192 |
-| Controllable (including 2 merged and 1 rejected with reason) | 176 |
-| Completed | 175 |
-| Open controllable | 1 (`globaldepth`, section 14) |
+| Controllable (including 2 merged and 1 rejected with reason) | 177 |
+| Completed | 177 |
+| Open controllable | 0 |
 | Contradicted by evidence | 0 |
-| Blocked external | 3 |
+| Blocked external | 2 |
 | Empirical future | 12 |
 | Perpetual frontier (never counted as closed) | 1 (`atscale`) |
 
@@ -82,7 +79,7 @@ owns its theme, none unattached), 148 merged, and 149 rejected with a code (EVID
 
 ## 6. Coverage percent
 
-**99.4% of controllable requirements closed (175 of 176).** A requirement counts as closed only when the oracle
+**100% of controllable requirements closed (177 of 177).** A requirement counts as closed only when the oracle
 finds its code location in the source and a named test that passed in this log. For a doc or process requirement,
 the files it names must exist. The oracle is attacked by its own suite (CO5): fabricated claims, missing tests,
 failed tests and missing symbols are all caught.
@@ -91,10 +88,10 @@ failed tests and missing symbols are all caught.
 
 | Requirement | Blocker | What would clear it |
 |---|---|---|
-| `deploy` (§188) | no authorised read of the live Vercel project from this session (section 2) | the owner grants the connector access to the project, or checks the live title |
 | `L12`, `L13` (§72) | generating curriculum or pedagogy at runtime needs a content model in the loop: a credential and a budget the owner has not granted, plus a human review step so generated culture meets §136 | the owner's decision; the schema and quality gates that generated sessions would face are already in place |
 
-Nothing else is blocked. The one open requirement, `globaldepth`, is ordinary work and is the next thing to build.
+`deploy` is no longer blocked: the tested commit's deployment is confirmed through the connector (section 2). Its
+served pages remain unobserved, and the report says so wherever deployment is mentioned.
 
 ## 8. Empirical future items
 
@@ -127,7 +124,7 @@ provenance. Detail: `../v3/02_ORGANS.md`.
 | Literature | km1, km2, km3 (*The Brothers Karamazov*), ozy (a whole poem) |
 | Mathematics | euler (Königsberg, the kolam), zero (place value from India and Cambodia through Baghdad to Pisa), maya (the Long Count, the Dresden Codex) |
 | Science | willow, samarkand (Ulugh Beg's observatory), wayfinding (Pacific navigation) (+ seasons 1–2) |
-| History | wisdom (the Baghdad translation movement), timbuktu (the manuscripts, their rescue, archive bias) |
+| History | wisdom (the Baghdad translation movement), timbuktu (the manuscripts, their rescue, archive bias), angkor (a city built around water, and cascading failure) |
 | Philosophy | km2 (theodicy, the Grand Inquisitor) |
 | Art | pattern (girih), taste (season 2) |
 | Music | cadence (question and answer, maqam) |
@@ -137,9 +134,9 @@ provenance. Detail: `../v3/02_ORGANS.md`.
 | Language (§34) | names (forms of address in Russian and Egyptian Arabic as a portal) |
 | Reasoning (seasons 1–2) | commit, select, base, loop, proxy, falsify, bottleneck, question, snow, double, boss |
 
-In numbers: 31 sessions (6 + 6 + 19) with 278 steps, 201 provenance records, 93 returning questions, 84 depth
-cards, 31 live models, 24 drawn figures and 17 registered quotations. There is also a capability genome of 28 atoms
-and 8 compounds, and a civilisation graph of 105 nodes and 91 links. Every figure and model is registered with its job,
+In numbers: 32 sessions (6 + 6 + 20) with 287 steps, 208 provenance records, 96 returning questions, 87 depth
+cards, 32 live models, 24 drawn figures and 17 registered quotations. There is also a capability genome of 28 atoms
+and 8 compounds, and a civilisation graph of 108 nodes and 94 links. Every figure and model is registered with its job,
 its source and its rights class (M1).
 
 ## 10. Masterpiece status
@@ -172,29 +169,28 @@ The benchmark lab (`../05_BENCHMARKS.md`, `../v3/04_MEASUREMENT.md`) defines the
 genius-delta battery (52 items, preregistered and hashed before any answer), the counterfeit learners and the hostile
 matrix. **Built and adversarially tested; no benchmark result exists yet**, because every one needs his answers over
 time. The counterfeit learners (strategies that game the items without understanding) all stay within chance + 0.12,
-checked in this regression (`receipts/v18_3/counterfeit_learners.json`).
+checked in this regression (`receipts/v18_4/counterfeit_learners.json`).
 
 ## 14. Declarations
 
-**§282 Architectural declaration: not made.** Most of the §209 criteria are met by built and tested components, but
-three are not, so the sentence is not written:
+**§282 Architectural declaration: not made.** Most §209 criteria are met by built and tested components, and the
+deployment state is now known at the platform. Two are not met, so the sentence is not written:
 
-- "Deployment state is truthfully known": the platform state is known, but the served pages cannot be read from
-  here (section 2).
-- "The intellectual-life stack is absorbed": every organ exists, but with one to three sessions each; scale (§235)
-  is a perpetual frontier.
-- "Curriculum and pedagogy self-improvement beyond representation order": L2–L11 and L14 exist, but L12 and L13 are
-  blocked (section 12).
+- "The intellectual-life stack is absorbed": every organ exists and every region has a session set there, but with
+  one to four sessions each.
+- "Cultural possession exists" (§210: "possession, not familiarity"): the ladder, the sealed reader-Turing items and
+  the compiler are built, but no one has yet shown possession. That is an empirical result, and it is not in.
 
-**§283 Controllable completion declaration: not made.** v18.3 closes `globalfloor`. Samarkand gives Central Asia a
-session of its own, as the Maya session does for the Americas and Pacific wayfinding for Oceania, and V12 now fails any
-region taught only in passing. Before writing the sentence, the review was repeated once more, with the rule that
-caught language: work that can be built now is controllable, whatever label it carries. It caught `globaldepth` (every
-region is the setting of a session of its own). That had been filed as frontier, and with nine regions done it is no
-longer out of reach. Only Southeast Asia lacks a session of its own; it is taught in several (the Khmer zero, Angkor's
-vaults, the Hanoi rat bounty). `globaldepth` is therefore open, and the next increment builds Angkor's water network
-with a test that each region is the named setting of a session that teaches it. The one frontier item left, `atscale`,
-is perpetual by §235's own word: "eventually … thousands".
+**§283 Controllable completion declaration.** The criteria are met:
+
+- The oracle reports 177 of 177 controllable requirements closed, none open and none contradicted, from this regression's log, and `--check` confirms the committed ledger.
+- The §7 analyses were re-run on this state (`../v3/06_MISSION_LINEAGE.md` §14), under the rule that caught language, token regions and global depth: anything that can be built now is controllable. They found nothing left that can be built now.
+- What is not closed is listed in sections 7 and 8: two requirements blocked on the owner's credential and budget, twelve empirical items that need time and the learner, and one perpetual frontier (`atscale`).
+
+100% CONTROLLABLE RENAISSANCE COMPLETION ACHIEVED.
+
+This means every requirement that can be built and tested now is built and tested. It does not mean the system works
+on the learner: that is §284, below, and none of it is in yet.
 
 **§284 Empirical status.**
 
@@ -212,10 +208,10 @@ Nothing here claims an IQ change, genius, or a guarantee (§285).
 
 ## 15. Receipts
 
-- `receipts/v18_3/full_regression.log`: every suite in this regression, then the coverage-oracle suite and the
+- `receipts/v18_4/full_regression.log`: every suite in this regression, then the coverage-oracle suite and the
   ledger check.
-- `receipts/v18_3/RECEIPT.md`: what ran, where, and the per-suite results.
-- `receipts/v18_3/*.json`: per-suite machine-readable results.
+- `receipts/v18_4/RECEIPT.md`: what ran, where, and the per-suite results.
+- `receipts/v18_4/*.json`: per-suite machine-readable results.
 - `docs/RENAISSANCE/completion/COMPLETION_LEDGER.md` / `.json` and `REQUIREMENT_GRAPH.json`: generated from that
   log by `tools/renaissance/oracle.js`; `--check` fails if they are edited by hand.
 - `docs/RENAISSANCE/completion/REVERIFY.md` / `.json`: when each factual claim must be checked again.

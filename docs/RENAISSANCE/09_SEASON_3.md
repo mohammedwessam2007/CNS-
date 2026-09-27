@@ -4,7 +4,7 @@ Code: `source/public/renaissance-s3a.js` (Karamazov, *Ozymandias*), `renaissance
 pattern, the cadence), `renaissance-s3c.js` (the medicine relay, the salon, the cut, the arch). Tests:
 `tests/renaissance_v3_test.js` (V1–V11, M1, Q1, S2–S3), `tests/renaissance_test.js` R20–R22, R32, R34–R35.
 
-## The nineteen sessions
+## The twenty sessions
 
 | id | Session | Organ | Setting | Min | Work(s) | Live model | Sources |
 |---|---|---|---|---|---|---|---|
@@ -20,6 +20,7 @@ pattern, the cadence), `renaissance-s3c.js` (the medicine relay, the salon, the 
 | samarkand | A scale the size of a hill (v18.3) | science | Samarkand, Central Asia | 24 | Zij-i Sultani | the scale's radius against the eye | 8 |
 | wayfinding | Finding an island with no instruments (v18.3) | science | Micronesia, Hawaiʻi, Tahiti | 24 | Hōkūleʻa, 1976 | the chance of landfall | 7 |
 | maya | Counting days for five thousand years (v18.3) | mathematics | Mesoamerica | 24 | the Dresden Codex | the Long Count converter | 7 |
+| angkor | A city that ran on water (v18.4) | history | Angkor, Cambodia | 24 | Angkor's water network | one breach, then the next | 7 |
 | wisdom | Why did Baghdad translate the Greeks? | history | Iraq, Iran, Central Asia, Spain | 26 | the translation movement | weighing explanations | 8 |
 | timbuktu | What survives: the libraries of Timbuktu (v18.2) | history | Mali and the Sahara | 24 | Timbuktu's manuscripts | one store against scattered copies | 5 |
 | salon | The salon | conversation | Cairo, anywhere | 25 | — | one idea, four listeners | 6 |
@@ -110,6 +111,10 @@ Each major experience was read through six lenses. Findings, and what was done:
 - Maya (v18.3): the oldest Long Count dates are given with the dispute over which shows the oldest zero, and with the
   likelihood that the count began with the Maya's neighbours; Landa's figure of 27 books is his own report; the
   Grolier Codex is counted as genuine after the 2016 study; the Venus table's 584 days are compared with 583.92.
+- Angkor (v18.4): the lidar survey's figures (about 370 km² in about 20 hours of flight; a city of about 1,000 km²)
+  are from Evans et al. (2013); the droughts' dates from Buckley et al. (2010); the cascade from Penny et al. (2018),
+  with the other explanations of the city's decline named; the purpose of the barays is taught as debated; the
+  cascade model is labelled illustrative.
 
 ## What season 3 does not do
 

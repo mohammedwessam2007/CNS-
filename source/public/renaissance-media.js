@@ -69,6 +69,7 @@
     scale: M("Lets the reader set a scale's radius and mark spacing and see the finest angle it can mark against the naked eye's limit.", "computed live as mark spacing divided by radius; the eye's limit of about one minute of arc is standard optometry"),
     landfall: M("Lets the reader set distance, heading error, the number of islands in a chain and whether birds are read, and see the chance of making landfall.", "illustrative numbers; the model lets errors build up unchecked and says that real navigators corrected along the way"),
     longcount: M("Lets the reader write any number of days in the five places of the Maya Long Count and see the shell sign fill empty places.", "computed live; place values 144,000, 7,200, 360, 20 and 1 days, as in standard accounts of the Long Count"),
+    cascade: M("Lets the reader raise a flood through a chain of ten channels and add spillways, to see failure jump past a threshold and modularity contain it.", "an illustrative chain; Penny et al. (2018) modelled Angkor's real network and found the same abrupt behaviour"),
     seating: M("Lets the reader try three seating plans and see which conversations start, whether the big talkers can dominate, and whether the quietest guest is left alone.", "an invented dinner; the rules (shared interests start conversations, dominant voices crowd out others) follow the session's cited studies"),
   };
   const L = (type, job, source, rights) => ({ type, job, source, rights });

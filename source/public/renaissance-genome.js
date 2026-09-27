@@ -74,18 +74,18 @@
   // keeps rival models side by side instead of forcing one grand theory. A layer with no session is a named gap.
   const world = {
     layers: {
-      matter: ["willow", "arch", "samarkand"],
+      matter: ["willow", "arch", "samarkand", "angkor"],
       energy: ["willow"],
       information: ["select", "base", "question", "km3", "zero", "timbuktu", "samarkand", "wayfinding", "maya"],
       life: ["willow", "falsify", "snow"],
       evolution: [],
       mind: ["commit", "loop", "km1", "cadence", "host", "names"],
       intelligence: [],
-      society: ["proxy", "salon", "host", "km2", "names"],
+      society: ["proxy", "salon", "host", "km2", "names", "angkor"],
       economics: ["proxy", "bottleneck", "question"],
-      institutions: ["proxy", "km3", "wisdom", "timbuktu"],
-      technology: ["double", "cut", "arch", "pattern", "zero", "samarkand", "wayfinding"],
-      history: ["wisdom", "falsify", "snow", "euler", "zero", "timbuktu", "samarkand", "wayfinding", "maya"],
+      institutions: ["proxy", "km3", "wisdom", "timbuktu", "angkor"],
+      technology: ["double", "cut", "arch", "pattern", "zero", "samarkand", "wayfinding", "angkor"],
+      history: ["wisdom", "falsify", "snow", "euler", "zero", "timbuktu", "samarkand", "wayfinding", "maya", "angkor"],
       culture: ["km1", "ozy", "cadence", "pattern", "salon", "cut", "timbuktu", "names", "wayfinding", "maya"],
       art: ["pattern", "cadence", "ozy", "cut", "taste"],
       meaning: ["km2", "ozy", "km1", "names", "maya"],
@@ -104,6 +104,7 @@
       names: "the strong claim that language decides what you can see, against the weak claim that its obligatory choices speed some judgements",
       maya: "zero as one people's invention against zero as an idea any long positional count arrives at",
       wayfinding: "accidental drift against deliberate navigation, weighed on a simulation and a voyage",
+      angkor: "climate as the cause against the network as the amplifier, and other causes argued beside both",
       cadence: "‘in tune’ as physics against ‘in tune’ as a learned tradition (the 1932 Cairo debate)",
     },
   };

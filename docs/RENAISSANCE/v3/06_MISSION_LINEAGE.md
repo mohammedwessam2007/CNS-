@@ -110,7 +110,7 @@ reduction is plausible, not proven.
 | Lossy compression | compile map names what is not read; V11 texture rules |
 | Shallow source research, unverified claims | quotation records say how each was checked; half-life re-verification (CO10) |
 | Too many agents, too many abstractions | one engine file, one requirement graph; no agents used in this build |
-| No real content | nineteen playable season-3 sessions, each run to the end (V6) |
+| No real content | twenty playable season-3 sessions, each run to the end (V6) |
 | Weak UX | phone runs, contrast, keyboard, 44-px targets (V4, A1, R24) |
 | Simulated tests that don't reflect humans | stated: every test is a machine test; the human outcomes are in the empirical queue |
 | Optimising what is easy to measure | nothing is optimised on in-session scores; trials are judged on transfer and later recall |
@@ -214,3 +214,33 @@ Every mechanism new in v18 has an ancestor; none is claimed as novel.
 | Self-improvement gap | `03_ENGINE.md` §3 (L12–L13 blocked, with the gates in place) |
 | Domain and medium gap | `02_ORGANS.md` §3–5 (global depth, painting, recorded performance, language) |
 | Life-integration gap | the gate and weekly caps (R16–R17); the real-talk tap (F3); `04_MEASUREMENT.md` §7 |
+
+## 14. The §7 analyses re-run before the v18.4 declaration
+
+Each analysis was run again on the v18.4 state, looking for controllable work hidden under another label. The
+rule applied throughout: if something can be built now, it is controllable, whatever class it was filed under.
+
+| Analysis | Result at v18.4 |
+|---|---|
+| Coverage oracle | All 711 sections mapped (CO1). The ledger is generated from the v18.4 regression log and checked by `--check`. |
+| Unknown-unknown search | Three gaps found across the reviews for v18.1–v18.3, each outside what the tests then measured: language had no session (§34); three regions were taught only in passing (§26); one region had no session set there. All three are built and tested (names; samarkand, wayfinding, maya and V12; angkor and V13). |
+| Red team | The frontier and external lists were re-examined item by item (below). The critic panel and content audits in `../09_SEASON_3.md` cover every new session. |
+| Prior-art search | Unchanged since §12; the new sessions teach cited scholarship and claim no invention. |
+| Dependency analysis | Where a new session builds on another it says so (zero → euler, maya → zero, timbuktu → wisdom, names → km1), and V1 checks every one exists. The others stand alone. |
+| Implementation gap | The oracle's open list is empty; every build and guard requirement has a code location and a passing named test. |
+| User-experience gap | Every new figure passed the 360-px legibility check (R34) after the v18.2 fixes; every new session is played to the end on a phone by V6/V4. |
+| Benchmark gap | Unchanged: explanation and writing are not measured (a grader needs a person, or a model the owner has not provided); every benchmark waits for the learner's answers. |
+| Source and rights gap | 208 claims carry a year and a re-verification date (CO10). Painting and recorded performance still need licensed or public-domain media the sandbox cannot fetch (Wikimedia is blocked by the egress policy, which is reported, not routed around). |
+| Self-improvement gap | L2–L11 and L14 run as safe trials. L12–L13 need a content-generating model, a credential and a budget; granting those is the owner's decision (§248). |
+| Domain and medium gap | Every organ has a session and every region has a session set there. Breadth beyond that (thousands of works, every form) is `atscale`, perpetual by §235's "eventually". |
+| Life-integration gap | The gate, weekly caps, stop rule and real-talk tap are unchanged and tested (R16–R17, F3). |
+
+**The remaining non-closed items, re-examined:**
+
+- `L12`, `L13`: blocked on a credential and budget that only the owner can grant; self-granting is forbidden (§248).
+- `atscale`: perpetual by definition.
+- The twelve empirical items: they need time and the learner's answers.
+- `canon` and `zoom` are merged into `compiler` and `reps`, where they are implemented and tested.
+- `faculty` (simulated great minds) is rejected under the no-hallucinated-culture rule (§136).
+
+None of these can be built today.
