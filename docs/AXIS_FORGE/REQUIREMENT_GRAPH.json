@@ -127,20 +127,34 @@
     {
       "id": "AF21",
       "name": "Vercel build injects observer after Renaissance",
-      "status": "IMPLEMENTED_PENDING_PREVIEW",
-      "evidence": "workflow/build"
+      "status": "SOURCE_VERIFIED_EXTERNAL_DEPLOY_BLOCKED",
+      "evidence": "canonical source loads Axis Forge exactly once after Renaissance; Vercel status on head: deployment rate limited for 24 hours"
     },
     {
       "id": "AF22",
       "name": "production v18.4 remains unchanged until promotion",
       "status": "VERIFIED",
-      "evidence": "Vercel production still 1dc9546"
+      "evidence": "production remains READY on Renaissance v18.4 commit 1dc9546 while Axis Forge source is isolated on PR #2"
     },
     {
       "id": "AF23",
       "name": "no faculty is claimed discovered before real learner evidence",
       "status": "VERIFIED",
       "evidence": "design invariant"
+    }
+  ],
+  "externalBlockers": [
+    {
+      "id": "vercel-preview",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": "GitHub/Vercel commit status on dfc9d732: 'Deployment rate limited — retry in 24 hours.'",
+      "effect": "latest integrated preview cannot be produced now; production remains untouched"
+    },
+    {
+      "id": "github-actions-runner",
+      "status": "INFRASTRUCTURE_FAILURE",
+      "evidence": "Actions jobs end before runner allocation (runner_id 0; zero steps); direct exact-module verification is 20/20",
+      "effect": "workflow is not treated as source-code evidence"
     }
   ]
 }
