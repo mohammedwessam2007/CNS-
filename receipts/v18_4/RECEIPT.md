@@ -55,6 +55,16 @@ connector's confirmation of the previous tested commit's production deployment, 
 empirical items with due dates, and 1 is perpetual frontier (`atscale`). See
 `docs/RENAISSANCE/completion/COMPLETION_LEDGER.md` and `COMPLETION_REPORT.md`.
 
+## Deployment after the push
+
+Checked through the Vercel connector (read only) after `1dc9546` was pushed at 00:14 UTC on 27 September:
+
+- The deployment `dpl_B8QpgnjWqqNKC9dDucs92KbL8f46` was created from `1dc9546` at 00:14:44 UTC, target production.
+  It was BUILDING at 00:15:46 and READY by 00:16:30.
+- The project read at 00:16:30 showed it as the latest production deployment.
+- Not observed: the served pages (the connector has no access to them, and the sandbox blocks `*.vercel.app`). The
+  build is the one tested on :8790 in this regression.
+
 ## Files
 
 - `full_regression.log`: the complete output, in run order, then the coverage-oracle suite and the ledger check.
