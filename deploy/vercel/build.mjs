@@ -46,6 +46,14 @@ if (pics && pics.stats.images > 0 && !html.includes(picTag)) {
   if (html.split(picAnchor).length !== 2) throw new Error("build: expected exactly one learn-v15.js tag in index.html");
   html = html.replace(picAnchor, picTag + picAnchor);
 }
+// Axis Forge is a silent successor observer. Keep source/index untouched so v18.4
+// remains the canonical Renaissance baseline; Vercel loads the observer after Renaissance.
+const axisTag = '<script defer src="/axis-forge-v1.js"></script>',
+  axisAnchor = '<script defer src="/renaissance-v1.js"></script>';
+if (!html.includes(axisTag)) {
+  if (html.split(axisAnchor).length !== 2) throw new Error("build: expected exactly one renaissance-v1.js tag in index.html");
+  html = html.replace(axisAnchor, axisAnchor + axisTag);
+}
 // fail fast: every same-origin script and stylesheet index.html names must be in dist (v16 adds six)
 {
   const { access } = await import("node:fs/promises");

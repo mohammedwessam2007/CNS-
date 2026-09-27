@@ -1,0 +1,160 @@
+{
+  "schema": "axis-forge.requirements/1",
+  "parent": "Renaissance v18.4 @ 2883a29b4700dc602ed72ad5297e98d7251f4d54",
+  "mission": "Evidence-gated cognitive organogenesis observer",
+  "generated": "2026-09-27",
+  "requirements": [
+    {
+      "id": "AF01",
+      "name": "storage isolation",
+      "status": "TESTED",
+      "evidence": "A1"
+    },
+    {
+      "id": "AF02",
+      "name": "existing atom cannot masquerade as novelty",
+      "status": "TESTED",
+      "evidence": "A2"
+    },
+    {
+      "id": "AF03",
+      "name": "registered compound cannot be renamed as a new organ",
+      "status": "TESTED",
+      "evidence": "A3"
+    },
+    {
+      "id": "AF04",
+      "name": "unregistered combination remains hypothesis only",
+      "status": "TESTED",
+      "evidence": "A4"
+    },
+    {
+      "id": "AF05",
+      "name": "Renaissance scan is idempotent",
+      "status": "TESTED",
+      "evidence": "A5"
+    },
+    {
+      "id": "AF06",
+      "name": "only transfer-like unhinted evidence counts as unaided",
+      "status": "TESTED",
+      "evidence": "A6"
+    },
+    {
+      "id": "AF07",
+      "name": "two-domain replication cannot claim transfer",
+      "status": "TESTED",
+      "evidence": "A7"
+    },
+    {
+      "id": "AF08",
+      "name": "transfer requires 3 domains + held-out + real-world evidence",
+      "status": "TESTED",
+      "evidence": "A8"
+    },
+    {
+      "id": "AF09",
+      "name": "promotion cannot self-grant authority",
+      "status": "TESTED",
+      "evidence": "A9"
+    },
+    {
+      "id": "AF10",
+      "name": "eligible promotion requires explicit human approval",
+      "status": "TESTED",
+      "evidence": "A10"
+    },
+    {
+      "id": "AF11",
+      "name": "AI-assisted performance cannot inflate human evidence",
+      "status": "TESTED",
+      "evidence": "A11"
+    },
+    {
+      "id": "AF12",
+      "name": "routine digital work can be classified OUTSOURCE",
+      "status": "TESTED",
+      "evidence": "A12"
+    },
+    {
+      "id": "AF13",
+      "name": "embodied capability can be classified EMBODY",
+      "status": "TESTED",
+      "evidence": "A13"
+    },
+    {
+      "id": "AF14",
+      "name": "irreducible cultural transformation can be EXPERIENCE",
+      "status": "TESTED",
+      "evidence": "A14"
+    },
+    {
+      "id": "AF15",
+      "name": "AI-strong but human-transforming capability can be COEVOLVE",
+      "status": "TESTED",
+      "evidence": "A15"
+    },
+    {
+      "id": "AF16",
+      "name": "probe compiler demands new-domain no-AI testing",
+      "status": "TESTED",
+      "evidence": "A16"
+    },
+    {
+      "id": "AF17",
+      "name": "candidate revocation preserves lineage",
+      "status": "TESTED",
+      "evidence": "A17"
+    },
+    {
+      "id": "AF18",
+      "name": "state export/import preserves evidence portability",
+      "status": "TESTED",
+      "evidence": "A18"
+    },
+    {
+      "id": "AF19",
+      "name": "corrupt state is preserved before recovery",
+      "status": "TESTED",
+      "evidence": "A19"
+    },
+    {
+      "id": "AF20",
+      "name": "kill switch prevents observation",
+      "status": "TESTED",
+      "evidence": "A20"
+    },
+    {
+      "id": "AF21",
+      "name": "Vercel build injects observer after Renaissance",
+      "status": "SOURCE_VERIFIED_EXTERNAL_DEPLOY_BLOCKED",
+      "evidence": "canonical source loads Axis Forge exactly once after Renaissance; Vercel status on head: deployment rate limited for 24 hours"
+    },
+    {
+      "id": "AF22",
+      "name": "production v18.4 remains unchanged until promotion",
+      "status": "VERIFIED",
+      "evidence": "production remains READY on Renaissance v18.4 commit 1dc9546 while Axis Forge source is isolated on PR #2"
+    },
+    {
+      "id": "AF23",
+      "name": "no faculty is claimed discovered before real learner evidence",
+      "status": "VERIFIED",
+      "evidence": "design invariant"
+    }
+  ],
+  "externalBlockers": [
+    {
+      "id": "vercel-preview",
+      "status": "BLOCKED_EXTERNAL",
+      "evidence": "GitHub/Vercel commit status on dfc9d732: 'Deployment rate limited — retry in 24 hours.'",
+      "effect": "latest integrated preview cannot be produced now; production remains untouched"
+    },
+    {
+      "id": "github-actions-runner",
+      "status": "INFRASTRUCTURE_FAILURE",
+      "evidence": "Actions jobs end before runner allocation (runner_id 0; zero steps); direct exact-module verification is 20/20",
+      "effect": "workflow is not treated as source-code evidence"
+    }
+  ]
+}
