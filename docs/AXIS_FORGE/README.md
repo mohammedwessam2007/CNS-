@@ -230,13 +230,18 @@ The GitHub workflow additionally performs a Vercel build with picture downloads 
 
 ## 12. What "complete" means here
 
-v0 is complete when:
+v0 has two separate completion states.
+
+**Controllable/source completion** requires:
 
 1. its unit/hostile checks pass;
-2. the Vercel build contains the observer;
-3. the branch preview is healthy;
-4. production v18.4 is unchanged;
+2. canonical source loads the observer exactly once after Renaissance;
+3. the build path preserves that loader without duplication;
+4. production v18.4 remains unchanged until source is intentionally merged;
 5. no candidate is falsely promoted before real evidence exists.
+
+**Deployment verification** is separate. A preview or production build is not called verified until it is actually
+observed. Provider quota/rate limits are recorded as external blockers rather than relabelled as source failures.
 
 That does **not** mean Axis Forge has discovered a new cognitive faculty. The first such claim can only be earned by future human evidence.
 
