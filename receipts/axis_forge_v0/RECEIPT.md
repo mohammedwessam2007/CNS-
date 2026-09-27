@@ -96,3 +96,26 @@ truth claim.
 
 The first genuine Axis Forge result requires learner data. A candidate cannot become `TRANSFERRED` before the
 hard evidence floor in `docs/AXIS_FORGE/README.md`, and cannot become `PROMOTED` without explicit human approval.
+
+## Post-merge verification
+
+PR #2 merged into the stable/default branch at:
+
+`b2342966c9f7b3615ff8b6eb950dbb8a1bfa509e`
+
+GitHub reports the PR closed and merged. The stable branch advanced from `2883a29` to `b234296`.
+
+The Vercel status attached to the merge commit is **failure only because of provider quota** and states exactly:
+
+> Deployment rate limited — retry in 24 hours.
+
+Therefore current truth is deliberately split:
+
+- **SOURCE:** Axis Forge v0 is merged into the stable CNS/Renaissance lineage.
+- **PRODUCTION:** still the previously verified Renaissance v18.4 deployment from `1dc9546`.
+- **AXIS FORGE PRODUCTION DEPLOYMENT:** not verified and not claimed.
+- **CODE VERIFICATION:** exact-module hostile verification 20/20; canonical loader count 1; loader immediately follows Renaissance; existing branch preview served the Axis Forge asset with HTTP 200.
+- **EMPIRICAL FACULTY DISCOVERY:** none claimed; requires future learner evidence.
+
+This is the terminal state for the current controllable mission. The remaining deployment gap is external infrastructure,
+not unperformed source work.
