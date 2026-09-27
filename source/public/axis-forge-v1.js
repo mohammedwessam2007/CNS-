@@ -255,8 +255,12 @@
     if (st.events.length > 5000) st.events.splice(0, st.events.length - 5000);
 
     // A single atom may be observed for lineage but cannot become a new organ.
-    const single = candidateFor(ev.atoms);
-    if (single) attachEvidence(single, ev);
+    // Multi-atom events are handled only by the pair/triple generator below so
+    // one observation cannot be counted twice for the same hypothesis.
+    if (ev.atoms.length === 1) {
+      const single = candidateFor(ev.atoms);
+      if (single) attachEvidence(single, ev);
+    }
 
     // Actual organ hypotheses are pair/triple combinations, not renamed tags.
     for (const atoms of combinations(ev.atoms)) {
