@@ -1,0 +1,46 @@
+name: axis-forge-v0
+
+on:
+  push:
+    branches:
+      - astra/axis-forge-v0
+  pull_request:
+    paths:
+      - "source/public/axis-forge-v1.js"
+      - "tests/axis_forge_test.js"
+      - "deploy/vercel/build.mjs"
+      - "docs/AXIS_FORGE/**"
+      - ".github/workflows/axis-forge.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Axis Forge hostile/unit checks
+        run: node tests/axis_forge_test.js
+
+      - name: Install Vercel build dependencies
+        run: npm ci --prefix deploy/vercel
+
+      - name: Build Vercel artifact without network pictures
+        env:
+          PICS: "0"
+        run: node deploy/vercel/build.mjs
+
+      - name: Verify runtime injection
+        run: |
+          test -f deploy/vercel/dist/axis-forge-v1.js
+          grep -q '<script defer src="/axis-forge-v1.js"></script>' deploy/vercel/dist/index.html
+          node --check deploy/vercel/dist/axis-forge-v1.js
