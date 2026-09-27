@@ -1,14 +1,15 @@
-# Renaissance completion report (§276) · v18.4
+# Renaissance completion report (§276) · v18.5
 
 Written from the evidence, not from intentions. Every number below comes from the regression log
-`receipts/v18_4/full_regression.log` or from the ledger the oracle generated from that log
+`receipts/v18_5/full_regression.log` or from the ledger the oracle generated from that log
 (`COMPLETION_LEDGER.md`, `COMPLETION_LEDGER.json`, `REQUIREMENT_GRAPH.json` in this folder). Where the two disagree,
 the ledger is right and this report is wrong.
 
 ## 1. Branch and commit
 
-Branch `claude/intellectuality-v14-upgrade-e2e4vt`. The tested snapshot is the commit that adds this report (`v18.4`);
-its parent is `413e925` (v18.3; earlier reports and receipts stay in `receipts/v18_1/` to `receipts/v18_3/` and in the history). Nothing was merged into another branch and no pull request was
+Branch `claude/intellectuality-v14-upgrade-e2e4vt`. The tested snapshot is `1b9d7c6` (v18.5: the Kasr Al Ainy book figures and the Renaissance door in Tools, merged
+with the Axis Forge commits another session pushed meanwhile, plus the Axis Forge A18 fix); this report and its
+receipt are committed on top of it. Earlier reports and receipts stay in `receipts/v18_1/` to `receipts/v18_4/` and in the history. Nothing was merged into another branch and no pull request was
 opened: none was asked for (§189).
 
 ## 2. Deployment state
@@ -16,16 +17,14 @@ opened: none was asked for (§189).
 **Deployed through the authorised path and confirmed at the platform; served pages not observed.**
 
 - The Vercel project deploys this branch to production on push, through its Git integration.
-- **Confirmed through the Vercel connector (read only):** the previous tested commit, v18.3 (`413e925`), was deployed
-  as `dpl_HdxJtEGt2BfHsEFDS6UC8zbQBndn`, **READY**, target production, within seconds of its push at 23:54 UTC on
-  26 September. The project read showed it as the latest production deployment. This commit's own deployment is
-  recorded in `receipts/v18_4/RECEIPT.md` after the push.
-- **History:** v18.2's receipt records a wrong conclusion, since corrected in place: that the integration had stopped.
-  It was slow. The v18.1 and v18.2 content commits got no deployment of their own; the next push superseded them.
-- **Not observed:** the served pages. The connector cannot fetch them and the sandbox cannot reach `*.vercel.app`.
-  That denial is reported, not routed around. What the site serves is the build of the deployed commit, which is the
-  build tested on port 8790.
-- To observe it: open the live URL and check that the tab title reads `v18.4`.
+- **Confirmed through the Vercel connector (read only):** the tested commit `1b9d7c6` was deployed as
+  `dpl_HDW7dNqT9QheGBokPkzeMBtPr1Wt`, **READY**, target production, the newest production deployment in the listing.
+  The previous tested commit, v18.4 (`1dc9546`), is `dpl_B8QpgnjWqqNKC9dDucs92KbL8f46`, READY, and stays a rollback
+  candidate.
+- **Not observed:** the served pages and files. The connector cannot fetch them, and it returns 404 for a Git
+  deployment's file list. The sandbox cannot reach `*.vercel.app`. That denial is reported, not routed around. What
+  the site serves is the build of the deployed commit, which is the build tested on port 8790.
+- To observe it: open the live URL and check that the tab title reads `v18.5`.
 
 Rollback is preserved: every earlier version is a commit on this branch and a rollback candidate on Vercel, and
 `tests/rollback_probe.js` ran in this regression.
@@ -40,24 +39,27 @@ the Vercel build (:8790).
 | CNS v16 (public / owner device with the department key) | 25/25 · 25/25 | — |
 | certify · spread · learn · hostile · v15.3 | 62/62 · 23/23 · 17/17 · 26/26 · 10/10 | — |
 | Vercel host adapter · option gallery | 14/14 · 7/7 | — |
-| department drawings | 16/16 | 16/16 |
-| atlas game · course map · audio options · answer figure | 22/22 · 11/11 · 12/12 · 10/10 | 22/22 · 11/11 · 12/12 · 10/10 |
-| Renaissance legacy suite (R1–R38) | 38/38 | 38/38 |
+| department drawings, with the Kasr Al Ainy book figures | 18/18 | 18/18 |
+| atlas game · course map · audio options · answer figure | 22/22 · 11/11 · 12/12 · 10/10 | 22/22 · 11/11 · 12/12 (re-run, see section 4) · 10/10 |
+| Renaissance legacy suite (R1–R38, with R1b and R2b for the Tools door) | 40/40 | 40/40 |
 | Renaissance v3 suite (organs, trials, sealed battery, counterfeit learners, media, compiler, accessibility, regions) | 59/59 | 59/59 |
+| Axis Forge (another session's observer, merged) | 20/20 | — |
 | OMEGA registry | 11/11 | — |
 | coverage oracle (CO1–CO10) | 10/10 | — |
-| rollback probe (v14.2 → v53 → v18.4) | pass | — |
+| rollback probe (v14.2 → v53 → v18.5) | pass | — |
 | ledger check (`oracle.js --check`) | pass | — |
 
-**568 checks passed, none failed.** The Renaissance share is 215 (legacy 76, v3 118, registry 11, oracle 10). Audits:
+**596 checks passed, none failed.** The Renaissance share is 219 (legacy 80, v3 118, registry 11, oracle 10). Audits:
 the privacy leak audit found 0 text and 0 query leaks over 1,011 items; strict notes coverage is 1,009/1,009 practice
 facts taught (held-out items are counted only, never taught from, by the firewall).
 
 ## 4. Regression status
 
-**Green.** No FAIL line anywhere in the log, and nothing was rerun. Before the full run both Renaissance suites passed
-on the source alone. The new depth test V13 was checked both ways: on the v18.3 season files it flags Southeast Asia
-only, and on this snapshot it flags nothing (`receipts/v18_4/RECEIPT.md`).
+**Green, with one irregular run recorded.** No FAIL line anywhere in the log. The audio-options suite on the Vercel
+build stopped after A7 in the full run, with neither a result line nor a FAIL line; its error text was filtered out
+of the log. Four re-runs of the unchanged test on the same build passed 12/12. Its A8 step now waits for the host's
+one sync reload, as A7 already did, and passed 12/12 on both builds (appended to the log). The cause of the stop was
+not reproduced and is not claimed (`receipts/v18_5/RECEIPT.md`).
 
 ## 5. Requirement counts
 
@@ -169,7 +171,7 @@ The benchmark lab (`../05_BENCHMARKS.md`, `../v3/04_MEASUREMENT.md`) defines the
 genius-delta battery (52 items, preregistered and hashed before any answer), the counterfeit learners and the hostile
 matrix. **Built and adversarially tested; no benchmark result exists yet**, because every one needs his answers over
 time. The counterfeit learners (strategies that game the items without understanding) all stay within chance + 0.12,
-checked in this regression (`receipts/v18_4/counterfeit_learners.json`).
+checked in this regression (`receipts/v18_5/counterfeit_learners.json`).
 
 ## 14. Declarations
 
@@ -208,10 +210,10 @@ Nothing here claims an IQ change, genius, or a guarantee (§285).
 
 ## 15. Receipts
 
-- `receipts/v18_4/full_regression.log`: every suite in this regression, then the coverage-oracle suite and the
+- `receipts/v18_5/full_regression.log`: every suite in this regression, then the coverage-oracle suite and the
   ledger check.
-- `receipts/v18_4/RECEIPT.md`: what ran, where, and the per-suite results.
-- `receipts/v18_4/*.json`: per-suite machine-readable results.
+- `receipts/v18_5/RECEIPT.md`: what ran, where, and the per-suite results.
+- `receipts/v18_5/*.json`: per-suite machine-readable results.
 - `docs/RENAISSANCE/completion/COMPLETION_LEDGER.md` / `.json` and `REQUIREMENT_GRAPH.json`: generated from that
   log by `tools/renaissance/oracle.js`; `--check` fails if they are edited by hand.
 - `docs/RENAISSANCE/completion/REVERIFY.md` / `.json`: when each factual claim must be checked again.

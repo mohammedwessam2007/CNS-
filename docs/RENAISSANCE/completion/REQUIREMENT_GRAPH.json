@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27T00:13:56.862Z",
- "log": "receipts/v18_4/full_regression.log",
+ "generated": "2026-09-27T21:55:18.773Z",
+ "log": "receipts/v18_5/full_regression.log",
  "inventory": {
   "seasons": 3,
   "sessions": 32,
@@ -7028,8 +7028,8 @@
    "deps": [],
    "status": "IMPLEMENTED",
    "docs": [
-    "receipts/v18_4/full_regression.log",
-    "receipts/v18_4/RECEIPT.md"
+    "receipts/v18_5/full_regression.log",
+    "receipts/v18_5/RECEIPT.md"
    ],
    "code": [],
    "tests": [],
@@ -7061,14 +7061,14 @@
    "status": "IMPLEMENTED",
    "docs": [
     "docs/DEPLOYMENT_VERCEL.md",
-    "receipts/v18_4/RECEIPT.md"
+    "receipts/v18_5/RECEIPT.md"
    ],
    "code": [],
    "tests": [],
    "bench": [],
    "effect": "",
    "blocker": null,
-   "evidence": "Verified through the Vercel connector (read only): the tested v18.3 commit 413e925 is deployed as dpl_HdxJtEGt2BfHsEFDS6UC8zbQBndn, READY, target production, and is the project's latest production deployment; the build is the one tested on :8790. Not observed: the served pages, which the connector cannot fetch and the sandbox cannot reach (*.vercel.app is blocked, reported not routed around). The v18.4 commit's own deployment is recorded in the receipt after the push.",
+   "evidence": "Verified through the Vercel connector (read only): the tested v18.4 commit 1dc9546 is deployed as dpl_B8QpgnjWqqNKC9dDucs92KbL8f46, READY, target production, and was the project's latest production deployment; the build is the one tested on :8790. Not observed: the served pages, which the connector cannot fetch and the sandbox cannot reach (*.vercel.app is blocked, reported not routed around). The v18.5 commit's own deployment is recorded in the receipt after the push.",
    "sup": null,
    "reason": null,
    "due": null,

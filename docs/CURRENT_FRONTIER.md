@@ -35,7 +35,15 @@ No new cognitive faculty is claimed. Axis Forge v0 is the instrument that makes 
 
 ## Deployment truth
 
-Verified production remains Renaissance v18.4 from commit `1dc95466bfef647980a4b56a8a8d6ba291a57326`,
+**Update, 27 Sep 2026 (v18.5):** production is now `1b9d7c660bdbfa07b2e4fd904ae8b21000e6f820`, deployment
+`dpl_HDW7dNqT9QheGBokPkzeMBtPr1Wt`, READY, confirmed through the Vercel connector's deployment listing. That commit is
+v18.5 (the Kasr Al Ainy book figures, the Renaissance door in Tools) merged with the Axis Forge commits below, plus a
+fix for Axis Forge A18, which failed on `25fa601` in a clean container (19/20; 20/20 after the fix). So a deployment of
+a commit containing Axis Forge is READY in production. The served page and `/axis-forge-v1.js` were **not** observed:
+the connector cannot fetch them and the build sandbox cannot reach `*.vercel.app`. The rule below still holds until
+someone opens the live page. Receipt: `receipts/v18_5/RECEIPT.md`.
+
+Before v18.5, verified production was Renaissance v18.4 from commit `1dc95466bfef647980a4b56a8a8d6ba291a57326`,
 deployment `dpl_B8QpgnjWqqNKC9dDucs92KbL8f46`, READY.
 
 Vercel rejected a deployment of the Axis Forge merge commit because of provider quota:

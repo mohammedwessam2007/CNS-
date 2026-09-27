@@ -84,8 +84,15 @@ function fakeSpeech() {
     }
     a7b = a7b || {};
     check('A7', '"Turn commute mode off" stops the voice at once, hides it all again, and stays off after a reload (the picked voice is remembered)', a7.cancelled && !a7.on && !a7.commute && a7.kind !== 'COMMUTE' && !a7.speak && a7.after === 0 && /OFF/.test(a7.label) && !a7b.on && a7b.voice === 'com.apple.voice.compact.en-US.Samantha' && /OFF/.test(a7b.label), { a7, a7b });
-    // A8: the progress panel has the same switch
-    await p.evaluate(() => document.querySelector('[data-ixg="panel"]').click());
+    // A8: the progress panel has the same switch. The host's one sync reload (see A7) can land here too:
+    // settle first, and if the page is replaced under the click, wait for it and click again
+    await p.waitForLoadState('load').catch(() => {});
+    const openPanel = () => p.evaluate(() => document.querySelector('[data-ixg="panel"]').click());
+    await openPanel().catch(async () => {
+      await tick(p, 1500).catch(() => {});
+      await p.waitForLoadState('load').catch(() => {});
+      await openPanel();
+    });
     await tick(p, 200);
     const box = await p.$('[data-ixau-opt="commute"]');
     const was = box ? await box.isChecked() : null;
