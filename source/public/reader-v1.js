@@ -7,7 +7,7 @@
 "use strict";
 const DB="renaissance_reader_v1",STORE="sources",VERSION=1,MAX_CHARS=12000000,MAX_FILE=100*1024*1024;
 const STOP=new Set(("the a an and or but if then than of to in on at for from by with without into onto over under is are was were be been being this that these those it its as not no yes we you they he she i our your their his her who whom whose which what when where why how can could should would may might will shall do does did done have has had having about after before during through between among against because while although however therefore thus also such more most less least many much some any each every both either neither one two first second other another same own only very just still even already yet all per via et al der die das den dem des ein eine einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur einen einem einer sich dass weil während jedoch daher mehr weniger alle jeder jede jedes عربي العربية في من على إلى عن هو هي هذا هذه ذلك تلك كان كانت يكون تكون مع بدون أو و ثم لكن إذا إن أن ما لا نعم كل بعض أي بين عند حتى حيث الذي التي الذين هناك هنا كما لقد لم لن قد قبل بعد أثناء خلال ضمن الى على من عن في der die das den dem des ein eine einen einem einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur sich dass weil während jedoch daher mehr weniger alle jeder jede jedes".split(/\\s+/)));
-let dbp=null,current=null,pdfmod=null,zipmod=null,pdfDocs=new Map();
+let dbp=null,current=null,pdfmod=null,zipmod=null,pdfDocs=new Map(),flow=null;
 const $=(s)=>document.querySelector(s);
 const E=(s)=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const now=()=>Date.now(), dayMs=86400000;
@@ -527,22 +527,57 @@ function view(r,tab){
  if(tab==="source")return '<h3>Full extracted source · never amputated</h3><div class="rrAudit">SHA-256 of extracted text: '+E(r.hash)+' · imported '+new Date(r.createdAt).toLocaleString()+'. '+(r.binary?"Original binary preserved locally.":"Text itself is the original imported payload.")+'</div><div class="rrSourceBox">'+E(r.text)+'</div>';
  return "";
 }
+function guidedSequence(r){
+ const c=r?.compiled||{},risk=!!(c.audit?.visualDependencyRisk||c.audit?.notationRisk),seq=[];
+ const add=(x)=>{if(x&&!seq.includes(x))seq.push(x);};
+ add("map");
+ if(c.type==="primary"){add("primary");add("capsule");add("verify");if(r?.binary) add("original");add("practice");}
+ else {add("capsule");add("verify");if(risk&&r?.binary)add("original");if((c.irreducible||[]).length)add("primary");add("practice");}
+ return seq;
+}
+function flowLabel(tab){
+ return ({map:"ORIENT",capsule:"COMPRESS",verify:"VERIFY",original:"CHECK ORIGINAL",primary:"KEEP IRREDUCIBLE",practice:"PROVE IT"})[tab]||String(tab||"").toUpperCase();
+}
+function renderFlow(){
+ const el=$("#rrFlow");if(!el)return;
+ if(!current){el.innerHTML="";return;}
+ if(!flow){
+   el.innerHTML='<div class="rrFlowIntro"><div><b>ONE-DOOR REPLACEMENT</b><span>Reader chooses the safe order for this source. It cannot award mastery.</span></div><button class="rrFlowStart" data-rr="startflow">RUN REPLACEMENT SESSION</button></div>';
+   return;
+ }
+ const seq=flow.seq,i=flow.i,tab=seq[i];
+ el.innerHTML='<div class="rrFlowHead"><div><b>STEP '+(i+1)+' / '+seq.length+' · '+E(flowLabel(tab))+'</b><span>'+seq.map((x,k)=>'<i class="'+(k<i?"done":k===i?"now":"")+'">'+(k+1)+'</i>').join("")+'</span></div><div class="rrFlowActions"><button class="rrMini" data-rr="flowprev" '+(i===0?"disabled":"")+'>← BACK</button><button class="rrFlowStart" data-rr="flownext">'+(i===seq.length-1?"FINISH SESSION":"NEXT →")+'</button></div></div>';
+}
+function startFlow(){
+ if(!current)return;
+ flow={seq:guidedSequence(current),i:0};
+ setTab(flow.seq[0],true);
+}
+function moveFlow(delta){
+ if(!flow||!current)return;
+ const next=flow.i+delta;
+ if(next<0)return;
+ if(next>=flow.seq.length){flow=null;renderFlow();setTab("practice");return;}
+ flow.i=next;setTab(flow.seq[flow.i],true);
+}
 async function openSource(r,tab="map"){
- const list=await all();r._relations=related(r,list);current=r;
+ const list=await all();r._relations=related(r,list);current=r;flow=null;
  const m=$("#rrModal");m.hidden=false;document.body.style.overflow="hidden";
  const c=r.compiled,ms=masteryState(r);
  $("#rrTitle").textContent=r.title;
  const rv=c.verdict||replacementVerdict(c.type,c.audit,c.questions,c.words);
  $("#rrVerdict").innerHTML='<div><strong>'+E(c.law.note)+'</strong><p>'+E(c.type.toUpperCase())+' · '+c.paragraphs+' paragraphs · '+c.sentences+' sentences · evidence state: '+E(ms.label)+'. Exact source is always one tab away.</p></div><div class="rrBig">'+E(rv.label)+'</div>';
- $("#rrMetrics").innerHTML=metrics(r);setTab(tab);
+ $("#rrMetrics").innerHTML=metrics(r);setTab(tab);renderFlow();
 }
-function setTab(tab){
+function setTab(tab,fromFlow){
  if(!current)return;
+ if(flow&&!fromFlow){const k=flow.seq.indexOf(tab);if(k>=0)flow.i=k;}
  document.querySelectorAll(".rrTab").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
  $("#rrView").innerHTML=view(current,tab);
  if(tab==="original")renderOriginalPage(current,1);
+ renderFlow();
 }
-function close(){current=null;$("#rrModal").hidden=true;document.body.style.overflow="";}
+function close(){current=null;flow=null;$("#rrModal").hidden=true;document.body.style.overflow="";}
 async function score(qid,ok){
  if(!current)return;
  const r=await get(current.id),q=r.compiled.questions.find(x=>x.id===qid);if(!q)return;
@@ -572,12 +607,12 @@ async function compileFromUI(){
 function mount(){
  const host=$("#rrHost");if(!host)return;
  host.innerHTML='<section class="rrShell"><div class="rrHero"><div><p class="rsEyebrow">READER OS · READING REPLACEMENT ENGINE</p><h2>Replace the reading.<br><em>Keep the knowledge.</em></h2><p>Bring the source you would otherwise spend an hour, a week, or a month reading. Renaissance keeps the entire extractable text, builds an anchored compression ladder, preserves irreducible passages, isolates evidence that deserves exact checking, and schedules retrieval until the source survives without the page.</p></div><div class="rrLaw"><b>THE LAW</b><span>If reading is transport for information, compress it. If exact wording, methods, evidence, style or aesthetic experience is the cargo, keep that part primary. No summary is allowed to impersonate the source, and no upload is allowed to impersonate mastery.</span></div></div><div class="rrInput"><textarea id="rrPaste" class="rrPaste" placeholder="Paste an article, chapter, paper, book extract, lecture notes…"></textarea><div class="rrControls"><input id="rrSourceTitle" class="rrTitle" placeholder="Source title (optional)"><select id="rrType" class="rrSelect"><option value="auto">AUTO CLASSIFY</option><option value="nonfiction">NONFICTION / ARTICLE</option><option value="textbook">TEXTBOOK / EXPLANATORY</option><option value="research">RESEARCH PAPER</option><option value="primary">LITERATURE / PRIMARY TEXT</option></select><input id="rrFile" class="rrFile" type="file" accept=".pdf,.epub,.docx,.txt,.md,.markdown,.html,.htm,.csv,.json,.rtf,.reader.json,text/*,application/pdf"><button id="rrCompile" class="rrCompile" type="button">COMPILE READING</button><p class="rrHint">PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON, RTF or pasted text. Source stays on this device. Scanned PDFs and unknown formats fail loudly instead of producing fake understanding.</p></div></div><div id="rrStatus" class="rrStatus" aria-live="polite"></div><div class="rrLibrary"><div class="rrLibraryTop"><h3>Your compiled library</h3><span id="rrLibraryCount"></span></div><div class="rrLibraryTools"><input id="rrSearch" class="rrSearch" type="search" placeholder="Search titles and concepts"><span class="rrHint">Each source can be exported as a hash-verified Reader backup.</span></div><div id="rrCards" class="rrCards"></div></div></section>';
- const modal=document.createElement("div");modal.id="rrModal";modal.className="rrModal";modal.hidden=true;modal.innerHTML='<div class="rrPanel" role="dialog" aria-modal="true" aria-labelledby="rrTitle"><div class="rrTop"><div><span class="rrKicker">RENAISSANCE READER OS</span><h2 id="rrTitle"></h2></div><button class="rrClose" data-rr="close" aria-label="Close">×</button></div><div class="rrBody"><div id="rrVerdict" class="rrVerdict"></div><div id="rrMetrics"></div><div class="rrTabs"><button class="rrTab on" data-rr="tab" data-tab="map">MAP</button><button class="rrTab" data-rr="tab" data-tab="capsule">CAPSULE</button><button class="rrTab" data-rr="tab" data-tab="verify">VERIFY</button><button class="rrTab" data-rr="tab" data-tab="terms">TERMS + CONTRASTS</button><button class="rrTab" data-rr="tab" data-tab="primary">IRREDUCIBLE</button><button class="rrTab" data-rr="tab" data-tab="practice">PROVE IT</button><button class="rrTab" data-rr="tab" data-tab="connections">CONNECTIONS</button><button class="rrTab" data-rr="tab" data-tab="search">EVIDENCE SEARCH</button><button class="rrTab" data-rr="tab" data-tab="original">ORIGINAL</button><button class="rrTab" data-rr="tab" data-tab="source">EXTRACTED SOURCE</button></div><div id="rrView" class="rrView"></div></div></div>';
+ const modal=document.createElement("div");modal.id="rrModal";modal.className="rrModal";modal.hidden=true;modal.innerHTML='<div class="rrPanel" role="dialog" aria-modal="true" aria-labelledby="rrTitle"><div class="rrTop"><div><span class="rrKicker">RENAISSANCE READER OS</span><h2 id="rrTitle"></h2></div><button class="rrClose" data-rr="close" aria-label="Close">×</button></div><div class="rrBody"><div id="rrVerdict" class="rrVerdict"></div><div id="rrMetrics"></div><div id="rrFlow" class="rrFlow"></div><div class="rrTabs"><button class="rrTab on" data-rr="tab" data-tab="map">MAP</button><button class="rrTab" data-rr="tab" data-tab="capsule">CAPSULE</button><button class="rrTab" data-rr="tab" data-tab="verify">VERIFY</button><button class="rrTab" data-rr="tab" data-tab="terms">TERMS + CONTRASTS</button><button class="rrTab" data-rr="tab" data-tab="primary">IRREDUCIBLE</button><button class="rrTab" data-rr="tab" data-tab="practice">PROVE IT</button><button class="rrTab" data-rr="tab" data-tab="connections">CONNECTIONS</button><button class="rrTab" data-rr="tab" data-tab="search">EVIDENCE SEARCH</button><button class="rrTab" data-rr="tab" data-tab="original">ORIGINAL</button><button class="rrTab" data-rr="tab" data-tab="source">EXTRACTED SOURCE</button></div><div id="rrView" class="rrView"></div></div></div>';
  document.body.appendChild(modal);
  $("#rrCompile").addEventListener("click",compileFromUI);$("#rrSearch").addEventListener("input",renderLibrary);
  document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-rr]");if(!b)return;const a=b.dataset.rr;
-  if(a==="close")return close();if(a==="tab")return setTab(b.dataset.tab);
+  if(a==="close")return close();if(a==="tab")return setTab(b.dataset.tab);if(a==="startflow")return startFlow();if(a==="flownext")return moveFlow(1);if(a==="flowprev")return moveFlow(-1);
   if(a==="open"){const r=await get(b.dataset.id);if(r)await openSource(r);return;}
   if(a==="export"){await exportSource(b.dataset.id);return;}
   if(a==="original"){await downloadOriginal(b.dataset.id);return;}
@@ -621,9 +656,12 @@ function doctor(){
   if((x.verify||[]).length<2)failures.push("verification anchors missing");
   if(primary.verdict?.label!=="BRIDGE, DO NOT REPLACE")failures.push("primary-text protection failed");
   if(visual.verdict?.label!=="ORIGINAL-WINDOW REQUIRED")failures.push("visual dependency protection failed");
-  return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label}};
+  const gResearch=guidedSequence({compiled:x,binary:null}),gPrimary=guidedSequence({compiled:primary,binary:null});
+  if(gResearch[0]!=="map"||gResearch[gResearch.length-1]!=="practice"||!gResearch.includes("verify"))failures.push("guided research sequence failed");
+  if(gPrimary[0]!=="map"||gPrimary[1]!=="primary"||gPrimary[gPrimary.length-1]!=="practice")failures.push("guided primary sequence failed");
+  return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label,guided:gResearch.join(">")}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},mastery:masteryState,relationScore,doctor,version:"1.6"};
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;await openSource(r);startFlow();return true;},mastery:masteryState,relationScore,doctor,version:"1.7"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
