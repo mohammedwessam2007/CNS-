@@ -251,8 +251,9 @@ function compile(text,title,chosen){
  questions.push(...deepQuestions);
  const audit=auditCompression(ss,map,keys,terms,counter,verify);
  audit.deepRetrievalPrompts=deepQuestions.length;
- audit.ocrDerived=/\\[PAGE\\s+\\d+\\s+OCR\\]/i.test(text);
- audit.ocrPages=audit.ocrDerived?(text.match(/\\[PAGE\\s+\\d+\\s+OCR\\]/gi)||[]).length:0;
+ const ocrText=String(text).toUpperCase();
+ audit.ocrDerived=ocrText.includes("[PAGE ")&&ocrText.includes(" OCR]");
+ audit.ocrPages=audit.ocrDerived?Math.max(1,ocrText.split(" OCR]").length-1):0;
  const verdict=replacementVerdict(type,audit,questions,words);
  return {
   type,law,words,paragraphs:ps.length,sentences:ss.length,
