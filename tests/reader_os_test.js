@@ -71,6 +71,10 @@ function mature(compiled,deepResponses=true){
  }
  return {compiled:c,createdAt:now-40*d,updatedAt:now};
 }
+const matureOCR=mature(O,true);
+check("mature OCR remains blocked before original spot-check",R.mastery(matureOCR).label!=="READING REPLACEMENT PROVEN",R.mastery(matureOCR));
+matureOCR.ocrVerified={t:Date.now(),pages:[1,2,3],required:3};
+check("mature OCR may prove only after verification receipt",R.mastery(matureOCR).label==="READING REPLACEMENT PROVEN",R.mastery(matureOCR));
 const noDeep=R.mastery(mature(C,false));
 check("button-only deep prompts cannot prove replacement",noDeep.label!=="READING REPLACEMENT PROVEN",noDeep);
 const matureResearch=R.mastery(mature(C,true));
