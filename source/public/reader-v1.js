@@ -156,82 +156,136 @@ async function parsePdf(file,status){
  }
  const data=new Uint8Array(await file.arrayBuffer());
  const task=pdfmod.getDocument({data,cMapUrl:"/vendor/cmaps/",cMapPacked:true,standardFontDataUrl:"/vendor/standard_fonts/",wasmUrl:"/vendor/wasm/"});
- const doc=await task.promise, pages=[];
+ const doc=await task.promise,pages=[]; let extractedWords=0;
  for(let i=1;i<=doc.numPages;i++){
   if(i===1||i%10===0||i===doc.numPages)status("Extracting PDF text · page "+i+" / "+doc.numPages);
   const p=await doc.getPage(i),tc=await p.getTextContent();
   const line=tc.items.map(x=>x.str||"").join(" ").replace(/\s+/g," ").trim();
-  if(line)pages.push("[PAGE "+i+"]\n"+line);
+  extractedWords+=wc(line);
+  pages.push("[PAGE "+i+"]\n"+line);
  }
+ if(extractedWords<Math.max(30,doc.numPages*3)) throw new Error("This PDF appears image-only or scanned. Reader OS refused a fake extraction. OCR is not enabled in this build yet; use a text-searchable PDF or OCR copy.");
  return pages.join("\n\n");
 }
-function zipPath(base,href){
- const parts=(base+href).split("/"),out=[];
- for(const p of parts){if(!p||p===".")continue;if(p==="..")out.pop();else out.push(p);}
- return out.join("/");
-}
-async function zipEngine(){
+async function loadZip(){
  if(!zipmod)zipmod=await import("/vendor/fflate.mjs");
  return zipmod;
 }
-async function parseEpub(file,status){
- status("Opening EPUB locally…");
- const z=await zipEngine(),files=z.unzipSync(new Uint8Array(await file.arrayBuffer())),names=Object.keys(files);
- const read=(n)=>files[n]?z.strFromU8(files[n]):"";
- let opf="";
- const container=read("META-INF/container.xml");
- if(container){
-  const x=new DOMParser().parseFromString(container,"application/xml");
-  opf=x.querySelector("rootfile")?.getAttribute("full-path")||"";
+function decodeBytes(b){return new TextDecoder("utf-8",{fatal:false}).decode(b);}
+function xmlDoc(t){return new DOMParser().parseFromString(t,"application/xml");}
+function localEls(root,name){
+ try{return [...root.getElementsByTagNameNS("*",name)];}catch(e){return [...root.getElementsByTagName(name)];}
+}
+function attrLocal(el,name){
+ if(!el||!el.attributes)return null;
+ for(const a of [...el.attributes])if(a.localName===name||a.name===name||a.name.endsWith(":"+name))return a.value;
+ return null;
+}
+function zipPreflight(data){
+ const dv=new DataView(data.buffer,data.byteOffset,data.byteLength),n=data.byteLength;
+ let eocd=-1;
+ for(let i=n-22;i>=Math.max(0,n-66000);i--)if(dv.getUint32(i,true)===0x06054b50){eocd=i;break;}
+ if(eocd<0)throw new Error("ZIP container is malformed or unsupported.");
+ const entries=dv.getUint16(eocd+10,true),cdSize=dv.getUint32(eocd+12,true),cdOff=dv.getUint32(eocd+16,true);
+ if(entries===0xffff||cdSize===0xffffffff||cdOff===0xffffffff)throw new Error("ZIP64 containers are not accepted in this local parser yet.");
+ if(entries>5000)throw new Error("Archive contains too many internal files.");
+ let p=cdOff,totalU=0,totalC=0,seen=0;
+ while(p+46<=n&&p<cdOff+cdSize&&dv.getUint32(p,true)===0x02014b50){
+  const cs=dv.getUint32(p+20,true),us=dv.getUint32(p+24,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true);
+  if(cs===0xffffffff||us===0xffffffff)throw new Error("ZIP64 entry rejected.");
+  totalU+=us;totalC+=cs;seen++;p+=46+nl+xl+cl;
  }
- let chapters=[];
- if(opf&&files[opf]){
-  const xml=new DOMParser().parseFromString(read(opf),"application/xml"),base=opf.includes("/")?opf.slice(0,opf.lastIndexOf("/")+1):"";
-  const manifest={};
-  xml.querySelectorAll("manifest item").forEach(n=>manifest[n.getAttribute("id")]={href:n.getAttribute("href")||"",type:n.getAttribute("media-type")||""});
-  xml.querySelectorAll("spine itemref").forEach(n=>{
-   const m=manifest[n.getAttribute("idref")];if(!m)return;
-   const p=zipPath(base,m.href);
-   if(files[p]&&/html|xhtml/i.test(m.type+" "+p))chapters.push(p);
-  });
+ if(seen!==entries&&entries!==0)throw new Error("ZIP central directory did not reconcile.");
+ if(totalU>220*1024*1024)throw new Error("Archive expands beyond the 220 MB safety ceiling.");
+ if(totalC>0&&totalU/Math.max(1,totalC)>120)throw new Error("Archive expansion ratio is suspicious; import blocked as a possible ZIP bomb.");
+ return {entries,totalU,totalC};
+}
+function unzipSafe(data){
+ zipPreflight(data);
+ return loadZip().then(z=>z.unzipSync(data));
+}
+function zipPath(base,href){
+ const parts=(base?base.split("/").slice(0,-1):[]).concat(String(href||"").split("/")),out=[];
+ for(const x of parts){if(!x||x===".")continue;if(x==="..")out.pop();else out.push(x);}
+ return out.join("/");
+}
+function htmlToText(t,label){
+ const d=new DOMParser().parseFromString(t,"text/html");
+ d.querySelectorAll("script,style,noscript,svg,canvas").forEach(x=>x.remove());
+ const body=d.body||d.documentElement,out=[];
+ const els=body.querySelectorAll("h1,h2,h3,h4,h5,h6,p,li,blockquote,pre,figcaption");
+ if(els.length){
+  els.forEach(el=>{const x=(el.innerText||el.textContent||"").replace(/\s+/g," ").trim();if(x)out.push(/^H[1-6]$/.test(el.tagName)?"[HEADING] "+x:x);});
+ }else{
+  const x=(body.innerText||body.textContent||"").replace(/\s+/g," ").trim();if(x)out.push(x);
  }
- if(!chapters.length)chapters=names.filter(n=>/\.(xhtml|html|htm)$/i.test(n)&&!/nav\.xhtml$/i.test(n)).sort();
- const out=[];
- for(let i=0;i<chapters.length;i++){
-  if(i===0||i%10===0||i===chapters.length-1)status("Extracting EPUB · section "+(i+1)+" / "+chapters.length);
-  const d=new DOMParser().parseFromString(read(chapters[i]),"text/html");
-  d.querySelectorAll("script,style,noscript,svg").forEach(x=>x.remove());
-  const t=(d.body?.innerText||d.documentElement.textContent||"").replace(/\s+\n/g,"\n").trim();
-  if(t)out.push("[EPUB SECTION "+(i+1)+"]\n"+t);
- }
- if(!out.length)throw new Error("The EPUB opened, but no readable spine text was found.");
- return out.join("\n\n");
+ return (label?"["+label+"]\n":"")+out.join("\n\n");
 }
 async function parseDocx(file,status){
  status("Opening DOCX locally…");
- const z=await zipEngine(),files=z.unzipSync(new Uint8Array(await file.arrayBuffer())),raw=files["word/document.xml"];
- if(!raw)throw new Error("This DOCX has no word/document.xml body.");
- const xml=new DOMParser().parseFromString(z.strFromU8(raw),"application/xml"),out=[];
- xml.querySelectorAll("p").forEach(p=>{
-  const t=[...p.querySelectorAll("t")].map(x=>x.textContent||"").join("").trim();
-  if(t)out.push(t);
- });
- if(!out.length)throw new Error("The DOCX opened, but no readable paragraph text was found.");
+ const data=new Uint8Array(await file.arrayBuffer()),zip=await unzipSafe(data);
+ const names=Object.keys(zip).filter(n=>/^word\/(document|footnotes|endnotes|comments|header\d+|footer\d+)\.xml$/i.test(n))
+  .sort((a,b)=>(a==="word/document.xml"?-1:b==="word/document.xml"?1:a.localeCompare(b)));
+ if(!names.includes("word/document.xml"))throw new Error("DOCX has no word/document.xml.");
+ const out=[];
+ for(const name of names){
+  const d=xmlDoc(decodeBytes(zip[name]));
+  for(const p of localEls(d,"p")){
+   const parts=[];
+   for(const node of [...p.getElementsByTagName("*")]){
+    if(node.localName==="t")parts.push(node.textContent||"");
+    else if(node.localName==="tab")parts.push(" ");
+    else if(node.localName==="br")parts.push("\n");
+   }
+   let line=parts.join("").replace(/[ \t]+/g," ").trim();if(!line)continue;
+   const pStyle=localEls(p,"pStyle")[0],style=(attrLocal(pStyle,"val")||"").toLowerCase();
+   if(style.includes("heading")||style.includes("title"))line="[HEADING] "+line;
+   out.push(line);
+  }
+ }
+ if(!out.length)throw new Error("DOCX contained no extractable text.");
  return out.join("\n\n");
+}
+async function parseEpub(file,status){
+ status("Opening EPUB locally…");
+ const data=new Uint8Array(await file.arrayBuffer()),zip=await unzipSafe(data),dec=(n)=>zip[n]?decodeBytes(zip[n]):"";
+ const container=xmlDoc(dec("META-INF/container.xml")),root=localEls(container,"rootfile")[0],opf=attrLocal(root,"full-path");
+ if(!opf||!zip[opf])throw new Error("EPUB package document could not be located.");
+ const packageDoc=xmlDoc(dec(opf)),manifest=new Map();
+ for(const item of localEls(packageDoc,"item")){
+  const id=attrLocal(item,"id"),href=attrLocal(item,"href"),media=attrLocal(item,"media-type")||"";
+  if(id&&href)manifest.set(id,{path:zipPath(opf,href),media});
+ }
+ const spine=[];
+ for(const it of localEls(packageDoc,"itemref")){const id=attrLocal(it,"idref"),m=manifest.get(id);if(m)spine.push(m);}
+ const ordered=spine.length?spine:[...manifest.values()].filter(x=>/html|xhtml/i.test(x.media)||/\.x?html?$/i.test(x.path));
+ const out=[];let i=0;
+ for(const item of ordered){
+  if(!zip[item.path])continue;i++;if(i===1||i%10===0)status("Extracting EPUB section "+i+" / "+ordered.length);
+  const x=htmlToText(dec(item.path),"EPUB SECTION "+i);if(x.trim())out.push(x);
+ }
+ if(!out.length)throw new Error("EPUB contained no readable spine text.");
+ return out.join("\n\n");
+}
+function stripRtf(t){
+ return String(t||"").replace(/\\'([0-9a-fA-F]{2})/g,(_,h)=>String.fromCharCode(parseInt(h,16)))
+  .replace(/\\par[d]?\b/g,"\n\n").replace(/\\tab\b/g," ")
+  .replace(/\\[a-zA-Z]+-?\d* ?/g,"").replace(/[{}]/g,"").replace(/\n{3,}/g,"\n\n");
 }
 async function readFile(file,status){
  if(file.size>MAX_FILE)throw new Error("This file is over 100 MB. Split it by book/part so the compiler can preserve everything without crashing your device.");
  const name=file.name.toLowerCase();
- if(file.type==="application/pdf"||name.endsWith(".pdf"))return parsePdf(file,status);\n if(name.endsWith(".epub"))return parseEpub(file,status);\n if(name.endsWith(".docx"))return parseDocx(file,status);
+ if(file.type==="application/pdf"||name.endsWith(".pdf"))return parsePdf(file,status);
+ if(name.endsWith(".docx"))return parseDocx(file,status);
+ if(name.endsWith(".epub"))return parseEpub(file,status);
  if(/\.(txt|md|markdown|html?|csv|json|rtf)$/i.test(name)||/^text\//.test(file.type)){
   let t=await file.text();
-  if(/\.html?$/i.test(name)){
-   const d=new DOMParser().parseFromString(t,"text/html");d.querySelectorAll("script,style,noscript,svg").forEach(x=>x.remove());t=d.body?.innerText||d.documentElement.textContent||"";
-  }
+  if(/\.html?$/i.test(name))t=htmlToText(t,"HTML");
+  if(/\.rtf$/i.test(name))t=stripRtf(t);
   if(/\.json$/i.test(name)){try{const o=JSON.parse(t);t=JSON.stringify(o,null,2);}catch(e){}}
   return t;
  }
- throw new Error("Unsupported file. Use PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON or RTF, or paste the text. The compiler refuses unknown formats rather than silently mangling them.");
+ throw new Error("Unsupported file. Use PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON or RTF, or paste the text. Unsupported formats are refused rather than silently mangled.");
 }
 async function saveSource(text,title,type,fileName){
  text=normalize(text); if(text.length>MAX_CHARS)throw new Error("This source exceeds the 12-million-character safety ceiling. Split it into volumes/parts. Nothing was truncated or imported.");
