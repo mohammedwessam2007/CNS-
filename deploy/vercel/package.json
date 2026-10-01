@@ -1,13 +1,11 @@
 {
-  "name": "intellectuality-cns-vercel-host",
+  "name": "renaissance-intellectuality-standalone",
   "private": true,
   "type": "module",
-  "description": "Standalone Renaissance host with local-first Reading Replacement Engine.",
-  "engines": {
-    "node": ">=20"
-  },
+  "description": "Renaissance standalone: local-first adaptive curriculum and Reading Replacement Engine.",
+  "engines": { "node": ">=20" },
   "dependencies": {
-    "@vercel/blob": "2.8.0",
+    "fflate": "0.8.3",
     "pdfjs-dist": "6.3.289"
   }
-}\n
+}
