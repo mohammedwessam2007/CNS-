@@ -1,6 +1,6 @@
-const CACHE="renaissance-v1-622bcb";
+const CACHE="renaissance-reader-v1";
 const CORE=[
-"/","/index.html","/renaissance-v1.css","/renaissance-standalone.css","/renaissance-standalone.js",
+"/","/index.html","/renaissance-v1.css","/renaissance-standalone.css","/renaissance-standalone.js","/reader-v1.css","/reader-v1.js",
 "/renaissance-s1.js","/renaissance-s2.js","/renaissance-s3a.js","/renaissance-s3b.js","/renaissance-s3c.js",
 "/renaissance-civ.js","/renaissance-genome.js","/renaissance-media.js","/renaissance-sealed.js","/renaissance-v1.js","/axis-forge-v1.js",
 "/manifest.webmanifest"
