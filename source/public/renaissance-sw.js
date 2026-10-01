@@ -1,4 +1,4 @@
-const CACHE="renaissance-campus-reader-v4";
+const CACHE="renaissance-reader2-campus12-v5";
 const CORE=[
 "/","/index.html","/renaissance-v1.css","/renaissance-standalone.css","/renaissance-standalone.js","/reader-v1.css","/reader-v1.js","/campus-v1.css","/campus-v1.js",
 "/renaissance-s1.js","/renaissance-s2.js","/renaissance-s3a.js","/renaissance-s3b.js","/renaissance-s3c.js",
