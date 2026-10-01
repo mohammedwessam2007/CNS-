@@ -7,7 +7,7 @@
 "use strict";
 const DB="renaissance_reader_v1",STORE="sources",VERSION=1,MAX_CHARS=12000000,MAX_FILE=100*1024*1024;
 const STOP=new Set(("the a an and or but if then than of to in on at for from by with without into onto over under is are was were be been being this that these those it its as not no yes we you they he she i our your their his her who whom whose which what when where why how can could should would may might will shall do does did done have has had having about after before during through between among against because while although however therefore thus also such more most less least many much some any each every both either neither one two first second other another same own only very just still even already yet all per via et al der die das den dem des ein eine einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur einen einem einer sich dass weil während jedoch daher mehr weniger alle jeder jede jedes عربي العربية في من على إلى عن هو هي هذا هذه ذلك تلك كان كانت يكون تكون مع بدون أو و ثم لكن إذا إن أن ما لا نعم كل بعض أي بين عند حتى حيث الذي التي الذين هناك هنا كما لقد لم لن قد قبل بعد أثناء خلال ضمن الى على من عن في der die das den dem des ein eine einen einem einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur sich dass weil während jedoch daher mehr weniger alle jeder jede jedes".split(/\\s+/)));
-let dbp=null,current=null,pdfmod=null,zipmod=null;
+let dbp=null,current=null,pdfmod=null,zipmod=null,pdfDocs=new Map();
 const $=(s)=>document.querySelector(s);
 const E=(s)=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const now=()=>Date.now(), dayMs=86400000;
@@ -353,14 +353,20 @@ async function readFile(file,status){
  }
  throw new Error("Unsupported file. Use PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON or RTF, or paste the text. Unsupported formats are refused rather than silently mangled.");
 }
-async function saveSource(text,title,type,fileName){
+async function saveSource(text,title,type,fileName,originalFile){
  text=normalize(text); if(text.length>MAX_CHARS)throw new Error("This source exceeds the 12-million-character safety ceiling. Split it into volumes/parts. Nothing was truncated or imported.");
- const id=(await sha(text)).slice(0,24),existing=await get(id);
+ const fullHash=await sha(text),id=fullHash.slice(0,24),existing=await get(id);
  if(existing)return {...existing,duplicate:true};
+ if(originalFile&&navigator.storage?.estimate){
+  try{
+   const est=await navigator.storage.estimate(),free=(est.quota||0)-(est.usage||0),need=originalFile.size+new Blob([text]).size;
+   if(est.quota&&free<need*1.25)throw new Error("Not enough browser storage to preserve the original file safely. Free space or import a smaller source; Reader OS refused to store a lossy copy.");
+  }catch(e){if(/Not enough browser storage/.test(e.message))throw e;}
+ }
  const compiled=compile(text,title,type);
- const rec={id,hash:await sha(text),title:(title||fileName||"Untitled source").trim(),fileName:fileName||null,text,compiled,createdAt:now(),updatedAt:now()};
- await put(rec);
- try{await navigator.storage?.persist?.();}catch(e){}
+ const binary=originalFile?{blob:originalFile,name:originalFile.name,type:originalFile.type||"application/octet-stream",size:originalFile.size}:null;
+ const rec={id,hash:fullHash,title:(title||fileName||"Untitled source").trim(),fileName:fileName||null,text,binary,compiled,createdAt:now(),updatedAt:now()};
+ await put(rec);try{await navigator.storage?.persist?.();}catch(e){}
  return rec;
 }
 function dueText(qs){
@@ -461,7 +467,7 @@ async function compileFromUI(){
   if(file){status("Reading "+file.name+" locally…");text=await readFile(file,(m)=>status(m));}
   if(!text)throw new Error("Paste text or choose a supported file.");
   status("Compiling structure, claims, verification anchors and retrieval…");
-  const rec=await saveSource(text,title,type,file?.name||null);
+  const rec=await saveSource(text,title,type,file?.name||null,file||null);
   status(rec.duplicate?"Already in your library. Opening the existing capsule.":"Compiled locally. No source text was uploaded.");
   renderLibrary();await openSource(rec);
  }catch(e){status(e.message,true);}finally{btn.disabled=false;}
