@@ -7,7 +7,7 @@
 "use strict";
 const DB="renaissance_reader_v1",STORE="sources",VERSION=1,MAX_CHARS=12000000,MAX_FILE=100*1024*1024;
 const STOP=new Set(("the a an and or but if then than of to in on at for from by with without into onto over under is are was were be been being this that these those it its as not no yes we you they he she i our your their his her who whom whose which what when where why how can could should would may might will shall do does did done have has had having about after before during through between among against because while although however therefore thus also such more most less least many much some any each every both either neither one two first second other another same own only very just still even already yet all per via et al der die das den dem des ein eine einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur einen einem einer sich dass weil während jedoch daher mehr weniger alle jeder jede jedes عربي العربية في من على إلى عن هو هي هذا هذه ذلك تلك كان كانت يكون تكون مع بدون أو و ثم لكن إذا إن أن ما لا نعم كل بعض أي بين عند حتى حيث الذي التي الذين هناك هنا كما لقد لم لن قد قبل بعد أثناء خلال ضمن الى على من عن في der die das den dem des ein eine einen einem einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur sich dass weil während jedoch daher mehr weniger alle jeder jede jedes".split(/\\s+/)));
-let dbp=null,current=null,pdfmod=null,zipmod=null,pdfDocs=new Map(),flow=null;
+let dbp=null,current=null,pdfmod=null,zipmod=null,ocrmod=null,pdfDocs=new Map(),flow=null;
 const $=(s)=>document.querySelector(s);
 const E=(s)=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const now=()=>Date.now(), dayMs=86400000;
@@ -257,6 +257,31 @@ function compile(text,title,chosen){
   estimates:{sourceMinutes:Math.max(1,Math.round(words/250)),capsuleMinutes:Math.max(6,Math.round(compressionWords/220+questions.length*.9+map.length*.4+verify.length*.08))}
  };
 }
+async function ocrPdf(doc,status){
+ if(doc.numPages>250)throw new Error("This scanned PDF has more than 250 pages. Split it into volumes so local OCR stays reliable and your device does not become a space heater.");
+ if(!ocrmod)ocrmod=await import("/vendor/tesseract/tesseract.esm.min.js");
+ status("Loading local English + Arabic OCR models…");
+ const worker=await ocrmod.createWorker(["eng","ara"],1,{
+   workerPath:"/vendor/tesseract/worker.min.js",
+   corePath:"/vendor/tesseract-core/",
+   langPath:"/vendor/tessdata/",
+   gzip:true
+ });
+ const out=[];let words=0;
+ try{
+  for(let i=1;i<=doc.numPages;i++){
+   status("OCR · page "+i+" / "+doc.numPages+" · source stays on this device");
+   const page=await doc.getPage(i),v0=page.getViewport({scale:1}),target=Math.min(1800,Math.max(1100,v0.width*1.55)),scale=target/v0.width,vp=page.getViewport({scale});
+   const canvas=document.createElement("canvas");canvas.width=Math.ceil(vp.width);canvas.height=Math.ceil(vp.height);
+   const ctx=canvas.getContext("2d",{alpha:false});await page.render({canvasContext:ctx,viewport:vp}).promise;
+   const ret=await worker.recognize(canvas),line=normalize(ret?.data?.text||"");
+   words+=wc(line);out.push("[PAGE "+i+" OCR]\n"+line);
+   canvas.width=1;canvas.height=1;
+  }
+ }finally{try{await worker.terminate();}catch(e){}}
+ if(words<Math.max(30,doc.numPages*5))throw new Error("Local OCR ran, but produced too little usable text. Reader OS refused to pretend the scan was understood.");
+ return out.join("\n\n");
+}
 async function parsePdf(file,status){
  if(!pdfmod){
   status("Loading local PDF engine…");
@@ -273,7 +298,10 @@ async function parsePdf(file,status){
   extractedWords+=wc(line);
   pages.push("[PAGE "+i+"]\n"+line);
  }
- if(extractedWords<Math.max(30,doc.numPages*3)) throw new Error("This PDF appears image-only or scanned. Reader OS refused a fake extraction. OCR is not enabled in this build yet; use a text-searchable PDF or OCR copy.");
+ if(extractedWords<Math.max(30,doc.numPages*3)){
+  status("No usable text layer found. Switching to local OCR…");
+  return ocrPdf(doc,status);
+ }
  return pages.join("\n\n");
 }
 async function loadZip(){
