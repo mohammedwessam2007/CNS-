@@ -80,16 +80,14 @@ function mature(compiled,deepResponses=true){
  }
  return {compiled:c,createdAt:now-40*d,updatedAt:now};
 }
-const matureOCR=mature(O,true);
-check("mature OCR remains blocked before original spot-check",R.mastery(matureOCR).label!=="READING REPLACEMENT PROVEN",R.mastery(matureOCR));
-matureOCR.ocrVerified={t:Date.now(),pages:[1,2,3],required:3};
-check("mature OCR may prove only after verification receipt",R.mastery(matureOCR).label==="READING REPLACEMENT PROVEN",R.mastery(matureOCR));
 const noDeep=R.mastery(mature(C,false));
 check("button-only deep prompts cannot prove replacement",noDeep.label!=="READING REPLACEMENT PROVEN",noDeep);
 const matureOcrBase=mature(O,true);
 const matureOcrBefore=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:null});
 check("OCR mature record remains blocked before original spot-check",matureOcrBefore.label==="OCR ORIGINAL CHECK REQUIRED"&&matureOcrBefore.score<1,matureOcrBefore);
-const matureOcrWrongHash=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:{t:Date.now(),pages:[1,2,3],required:3,binarySha256:"different-file"}});\ncheck("OCR receipt cannot authorize a different original binary",matureOcrWrongHash.label==="OCR ORIGINAL CHECK REQUIRED"&&matureOcrWrongHash.score<1,matureOcrWrongHash);\nconst matureOcrAfter=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:{t:Date.now(),pages:[1,2,3],required:3,binarySha256:"source-file-hash"}});
+const matureOcrWrongHash=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:{t:Date.now(),pages:[1,2,3],required:3,binarySha256:"different-file"}});
+check("OCR receipt cannot authorize a different original binary",matureOcrWrongHash.label==="OCR ORIGINAL CHECK REQUIRED"&&matureOcrWrongHash.score<1,matureOcrWrongHash);
+const matureOcrAfter=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:{t:Date.now(),pages:[1,2,3],required:3,binarySha256:"source-file-hash"}});
 check("OCR mature record unlocks only after original spot-check receipt",matureOcrAfter.label==="READING REPLACEMENT PROVEN"&&matureOcrAfter.score===1,matureOcrAfter);
 
 const matureResearch=R.mastery(mature(C,true));
