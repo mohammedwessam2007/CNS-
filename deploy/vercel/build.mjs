@@ -1,77 +1,49 @@
-// Build for the Vercel host: copy the exact app (source/public) and add the host adapter.
-// The only change to app files is one <script src="/host-sync.js"> tag injected into index.html;
-// login.html is replaced by the sync-code page (Hatchable email login does not exist here).
-// v15.1: real pictures are downloaded into dist/pics at build time (pics.mjs) so the app shows them
-// from its own domain; one <script defer src="/pics/manifest.js"> tag tells the app where they are.
-import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+// Renaissance-only Vercel build. This branch deliberately excludes the medical CNS shell and assets.
+import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { bundlePictures, readNoteSources } from "./pics.mjs";
 
-const here = (p) => new URL(p, import.meta.url);
-const SRC = here("../../source/public/"),
-  OUT = here("./dist/");
+const here=(p)=>new URL(p,import.meta.url);
+const SRC=here("../../source/public/");
+const OUT=here("./dist/");
+const ASSETS=[
+  "index.html",
+  "renaissance-v1.css",
+  "renaissance-standalone.css",
+  "renaissance-standalone.js",
+  "renaissance-s1.js",
+  "renaissance-s2.js",
+  "renaissance-s3a.js",
+  "renaissance-s3b.js",
+  "renaissance-s3c.js",
+  "renaissance-civ.js",
+  "renaissance-genome.js",
+  "renaissance-media.js",
+  "renaissance-sealed.js",
+  "renaissance-v1.js",
+  "axis-forge-v1.js",
+  "manifest.webmanifest",
+  "renaissance-sw.js"
+];
 
-await rm(OUT, { recursive: true, force: true });
-await mkdir(OUT, { recursive: true });
-await cp(SRC, OUT, { recursive: true });
-await cp(here("./static/"), OUT, { recursive: true, force: true });
-
-const indexUrl = new URL("index.html", OUT);
-let html = await readFile(indexUrl, "utf8");
-const tag = '<script src="/host-sync.js"></script>',
-  anchor = '<meta charset="utf-8">';
-if (!html.includes(tag)) {
-  if (html.split(anchor).length !== 2) throw new Error("build: expected exactly one charset meta in index.html");
-  html = html.replace(anchor, anchor + tag);
+await rm(OUT,{recursive:true,force:true});
+await mkdir(OUT,{recursive:true});
+const integrity={};
+for(const name of ASSETS){
+  const src=new URL(name,SRC), out=new URL(name,OUT);
+  await copyFile(src,out);
+  const buf=await readFile(src);
+  integrity[name]={bytes:buf.byteLength,sha256:createHash("sha256").update(buf).digest("hex")};
 }
-let pics = null;
-if (process.env.PICS !== "0") {
-  try {
-    pics = await bundlePictures({
-      outDir: OUT,
-      noteSources: await readNoteSources(SRC),
-      registrySources: await Promise.all(["visual-registry-v14.js", "real-visuals-v9.js"].map((n) => readFile(new URL(n, SRC), "utf8"))),
-      bases: { wp: process.env.PICS_WP, wrest: process.env.PICS_WREST, commons: process.env.PICS_COMMONS },
-      cacheDir: here("./node_modules/.cache/intellectuality-pics/"),
-      maxMinutes: +(process.env.PICS_MINUTES || 7),
-      graceMs: +(process.env.PICS_GRACE_S || 60) * 1000,
-    });
-  } catch (e) {
-    console.log("[pics] skipped:", e.message);
-  }
-}
-const picTag = '<script defer src="/pics/manifest.js"></script>',
-  picAnchor = '<script defer src="/learn-v15.js"></script>';
-if (pics && pics.stats.images > 0 && !html.includes(picTag)) {
-  if (html.split(picAnchor).length !== 2) throw new Error("build: expected exactly one learn-v15.js tag in index.html");
-  html = html.replace(picAnchor, picTag + picAnchor);
-}
-// Axis Forge is a silent successor observer. Keep source/index untouched so v18.4
-// remains the canonical Renaissance baseline; Vercel loads the observer after Renaissance.
-const axisTag = '<script defer src="/axis-forge-v1.js"></script>',
-  axisAnchor = '<script defer src="/renaissance-v1.js"></script>';
-if (!html.includes(axisTag)) {
-  if (html.split(axisAnchor).length !== 2) throw new Error("build: expected exactly one renaissance-v1.js tag in index.html");
-  html = html.replace(axisAnchor, axisAnchor + axisTag);
-}
-// fail fast: every same-origin script and stylesheet index.html names must be in dist (v16 adds six)
-{
-  const { access } = await import("node:fs/promises");
-  const refs = [...html.matchAll(/<(?:script[^>]*\ssrc|link[^>]*\shref)="\/([^"?#]+)"/g)].map((m) => m[1]).filter((p) => /\.(js|css)$/.test(p) && !p.startsWith("pics/"));
-  for (const p of refs) await access(new URL(p, OUT)).catch(() => { throw new Error("build: index.html names /" + p + " but it is not in dist"); });
-  console.log("[build] " + refs.length + " app scripts/styles present");
-}
-await writeFile(indexUrl, html);
-
-const info = {
-  app: "INTELLECTUALITY CNS",
-  commit: process.env.VERCEL_GIT_COMMIT_SHA || null,
-  branch: process.env.VERCEL_GIT_COMMIT_REF || null,
-  builtAt: new Date().toISOString(),
-  indexSha256: createHash("sha256").update(html).digest("hex"),
-  pictures: pics ? pics.stats : null,
+const info={
+  app:"RENAISSANCE · INTELLECTUALITY",
+  mode:"standalone",
+  source:"CNS- Renaissance organ",
+  gitCommit:process.env.VERCEL_GIT_COMMIT_SHA||null,
+  gitBranch:process.env.VERCEL_GIT_COMMIT_REF||null,
+  builtAt:new Date().toISOString(),
+  assetCount:ASSETS.length,
+  totalBytes:Object.values(integrity).reduce((n,x)=>n+x.bytes,0),
+  integrity
 };
-await writeFile(new URL("build-info.json", OUT), JSON.stringify(info, null, 1));
-console.log("[build] dist ready", info);
-// requests the picture watchdog left behind must not keep the build open
-process.exit(0);
+await writeFile(new URL("build-info.json",OUT),JSON.stringify(info,null,2));
+console.log("[renaissance-build] ready", {assetCount:info.assetCount,totalBytes:info.totalBytes,gitCommit:info.gitCommit});
