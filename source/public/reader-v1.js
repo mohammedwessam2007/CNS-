@@ -156,6 +156,19 @@ function auditCompression(ss,map,keys,terms,counter,verify){
   noGeneratedClaims:true
  };
 }
+function replacementVerdict(type,audit,questions,words){
+ const gates=[];
+ const add=(name,ok,why)=>gates.push({name,ok,why});
+ add("source retained",true,"Full normalized source is stored beside the capsule.");
+ add("extractive claims",audit.extractive===true&&audit.noGeneratedClaims===true,"Capsule claims must remain exact source sentences.");
+ add("structure mapped",audit.sectionCoverage>=.99,"Every structural slice must have an exact anchor.");
+ add("concept coverage",audit.lexicalTopTermCoverage>=.72,"At least 72% of the top content vocabulary must survive the claim capsule.");
+ add("retrieval set",questions.length>=Math.min(6,Math.max(3,Math.round(words/2500))),"Enough source-grounded prompts must exist to test possession.");
+ if(type==="research") add("numeric/method audit",audit.numericEvidenceCaptured>=.75,"Research compression must retain a bounded audit set of numbers/method-like claims.");
+ if(type==="primary") add("primary experience preserved",true,"Primary literature is bridged, never declared fully replaceable.");
+ const pass=gates.every(x=>x.ok);
+ return {pass,label:type==="primary"?"BRIDGE, DO NOT REPLACE":pass?"REPLACEMENT CANDIDATE":"READ / RECOMPILE",gates};
+}
 function relationScore(a,b){
  const A=new Set((a.compiled?.terms||[]).slice(0,18).map(x=>x.term.toLocaleLowerCase()));
  const B=new Set((b.compiled?.terms||[]).slice(0,18).map(x=>x.term.toLocaleLowerCase()));
@@ -190,13 +203,15 @@ function compile(text,title,chosen){
  if(ss.length<5)throw new Error("The source is too short to compile as a reading replacement.");
  const f=frequencies(ss), ranked=sentenceRank(ss,f), terms=termList(f),keys=diverse(ranked,Math.min(28,Math.max(12,Math.ceil(ss.length*.04))));
  const map=mapSections(ps,ss,ranked,Math.min(12,Math.max(6,Math.ceil(Math.sqrt(ps.length))))), questions=questionSet(keys,terms), law=replacementLaw(type,text);
- const counter=contras(ps),verify=verificationAnchors(ss),compressionWords=keys.reduce((n,x)=>n+wc(x.text),0);
+ const counter=contras(ps),verify=verificationAnchors(ss),compressionWords=keys.reduce((n,x)=>n+wc(x.text),0),words=wc(text);
+ const audit=auditCompression(ss,map,keys,terms,counter,verify);
+ const verdict=replacementVerdict(type,audit,questions,words);
  return {
-  type,law,words:wc(text),paragraphs:ps.length,sentences:ss.length,
+  type,law,words,paragraphs:ps.length,sentences:ss.length,
   map,keys:keys.map(({text,pi,score})=>({text,pi,anchor:"P"+(pi+1),score})),
   terms,questions,irreducible:irreducible(type,ps,ranked),counter,verify,
-  audit:auditCompression(ss,map,keys,terms,counter,verify),
-  estimates:{sourceMinutes:Math.max(1,Math.round(wc(text)/250)),capsuleMinutes:Math.max(6,Math.round(compressionWords/220+questions.length*.9+map.length*.4+verify.length*.08))}
+  audit,verdict,
+  estimates:{sourceMinutes:Math.max(1,Math.round(words/250)),capsuleMinutes:Math.max(6,Math.round(compressionWords/220+questions.length*.9+map.length*.4+verify.length*.08))}
  };
 }
 async function parsePdf(file,status){
@@ -401,7 +416,7 @@ function metrics(r){
 function view(r,tab){
  const c=r.compiled,m=masteryState(r);
  if(tab==="map")return '<h3>Source map</h3><p>Every structural slice keeps an exact-source anchor. This is orientation, not a claim that one sentence equals a whole section.</p><div class="rrMap">'+c.map.map((x,i)=>'<div class="rrMapItem"><b>SECTOR '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
- if(tab==="capsule")return '<h3>Compression ladder</h3><div class="rrAudit">Extractive by construction: every claim below is an exact sentence from the source. Renaissance ranks and de-duplicates; it does not fabricate a substitute argument.</div><div class="rrMap">'+c.keys.map((x,i)=>'<div class="rrClaim"><b>CLAIM '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
+ if(tab==="capsule"){const v=c.verdict||replacementVerdict(c.type,c.audit,c.questions,c.words);return '<h3>Compression ladder</h3><div class="rrAudit"><b>'+E(v.label)+'</b><br>'+v.gates.map(x=>(x.ok?'✓ ':'✕ ')+E(x.name)+' · '+E(x.why)).join('<br>')+'</div><p>Every claim below is an exact sentence from the source. Renaissance ranks and de-duplicates; it does not fabricate a substitute argument.</p><div class="rrMap">'+c.keys.map((x,i)=>'<div class="rrClaim"><b>CLAIM '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';}
  if(tab==="terms")return '<h3>Concept vocabulary</h3><p>High-frequency content terms orient the source. Frequency is not importance, so these never substitute for the anchored claims.</p><div class="rrTerms">'+c.terms.map(x=>'<span class="rrTerm"><b>'+x.count+'×</b> '+E(x.term)+'</span>').join("")+'</div>'+(c.counter.length?'<h3>Contrasts / limitations found</h3><div class="rrMap">'+c.counter.map(x=>'<div class="rrClaim"><b>'+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>':'');
  if(tab==="verify")return '<h3>Verification anchors</h3><div class="rrAudit">Methods, numbers, results and limitation-like sentences are deliberately retained for exact checking. High-stakes use still points back to the full source.</div><div class="rrMap">'+(c.verify||[]).map((x,i)=>'<div class="rrClaim"><b>VERIFY '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div><h3>Compression audit</h3><div class="rrMap"><div class="rrRelation"><b>EXTRACTIVE</b><p>'+E(String(c.audit.extractive))+' · no generated claims: '+E(String(c.audit.noGeneratedClaims))+'</p></div><div class="rrRelation"><b>TOP-TERM COVERAGE</b><p>'+Math.round(c.audit.lexicalTopTermCoverage*100)+'%</p></div><div class="rrRelation"><b>NUMERIC EVIDENCE CAPTURE</b><p>'+Math.round((c.audit.numericEvidenceCaptured||0)*100)+'% of the bounded numeric audit set</p></div><div class="rrRelation"><b>SOURCE HASH</b><p class="rrExact">'+E(r.hash)+'</p></div></div>';
  if(tab==="primary")return '<h3>Irreducible passages</h3><p>'+E(c.type==="primary"?"These stay because language, form, voice or sequence is part of the object. The machine is not allowed to eat the art.":"These passages are retained as exact-source checkpoints against compression loss.")+'</p><div class="rrMap">'+c.irreducible.map(x=>'<div class="rrPassage"><b class="rrKicker">P'+(x.pi+1)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
