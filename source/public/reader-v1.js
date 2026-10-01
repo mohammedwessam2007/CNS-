@@ -102,17 +102,24 @@ function findTerm(sentence,terms){
  const low=sentence.toLocaleLowerCase();
  return terms.find(x=>x.term.length>4&&low.includes(x.term.toLocaleLowerCase()))?.term||tokens(sentence).sort((a,b)=>b.length-a.length)[0]||null;
 }
-function questionSet(keys,terms){
+function questionSet(keys,terms,target=10){
  const qs=[];
  for(const k of keys){
   const term=findTerm(k.text,terms);if(!term)continue;
   const re=new RegExp(term.replace(/[.*+?^$()|[\]{}\\]/g,"\\$&"),"i");
   const stem=k.text.replace(re,"_____");
   if(stem===k.text)continue;
-  qs.push({id:"q"+qs.length,stem,answer:term,anchor:"P"+(k.pi+1),source:k.text,due:0,interval:0,attempts:0,correct:0});
-  if(qs.length>=10)break;
+  qs.push({id:"q"+qs.length,kind:"cloze",stem,answer:term,anchor:"P"+(k.pi+1),source:k.text,due:0,interval:0,attempts:0,correct:0,history:[]});
+  if(qs.length>=target)break;
  }
  return qs;
+}
+function probeRequirement(words){
+ if(words<1000)return 6;
+ if(words<5000)return 10;
+ if(words<20000)return 16;
+ if(words<50000)return 24;
+ return 32;
 }
 function deepQuestionSet(keys,counter,verify,terms){
  const out=[];
@@ -169,18 +176,18 @@ function auditCompression(ss,map,keys,terms,counter,verify){
  };
 }
 function replacementVerdict(type,audit,questions,words){
- const gates=[];
+ const gates=[],required=probeRequirement(words);
  const add=(name,ok,why)=>gates.push({name,ok,why});
  add("source retained",true,"Full normalized source is stored beside the capsule.");
  add("extractive claims",audit.extractive===true&&audit.noGeneratedClaims===true,"Capsule claims must remain exact source sentences.");
  add("structure mapped",audit.sectionCoverage>=.99,"Every structural slice must have an exact anchor.");
  add("concept coverage",audit.lexicalTopTermCoverage>=.72,"At least 72% of the top content vocabulary must survive the claim capsule.");
- add("retrieval set",questions.length>=Math.min(8,Math.max(5,Math.round(words/2000))),"Enough source-grounded prompts must exist to test possession.");
+ add("retrieval set",questions.length>=required,"Probe floor scales with source size: this source requires at least "+required+" source-grounded prompts.");
  add("deep retrieval",audit.deepRetrievalPrompts>=3,"Replacement requires argument/evidence/contrast or transfer prompts, not cloze memory alone.");
  if(type==="research") add("numeric/method audit",audit.numericEvidenceCaptured>=.75,"Research compression must retain a bounded audit set of numbers/method-like claims.");
  if(type==="primary") add("primary experience preserved",true,"Primary literature is bridged, never declared fully replaceable.");
  const pass=gates.every(x=>x.ok);
- return {pass,label:type==="primary"?"BRIDGE, DO NOT REPLACE":pass?"REPLACEMENT CANDIDATE":"READ / RECOMPILE",gates};
+ return {pass,required,label:type==="primary"?"BRIDGE, DO NOT REPLACE":pass?"REPLACEMENT CANDIDATE":"READ / RECOMPILE",gates};
 }
 function relationScore(a,b){
  const A=new Set((a.compiled?.terms||[]).slice(0,18).map(x=>x.term.toLocaleLowerCase()));
@@ -190,8 +197,12 @@ function relationScore(a,b){
 }
 function masteryState(r){
  const qs=r.compiled?.questions||[],hist=qs.flatMap(q=>q.history||[]);
- if(!qs.length)return {label:"NO RETRIEVAL SET",score:0,due:0,delayed:0};
- const deep=qs.filter(q=>q.kind&&q.kind!=="cloze"),deepSeen=deep.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length,deepRight=deep.reduce((n,q)=>n+(q.correct||0),0),deepAttempts=deep.reduce((n,q)=>n+(q.attempts||0),0),deepAcc=deepAttempts?deepRight/deepAttempts:0;
+ const rv=r.compiled?.verdict||replacementVerdict(r.compiled?.type,r.compiled?.audit||{},qs,r.compiled?.words||0);
+ const required=rv.required||probeRequirement(r.compiled?.words||0);
+ if(!qs.length)return {label:"NO RETRIEVAL SET",score:0,due:0,delayed:0,required,total:0};
+ const deep=qs.filter(q=>q.kind&&q.kind!=="cloze");
+ const deepSeen=deep.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length;
+ const deepRight=deep.reduce((n,q)=>n+(q.correct||0),0),deepAttempts=deep.reduce((n,q)=>n+(q.attempts||0),0),deepAcc=deepAttempts?deepRight/deepAttempts:0;
  const attempts=hist.length||qs.reduce((n,q)=>n+(q.attempts||0),0);
  const right=hist.filter(x=>x.ok).length||qs.reduce((n,q)=>n+(q.correct||0),0);
  const due=qs.filter(q=>!q.due||q.due<=now()).length;
@@ -199,15 +210,17 @@ function masteryState(r){
   const h=q.history||[]; if(h.length<2)return false;
   return h.some((x,i)=>x.ok&&h.some((y,j)=>j<i&&y.ok&&x.t-y.t>=6*dayMs));
  }).length;
- const acc=attempts?right/attempts:0,age=(now()-(r.createdAt||now()))/dayMs,seen=qs.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length;
+ const acc=attempts?right/attempts:0,age=(now()-(r.createdAt||now()))/dayMs;
+ const seen=qs.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length;
+ if(!rv.pass)return {label:"RECOMPILE BEFORE REPLACEMENT",score:.08,due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,required,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2)};
  let label="NOT PROVEN",score=0;
- if(seen) {label="ACTIVE RETRIEVAL";score=.25;}
- if(seen===qs.length&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.75){label="PROVISIONAL";score=.55;}
- if(age>=7&&delayed>=Math.ceil(qs.length*.6)&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.8){label="DURABLE";score=.82;}
- if(age>=30&&delayed>=Math.ceil(qs.length*.85)&&acc>=.85&&deepSeen===deep.length&&deepAcc>=.85){
+ if(seen){label="ACTIVE RETRIEVAL";score=.25;}
+ if(seen>=required&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.75){label="PROVISIONAL";score=.55;}
+ if(age>=7&&delayed>=Math.ceil(required*.6)&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.8){label="DURABLE";score=.82;}
+ if(age>=30&&delayed>=Math.ceil(required*.85)&&acc>=.85&&deepSeen===deep.length&&deepAcc>=.85){
    label=r.compiled.type==="primary"?"SECONDARY LAYER POSSESSED":"READING REPLACEMENT PROVEN";score=1;
  }
- return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2)};
+ return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,required,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2)};
 }
 function compile(text,title,chosen){
  const type=inferType(text,title,chosen),ps=paras(text);
@@ -215,9 +228,13 @@ function compile(text,title,chosen){
  const ss=[];let gi=0;
  ps.forEach((p,pi)=>sentencesFrom(p).forEach((t,si)=>ss.push({text:t,pi,si,gi:gi++})));
  if(ss.length<5)throw new Error("The source is too short to compile as a reading replacement.");
- const f=frequencies(ss), ranked=sentenceRank(ss,f), terms=termList(f),keys=diverse(ranked,Math.min(28,Math.max(12,Math.ceil(ss.length*.04))));
- const map=mapSections(ps,ss,ranked,Math.min(12,Math.max(6,Math.ceil(Math.sqrt(ps.length))))), law=replacementLaw(type,text);
- const counter=contras(ps),verify=verificationAnchors(ss),questions=questionSet(keys,terms),deepQuestions=deepQuestionSet(keys,counter,verify,terms),compressionWords=keys.reduce((n,x)=>n+wc(x.text),0),words=wc(text);
+ const words=wc(text),requiredProbes=probeRequirement(words),probeTarget=Math.min(40,Math.max(requiredProbes,10));
+ const f=frequencies(ss),ranked=sentenceRank(ss,f),terms=termList(f);
+ const keys=diverse(ranked,Math.min(56,Math.max(requiredProbes+8,Math.ceil(ss.length*.05))));
+ const map=mapSections(ps,ss,ranked,Math.min(16,Math.max(6,Math.ceil(Math.sqrt(ps.length))))),law=replacementLaw(type,text);
+ const counter=contras(ps),verify=verificationAnchors(ss);
+ const questions=questionSet(keys,terms,probeTarget),deepQuestions=deepQuestionSet(keys,counter,verify,terms);
+ const compressionWords=keys.reduce((n,x)=>n+wc(x.text),0);
  questions.push(...deepQuestions);
  const audit=auditCompression(ss,map,keys,terms,counter,verify);
  audit.deepRetrievalPrompts=deepQuestions.length;
@@ -479,7 +496,7 @@ function view(r,tab){
  if(tab==="terms")return '<h3>Concept vocabulary</h3><p>High-frequency content terms orient the source. Frequency is not importance, so these never substitute for the anchored claims.</p><div class="rrTerms">'+c.terms.map(x=>'<span class="rrTerm"><b>'+x.count+'×</b> '+E(x.term)+'</span>').join("")+'</div>'+(c.counter.length?'<h3>Contrasts / limitations found</h3><div class="rrMap">'+c.counter.map(x=>'<div class="rrClaim"><b>'+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>':'');
  if(tab==="verify")return '<h3>Verification anchors</h3><div class="rrAudit">Methods, numbers, results and limitation-like sentences are deliberately retained for exact checking. High-stakes use still points back to the full source.</div><div class="rrMap">'+(c.verify||[]).map((x,i)=>'<div class="rrClaim"><b>VERIFY '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div><h3>Compression audit</h3><div class="rrMap"><div class="rrRelation"><b>EXTRACTIVE</b><p>'+E(String(c.audit.extractive))+' · no generated claims: '+E(String(c.audit.noGeneratedClaims))+'</p></div><div class="rrRelation"><b>TOP-TERM COVERAGE</b><p>'+Math.round(c.audit.lexicalTopTermCoverage*100)+'%</p></div><div class="rrRelation"><b>NUMERIC EVIDENCE CAPTURE</b><p>'+Math.round((c.audit.numericEvidenceCaptured||0)*100)+'% of the bounded numeric audit set</p></div><div class="rrRelation"><b>SOURCE HASH</b><p class="rrExact">'+E(r.hash)+'</p></div></div>';
  if(tab==="primary")return '<h3>Irreducible passages</h3><p>'+E(c.type==="primary"?"These stay because language, form, voice or sequence is part of the object. The machine is not allowed to eat the art.":"These passages are retained as exact-source checkpoints against compression loss.")+'</p><div class="rrMap">'+c.irreducible.map(x=>'<div class="rrPassage"><b class="rrKicker">P'+(x.pi+1)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
- if(tab==="practice")return '<h3>Prove the source survived compression</h3><div class="rrAudit">'+E(m.label)+' · '+m.seen+'/'+m.total+' prompts attempted · '+m.delayed+' passed after a ≥6-day separation. A source does not become “replaced” because it was uploaded.</div><p>Reveal only after answering from memory. A miss returns tomorrow; repeated success increases the spacing interval.</p><div class="rrMap">'+c.questions.map(q=>{const due=!q.due||q.due<=now();return '<div class="rrQuestion" data-q="'+E(q.id)+'"><p class="rrQPrompt">'+E(q.stem)+'</p><span class="rrAnchor">'+E(q.anchor)+(due?" · DUE":" · scheduled")+'</span><button class="rrReveal" data-rr="reveal" data-q="'+E(q.id)+'">REVEAL</button><div class="rrAnswer" data-a="'+E(q.id)+'" hidden><b>'+E(q.answer)+'</b><br>'+E(q.source)+'<div class="rrScore"><button class="good" data-rr="score" data-q="'+E(q.id)+'" data-ok="1">GOT IT</button><button class="miss" data-rr="score" data-q="'+E(q.id)+'" data-ok="0">MISSED</button></div></div></div>';}).join("")+'</div>';
+ if(tab==="practice")return '<h3>Prove the source survived compression</h3><div class="rrAudit">'+E(m.label)+' · '+m.seen+'/'+m.total+' prompts attempted · '+m.delayed+' passed after a ≥6-day separation. A source does not become “replaced” because it was uploaded. The proof floor scales with source length.</div><p>Reveal only after answering from memory. A miss returns tomorrow; repeated success increases the spacing interval.</p><div class="rrMap">'+c.questions.map(q=>{const due=!q.due||q.due<=now();return '<div class="rrQuestion" data-q="'+E(q.id)+'"><p class="rrQPrompt">'+E(q.stem)+'</p><span class="rrAnchor">'+E(q.anchor)+(due?" · DUE":" · scheduled")+'</span><button class="rrReveal" data-rr="reveal" data-q="'+E(q.id)+'">REVEAL</button><div class="rrAnswer" data-a="'+E(q.id)+'" hidden><b>'+E(q.answer)+'</b><br>'+E(q.source)+'<div class="rrScore"><button class="good" data-rr="score" data-q="'+E(q.id)+'" data-ok="1">GOT IT</button><button class="miss" data-rr="score" data-q="'+E(q.id)+'" data-ok="0">MISSED</button></div></div></div>';}).join("")+'</div>';
  if(tab==="connections")return '<h3>Cross-source connections</h3><p>Connections are lexical candidates, not claims of agreement. They tell you where to compare sources, not what conclusion to adopt.</p><div class="rrMap">'+((r._relations||[]).length?r._relations.map(x=>'<div class="rrRelation"><b>'+Math.round(x.score*100)+'% OVERLAP</b><p>'+E(x.r.title)+'</p><button class="rrMini" data-rr="open" data-id="'+E(x.r.id)+'">OPEN SOURCE</button></div>').join(""):'<div class="rrEmpty">No strong cross-source overlap yet.</div>')+'</div>';
  if(tab==="original")return '<h3>Original source</h3><p>For PDFs, this is the actual preserved file rendered locally, not reconstructed text. Other uploaded originals remain downloadable byte-for-byte from local storage.</p><div id="rrOriginal"></div>';
  if(tab==="search"){
