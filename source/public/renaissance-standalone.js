@@ -133,7 +133,7 @@
     if((S.items||[]).length!==52) failures.push("sealed battery mismatch");
     const mediaCount=Object.keys(M.visuals||{}).length+Object.keys(M.models||{}).length+Object.keys(M.listen||{}).length+Object.keys(M.data||{}).length;
     if(mediaCount!==61) failures.push("media registry mismatch: "+mediaCount);
-    for(const k of ["gate","open","state","compile","sessionObject","probes","export","import"]) if(typeof R[k]!=="function") failures.push("missing engine API "+k);
+    for(const k of ["gate","open","queue","state","compile","sessionObject","probes","export","import"]) if(typeof R[k]!=="function") failures.push("missing engine API "+k);
     if(!window.RENAISSANCE_READER||window.RENAISSANCE_READER.version!=="1.6") failures.push("Reader OS API/version missing");
     else { const rd=window.RENAISSANCE_READER.doctor?.(); if(!rd?.ok) failures.push("Reader OS doctor: "+(rd?.failures||["missing doctor"]).join(", ")); }
     if(!window.RENAISSANCE_CAMPUS||window.RENAISSANCE_CAMPUS.version!=="1.0") failures.push("Campus API/version missing");
