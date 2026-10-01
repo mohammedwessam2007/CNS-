@@ -574,7 +574,8 @@ function mount(){
   if(a==="open"){const r=await get(b.dataset.id);if(r)await openSource(r);return;}
   if(a==="export"){await exportSource(b.dataset.id);return;}
   if(a==="original"){await downloadOriginal(b.dataset.id);return;}
-  if(a==="pdfpage"){await renderOriginalPage(current,Number(b.dataset.page)||1);return;}\n  if(a==="jumporiginal"){setTab("original");await renderOriginalPage(current,Number(b.dataset.page)||1);return;}
+  if(a==="pdfpage"){await renderOriginalPage(current,Number(b.dataset.page)||1);return;}
+  if(a==="jumporiginal"){setTab("original");await renderOriginalPage(current,Number(b.dataset.page)||1);return;}
   if(a==="sourcesearch"){
     const q=$("#rrEvidenceQuery")?.value||"";if(!current)return;
     current._searchQuery=q;current._searchResults=searchSource(current,q);setTab("search");return;
