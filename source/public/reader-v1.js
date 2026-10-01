@@ -191,6 +191,7 @@ function relationScore(a,b){
 function masteryState(r){
  const qs=r.compiled?.questions||[],hist=qs.flatMap(q=>q.history||[]);
  if(!qs.length)return {label:"NO RETRIEVAL SET",score:0,due:0,delayed:0};
+ const deep=qs.filter(q=>q.kind&&q.kind!=="cloze"),deepSeen=deep.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length,deepRight=deep.reduce((n,q)=>n+(q.correct||0),0),deepAttempts=deep.reduce((n,q)=>n+(q.attempts||0),0),deepAcc=deepAttempts?deepRight/deepAttempts:0;
  const attempts=hist.length||qs.reduce((n,q)=>n+(q.attempts||0),0);
  const right=hist.filter(x=>x.ok).length||qs.reduce((n,q)=>n+(q.correct||0),0);
  const due=qs.filter(q=>!q.due||q.due<=now()).length;
@@ -201,12 +202,12 @@ function masteryState(r){
  const acc=attempts?right/attempts:0,age=(now()-(r.createdAt||now()))/dayMs,seen=qs.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length;
  let label="NOT PROVEN",score=0;
  if(seen) {label="ACTIVE RETRIEVAL";score=.25;}
- if(seen===qs.length&&acc>=.8){label="PROVISIONAL";score=.55;}
- if(age>=7&&delayed>=Math.ceil(qs.length*.6)&&acc>=.8){label="DURABLE";score=.82;}
- if(age>=30&&delayed>=Math.ceil(qs.length*.85)&&acc>=.85){
+ if(seen===qs.length&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.75){label="PROVISIONAL";score=.55;}
+ if(age>=7&&delayed>=Math.ceil(qs.length*.6)&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.8){label="DURABLE";score=.82;}
+ if(age>=30&&delayed>=Math.ceil(qs.length*.85)&&acc>=.85&&deepSeen===deep.length&&deepAcc>=.85){
    label=r.compiled.type==="primary"?"SECONDARY LAYER POSSESSED":"READING REPLACEMENT PROVEN";score=1;
  }
- return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length};
+ return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2)};
 }
 function compile(text,title,chosen){
  const type=inferType(text,title,chosen),ps=paras(text);
