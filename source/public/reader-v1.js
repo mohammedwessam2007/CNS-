@@ -598,15 +598,17 @@ function doctor(){
  try{
   const x=compile(sample,"Reader OS doctor","research"),claims=x.keys.every(k=>sample.includes(k.text)),deep=x.questions.filter(q=>q.kind&&q.kind!=="cloze").length;
   const primary=compile("Chapter one. The voice of the narrator changes the meaning of the scene.\n\nChapter two. The rhythm of the words is part of the experience.\n\nA third passage carries the conflict through style.\n\nA fourth passage changes the speaker.\n\nA fifth passage closes the scene.","Primary doctor","primary");
+  const visual=compile("Figure 1 shows the network architecture and its three branches.\n\nTable 1 compares the measured outputs across groups.\n\nThe diagram in Figure 2 is required to distinguish the pathways.\n\nThe text explains why the first branch is upstream of the second.\n\nA final paragraph states the practical interpretation of the chart.","Visual doctor","textbook");
   const failures=[];
   if(!claims)failures.push("non-extractive claim");
   if(!x.verdict?.pass)failures.push("research replacement gates fail");
   if(deep<3)failures.push("deep retrieval missing");
   if((x.verify||[]).length<2)failures.push("verification anchors missing");
   if(primary.verdict?.label!=="BRIDGE, DO NOT REPLACE")failures.push("primary-text protection failed");
-  return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label}};
+  if(visual.verdict?.label!=="ORIGINAL-WINDOW REQUIRED")failures.push("visual dependency protection failed");
+  return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,doctor,version:"1.4"};
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,doctor,version:"1.5"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
