@@ -13,7 +13,7 @@ sandbox.window=sandbox;sandbox.globalThis=sandbox;
 vm.createContext(sandbox);
 try{vm.runInContext(src,sandbox,{filename:"reader-v1.js"});}catch(e){console.error(e);process.exit(1);}
 const R=sandbox.RENAISSANCE_READER;
-check("reader version",R&&R.version==="1.7",R&&R.version);
+check("reader version",R&&R.version==="1.8",R&&R.version);
 const doctor=R&&R.doctor&&R.doctor();
 check("behavioral doctor",doctor&&doctor.ok,doctor);
 
@@ -78,6 +78,13 @@ check("mature primary ends at secondary-layer possession",maturePrimary.label===
 
 check("no source upload primitive",!(/\bfetch\s*\(|XMLHttpRequest|sendBeacon\s*\(/.test(src)),null);
 check("no medical asset dependency",!(/mcq-v16|learn-v15|cns-atlas|dept-fig/.test(src)),null);
+
+const build=fs.readFileSync(path.join(__dirname,"../deploy/vercel/build.mjs"),"utf8");
+const pkg=JSON.parse(fs.readFileSync(path.join(__dirname,"../deploy/vercel/package.json"),"utf8"));
+check("OCR source is local-only",src.includes('/vendor/tesseract/')&&src.includes('/vendor/tessdata/'),null);
+check("OCR runtime is actually bundled",build.includes('node_modules/tesseract.js/dist/')&&build.includes('@tesseract.js-data/eng')&&build.includes('@tesseract.js-data/ara'),null);
+check("OCR dependencies pinned",!!pkg.dependencies?.["tesseract.js"]&&!!pkg.dependencies?.["@tesseract.js-data/eng"]&&!!pkg.dependencies?.["@tesseract.js-data/ara"],pkg.dependencies);
+
 
 if(failures.length){console.error("\nReader OS gate failed",failures);process.exit(1);}
 console.log("\nReader OS hostile gate: ALL PASS");
