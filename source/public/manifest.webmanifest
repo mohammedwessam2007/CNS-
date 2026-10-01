@@ -1,0 +1,9 @@
+{
+  "name": "Renaissance · Intellectuality",
+  "short_name": "Renaissance",
+  "description": "Private adaptive curriculum for durable understanding, transfer, judgment, cultural possession and creation.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07111d",
+  "theme_color": "#07111d"
+}
