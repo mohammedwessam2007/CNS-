@@ -1,9 +1,9 @@
-const CACHE="renaissance-reader-v1";
+const CACHE="renaissance-reader-v2";
 const CORE=[
 "/","/index.html","/renaissance-v1.css","/renaissance-standalone.css","/renaissance-standalone.js","/reader-v1.css","/reader-v1.js",
 "/renaissance-s1.js","/renaissance-s2.js","/renaissance-s3a.js","/renaissance-s3b.js","/renaissance-s3c.js",
 "/renaissance-civ.js","/renaissance-genome.js","/renaissance-media.js","/renaissance-sealed.js","/renaissance-v1.js","/axis-forge-v1.js",
-"/manifest.webmanifest"
+"/manifest.webmanifest","/vendor/pdf.mjs","/vendor/pdf.worker.mjs","/vendor/fflate.mjs"
 ];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
