@@ -7,7 +7,7 @@
 "use strict";
 const DB="renaissance_reader_v1",STORE="sources",VERSION=1,MAX_CHARS=12000000,MAX_FILE=100*1024*1024;
 const STOP=new Set(("the a an and or but if then than of to in on at for from by with without into onto over under is are was were be been being this that these those it its as not no yes we you they he she i our your their his her who whom whose which what when where why how can could should would may might will shall do does did done have has had having about after before during through between among against because while although however therefore thus also such more most less least many much some any each every both either neither one two first second other another same own only very just still even already yet all per via et al der die das den dem des ein eine einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur einen einem einer sich dass weil während jedoch daher mehr weniger alle jeder jede jedes عربي العربية في من على إلى عن هو هي هذا هذه ذلك تلك كان كانت يكون تكون مع بدون أو و ثم لكن إذا إن أن ما لا نعم كل بعض أي بين عند حتى حيث الذي التي الذين هناك هنا كما لقد لم لن قد قبل بعد أثناء خلال ضمن الى على من عن في der die das den dem des ein eine einen einem einer eines und oder aber wenn dann als von zu im in am auf für mit ohne ist sind war waren sein gewesen diese dieser dieses es wir ihr sie er ich unser eure ihre sein ihr wer was wann wo warum wie kann könnte sollte würde haben hat hatte nicht noch schon auch sehr nur durch über unter aus bei sowie zum zur sich dass weil während jedoch daher mehr weniger alle jeder jede jedes".split(/\\s+/)));
-let dbp=null,current=null,pdfmod=null,zipmod=null,ocrmod=null,pdfDocs=new Map(),flow=null;
+let dbp=null,current=null,pdfmod=null,zipmod=null,ocrmod=null,pdfDocs=new Map(),flow=null,dueMode=false;
 const $=(s)=>document.querySelector(s);
 const E=(s)=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const now=()=>Date.now(), dayMs=86400000;
@@ -444,6 +444,30 @@ function dueText(qs){
  const due=(qs||[]).filter(q=>!q.due||q.due<=now()).length;
  return due?due+" retrieval "+(due===1?"item":"items")+" due":"retrieval clear";
 }
+async function dueQueue(){
+ const list=await all(),rows=[];
+ for(const r of list)for(const q of r.compiled?.questions||[]){
+   if(!q.due||q.due<=now()){
+     const h=q.history||[],last=h[h.length-1],deep=!!(q.kind&&q.kind!=="cloze");
+     rows.push({sourceId:r.id,title:r.title,qid:q.id,kind:q.kind||"cloze",deep,miss:last?last.ok===false:false,due:q.due||0});
+   }
+ }
+ return rows.sort((a,b)=>(b.miss-a.miss)||(b.deep-a.deep)||((a.due||0)-(b.due||0))||a.title.localeCompare(b.title));
+}
+function renderReaderTodayFromList(list){
+ const host=$("#rrToday");if(!host)return;
+ const rows=[];
+ for(const r of list)for(const q of r.compiled?.questions||[])if(!q.due||q.due<=now())rows.push({r,q});
+ const sources=new Set(rows.map(x=>x.r.id)).size,deep=rows.filter(x=>x.q.kind&&x.q.kind!=="cloze").length;
+ host.innerHTML='<div class="rrTodayCopy"><span class="rsEyebrow">READER TODAY</span><b>'+(rows.length?rows.length+" retrieval "+(rows.length===1?"item":"items")+" due":"Memory queue clear")+'</b><small>'+(rows.length?(sources+" source"+(sources===1?"":"s")+" · "+deep+" deep reconstruction"+(deep===1?"":"s")):"Nothing is owed. New reading or future spacing will reopen the queue.")+'</small></div><button class="rrFlowStart" data-rr="due" '+(rows.length?"":"disabled")+'>RUN DUE RETRIEVAL</button>';
+}
+async function runDue(){
+ const rows=await dueQueue();
+ if(!rows.length){dueMode=false;renderLibrary();status("Reader Today is clear. Nothing is owed.");return false;}
+ const r=await get(rows[0].sourceId);if(!r)return false;
+ await openSource(r,"map");dueMode=true;flow=null;setTab("practice");
+ return true;
+}
 function safeName(s){return String(s||"source").replace(/[^a-z0-9._-]+/gi,"-").replace(/^-+|-+$/g,"").slice(0,80)||"source";}
 function downloadJSON(name,obj){
  const blob=new Blob([JSON.stringify(obj,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
@@ -500,6 +524,7 @@ function related(r,list){
 function renderLibrary(){
  all().then(list=>{
   list.sort((a,b)=>b.updatedAt-a.updatedAt);
+  renderReaderTodayFromList(list);
   const box=$("#rrCards"),count=$("#rrLibraryCount");if(!box)return;
   const q=($("#rrSearch")?.value||"").trim().toLocaleLowerCase();
   const visible=!q?list:list.filter(r=>(r.title+" "+(r.fileName||"")+" "+(r.compiled?.terms||[]).map(x=>x.term).join(" ")).toLocaleLowerCase().includes(q));
@@ -545,7 +570,9 @@ function view(r,tab){
  if(tab==="terms")return '<h3>Concept vocabulary</h3><p>High-frequency content terms orient the source. Frequency is not importance, so these never substitute for the anchored claims.</p><div class="rrTerms">'+c.terms.map(x=>'<span class="rrTerm"><b>'+x.count+'×</b> '+E(x.term)+'</span>').join("")+'</div>'+(c.counter.length?'<h3>Contrasts / limitations found</h3><div class="rrMap">'+c.counter.map(x=>'<div class="rrClaim"><b>'+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>':'');
  if(tab==="verify")return '<h3>Verification anchors</h3><div class="rrAudit">Methods, numbers, results, limitations, figure/table references and notation-sensitive claims are deliberately retained for exact checking. PDF anchors can jump to the preserved original page.</div><div class="rrMap">'+(c.verify||[]).map((x,i)=>verifyCard(r,x,i)).join("")+'</div><h3>Compression audit</h3><div class="rrMap"><div class="rrRelation"><b>EXTRACTIVE</b><p>'+E(String(c.audit.extractive))+' · no generated claims: '+E(String(c.audit.noGeneratedClaims))+'</p></div><div class="rrRelation"><b>TOP-TERM COVERAGE</b><p>'+Math.round(c.audit.lexicalTopTermCoverage*100)+'%</p></div><div class="rrRelation"><b>NUMERIC EVIDENCE CAPTURE</b><p>'+Math.round((c.audit.numericEvidenceCaptured||0)*100)+'% of the bounded numeric audit set</p></div><div class="rrRelation"><b>VISUAL DEPENDENCY</b><p>'+(c.audit.visualDependencyRisk?"ORIGINAL WINDOW REQUIRED":"low by current heuristic")+' · signals: '+(c.audit.visualSignals||0)+'</p></div><div class="rrRelation"><b>NOTATION RISK</b><p>'+(c.audit.notationRisk?"ORIGINAL WINDOW REQUIRED":"low by current heuristic")+' · signals: '+(c.audit.mathSignals||0)+'</p></div><div class="rrRelation"><b>SOURCE HASH</b><p class="rrExact">'+E(r.hash)+'</p></div></div>';
  if(tab==="primary")return '<h3>Irreducible passages</h3><p>'+E(c.type==="primary"?"These stay because language, form, voice or sequence is part of the object. The machine is not allowed to eat the art.":"These passages are retained as exact-source checkpoints against compression loss.")+'</p><div class="rrMap">'+c.irreducible.map(x=>'<div class="rrPassage"><b class="rrKicker">P'+(x.pi+1)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
- if(tab==="practice")return '<h3>Prove the source survived compression</h3><div class="rrAudit">'+E(m.label)+' · '+m.seen+'/'+m.total+' prompts attempted · '+m.delayed+' passed after a ≥6-day separation · '+(m.deepCommitted||0)+'/'+(m.deepTotal||0)+' deep prompts have a committed written answer. Uploading or button-tapping earns no replacement proof.</div><p>Deep prompts lock reveal until you commit your own reconstruction. A miss returns tomorrow; repeated success increases spacing. Stored responses can later be graded independently.</p><div class="rrMap">'+c.questions.map(questionCard).join("")+'</div>';
+ if(tab==="practice"){const qs=(dueMode?c.questions.filter(q=>!q.due||q.due<=now()):c.questions),mode=dueMode?" · Reader Today queue":"";
+  return '<h3>Prove the source survived compression'+mode+'</h3><div class="rrAudit">'+E(m.label)+' · '+m.seen+'/'+m.total+' prompts attempted · '+m.delayed+' passed after a ≥6-day separation · '+(m.deepCommitted||0)+'/'+(m.deepTotal||0)+' deep prompts have a committed written answer. Uploading or button-tapping earns no replacement proof.</div><p>Deep prompts lock reveal until you commit your own reconstruction. A miss returns tomorrow; repeated success increases spacing. Stored responses can later be graded independently.</p><div class="rrMap">'+(qs.length?qs.map(questionCard).join(""):'<div class="rrEmpty">This source is clear for now.</div>')+'</div>';}
+
  if(tab==="connections")return '<h3>Cross-source connections</h3><p>Connections are lexical candidates, not claims of agreement. They tell you where to compare sources, not what conclusion to adopt.</p><div class="rrMap">'+((r._relations||[]).length?r._relations.map(x=>'<div class="rrRelation"><b>'+Math.round(x.score*100)+'% OVERLAP</b><p>'+E(x.r.title)+'</p><button class="rrMini" data-rr="open" data-id="'+E(x.r.id)+'">OPEN SOURCE</button></div>').join(""):'<div class="rrEmpty">No strong cross-source overlap yet.</div>')+'</div>';
  if(tab==="original")return '<h3>Original source</h3><p>For PDFs, this is the actual preserved file rendered locally, not reconstructed text. Other uploaded originals remain downloadable byte-for-byte from local storage.</p><div id="rrOriginal"></div>';
  if(tab==="search"){
@@ -605,7 +632,7 @@ function setTab(tab,fromFlow){
  if(tab==="original")renderOriginalPage(current,1);
  renderFlow();
 }
-function close(){current=null;flow=null;$("#rrModal").hidden=true;document.body.style.overflow="";}
+function close(){current=null;flow=null;dueMode=false;$("#rrModal").hidden=true;document.body.style.overflow="";renderLibrary();}
 async function score(qid,ok){
  if(!current)return;
  const r=await get(current.id),q=r.compiled.questions.find(x=>x.id===qid);if(!q)return;
@@ -615,6 +642,10 @@ async function score(qid,ok){
  q.interval=i;q.due=now()+seq[i]*dayMs;r.updatedAt=now();await put(r);current={...r,_relations:current._relations};renderLibrary();
  const el=document.querySelector('[data-q="'+CSS.escape(qid)+'"] .rrScore');if(el)el.innerHTML='<span class="rrAnchor">'+(ok?"Scheduled later.":"Returns tomorrow.")+'</span>';
  $("#rrMetrics").innerHTML=metrics(current);
+ if(dueMode){
+   const left=current.compiled.questions.filter(x=>!x.due||x.due<=now());
+   if(left.length)setTab("practice");else await runDue();
+ }
 }
 async function compileFromUI(){
  const btn=$("#rrCompile"),file=$("#rrFile")?.files?.[0],pasted=$("#rrPaste")?.value||"",title=$("#rrSourceTitle")?.value||file?.name||"",type=$("#rrType")?.value||"auto";
@@ -634,13 +665,13 @@ async function compileFromUI(){
 }
 function mount(){
  const host=$("#rrHost");if(!host)return;
- host.innerHTML='<section class="rrShell"><div class="rrHero"><div><p class="rsEyebrow">READER OS · READING REPLACEMENT ENGINE</p><h2>Replace the reading.<br><em>Keep the knowledge.</em></h2><p>Bring the source you would otherwise spend an hour, a week, or a month reading. Renaissance keeps the entire extractable text, builds an anchored compression ladder, preserves irreducible passages, isolates evidence that deserves exact checking, and schedules retrieval until the source survives without the page.</p></div><div class="rrLaw"><b>THE LAW</b><span>If reading is transport for information, compress it. If exact wording, methods, evidence, style or aesthetic experience is the cargo, keep that part primary. No summary is allowed to impersonate the source, and no upload is allowed to impersonate mastery.</span></div></div><div class="rrInput"><textarea id="rrPaste" class="rrPaste" placeholder="Paste an article, chapter, paper, book extract, lecture notes…"></textarea><div class="rrControls"><input id="rrSourceTitle" class="rrTitle" placeholder="Source title (optional)"><select id="rrType" class="rrSelect"><option value="auto">AUTO CLASSIFY</option><option value="nonfiction">NONFICTION / ARTICLE</option><option value="textbook">TEXTBOOK / EXPLANATORY</option><option value="research">RESEARCH PAPER</option><option value="primary">LITERATURE / PRIMARY TEXT</option></select><input id="rrFile" class="rrFile" type="file" accept=".pdf,.epub,.docx,.txt,.md,.markdown,.html,.htm,.csv,.json,.rtf,.reader.json,text/*,application/pdf"><button id="rrCompile" class="rrCompile" type="button">COMPILE READING</button><p class="rrHint">PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON, RTF or pasted text. Source stays on this device. Scanned PDFs and unknown formats fail loudly instead of producing fake understanding.</p></div></div><div id="rrStatus" class="rrStatus" aria-live="polite"></div><div class="rrLibrary"><div class="rrLibraryTop"><h3>Your compiled library</h3><span id="rrLibraryCount"></span></div><div class="rrLibraryTools"><input id="rrSearch" class="rrSearch" type="search" placeholder="Search titles and concepts"><span class="rrHint">Each source can be exported as a hash-verified Reader backup.</span></div><div id="rrCards" class="rrCards"></div></div></section>';
+ host.innerHTML='<section class="rrShell"><div class="rrHero"><div><p class="rsEyebrow">READER OS · READING REPLACEMENT ENGINE</p><h2>Replace the reading.<br><em>Keep the knowledge.</em></h2><p>Bring the source you would otherwise spend an hour, a week, or a month reading. Renaissance keeps the entire extractable text, builds an anchored compression ladder, preserves irreducible passages, isolates evidence that deserves exact checking, and schedules retrieval until the source survives without the page.</p></div><div class="rrLaw"><b>THE LAW</b><span>If reading is transport for information, compress it. If exact wording, methods, evidence, style or aesthetic experience is the cargo, keep that part primary. No summary is allowed to impersonate the source, and no upload is allowed to impersonate mastery.</span></div></div><div class="rrInput"><textarea id="rrPaste" class="rrPaste" placeholder="Paste an article, chapter, paper, book extract, lecture notes…"></textarea><div class="rrControls"><input id="rrSourceTitle" class="rrTitle" placeholder="Source title (optional)"><select id="rrType" class="rrSelect"><option value="auto">AUTO CLASSIFY</option><option value="nonfiction">NONFICTION / ARTICLE</option><option value="textbook">TEXTBOOK / EXPLANATORY</option><option value="research">RESEARCH PAPER</option><option value="primary">LITERATURE / PRIMARY TEXT</option></select><input id="rrFile" class="rrFile" type="file" accept=".pdf,.epub,.docx,.txt,.md,.markdown,.html,.htm,.csv,.json,.rtf,.reader.json,text/*,application/pdf"><button id="rrCompile" class="rrCompile" type="button">COMPILE READING</button><p class="rrHint">PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON, RTF or pasted text. Source stays on this device. Scanned PDFs and unknown formats fail loudly instead of producing fake understanding.</p></div></div><div id="rrStatus" class="rrStatus" aria-live="polite"></div><div id="rrToday" class="rrToday"></div><div class="rrLibrary"><div class="rrLibraryTop"><h3>Your compiled library</h3><span id="rrLibraryCount"></span></div><div class="rrLibraryTools"><input id="rrSearch" class="rrSearch" type="search" placeholder="Search titles and concepts"><span class="rrHint">Each source can be exported as a hash-verified Reader backup.</span></div><div id="rrCards" class="rrCards"></div></div></section>';
  const modal=document.createElement("div");modal.id="rrModal";modal.className="rrModal";modal.hidden=true;modal.innerHTML='<div class="rrPanel" role="dialog" aria-modal="true" aria-labelledby="rrTitle"><div class="rrTop"><div><span class="rrKicker">RENAISSANCE READER OS</span><h2 id="rrTitle"></h2></div><button class="rrClose" data-rr="close" aria-label="Close">×</button></div><div class="rrBody"><div id="rrVerdict" class="rrVerdict"></div><div id="rrMetrics"></div><div id="rrFlow" class="rrFlow"></div><div class="rrTabs"><button class="rrTab on" data-rr="tab" data-tab="map">MAP</button><button class="rrTab" data-rr="tab" data-tab="capsule">CAPSULE</button><button class="rrTab" data-rr="tab" data-tab="verify">VERIFY</button><button class="rrTab" data-rr="tab" data-tab="terms">TERMS + CONTRASTS</button><button class="rrTab" data-rr="tab" data-tab="primary">IRREDUCIBLE</button><button class="rrTab" data-rr="tab" data-tab="practice">PROVE IT</button><button class="rrTab" data-rr="tab" data-tab="connections">CONNECTIONS</button><button class="rrTab" data-rr="tab" data-tab="search">EVIDENCE SEARCH</button><button class="rrTab" data-rr="tab" data-tab="original">ORIGINAL</button><button class="rrTab" data-rr="tab" data-tab="source">EXTRACTED SOURCE</button></div><div id="rrView" class="rrView"></div></div></div>';
  document.body.appendChild(modal);
  $("#rrCompile").addEventListener("click",compileFromUI);$("#rrSearch").addEventListener("input",renderLibrary);
  document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-rr]");if(!b)return;const a=b.dataset.rr;
-  if(a==="close")return close();if(a==="tab")return setTab(b.dataset.tab);if(a==="startflow")return startFlow();if(a==="flownext")return moveFlow(1);if(a==="flowprev")return moveFlow(-1);
+  if(a==="close")return close();if(a==="tab")return setTab(b.dataset.tab);if(a==="startflow")return startFlow();if(a==="flownext")return moveFlow(1);if(a==="flowprev")return moveFlow(-1);if(a==="due")return runDue();
   if(a==="open"){const r=await get(b.dataset.id);if(r)await openSource(r);return;}
   if(a==="run"){const r=await get(b.dataset.id);if(r){await openSource(r);startFlow();}return;}
   if(a==="export"){await exportSource(b.dataset.id);return;}
@@ -691,6 +722,6 @@ function doctor(){
   return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label,guided:gResearch.join(">")}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;await openSource(r);startFlow();return true;},mastery:masteryState,relationScore,doctor,version:"1.7"};
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;dueMode=false;await openSource(r);startFlow();return true;},due:dueQueue,runDue,mastery:masteryState,relationScore,doctor,version:"1.8"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
