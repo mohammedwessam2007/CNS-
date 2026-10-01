@@ -45,3 +45,60 @@ Terminal verification required for the deployment created from this commit:
 4. Local OCR assets return HTTP 200.
 5. medical-only assets return HTTP 404 on the Renaissance URL.
 6. medical production still serves CNS v18.6 and contains no Reader/Campus markers.
+
+
+## Recovery terminal verification
+
+Recovered live standalone deployment:
+- deployment: `dpl_BbREsA3ZngMHA1mfszoU127K611R`
+- Vercel state: `READY`
+- Git commit: `40903e239f7267456e4bcbc40fec972307d4eb17`
+- source branch: `renaissance/standalone-v1`
+- stable alias: `https://intellectuality-cns-git-ren-81d684-mohammedwessam2007s-projects.vercel.app`
+- region: `fra1`
+- target: preview / null
+- alias error: none
+
+Live `build-info.json`:
+- app: `RENAISSANCE · INTELLECTUALITY`
+- mode: `standalone+reader-os+campus`
+- commit: `40903e239f7267456e4bcbc40fec972307d4eb17`
+- branch: `renaissance/standalone-v1`
+- integrity assets: 257
+- bytes: 58,918,637
+- medical leak keys: 0
+
+Live HTTP verification:
+- Renaissance home: 200, title `RENAISSANCE · INTELLECTUALITY`
+- Reader asset: 200
+- Campus asset: 200
+- local PDF.js: 200
+- local Tesseract runtime: 200
+- local Tesseract worker: 200
+- English traineddata: 200
+- Arabic traineddata: 200
+- Tesseract core WASM: 200
+- `/mcq-v16.js`: 404
+- `/learn-v15.js`: 404
+- `/cns-atlas-v17.js`: 404
+
+Medical production re-verified after recovery:
+- `https://intellectuality-cns.vercel.app/`: 200
+- title: `INTELLECTUALITY CNS v18.6 · MCQ EXAM`
+- Reader marker: absent
+- Campus marker: absent
+- medical MCQ marker: present
+
+The fresh recovery-trigger commit `ff730ad8f3cc0c09c015c19a7e4e5ea70dbc18cf` was not built because Vercel returned:
+`Deployment rate limited — retry in 24 hours.`
+This is an external free-plan preview build quota, not a source/test failure. It does not invalidate the already READY `40903e...` standalone deployment.
+
+## Namespace truth
+
+The Renaissance site is a physically isolated preview deployment and stable branch alias. It currently lives under the same Vercel project object as the medical app, but it is **not** the medical production deployment and is **not** promoted to the production alias.
+
+Future work must preserve this distinction:
+- medical production alias remains CNS-only;
+- Renaissance stable alias remains standalone-only;
+- no promotion of Renaissance onto `intellectuality-cns.vercel.app`;
+- if a dedicated second Vercel project is later connected, migrate the already-frozen standalone artifact there without changing the medical project.
