@@ -103,6 +103,8 @@ const pkg=JSON.parse(fs.readFileSync(path.join(__dirname,"../deploy/vercel/packa
 check("OCR source is local-only",src.includes('/vendor/tesseract/')&&src.includes('/vendor/tessdata/'),null);
 check("OCR runtime is actually bundled",build.includes('node_modules/tesseract.js/dist/')&&build.includes('@tesseract.js-data/eng')&&build.includes('@tesseract.js-data/ara'),null);
 check("OCR dependencies pinned",!!pkg.dependencies?.["tesseract.js"]&&!!pkg.dependencies?.["@tesseract.js-data/eng"]&&!!pkg.dependencies?.["@tesseract.js-data/ara"],pkg.dependencies);
+check("OCR receipt bound to original binary SHA-256",src.includes("binarySha256")&&src.includes("shaBlob"),null);
+check("restored backup cannot retain OCR authority",src.includes("historicalOcrReceipt")&&src.includes("ocrVerified:null")&&src.includes("ocrPagesViewed:[]"),null);
 
 
 if(failures.length){console.error("\nReader OS gate failed",failures);process.exit(1);}
