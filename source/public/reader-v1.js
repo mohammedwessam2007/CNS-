@@ -114,6 +114,18 @@ function questionSet(keys,terms){
  }
  return qs;
 }
+function deepQuestionSet(keys,counter,verify,terms){
+ const out=[];
+ const add=(kind,stem,answer,anchor,source)=>{if(stem&&answer&&!out.some(x=>x.stem===stem))out.push({id:"d"+out.length,kind,stem,answer,anchor,source,due:0,interval:0,attempts:0,correct:0,history:[]});};
+ const causal=keys.filter(k=>/\b(because|therefore|thus|leads? to|causes?|results? in|depends? on|mechanism|explains?)\b/i.test(k.text));
+ for(const k of causal.slice(0,3))add("argument","Reconstruct the reasoning in this source claim without looking. What relation connects the cause/reason to the conclusion?",k.text,"P"+(k.pi+1),k.text);
+ for(const x of (counter||[]).slice(0,3))add("counter","What limitation, contrast, exception or counter-position does the source preserve here?",x.text,x.anchor,x.text);
+ for(const x of (verify||[]).slice(0,3))add("evidence","Before checking the source, reconstruct the exact method/number/evidence claim anchored here.",x.text,x.anchor,x.text);
+ const top=(terms||[]).slice(0,4).map(x=>x.term);
+ if(keys.length>=2)add("synthesis","Explain how two major claims in this source fit together, then check both anchors.",keys.slice(0,2).map(x=>x.text).join(" | "),keys.slice(0,2).map(x=>"P"+(x.pi+1)).join(" + "),keys.slice(0,2).map(x=>x.text).join(" | "));
+ if(top.length>=2)add("transfer","Give a new example or case where the relationship between "+top[0]+" and "+top[1]+" would matter. Then compare your reasoning with the source anchors.","Open transfer: there is no single source sentence answer. Use the full source/capsule to audit whether your example preserves the source's relationships.","TRANSFER","Transfer prompt generated from source vocabulary; score only after self-audit.");
+ return out.slice(0,10);
+}
 function irreducible(type,ps,ranked){
  let count=type==="primary"?10:type==="research"?5:4;
  const chosen=[],add=(pi)=>{if(pi>=0&&pi<ps.length&&!chosen.some(x=>x.pi===pi))chosen.push({pi,text:ps[pi]});};
@@ -163,7 +175,8 @@ function replacementVerdict(type,audit,questions,words){
  add("extractive claims",audit.extractive===true&&audit.noGeneratedClaims===true,"Capsule claims must remain exact source sentences.");
  add("structure mapped",audit.sectionCoverage>=.99,"Every structural slice must have an exact anchor.");
  add("concept coverage",audit.lexicalTopTermCoverage>=.72,"At least 72% of the top content vocabulary must survive the claim capsule.");
- add("retrieval set",questions.length>=Math.min(6,Math.max(3,Math.round(words/2500))),"Enough source-grounded prompts must exist to test possession.");
+ add("retrieval set",questions.length>=Math.min(8,Math.max(5,Math.round(words/2000))),"Enough source-grounded prompts must exist to test possession.");
+ add("deep retrieval",audit.deepRetrievalPrompts>=3,"Replacement requires argument/evidence/contrast or transfer prompts, not cloze memory alone.");
  if(type==="research") add("numeric/method audit",audit.numericEvidenceCaptured>=.75,"Research compression must retain a bounded audit set of numbers/method-like claims.");
  if(type==="primary") add("primary experience preserved",true,"Primary literature is bridged, never declared fully replaceable.");
  const pass=gates.every(x=>x.ok);
@@ -202,9 +215,11 @@ function compile(text,title,chosen){
  ps.forEach((p,pi)=>sentencesFrom(p).forEach((t,si)=>ss.push({text:t,pi,si,gi:gi++})));
  if(ss.length<5)throw new Error("The source is too short to compile as a reading replacement.");
  const f=frequencies(ss), ranked=sentenceRank(ss,f), terms=termList(f),keys=diverse(ranked,Math.min(28,Math.max(12,Math.ceil(ss.length*.04))));
- const map=mapSections(ps,ss,ranked,Math.min(12,Math.max(6,Math.ceil(Math.sqrt(ps.length))))), questions=questionSet(keys,terms), law=replacementLaw(type,text);
- const counter=contras(ps),verify=verificationAnchors(ss),compressionWords=keys.reduce((n,x)=>n+wc(x.text),0),words=wc(text);
+ const map=mapSections(ps,ss,ranked,Math.min(12,Math.max(6,Math.ceil(Math.sqrt(ps.length))))), law=replacementLaw(type,text);
+ const counter=contras(ps),verify=verificationAnchors(ss),questions=questionSet(keys,terms),deepQuestions=deepQuestionSet(keys,counter,verify,terms),compressionWords=keys.reduce((n,x)=>n+wc(x.text),0),words=wc(text);
+ questions.push(...deepQuestions);
  const audit=auditCompression(ss,map,keys,terms,counter,verify);
+ audit.deepRetrievalPrompts=deepQuestions.length;
  const verdict=replacementVerdict(type,audit,questions,words);
  return {
   type,law,words,paragraphs:ps.length,sentences:ss.length,
