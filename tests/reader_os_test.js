@@ -13,7 +13,7 @@ sandbox.window=sandbox;sandbox.globalThis=sandbox;
 vm.createContext(sandbox);
 try{vm.runInContext(src,sandbox,{filename:"reader-v1.js"});}catch(e){console.error(e);process.exit(1);}
 const R=sandbox.RENAISSANCE_READER;
-check("reader version",R&&R.version==="1.8",R&&R.version);
+check("reader version",R&&R.version==="1.9",R&&R.version);
 const doctor=R&&R.doctor&&R.doctor();
 check("behavioral doctor",doctor&&doctor.ok,doctor);
 
@@ -37,6 +37,8 @@ const primary=[
  "A fourth passage changes speaker and therefore changes the reader's position.",
  "A fifth passage closes the scene by changing the cadence rather than stating a thesis."
 ].join("\n\n");
+const O=R.compile("[PAGE 1 OCR]\\nA scanned page explains the mechanism because pressure changes flow.\\n\\n[PAGE 2 OCR]\\nHowever, the source preserves a limitation that should be checked.\\n\\n[PAGE 3 OCR]\\nThe practical interpretation depends on the original scan.\\n\\nA fourth paragraph gives enough structure to compile.\\n\\nA fifth paragraph closes the argument with a testable claim.","OCR hostile source","nonfiction");
+check("OCR compilation is explicitly trust-gated",O.audit&&O.audit.ocrDerived&&O.verdict&&O.verdict.label==="OCR CHECK REQUIRED",O.verdict);
 const P=R.compile(primary,"Primary hostile source","primary");
 check("primary never replacement candidate",P.verdict&&P.verdict.label==="BRIDGE, DO NOT REPLACE",P.verdict);
 
