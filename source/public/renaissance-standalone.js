@@ -108,6 +108,37 @@
     box.innerHTML=bits.map(x=>"<p>"+x+"</p>").join("");
   }
 
+  function integrityCheck(R){
+    const sessions=allSessions();
+    const steps=sessions.reduce((n,s)=>n+(s.steps||[]).length,0);
+    const provenance=sessions.reduce((n,s)=>n+(s.provenance||[]).length,0);
+    const hooks=sessions.flatMap(s=>s.hooks||[]);
+    const failures=[];
+    const unique=(xs)=>new Set(xs).size===xs.length;
+    if(sessions.length!==32) failures.push("session count "+sessions.length+" != 32");
+    if(steps!==287) failures.push("step count "+steps+" != 287");
+    if(provenance!==208) failures.push("provenance count "+provenance+" != 208");
+    if(hooks.length!==96) failures.push("hook count "+hooks.length+" != 96");
+    if(!unique(sessions.map(s=>s.id))) failures.push("duplicate session id");
+    if(!unique(hooks.map(h=>h.id))) failures.push("duplicate retrieval-hook id");
+    for(const s of sessions){
+      if(!s.id||!s.title||!s.minutes) failures.push("malformed session "+(s.id||"?"));
+      if(!unique((s.steps||[]).map(x=>x.id))) failures.push("duplicate step id in "+s.id);
+      for(const req of s.requires||[]) if(!sessions.some(x=>x.id===req)) failures.push("missing prerequisite "+req+" for "+s.id);
+    }
+    const G=window.RENAISSANCE_GENOME||{}, C=window.RENAISSANCE_CIV||{}, M=window.RENAISSANCE_MEDIA||{}, S=window.RENAISSANCE_SEALED||{};
+    if(Object.keys(G.atoms||{}).length!==28) failures.push("capability atom registry mismatch");
+    if((G.compounds||[]).length!==8) failures.push("capability compound registry mismatch");
+    if(Object.keys(C.nodes||{}).length!==108||(C.edges||[]).length!==94) failures.push("civilisation graph mismatch");
+    if((S.items||[]).length!==52) failures.push("sealed battery mismatch");
+    const mediaCount=Object.keys(M.visuals||{}).length+Object.keys(M.models||{}).length+Object.keys(M.listen||{}).length+Object.keys(M.data||{}).length;
+    if(mediaCount!==61) failures.push("media registry mismatch: "+mediaCount);
+    for(const k of ["gate","open","state","compile","sessionObject","probes","export","import"]) if(typeof R[k]!=="function") failures.push("missing engine API "+k);
+    const med=[...document.scripts].map(s=>s.src).filter(src=>/mcq-v16|learn-v15|cns-atlas|dept-fig/i.test(src));
+    if(med.length) failures.push("medical asset leaked into standalone shell");
+    return {ok:!failures.length,failures,metrics:{sessions:sessions.length,steps,provenance,hooks:hooks.length,atoms:Object.keys(G.atoms||{}).length,compounds:(G.compounds||[]).length,civNodes:Object.keys(C.nodes||{}).length,civEdges:(C.edges||[]).length,sealed:(S.items||[]).length,media:mediaCount}};
+  }
+
   function refresh(){
     const R=window.RENAISSANCE;
     if(!R){setRuntime("","loading engine");return;}
@@ -126,7 +157,7 @@
       renderCurriculum(R,st);
       renderCompiler(R);
       renderMeasure(R);
-      setRuntime("ready","engine ready");
+      setRuntime("ready","32/32 · integrity green");
       $("#rsBuild").textContent="Renaissance engine "+R.version+" · "+sessions.length+" sessions · local-first progress";
     }catch(e){
       setRuntime("error","engine error");
