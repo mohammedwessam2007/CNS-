@@ -131,21 +131,72 @@ function lexicalCoverage(keys,terms){
  const top=terms.slice(0,15); if(!top.length)return 1;
  return top.filter(x=>blob.includes(x.term.toLocaleLowerCase())).length/top.length;
 }
+function verificationAnchors(ss){
+ const out=[];
+ for(const s of ss){
+  const t=s.text;
+  if(/\d|%|\bp\s*[<=>]|\bCI\b|confidence interval|odds ratio|risk ratio|hazard ratio|sample|participants?|subjects?|methods?|randomi[sz]|limitation|excluded?|included?|measured?|estimated?|mean|median|standard deviation/i.test(t)) out.push({text:t,pi:s.pi,anchor:"P"+(s.pi+1)});
+  if(out.length>=28)break;
+ }
+ return out;
+}
+function auditCompression(ss,map,keys,terms,counter,verify){
+ const topCoverage=lexicalCoverage(keys,terms);
+ const sourceNumeric=ss.filter(s=>/\d|%/.test(s.text)).length;
+ const verifyNumeric=verify.filter(s=>/\d|%/.test(s.text)).length;
+ const sourceContrast=ss.filter(s=>/\b(however|but|although|yet|nevertheless|in contrast|limitation|counter)\b/i.test(s.text)).length;
+ return {
+  extractive:true,
+  sectionCoverage:map.length?1:0,
+  lexicalTopTermCoverage:+topCoverage.toFixed(2),
+  numericEvidenceCaptured:sourceNumeric?Math.min(1,verifyNumeric/Math.min(sourceNumeric,28)):1,
+  contrastAnchors:counter.length,
+  contrastSignalsInSource:sourceContrast,
+  verificationAnchors:verify.length,
+  noGeneratedClaims:true
+ };
+}
+function relationScore(a,b){
+ const A=new Set((a.compiled?.terms||[]).slice(0,18).map(x=>x.term.toLocaleLowerCase()));
+ const B=new Set((b.compiled?.terms||[]).slice(0,18).map(x=>x.term.toLocaleLowerCase()));
+ if(!A.size||!B.size)return 0;let hit=0;for(const x of A)if(B.has(x))hit++;
+ return +(hit/Math.max(1,A.size+B.size-hit)).toFixed(3);
+}
+function masteryState(r){
+ const qs=r.compiled?.questions||[],hist=qs.flatMap(q=>q.history||[]);
+ if(!qs.length)return {label:"NO RETRIEVAL SET",score:0,due:0,delayed:0};
+ const attempts=hist.length||qs.reduce((n,q)=>n+(q.attempts||0),0);
+ const right=hist.filter(x=>x.ok).length||qs.reduce((n,q)=>n+(q.correct||0),0);
+ const due=qs.filter(q=>!q.due||q.due<=now()).length;
+ const delayed=qs.filter(q=>{
+  const h=q.history||[]; if(h.length<2)return false;
+  return h.some((x,i)=>x.ok&&h.some((y,j)=>j<i&&y.ok&&x.t-y.t>=6*dayMs));
+ }).length;
+ const acc=attempts?right/attempts:0,age=(now()-(r.createdAt||now()))/dayMs,seen=qs.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length;
+ let label="NOT PROVEN",score=0;
+ if(seen) {label="ACTIVE RETRIEVAL";score=.25;}
+ if(seen===qs.length&&acc>=.8){label="PROVISIONAL";score=.55;}
+ if(age>=7&&delayed>=Math.ceil(qs.length*.6)&&acc>=.8){label="DURABLE";score=.82;}
+ if(age>=30&&delayed>=Math.ceil(qs.length*.85)&&acc>=.85){
+   label=r.compiled.type==="primary"?"SECONDARY LAYER POSSESSED":"READING REPLACEMENT PROVEN";score=1;
+ }
+ return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length};
+}
 function compile(text,title,chosen){
  const type=inferType(text,title,chosen),ps=paras(text);
  if(!ps.length)throw new Error("I could not find readable paragraphs in that source.");
  const ss=[];let gi=0;
  ps.forEach((p,pi)=>sentencesFrom(p).forEach((t,si)=>ss.push({text:t,pi,si,gi:gi++})));
  if(ss.length<5)throw new Error("The source is too short to compile as a reading replacement.");
- const f=frequencies(ss), ranked=sentenceRank(ss,f), terms=termList(f),keys=diverse(ranked,Math.min(24,Math.max(10,Math.ceil(ss.length*.035))));
- const map=mapSections(ps,ss,ranked,8), questions=questionSet(keys,terms), law=replacementLaw(type,text);
- const compressionWords=keys.reduce((n,x)=>n+wc(x.text),0);
+ const f=frequencies(ss), ranked=sentenceRank(ss,f), terms=termList(f),keys=diverse(ranked,Math.min(28,Math.max(12,Math.ceil(ss.length*.04))));
+ const map=mapSections(ps,ss,ranked,Math.min(12,Math.max(6,Math.ceil(Math.sqrt(ps.length))))), questions=questionSet(keys,terms), law=replacementLaw(type,text);
+ const counter=contras(ps),verify=verificationAnchors(ss),compressionWords=keys.reduce((n,x)=>n+wc(x.text),0);
  return {
   type,law,words:wc(text),paragraphs:ps.length,sentences:ss.length,
   map,keys:keys.map(({text,pi,score})=>({text,pi,anchor:"P"+(pi+1),score})),
-  terms,questions,irreducible:irreducible(type,ps,ranked),counter:contras(ps),
-  audit:{lexicalTopTermCoverage:+lexicalCoverage(keys,terms).toFixed(2),sectionCoverage:map.length?1:0,extractive:true},
-  estimates:{sourceMinutes:Math.max(1,Math.round(wc(text)/250)),capsuleMinutes:Math.max(6,Math.round(compressionWords/220+questions.length*.75+map.length*.35))}
+  terms,questions,irreducible:irreducible(type,ps,ranked),counter,verify,
+  audit:auditCompression(ss,map,keys,terms,counter,verify),
+  estimates:{sourceMinutes:Math.max(1,Math.round(wc(text)/250)),capsuleMinutes:Math.max(6,Math.round(compressionWords/220+questions.length*.9+map.length*.4+verify.length*.08))}
  };
 }
 async function parsePdf(file,status){
