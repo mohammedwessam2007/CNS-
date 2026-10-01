@@ -495,6 +495,19 @@ async function pdfDocument(r){
  const doc=await pdfmod.getDocument({data,cMapUrl:"/vendor/cmaps/",cMapPacked:true,standardFontDataUrl:"/vendor/standard_fonts/",wasmUrl:"/vendor/wasm/"}).promise;
  pdfDocs.set(r.id,doc);return doc;
 }
+function ocrRequiredPages(total){return Math.max(1,Math.min(3,Number(total)||1));}
+async function recordOcrPageView(r,page,total){
+ if(!r?.compiled?.audit?.ocrDerived)return r;
+ const rec=await get(r.id);if(!rec)return r;
+ rec.ocrPagesViewed=[...new Set([...(rec.ocrPagesViewed||[]),Number(page)])].filter(x=>Number.isFinite(x)&&x>=1).sort((a,b)=>a-b);
+ rec.ocrPageTotal=Number(total)||rec.ocrPageTotal||null;rec.updatedAt=now();await put(rec);return rec;
+}
+function ocrTrustHTML(r,total){
+ if(!r?.compiled?.audit?.ocrDerived)return "";
+ const seen=(r.ocrPagesViewed||[]),need=ocrRequiredPages(total||r.ocrPageTotal||r.compiled.audit.ocrPages||1),ok=seen.length>=need;
+ if(r.ocrVerified)return '<div class="rrAudit"><b>OCR SPOT-CHECK RECORDED</b><br>Confirmed '+new Date(r.ocrVerified.t).toLocaleString()+' after inspecting original pages '+E((r.ocrVerified.pages||[]).join(", "))+'. This is a spot-check receipt, not a claim of character-perfect OCR.</div>';
+ return '<div class="rrAudit"><b>OCR TRUST LOCK</b><br>Original pages inspected: '+seen.length+' / '+need+(seen.length?' · '+E(seen.join(", ")):'')+'. Browse distinct pages above, compare the visible page with the extracted text, then confirm the spot-check.'+(ok?'<br><button class="rrFlowStart" data-rr="ocrok">I CHECKED THESE OCR PAGES AGAINST THE ORIGINAL</button>':'')+'</div>';
+}
 async function renderOriginalPage(r,pageNo=1){
  const host=$("#rrOriginal");if(!host)return;
  if(!r?.binary?.blob){host.innerHTML='<div class="rrEmpty">This source was pasted as text, so the exact extracted source is the canonical original stored here.</div>';return;}
@@ -508,7 +521,11 @@ async function renderOriginalPage(r,pageNo=1){
   host.innerHTML='<div class="rrPdfNav"><button class="rrMini" data-rr="pdfpage" data-page="'+Math.max(1,n-1)+'">←</button><b>PAGE '+n+' / '+doc.numPages+'</b><button class="rrMini" data-rr="pdfpage" data-page="'+Math.min(doc.numPages,n+1)+'">→</button><button class="rrMini" data-rr="original" data-id="'+E(r.id)+'">DOWNLOAD PDF</button></div><canvas id="rrPdfCanvas" class="rrPdfCanvas"></canvas>';
   const canvas=$("#rrPdfCanvas"),ctx=canvas.getContext("2d",{alpha:false});canvas.width=Math.ceil(vp.width);canvas.height=Math.ceil(vp.height);
   await page.render({canvasContext:ctx,viewport:vp}).promise;
+  if(r.compiled?.audit?.ocrDerived){
+    const rec=await recordOcrPageView(r,n,doc.numPages);current={...rec,_relations:current?._relations};host.insertAdjacentHTML("beforeend",ocrTrustHTML(rec,doc.numPages));
+  }
  }catch(e){host.innerHTML='<div class="rrAudit">Original PDF preserved, but page rendering failed: '+E(e.message)+'</div>';}
+
 }
 async function importBackup(file){
  const x=JSON.parse(await file.text());
@@ -682,6 +699,14 @@ function mount(){
   if(a==="export"){await exportSource(b.dataset.id);return;}
   if(a==="original"){await downloadOriginal(b.dataset.id);return;}
   if(a==="pdfpage"){await renderOriginalPage(current,Number(b.dataset.page)||1);return;}
+  if(a==="ocrok"){
+    if(!current?.compiled?.audit?.ocrDerived)return;
+    const r=await get(current.id);if(!r)return;
+    const need=ocrRequiredPages(r.ocrPageTotal||r.compiled.audit.ocrPages||1),pages=[...new Set(r.ocrPagesViewed||[])];
+    if(pages.length<need)return;
+    r.ocrVerified={t:now(),pages:pages.slice(),required:need,statement:"human spot-check against preserved original PDF"};
+    r.updatedAt=now();await put(r);current={...r,_relations:current._relations};$("#rrMetrics").innerHTML=metrics(current);setTab("original");renderLibrary();return;
+  }
   if(a==="jumporiginal"){setTab("original");await renderOriginalPage(current,Number(b.dataset.page)||1);return;}
   if(a==="sourcesearch"){
     const q=$("#rrEvidenceQuery")?.value||"";if(!current)return;
