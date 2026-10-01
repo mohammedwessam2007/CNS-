@@ -243,3 +243,19 @@ Deployment completion requires:
 - medical production still serves CNS v18.6 and does not contain Reader/Campus markers.
 
 Only then may the standalone release be called live.
+
+
+## Deployment retry lineage
+
+Source freeze commit: `5dc40d70b9ad73b1d0b779bcb785ef0ee8f530bb`.
+
+That commit's Vercel status was rejected before build with the external preview `build-rate-limit`; this is not a source/test failure.
+
+A later docs-only descendant may be used solely to retrigger the Git→Vercel pipeline. For release equivalence, it must:
+- descend directly from the source freeze lineage;
+- change no files under `source/`, `tests/`, or `deploy/`;
+- build the same frozen Reader OS 2.0 / Campus 1.2 source;
+- pass the mandatory Reader and Campus gates;
+- report its own deployment commit in `build-info.json`.
+
+The source freeze remains the authority for executable content. A docs-only deploy-trigger descendant does not supersede the frozen executable tree.
