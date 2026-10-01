@@ -538,6 +538,6 @@ function mount(){
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#rrModal").hidden)close();});
  renderLibrary();
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,version:"1.2"};
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,version:"1.3"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
