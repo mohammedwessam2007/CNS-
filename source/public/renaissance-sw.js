@@ -1,9 +1,9 @@
-const CACHE="renaissance-campus-v3";
+const CACHE="renaissance-campus-reader-v4";
 const CORE=[
 "/","/index.html","/renaissance-v1.css","/renaissance-standalone.css","/renaissance-standalone.js","/reader-v1.css","/reader-v1.js","/campus-v1.css","/campus-v1.js",
 "/renaissance-s1.js","/renaissance-s2.js","/renaissance-s3a.js","/renaissance-s3b.js","/renaissance-s3c.js",
 "/renaissance-civ.js","/renaissance-genome.js","/renaissance-media.js","/renaissance-sealed.js","/renaissance-v1.js","/axis-forge-v1.js",
-"/manifest.webmanifest","/vendor/pdf.mjs","/vendor/pdf.worker.mjs","/vendor/fflate.mjs"
+"/manifest.webmanifest","/vendor/pdf.mjs","/vendor/pdf.worker.mjs","/vendor/fflate.mjs","/vendor/tesseract/tesseract.esm.min.js","/vendor/tesseract/worker.min.js"
 ];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
