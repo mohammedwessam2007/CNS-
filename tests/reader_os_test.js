@@ -13,7 +13,7 @@ sandbox.window=sandbox;sandbox.globalThis=sandbox;
 vm.createContext(sandbox);
 try{vm.runInContext(src,sandbox,{filename:"reader-v1.js"});}catch(e){console.error(e);process.exit(1);}
 const R=sandbox.RENAISSANCE_READER;
-check("reader version",R&&R.version==="1.9",R&&R.version);
+check("reader version",R&&R.version==="2.0",R&&R.version);
 const doctor=R&&R.doctor&&R.doctor();
 check("behavioral doctor",doctor&&doctor.ok,doctor);
 
@@ -100,9 +100,9 @@ check("mature OCR may prove only after verification receipt",R.mastery(matureOCR
 const noDeep=R.mastery(mature(C,false));
 check("button-only deep prompts cannot prove replacement",noDeep.label!=="READING REPLACEMENT PROVEN",noDeep);
 const matureOcrBase=mature(O,true);
-const matureOcrBefore=R.mastery({...matureOcrBase,ocrVerified:null});
+const matureOcrBefore=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:null});
 check("OCR mature record remains blocked before original spot-check",matureOcrBefore.label==="OCR ORIGINAL CHECK REQUIRED"&&matureOcrBefore.score<1,matureOcrBefore);
-const matureOcrAfter=R.mastery({...matureOcrBase,ocrVerified:{t:Date.now(),pages:[1,2,3],required:3}});
+const matureOcrWrongHash=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:{t:Date.now(),pages:[1,2,3],required:3,binarySha256:"different-file"}});\ncheck("OCR receipt cannot authorize a different original binary",matureOcrWrongHash.label==="OCR ORIGINAL CHECK REQUIRED"&&matureOcrWrongHash.score<1,matureOcrWrongHash);\nconst matureOcrAfter=R.mastery({...matureOcrBase,binary:{sha256:"source-file-hash"},ocrVerified:{t:Date.now(),pages:[1,2,3],required:3,binarySha256:"source-file-hash"}});
 check("OCR mature record unlocks only after original spot-check receipt",matureOcrAfter.label==="READING REPLACEMENT PROVEN"&&matureOcrAfter.score===1,matureOcrAfter);
 
 const matureResearch=R.mastery(mature(C,true));
