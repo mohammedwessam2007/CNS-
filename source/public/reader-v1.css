@@ -66,3 +66,10 @@
 .rrSourceBox{max-height:58vh;overflow:auto;padding:14px;border:1px solid #29445e;border-radius:14px;background:#050d16;color:#d5e0ea;white-space:pre-wrap;font:500 13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}
 @media(max-width:820px){.rrHero,.rrInput{grid-template-columns:1fr}.rrCards{grid-template-columns:1fr 1fr}.rrMetrics{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.rrShell{padding:16px;border-radius:18px}.rrCards{grid-template-columns:1fr}.rrModal{padding:0}.rrPanel{min-height:100vh;border-radius:0;border-left:0;border-right:0}.rrVerdict{grid-template-columns:1fr}.rrVerdict .rrBig{text-align:left}}
+
+.rrSearch{width:100%;min-height:46px;padding:10px 12px;border:1px solid #2b455f;border-radius:13px;background:#081522;color:#e8eef6}
+.rrLibraryTools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;margin:10px 0}
+.rrGauge{height:8px;margin-top:8px;border-radius:999px;background:#122338;overflow:hidden}.rrGauge i{display:block;height:100%;background:#d9ff43}
+.rrDue{color:#ffd166!important}.rrMastered{color:#5ef0a0!important}.rrRelation{padding:12px 13px;border:1px solid #213950;border-radius:13px;background:#091622}.rrRelation b{color:#66e9ff;font-size:10px;text-transform:uppercase;letter-spacing:.09em}.rrRelation p{margin:7px 0 0}
+.rrMetrics{grid-template-columns:repeat(5,1fr)}
+@media(max-width:820px){.rrLibraryTools{grid-template-columns:1fr}.rrMetrics{grid-template-columns:1fr 1fr}}
