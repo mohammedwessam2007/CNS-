@@ -136,7 +136,7 @@
     for(const k of ["gate","open","queue","state","compile","sessionObject","probes","export","import"]) if(typeof R[k]!=="function") failures.push("missing engine API "+k);
     if(!window.RENAISSANCE_READER||window.RENAISSANCE_READER.version!=="2.0") failures.push("Reader OS API/version missing");
     else { const rd=window.RENAISSANCE_READER.doctor?.(); if(!rd?.ok) failures.push("Reader OS doctor: "+(rd?.failures||["missing doctor"]).join(", ")); }
-    if(!window.RENAISSANCE_CAMPUS||window.RENAISSANCE_CAMPUS.version!=="1.1") failures.push("Campus API/version missing");
+    if(!window.RENAISSANCE_CAMPUS||window.RENAISSANCE_CAMPUS.version!=="1.2") failures.push("Campus API/version missing");
     else { const cd=window.RENAISSANCE_CAMPUS.doctor?.(); if(!cd?.ok) failures.push("Campus doctor: "+(cd?.failures||["missing doctor"]).join(", ")); }
     const med=[...document.scripts].map(s=>s.src).filter(src=>/mcq-v16|learn-v15|cns-atlas|dept-fig/i.test(src));
     if(med.length) failures.push("medical asset leaked into standalone shell");
@@ -163,8 +163,8 @@
       renderCurriculum(R,st);
       renderCompiler(R);
       renderMeasure(R);
-      setRuntime("ready","32/32 · reader 2.0 · campus 1.1 · green");
-      $("#rsBuild").textContent="Renaissance engine "+R.version+" · "+sessions.length+" sessions · Reader OS 2.0 · Campus 1.1 · integrity green";
+      setRuntime("ready","32/32 · reader 2.0 · campus 1.2 · green");
+      $("#rsBuild").textContent="Renaissance engine "+R.version+" · "+sessions.length+" sessions · Reader OS 2.0 · Campus 1.2 · integrity green";
     }catch(e){
       setRuntime("error","engine error");
       $("#rsGateText").textContent="The engine loaded but the dashboard hit an error: "+e.message;
