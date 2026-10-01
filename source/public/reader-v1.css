@@ -88,3 +88,7 @@
 .rrResponse{min-height:90px;padding:10px;border:1px solid #29445e;border-radius:11px;background:#07121f;color:#eaf1f7;resize:vertical;line-height:1.45}
 .rrReveal:disabled{opacity:.38;cursor:not-allowed}
 @media(max-width:620px){.rrFlowIntro,.rrFlowHead{align-items:stretch;flex-direction:column}.rrFlowActions{justify-content:space-between}.rrResponseBox{grid-template-columns:1fr}}
+
+.rrToday{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:16px 0 4px;padding:14px 15px;border:1px solid #3a5a31;border-radius:16px;background:linear-gradient(135deg,#0d1d14,#0a1721)}
+.rrTodayCopy{display:grid;gap:3px}.rrTodayCopy b{color:#eef7e8;font-size:15px}.rrTodayCopy small{color:#8fa6bb;font-size:10px;line-height:1.45}
+@media(max-width:620px){.rrToday{align-items:stretch;flex-direction:column}}
