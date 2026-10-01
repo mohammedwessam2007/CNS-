@@ -21,10 +21,10 @@ for(const name of ["renaissance-s1.js","renaissance-s2.js","renaissance-s3a.js",
 const campusSrc=fs.readFileSync(path.join(ROOT,"campus-v1.js"),"utf8");
 try{vm.runInContext(campusSrc,sandbox,{filename:"campus-v1.js"});}catch(e){console.error(e);process.exit(1);}
 const C=sandbox.RENAISSANCE_CAMPUS,doctor=C&&C.doctor&&C.doctor();
-check("campus version",C&&C.version==="1.1",C&&C.version);
+check("campus version",C&&C.version==="1.2",C&&C.version);
 check("campus doctor",doctor&&doctor.ok,doctor);
 check("exact 32 session mapping",doctor?.metrics?.sessions===32&&doctor?.metrics?.mapped===32,doctor?.metrics);
-check("five authored tracks",doctor?.metrics?.tracks===5,doctor?.metrics);
+check("five authored tracks",doctor?.metrics?.tracks===5,doctor?.metrics);\ncheck("all 96 delayed retrieval hooks exposed",doctor?.metrics?.hooks===96,doctor?.metrics);\ncheck("rich authored step fields exposed",/function authoredExtras/.test(campusSrc)&&/data-tab="retrieval"/.test(campusSrc),doctor?.metrics);
 const ids=C.tracks().flatMap(t=>t.ids);
 check("map ids unique",new Set(ids).size===ids.length,ids);
 check("core bootloader preserved",JSON.stringify(C.tracks()[0].ids)===JSON.stringify(["commit","select","base","loop","proxy","falsify","bottleneck","question","snow","double","taste","boss"]),C.tracks()[0].ids);
