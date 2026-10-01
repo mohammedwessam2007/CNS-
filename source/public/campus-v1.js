@@ -180,7 +180,8 @@ function mount(){
   if(a==="close")return close();
   if(a==="tab")return showTab(b.dataset.tab);
   if(a==="answer"){const el=document.getElementById(b.dataset.q);if(el)el.hidden=!el.hidden;return;}
-  if(a==="study")return study();\n  if(a==="studythis")return studyThis();
+  if(a==="study")return study();
+  if(a==="studythis")return studyThis();
   if(a==="filter"){document.querySelectorAll(".rcFilter").forEach(x=>x.classList.remove("on"));b.classList.add("on");return renderTracks($("#rcSearch")?.value||"",b.dataset.filter);}
   if(a==="reader"){if(window.RENAISSANCE_READER?.open)await window.RENAISSANCE_READER.open(b.dataset.id);return;}
  });
