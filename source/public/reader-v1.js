@@ -430,7 +430,8 @@ async function openSource(r,tab="map"){
  const m=$("#rrModal");m.hidden=false;document.body.style.overflow="hidden";
  const c=r.compiled,ms=masteryState(r);
  $("#rrTitle").textContent=r.title;
- $("#rrVerdict").innerHTML='<div><strong>'+E(c.law.note)+'</strong><p>'+E(c.type.toUpperCase())+' · '+c.paragraphs+' paragraphs · '+c.sentences+' sentences · evidence state: '+E(ms.label)+'. Exact source is always one tab away.</p></div><div class="rrBig">'+E(c.law.mode)+'</div>';
+ const rv=c.verdict||replacementVerdict(c.type,c.audit,c.questions,c.words);
+ $("#rrVerdict").innerHTML='<div><strong>'+E(c.law.note)+'</strong><p>'+E(c.type.toUpperCase())+' · '+c.paragraphs+' paragraphs · '+c.sentences+' sentences · evidence state: '+E(ms.label)+'. Exact source is always one tab away.</p></div><div class="rrBig">'+E(rv.label)+'</div>';
  $("#rrMetrics").innerHTML=metrics(r);setTab(tab);
 }
 function setTab(tab){
