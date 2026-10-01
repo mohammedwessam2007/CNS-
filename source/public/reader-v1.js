@@ -739,6 +739,7 @@ function doctor(){
   const x=compile(sample,"Reader OS doctor","research"),claims=x.keys.every(k=>sample.includes(k.text)),deep=x.questions.filter(q=>q.kind&&q.kind!=="cloze").length;
   const primary=compile("Chapter one. The voice of the narrator changes the meaning of the scene.\n\nChapter two. The rhythm of the words is part of the experience.\n\nA third passage carries the conflict through style.\n\nA fourth passage changes the speaker.\n\nA fifth passage closes the scene.","Primary doctor","primary");
   const visual=compile("Figure 1 shows the network architecture and its three branches.\n\nTable 1 compares the measured outputs across groups.\n\nThe diagram in Figure 2 is required to distinguish the pathways.\n\nThe text explains why the first branch is upstream of the second.\n\nA final paragraph states the practical interpretation of the chart.","Visual doctor","textbook");
+  const ocr=compile("[PAGE 1 OCR] A scanned source explains a mechanism because pressure changes flow.\n\n[PAGE 2 OCR] However, an alternative explanation remains possible.\n\n[PAGE 3 OCR] In 240 observations, output rose from 31 to 47 units.\n\nA fourth paragraph preserves a limitation.\n\nA fifth paragraph states a falsifiable prediction.","OCR doctor","nonfiction");
   const failures=[];
   if(!claims)failures.push("non-extractive claim");
   if(!x.verdict?.pass)failures.push("research replacement gates fail");
@@ -746,10 +747,11 @@ function doctor(){
   if((x.verify||[]).length<2)failures.push("verification anchors missing");
   if(primary.verdict?.label!=="BRIDGE, DO NOT REPLACE")failures.push("primary-text protection failed");
   if(visual.verdict?.label!=="ORIGINAL-WINDOW REQUIRED")failures.push("visual dependency protection failed");
+  if(!ocr.audit?.ocrDerived||ocr.verdict?.label!=="OCR CHECK REQUIRED")failures.push("OCR trust gate failed");
   const gResearch=guidedSequence({compiled:x,binary:null}),gPrimary=guidedSequence({compiled:primary,binary:null});
   if(gResearch[0]!=="map"||gResearch[gResearch.length-1]!=="practice"||!gResearch.includes("verify"))failures.push("guided research sequence failed");
   if(gPrimary[0]!=="map"||gPrimary[1]!=="primary"||gPrimary[gPrimary.length-1]!=="practice")failures.push("guided primary sequence failed");
-  return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label,guided:gResearch.join(">")}};
+  return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label,ocr:ocr.verdict?.label,guided:gResearch.join(">")}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
 window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;dueMode=false;await openSource(r);startFlow();return true;},due:dueQueue,runDue,mastery:masteryState,relationScore,doctor,version:"1.9"};
