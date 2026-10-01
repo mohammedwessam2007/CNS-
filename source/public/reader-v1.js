@@ -555,6 +555,27 @@ function mount(){
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#rrModal").hidden)close();});
  renderLibrary();
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,version:"1.3"};
+function doctor(){
+ const sample=[
+  "A system has a visible step and a hidden constraint. The visible step takes four minutes, but the hidden step takes seventy minutes.",
+  "Because the hidden step limits throughput, optimizing the visible step cannot materially increase total flow.",
+  "However, a second system without that constraint may respond differently, so the mechanism should not be generalized blindly.",
+  "In a sample of 1,240 cases, median delay fell from 182 minutes to 139 minutes after the intervention.",
+  "Staffing also changed during the period, which limits a causal interpretation of the before-and-after comparison.",
+  "The practical decision is to measure the constraint, test a discriminating intervention, and preserve the limitation beside the result."
+ ].join("\n\n");
+ try{
+  const x=compile(sample,"Reader OS doctor","research"),claims=x.keys.every(k=>sample.includes(k.text)),deep=x.questions.filter(q=>q.kind&&q.kind!=="cloze").length;
+  const primary=compile("Chapter one. The voice of the narrator changes the meaning of the scene.\n\nChapter two. The rhythm of the words is part of the experience.\n\nA third passage carries the conflict through style.\n\nA fourth passage changes the speaker.\n\nA fifth passage closes the scene.","Primary doctor","primary");
+  const failures=[];
+  if(!claims)failures.push("non-extractive claim");
+  if(!x.verdict?.pass)failures.push("research replacement gates fail");
+  if(deep<3)failures.push("deep retrieval missing");
+  if((x.verify||[]).length<2)failures.push("verification anchors missing");
+  if(primary.verdict?.label!=="BRIDGE, DO NOT REPLACE")failures.push("primary-text protection failed");
+  return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label}};
+ }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
+}
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,doctor,version:"1.4"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
