@@ -154,10 +154,24 @@ function study(){
  const g=R.open();
  if(g&&!g.open){const el=$("#rcStudyMsg");if(el)el.textContent=g.msg||"The life governor is resting this session right now.";}
 }
+function studyThis(){
+ const R=window.RENAISSANCE,el=$("#rcStudyMsg");if(!R||!current)return;
+ const q=R.queue?.(current.id);
+ if(!q?.ok){
+   const msg=q?.why==="bootloader"?"Finish the cognitive bootloader in order first. Next: "+(session(q.next)?.title||q.next):
+     q?.why==="prerequisite"?"Prerequisite required: "+(q.missing||[]).map(id=>session(id)?.title||id).join(", "):
+     q?.why==="already-complete"?"This session is already complete. Browse it here; the evidence engine will not counterfeit a second completion.":
+     "This lesson cannot be queued right now.";
+   if(el)el.textContent=msg;return;
+ }
+ close();
+ const g=R.open();
+ if(g&&!g.open){if(el)el.textContent=g.msg||"Queued for today, but the life governor is resting right now.";}
+}
 function mount(){
  const host=document.createElement("div");host.id="rcHost";
  const today=document.querySelector(".rsStats");(today?.parentNode||document.querySelector("main"))?.insertBefore(host,today?.nextSibling||null);
- const modal=document.createElement("div");modal.id="rcModal";modal.className="rcModal";modal.hidden=true;modal.innerHTML='<div class="rcPanel" role="dialog" aria-modal="true" aria-labelledby="rcTitle"><div class="rcTop"><div><small id="rcKicker">RENAISSANCE CAMPUS</small><h2 id="rcTitle"></h2></div><button class="rcClose" data-rc="close" aria-label="Close">×</button></div><div class="rcDetail"><div id="rcOverview" class="rcOverview"></div><div id="rcMeta" class="rcPills"></div><div class="rcTabs"><button class="rcTab on" data-rc="tab" data-tab="lesson">LESSON</button><button class="rcTab" data-rc="tab" data-tab="vocab">VOCABULARY</button><button class="rcTab" data-rc="tab" data-tab="sources">SOURCES</button><button class="rcTab" data-rc="tab" data-tab="map">MAP</button></div><div id="rcView"></div></div><div class="rcStudyBar"><span id="rcStudyMsg">Browse mode writes no mastery evidence. Study mode preserves predictions, retrieval and experimental integrity.</span><button class="rcStudyBtn" data-rc="study">RESUME EVIDENCE-BEARING STUDY</button></div></div>';
+ const modal=document.createElement("div");modal.id="rcModal";modal.className="rcModal";modal.hidden=true;modal.innerHTML='<div class="rcPanel" role="dialog" aria-modal="true" aria-labelledby="rcTitle"><div class="rcTop"><div><small id="rcKicker">RENAISSANCE CAMPUS</small><h2 id="rcTitle"></h2></div><button class="rcClose" data-rc="close" aria-label="Close">×</button></div><div class="rcDetail"><div id="rcOverview" class="rcOverview"></div><div id="rcMeta" class="rcPills"></div><div class="rcTabs"><button class="rcTab on" data-rc="tab" data-tab="lesson">LESSON</button><button class="rcTab" data-rc="tab" data-tab="vocab">VOCABULARY</button><button class="rcTab" data-rc="tab" data-tab="sources">SOURCES</button><button class="rcTab" data-rc="tab" data-tab="map">MAP</button></div><div id="rcView"></div></div><div class="rcStudyBar"><span id="rcStudyMsg">Browse mode writes no mastery evidence. Study mode preserves predictions, retrieval and experimental integrity.</span><div style="display:flex;gap:7px;width:100%;justify-content:flex-end"><button class="rcStudyBtn" data-rc="study">RESUME RECOMMENDED</button><button class="rcStudyBtn" data-rc="studythis">STUDY THIS LESSON</button></div></div></div>';
  document.body.appendChild(modal);
  document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-rc]");if(!b)return;
@@ -166,7 +180,7 @@ function mount(){
   if(a==="close")return close();
   if(a==="tab")return showTab(b.dataset.tab);
   if(a==="answer"){const el=document.getElementById(b.dataset.q);if(el)el.hidden=!el.hidden;return;}
-  if(a==="study")return study();
+  if(a==="study")return study();\n  if(a==="studythis")return studyThis();
   if(a==="filter"){document.querySelectorAll(".rcFilter").forEach(x=>x.classList.remove("on"));b.classList.add("on");return renderTracks($("#rcSearch")?.value||"",b.dataset.filter);}
   if(a==="reader"){if(window.RENAISSANCE_READER?.open)await window.RENAISSANCE_READER.open(b.dataset.id);return;}
  });
