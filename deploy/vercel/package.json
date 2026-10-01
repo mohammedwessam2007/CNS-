@@ -3,9 +3,14 @@
   "private": true,
   "type": "module",
   "description": "Renaissance standalone: local-first adaptive curriculum and Reading Replacement Engine.",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "fflate": "0.8.3",
-    "pdfjs-dist": "6.3.289"
+    "pdfjs-dist": "6.3.289",
+    "tesseract.js": "7.0.0",
+    "@tesseract.js-data/eng": "1.0.0",
+    "@tesseract.js-data/ara": "1.0.0"
   }
 }
