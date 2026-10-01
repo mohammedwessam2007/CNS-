@@ -15,7 +15,7 @@
   const ENABLED = true;
   const VERSION = "1.0";
   const KEY = "renaissance_v1";
-  const EXAM_DAY = "2026-11-15";
+  const EXAM_DAY = window.RENAISSANCE_EXAM_DAY || "2026-11-15";
   const DOSE = { full: 25, short: 10, deep: 45 };
   const WEEK_CAP = 245; // minutes in 7 days before the dose shrinks
   const WEEK_STOP = 300; // minutes in 7 days before Renaissance rests
@@ -1770,7 +1770,7 @@
     const st = load();
     if (P.sid && st.sessions[P.sid]) st.sessions[P.sid].stopped = Date.now();
     save();
-    P.sheet = '<h3>Stopped. Nothing is owed.</h3>' + md("Minutes so far are counted. Next time starts where you left off, with no catch-up and no penalty.") + '<button type="button" class="rnBtn" data-rn="leave">BACK TO INTELLECTUALITY</button>';
+    P.sheet = '<h3>Stopped. Nothing is owed.</h3>' + md("Minutes so far are counted. Next time starts where you left off, with no catch-up and no penalty.") + '<button type="button" class="rnBtn" data-rn="leave">BACK TO RENAISSANCE</button>';
     redraw();
   }
   document.addEventListener("click", (ev) => {
