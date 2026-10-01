@@ -134,9 +134,9 @@
     const mediaCount=Object.keys(M.visuals||{}).length+Object.keys(M.models||{}).length+Object.keys(M.listen||{}).length+Object.keys(M.data||{}).length;
     if(mediaCount!==61) failures.push("media registry mismatch: "+mediaCount);
     for(const k of ["gate","open","state","compile","sessionObject","probes","export","import"]) if(typeof R[k]!=="function") failures.push("missing engine API "+k);
-    if(!window.RENAISSANCE_READER||window.RENAISSANCE_READER.version!=="1.5") failures.push("Reader OS API/version missing");
+    if(!window.RENAISSANCE_READER||window.RENAISSANCE_READER.version!=="1.6") failures.push("Reader OS API/version missing");
     else { const rd=window.RENAISSANCE_READER.doctor?.(); if(!rd?.ok) failures.push("Reader OS doctor: "+(rd?.failures||["missing doctor"]).join(", ")); }
-    const med=[...document.scripts].map(s=>s.src).filter(src=>/mcq-v16|learn-v15|cns-atlas|dept-fig/i.test(src));
+    if(!window.RENAISSANCE_CAMPUS||window.RENAISSANCE_CAMPUS.version!=="1.0") failures.push("Campus API/version missing");\n    else { const cd=window.RENAISSANCE_CAMPUS.doctor?.(); if(!cd?.ok) failures.push("Campus doctor: "+(cd?.failures||["missing doctor"]).join(", ")); }\n    const med=[...document.scripts].map(s=>s.src).filter(src=>/mcq-v16|learn-v15|cns-atlas|dept-fig/i.test(src));
     if(med.length) failures.push("medical asset leaked into standalone shell");
     return {ok:!failures.length,failures,metrics:{sessions:sessions.length,steps,provenance,hooks:hooks.length,atoms:Object.keys(G.atoms||{}).length,compounds:(G.compounds||[]).length,civNodes:Object.keys(C.nodes||{}).length,civEdges:(C.edges||[]).length,sealed:(S.items||[]).length,media:mediaCount}};
   }
@@ -161,8 +161,8 @@
       renderCurriculum(R,st);
       renderCompiler(R);
       renderMeasure(R);
-      setRuntime("ready","32/32 · reader 1.5 · green");
-      $("#rsBuild").textContent="Renaissance engine "+R.version+" · "+sessions.length+" sessions · Reader OS 1.5 · integrity green";
+      setRuntime("ready","32/32 · reader 1.6 · campus 1.0 · green");
+      $("#rsBuild").textContent="Renaissance engine "+R.version+" · "+sessions.length+" sessions · Reader OS 1.6 · Campus 1.0 · integrity green";
     }catch(e){
       setRuntime("error","engine error");
       $("#rsGateText").textContent="The engine loaded but the dashboard hit an error: "+e.message;
