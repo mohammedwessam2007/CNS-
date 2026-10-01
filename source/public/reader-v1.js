@@ -211,6 +211,7 @@ function masteryState(r){
  if(!qs.length)return {label:"NO RETRIEVAL SET",score:0,due:0,delayed:0,required,total:0};
  const deep=qs.filter(q=>q.kind&&q.kind!=="cloze");
  const deepSeen=deep.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length;
+ const deepCommitted=deep.filter(q=>(q.responses||[]).some(x=>String(x.text||"").trim().length>=12)).length;
  const deepRight=deep.reduce((n,q)=>n+(q.correct||0),0),deepAttempts=deep.reduce((n,q)=>n+(q.attempts||0),0),deepAcc=deepAttempts?deepRight/deepAttempts:0;
  const attempts=hist.length||qs.reduce((n,q)=>n+(q.attempts||0),0);
  const right=hist.filter(x=>x.ok).length||qs.reduce((n,q)=>n+(q.correct||0),0);
@@ -221,12 +222,12 @@ function masteryState(r){
  }).length;
  const acc=attempts?right/attempts:0,age=(now()-(r.createdAt||now()))/dayMs;
  const seen=qs.filter(q=>(q.history||[]).length||(q.attempts||0)>0).length;
- if(!rv.pass)return {label:"RECOMPILE BEFORE REPLACEMENT",score:.08,due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,required,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2)};
+ if(!rv.pass)return {label:"RECOMPILE BEFORE REPLACEMENT",score:.08,due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,required,deepSeen,deepCommitted,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2)};
  let label="NOT PROVEN",score=0;
  if(seen){label="ACTIVE RETRIEVAL";score=.25;}
- if(seen>=required&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.75){label="PROVISIONAL";score=.55;}
- if(age>=7&&delayed>=Math.ceil(required*.6)&&acc>=.8&&deepSeen===deep.length&&deepAcc>=.8){label="DURABLE";score=.82;}
- if(age>=30&&delayed>=Math.ceil(required*.85)&&acc>=.85&&deepSeen===deep.length&&deepAcc>=.85){
+ if(seen>=required&&acc>=.8&&deepSeen===deep.length&&deepCommitted===deep.length&&deepAcc>=.75){label="PROVISIONAL";score=.55;}
+ if(age>=7&&delayed>=Math.ceil(required*.6)&&acc>=.8&&deepSeen===deep.length&&deepCommitted===deep.length&&deepAcc>=.8){label="DURABLE";score=.82;}
+ if(age>=30&&delayed>=Math.ceil(required*.85)&&acc>=.85&&deepSeen===deep.length&&deepCommitted===deep.length&&deepAcc>=.85){
    label=r.compiled.type==="primary"?"SECONDARY LAYER POSSESSED":"READING REPLACEMENT PROVEN";score=1;
  }
  return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,required,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2)};
@@ -503,6 +504,12 @@ function verifyCard(r,x,i){
  const jump=isPdf&&m?'<button class="rrMini" data-rr="jumporiginal" data-page="'+m[1]+'">VIEW ORIGINAL PAGE '+m[1]+'</button>':"";
  return '<div class="rrClaim"><b>VERIFY '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p>'+jump+'</div>';
 }
+function questionCard(q){
+ const due=!q.due||q.due<=now(),deep=!!(q.kind&&q.kind!=="cloze"),responses=q.responses||[],history=q.history||[];
+ const lastResponse=responses.length?responses[responses.length-1].t:0,lastScore=history.length?history[history.length-1].t:0,responseReady=!deep||lastResponse>lastScore;
+ const commit=deep?'<div class="rrResponseBox"><textarea class="rrResponse" data-response="'+E(q.id)+'" placeholder="Commit your reconstruction before reveal. Minimum 12 characters."></textarea><button class="rrMini" data-rr="commitresponse" data-q="'+E(q.id)+'">COMMIT RESPONSE</button><span class="rrAnchor">'+(responseReady?"response committed":"reveal locked until you commit")+'</span></div>':"";
+ return '<div class="rrQuestion" data-q="'+E(q.id)+'"><p class="rrQPrompt">'+E(q.stem)+'</p><span class="rrAnchor">'+E(q.anchor)+(due?" · DUE":" · scheduled")+(deep?" · "+E(q.kind.toUpperCase()):"")+'</span>'+commit+'<button class="rrReveal" data-rr="reveal" data-q="'+E(q.id)+'" '+(responseReady?"":"disabled")+'>REVEAL</button><div class="rrAnswer" data-a="'+E(q.id)+'" hidden><b>'+E(q.answer)+'</b><br>'+E(q.source)+'<div class="rrScore"><button class="good" data-rr="score" data-q="'+E(q.id)+'" data-ok="1">GOT IT</button><button class="miss" data-rr="score" data-q="'+E(q.id)+'" data-ok="0">MISSED</button></div></div></div>';
+}
 function view(r,tab){
  const c=r.compiled,m=masteryState(r);
  if(tab==="map")return '<h3>Source map</h3><p>Every structural slice keeps an exact-source anchor. This is orientation, not a claim that one sentence equals a whole section.</p><div class="rrMap">'+c.map.map((x,i)=>'<div class="rrMapItem"><b>SECTOR '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
@@ -510,7 +517,7 @@ function view(r,tab){
  if(tab==="terms")return '<h3>Concept vocabulary</h3><p>High-frequency content terms orient the source. Frequency is not importance, so these never substitute for the anchored claims.</p><div class="rrTerms">'+c.terms.map(x=>'<span class="rrTerm"><b>'+x.count+'×</b> '+E(x.term)+'</span>').join("")+'</div>'+(c.counter.length?'<h3>Contrasts / limitations found</h3><div class="rrMap">'+c.counter.map(x=>'<div class="rrClaim"><b>'+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>':'');
  if(tab==="verify")return '<h3>Verification anchors</h3><div class="rrAudit">Methods, numbers, results, limitations, figure/table references and notation-sensitive claims are deliberately retained for exact checking. PDF anchors can jump to the preserved original page.</div><div class="rrMap">'+(c.verify||[]).map((x,i)=>verifyCard(r,x,i)).join("")+'</div><h3>Compression audit</h3><div class="rrMap"><div class="rrRelation"><b>EXTRACTIVE</b><p>'+E(String(c.audit.extractive))+' · no generated claims: '+E(String(c.audit.noGeneratedClaims))+'</p></div><div class="rrRelation"><b>TOP-TERM COVERAGE</b><p>'+Math.round(c.audit.lexicalTopTermCoverage*100)+'%</p></div><div class="rrRelation"><b>NUMERIC EVIDENCE CAPTURE</b><p>'+Math.round((c.audit.numericEvidenceCaptured||0)*100)+'% of the bounded numeric audit set</p></div><div class="rrRelation"><b>VISUAL DEPENDENCY</b><p>'+(c.audit.visualDependencyRisk?"ORIGINAL WINDOW REQUIRED":"low by current heuristic")+' · signals: '+(c.audit.visualSignals||0)+'</p></div><div class="rrRelation"><b>NOTATION RISK</b><p>'+(c.audit.notationRisk?"ORIGINAL WINDOW REQUIRED":"low by current heuristic")+' · signals: '+(c.audit.mathSignals||0)+'</p></div><div class="rrRelation"><b>SOURCE HASH</b><p class="rrExact">'+E(r.hash)+'</p></div></div>';
  if(tab==="primary")return '<h3>Irreducible passages</h3><p>'+E(c.type==="primary"?"These stay because language, form, voice or sequence is part of the object. The machine is not allowed to eat the art.":"These passages are retained as exact-source checkpoints against compression loss.")+'</p><div class="rrMap">'+c.irreducible.map(x=>'<div class="rrPassage"><b class="rrKicker">P'+(x.pi+1)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
- if(tab==="practice")return '<h3>Prove the source survived compression</h3><div class="rrAudit">'+E(m.label)+' · '+m.seen+'/'+m.total+' prompts attempted · '+m.delayed+' passed after a ≥6-day separation. A source does not become “replaced” because it was uploaded. The proof floor scales with source length.</div><p>Reveal only after answering from memory. A miss returns tomorrow; repeated success increases the spacing interval.</p><div class="rrMap">'+c.questions.map(q=>{const due=!q.due||q.due<=now();return '<div class="rrQuestion" data-q="'+E(q.id)+'"><p class="rrQPrompt">'+E(q.stem)+'</p><span class="rrAnchor">'+E(q.anchor)+(due?" · DUE":" · scheduled")+'</span><button class="rrReveal" data-rr="reveal" data-q="'+E(q.id)+'">REVEAL</button><div class="rrAnswer" data-a="'+E(q.id)+'" hidden><b>'+E(q.answer)+'</b><br>'+E(q.source)+'<div class="rrScore"><button class="good" data-rr="score" data-q="'+E(q.id)+'" data-ok="1">GOT IT</button><button class="miss" data-rr="score" data-q="'+E(q.id)+'" data-ok="0">MISSED</button></div></div></div>';}).join("")+'</div>';
+ if(tab==="practice")return '<h3>Prove the source survived compression</h3><div class="rrAudit">'+E(m.label)+' · '+m.seen+'/'+m.total+' prompts attempted · '+m.delayed+' passed after a ≥6-day separation · '+(m.deepCommitted||0)+'/'+(m.deepTotal||0)+' deep prompts have a committed written answer. Uploading or button-tapping earns no replacement proof.</div><p>Deep prompts lock reveal until you commit your own reconstruction. A miss returns tomorrow; repeated success increases spacing. Stored responses can later be graded independently.</p><div class="rrMap">'+c.questions.map(questionCard).join("")+'</div>';
  if(tab==="connections")return '<h3>Cross-source connections</h3><p>Connections are lexical candidates, not claims of agreement. They tell you where to compare sources, not what conclusion to adopt.</p><div class="rrMap">'+((r._relations||[]).length?r._relations.map(x=>'<div class="rrRelation"><b>'+Math.round(x.score*100)+'% OVERLAP</b><p>'+E(x.r.title)+'</p><button class="rrMini" data-rr="open" data-id="'+E(x.r.id)+'">OPEN SOURCE</button></div>').join(""):'<div class="rrEmpty">No strong cross-source overlap yet.</div>')+'</div>';
  if(tab==="original")return '<h3>Original source</h3><p>For PDFs, this is the actual preserved file rendered locally, not reconstructed text. Other uploaded originals remain downloadable byte-for-byte from local storage.</p><div id="rrOriginal"></div>';
  if(tab==="search"){
@@ -581,6 +588,13 @@ function mount(){
     current._searchQuery=q;current._searchResults=searchSource(current,q);setTab("search");return;
   }
   if(a==="delete"){if(confirm("Delete this local source and its Reader OS record? This does not touch Renaissance curriculum state.")){await del(b.dataset.id);renderLibrary();}return;}
+  if(a==="commitresponse"){
+    if(!current)return;const id=b.dataset.q,box=b.closest(".rrQuestion"),ta=box?.querySelector("[data-response]"),answer=String(ta?.value||"").trim();
+    if(answer.length<12){ta?.focus();return;}
+    const r=await get(current.id),q=r.compiled.questions.find(x=>x.id===id);if(!q)return;
+    q.responses=Array.isArray(q.responses)?q.responses:[];q.responses.push({t:now(),text:answer});if(q.responses.length>50)q.responses.splice(0,q.responses.length-50);
+    r.updatedAt=now();await put(r);current={...r,_relations:current._relations};setTab("practice");renderLibrary();return;
+  }
   if(a==="reveal"){const x=document.querySelector('[data-a="'+CSS.escape(b.dataset.q)+'"]');if(x)x.hidden=false;return;}
   if(a==="score")return score(b.dataset.q,b.dataset.ok==="1");
  });
@@ -610,6 +624,6 @@ function doctor(){
   return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,doctor,version:"1.5"};
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,doctor,version:"1.6"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
