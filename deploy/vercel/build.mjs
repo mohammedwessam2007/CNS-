@@ -42,7 +42,9 @@ const VOUT=new URL("vendor/",OUT);
 await mkdir(VOUT,{recursive:true});
 await copyFile(here("./node_modules/pdfjs-dist/legacy/build/pdf.mjs"),new URL("pdf.mjs",VOUT));
 await copyFile(here("./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs"),new URL("pdf.worker.mjs",VOUT));
-await copyFile(here("./node_modules/pdfjs-dist/LICENSE"),new URL("PDFJS-LICENSE",VOUT));\nawait copyFile(here("./node_modules/fflate/esm/browser.js"),new URL("fflate.mjs",VOUT));\nawait copyFile(here("./node_modules/fflate/LICENSE"),new URL("FFLATE-LICENSE",VOUT));
+await copyFile(here("./node_modules/pdfjs-dist/LICENSE"),new URL("PDFJS-LICENSE",VOUT));
+await copyFile(here("./node_modules/fflate/esm/browser.js"),new URL("fflate.mjs",VOUT));
+await copyFile(here("./node_modules/fflate/LICENSE"),new URL("FFLATE-LICENSE",VOUT));
 for(const dir of ["cmaps","standard_fonts","wasm"]){
   await cp(here("./node_modules/pdfjs-dist/"+dir+"/"),new URL(dir+"/",VOUT),{recursive:true});
 }
