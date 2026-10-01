@@ -136,7 +136,9 @@
     for(const k of ["gate","open","state","compile","sessionObject","probes","export","import"]) if(typeof R[k]!=="function") failures.push("missing engine API "+k);
     if(!window.RENAISSANCE_READER||window.RENAISSANCE_READER.version!=="1.6") failures.push("Reader OS API/version missing");
     else { const rd=window.RENAISSANCE_READER.doctor?.(); if(!rd?.ok) failures.push("Reader OS doctor: "+(rd?.failures||["missing doctor"]).join(", ")); }
-    if(!window.RENAISSANCE_CAMPUS||window.RENAISSANCE_CAMPUS.version!=="1.0") failures.push("Campus API/version missing");\n    else { const cd=window.RENAISSANCE_CAMPUS.doctor?.(); if(!cd?.ok) failures.push("Campus doctor: "+(cd?.failures||["missing doctor"]).join(", ")); }\n    const med=[...document.scripts].map(s=>s.src).filter(src=>/mcq-v16|learn-v15|cns-atlas|dept-fig/i.test(src));
+    if(!window.RENAISSANCE_CAMPUS||window.RENAISSANCE_CAMPUS.version!=="1.0") failures.push("Campus API/version missing");
+    else { const cd=window.RENAISSANCE_CAMPUS.doctor?.(); if(!cd?.ok) failures.push("Campus doctor: "+(cd?.failures||["missing doctor"]).join(", ")); }
+    const med=[...document.scripts].map(s=>s.src).filter(src=>/mcq-v16|learn-v15|cns-atlas|dept-fig/i.test(src));
     if(med.length) failures.push("medical asset leaked into standalone shell");
     return {ok:!failures.length,failures,metrics:{sessions:sessions.length,steps,provenance,hooks:hooks.length,atoms:Object.keys(G.atoms||{}).length,compounds:(G.compounds||[]).length,civNodes:Object.keys(C.nodes||{}).length,civEdges:(C.edges||[]).length,sealed:(S.items||[]).length,media:mediaCount}};
   }
