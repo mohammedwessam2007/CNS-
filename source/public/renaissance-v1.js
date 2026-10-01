@@ -1993,6 +1993,26 @@
       const c = choose(st, today, DOSE.full, t);
       return c ? { sid: c.s ? c.s.id : null, mode: c.mode, why: c.why || c.wait, l11: c.l11 != null ? c.l11 : null, weights: Object.assign({}, c.l11 === 1 ? W11 : W), ranked: (c.ranked || []).map((r) => ({ sid: r.s.id, score: r.score, parts: r.parts, reasons: r.reasons })) } : null;
     },
+    queue: (id) => {
+      const s = sessionById(id), st = load();
+      if (!s) return { ok: false, why: "unknown-session" };
+      if (st.sessions[id] && st.sessions[id].done) return { ok: false, why: "already-complete" };
+      const boot = seasons().filter((z) => z.boot).flatMap((z) => z.sessions || []);
+      const nextBoot = boot.find((x) => !(st.sessions[x.id] && st.sessions[x.id].done));
+      if (nextBoot && nextBoot.id !== id) return { ok: false, why: "bootloader", next: nextBoot.id };
+      const missing = (s.requires || []).filter((rid) => !(st.sessions[rid] && st.sessions[rid].done));
+      if (missing.length) return { ok: false, why: "prerequisite", missing };
+      const today = dayKey(new Date());
+      st.choice = { sid: id, day: today, over: null, source: "campus" };
+      save();
+      return { ok: true, sid: id, day: today };
+    },
+    clearQueue: () => {
+      const st = load();
+      st.choice = null;
+      save();
+      return { ok: true };
+    },
     sessionObject: (id) => sessionObject(sessionById(id)),
     experiments: () => expReport(load()),
     vector: () => vector(load()),
