@@ -50,6 +50,17 @@ function matureOcr(compiled,verified){
 const ocrBefore=R.mastery(matureOcr(O,false)),ocrAfter=R.mastery(matureOcr(O,true));
 check("OCR cannot reach proven state before original-page spot-check",ocrBefore.label==="OCR ORIGINAL CHECK REQUIRED"&&ocrBefore.score<1,ocrBefore);
 check("OCR may reach proven state only after verified original-page receipt",ocrAfter.label==="READING REPLACEMENT PROVEN"&&ocrAfter.score===1,ocrAfter);
+const ocrSource=[
+ "[PAGE 1 OCR] The system works because pressure changes flow through the constrained path.",
+ "[PAGE 2 OCR] However, a competing mechanism remains possible and must be checked against the original evidence.",
+ "[PAGE 3 OCR] In 240 observations, measured output increased from 31 to 47 units.",
+ "A fourth paragraph explains that a hidden constraint changes the mechanism.",
+ "A fifth paragraph preserves a limitation on generalization.",
+ "A sixth paragraph describes a falsifying test."
+].join("\n\n");
+const O=R.compile(ocrSource,"OCR hostile source","research");
+check("OCR compile carries trust lock",O.audit?.ocrDerived&&O.audit?.ocrPages===3&&O.verdict?.label==="OCR CHECK REQUIRED",O.verdict);
+
 const P=R.compile(primary,"Primary hostile source","primary");
 check("primary never replacement candidate",P.verdict&&P.verdict.label==="BRIDGE, DO NOT REPLACE",P.verdict);
 
@@ -88,6 +99,12 @@ matureOCR.ocrVerified={t:Date.now(),pages:[1,2,3],required:3};
 check("mature OCR may prove only after verification receipt",R.mastery(matureOCR).label==="READING REPLACEMENT PROVEN",R.mastery(matureOCR));
 const noDeep=R.mastery(mature(C,false));
 check("button-only deep prompts cannot prove replacement",noDeep.label!=="READING REPLACEMENT PROVEN",noDeep);
+const matureOcrBase=mature(O,true);
+const matureOcrBefore=R.mastery({...matureOcrBase,ocrVerified:null});
+check("OCR mature record remains blocked before original spot-check",matureOcrBefore.label==="OCR ORIGINAL CHECK REQUIRED"&&matureOcrBefore.score<1,matureOcrBefore);
+const matureOcrAfter=R.mastery({...matureOcrBase,ocrVerified:{t:Date.now(),pages:[1,2,3],required:3}});
+check("OCR mature record unlocks only after original spot-check receipt",matureOcrAfter.label==="READING REPLACEMENT PROVEN"&&matureOcrAfter.score===1,matureOcrAfter);
+
 const matureResearch=R.mastery(mature(C,true));
 check("mature delayed research can reach proven state",matureResearch.label==="READING REPLACEMENT PROVEN",matureResearch);
 const maturePrimary=R.mastery(mature(P,true));
