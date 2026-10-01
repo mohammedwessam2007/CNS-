@@ -479,7 +479,7 @@ function renderLibrary(){
   if(!visible.length){box.innerHTML='<div class="rrEmpty">'+(list.length?"Nothing matches that search.":"No imported sources yet. Paste an article or upload a book, paper, EPUB or DOCX. The original text will stay locally beside its compiled replacement.")+'</div>';return;}
   box.innerHTML=visible.map(r=>{
    const m=masteryState(r),rels=related(r,list),cls=m.score>=.82?"rrMastered":m.due?"rrDue":"";
-   return '<article class="rrCard"><b>'+E(r.title)+'</b><small>'+r.compiled.words.toLocaleString()+" words · "+r.compiled.paragraphs+" paragraphs · "+E(dueText(r.compiled.questions))+'</small><span class="rrMode">'+E(r.compiled.law.mode)+'</span><small class="'+cls+'">'+E(m.label)+(m.accuracy!=null?" · "+Math.round(m.accuracy*100)+"% retrieval":"")+'</small><div class="rrGauge" aria-label="replacement evidence"><i style="width:'+Math.round(m.score*100)+'%"></i></div>'+(rels.length?'<small>connects: '+rels.slice(0,2).map(x=>E(x.r.title)).join(" · ")+'</small>':"")+'<div class="rrCardActions"><button class="rrMini" data-rr="open" data-id="'+E(r.id)+'">OPEN CAPSULE</button><button class="rrMini" data-rr="export" data-id="'+E(r.id)+'">EXPORT</button><button class="rrMini danger" data-rr="delete" data-id="'+E(r.id)+'">DELETE</button></div></article>';
+   return '<article class="rrCard"><b>'+E(r.title)+'</b><small>'+r.compiled.words.toLocaleString()+" words · "+r.compiled.paragraphs+" paragraphs · "+E(dueText(r.compiled.questions))+'</small><span class="rrMode">'+E(r.compiled.law.mode)+'</span><small class="'+cls+'">'+E(m.label)+(m.accuracy!=null?" · "+Math.round(m.accuracy*100)+"% retrieval":"")+'</small><div class="rrGauge" aria-label="replacement evidence"><i style="width:'+Math.round(m.score*100)+'%"></i></div>'+(rels.length?'<small>connects: '+rels.slice(0,2).map(x=>E(x.r.title)).join(" · ")+'</small>':"")+'<div class="rrCardActions"><button class="rrFlowStart" data-rr="run" data-id="'+E(r.id)+'">RUN REPLACEMENT</button><button class="rrMini" data-rr="open" data-id="'+E(r.id)+'">BROWSE</button><button class="rrMini" data-rr="export" data-id="'+E(r.id)+'">EXPORT</button><button class="rrMini danger" data-rr="delete" data-id="'+E(r.id)+'">DELETE</button></div></article>';
   }).join("");
  }).catch(e=>status("Library error: "+e.message,true));
 }
@@ -600,8 +600,8 @@ async function compileFromUI(){
   if(!text)throw new Error("Paste text or choose a supported file.");
   status("Compiling structure, claims, verification anchors and retrieval…");
   const rec=await saveSource(text,title,type,file?.name||null,file||null);
-  status(rec.duplicate?"Already in your library. Opening the existing capsule.":"Compiled locally. No source text was uploaded.");
-  renderLibrary();await openSource(rec);
+  status(rec.duplicate?"Already in your library. Starting its replacement protocol.":"Compiled locally. No source text was uploaded. Starting the replacement protocol.");
+  renderLibrary();await openSource(rec);startFlow();
  }catch(e){status(e.message,true);}finally{btn.disabled=false;}
 }
 function mount(){
@@ -614,6 +614,7 @@ function mount(){
   const b=e.target.closest("[data-rr]");if(!b)return;const a=b.dataset.rr;
   if(a==="close")return close();if(a==="tab")return setTab(b.dataset.tab);if(a==="startflow")return startFlow();if(a==="flownext")return moveFlow(1);if(a==="flowprev")return moveFlow(-1);
   if(a==="open"){const r=await get(b.dataset.id);if(r)await openSource(r);return;}
+  if(a==="run"){const r=await get(b.dataset.id);if(r){await openSource(r);startFlow();}return;}
   if(a==="export"){await exportSource(b.dataset.id);return;}
   if(a==="original"){await downloadOriginal(b.dataset.id);return;}
   if(a==="pdfpage"){await renderOriginalPage(current,Number(b.dataset.page)||1);return;}
