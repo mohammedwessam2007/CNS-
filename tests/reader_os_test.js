@@ -39,6 +39,17 @@ const primary=[
 ].join("\n\n");
 const O=R.compile("[PAGE 1 OCR]\\nA scanned page explains the mechanism because pressure changes flow.\\n\\n[PAGE 2 OCR]\\nHowever, the source preserves a limitation that should be checked.\\n\\n[PAGE 3 OCR]\\nThe practical interpretation depends on the original scan.\\n\\nA fourth paragraph gives enough structure to compile.\\n\\nA fifth paragraph closes the argument with a testable claim.","OCR hostile source","nonfiction");
 check("OCR compilation is explicitly trust-gated",O.audit&&O.audit.ocrDerived&&O.verdict&&O.verdict.label==="OCR CHECK REQUIRED",O.verdict);
+function matureOcr(compiled,verified){
+ const c=JSON.parse(JSON.stringify(compiled)),now=Date.now(),d=86400000;
+ for(const q of c.questions){
+   q.history=[{t:now-35*d,ok:true},{t:now-d,ok:true}];q.attempts=2;q.correct=2;q.due=now+7*d;q.interval=3;
+   if(q.kind&&q.kind!=="cloze")q.responses=[{t:now-36*d,text:"A committed reconstruction long enough to count as a genuine answer."}];
+ }
+ return {compiled:c,createdAt:now-40*d,updatedAt:now,ocrVerified:verified?{t:now,pages:[1,2,3],required:3}:null};
+}
+const ocrBefore=R.mastery(matureOcr(O,false)),ocrAfter=R.mastery(matureOcr(O,true));
+check("OCR cannot reach proven state before original-page spot-check",ocrBefore.label==="OCR ORIGINAL CHECK REQUIRED"&&ocrBefore.score<1,ocrBefore);
+check("OCR may reach proven state only after verified original-page receipt",ocrAfter.label==="READING REPLACEMENT PROVEN"&&ocrAfter.score===1,ocrAfter);
 const P=R.compile(primary,"Primary hostile source","primary");
 check("primary never replacement candidate",P.verdict&&P.verdict.label==="BRIDGE, DO NOT REPLACE",P.verdict);
 
