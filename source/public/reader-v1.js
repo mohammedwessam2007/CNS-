@@ -50,6 +50,10 @@ async function sha(t){
  const b=new TextEncoder().encode(t),h=await crypto.subtle.digest("SHA-256",b);
  return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
 }
+async function shaBlob(blob){
+ const h=await crypto.subtle.digest("SHA-256",await blob.arrayBuffer());
+ return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
 function inferType(text,title,chosen){
  if(chosen&&chosen!=="auto")return chosen;
  const h=(title+"\n"+text.slice(0,25000)).toLowerCase();
@@ -231,9 +235,10 @@ function masteryState(r){
  if(age>=30&&delayed>=Math.ceil(required*.85)&&acc>=.85&&deepSeen===deep.length&&deepCommitted===deep.length&&deepAcc>=.85){
    label=r.compiled.type==="primary"?"SECONDARY LAYER POSSESSED":"READING REPLACEMENT PROVEN";score=1;
  }
- const ocrPending=!!(r.compiled?.audit?.ocrDerived&&!r.ocrVerified);
+ const ocrReceiptValid=!!(r.ocrVerified&&r.binary?.sha256&&r.ocrVerified.binarySha256===r.binary.sha256);
+ const ocrPending=!!(r.compiled?.audit?.ocrDerived&&!ocrReceiptValid);
  if(ocrPending&&score>=1){label="OCR ORIGINAL CHECK REQUIRED";score=.82;}
- return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,required,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2),ocrPending,ocrVerified:!!r.ocrVerified};
+ return {label,score:+score.toFixed(2),due,delayed,accuracy:+acc.toFixed(2),attempts,seen,total:qs.length,required,deepSeen,deepTotal:deep.length,deepAccuracy:+deepAcc.toFixed(2),ocrPending,ocrVerified:ocrReceiptValid};
 }
 function compile(text,title,chosen){
  const type=inferType(text,title,chosen),ps=paras(text);
@@ -441,7 +446,7 @@ async function saveSource(text,title,type,fileName,originalFile){
   }catch(e){if(/Not enough browser storage/.test(e.message))throw e;}
  }
  const compiled=compile(text,title,type);
- const binary=originalFile?{blob:originalFile,name:originalFile.name,type:originalFile.type||"application/octet-stream",size:originalFile.size}:null;
+ const binary=originalFile?{blob:originalFile,name:originalFile.name,type:originalFile.type||"application/octet-stream",size:originalFile.size,sha256:await shaBlob(originalFile)}:null;
  const rec={id,hash:fullHash,title:(title||fileName||"Untitled source").trim(),fileName:fileName||null,text,binary,compiled,createdAt:now(),updatedAt:now()};
  await put(rec);try{await navigator.storage?.persist?.();}catch(e){}
  return rec;
@@ -506,7 +511,8 @@ async function recordOcrPageView(r,page,total){
 function ocrTrustHTML(r,total){
  if(!r?.compiled?.audit?.ocrDerived)return "";
  const seen=(r.ocrPagesViewed||[]),need=ocrRequiredPages(total||r.ocrPageTotal||r.compiled.audit.ocrPages||1),ok=seen.length>=need;
- if(r.ocrVerified)return '<div class="rrAudit"><b>OCR SPOT-CHECK RECORDED</b><br>Confirmed '+new Date(r.ocrVerified.t).toLocaleString()+' after inspecting original pages '+E((r.ocrVerified.pages||[]).join(", "))+'. This is a spot-check receipt, not a claim of character-perfect OCR.</div>';
+ const receiptValid=!!(r.ocrVerified&&r.binary?.sha256&&r.ocrVerified.binarySha256===r.binary.sha256);
+ if(receiptValid)return '<div class="rrAudit"><b>OCR SPOT-CHECK RECORDED</b><br>Confirmed '+new Date(r.ocrVerified.t).toLocaleString()+' after inspecting original pages '+E((r.ocrVerified.pages||[]).join(", "))+'. Receipt bound to original-file SHA-256 '+E(r.binary.sha256.slice(0,16))+'…. This is a spot-check receipt, not a claim of character-perfect OCR.</div>';
  return '<div class="rrAudit"><b>OCR TRUST LOCK</b><br>Original pages inspected: '+seen.length+' / '+need+(seen.length?' · '+E(seen.join(", ")):'')+'. Browse distinct pages above, compare the visible page with the extracted text, then confirm the spot-check.'+(ok?'<br><button class="rrFlowStart" data-rr="ocrok">I CHECKED THESE OCR PAGES AGAINST THE ORIGINAL</button>':'')+'</div>';
 }
 async function renderOriginalPage(r,pageNo=1){
@@ -538,7 +544,12 @@ async function importBackup(file){
  compiled.questions.forEach(q=>{
   const old=oldQ.get(q.id);if(old){q.history=Array.isArray(old.history)?old.history.slice(-100):[];q.attempts=old.attempts||q.history.length;q.correct=old.correct||q.history.filter(x=>x.ok).length;q.due=old.due||0;q.interval=old.interval||0;}
  });
- const rec={id:h.slice(0,24),hash:h,title:original.title||file.name,fileName:original.fileName||file.name,text,compiled,createdAt:original.createdAt||now(),updatedAt:now()};
+ const rec={
+   id:h.slice(0,24),hash:h,title:original.title||file.name,fileName:original.fileName||file.name,text,compiled,
+   createdAt:original.createdAt||now(),updatedAt:now(),
+   historicalOcrReceipt:original.ocrVerified||original.historicalOcrReceipt||null,
+   ocrVerified:null,ocrPagesViewed:[],ocrPageTotal:original.ocrPageTotal||compiled.audit?.ocrPages||null
+ };
  await put(rec);return rec;
 }
 function related(r,list){
@@ -705,7 +716,8 @@ function mount(){
     const r=await get(current.id);if(!r)return;
     const need=ocrRequiredPages(r.ocrPageTotal||r.compiled.audit.ocrPages||1),pages=[...new Set(r.ocrPagesViewed||[])];
     if(pages.length<need)return;
-    r.ocrVerified={t:now(),pages:pages.slice(),required:need,statement:"human spot-check against preserved original PDF"};
+    if(!r.binary?.sha256)return;
+    r.ocrVerified={t:now(),pages:pages.slice(),required:need,binarySha256:r.binary.sha256,statement:"human spot-check against preserved original PDF"};
     r.updatedAt=now();await put(r);current={...r,_relations:current._relations};$("#rrMetrics").innerHTML=metrics(current);setTab("original");renderLibrary();return;
   }
   if(a==="jumporiginal"){setTab("original");await renderOriginalPage(current,Number(b.dataset.page)||1);return;}
@@ -755,6 +767,6 @@ function doctor(){
   return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label,ocr:ocr.verdict?.label,guided:gResearch.join(">")}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;dueMode=false;await openSource(r);startFlow();return true;},due:dueQueue,runDue,mastery:masteryState,relationScore,doctor,version:"1.9"};
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;dueMode=false;await openSource(r);startFlow();return true;},due:dueQueue,runDue,mastery:masteryState,relationScore,doctor,version:"2.0"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
