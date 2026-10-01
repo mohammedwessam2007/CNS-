@@ -165,10 +165,64 @@ async function parsePdf(file,status){
  }
  return pages.join("\n\n");
 }
+function zipPath(base,href){
+ const parts=(base+href).split("/"),out=[];
+ for(const p of parts){if(!p||p===".")continue;if(p==="..")out.pop();else out.push(p);}
+ return out.join("/");
+}
+async function zipEngine(){
+ if(!zipmod)zipmod=await import("/vendor/fflate.mjs");
+ return zipmod;
+}
+async function parseEpub(file,status){
+ status("Opening EPUB locally…");
+ const z=await zipEngine(),files=z.unzipSync(new Uint8Array(await file.arrayBuffer())),names=Object.keys(files);
+ const read=(n)=>files[n]?z.strFromU8(files[n]):"";
+ let opf="";
+ const container=read("META-INF/container.xml");
+ if(container){
+  const x=new DOMParser().parseFromString(container,"application/xml");
+  opf=x.querySelector("rootfile")?.getAttribute("full-path")||"";
+ }
+ let chapters=[];
+ if(opf&&files[opf]){
+  const xml=new DOMParser().parseFromString(read(opf),"application/xml"),base=opf.includes("/")?opf.slice(0,opf.lastIndexOf("/")+1):"";
+  const manifest={};
+  xml.querySelectorAll("manifest item").forEach(n=>manifest[n.getAttribute("id")]={href:n.getAttribute("href")||"",type:n.getAttribute("media-type")||""});
+  xml.querySelectorAll("spine itemref").forEach(n=>{
+   const m=manifest[n.getAttribute("idref")];if(!m)return;
+   const p=zipPath(base,m.href);
+   if(files[p]&&/html|xhtml/i.test(m.type+" "+p))chapters.push(p);
+  });
+ }
+ if(!chapters.length)chapters=names.filter(n=>/\.(xhtml|html|htm)$/i.test(n)&&!/nav\.xhtml$/i.test(n)).sort();
+ const out=[];
+ for(let i=0;i<chapters.length;i++){
+  if(i===0||i%10===0||i===chapters.length-1)status("Extracting EPUB · section "+(i+1)+" / "+chapters.length);
+  const d=new DOMParser().parseFromString(read(chapters[i]),"text/html");
+  d.querySelectorAll("script,style,noscript,svg").forEach(x=>x.remove());
+  const t=(d.body?.innerText||d.documentElement.textContent||"").replace(/\s+\n/g,"\n").trim();
+  if(t)out.push("[EPUB SECTION "+(i+1)+"]\n"+t);
+ }
+ if(!out.length)throw new Error("The EPUB opened, but no readable spine text was found.");
+ return out.join("\n\n");
+}
+async function parseDocx(file,status){
+ status("Opening DOCX locally…");
+ const z=await zipEngine(),files=z.unzipSync(new Uint8Array(await file.arrayBuffer())),raw=files["word/document.xml"];
+ if(!raw)throw new Error("This DOCX has no word/document.xml body.");
+ const xml=new DOMParser().parseFromString(z.strFromU8(raw),"application/xml"),out=[];
+ xml.querySelectorAll("p").forEach(p=>{
+  const t=[...p.querySelectorAll("t")].map(x=>x.textContent||"").join("").trim();
+  if(t)out.push(t);
+ });
+ if(!out.length)throw new Error("The DOCX opened, but no readable paragraph text was found.");
+ return out.join("\n\n");
+}
 async function readFile(file,status){
  if(file.size>MAX_FILE)throw new Error("This file is over 100 MB. Split it by book/part so the compiler can preserve everything without crashing your device.");
  const name=file.name.toLowerCase();
- if(file.type==="application/pdf"||name.endsWith(".pdf"))return parsePdf(file,status);
+ if(file.type==="application/pdf"||name.endsWith(".pdf"))return parsePdf(file,status);\n if(name.endsWith(".epub"))return parseEpub(file,status);\n if(name.endsWith(".docx"))return parseDocx(file,status);
  if(/\.(txt|md|markdown|html?|csv|json|rtf)$/i.test(name)||/^text\//.test(file.type)){
   let t=await file.text();
   if(/\.html?$/i.test(name)){
@@ -177,7 +231,7 @@ async function readFile(file,status){
   if(/\.json$/i.test(name)){try{const o=JSON.parse(t);t=JSON.stringify(o,null,2);}catch(e){}}
   return t;
  }
- throw new Error("Unsupported file. Use PDF, TXT, Markdown, HTML, CSV, JSON or RTF, or paste the text. EPUB/DOCX stay outside v1 rather than being silently mangled.");
+ throw new Error("Unsupported file. Use PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON or RTF, or paste the text. The compiler refuses unknown formats rather than silently mangling them.");
 }
 async function saveSource(text,title,type,fileName){
  text=normalize(text); if(text.length>MAX_CHARS)throw new Error("This source exceeds the 12-million-character safety ceiling. Split it into volumes/parts. Nothing was truncated or imported.");
@@ -256,7 +310,7 @@ async function compileFromUI(){
 }
 function mount(){
  const host=$("#rrHost");if(!host)return;
- host.innerHTML='<section class="rrShell"><div class="rrHero"><div><p class="rsEyebrow">READER OS · READING REPLACEMENT ENGINE</p><h2>Replace the reading.<br><em>Keep the knowledge.</em></h2><p>Bring the source you would otherwise spend an hour, a week, or a month reading. Renaissance keeps the full text, builds an anchored compression ladder, preserves the irreducible parts, then makes you retrieve what matters until it survives without the page.</p></div><div class="rrLaw"><b>THE LAW</b><span>If reading is transport for information, compress it. If exact wording, method, evidence, style or aesthetic experience is the cargo, keep that part primary. No summary is allowed to impersonate the source.</span></div></div><div class="rrInput"><textarea id="rrPaste" class="rrPaste" placeholder="Paste an article, chapter, paper, book extract, lecture notes…"></textarea><div class="rrControls"><input id="rrSourceTitle" class="rrTitle" placeholder="Source title (optional)"><select id="rrType" class="rrSelect"><option value="auto">AUTO CLASSIFY</option><option value="nonfiction">NONFICTION / ARTICLE</option><option value="textbook">TEXTBOOK / EXPLANATORY</option><option value="research">RESEARCH PAPER</option><option value="primary">LITERATURE / PRIMARY TEXT</option></select><input id="rrFile" class="rrFile" type="file" accept=".pdf,.txt,.md,.markdown,.html,.htm,.csv,.json,.rtf,text/*,application/pdf"><button id="rrCompile" class="rrCompile" type="button">COMPILE READING</button><p class="rrHint">PDF, TXT, Markdown, HTML, CSV, JSON, RTF or pasted text. Source stays on this device in IndexedDB. v1 refuses unsupported formats rather than corrupting them.</p></div></div><div id="rrStatus" class="rrStatus" aria-live="polite"></div><div class="rrLibrary"><div class="rrLibraryTop"><h3>Your compiled library</h3><span id="rrLibraryCount"></span></div><div id="rrCards" class="rrCards"></div></div></section>';
+ host.innerHTML='<section class="rrShell"><div class="rrHero"><div><p class="rsEyebrow">READER OS · READING REPLACEMENT ENGINE</p><h2>Replace the reading.<br><em>Keep the knowledge.</em></h2><p>Bring the source you would otherwise spend an hour, a week, or a month reading. Renaissance keeps the full text, builds an anchored compression ladder, preserves the irreducible parts, then makes you retrieve what matters until it survives without the page.</p></div><div class="rrLaw"><b>THE LAW</b><span>If reading is transport for information, compress it. If exact wording, method, evidence, style or aesthetic experience is the cargo, keep that part primary. No summary is allowed to impersonate the source.</span></div></div><div class="rrInput"><textarea id="rrPaste" class="rrPaste" placeholder="Paste an article, chapter, paper, book extract, lecture notes…"></textarea><div class="rrControls"><input id="rrSourceTitle" class="rrTitle" placeholder="Source title (optional)"><select id="rrType" class="rrSelect"><option value="auto">AUTO CLASSIFY</option><option value="nonfiction">NONFICTION / ARTICLE</option><option value="textbook">TEXTBOOK / EXPLANATORY</option><option value="research">RESEARCH PAPER</option><option value="primary">LITERATURE / PRIMARY TEXT</option></select><input id="rrFile" class="rrFile" type="file" accept=".pdf,.epub,.docx,.txt,.md,.markdown,.html,.htm,.csv,.json,.rtf,text/*,application/pdf"><button id="rrCompile" class="rrCompile" type="button">COMPILE READING</button><p class="rrHint">PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON, RTF or pasted text. Source stays on this device in IndexedDB. Unknown formats are refused rather than corrupted.</p></div></div><div id="rrStatus" class="rrStatus" aria-live="polite"></div><div class="rrLibrary"><div class="rrLibraryTop"><h3>Your compiled library</h3><span id="rrLibraryCount"></span></div><div id="rrCards" class="rrCards"></div></div></section>';
  const modal=document.createElement("div");modal.id="rrModal";modal.className="rrModal";modal.hidden=true;modal.innerHTML='<div class="rrPanel" role="dialog" aria-modal="true" aria-labelledby="rrTitle"><div class="rrTop"><div><span class="rrKicker">RENAISSANCE READER OS</span><h2 id="rrTitle"></h2></div><button class="rrClose" data-rr="close" aria-label="Close">×</button></div><div class="rrBody"><div id="rrVerdict" class="rrVerdict"></div><div id="rrMetrics"></div><div class="rrTabs"><button class="rrTab on" data-rr="tab" data-tab="map">MAP</button><button class="rrTab" data-rr="tab" data-tab="capsule">CAPSULE</button><button class="rrTab" data-rr="tab" data-tab="terms">TERMS + CONTRASTS</button><button class="rrTab" data-rr="tab" data-tab="primary">IRREDUCIBLE</button><button class="rrTab" data-rr="tab" data-tab="practice">PROVE IT</button><button class="rrTab" data-rr="tab" data-tab="source">FULL SOURCE</button></div><div id="rrView" class="rrView"></div></div></div>';
  document.body.appendChild(modal);
  $("#rrCompile").addEventListener("click",compileFromUI);
