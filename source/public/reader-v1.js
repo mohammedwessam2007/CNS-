@@ -624,6 +624,6 @@ function doctor(){
   return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,mastery:masteryState,relationScore,doctor,version:"1.6"};
+window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},mastery:masteryState,relationScore,doctor,version:"1.6"};
 document.addEventListener("DOMContentLoaded",mount);
 })();
