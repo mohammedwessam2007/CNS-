@@ -87,7 +87,21 @@ function repHTML(rep,sid){
 function qHTML(q,key){
  if(!q)return "";
  const id="rcq-"+E(key);
- return '<div class="rcChoices">'+(q.options||[]).map((o,i)=>'<div class="rcChoice" data-choice="'+i+'">'+E(o.t)+'</div>').join("")+'</div><button class="rcReveal" data-rc="answer" data-q="'+id+'">REVEAL EXPLANATION</button><div id="'+id+'" class="rcAnswer" hidden>'+((q.options||[]).map((o,i)=>'<div class="rcChoice '+(o.ok?"ok":"bad")+'"><strong>'+(o.ok?"✓ ":"") + E(o.t)+'</strong>'+(o.why?'<br>'+E(o.why):"")+'</div>').join(""))+(q.after?md(q.after):"")+'</div>';
+ return '<div class="rcChoices">'+(q.options||[]).map((o,i)=>'<div class="rcChoice" data-choice="'+i+'">'+E(o.t)+'</div>').join("")+'</div><button class="rcReveal" data-rc="answer" data-q="'+id+'">REVEAL EXPLANATION</button><div id="'+id+'" class="rcAnswer" hidden>'+((q.options||[]).map((o,i)=>'<div class="rcChoice '+(o.ok?"ok":"bad")+'"><strong>'+(o.ok?"✓ ":"") + E(o.t)+'</strong>'+(o.why?'<br>'+E(o.why):"")+(o.bug?'<br><small>error family: '+E(o.bug)+'</small>':"")+'</div>').join(""))+(q.after?md(q.after):"")+'</div>';
+}
+function authoredExtras(x,sid){
+ let h="";
+ if(x.alt)h+='<div class="rcBox"><b>ALTERNATIVE HINT</b>'+md(x.alt)+'</div>';
+ if(x.dialogue?.length)h+='<div class="rcBox"><b>DIALOGUE</b>'+x.dialogue.map(d=>'<p><strong>'+E(d.who||"Speaker")+':</strong> '+E(d.say||"")+'</p>').join("")+'</div>';
+ if(x.listen?.length)h+='<div class="rcBox"><b>LISTENING OBJECT</b>'+x.listen.map(a=>'<p><strong>'+E(a.label||"PLAY")+'</strong><br>'+E(a.text||"")+(a.seq?'<br><small>'+E((a.seq.bpm?("tempo "+a.seq.bpm+" BPM · "):"")+(a.seq.notes?.length||0)+" note events")+'</small>':"")+'</p>').join("")+'<p><small>Audio playback remains in Study mode so browsing writes no media-use evidence.</small></p></div>';
+ if(x.panels?.length)h+='<div class="rcPair">'+x.panels.map(p=>'<div><h4>'+E(p.title||"Panel")+'</h4>'+(p.body?md(p.body):"")+(p.svg?'<span class="rcPill">visual '+E(p.svg)+'</span>':"")+'</div>').join("")+'</div>';
+ if(x.slots?.length)h+='<div class="rcBox"><b>FORGE OPTIONS</b>'+x.slots.map(s=>'<div class="rcStep"><strong>'+E(s.label||s.key||"slot")+'</strong>'+(s.options||[]).map(o=>'<div class="rcChoice '+(o.grade==="good"?"ok":"")+'"><strong>'+E(o.t||"")+'</strong>'+(o.grade?'<br><small>grade: '+E(o.grade)+'</small>':"")+(o.note?'<br>'+E(o.note):"")+(o.say?'<br><small>compiled wording: '+E(o.say)+'</small>':"")+'</div>').join("")+'</div>').join("")+(x.template?'<p><strong>Template:</strong> '+E(x.template)+'</p>':"")+'</div>';
+ else if(x.template)h+='<div class="rcBox"><b>TEMPLATE</b>'+md(x.template)+'</div>';
+ if(x.poss)h+='<div class="rcBox"><b>POSSESSION EVIDENCE</b><div class="rcPills">'+Object.entries(x.poss).map(([k,v])=>'<span class="rcPill">'+E(k)+' → '+E(v)+'</span>').join("")+'</div></div>';
+ if(x.src?.length)h+='<div class="rcPills">'+x.src.map(s=>'<span class="rcPill">source '+E(s)+'</span>').join("")+'</div>';
+ if(x.svg)h+='<div class="rcPills"><span class="rcPill">visual '+E(x.svg)+'</span></div>';
+ if(x.opt)h+='<div class="rcPills"><span class="rcPill">optional depth</span></div>';
+ return h;
 }
 function stepHTML(x,sid,i){
  const title=x.title||x.label||({q:"Question",scene:"Explanation",model:"Interactive model",contrast:"Compare",passage:"Primary text",forge:"Forge",reality:"Reality check",close:"Close"}[x.type]||x.type||"Step");
@@ -113,7 +127,7 @@ function stepHTML(x,sid,i){
    if(x.options)inner+=qHTML(x,sid+"-"+x.id);
  }
  const meta=[x.stage,x.kind,x.min&&x.min+" min"].filter(Boolean).join(" · ");
- return '<article class="rcStep"><div class="rcStepHead"><b>'+(i+1)+'. '+E(title)+'</b><span>'+E(meta)+'</span></div>'+inner+(x.terms?.length?'<div class="rcPills">'+x.terms.map(t=>'<span class="rcPill">'+E(t)+'</span>').join("")+'</div>':"")+'</article>';
+ return '<article class="rcStep"><div class="rcStepHead"><b>'+(i+1)+'. '+E(title)+'</b><span>'+E(meta)+'</span></div>'+inner+authoredExtras(x,sid)+(x.terms?.length?'<div class="rcPills">'+x.terms.map(t=>'<span class="rcPill">'+E(t)+'</span>').join("")+'</div>':"")+'</article>';
 }
 function renderModal(){
  if(!current)return;
@@ -121,7 +135,7 @@ function renderModal(){
  $("#rcTitle").textContent=s.title;
  $("#rcKicker").textContent=(t?.title||"Renaissance")+" · "+status;
  $("#rcOverview").innerHTML='<div class="rcBox"><b>WHY THIS EXISTS</b>'+md(s.why||s.hook||"")+'</div><div class="rcBox"><b>CAPABILITY</b>'+md(s.capability||"")+'</div><div class="rcBox"><b>STAKES</b>'+md(s.stakes||"")+'</div><div class="rcBox"><b>CONNECTION</b>'+md(s.connection||s.bridge||"")+'</div>';
- $("#rcMeta").innerHTML=[(s.minutes||"?")+" min",s.domain||s.primitive,s.region,(s.atoms||[]).join(" · "),(s.works||[]).join(" · ")].filter(Boolean).map(x=>'<span class="rcPill">'+E(x)+'</span>').join("");
+ $("#rcMeta").innerHTML=[(s.minutes||"?")+" min",s.domain||s.primitive,s.region,(s.atoms||[]).join(" · "),(s.works||[]).join(" · "),s.talk&&"conversation-enabled"].filter(Boolean).map(x=>'<span class="rcPill">'+E(x)+'</span>').join("");
  showTab(currentTab);
 }
 function showTab(tab){
@@ -131,8 +145,11 @@ function showTab(tab){
  if(tab==="lesson"){
    let h='<div class="rcSteps">'+(s.steps||[]).map((x,i)=>stepHTML(x,s.id,i)).join("")+'</div>';
    if(s.challenge)h+='<h3>Challenge</h3><article class="rcStep">'+md(s.challenge.stem||s.challenge.body||"")+qHTML(s.challenge,s.id+"-challenge")+'</article>';
-   if(s.deeper?.length)h+='<h3>Go deeper</h3><div class="rcSteps">'+s.deeper.map((x,i)=>'<article class="rcStep"><div class="rcStepHead"><b>'+E(x.title||("Depth "+(i+1)))+'</b></div>'+md(x.body||"")+'</article>').join("")+'</div>';
+   if(s.deeper?.length)h+='<h3>Go deeper</h3><div class="rcSteps">'+s.deeper.map((x,i)=>'<article class="rcStep"><div class="rcStepHead"><b>'+E(x.title||("Depth "+(i+1)))+'</b></div>'+md(x.body||"")+(x.quotes||[]).map(qid=>{const q=quote(qid,s.id);return q?'<figure class="rcQuote"><blockquote>'+E(q.text||"").replace(/\\n/g,"<br>")+'</blockquote><small>'+E([q.speaker,q.work,q.where,q.translator&&("tr. "+q.translator)].filter(Boolean).join(" · "))+'</small></figure>':"";}).join("")+'</article>').join("")+'</div>';
    v.innerHTML=h;return;
+ }
+ if(tab==="retrieval"){
+   v.innerHTML='<h3>Delayed retrieval · 1 / 7 / 30 days</h3><p>These are the authored returning questions scheduled after the session. Browsing them here does not satisfy or retire the hook.</p><div class="rcSteps">'+(s.hooks||[]).map((h,i)=>'<article class="rcStep"><div class="rcStepHead"><b>'+E(h.id||("Hook "+(i+1)))+'</b><span>+'+E(h.gap||"?")+' day'+(Number(h.gap)===1?"":"s")+'</span></div>'+qHTML(h.q||{},s.id+"-"+(h.id||i))+(h.poss?'<div class="rcPills">'+Object.entries(h.poss).map(([k,v])=>'<span class="rcPill">'+E(k)+' → '+E(v)+'</span>').join("")+'</div>':"")+'</article>').join("")+'</div>';return;
  }
  if(tab==="vocab"){
    const vs=s.vocab||{};v.innerHTML='<div class="rcVocab">'+Object.entries(vs).map(([k,x])=>'<div class="rcVocabCard"><b>'+E(x.name||k)+'</b><p>'+E(x.h||"")+'</p>'+(x.s?'<p class="rcArabic">'+E(x.s)+'</p>':"")+(x.t?'<p>'+E(x.t)+'</p>':"")+'</div>').join("")+'</div>';return;
@@ -171,7 +188,7 @@ function studyThis(){
 function mount(){
  const host=document.createElement("div");host.id="rcHost";
  const today=document.querySelector(".rsStats");(today?.parentNode||document.querySelector("main"))?.insertBefore(host,today?.nextSibling||null);
- const modal=document.createElement("div");modal.id="rcModal";modal.className="rcModal";modal.hidden=true;modal.innerHTML='<div class="rcPanel" role="dialog" aria-modal="true" aria-labelledby="rcTitle"><div class="rcTop"><div><small id="rcKicker">RENAISSANCE CAMPUS</small><h2 id="rcTitle"></h2></div><button class="rcClose" data-rc="close" aria-label="Close">×</button></div><div class="rcDetail"><div id="rcOverview" class="rcOverview"></div><div id="rcMeta" class="rcPills"></div><div class="rcTabs"><button class="rcTab on" data-rc="tab" data-tab="lesson">LESSON</button><button class="rcTab" data-rc="tab" data-tab="vocab">VOCABULARY</button><button class="rcTab" data-rc="tab" data-tab="sources">SOURCES</button><button class="rcTab" data-rc="tab" data-tab="map">MAP</button></div><div id="rcView"></div></div><div class="rcStudyBar"><span id="rcStudyMsg">Browse mode writes no mastery evidence. Study mode preserves predictions, retrieval and experimental integrity.</span><div style="display:flex;gap:7px;width:100%;justify-content:flex-end"><button class="rcStudyBtn" data-rc="study">RESUME RECOMMENDED</button><button class="rcStudyBtn" data-rc="studythis">STUDY THIS LESSON</button></div></div></div>';
+ const modal=document.createElement("div");modal.id="rcModal";modal.className="rcModal";modal.hidden=true;modal.innerHTML='<div class="rcPanel" role="dialog" aria-modal="true" aria-labelledby="rcTitle"><div class="rcTop"><div><small id="rcKicker">RENAISSANCE CAMPUS</small><h2 id="rcTitle"></h2></div><button class="rcClose" data-rc="close" aria-label="Close">×</button></div><div class="rcDetail"><div id="rcOverview" class="rcOverview"></div><div id="rcMeta" class="rcPills"></div><div class="rcTabs"><button class="rcTab on" data-rc="tab" data-tab="lesson">LESSON</button><button class="rcTab" data-rc="tab" data-tab="retrieval">RETRIEVAL</button><button class="rcTab" data-rc="tab" data-tab="vocab">VOCABULARY</button><button class="rcTab" data-rc="tab" data-tab="sources">SOURCES</button><button class="rcTab" data-rc="tab" data-tab="map">MAP</button></div><div id="rcView"></div></div><div class="rcStudyBar"><span id="rcStudyMsg">Browse mode writes no mastery evidence. Study mode preserves predictions, retrieval and experimental integrity.</span><div style="display:flex;gap:7px;width:100%;justify-content:flex-end"><button class="rcStudyBtn" data-rc="study">RESUME RECOMMENDED</button><button class="rcStudyBtn" data-rc="studythis">STUDY THIS LESSON</button></div></div></div>';
  document.body.appendChild(modal);
  document.addEventListener("click",async e=>{
   const b=e.target.closest("[data-rc]");if(!b)return;
@@ -188,6 +205,6 @@ function mount(){
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#rcModal").hidden)close();});
  render();
 }
-window.RENAISSANCE_CAMPUS={version:"1.1",tracks:()=>JSON.parse(JSON.stringify(TRACKS)),open:openSession,doctor:()=>{const xs=sessions(),ids=TRACKS.flatMap(t=>t.ids),miss=xs.filter(s=>!ids.includes(s.id)).map(s=>s.id),dup=ids.filter((x,i)=>ids.indexOf(x)!==i),reader=window.RENAISSANCE_READER;const rf=reader&&typeof reader.run==="function";return {ok:xs.length===32&&ids.length===32&&!miss.length&&!dup.length&&rf,metrics:{sessions:xs.length,mapped:ids.length,tracks:TRACKS.length,readerRun:!!rf},failures:[...(miss.length?["unmapped "+miss.join(",")]:[]),...(dup.length?["duplicate "+dup.join(",")]:[]),...(!rf?["Reader run integration missing"]:[])]};}};
+window.RENAISSANCE_CAMPUS={version:"1.2",tracks:()=>JSON.parse(JSON.stringify(TRACKS)),open:openSession,doctor:()=>{const xs=sessions(),ids=TRACKS.flatMap(t=>t.ids),miss=xs.filter(s=>!ids.includes(s.id)).map(s=>s.id),dup=ids.filter((x,i)=>ids.indexOf(x)!==i),reader=window.RENAISSANCE_READER;const rf=reader&&typeof reader.run==="function";return {ok:xs.length===32&&ids.length===32&&!miss.length&&!dup.length&&rf,metrics:{sessions:xs.length,mapped:ids.length,tracks:TRACKS.length,readerRun:!!rf},failures:[...(miss.length?["unmapped "+miss.join(",")]:[]),...(dup.length?["duplicate "+dup.join(",")]:[]),...(!rf?["Reader run integration missing"]:[])]};}};
 document.addEventListener("DOMContentLoaded",mount);
 })();
