@@ -51,6 +51,14 @@ for(const dir of ["cmaps","standard_fonts","wasm"]){
   await cp(here("./node_modules/pdfjs-dist/"+dir+"/"),new URL(dir+"/",VOUT),{recursive:true});
 }
 
+// Tesseract.js OCR is shipped locally. Source pages never leave the browser.
+await cp(here("./node_modules/tesseract.js/dist/"),new URL("tesseract/",VOUT),{recursive:true});
+await cp(here("./node_modules/tesseract.js-core/"),new URL("tesseract-core/",VOUT),{recursive:true});
+await mkdir(new URL("tessdata/",VOUT),{recursive:true});
+await copyFile(here("./node_modules/@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz"),new URL("tessdata/eng.traineddata.gz",VOUT));
+await copyFile(here("./node_modules/@tesseract.js-data/ara/4.0.0_best_int/ara.traineddata.gz"),new URL("tessdata/ara.traineddata.gz",VOUT));
+await copyFile(here("./node_modules/tesseract.js/LICENSE.md"),new URL("TESSERACT-JS-LICENSE",VOUT));
+
 async function walk(url,prefix=""){
   const rows=[];
   for(const name of await readdir(url)){
