@@ -16,6 +16,9 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .rsMark{display:grid;place-items:center;width:34px;height:34px;border:1px solid #56711d;border-radius:10px;background:#111d0c;color:var(--lime);font:950 17px/1 Georgia,serif}
 .rsBrand b{display:block;font-size:12px;letter-spacing:.18em}
 .rsBrand small{display:block;margin-top:3px;color:var(--mut);font-size:9px;font-weight:800;letter-spacing:.12em}
+.rsNav{display:flex;align-items:center;gap:7px;margin-left:auto}
+.rsNav a{display:inline-flex;align-items:center;min-height:32px;padding:0 9px;border:1px solid transparent;border-radius:999px;color:#8299ae;text-decoration:none;font-size:9px;font-weight:900;letter-spacing:.08em}
+.rsNav a:hover{border-color:var(--line);color:#fff;background:#0b1725}
 .rsTopRight{display:flex;align-items:center;gap:8px}
 .rsRuntime,.rsTiny,.rsPill{display:inline-flex;align-items:center;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:999px;background:#0b1725;color:var(--mut);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
 .rsRuntime.ready{border-color:#2d674c;color:var(--green);background:#0a1d15}
@@ -71,7 +74,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .rsNoScript{position:fixed;inset:auto 16px 16px;padding:16px;border-radius:14px;background:#2a1119;color:#fff}
 .rnRoot{z-index:10000}
 body.rnOpen .rsTop{display:none}
-@media(max-width:880px){
+@media(max-width:880px){\n .rsNav{display:none}
  .rsPage{width:min(100% - 24px,760px);padding-top:28px}
  .rsStats{grid-template-columns:repeat(2,1fr)}
  .rsGrid{grid-template-columns:1fr}
