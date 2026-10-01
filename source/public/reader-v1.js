@@ -154,10 +154,16 @@ function verificationAnchors(ss){
  const out=[];
  for(const s of ss){
   const t=s.text;
-  if(/\d|%|\bp\s*[<=>]|\bCI\b|confidence interval|odds ratio|risk ratio|hazard ratio|sample|participants?|subjects?|methods?|randomi[sz]|limitation|excluded?|included?|measured?|estimated?|mean|median|standard deviation/i.test(t)) out.push({text:t,pi:s.pi,anchor:"P"+(s.pi+1)});
-  if(out.length>=28)break;
+  if(/\d|%|\bp\s*[<=>]|\bCI\b|confidence interval|odds ratio|risk ratio|hazard ratio|sample|participants?|subjects?|methods?|randomi[sz]|limitation|excluded?|included?|measured?|estimated?|mean|median|standard deviation|\bfig(?:ure)?\.?\s*\d|\btable\s*\d|equation|theorem|proof|diagram|shown in/i.test(t)) out.push({text:t,pi:s.pi,anchor:"P"+(s.pi+1)});
+  if(out.length>=36)break;
  }
  return out;
+}
+function modalityRisk(ss){
+ const text=ss.map(x=>x.text).join("\n");
+ const visual=(text.match(/\b(fig(?:ure)?\.?|table|diagram|panel|image|graph|chart|shown in|see (?:fig|table))/gi)||[]).length;
+ const math=(text.match(/[∑∫√∞≈≠≤≥±×÷]|\b(equation|theorem|lemma|proof|matrix|derivative|integral|vector|tensor)\b/gi)||[]).length;
+ return {visualSignals:visual,mathSignals:math,visualDependencyRisk:visual>=3,notationRisk:math>=4};
 }
 function auditCompression(ss,map,keys,terms,counter,verify){
  const topCoverage=lexicalCoverage(keys,terms);
@@ -172,7 +178,8 @@ function auditCompression(ss,map,keys,terms,counter,verify){
   contrastAnchors:counter.length,
   contrastSignalsInSource:sourceContrast,
   verificationAnchors:verify.length,
-  noGeneratedClaims:true
+  noGeneratedClaims:true,
+  ...modalityRisk(ss)
  };
 }
 function replacementVerdict(type,audit,questions,words){
@@ -185,9 +192,11 @@ function replacementVerdict(type,audit,questions,words){
  add("retrieval set",questions.length>=required,"Probe floor scales with source size: this source requires at least "+required+" source-grounded prompts.");
  add("deep retrieval",audit.deepRetrievalPrompts>=3,"Replacement requires argument/evidence/contrast or transfer prompts, not cloze memory alone.");
  if(type==="research") add("numeric/method audit",audit.numericEvidenceCaptured>=.75,"Research compression must retain a bounded audit set of numbers/method-like claims.");
+ if(audit.visualDependencyRisk) add("visual layer",false,"Figure/table density is high enough that the original visual windows must be checked; text extraction cannot replace them.");
+ if(audit.notationRisk) add("notation layer",false,"Mathematical notation density is high enough that the original notation must be checked; generic extraction is not trusted to preserve it.");
  if(type==="primary") add("primary experience preserved",true,"Primary literature is bridged, never declared fully replaceable.");
- const pass=gates.every(x=>x.ok);
- return {pass,required,label:type==="primary"?"BRIDGE, DO NOT REPLACE":pass?"REPLACEMENT CANDIDATE":"READ / RECOMPILE",gates};
+ const pass=gates.every(x=>x.ok),modality=audit.visualDependencyRisk||audit.notationRisk;
+ return {pass,required,label:type==="primary"?"BRIDGE, DO NOT REPLACE":modality?"ORIGINAL-WINDOW REQUIRED":pass?"REPLACEMENT CANDIDATE":"READ / RECOMPILE",gates};
 }
 function relationScore(a,b){
  const A=new Set((a.compiled?.terms||[]).slice(0,18).map(x=>x.term.toLocaleLowerCase()));
@@ -312,9 +321,9 @@ function htmlToText(t,label){
  const d=new DOMParser().parseFromString(t,"text/html");
  d.querySelectorAll("script,style,noscript,svg,canvas").forEach(x=>x.remove());
  const body=d.body||d.documentElement,out=[];
- const els=body.querySelectorAll("h1,h2,h3,h4,h5,h6,p,li,blockquote,pre,figcaption");
+ const els=body.querySelectorAll("h1,h2,h3,h4,h5,h6,p,li,blockquote,pre,figcaption,tr");
  if(els.length){
-  els.forEach(el=>{const x=(el.innerText||el.textContent||"").replace(/\s+/g," ").trim();if(x)out.push(/^H[1-6]$/.test(el.tagName)?"[HEADING] "+x:x);});
+  els.forEach(el=>{const x=(el.innerText||el.textContent||"").replace(/\s+/g," ").trim();if(x)out.push(/^H[1-6]$/.test(el.tagName)?"[HEADING] "+x:el.tagName==="TR"?"[TABLE ROW] "+[...el.querySelectorAll("th,td")].map(z=>(z.innerText||z.textContent||"").replace(/\\s+/g," ").trim()).filter(Boolean).join(" | "):x);});
  }else{
   const x=(body.innerText||body.textContent||"").replace(/\s+/g," ").trim();if(x)out.push(x);
  }
