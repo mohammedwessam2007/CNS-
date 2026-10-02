@@ -2,12 +2,30 @@
 // Vercel must run this before publishing the standalone Renaissance artifact.
 const fs=require("fs"),path=require("path"),vm=require("vm");
 const src=fs.readFileSync(path.join(__dirname,"../source/public/reader-v1.js"),"utf8");
+// A minimal in-memory IndexedDB with the semantics that matter: a request's `result` is set when it completes and is undefined for a missing key.
+// (Reader OS 2.0 shipped with a helper that returned the request object itself for a missing key, so every new source looked like a duplicate
+// and nothing was ever saved. The hostile gate had no storage at all, so nothing caught it.)
+function fakeIndexedDB(){
+ const stores=new Map();
+ return {open(){
+  const r={};
+  setTimeout(()=>{
+   const db={objectStoreNames:{contains:n=>stores.has(n)},createObjectStore(n,o){stores.set(n,{key:o.keyPath,rows:new Map()});},
+    transaction(n){const st=stores.get(n),t={oncomplete:null,onerror:null};let pending=0;
+     const wrap=(fn)=>{const q={};pending++;setTimeout(()=>{q.result=fn();pending--;if(!pending)setTimeout(()=>t.oncomplete&&t.oncomplete(),0);},0);return q;};
+     t.objectStore=()=>({getAll:()=>wrap(()=>[...st.rows.values()]),get:(k)=>wrap(()=>st.rows.get(k)),put:(x)=>wrap(()=>{st.rows.set(x[st.key],x);return x[st.key];}),delete:(k)=>wrap(()=>{st.rows.delete(k);})});
+     return t;}};
+   r.result=db;if(!stores.size&&r.onupgradeneeded)r.onupgradeneeded();r.onsuccess&&r.onsuccess();
+  },0);
+  return r;}};
+}
 const failures=[],check=(name,ok,detail)=>{if(!ok)failures.push({name,detail});console.log((ok?"PASS ":"FAIL ")+name+(ok?"":" "+JSON.stringify(detail).slice(0,500)));};
 const sandbox={
   console,TextEncoder,TextDecoder,Blob,URL,crypto:globalThis.crypto,
   document:{addEventListener(){},querySelector(){return null;}},
   navigator:{storage:{}},location:{protocol:"https:"},
-  setTimeout,clearTimeout
+  setTimeout,clearTimeout,
+  indexedDB:fakeIndexedDB()
 };
 sandbox.window=sandbox;sandbox.globalThis=sandbox;
 vm.createContext(sandbox);
@@ -107,5 +125,18 @@ check("OCR receipt bound to original binary SHA-256",src.includes("binarySha256"
 check("restored backup cannot retain OCR authority",src.includes("historicalOcrReceipt")&&src.includes("ocrVerified:null")&&src.includes("ocrPagesViewed:[]"),null);
 
 
-if(failures.length){console.error("\nReader OS gate failed",failures);process.exit(1);}
-console.log("\nReader OS hostile gate: ALL PASS");
+(async()=>{
+ // storage and the internal digestion entry (the World Harvester's door into Reader OS)
+ check("missing key reads as undefined, not as a request object",(await R.get("no-such-source"))===undefined,null);
+ check("digestApi present, manual compile path unchanged",R.digestApi===1&&typeof R.digest==="function"&&typeof R.compile==="function"&&typeof R.library==="function",null);
+ const nodeCrypto=require("crypto"),hash=t=>nodeCrypto.createHash("sha256").update(t).digest("hex"),origin={via:"world-harvester",url:"https://example.test/page?oldid=7",revision:7,license:"CC BY-SA 4.0",contentSha256:hash(research),whyChosen:"test",retrievedAt:"2026-10-02T00:00:00Z"};
+ const first=await R.digest(research,"Digest probe","research",origin);
+ check("a new source is saved (not mistaken for a duplicate) with its origin attached",first.duplicate===false&&(await R.library()).length===1&&(await R.get(first.id))?.origin?.via==="world-harvester"&&first.id===origin.contentSha256.slice(0,24),first);
+ const second=await R.digest(research,"Digest probe","research",origin);
+ check("the same source again is recognised as a duplicate and stored once",second.duplicate===true&&(await R.library()).length===1,second);
+ let e1=null,e2=null;try{await R.digest(research,"x","research",{...origin,contentSha256:"0".repeat(64)});}catch(e){e1=e.message;}
+ try{await R.digest(research,"x","research",null);}catch(e){e2=e.message;}
+ check("digest refuses text that does not match its recorded hash, and refuses a missing origin (provenance is never lost)",/does not match the recorded content hash/.test(e1||"")&&/origin/.test(e2||"")&&(await R.library()).length===1,{e1,e2});
+ if(failures.length){console.error("\nReader OS gate failed",failures);process.exit(1);}
+ console.log("\nReader OS hostile gate: ALL PASS");
+})();

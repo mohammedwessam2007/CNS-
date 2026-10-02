@@ -65,3 +65,11 @@
 .rcStudyBar span{color:#8ca4b9;font-size:10px;line-height:1.45}.rcStudyBtn{min-height:44px;padding:0 14px;border:0;border-radius:12px;background:#d9ff43;color:#07111d;font-size:10px;font-weight:950;letter-spacing:.08em;cursor:pointer}
 @media(max-width:900px){.rcLessons{grid-template-columns:repeat(2,minmax(0,1fr))}.rcReaderCards{grid-template-columns:1fr 1fr}.rcOverview{grid-template-columns:1fr}}
 @media(max-width:560px){.rcHead{padding:18px}.rcHeadRow{display:block}.rcResume{width:100%;margin-top:14px}.rcStats{grid-template-columns:1fr 1fr}.rcBody{padding:12px}.rcLessons,.rcReaderCards,.rcVocab{grid-template-columns:1fr}.rcTrackHead{align-items:start}.rcTrackProgress{min-width:100px}.rcModal{padding:0}.rcPanel{min-height:100vh;border-radius:0;border-left:0;border-right:0}.rcPair{grid-template-columns:1fr}.rcStudyBar{align-items:flex-start;flex-direction:column}.rcStudyBtn{width:100%}}
+.rcHx{padding:14px;border:1px solid #2c4a3a;border-radius:14px;background:#08161a;margin-bottom:12px}
+.rcHxHead{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}.rcHxHead b{color:#fff;font-size:13px}.rcHxHead small{color:#7f98ad;font-size:10px}
+.rcHxTag{font-size:9px;font-weight:800;letter-spacing:.08em;color:#9fe3b0;border:1px solid #2c6a45;border-radius:99px;padding:2px 8px}
+.rcHx p{color:#b9c9d8;font-size:11px;line-height:1.5}.rcHx summary{cursor:pointer;color:#8fd0ff;font-size:11px;padding:6px 0}.rcHx h4{margin:10px 0 4px;color:#fff;font-size:11px}
+.rcHx li{color:#b9c9d8;font-size:11px;line-height:1.5;margin-bottom:4px}.rcHx li small{color:#6f8aa0}
+.rcHxHeld{margin:8px 0;padding:8px 10px;border:1px solid #6a3a2c;border-radius:10px;color:#f0b9a9;font-size:11px}
+.rcHxBtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.rcHxBtn{min-height:44px;padding:8px 14px;border-radius:12px;border:1px solid #3b7a58;background:#0f2a1f;color:#d7f5e1;font-weight:800;font-size:11px;cursor:pointer}
+.rcHxBtn.ghost{background:transparent;border-color:#35506a;color:#bcd4ea}.rcHxBtn[disabled]{opacity:.45;cursor:not-allowed}.rcHxOut{margin-top:8px;color:#b9c9d8;font-size:11px;line-height:1.5}

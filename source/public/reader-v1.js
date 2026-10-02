@@ -24,7 +24,7 @@ async function tx(mode,fn){
  const d=await openDB();return new Promise((resolve,reject)=>{
   const t=d.transaction(STORE,mode),s=t.objectStore(STORE);let out;
   try{out=fn(s);}catch(e){reject(e);return;}
-  t.oncomplete=()=>resolve(out&&out.result!==undefined?out.result:out);t.onerror=()=>reject(t.error);
+  t.oncomplete=()=>resolve(out&&typeof out==='object'&&'result' in out?out.result:out);// a request's result, even when it is undefined (a missing key): returning the request object itself made every new source look like a duplicatet.onerror=()=>reject(t.error);
  });
 }
 const all=()=>tx("readonly",s=>s.getAll());
@@ -435,7 +435,7 @@ async function readFile(file,status){
  }
  throw new Error("Unsupported file. Use PDF, EPUB, DOCX, TXT, Markdown, HTML, CSV, JSON or RTF, or paste the text. Unsupported formats are refused rather than silently mangled.");
 }
-async function saveSource(text,title,type,fileName,originalFile){
+async function saveSource(text,title,type,fileName,originalFile,origin){
  text=normalize(text); if(text.length>MAX_CHARS)throw new Error("This source exceeds the 12-million-character safety ceiling. Split it into volumes/parts. Nothing was truncated or imported.");
  const fullHash=await sha(text),id=fullHash.slice(0,24),existing=await get(id);
  if(existing)return {...existing,duplicate:true};
@@ -447,7 +447,7 @@ async function saveSource(text,title,type,fileName,originalFile){
  }
  const compiled=compile(text,title,type);
  const binary=originalFile?{blob:originalFile,name:originalFile.name,type:originalFile.type||"application/octet-stream",size:originalFile.size,sha256:await shaBlob(originalFile)}:null;
- const rec={id,hash:fullHash,title:(title||fileName||"Untitled source").trim(),fileName:fileName||null,text,binary,compiled,createdAt:now(),updatedAt:now()};
+ const rec={id,hash:fullHash,title:(title||fileName||"Untitled source").trim(),fileName:fileName||null,text,binary,compiled,origin:origin||null,createdAt:now(),updatedAt:now()};
  await put(rec);try{await navigator.storage?.persist?.();}catch(e){}
  return rec;
 }
@@ -517,7 +517,7 @@ function ocrTrustHTML(r,total){
 }
 async function renderOriginalPage(r,pageNo=1){
  const host=$("#rrOriginal");if(!host)return;
- if(!r?.binary?.blob){host.innerHTML='<div class="rrEmpty">This source was pasted as text, so the exact extracted source is the canonical original stored here.</div>';return;}
+ if(!r?.binary?.blob){host.innerHTML='<div class="rrEmpty">'+(r?.origin?'This text was fetched by the World Harvester; the exact fetched text (SHA-256 recorded above) is the canonical copy stored here. The linked page may change; the revision above does not.':'This source was pasted as text, so the exact extracted source is the canonical original stored here.')+'</div>';return;}
  if(!/pdf/i.test(r.binary.type||"")&&!/\.pdf$/i.test(r.binary.name||"")){
   host.innerHTML='<div class="rrAudit">The original '+E(r.binary.name||"file")+' is preserved locally. Browser-native rendering is not claimed for this format.</div><button class="rrMini" data-rr="original" data-id="'+E(r.id)+'">DOWNLOAD ORIGINAL</button>';return;
  }
@@ -597,6 +597,10 @@ function questionCard(q){
  const commit=deep?'<div class="rrResponseBox"><textarea class="rrResponse" data-response="'+E(q.id)+'" placeholder="Commit your reconstruction before reveal. Minimum 12 characters."></textarea><button class="rrMini" data-rr="commitresponse" data-q="'+E(q.id)+'">COMMIT RESPONSE</button><span class="rrAnchor">'+(responseReady?"response committed":"reveal locked until you commit")+'</span></div>':"";
  return '<div class="rrQuestion" data-q="'+E(q.id)+'"><p class="rrQPrompt">'+E(q.stem)+'</p><span class="rrAnchor">'+E(q.anchor)+(due?" · DUE":" · scheduled")+(deep?" · "+E(q.kind.toUpperCase()):"")+'</span>'+commit+'<button class="rrReveal" data-rr="reveal" data-q="'+E(q.id)+'" '+(responseReady?"":"disabled")+'>REVEAL</button><div class="rrAnswer" data-a="'+E(q.id)+'" hidden><b>'+E(q.answer)+'</b><br>'+E(q.source)+'<div class="rrScore"><button class="good" data-rr="score" data-q="'+E(q.id)+'" data-ok="1">GOT IT</button><button class="miss" data-rr="score" data-q="'+E(q.id)+'" data-ok="0">MISSED</button></div></div></div>';
 }
+function originBox(r){
+ const o=r&&r.origin;if(!o)return "";
+ return '<div class="rrAudit"><b>FOUND AND VERIFIED BY THE WORLD HARVESTER</b><br>'+E(o.title||r.title)+(o.url?' · <span>'+E(o.url)+'</span>':'')+'<br>Licence: '+E(o.license||"unknown")+(o.attribution?' · '+E(o.attribution):'')+(o.revision?' · revision '+E(String(o.revision)):'')+'<br>Fetched '+E(o.retrievedAt||"")+' · content SHA-256 '+E(String(o.contentSha256).slice(0,16))+'…<br>Why it was chosen: '+E(o.whyChosen||"not recorded")+'</div>';
+}
 function view(r,tab){
  const c=r.compiled,m=masteryState(r);
  if(tab==="map")return '<h3>Source map</h3><p>Every structural slice keeps an exact-source anchor. This is orientation, not a claim that one sentence equals a whole section.</p><div class="rrMap">'+c.map.map((x,i)=>'<div class="rrMapItem"><b>SECTOR '+(i+1)+' · '+E(x.anchor)+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>';
@@ -608,7 +612,7 @@ function view(r,tab){
   return '<h3>Prove the source survived compression'+mode+'</h3><div class="rrAudit">'+E(m.label)+' · '+m.seen+'/'+m.total+' prompts attempted · '+m.delayed+' passed after a ≥6-day separation · '+(m.deepCommitted||0)+'/'+(m.deepTotal||0)+' deep prompts have a committed written answer. Uploading or button-tapping earns no replacement proof.</div><p>Deep prompts lock reveal until you commit your own reconstruction. A miss returns tomorrow; repeated success increases spacing. Stored responses can later be graded independently.</p><div class="rrMap">'+(qs.length?qs.map(questionCard).join(""):'<div class="rrEmpty">This source is clear for now.</div>')+'</div>';}
 
  if(tab==="connections")return '<h3>Cross-source connections</h3><p>Connections are lexical candidates, not claims of agreement. They tell you where to compare sources, not what conclusion to adopt.</p><div class="rrMap">'+((r._relations||[]).length?r._relations.map(x=>'<div class="rrRelation"><b>'+Math.round(x.score*100)+'% OVERLAP</b><p>'+E(x.r.title)+'</p><button class="rrMini" data-rr="open" data-id="'+E(x.r.id)+'">OPEN SOURCE</button></div>').join(""):'<div class="rrEmpty">No strong cross-source overlap yet.</div>')+'</div>';
- if(tab==="original")return '<h3>Original source</h3><p>For PDFs, this is the actual preserved file rendered locally, not reconstructed text. Other uploaded originals remain downloadable byte-for-byte from local storage.</p>'+(c.audit?.ocrDerived?'<div class="rrAudit"><b>OCR-DERIVED TEXT</b><br>The extracted text came from local English + Arabic OCR. Inspect at least three original pages (or every page if the PDF is shorter) before confirming the OCR spot-check. This confirmation does not certify every character; it only removes the final OCR trust lock.</div>':'')+'<div id="rrOriginal"></div>';
+ if(tab==="original")return originBox(r)+'<h3>Original source</h3><p>For PDFs, this is the actual preserved file rendered locally, not reconstructed text. Other uploaded originals remain downloadable byte-for-byte from local storage.</p>'+(c.audit?.ocrDerived?'<div class="rrAudit"><b>OCR-DERIVED TEXT</b><br>The extracted text came from local English + Arabic OCR. Inspect at least three original pages (or every page if the PDF is shorter) before confirming the OCR spot-check. This confirmation does not certify every character; it only removes the final OCR trust lock.</div>':'')+'<div id="rrOriginal"></div>';
  if(tab==="search"){
   const q=r._searchQuery||"",res=r._searchResults||[];
   return '<h3>Evidence search</h3><p>Ask with keywords or a natural-language question. Reader OS returns the closest exact passages; it does not invent an answer between them.</p><div class="rrLibraryTools"><input id="rrEvidenceQuery" class="rrSearch" placeholder="e.g. What evidence supports the mechanism?" value="'+E(q)+'"><button class="rrMini" data-rr="sourcesearch">SEARCH EXACT SOURCE</button></div>'+(q?(res.length?'<div class="rrMap">'+res.map(x=>'<div class="rrClaim"><b>'+E(x.anchor)+' · score '+x.score+'</b><p class="rrExact">'+E(x.text)+'</p></div>').join("")+'</div>':'<div class="rrEmpty">No passage matched strongly enough. Try fewer or more concrete terms.</div>'):'');
@@ -767,6 +771,14 @@ function doctor(){
   return {ok:!failures.length,failures,metrics:{claims:x.keys.length,deep,verify:x.verify.length,research:x.verdict?.label,primary:primary.verdict?.label,visual:visual.verdict?.label,ocr:ocr.verdict?.label,guided:gResearch.join(">")}};
  }catch(e){return {ok:false,failures:[e.message],metrics:{}};}
 }
-window.RENAISSANCE_READER={compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;dueMode=false;await openSource(r);startFlow();return true;},due:dueQueue,runDue,mastery:masteryState,relationScore,doctor,version:"2.0"};
+// Internal digestion entry (v2.0, additive): the World Harvester hands Reader OS a source it found and verified, with its origin
+// (url, revision, licence, content hash). The same compile, gates and evidence lifecycle apply as for a manual import; manual import is unchanged.
+async function digest(text,title,type,origin){
+ if(!origin||typeof origin!=="object"||!origin.via||!origin.contentSha256)throw new Error("digest needs an origin with via and contentSha256, so provenance is never lost");
+ if(await sha(normalize(text))!==origin.contentSha256)throw new Error("digest refused: the text does not match the recorded content hash");
+ const rec=await saveSource(text,title,type,null,null,{...origin,digestedAt:now()});
+ return {id:rec.id,duplicate:!!rec.duplicate,title:rec.title,verdict:rec.compiled?.verdict||null,origin:rec.origin};
+}
+window.RENAISSANCE_READER={digest,compile:(text,title,type)=>compile(normalize(text),title||"Untitled",type||"auto"),library:all,get,open:async(id)=>{const r=await get(id);if(r)await openSource(r);return !!r;},run:async(id)=>{const r=await get(id);if(!r)return false;dueMode=false;await openSource(r);startFlow();return true;},due:dueQueue,runDue,mastery:masteryState,relationScore,doctor,version:"2.0",digestApi:1};
 document.addEventListener("DOMContentLoaded",mount);
 })();

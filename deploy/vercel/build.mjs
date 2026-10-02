@@ -12,6 +12,7 @@ const ASSETS=[
   "renaissance-standalone.js",
   "reader-v1.css",
   "reader-v1.js",
+  "renaissance-harvest.js",
   "campus-v1.css",
   "campus-v1.js",
   "renaissance-s1.js",
@@ -37,6 +38,12 @@ for(const name of ASSETS){
   await copyFile(src,out);
   const buf=await readFile(src);
   integrity[name]={bytes:buf.byteLength,sha256:createHash("sha256").update(buf).digest("hex")};
+}
+
+// The World Harvester's output: packs written by tools/harvester/harvest.mjs, loaded same-origin by the page (connect-src stays 'self').
+await cp(here("../../source/public/harvest/"),new URL("harvest/",OUT),{recursive:true});
+for(const x of await (async function w(url,prefix){const rows=[];for(const n of await readdir(url)){const u=new URL(n,url),s=await stat(u);if(s.isDirectory())rows.push(...await w(new URL(n+"/",url),prefix+n+"/"));else rows.push({rel:prefix+n,url:u});}return rows;})(new URL("harvest/",OUT),"harvest/")){
+  const buf=await readFile(x.url);integrity[x.rel]={bytes:buf.byteLength,sha256:createHash("sha256").update(buf).digest("hex")};
 }
 
 // PDF.js is pinned in package.json and copied locally so source files never leave the browser.

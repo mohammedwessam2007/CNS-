@@ -1,0 +1,24 @@
+{
+  "_": "Target capabilities for the World Harvester. A target is a capability, not a source list (Constitution section 6): the harvester searches for the smallest sufficient set of sources. The transfer and reality texts below are MACHINE-DRAFTED and are always marked for the learner's review. Domain discovery that proposes new targets by itself is the next slice; this first one is seeded from the example in the Constitution.",
+  "targets": [
+    {
+      "id": "natural-selection",
+      "title": "Natural selection, from variation to constraint",
+      "capability": "Reason fluently about selection, variation, inheritance, fitness, trade-offs, drift, adaptation and evolutionary constraints, and about the misconception that evolution has a purpose.",
+      "domain": "biology",
+      "plan": [
+        { "host": "en.wikipedia.org", "kind": "reference", "queries": ["natural selection", "genetic drift", "fitness (biology)", "evolution of antibiotic resistance"] },
+        { "host": "en.wikisource.org", "kind": "primary", "queries": ["On the Origin of Species Natural Selection"] }
+      ],
+      "vocabulary": [
+        { "term": "natural selection", "w": 3 }, { "term": "variation", "w": 2 }, { "term": "heritab", "w": 2 }, { "term": "inherit", "w": 2 },
+        { "term": "fitness", "w": 2 }, { "term": "genetic drift", "w": 2 }, { "term": "adaptation", "w": 2 }, { "term": "mutation", "w": 1 },
+        { "term": "allele", "w": 1 }, { "term": "population", "w": 1 }, { "term": "reproduc", "w": 1 }, { "term": "constraint", "w": 1 }, { "term": "trade-off", "w": 1 }
+      ],
+      "must": ["natural selection"],
+      "wantPrimary": true,
+      "transfer": "Pick a system outside biology that has variation, copying and differential survival: ideas, software features, recipes. Predict which variants will spread and what would make selection weak or misleading there. Then say what plays the role of heredity in your example, and where the analogy breaks.",
+      "reality": "Today, find a set of similar things around you (products in a shop window, plants on one street, versions of the same app). Note three differences you think help survival or spread, and one that probably does not matter. Do not decide yet: write what you would need to observe to tell them apart."
+    }
+  ]
+}

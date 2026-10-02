@@ -1,0 +1,106 @@
+# Gate log · World Harvester v0.1 · 2026-10-02 · branch renaissance/standalone-v1 (tree: working copy before commit)
+
+=== node tests/reader_os_test.js (Reader OS 2.0 hostile gate + new storage and digest checks)
+PASS reader version
+PASS behavioral doctor
+PASS extractive claims
+PASS deep prompts
+PASS research candidate gates
+PASS OCR compile carries trust lock
+PASS primary never replacement candidate
+PASS visual original-window gate
+PASS notation original-window gate
+PASS button-only deep prompts cannot prove replacement
+PASS OCR mature record remains blocked before original spot-check
+PASS OCR receipt cannot authorize a different original binary
+PASS OCR mature record unlocks only after original spot-check receipt
+PASS mature delayed research can reach proven state
+PASS mature primary ends at secondary-layer possession
+PASS no source upload primitive
+PASS no medical asset dependency
+PASS OCR source is local-only
+PASS OCR runtime is actually bundled
+PASS OCR dependencies pinned
+PASS OCR receipt bound to original binary SHA-256
+PASS restored backup cannot retain OCR authority
+PASS missing key reads as undefined, not as a request object
+PASS digestApi present, manual compile path unchanged
+PASS a new source is saved (not mistaken for a duplicate) with its origin attached
+PASS the same source again is recognised as a duplicate and stored once
+PASS digest refuses text that does not match its recorded hash, and refuses a missing origin (provenance is never lost)
+
+Reader OS hostile gate: ALL PASS
+
+=== node tests/campus_test.js (Campus 1.2 invariant gate)
+PASS campus version
+PASS campus doctor
+PASS exact 32 session mapping
+PASS five authored tracks
+PASS all 96 delayed retrieval hooks exposed
+PASS rich authored step fields exposed
+PASS map ids unique
+PASS core bootloader preserved
+PASS reader bridge present
+PASS browse map has no direct medical assets
+
+Renaissance Campus gate: ALL PASS
+
+=== node tests/harvester_test.js (World Harvester gate, stand-in MediaWiki world)
+PASS H1 Licences: CC BY-SA 4.0/3.0, CC BY, CC0 and public domain are accepted (attribution flagged where required); anything else, including 'all rights reserved', is not
+PASS H2 Etiquette: only the public API path, an identifying User-Agent, maxlag set, one request at a time with a pause between them
+PASS H2b A host that stays rate-limited stops the cycle with a clear message instead of being pressed: errors recorded, no crash, nothing half-written
+PASS H3 Every chosen source carries full provenance: permalink with the revision, retrieval time, licence, attribution, language, content SHA-256, and why it was chosen
+PASS H3b Source type is classified: encyclopedia pages are 'reference', Wikisource works are 'primary'; the primary source is compiled under Reader's primary-text law
+PASS H4 Source tournament: the off-topic page, the stub, the near-duplicate and the unlicensed text are all turned away, each with its reason
+PASS H4b The tournament prefers the featured, well-evidenced pages and does not spend minutes on a page that repeats an already chosen one (redundancy penalty)
+PASS H4c Every ranking explains itself in numbers (fit, evidence, compressibility, novelty, kind gap, redundancy, uncertainty), so 'why this lesson, why not something else' is answerable
+PASS H4d A target that asks for a primary experience gets one: the reserved slot goes to the Darwin chapter (which a measured-evidence score alone would never pick), it displaces the lowest-ranked reference, and Reader's law labels it BRIDGE, not replaced
+PASS H5 One candidate experience is compiled: status CANDIDATE, a model from at least two sources, a contrast step, retrieval prompts of at least two deep kinds, a transfer prompt and a reality task
+PASS H5b Every claim and contrast item is a verbatim substring of its stored source text (nothing invented, nothing paraphrased into a false quote)
+PASS H5c The machine-drafted transfer prompt and reality task are marked for the learner's review
+PASS H5d The experience id is deterministic (same target, same sources → same id), so a repeated cycle does not multiply candidates
+PASS H6 All blocking quality gates pass for the honest candidate
+PASS H6a Gate G4 (verbatim): a claim that is not in its source is caught
+PASS H6b Gate G5 (integrity): source text that no longer matches its recorded SHA-256 is caught
+PASS H6c Gate G2 (provenance): a source without a revision is caught
+PASS H6d Gate G1 (licence): an unlicensed source is caught
+PASS H6e Gate G3 (attribution): a CC BY-SA source without attribution is caught
+PASS H6f Gate G7 (contrast): a candidate that preserves no limitation or test is caught (no unchallenged claims)
+PASS H6g Gate G11 (no self-certification): a candidate that arrives already promoted, without approval, is caught
+PASS H6h Gate G9 (primary law): a primary literary source declared 'replaced' is caught
+PASS H6i Gate G10: a source that was rejected in an earlier cycle blocks the candidate
+PASS H7 Promotion needs a human approval: none, a model's, or a wrong token all throw; a failed gate throws even with approval
+PASS H7b With a human approval and passing gates a candidate becomes a PILOT, the approval is in its lifecycle, and the original object is unchanged
+PASS H7c No job, timer or model path promotes: the Node harvester never mentions promote/approve, and in the page only the Campus 'I APPROVE' click reaches approve()
+PASS H8 Rejected sources stay in memory with title, URL where known, licence, why discovered and why rejected, and no source text
+PASS H8b A second cycle does not re-fetch what was rejected (no rediscovering the same garbage); the chosen sources are recorded with their content hashes and the cycle is logged
+PASS H9 The shipped folder holds packs only for chosen sources, an index of candidates with gates and 'not chosen' reasons, and the memory (metadata only)
+PASS H9a Pack file names are safe on every file system and in a URL (no percent signs or colons) and the writer and the page use the same naming function
+PASS H9b A pack's text hashes to the recorded content hash, and is already in Reader OS's normal form, so the page's digest check holds
+PASS H9c Reader OS can compile every pack (the same compile the app runs on digest)
+PASS H9d The folder verifier (run before anything is committed) accepts an honest harvest, rejects a tampered pack, and accepts the empty shipped folder
+PASS H10 The job refuses to run without --live, so fixtures can never be written into the shipped folder
+PASS H10b The shipped harvest folder is honest: no candidates and no memory until a live run has written them
+PASS H10c No Renaissance source touches the network from the page: the harvester core's only fetches are same-origin /harvest/ paths (CSP connect-src 'self' is unchanged)
+World Harvester gate: ALL 36 PASSED
+
+=== node tests/harvester_e2e.js (real Chromium, shipped CSP, same-origin only)
+PASS E1 The sandbox Campus track shows the candidate, labelled CANDIDATE · SANDBOX, with its minutes, sources and gate count, under the shipped CSP
+PASS E2 'Why this, and why not something else' is on the card: each chosen source with its ranking numbers and every rejected source with its reason (transparency, Constitution section 39)
+PASS E3 The experience steps are visible: the model in the sources' words with anchors, the contrast, the retrieval prompts, and the machine-drafted transfer and reality tasks marked for review
+PASS E4 DIGEST INTO READER stores every chosen source in Reader OS with its origin (via world-harvester, permalink with revision, licence, content hash, why chosen) and without any upload
+PASS E5 Reader's own laws still apply to what the harvester feeds it: the primary source is typed primary and labelled BRIDGE, DO NOT REPLACE; and the Reader id is the hash of the stored text
+PASS E6 Digesting again is idempotent (duplicates are recognised, nothing is stored twice)
+PASS E7 Each digested source gets a STUDY button that opens it in Reader OS (the evidence-bearing retrieval flow), so the learner's evidence is gathered by the engine that already exists
+PASS E8 Reader's Original tab shows 'found and verified by the World Harvester' with the URL, licence, revision, hash and why chosen
+PASS E9 Tampering with a stored pack is caught in the browser: the hash gate fails, digestion refuses with the gate names, and nothing is stored
+PASS E9b A pack whose licence field is changed does not slip through as lawful: the index's licence (checked by G1) and the pack's agree or the candidate is not trusted
+PASS E10 Calling promote() with no approval, a model's approval or a wrong token is refused, and the status stays CANDIDATE
+PASS E11 The learner's own click on 'I APPROVE THIS AS A PILOT' (after a confirmation) makes it a PILOT, recorded on this device with the time; the approve button disappears
+PASS E12 Nothing left the origin: every request the page made went to the same origin, so the shipped CSP (connect-src 'self') was never in the way and never needed loosening
+PASS E13 No page errors, console errors or CSP violations while loading, digesting, verifying, tampering and approving
+PASS E14 With no harvest yet the track says so plainly and tells the learner there is nothing to upload, choose or prepare
+World Harvester browser gate: ALL 15 PASSED
+
+=== node tools/harvester/verify_harvest.mjs (the shipped, empty harvest folder)
+{"ok":true,"problems":[],"experiences":0,"packs":0}

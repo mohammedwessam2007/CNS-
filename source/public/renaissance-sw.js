@@ -1,6 +1,6 @@
-const CACHE="renaissance-reader2-campus12-v5";
+const CACHE="renaissance-reader2-campus12-harvest01-v6";
 const CORE=[
-"/","/index.html","/renaissance-v1.css","/renaissance-standalone.css","/renaissance-standalone.js","/reader-v1.css","/reader-v1.js","/campus-v1.css","/campus-v1.js",
+"/","/index.html","/renaissance-v1.css","/renaissance-standalone.css","/renaissance-standalone.js","/reader-v1.css","/reader-v1.js","/renaissance-harvest.js","/campus-v1.css","/campus-v1.js",
 "/renaissance-s1.js","/renaissance-s2.js","/renaissance-s3a.js","/renaissance-s3b.js","/renaissance-s3c.js",
 "/renaissance-civ.js","/renaissance-genome.js","/renaissance-media.js","/renaissance-sealed.js","/renaissance-v1.js","/axis-forge-v1.js",
 "/manifest.webmanifest","/vendor/pdf.mjs","/vendor/pdf.worker.mjs","/vendor/fflate.mjs","/vendor/tesseract/tesseract.esm.min.js","/vendor/tesseract/worker.min.js"

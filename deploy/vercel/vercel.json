@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm install --omit=dev --no-audit --no-fund",
-  "buildCommand": "node ../../tests/reader_os_test.js && node ../../tests/campus_test.js && node build.mjs",
+  "buildCommand": "node ../../tests/reader_os_test.js && node ../../tests/campus_test.js && node ../../tests/harvester_test.js && node build.mjs",
   "outputDirectory": "dist",
   "cleanUrls": true,
   "headers": [

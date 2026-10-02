@@ -65,8 +65,42 @@ function renderTracks(query,filter){
   }).join("")+'</div></section>';
  }
  html+='<section class="rcTrack"><div class="rcTrackHead"><div><h3>VI · Reader OS Library</h3><p>Your imported books, papers, articles and notes become a living personal course shelf.</p></div></div><div id="rcReaderTrack" class="rcReaderTrack"><div class="rcEmpty">Loading your local Reader library…</div></div></section>';
+ html+='<section class="rcTrack"><div class="rcTrackHead"><div><h3>VII · Harvested · sandbox</h3><p>Found, compared and compiled by the World Harvester so you do not have to. Candidates only: nothing here is certified until you approve it.</p></div></div><div id="rcHarvestTrack" class="rcReaderTrack"><div class="rcEmpty">Looking for harvested candidates…</div></div></section>';
  body.innerHTML=html||'<div class="rcEmpty">Nothing matches this view.</div>';
- renderReaderTrack(q);
+ renderReaderTrack(q);renderHarvestTrack();
+}
+async function renderHarvestTrack(){
+ const box=$("#rcHarvestTrack"),H=window.RENAISSANCE_HARVEST;if(!box)return;
+ if(!H){box.innerHTML='<div class="rcEmpty">The World Harvester is not available.</div>';return;}
+ try{
+  const idx=await H.load(),xs=idx.experiences||[];
+  if(!xs.length){const c=(idx.cycles||[]).slice(-1)[0];box.innerHTML='<div class="rcEmpty">No harvest has run yet. The harvester works outside this app, so there is nothing for you to upload, choose or prepare. When it has run, candidates appear here.'+(c?' Last cycle: '+E(c.at)+' · '+c.discovered+' found, '+c.selected+' chosen'+(c.errors&&c.errors.length?' · '+c.errors.length+' network problem(s) recorded':'')+'.':'')+'</div>';return;}
+  box.innerHTML=xs.map(x=>{
+   const status=H.status(x.id),ok=x.gates.filter(g=>g.block&&g.ok).length,nb=x.gates.filter(g=>g.block).length,bad=x.gates.filter(g=>g.block&&!g.ok),step=id=>(x.steps.find(t=>t.id===id)||{});
+   const cl=(a)=>'<li>'+E(a.text)+' <small>['+E((x.sources.find(s=>s.id===a.src)||{}).title||a.src)+' · '+E(a.anchor||"")+']</small></li>';
+   return '<article class="rcHx" data-id="'+E(x.id)+'"><div class="rcHxHead"><span class="rcHxTag">'+E(status)+(status==="CANDIDATE"?' · SANDBOX':'')+'</span><b>'+E(x.title)+'</b><small>'+x.minutes+' min · '+x.sources.length+' sources · '+ok+'/'+nb+' blocking gates passed</small></div>'
+   +'<p>'+E(x.target.capability)+'</p>'
+   +'<details><summary>Why these sources, and why not something else</summary><ul>'+x.sources.map(s=>'<li><b>'+E(s.title)+'</b> ('+E(s.kind)+', '+E(s.license)+', revision '+E(String(s.revision))+') · '+E(s.whyChosen)+'</li>').join('')+'</ul><p><b>Considered and not chosen:</b></p><ul>'+(x.notChosen||[]).map(r=>'<li>'+E(r.title)+': '+E(r.reason)+'</li>').join('')+'</ul></details>'
+   +'<details><summary>The experience, step by step</summary><h4>The model, in the sources\' own words</h4><ul>'+(step("model").claims||[]).map(cl).join('')+'</ul><h4>Where the sources limit or test it</h4><ul>'+(step("contrast").items||[]).map(cl).join('')+'</ul><h4>Reconstruct it without looking</h4><ul>'+(step("retrieve").items||[]).map(q=>'<li>'+E(q.stem)+'</li>').join('')+'</ul><h4>Far transfer <small>(machine-drafted: review it)</small></h4><p>'+E(step("transfer").prompt||"")+'</p><h4>Reality task <small>(machine-drafted: review it)</small></h4><p>'+E(step("reality").prompt||"")+'</p></details>'
+   +(bad.length?'<div class="rcHxHeld"><b>Held back by the quality gates:</b> '+bad.map(g=>E(g.id)).join(', ')+'</div>':'')
+   +'<div class="rcHxBtns"><button class="rcHxBtn" data-rc="hx-digest" data-id="'+E(x.id)+'"'+(x.sandbox?'':' disabled')+'>DIGEST INTO READER</button>'+(status==="CANDIDATE"&&x.sandbox?'<button class="rcHxBtn ghost" data-rc="hx-approve" data-id="'+E(x.id)+'">I APPROVE THIS AS A PILOT</button>':'')+'</div><div class="rcHxOut" id="hxo-'+E(x.id)+'" aria-live="polite"></div></article>';
+  }).join('');
+ }catch(e){box.innerHTML='<div class="rcEmpty">Harvested candidates are unavailable: '+E(e.message)+'</div>';}
+}
+async function harvestAction(a,id){
+ const H=window.RENAISSANCE_HARVEST,out=document.getElementById("hxo-"+id);if(!H||!out)return;
+ const x=H.experiences().find(e=>e.id===id);
+ try{
+  if(a==="hx-digest"){
+   out.textContent="Re-verifying the stored sources against their recorded hashes, then digesting them into Reader OS…";
+   const r=await H.digest(id);
+   out.innerHTML='Digested into Reader OS: '+r.map(d=>'<button class="rcHxBtn ghost" data-rc="reader" data-id="'+E(d.id)+'">STUDY: '+E(d.title)+(d.duplicate?' (already there)':'')+'</button>').join(' ');
+  }
+  if(a==="hx-approve"){
+   if(!window.confirm("Approve this candidate as a PILOT? You are the one who certifies it: the machine drafted the transfer task and the reality task. This is recorded on this device only."))return;
+   await H.approve(id,"approved in the Campus track");renderHarvestTrack();
+  }
+ }catch(e){out.textContent="Nothing was changed. "+e.message;}
 }
 async function renderReaderTrack(q){
  const box=$("#rcReaderTrack"),R=window.RENAISSANCE_READER;if(!box)return;
@@ -200,6 +234,7 @@ function mount(){
   if(a==="study")return study();
   if(a==="studythis")return studyThis();
   if(a==="filter"){document.querySelectorAll(".rcFilter").forEach(x=>x.classList.remove("on"));b.classList.add("on");return renderTracks($("#rcSearch")?.value||"",b.dataset.filter);}
+  if(a==="hx-digest"||a==="hx-approve")return harvestAction(a,b.dataset.id);
   if(a==="reader"){const R=window.RENAISSANCE_READER;if(R?.run)await R.run(b.dataset.id);else if(R?.open)await R.open(b.dataset.id);return;}
  });
  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#rcModal").hidden)close();});

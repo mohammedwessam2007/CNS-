@@ -14,7 +14,8 @@ This folder is the canonical crash-recovery handoff for the standalone Renaissan
 4. Read `CONTINUE_NEXT.md`.
 5. Use `SOURCE_MANIFEST.json` to recover exact Git blobs from snapshot `f0110f13032f37b0c96307e71134266519eddc80`.
 6. Use `LIVE_BUILD_INFO.json` to verify the deployed artifact byte-for-byte.
-7. Read historical receipts only when needed; do not let older receipts override current source/live evidence.
+7. Read `03_HARVESTER_SLICE.md` for the World Harvester vertical slice (v0.1, added 2026-10-02 after the frozen snapshot) and the Reader OS storage defect fixed with it.
+8. Read historical receipts only when needed; do not let older receipts override current source/live evidence.
 
 ## Non-amputation law
 
@@ -62,6 +63,9 @@ Evidence lifecycle:
 `NOT PROVEN → ACTIVE RETRIEVAL → PROVISIONAL → DURABLE → READING REPLACEMENT PROVEN`
 
 Primary literary/artistic text ends at secondary-layer possession / bridge, not a false claim that primary experience was replaced.
+
+### World Harvester v0.1 (added after the frozen snapshot)
+Runs outside the app (Node or the "Renaissance World Harvester" GitHub workflow); writes same-origin packs; the app verifies them, digests them into Reader OS (`RENAISSANCE_READER.digest`, additive) and shows candidates in Campus section VII. Candidates only: promotion needs a human approval. No live harvest has run yet. See `03_HARVESTER_SLICE.md`.
 
 ### Renaissance Campus 1.2
 - exact 32/32 authored curriculum mapping

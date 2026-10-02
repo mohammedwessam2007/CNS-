@@ -6,6 +6,8 @@ on:
       - renaissance/standalone-v1
     paths:
       - ".github/workflows/renaissance-separate-vercel.yml"
+      - "tools/harvester/**"
+      - "tests/harvester_test.js"
       - "source/public/**"
       - "tests/reader_os_test.js"
       - "tests/campus_test.js"
@@ -55,6 +57,9 @@ jobs:
 
       - name: Campus 1.2 invariant gate
         run: node tests/campus_test.js
+
+      - name: World Harvester gate
+        run: node tests/harvester_test.js
 
       - name: Install pinned Vercel CLI
         run: npm install --global vercel@59.20.0
