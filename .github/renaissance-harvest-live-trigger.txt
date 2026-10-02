@@ -1,0 +1,4 @@
+Renaissance World Harvester live trigger
+date=2026-10-03
+target=natural-selection
+purpose=first real Wikimedia harvest after fixture-only validation
