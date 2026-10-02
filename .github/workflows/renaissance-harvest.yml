@@ -1,9 +1,5 @@
 name: Renaissance World Harvester
 
-# Autonomous live harvest runner.
-# - workflow_dispatch remains available for manual targets.
-# - a change to .github/renaissance-harvest-live-trigger.txt runs a real verified harvest without owner UI work.
-# - browser CSP remains connect-src 'self'; all external discovery happens in GitHub Actions.
 on:
   workflow_dispatch:
     inputs:
@@ -32,14 +28,30 @@ jobs:
   harvest:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      TARGET: ${{ inputs.target || 'natural-selection' }}
-      AUTO_COMMIT: ${{ github.event_name == 'push' || inputs.commit }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Resolve event inputs safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          TARGET="natural-selection"
+          AUTO_COMMIT="false"
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            v="$(jq -r '.inputs.target // empty' "$GITHUB_EVENT_PATH")"
+            [ -n "$v" ] && TARGET="$v"
+            c="$(jq -r '.inputs.commit // "false"' "$GITHUB_EVENT_PATH")"
+            [ "$c" = "true" ] && AUTO_COMMIT="true"
+          else
+            AUTO_COMMIT="true"
+          fi
+          echo "TARGET=$TARGET" >> "$GITHUB_ENV"
+          echo "AUTO_COMMIT=$AUTO_COMMIT" >> "$GITHUB_ENV"
+          echo "Resolved target=$TARGET auto_commit=$AUTO_COMMIT"
 
       - name: Gates before touching the network
         run: |
@@ -60,7 +72,7 @@ jobs:
           path: source/public/harvest
 
       - name: Commit verified harvest when requested or automation-triggered
-        if: ${{ env.AUTO_COMMIT == 'true' }}
+        if: env.AUTO_COMMIT == 'true'
         run: |
           git config user.name "renaissance-harvester"
           git config user.email "renaissance-harvester@users.noreply.github.com"
