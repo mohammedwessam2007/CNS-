@@ -1,10 +1,9 @@
 name: Renaissance World Harvester
 
-# One button: Actions -> "Renaissance World Harvester" -> Run workflow.
-# The harvester runs HERE, not in the app, because the app's Content-Security-Policy is connect-src 'self' and its
-# promise is that nothing the learner does leaves the browser. Output is verified, then uploaded as an artifact; it is
-# committed only if you tick "commit". A commit to the branch starts a Vercel preview build, which counts toward the
-# free-plan build quota, so leave it unticked unless you want the result in the app.
+# Autonomous live harvest runner.
+# - workflow_dispatch remains available for manual targets.
+# - a change to .github/renaissance-harvest-live-trigger.txt runs a real verified harvest without owner UI work.
+# - browser CSP remains connect-src 'self'; all external discovery happens in GitHub Actions.
 on:
   workflow_dispatch:
     inputs:
@@ -13,9 +12,14 @@ on:
         default: "natural-selection"
         required: true
       commit:
-        description: "Commit the verified harvest to this branch (starts a Vercel preview build)"
+        description: "Commit the verified harvest to this branch"
         type: boolean
         default: false
+  push:
+    branches:
+      - renaissance/standalone-v1
+    paths:
+      - ".github/renaissance-harvest-live-trigger.txt"
 
 permissions:
   contents: write
@@ -28,31 +32,39 @@ jobs:
   harvest:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      TARGET: ${{ inputs.target || 'natural-selection' }}
+      AUTO_COMMIT: ${{ github.event_name == 'push' || inputs.commit }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+
       - name: Gates before touching the network
         run: |
           node tests/reader_os_test.js
           node tests/campus_test.js
           node tests/harvester_test.js
+
       - name: "Harvest live (polite: identifying User-Agent, maxlag, one request at a time)"
-        run: node tools/harvester/harvest.mjs --live --target "${{ inputs.target }}"
+        run: node tools/harvester/harvest.mjs --live --target "$TARGET"
+
       - name: "Verify the harvest from scratch (same gates the page runs)"
         run: node tools/harvester/verify_harvest.mjs
-      - name: Keep the result as an artifact
+
+      - name: Keep the verified result as an artifact
         uses: actions/upload-artifact@v4
         with:
-          name: harvest-${{ inputs.target }}
+          name: harvest-${{ env.TARGET }}
           path: source/public/harvest
-      - name: Commit the verified harvest (only if asked)
-        if: ${{ inputs.commit }}
+
+      - name: Commit verified harvest when requested or automation-triggered
+        if: ${{ env.AUTO_COMMIT == 'true' }}
         run: |
           git config user.name "renaissance-harvester"
           git config user.email "renaissance-harvester@users.noreply.github.com"
           git add source/public/harvest
           git diff --cached --quiet && { echo "nothing new to commit"; exit 0; }
-          git commit -m "renaissance harvest: ${{ inputs.target }} (verified; candidates only, nothing certified)"
+          git commit -m "renaissance harvest: $TARGET (verified live candidates; nothing self-certified)"
           git push
