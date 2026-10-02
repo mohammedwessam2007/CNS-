@@ -102,3 +102,59 @@ Future work must preserve this distinction:
 - Renaissance stable alias remains standalone-only;
 - no promotion of Renaissance onto `intellectuality-cns.vercel.app`;
 - if a dedicated second Vercel project is later connected, migrate the already-frozen standalone artifact there without changing the medical project.
+
+
+## Final recovered deployment · 2026-10-02
+
+A later docs-only descendant successfully cleared Vercel after the earlier rate-limit event.
+
+Canonical recovered standalone deployment:
+- deployment: `dpl_2NcgenexHQQoeK1ZjLzB2dp9PtN7`
+- state: `READY`
+- target: preview / null
+- branch: `renaissance/standalone-v1`
+- deployment commit: `0c9a9ca4c239c27b9aa4b1fce7a8ecfd113fbecd`
+- direct deployment URL: `https://intellectuality-7jpe9x6wa-mohammedwessam2007s-projects.vercel.app`
+- stable Renaissance branch URL: `https://intellectuality-cns-git-ren-81d684-mohammedwessam2007s-projects.vercel.app`
+
+The deployment commit changes only this recovery receipt lineage and does not alter executable `source/`, `tests/`, or `deploy/` content relative to the frozen Reader OS 2.0 / Campus 1.2 executable frontier.
+
+Live build-info at terminal verification:
+- mode: `standalone+reader-os+campus`
+- build commit: `0c9a9ca4c239c27b9aa4b1fce7a8ecfd113fbecd`
+- 257 integrity-hashed assets
+- 58,918,637 bytes
+- Reader OS: 2.0
+- Campus: 1.2
+- OCR-related emitted assets: 33
+- medical leak keys: 0
+
+Live verified HTTP 200:
+- Reader OS
+- Campus
+- standalone shell
+- PDF.js
+- Tesseract runtime
+- Tesseract worker
+- English traineddata
+- Arabic traineddata
+- Tesseract core WASM
+- build-info
+
+Live verified HTTP 404 on Renaissance:
+- `/mcq-v16.js`
+- `/learn-v15.js`
+- `/cns-atlas-v17.js`
+
+Medical production was re-fetched after this recovered deployment:
+- HTTP 200
+- title `INTELLECTUALITY CNS v18.6 · MCQ EXAM`
+- medical marker present
+- Reader marker absent
+- Campus marker absent
+
+Namespace boundary remains truthful:
+- Renaissance is a separate physical deployment/artifact/URL.
+- It still belongs to the existing Vercel project object because the connected Vercel write surface exposes no project-targeted deployment/link mutation.
+- Dormant project `intellectuality-holiday-renaissance` exists with zero deployments.
+- Do not invoke the generic untargeted Vercel deploy operation merely to force project-object separation; protecting CNS production has higher authority.
