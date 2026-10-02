@@ -1,4 +1,5 @@
 Renaissance World Harvester live trigger
 date=2026-10-03
 target=natural-selection
+attempt=2
 purpose=first real Wikimedia harvest after fixture-only validation
