@@ -1,0 +1,106 @@
+name: Renaissance Separate Vercel
+
+on:
+  push:
+    branches:
+      - renaissance/standalone-v1
+    paths:
+      - ".github/workflows/renaissance-separate-vercel.yml"
+      - "source/public/**"
+      - "tests/reader_os_test.js"
+      - "tests/campus_test.js"
+      - "deploy/vercel/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renaissance-separate-vercel
+  cancel-in-progress: false
+
+jobs:
+  verify-build-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      VERCEL_ORG_ID: team_A9LnjIuS5PU0rNetsHMu1N0r
+      VERCEL_PROJECT_ID: prj_a4IsKK63xEYTa5VBwi556zFWTd9z
+      RENAISSANCE_PROJECT_NAME: intellectuality-holiday-renaissance
+
+    steps:
+      - name: Checkout exact branch commit
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fail closed if Vercel deploy secret is unavailable
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN repository secret is not configured. No deployment attempted."
+            exit 1
+          fi
+
+      - name: Install pinned standalone dependencies
+        run: npm install --prefix deploy/vercel --omit=dev --no-audit --no-fund
+
+      - name: Reader OS 2.0 hostile gate
+        run: node tests/reader_os_test.js
+
+      - name: Campus 1.2 invariant gate
+        run: node tests/campus_test.js
+
+      - name: Install pinned Vercel CLI
+        run: npm install --global vercel@59.20.0
+
+      - name: Bind CLI to Renaissance-only Vercel project
+        shell: bash
+        run: |
+          mkdir -p deploy/vercel/.vercel
+          printf '%s\n' '{"orgId":"team_A9LnjIuS5PU0rNetsHMu1N0r","projectId":"prj_a4IsKK63xEYTa5VBwi556zFWTd9z"}' > deploy/vercel/.vercel/project.json
+          cat deploy/vercel/.vercel/project.json
+
+      - name: Pull dedicated project settings
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN" --cwd deploy/vercel
+
+      - name: Build dedicated Renaissance artifact locally
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token="$VERCEL_TOKEN" --cwd deploy/vercel
+
+      - name: Assert medical assets are absent from prebuilt output
+        shell: bash
+        run: |
+          test -d deploy/vercel/.vercel/output
+          if find deploy/vercel/.vercel/output -type f \( -name 'mcq-v16.js' -o -name 'learn-v15.js' -o -name 'cns-atlas-v17.js' \) | grep -q .; then
+            echo "::error::Medical asset leaked into Renaissance prebuilt output."
+            exit 1
+          fi
+
+      - name: Deploy prebuilt artifact to dedicated Renaissance production
+        id: deploy
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          URL="$(vercel deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN" --cwd deploy/vercel)"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Dedicated Renaissance production: $URL"
+
+      - name: Deployment receipt
+        shell: bash
+        run: |
+          echo "Renaissance project: $RENAISSANCE_PROJECT_NAME"
+          echo "Renaissance project id: $VERCEL_PROJECT_ID"
+          echo "Source commit: $GITHUB_SHA"
+          echo "Deployment: ${{ steps.deploy.outputs.url }}"
