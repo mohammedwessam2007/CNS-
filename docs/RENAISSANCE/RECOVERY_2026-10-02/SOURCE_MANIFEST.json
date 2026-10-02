@@ -1,0 +1,737 @@
+{
+  "schema": "renaissance.recovery.manifest/1",
+  "repository": "mohammedwessam2007/CNS-",
+  "branch": "renaissance/standalone-v1",
+  "snapshotCommit": "f0110f13032f37b0c96307e71134266519eddc80",
+  "generatedFor": "crash recovery / no-amputation continuation",
+  "fileCount": 121,
+  "totalBytes": 3687419,
+  "files": [
+    {
+      "path": ".github/workflows/renaissance-separate-vercel.yml",
+      "size": 3513,
+      "gitBlobSha1": "9f0e5afda71cb7bac2f364cd8e04f545660b08c1",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/api/state.js",
+      "size": 3909,
+      "gitBlobSha1": "256222cb207b6d414f55e308d355c4d44e542989",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/api/vision.js",
+      "size": 445,
+      "gitBlobSha1": "ea870987ca76d6594550189eb8dfdc1038062b26",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/build.mjs",
+      "size": 3739,
+      "gitBlobSha1": "30f15e878a81db00c749635a845c90b3bcb46c71",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/lib/store.js",
+      "size": 1640,
+      "gitBlobSha1": "2bb37e170b298089a4f2ab5cff86cfcc58a7f4d6",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/package.json",
+      "size": 424,
+      "gitBlobSha1": "3d8ac9a55c16d212479fdb637fef381f03ccc9bc",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/pics.mjs",
+      "size": 18060,
+      "gitBlobSha1": "78be1d1899e1032668481faabf26c465624de57a",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/static/host-sync.js",
+      "size": 15526,
+      "gitBlobSha1": "06877ec461776f45105baa2ac1e6ceb53800c00a",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/static/login.html",
+      "size": 7913,
+      "gitBlobSha1": "169a08c10b34285fd67fc2cf456a9f71e40f0893",
+      "mode": "100644"
+    },
+    {
+      "path": "deploy/vercel/vercel.json",
+      "size": 1276,
+      "gitBlobSha1": "571616dbb853ef52afc8d9993e830b1216205a13",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE_FINAL_RECEIPT_2026-10-02.md",
+      "size": 3388,
+      "gitBlobSha1": "2864f41e3d7dcb5f4b7a2d7e052d5d1256c8c78c",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE_RECOVERY_REDEPLOY_2026-10-02.md",
+      "size": 7451,
+      "gitBlobSha1": "26e710abdd853bf1af1fa33c381fd39ad5664429",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE_STANDALONE_RECEIPT.md",
+      "size": 5910,
+      "gitBlobSha1": "8b21af2609778f7f02fb5766400cf0caecd6d610",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/01_RESEARCH.md",
+      "size": 12854,
+      "gitBlobSha1": "eb6fdbedc6c6678b93b06cbacad055e3e640e62c",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/02_FAILURE_UNIVERSE.md",
+      "size": 7639,
+      "gitBlobSha1": "653a06162fd7c18d56e1e1be48de2e681fb12633",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/03_ARCHITECTURE.md",
+      "size": 13724,
+      "gitBlobSha1": "a5454775a86eed5cc43a0a50b637ef65b749b352",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/04_INVENTION_REGISTRY.md",
+      "size": 18697,
+      "gitBlobSha1": "4969cc4dd79090fae550f973221fcf48613b1fc3",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/05_BENCHMARKS.md",
+      "size": 6140,
+      "gitBlobSha1": "d66a657e2f51a6516f2651ab8d2312e3f5660528",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/06_LONGITUDINAL.md",
+      "size": 4541,
+      "gitBlobSha1": "a92318a56395e426d1f5284c336b4f312aadf546",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/07_SEASON_1.md",
+      "size": 5669,
+      "gitBlobSha1": "fb4e3be1c214975cfdafb4c0a00f195928886f9a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/08_SEASON_2.md",
+      "size": 6018,
+      "gitBlobSha1": "cd7178c8aee0e18b09699a1ab07a391fe3572f09",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/09_SEASON_3.md",
+      "size": 12002,
+      "gitBlobSha1": "a90d6aa2824e274853f008d7e6f012cbf67d00d4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/10_MASTERPIECE_COMPILER.md",
+      "size": 9331,
+      "gitBlobSha1": "af1ef5468d757acb667f1dd94f1b3df1f4eb928e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/CAMPUS_READER_COMPLETION_RECEIPT.md",
+      "size": 6221,
+      "gitBlobSha1": "6ca16d1f898f17b3c218b0a668d22450bfde8eea",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/CAMPUS_READER_COMPLETION.md",
+      "size": 7524,
+      "gitBlobSha1": "f573795c79304141a8196c05664cabc4ad1337a7",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/CAMPUS_READER_FINAL_2026-10-01.md",
+      "size": 8003,
+      "gitBlobSha1": "63b5a91b7802f3743323b58627feb6390c820be2",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/completion/COMPLETION_LEDGER.json",
+      "size": 5936,
+      "gitBlobSha1": "561a0b04b78d8818f7656146807e7eeb067c1e42",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/completion/COMPLETION_LEDGER.md",
+      "size": 5433,
+      "gitBlobSha1": "cc0c512a13e15de5d9e0032cb5ecde1eeacbb90b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/completion/COMPLETION_REPORT.md",
+      "size": 14125,
+      "gitBlobSha1": "09975bee25394412128e141c012de8e0fce39be0",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/completion/EMPIRICAL_QUEUE.md",
+      "size": 3433,
+      "gitBlobSha1": "2e394843211bd7f13519be09d8812bbeb9ad3933",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/completion/REQUIREMENT_GRAPH.json",
+      "size": 294233,
+      "gitBlobSha1": "2bd0a01cfc5a45585d6ba2f9a1349a8502bea5c6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/completion/REVERIFY.json",
+      "size": 28298,
+      "gitBlobSha1": "89983032649c95dbdd20649b9dfee2e54d5d6347",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/completion/REVERIFY.md",
+      "size": 1082,
+      "gitBlobSha1": "e52e51803eff347d3e493f53c86baadd27b581f9",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/FINAL_STANDALONE_COMPLETION_2026-10-01.md",
+      "size": 8700,
+      "gitBlobSha1": "71d400e002784e695c2661d2c74a1988c9947b1d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/missions/01_RENAISSANCE_SINGULARITY.txt",
+      "size": 92395,
+      "gitBlobSha1": "e0976c851a02b316ae7284d9309eb872109ce112",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/missions/02_OMEGA.txt",
+      "size": 73545,
+      "gitBlobSha1": "42c761f8f0d0a7de94f2ef27826d4d062c9ffc25",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/missions/03_ABSOLUTE_COMPLETION.txt",
+      "size": 109459,
+      "gitBlobSha1": "e9ad16e37e5a45d9e3d365e29a64b47516c8ddfd",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/00_README.md",
+      "size": 10766,
+      "gitBlobSha1": "89f357b71ff07e6dd37796804b84d9bce83c56ae",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/01_ATTACK.md",
+      "size": 13400,
+      "gitBlobSha1": "5579c2ea2a3161422f445261d5f8897bbbd164c7",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/02_REGISTRY.md",
+      "size": 30145,
+      "gitBlobSha1": "0e2efcc8360581350428789cc10feb0748fdcba9",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/03_PROMPT_LINEAGE.md",
+      "size": 8931,
+      "gitBlobSha1": "6413c9c31a73fce15ba3e84b6f3dc919a101e908",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/04_OBJECTIVE_AND_METRICS.md",
+      "size": 10623,
+      "gitBlobSha1": "686e5a9d43bb26478326ff5e8cebffb601d31c27",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/05_GENOME_AND_ENGINES.md",
+      "size": 11088,
+      "gitBlobSha1": "1610253a7ca029db520f00636726432937926c9b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/06_DAY_AND_DECADE.md",
+      "size": 7581,
+      "gitBlobSha1": "801bc73f50559005213e48868978e21c6b3b6a24",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/gen1_all.tsv",
+      "size": 394968,
+      "gitBlobSha1": "3167a07f2e100685a472c5f45a2e9c92ca0c3133",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/gen1_summary.json",
+      "size": 455,
+      "gitBlobSha1": "0916b745635362f28ae11ae8d88f8a36f21edb0d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/generator_sample.tsv",
+      "size": 852,
+      "gitBlobSha1": "7641dd2c85d80c3c67c9b75935522723e4860339",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/build.py",
+      "size": 19701,
+      "gitBlobSha1": "32d5bd7de7d14e02d202e11276f3aa14fb3ebd98",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/legacy_fill.py",
+      "size": 25748,
+      "gitBlobSha1": "ad41ce2813a39f2600f46ba58407e15732cf3284",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/p41_45.py",
+      "size": 31888,
+      "gitBlobSha1": "7a712a60eae3f26b6033ac91362e669a004cc93b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/p46_50.py",
+      "size": 28019,
+      "gitBlobSha1": "4117bd3b420f147c247455a26f01d9a4c2bb285f",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/p51_55.py",
+      "size": 27036,
+      "gitBlobSha1": "ed3a717f766c01ec800cf28558114b5b39bd8612",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/p56_61.py",
+      "size": 30038,
+      "gitBlobSha1": "3597a64990f88bce701c10f4da0b91b38e073262",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/p62_66.py",
+      "size": 25284,
+      "gitBlobSha1": "9354e2bae97c6c4053d47f65c6c7cf79120e615f",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/src/p67_72.py",
+      "size": 31976,
+      "gitBlobSha1": "2c00457365476cd581ad84cca1278e4230add04e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/omega/registry/strongest200.tsv",
+      "size": 6358,
+      "gitBlobSha1": "79ad8c0f4da67a1e74825a294cca56d1b57b15f4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/READER_OS_1_3.md",
+      "size": 5265,
+      "gitBlobSha1": "afb6ef5e776f16fbf8441822f34ab721201b90fe",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/READER_OS_1_4.md",
+      "size": 7011,
+      "gitBlobSha1": "fb3ed0909613e1116fed88534c2948a3de1507ac",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/README.md",
+      "size": 4117,
+      "gitBlobSha1": "1cfc2b79b007646231f2a16845633f96841572dd",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/registry/gen1.txt",
+      "size": 31434,
+      "gitBlobSha1": "463ec479fa971dcc35d42eb17aadcc8b6cf9bd2b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/sealed/preregistration.json",
+      "size": 8954,
+      "gitBlobSha1": "87afab42010c9829da4edf88cc909646f7990fc6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/sealed/README.md",
+      "size": 3021,
+      "gitBlobSha1": "e3191262b87c5200602721750450d94e8cd1d755",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/v3/00_README.md",
+      "size": 7371,
+      "gitBlobSha1": "3500b611548903dc9cebe98007f254d373631bbc",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/v3/01_POSSESSION.md",
+      "size": 5575,
+      "gitBlobSha1": "3dbaddf7a7c862984357be17fa63c5d85012511a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/v3/02_ORGANS.md",
+      "size": 10380,
+      "gitBlobSha1": "b2e98335b637ac6cc043b65af1310e78b0528f26",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/v3/03_ENGINE.md",
+      "size": 8710,
+      "gitBlobSha1": "b4defb496a6b54c77476aadb660d19d8a470633b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/v3/04_MEASUREMENT.md",
+      "size": 9011,
+      "gitBlobSha1": "f745df29cb8e91feed0b195cab12afbb23295a46",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/v3/05_RIGHTS_MEDIA_FUTURE.md",
+      "size": 5837,
+      "gitBlobSha1": "1ca6e9329f4d1be3c6a599d4031cd24a8471aaf2",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/RENAISSANCE/v3/06_MISSION_LINEAGE.md",
+      "size": 20197,
+      "gitBlobSha1": "94bc7eb00fbf612dbef9c33ec4a2e66c2daa292f",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v17_4/renaissance_test_source.json",
+      "size": 14623,
+      "gitBlobSha1": "32be074cee9ecf2e5fb4d41957aaa20a1b6bcc0a",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v17_4/renaissance_test_vercel.json",
+      "size": 14623,
+      "gitBlobSha1": "dc208ece6f266ee81e1f1478bd66c2533c196b73",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v17_5/renaissance_source.json",
+      "size": 24209,
+      "gitBlobSha1": "92a7f019fa03b7df4434f4cbb9ae4e1ec15bc7ab",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v17_5/renaissance_vercel.json",
+      "size": 24209,
+      "gitBlobSha1": "3d08d627d17f9b071e80d6a5e2075e17aad8c21c",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_1/renaissance_source.json",
+      "size": 29851,
+      "gitBlobSha1": "ec6cdaf184d026f57887f9c9acd868ef35fc526f",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_1/renaissance_vercel.json",
+      "size": 29852,
+      "gitBlobSha1": "c606ed1252e942f7f40057a15fc77cd9cffd58d3",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_1/v3_source.json",
+      "size": 29337,
+      "gitBlobSha1": "598a71b4abff2f9f3096759fe1c8160c8b89905a",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_1/v3_vercel.json",
+      "size": 29337,
+      "gitBlobSha1": "494dcc25758d34fb7df1434aba9dfc7cf152aca4",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_2/renaissance_source.json",
+      "size": 31083,
+      "gitBlobSha1": "0dd088736fce648f8bb34861cf54383794c1c06c",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_2/renaissance_vercel.json",
+      "size": 31083,
+      "gitBlobSha1": "9b6fc16dfbc764605f772dabdf50c70d50b088fb",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_2/v3_source.json",
+      "size": 29584,
+      "gitBlobSha1": "44ca24babb657028af2699d972e3df13d528bb12",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_2/v3_vercel.json",
+      "size": 29584,
+      "gitBlobSha1": "d0c38823cdfaeab971d4cc47477ed1b445703b2b",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_3/renaissance_source.json",
+      "size": 32327,
+      "gitBlobSha1": "371b89476bd1d3fd968a91e7a4bb7984359494e6",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_3/renaissance_vercel.json",
+      "size": 32327,
+      "gitBlobSha1": "ac96dd4e77985fdbd2a74ac79250f9ca49e0fd70",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_3/v3_source.json",
+      "size": 31260,
+      "gitBlobSha1": "1298495a7476eed29b9382fce9e741d94632cff1",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_3/v3_vercel.json",
+      "size": 31260,
+      "gitBlobSha1": "c98d62119d8f7c0facb93b8673e4259eee6c930c",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_4/renaissance_source.json",
+      "size": 32742,
+      "gitBlobSha1": "a86196a89a4dfb48ace270795ab5d8b938f63753",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_4/renaissance_vercel.json",
+      "size": 32742,
+      "gitBlobSha1": "59cd617e80b8a046255c63093ef7b151ac5a09e2",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_4/v3_source.json",
+      "size": 32338,
+      "gitBlobSha1": "e4bdbe8e998968819aa8a340dd3cf9af5578688f",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_4/v3_vercel.json",
+      "size": 32338,
+      "gitBlobSha1": "78b8e4d3be726aa69084a6be05b88d7398cf982a",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_5/renaissance_source.json",
+      "size": 33392,
+      "gitBlobSha1": "b8c3a39d7092c9f69bb16056089ccebb099b4d5c",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_5/renaissance_vercel.json",
+      "size": 33392,
+      "gitBlobSha1": "6f2c5328c8fb9954f8e6f38ea179921c34a3d461",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_5/v3_source.json",
+      "size": 32336,
+      "gitBlobSha1": "9732973b12f81263c3e42777e370bb323abeeff2",
+      "mode": "100644"
+    },
+    {
+      "path": "receipts/v18_5/v3_vercel.json",
+      "size": 32338,
+      "gitBlobSha1": "87f3bc98f61e426886d7fd14f2e7d3cd7a151c34",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/axis-forge-v1.js",
+      "size": 17355,
+      "gitBlobSha1": "53d40c57dfa63c2f23a1a53c174d263114104727",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/campus-v1.css",
+      "size": 9000,
+      "gitBlobSha1": "efdcad5bd35d89018498ec3df6f6490f233029dd",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/campus-v1.js",
+      "size": 20863,
+      "gitBlobSha1": "fb145bcf75d8217105741b87e4d58d2520222115",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/reader-v1.css",
+      "size": 10182,
+      "gitBlobSha1": "42bcd14fa31dd663f0e806d4de3cc8fca8952187",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/reader-v1.js",
+      "size": 65623,
+      "gitBlobSha1": "dfe4241cc4cfc14fcf73f8022c699d7a1feb62c6",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-civ.js",
+      "size": 15609,
+      "gitBlobSha1": "4cb0be2b213200a1c9058ad50057646722404b59",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-genome.js",
+      "size": 13942,
+      "gitBlobSha1": "608391ff219e2a326b2cabd353265d2110a4c401",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-media.js",
+      "size": 13453,
+      "gitBlobSha1": "6fc31b7feb2864e4b91f731e75a563c25a813ae5",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-s1.js",
+      "size": 122140,
+      "gitBlobSha1": "491af0bb08439f174e3640ed515488102554cb5a",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-s2.js",
+      "size": 102057,
+      "gitBlobSha1": "53337ff30e4469fbbc1c093933f4b110a1aede34",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-s3a.js",
+      "size": 114142,
+      "gitBlobSha1": "9773f3e869a1e9220ebb0bbf34dceb37b226f925",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-s3b.js",
+      "size": 178786,
+      "gitBlobSha1": "cb3cc12ab1d8fdde667bd23dc32a0d85b4ac7c8e",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-s3c.js",
+      "size": 176979,
+      "gitBlobSha1": "a7b81f3536bb05fa209a9877a7c53a3b1d77be7f",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-sealed.js",
+      "size": 59470,
+      "gitBlobSha1": "24815515add373d464617b7f3e6df46ae7da90a4",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-standalone.css",
+      "size": 7391,
+      "gitBlobSha1": "724b6167570ba4f219824901a2661aea0069e203",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-standalone.js",
+      "size": 12124,
+      "gitBlobSha1": "3878cea68d7059f68b387ef06f7d74f4b95e6e1e",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-sw.js",
+      "size": 1273,
+      "gitBlobSha1": "5e43a70bca22fdf843e0ed6b8a23dbf4d7bf50a0",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-v1.css",
+      "size": 10999,
+      "gitBlobSha1": "a27d91841b0b7cdd6da48b406c1dd69195541ef1",
+      "mode": "100644"
+    },
+    {
+      "path": "source/public/renaissance-v1.js",
+      "size": 117449,
+      "gitBlobSha1": "9fff03f9dfbfb4e3098c588dc210be1fc44be10c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/campus_test.js",
+      "size": 2554,
+      "gitBlobSha1": "a9dd9cc5a65b8c77acaee9444b3fb1ce1f20e16d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/reader_os_test.js",
+      "size": 7851,
+      "gitBlobSha1": "96cfdc11134cfaf15db4018876da02779d309917",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/renaissance_test.js",
+      "size": 46588,
+      "gitBlobSha1": "d487ea29a69ed4aa621bb6e164b6d4649a95320a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/renaissance_v3_test.js",
+      "size": 84948,
+      "gitBlobSha1": "91ff2259ed523fd8e1a41ba9f73f3bb3db61f1fc",
+      "mode": "100644"
+    },
+    {
+      "path": "tools/renaissance/halflife.js",
+      "size": 5224,
+      "gitBlobSha1": "6197707ca2a9a9fca94ed9802d973962f5db0602",
+      "mode": "100644"
+    },
+    {
+      "path": "tools/renaissance/oracle.js",
+      "size": 22913,
+      "gitBlobSha1": "2e759883e9406841139fe93a5b9636113c8f5270",
+      "mode": "100644"
+    },
+    {
+      "path": "tools/renaissance/requirement_map.js",
+      "size": 10789,
+      "gitBlobSha1": "544dd6057069418d429480a7a6ad6a27def760df",
+      "mode": "100644"
+    },
+    {
+      "path": "tools/renaissance/requirements.js",
+      "size": 56531,
+      "gitBlobSha1": "f56622e021b063739e70af7e26b83b6443e85c42",
+      "mode": "100644"
+    },
+    {
+      "path": "tools/renaissance/seal.js",
+      "size": 5081,
+      "gitBlobSha1": "2f7735b273c068676d7c2b6750943ac5edcb534d",
+      "mode": "100644"
+    }
+  ]
+}
