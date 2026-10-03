@@ -17,6 +17,7 @@ ok("today reads canonical life governor",js.includes("window.RENAISSANCE?.gate?.
 ok("today launches canonical study path",js.includes("window.RENAISSANCE.open(new Date())"));
 ok("today has no parallel calendar rotation",!js.includes("Date.UTC")&&!js.includes("day%pool.length"));
 ok("rest state is visible without backlog debt",js.includes("Nothing is owed today.")&&js.includes("There is no backlog debt."));
+ok("civilization home refreshes when study dialog closes",js.includes("function watchStudyRoot()")&&js.includes("attributeFilter:[\"hidden\"]")&&js.includes("if(r.hidden)render()"));
 for(const x of ["mcq-v16.js","learn-v15.js","cns-atlas-v17.js"])ok("medical asset excluded "+x,!build.includes(x));
 ok("offline cache advanced",sw.includes("renaissance-civilization-reader2-campus12-v8"));
 console.log("CIVILIZATION SURFACE: ALL PASS",n);
