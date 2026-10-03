@@ -8,6 +8,8 @@ on:
       - ".github/workflows/renaissance-separate-vercel.yml"
       - "tools/harvester/**"
       - "tests/harvester_test.js"
+      - "tests/renaissance_v3_test.js"
+      - "tests/civilization_surface_test.js"
       - "source/public/**"
       - "tests/reader_os_test.js"
       - "tests/campus_test.js"
@@ -51,6 +53,12 @@ jobs:
 
       - name: Install pinned standalone dependencies
         run: npm install --prefix deploy/vercel --omit=dev --no-audit --no-fund
+
+      - name: Core Renaissance invariant gate
+        run: node tests/renaissance_v3_test.js
+
+      - name: Civilization surface gate
+        run: node tests/civilization_surface_test.js
 
       - name: Reader OS 2.0 hostile gate
         run: node tests/reader_os_test.js
