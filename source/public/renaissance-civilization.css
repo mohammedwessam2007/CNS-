@@ -1,0 +1,31 @@
+/* RENAISSANCE CIVILIZATION · culture-first product surface
+ * The cognitive/measurement engines remain underneath. The visible product is civilization.
+ */
+:root{--rv-paper:#f3ead9;--rv-ink:#151514;--rv-gold:#c6a15b;--rv-wine:#71383d;--rv-deep:#07111d;--rv-mist:#9fb0c1}
+.rvCivilization{margin:18px 0 34px}
+.rvManifesto{position:relative;overflow:hidden;padding:clamp(22px,4vw,42px);border:1px solid #33485d;border-radius:28px;background:linear-gradient(145deg,#0c1927,#09131d 58%,#14140f);box-shadow:0 24px 80px rgba(0,0,0,.22)}
+.rvManifesto:after{content:"R";position:absolute;right:-20px;bottom:-90px;font:900 260px/1 Georgia,serif;color:rgba(198,161,91,.055);pointer-events:none}
+.rvOverline{margin:0 0 10px;color:var(--rv-gold);font-size:10px;font-weight:900;letter-spacing:.19em;text-transform:uppercase}
+.rvManifesto h2{max-width:900px;margin:0;color:#f5efe5;font:700 clamp(30px,5vw,64px)/.98 Georgia,"Times New Roman",serif;letter-spacing:-.035em}
+.rvManifesto h2 em{color:#d8b879;font-style:italic;font-weight:500}
+.rvManifestoLead{max-width:840px;margin:18px 0 0;color:#b8c4d0;font-size:clamp(14px,2vw,18px);line-height:1.72}
+.rvLaw{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:22px}
+.rvLaw article{padding:14px;border:1px solid #2d4154;border-radius:15px;background:rgba(6,14,22,.52)}
+.rvLaw b{display:block;color:#f4e6c9;font:650 14px/1.25 Georgia,serif}.rvLaw span{display:block;margin-top:6px;color:#8498ab;font-size:11px;line-height:1.45}
+.rvToday{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:12px;margin-top:12px}
+.rvTodayMain,.rvTodayWhy{padding:20px;border:1px solid #2c4358;border-radius:20px;background:#0a1724}
+.rvTodayMain h3{margin:5px 0 8px;color:#fff;font:650 clamp(23px,3.4vw,36px)/1.05 Georgia,serif}
+.rvTodayMain p,.rvTodayWhy p{color:#9db0c1;line-height:1.58}.rvTodayWhy h4{margin:4px 0 8px;color:#ead8b7;font:650 18px/1.2 Georgia,serif}
+.rvEnter{min-height:46px;margin-top:12px;padding:0 15px;border:1px solid #d5b875;border-radius:12px;background:#d8b879;color:#111;font-size:11px;font-weight:950;letter-spacing:.1em;cursor:pointer}
+.rvWorlds{margin-top:26px}
+.rvWorldsTop{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:12px}.rvWorldsTop h2{margin:0;color:#f4efe7;font:650 clamp(25px,4vw,40px)/1.05 Georgia,serif}.rvWorldsTop p{max-width:560px;margin:0;color:#8397aa;font-size:12px;line-height:1.55}
+.rvWorldGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.rvWorld{padding:17px;border:1px solid #293f54;border-radius:18px;background:linear-gradient(145deg,#0a1724,#08131e)}
+.rvWorldKicker{color:#c9a963;font-size:9px;font-weight:900;letter-spacing:.15em;text-transform:uppercase}.rvWorld h3{margin:7px 0 6px;color:#fff;font:650 21px/1.1 Georgia,serif}.rvWorld>p{margin:0 0 12px;color:#899caf;font-size:12px;line-height:1.5}
+.rvWorks{display:grid;gap:7px}.rvWork{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;width:100%;padding:11px 12px;border:1px solid #22394f;border-radius:12px;background:#07131f;color:inherit;text-align:left;cursor:pointer}.rvWork:hover{border-color:#765f37;background:#0b1823}.rvWork strong{display:block;color:#e9edf1;font:650 14px/1.25 Georgia,serif}.rvWork small{display:block;margin-top:4px;color:#758ca0;font-size:10px;line-height:1.35}.rvWork i{color:#d8b879;font-size:17px;font-style:normal}
+.rvSourceLab{margin:28px 0}.rvSourceLab>summary{cursor:pointer;list-style:none;padding:15px 17px;border:1px solid #263d51;border-radius:15px;background:#091622;color:#d8b879;font-size:11px;font-weight:900;letter-spacing:.12em}.rvSourceLab>summary::-webkit-details-marker{display:none}.rvSourceLab[open]>summary{border-radius:15px 15px 0 0}.rvSourceInner{padding:4px 12px 12px;border:1px solid #263d51;border-top:0;border-radius:0 0 15px 15px;background:#07111c}
+/* Assessment is infrastructure, not the face of Renaissance. */
+.rsStats,#player{display:none!important}
+.rsPanel [id="rsMeasure"]{display:none!important}
+/* Campus becomes a library/map, not a scoreboard. */
+.rcStats{display:none!important}.rcTrackProgress{opacity:.55}.rcTrack:first-of-type{order:99;opacity:.76}.rcBody{display:flex!important;flex-direction:column}.rcLesson .rcState{display:none!important}.rcNum{letter-spacing:.12em}.rcChoice.ok,.rcChoice.bad{border-color:#30465b!important;background:#091622!important;color:inherit!important}.rcChoice.ok strong,.rcChoice.bad strong{color:#e5e9ee!important}
+@media(max-width:760px){.rvLaw,.rvToday,.rvWorldGrid{grid-template-columns:1fr}.rvManifesto{border-radius:21px}.rvWorldsTop{display:block}.rvWorldsTop p{margin-top:8px}}
