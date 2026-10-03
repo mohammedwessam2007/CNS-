@@ -27,10 +27,10 @@ ok("experience doctor checks civilization and campus",xp.includes("window.RENAIS
 ok("runtime cannot paint false green",xp.includes("civilization integrity error")&&xp.includes("new MutationObserver(enforce)"));
 for(const x of ["mcq-v16.js","learn-v15.js","cns-atlas-v17.js"])ok("medical asset excluded "+x,!build.includes(x));
 ok("offline cache advanced",sw.includes("renaissance-civilization-reader2-campus12-v8"));
-ok("direct Vercel build requires core Renaissance gate",vercel.includes("tests/renaissance_v3_test.js"));
 ok("direct Vercel build requires civilization gate",vercel.includes("tests/civilization_surface_test.js"));
-ok("separate deploy workflow requires core Renaissance gate",workflow.includes("node tests/renaissance_v3_test.js"));
+ok("direct Vercel build excludes browser-only certification",!vercel.includes("tests/renaissance_v3_test.js"));
 ok("separate deploy workflow requires civilization gate",workflow.includes("node tests/civilization_surface_test.js"));
+ok("separate deploy workflow does not execute browser-only certification",!workflow.includes("node tests/renaissance_v3_test.js"));
 ok("separate deploy workflow watches civilization gate changes",workflow.includes('"tests/civilization_surface_test.js"'));
 ok("separate deploy workflow targets dedicated Renaissance project",workflow.includes("prj_a4IsKK63xEYTa5VBwi556zFWTd9z")&&!workflow.includes("prj_l4M0fAWF4ShBCPhhwrIx1OlYUlYk"));
 console.log("CIVILIZATION SURFACE: ALL PASS",n);
