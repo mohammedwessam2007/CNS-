@@ -18,6 +18,8 @@ ok("today launches canonical study path",js.includes("window.RENAISSANCE.open(ne
 ok("today has no parallel calendar rotation",!js.includes("Date.UTC")&&!js.includes("day%pool.length"));
 ok("rest state is visible without backlog debt",js.includes("Nothing is owed today.")&&js.includes("There is no backlog debt."));
 ok("civilization home refreshes when study dialog closes",js.includes("function watchStudyRoot()")&&js.includes("attributeFilter:[\"hidden\"]")&&js.includes("if(r.hidden)render()"));
+ok("experience doctor checks civilization and campus",xp.includes("window.RENAISSANCE_CIVILIZATION")&&xp.includes("window.RENAISSANCE_CAMPUS")&&xp.includes("function doctor()"));
+ok("runtime cannot paint false green",xp.includes("civilization integrity error")&&xp.includes("new MutationObserver(enforce)"));
 for(const x of ["mcq-v16.js","learn-v15.js","cns-atlas-v17.js"])ok("medical asset excluded "+x,!build.includes(x));
 ok("offline cache advanced",sw.includes("renaissance-civilization-reader2-campus12-v8"));
 console.log("CIVILIZATION SURFACE: ALL PASS",n);
