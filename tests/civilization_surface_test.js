@@ -17,10 +17,12 @@ ok("bootloader hidden from front door",css.includes(".rvInternalTrack{display:no
 ok("engine room collapsed",index.includes('class="rvInfrastructure"'));
 ok("source lab optional",index.includes('class="rvSourceLab"'));
 ok("today reads canonical life governor",js.includes("window.RENAISSANCE?.gate?.(new Date())"));
-ok("today launches canonical study path",js.includes("window.RENAISSANCE.open(new Date())"));
+ok("today launches canonical study path",js.includes("R.open(new Date())"));
 ok("today has no parallel calendar rotation",!js.includes("Date.UTC")&&!js.includes("day%pool.length"));
 ok("rest state is visible without backlog debt",js.includes("Nothing is owed today.")&&js.includes("There is no backlog debt."));
 ok("civilization home refreshes when study dialog closes",js.includes("function watchStudyRoot()")&&js.includes("attributeFilter:[\"hidden\"]")&&js.includes("if(r.hidden)render()"));
+ok("canonical study faults are fail-visible",js.includes("canonical study path threw while opening today's encounter")&&js.includes("CIVILIZATION INTEGRITY FAILED"));
+ok("canonical study faults do not silently browse",!js.includes("catch(e){}const t=todayState().session"));
 ok("experience doctor checks civilization and campus",xp.includes("window.RENAISSANCE_CIVILIZATION")&&xp.includes("window.RENAISSANCE_CAMPUS")&&xp.includes("function doctor()"));
 ok("runtime cannot paint false green",xp.includes("civilization integrity error")&&xp.includes("new MutationObserver(enforce)"));
 for(const x of ["mcq-v16.js","learn-v15.js","cns-atlas-v17.js"])ok("medical asset excluded "+x,!build.includes(x));
