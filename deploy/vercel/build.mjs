@@ -26,6 +26,8 @@ const ASSETS=[
   "renaissance-sealed.js",
   "renaissance-v1.js",
   "axis-forge-v1.js",
+  "renaissance-civilization.css",
+  "renaissance-civilization.js",
   "manifest.webmanifest",
   "renaissance-sw.js"
 ];
@@ -82,7 +84,7 @@ for(const x of await walk(VOUT,"vendor/")){
 
 const info={
   app:"RENAISSANCE · INTELLECTUALITY",
-  mode:"standalone+reader-os+campus",
+  mode:"civilization+reader-os+campus",
   source:"CNS- Renaissance organ",
   gitCommit:process.env.VERCEL_GIT_COMMIT_SHA||null,
   gitBranch:process.env.VERCEL_GIT_COMMIT_REF||null,
