@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#07111d">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Renaissance: a private adaptive curriculum for durable understanding, transfer, judgment, cultural possession and creation.">
+  <meta name="description" content="Renaissance: a private civilization for absorbing great works, ideas, art, science, history and culture without wasting a lifetime on intellectual administration.">
   <title>RENAISSANCE · INTELLECTUALITY</title>
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/renaissance-v1.css">
   <link rel="stylesheet" href="/renaissance-standalone.css">
   <link rel="stylesheet" href="/reader-v1.css">
   <link rel="stylesheet" href="/campus-v1.css">
+  <link rel="stylesheet" href="/renaissance-civilization.css">
   <script defer src="/renaissance-standalone.js"></script>
   <script defer src="/reader-v1.js"></script>
   <script defer src="/renaissance-harvest.js"></script>
@@ -27,14 +28,15 @@
   <script defer src="/renaissance-sealed.js"></script>
   <script defer src="/renaissance-v1.js"></script>
   <script defer src="/axis-forge-v1.js"></script>
+  <script defer src="/renaissance-civilization.js"></script>
 </head>
 <body>
   <header class="rsTop">
     <a class="rsBrand" href="/" aria-label="Renaissance home">
       <span class="rsMark">R</span>
-      <span><b>RENAISSANCE</b><small>INTELLECTUALITY · SOVEREIGN CURRICULUM</small></span>
+      <span><b>RENAISSANCE</b><small>INTELLECTUALITY · PRIVATE CIVILIZATION</small></span>
     </a>
-    <nav class="rsNav" aria-label="Renaissance sections"><a href="#player">TODAY</a><a href="#rcHost">COURSE MAP</a><a href="#rrHost">READER OS</a></nav>
+    <nav class="rsNav" aria-label="Renaissance sections"><a href="#rvHost">TODAY</a><a href="#rvHost">WORLDS</a><a href="#rvSourceLab">SOURCE LAB</a></nav>
     <div class="rsTopRight">
       <span id="rsRuntime" class="rsRuntime" aria-live="polite">booting</span>
       <button id="rsInstall" class="rsTiny" type="button" hidden>INSTALL</button>
@@ -42,105 +44,58 @@
   </header>
 
   <main class="rsPage">
+    <div id="rvHost">
+      <section class="rvCivilization" aria-label="Renaissance loading">
+        <div class="rvManifesto"><p class="rvOverline">PRIVATE CIVILIZATION · ONE LIFETIME · THE BEST OF HUMANITY</p><h1>Absorb civilisation.<br><em>Keep what cannot be compressed.</em></h1><p class="rvManifestoLead">Loading your worlds, works and today’s encounter.</p></div>
+      </section>
+    </div>
+
+    <!-- Legacy engine anchors remain for compatibility, but civilization is the visible product. -->
     <section class="rsHero" aria-labelledby="rsTitle">
-      <p class="rsKicker">ONE HUMAN · MANY WORLDS · NO INTELLECTUAL OATMEAL</p>
-      <h1 id="rsTitle">Understand deeply.<br><em>Transfer under pressure.</em></h1>
-      <p class="rsLead">A private curriculum that makes you predict before reveal, compare rival models, retrieve later, build something, and prove that the idea survived outside the lesson.</p>
-      <div class="rsHeroMeta">
-        <span><b>32</b> authored sessions</span>
-        <span><b>287</b> steps</span>
-        <span><b>28</b> capability atoms</span>
-        <span><b>52</b> sealed probes</span>
-        <span><b>Reader OS</b> source → possession</span>
-      </div>
+      <p class="rsKicker">PRIVATE CIVILIZATION</p>
+      <h2 id="rsTitle">Great works, ideas, discovery and creation.</h2>
+      <p class="rsLead">The engine underneath sequences encounters, protects memory and keeps provenance. It is not the experience itself.</p>
+      <div class="rsHeroMeta"><span><b>32</b> authored encounters</span><span><b>Reader OS</b> source digestion</span><span><b>World Harvester</b> discovery</span></div>
     </section>
 
     <section id="player" class="rsToday" aria-labelledby="todayTitle">
-      <div class="stage">
-        <div class="rsSectionTop">
-          <div>
-            <p class="rsEyebrow">TODAY</p>
-            <h2 id="todayTitle">One door. One dose.</h2>
-          </div>
-          <span id="rsDose" class="rsPill">calculating…</span>
-        </div>
-        <p id="rsGateText" class="rsGateText">Loading the adaptive compiler and your local record.</p>
-        <button id="commuteBtn" type="button" hidden aria-hidden="true"></button>
-      </div>
+      <div class="stage"><div class="rsSectionTop"><div><p class="rsEyebrow">TODAY</p><h2 id="todayTitle">One encounter.</h2></div><span id="rsDose" class="rsPill">calculating…</span></div><p id="rsGateText" class="rsGateText">Loading the adaptive compiler and your local record.</p><button id="commuteBtn" type="button" hidden aria-hidden="true"></button></div>
     </section>
 
-    <section class="rsStats" aria-label="Renaissance progress">
-      <article><span id="rsDone">0</span><small>sessions completed</small></article>
+    <section class="rsStats" aria-label="Renaissance internal progress">
+      <article><span id="rsDone">0</span><small>encounters completed</small></article>
       <article><span id="rsMinutes">0</span><small>minutes · rolling 7 days</small></article>
-      <article><span id="rsAnswers">0</span><small>answers recorded</small></article>
-      <article><span id="rsProbes">0</span><small>sealed probes completed</small></article>
+      <article><span id="rsAnswers">0</span><small>responses recorded</small></article>
+      <article><span id="rsProbes">0</span><small>longitudinal checks completed</small></article>
     </section>
 
-    <div id="rrHost"></div>
+    <details id="rvSourceLab" class="rvSourceLab">
+      <summary>SOURCE LAB · OPTIONAL · OPEN ONLY WHEN YOU WANT TO INSPECT OR BRING A SOURCE</summary>
+      <div class="rvSourceInner"><div id="rrHost"></div></div>
+    </details>
 
-    <section class="rsGrid">
-      <article class="rsPanel rsPanelWide">
-        <div class="rsSectionTop">
-          <div>
-            <p class="rsEyebrow">CURRICULUM</p>
-            <h2>The civilisation you are building</h2>
-          </div>
-          <span id="rsCurriculumCount" class="rsPill">0 / 32</span>
-        </div>
-        <p class="rsMuted">The first 12 sessions are the fixed cognitive bootloader. After that, the compiler chooses from the cultural pool using your gaps, errors, unpossessed works, domain rotation, prerequisites and curiosity. Completed sessions never disappear.</p>
-        <div id="rsCurriculum" class="rsCurriculum" aria-live="polite"></div>
-      </article>
+    <details id="rvEngineRoom" class="rvInfrastructure">
+      <summary>ENGINE ROOM · MEMORY, PORTABILITY & SCHEDULING</summary>
+      <div class="rvInfrastructureInner">
+        <p class="rvInfrastructureNote">Renaissance keeps retrieval, provenance, scheduling and longitudinal evidence here so they can protect the experience without becoming the experience.</p>
+        <section class="rsGrid">
+          <article class="rsPanel rsPanelWide">
+            <div class="rsSectionTop"><div><p class="rsEyebrow">COLLECTION</p><h2>The civilisation you are building</h2></div><span id="rsCurriculumCount" class="rsPill">0 / 32</span></div>
+            <p class="rsMuted">The authored collection remains recoverable while Renaissance increasingly organizes it around worlds, works and experiences instead of a course checklist.</p>
+            <div id="rsCurriculum" class="rsCurriculum" aria-live="polite"></div>
+          </article>
+          <article class="rsPanel"><p class="rsEyebrow">SEQUENCING</p><h2>Why this, not something else?</h2><div id="rsCompiler" class="rsCompiler">The compiler is loading.</div></article>
+          <article class="rsPanel"><p class="rsEyebrow">MEMORY PROTECTION</p><h2>Evidence stays separate.</h2><div id="rsMeasure" class="rsCompiler">Transfer, durability, calibration, reality use and delayed evidence stay underneath the cultural experience.</div></article>
+          <article class="rsPanel"><p class="rsEyebrow">PORTABILITY</p><h2>Your record belongs to you.</h2><p class="rsMuted">Exports include encounters, responses, retrieval hooks, forges, forecasts and longitudinal outcomes. Imports merge instead of erasing stronger existing evidence.</p><div class="rsActions"><button id="rsExport" class="rsButton" type="button">EXPORT PROGRESS</button><button id="rsImport" class="rsButton ghost" type="button">IMPORT PROGRESS</button><input id="rsImportFile" type="file" accept="application/json,.json" hidden></div><p id="rsTransferMsg" class="rsNote" aria-live="polite"></p></article>
+          <article class="rsPanel"><p class="rsEyebrow">LIFE GOVERNOR</p><h2>Medicine and sleep still outrank the app.</h2><p class="rsMuted">Set the next medical exam so Renaissance automatically shortens or rests near it.</p><label class="rsField">Next medical exam<input id="rsExamDate" type="date"></label><button id="rsSaveExam" class="rsButton ghost" type="button">SAVE EXAM DATE</button><p id="rsExamMsg" class="rsNote" aria-live="polite"></p></article>
+          <article class="rsPanel rsPanelWide"><p class="rsEyebrow">DESIGN LAW</p><h2>What Renaissance refuses to become</h2><div class="rsLaws"><span>no streak guilt</span><span>no backlog debt</span><span>no learning-style mythology</span><span>no unearned possession</span><span>no quiz-first culture</span><span>no hidden answer cues</span><span>no AI dependence as the goal</span><span>no curriculum that colonises the day</span><span>no summary impersonating a source</span><span>no silent truncation</span></div></article>
+        </section>
+      </div>
+    </details>
 
-      <article class="rsPanel">
-        <p class="rsEyebrow">NEXT CHOICE</p>
-        <h2>Why this, not something else?</h2>
-        <div id="rsCompiler" class="rsCompiler">The compiler is loading.</div>
-      </article>
-
-      <article class="rsPanel">
-        <p class="rsEyebrow">MEASUREMENT</p>
-        <h2>No fake genius score.</h2>
-        <div id="rsMeasure" class="rsCompiler">Separate evidence stays separate: transfer, durability, calibration, reality use and sealed performance.</div>
-      </article>
-
-      <article class="rsPanel">
-        <p class="rsEyebrow">PORTABILITY</p>
-        <h2>Your record belongs to you.</h2>
-        <p class="rsMuted">Exports include sessions, answers, hooks, forges, forecasts and sealed-probe outcomes. Imports merge instead of erasing stronger existing evidence.</p>
-        <div class="rsActions">
-          <button id="rsExport" class="rsButton" type="button">EXPORT PROGRESS</button>
-          <button id="rsImport" class="rsButton ghost" type="button">IMPORT PROGRESS</button>
-          <input id="rsImportFile" type="file" accept="application/json,.json" hidden>
-        </div>
-        <p id="rsTransferMsg" class="rsNote" aria-live="polite"></p>
-      </article>
-
-      <article class="rsPanel">
-        <p class="rsEyebrow">LIFE GOVERNOR</p>
-        <h2>Medicine and sleep still outrank the app.</h2>
-        <p class="rsMuted">The standalone site removes the technical dependency on the CNS interface, but keeps the original sleep and weekly-dose protections. Set the next medical exam so Renaissance automatically shortens or rests near it.</p>
-        <label class="rsField">Next medical exam
-          <input id="rsExamDate" type="date">
-        </label>
-        <button id="rsSaveExam" class="rsButton ghost" type="button">SAVE EXAM DATE</button>
-        <p id="rsExamMsg" class="rsNote" aria-live="polite"></p>
-      </article>
-
-      <article class="rsPanel rsPanelWide">
-        <p class="rsEyebrow">DESIGN LAW</p>
-        <h2>What this site refuses to become</h2>
-        <div class="rsLaws">
-          <span>no streak guilt</span><span>no backlog debt</span><span>no learning-style mythology</span><span>no unearned possession</span><span>no IQ cosplay</span><span>no hidden answer cues</span><span>no AI dependence as the goal</span><span>no curriculum that colonises the day</span><span>no summary impersonating a source</span><span>no silent truncation</span>
-        </div>
-      </article>
-    </section>
-
-    <footer class="rsFooter">
-      <p><b>RENAISSANCE</b> · exact curriculum lineage from INTELLECTUALITY CNS v18.6 · standalone surface</p>
-      <p id="rsBuild">source integrity loading…</p>
-    </footer>
+    <footer class="rsFooter"><p><b>RENAISSANCE</b> · private civilization · medical CNS remains separate</p><p id="rsBuild">source integrity loading…</p></footer>
   </main>
 
-  <noscript><div class="rsNoScript">Renaissance needs JavaScript because its models, retrieval scheduler and sealed measurements are interactive.</div></noscript>
+  <noscript><div class="rsNoScript">Renaissance needs JavaScript because its source, scheduling and memory systems are interactive.</div></noscript>
 </body>
 </html>
