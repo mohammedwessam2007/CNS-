@@ -1,0 +1,334 @@
+{
+ "at": "2026-10-03T21:16:19.895Z",
+ "results": [
+  {
+   "id": "D1",
+   "what": "The whole set is on the site as ordinary pictures (department drawings + Kasr Al Ainy NEU 205 book figures + Dr Sameh Doss's labelled drawings): every file a JPEG, every drawing placed in a LEARN section that exists and captioned, no book figure twice, every Sameh drawing from a notebook page 1-283 with a relevance score per placement",
+   "ok": true,
+   "detail": {
+    "plain": true,
+    "n": 878,
+    "book": 340,
+    "sameh": 490,
+    "samehPages": 280,
+    "secs": 213,
+    "notes": 257,
+    "nBad": 0,
+    "bad": []
+   }
+  },
+  {
+   "id": "D2",
+   "what": "With no key and no link, a lesson section shows its drawings first (2 open, the rest one tap away), each a real picture; no lock line anywhere",
+   "ok": true,
+   "detail": {
+    "unlocked": true,
+    "locks": 0,
+    "secShown": 2,
+    "secMore": 23,
+    "secImgs": [
+     {
+      "w": 957,
+      "jpg": true
+     },
+     {
+      "w": 755,
+      "jpg": true
+     }
+    ],
+    "beforePics": true,
+    "exPicks": [
+     "The carotid sheath: its attachments at the base of the skull, and its contents (internal carotid artery, internal jugular vein, the lower four cranial nerves; common carotid artery, internal jugular vein and vagus nerve)",
+     "Cross-section of the neck: the carotid sheath (common carotid, internal jugular vein, vagus) beside the thyroid, and the recurrent laryngeal nerve by the trachea and oesophagus",
+     "The vagus nerve in the neck: the jugular foramen with the superior and inferior ganglia, its course in the carotid sheath between the internal jugular vein and the internal and common carotid arteries"
+    ],
+    "exCards": 3,
+    "exOpen": 2,
+    "exImgs": [
+     {
+      "w": 627,
+      "jpg": true
+     },
+     {
+      "w": 1016,
+      "jpg": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "D3",
+   "what": "After an answer: the drawings that fit the question are shown, best first, at most three and two open (internal jugular vein question → drawings that show the internal jugular vein and the carotid sheath)",
+   "ok": true,
+   "detail": {
+    "unlocked": true,
+    "locks": 0,
+    "secShown": 2,
+    "secMore": 23,
+    "secImgs": [
+     {
+      "w": 957,
+      "jpg": true
+     },
+     {
+      "w": 755,
+      "jpg": true
+     }
+    ],
+    "beforePics": true,
+    "exPicks": [
+     "The carotid sheath: its attachments at the base of the skull, and its contents (internal carotid artery, internal jugular vein, the lower four cranial nerves; common carotid artery, internal jugular vein and vagus nerve)",
+     "Cross-section of the neck: the carotid sheath (common carotid, internal jugular vein, vagus) beside the thyroid, and the recurrent laryngeal nerve by the trachea and oesophagus",
+     "The vagus nerve in the neck: the jugular foramen with the superior and inferior ganglia, its course in the carotid sheath between the internal jugular vein and the internal and common carotid arteries"
+    ],
+    "exCards": 3,
+    "exOpen": 2,
+    "exImgs": [
+     {
+      "w": 627,
+      "jpg": true
+     },
+     {
+      "w": 1016,
+      "jpg": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "D4",
+   "what": "A physiology section (vestibular hair cells) opens with the Kasr Al Ainy book figures, labelled with the book's figure number; the section's web photo folds behind a tap below them",
+   "ok": true,
+   "detail": {
+    "lab": "كتاب القصر العيني KASR AL AINY BOOK · FIG 359",
+    "imgs": 2,
+    "folded": true,
+    "order": true
+   }
+  },
+  {
+   "id": "D5",
+   "what": "Tap a drawing → full screen; tap → back",
+   "ok": true,
+   "detail": {
+    "z1": true,
+    "z2": false
+   }
+  },
+  {
+   "id": "D6",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  },
+  {
+   "id": "D11",
+   "what": "Every one of the 490 Sameh drawings is in at least one LEARN section",
+   "ok": true,
+   "detail": {
+    "nSameh": 490,
+    "inLesson": 490,
+    "practice": 1061,
+    "withFig": 770,
+    "withSameh": 484,
+    "usedSameh": 287,
+    "spot": {
+     "abducent": [
+      "sd-080a",
+      "sd-095b",
+      "sd-095a"
+     ],
+     "fossa": [
+      "sd-216b",
+      "kaa-034"
+     ],
+     "ventricle": [
+      "sd-278",
+      "sd-196a",
+      "sd-282b"
+     ],
+     "rln": [
+      "sd-138b",
+      "nv-vagus-neck",
+      "sd-121b"
+     ]
+    },
+    "none": [
+     [],
+     [],
+     []
+    ],
+    "maxPer": 3,
+    "dupInPick": false,
+    "secAbducent": [
+     "an-cranial-cavity#2",
+     "an-orbit#1",
+     "an-orbit#2"
+    ],
+    "ventSec": 3
+   }
+  },
+  {
+   "id": "D12",
+   "what": "In the answers: most practice questions get a fitting drawing (>= 700 of 1061), over 400 of them one of Dr Sameh Doss's, at most three per answer, never the same drawing twice, and 220+ of his drawings are the answer to some question",
+   "ok": true,
+   "detail": {
+    "nSameh": 490,
+    "inLesson": 490,
+    "practice": 1061,
+    "withFig": 770,
+    "withSameh": 484,
+    "usedSameh": 287,
+    "spot": {
+     "abducent": [
+      "sd-080a",
+      "sd-095b",
+      "sd-095a"
+     ],
+     "fossa": [
+      "sd-216b",
+      "kaa-034"
+     ],
+     "ventricle": [
+      "sd-278",
+      "sd-196a",
+      "sd-282b"
+     ],
+     "rln": [
+      "sd-138b",
+      "nv-vagus-neck",
+      "sd-121b"
+     ]
+    },
+    "none": [
+     [],
+     [],
+     []
+    ],
+    "maxPer": 3,
+    "dupInPick": false,
+    "secAbducent": [
+     "an-cranial-cavity#2",
+     "an-orbit#1",
+     "an-orbit#2"
+    ],
+    "ventSec": 3
+   }
+  },
+  {
+   "id": "D13",
+   "what": "The right drawing for the right question (cranial nerve VI → the abducent nerve drawing; interpeduncular fossa → its drawing; lateral ventricle → ventricle drawings; left recurrent laryngeal nerve → the recurrent nerve drawing)",
+   "ok": true,
+   "detail": {
+    "abducent": [
+     "sd-080a",
+     "sd-095b",
+     "sd-095a"
+    ],
+    "fossa": [
+     "sd-216b",
+     "kaa-034"
+    ],
+    "ventricle": [
+     "sd-278",
+     "sd-196a",
+     "sd-282b"
+    ],
+    "rln": [
+     "sd-138b",
+     "nv-vagus-neck",
+     "sd-121b"
+    ]
+   }
+  },
+  {
+   "id": "D14",
+   "what": "No picture is forced onto a question it does not explain (Nissl bodies, ependymal cells, axon: none)",
+   "ok": true,
+   "detail": [
+    [],
+    [],
+    []
+   ]
+  },
+  {
+   "id": "D15",
+   "what": "On a phone-size screen: the lesson section and the answer show Dr Sameh Doss's drawings, labelled with his name, every picture loads, and the page does not scroll sideways",
+   "ok": true,
+   "detail": {
+    "secLab": [
+     "رسمة د. سامح دوس DR SAMEH DOSS · LABELLED DRAWING",
+     "رسمة د. سامح دوس DR SAMEH DOSS · LABELLED DRAWING"
+    ],
+    "secW": [
+     787,
+     769
+    ],
+    "exLab": [
+     "رسمة د. سامح دوس DR SAMEH DOSS · LABELLED DRAWING",
+     "رسمة د. سامح دوس DR SAMEH DOSS · LABELLED DRAWING",
+     "رسمة د. سامح دوس DR SAMEH DOSS · LABELLED DRAWING"
+    ],
+    "exW": [
+     1017,
+     1100
+    ],
+    "more": true,
+    "overflowX": false
+   }
+  },
+  {
+   "id": "D16",
+   "what": "The \"more drawings\" fold opens and its pictures load; no page errors",
+   "ok": true,
+   "detail": {
+    "f": [
+     847,
+     1228,
+     1247
+    ],
+    "errors": []
+   }
+  },
+  {
+   "id": "D7",
+   "what": "The 50 figure items (9 department CNS-levels figures + the Nov 2024 paper's Section B figure, 5 labels each) are in the practice bank on every device, each explained (key + a reason for every other option), each tied to its figure",
+   "ok": true,
+   "detail": {
+    "n": 50,
+    "practice": 1061,
+    "explained": 1061,
+    "gaps": [],
+    "nGaps": 0,
+    "figs": 10
+   }
+  },
+  {
+   "id": "D8",
+   "what": "A drill question shows its department figure above the stem BEFORE answering, with the answers hidden",
+   "ok": true,
+   "detail": {
+    "fig": "cns-level-7",
+    "before": true,
+    "ans": false,
+    "w": 1400
+   }
+  },
+  {
+   "id": "D9",
+   "what": "After answering, the same figure carries the department answers for all 5 labels (not repeated inside the explanation)",
+   "ok": true,
+   "detail": {
+    "fig": "cns-level-7",
+    "ans": "Department answers: 1 trigeminal lemniscus (ends in VPMN) · 2 medial lemniscus (ends in VPLN) · 3 medial longitudinal bundle (continues as the sulcomarginal tract) · 4 the bundle keyed as continuing as the septomarginal tract · 5 transverse pontine fibres (separate the pyramidal bundles)",
+    "inExplain": 0
+   }
+  },
+  {
+   "id": "D10",
+   "what": "No page errors",
+   "ok": true,
+   "detail": []
+  }
+ ]
+}

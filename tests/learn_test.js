@@ -36,6 +36,9 @@ const BUNDLED = process.env.BUNDLED === '1';
     const k = await toKind(page, /teach/);
     const netAtLecture = { wiki: (log.wiki || []).length, commons: log.commons.length };
     await page.waitForTimeout(900);
+    // since v18.5 a section's web photo sits behind a tap under the official drawings; v18.7 gives the first lesson drawings too
+    await page.evaluate(() => document.querySelectorAll('#player details.ixWebPic').forEach((d) => (d.open = true)));
+    await page.waitForTimeout(1200);
     const r = await page.evaluate(() => {
       const a = nextAction(), secs = INTELLECTUALITY_V15.sectionsForLesson(a.l.id);
       const figs = [...document.querySelectorAll('#player .v15Pic')];

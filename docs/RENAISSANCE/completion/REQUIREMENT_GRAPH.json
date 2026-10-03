@@ -1,6 +1,6 @@
 {
- "generated": "2026-09-27T21:55:18.773Z",
- "log": "receipts/v18_5/full_regression.log",
+ "generated": "2026-10-03T21:29:22.890Z",
+ "log": "receipts/v18_7/full_regression.log",
  "inventory": {
   "seasons": 3,
   "sessions": 32,
@@ -81,7 +81,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -133,7 +133,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 11,
    "strongest": [
     "L418",
@@ -177,7 +177,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -217,7 +217,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 12,
    "strongest": [
     "O4101",
@@ -260,7 +260,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 8,
    "strongest": [
     "O6406",
@@ -305,7 +305,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -345,7 +345,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 24,
    "strongest": [
     "L274",
@@ -384,7 +384,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -419,7 +419,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -457,7 +457,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -496,7 +496,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -532,7 +532,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -565,7 +565,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -600,7 +600,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 10,
    "strongest": []
   },
@@ -635,7 +635,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 15,
    "strongest": []
   },
@@ -671,7 +671,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -706,7 +706,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -746,7 +746,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 11,
    "strongest": [
     "L391",
@@ -794,7 +794,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -829,7 +829,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -870,7 +870,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -909,7 +909,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -952,7 +952,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -989,7 +989,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1027,7 +1027,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1065,7 +1065,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1100,7 +1100,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1135,7 +1135,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1174,7 +1174,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1212,7 +1212,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1259,7 +1259,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 12,
    "strongest": [
     "L287",
@@ -1306,7 +1306,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1342,7 +1342,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 8,
    "strongest": [
     "L040",
@@ -1390,7 +1390,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1431,7 +1431,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 14,
    "strongest": [
     "O4301",
@@ -1480,7 +1480,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 38,
    "strongest": [
     "L222",
@@ -1525,7 +1525,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 15,
    "strongest": [
     "O4401",
@@ -1567,7 +1567,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 8,
    "strongest": [
     "L300",
@@ -1607,7 +1607,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1645,7 +1645,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1684,7 +1684,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1723,7 +1723,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 15,
    "strongest": [
     "O4901",
@@ -1776,7 +1776,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 46,
    "strongest": [
     "L014",
@@ -1823,7 +1823,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -1858,7 +1858,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 10,
    "strongest": []
   },
@@ -1907,7 +1907,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 28,
    "strongest": [
     "O5106",
@@ -1949,7 +1949,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 12,
    "strongest": [
     "O5701",
@@ -1991,7 +1991,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 25,
    "strongest": [
     "L106",
@@ -2037,7 +2037,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2073,7 +2073,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 13,
    "strongest": [
     "O5808"
@@ -2114,7 +2114,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2159,7 +2159,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2198,7 +2198,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 23,
    "strongest": [
     "L209",
@@ -2246,7 +2246,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2283,7 +2283,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 16,
    "strongest": [
     "O4702",
@@ -2335,7 +2335,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 10,
    "strongest": [
     "L118",
@@ -2377,7 +2377,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2413,7 +2413,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2453,7 +2453,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2491,7 +2491,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 15,
    "strongest": [
     "O6916"
@@ -2534,7 +2534,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 13,
    "strongest": [
     "O4201",
@@ -2576,7 +2576,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 24,
    "strongest": [
     "L406",
@@ -2624,7 +2624,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2661,7 +2661,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 12,
    "strongest": []
   },
@@ -2697,7 +2697,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 30,
    "strongest": []
   },
@@ -2734,7 +2734,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 11,
    "strongest": [
     "L378",
@@ -2776,7 +2776,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 11,
    "strongest": [
     "L354",
@@ -2819,7 +2819,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 11,
    "strongest": []
   },
@@ -2856,7 +2856,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 9,
    "strongest": []
   },
@@ -2892,7 +2892,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -2928,7 +2928,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 10,
    "strongest": []
   },
@@ -2963,7 +2963,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3001,7 +3001,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 9,
    "strongest": []
   },
@@ -3039,7 +3039,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3077,7 +3077,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3113,7 +3113,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3152,7 +3152,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3190,7 +3190,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3225,7 +3225,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3260,7 +3260,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3296,7 +3296,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3334,7 +3334,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3367,7 +3367,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3404,7 +3404,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 17,
    "strongest": [
     "O6804",
@@ -3444,7 +3444,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3525,7 +3525,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3556,7 +3556,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3590,7 +3590,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3626,7 +3626,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3672,7 +3672,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 33,
    "strongest": [
     "L027",
@@ -3719,7 +3719,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3753,7 +3753,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3792,7 +3792,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 9,
    "strongest": [
     "L001",
@@ -3836,7 +3836,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -3873,7 +3873,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 14,
    "strongest": [
     "O5901"
@@ -3914,7 +3914,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 13,
    "strongest": [
     "L482",
@@ -3966,7 +3966,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 16,
    "strongest": [
     "O4601",
@@ -4016,7 +4016,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4053,7 +4053,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 26,
    "strongest": [
     "L053",
@@ -4106,7 +4106,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 24,
    "strongest": [
     "L067",
@@ -4160,7 +4160,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 14,
    "strongest": [
     "O6001",
@@ -4203,7 +4203,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 11,
    "strongest": [
     "L443",
@@ -4244,7 +4244,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 14,
    "strongest": [
     "O5401",
@@ -4282,7 +4282,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4318,7 +4318,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4359,7 +4359,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 15,
    "strongest": [
     "O5504"
@@ -4402,7 +4402,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4443,7 +4443,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 22,
    "strongest": [
     "L469",
@@ -4484,7 +4484,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4527,7 +4527,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 16,
    "strongest": [
     "O5201",
@@ -4569,7 +4569,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4608,7 +4608,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4649,7 +4649,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4683,7 +4683,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4717,7 +4717,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4764,7 +4764,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4812,7 +4812,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4849,7 +4849,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4886,7 +4886,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4921,7 +4921,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4955,7 +4955,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -4989,7 +4989,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5023,7 +5023,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5056,7 +5056,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5091,7 +5091,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5126,7 +5126,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5160,7 +5160,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5194,7 +5194,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5229,7 +5229,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5325,7 +5325,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5362,7 +5362,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 10,
    "strongest": [
     "L092",
@@ -5440,7 +5440,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 12,
    "strongest": [
     "O6501",
@@ -5480,7 +5480,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5515,7 +5515,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5551,7 +5551,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 9,
    "strongest": [
     "L079",
@@ -5639,7 +5639,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 12,
    "strongest": []
   },
@@ -5676,7 +5676,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5710,7 +5710,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5748,7 +5748,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5794,7 +5794,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 13,
    "strongest": [
     "L508",
@@ -5832,7 +5832,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5867,7 +5867,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5900,7 +5900,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -5942,7 +5942,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6001,7 +6001,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6042,7 +6042,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6074,7 +6074,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6106,7 +6106,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6143,7 +6143,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6173,7 +6173,7 @@
    "class": "rejected",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6205,7 +6205,7 @@
    "class": "merged",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6236,7 +6236,7 @@
    "class": "merged",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6321,7 +6321,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6355,7 +6355,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6395,7 +6395,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6429,7 +6429,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6463,7 +6463,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6497,7 +6497,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 8,
    "strongest": []
   },
@@ -6528,7 +6528,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6563,7 +6563,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6606,7 +6606,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6640,7 +6640,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6675,7 +6675,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6706,7 +6706,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6745,7 +6745,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6794,7 +6794,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6836,7 +6836,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6869,7 +6869,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6906,7 +6906,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6946,7 +6946,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6982,7 +6982,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -7015,7 +7015,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -7047,7 +7047,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -7080,7 +7080,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -7109,7 +7109,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -7140,7 +7140,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -7188,7 +7188,7 @@
    "class": "controllable",
    "fails": [],
    "open": [],
-   "lastVerified": "2026-09-27",
+   "lastVerified": "2026-10-03",
    "registryCandidates": 0,
    "strongest": []
   },

@@ -13,6 +13,8 @@ function check(id, name, ok, detail = '') {
   console.log((ok ? 'PASS ' : 'FAIL ') + id.padEnd(5) + name + (d ? '  · ' + d.slice(0, 260) : ''));
 }
 const NEXT = '#player [data-act="visual-hide"], #player [data-act="v15-next"], #player [data-act="finish-segment"]';
+// v18.7: a section's web photo sits behind a tap ("Web photo · the official drawings above come first") when the section has official drawings
+const openFolds = async (page) => { await page.evaluate(() => document.querySelectorAll('#player details.ixWebPic').forEach((d) => (d.open = true))); await page.waitForTimeout(1200); };
 async function toTeach(page) {
   for (let i = 0; i < 8; i++) { const k = await page.evaluate(() => nextAction().seg?.type); if (k === 'teach') return true; await page.evaluate((sel) => document.querySelector(sel)?.click(), NEXT); await page.waitForTimeout(180); }
   return false;
@@ -65,12 +67,13 @@ async function toTeach(page) {
     const s = await open({ time: '2026-09-21T10:00:00+03:00', state: null, settle: 1000 });
     const { page } = s;
     await toTeach(page); await page.waitForTimeout(900);
+    await openFolds(page); // v18.7: the web photo sits behind a tap under the section's official drawings
     const before = await page.evaluate(() => { const f = document.querySelector('#player figure.v15Pic'); return { term: f.dataset.v15Term, key: f.querySelector('.v15Fig')?.dataset.v15Key || '' }; });
     await page.evaluate(() => document.querySelector('#player figure.v15Pic .v15Fig').click()); await page.waitForTimeout(200);
     const btn = await page.evaluate(() => ({ has: !!document.querySelector('.v15Zoom [data-v15-ban]'), h: document.querySelector('.v15Zoom [data-v15-ban]')?.getBoundingClientRect().height || 0 }));
     await page.evaluate(() => document.querySelector('.v15Zoom [data-v15-ban]')?.click()); await page.waitForTimeout(900);
     const after = await page.evaluate((term) => { const f = [...document.querySelectorAll('#player figure.v15Pic')].find((x) => x.dataset.v15Term === term); return { key: f?.querySelector('.v15Fig')?.dataset.v15Key || '', note: f?.querySelector('.v15NoPic')?.innerText || '', ban: S.v15.ban[term] || [], zoom: !!document.querySelector('.v15Zoom') }; }, before.term);
-    await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(1200);
+    await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(1200); await openFolds(page);
     const reload = await page.evaluate((term) => { const f = [...document.querySelectorAll('#player figure.v15Pic')].find((x) => x.dataset.v15Term === term); return { key: f?.querySelector('.v15Fig')?.dataset.v15Key || '', ban: S.v15.ban[term] || [] }; }, before.term);
     const bannedFile = before.key.replace(/^exact:/, '');
     check('P3', 'Zoom offers "✗ Wrong picture — show another" (≥ 44 px); tapping it swaps in a different picture and the rejection survives a reload', btn.has && btn.h >= 44 && !after.zoom && after.ban.includes(bannedFile) && (after.key ? after.key !== before.key : !!after.note) && reload.ban.includes(bannedFile) && reload.key !== before.key, { before, after, reload });
@@ -112,10 +115,10 @@ async function toTeach(page) {
       await page.evaluate(() => navigator.serviceWorker && navigator.serviceWorker.ready.then(() => true)); await page.waitForTimeout(500);
       await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(1000);
       const controlled = await page.evaluate(() => !!navigator.serviceWorker.controller);
-      await toTeach(page); await page.waitForTimeout(1500);
+      await toTeach(page); await page.waitForTimeout(1500); await openFolds(page);
       const online = await page.evaluate(() => [...document.querySelectorAll('#player .v15Fig img')].map((i) => i.getAttribute('src')));
       await context.setOffline(true);
-      await page.reload({ waitUntil: 'load' }).catch(() => null); await page.waitForTimeout(2000);
+      await page.reload({ waitUntil: 'load' }).catch(() => null); await page.waitForTimeout(2000); await openFolds(page);
       const off = await page.evaluate(() => ({ title: document.title, learn: !!document.querySelector('.v15Learn'), h: document.querySelector('.v15Sec h3')?.textContent || '', imgs: [...document.querySelectorAll('#player .v15Fig img')].map((i) => ({ src: i.getAttribute('src'), ok: i.complete && i.naturalWidth > 0 })) }));
       check('P5', 'Offline: after one online visit, the app and today\'s lecture open with no network, bundled pictures included', controlled && online.length > 0 && off.learn && !!off.h && off.imgs.length > 0 && off.imgs.every((i) => i.ok && /^\/pics\//.test(i.src)), { controlled, online, off });
       await context.setOffline(false);
