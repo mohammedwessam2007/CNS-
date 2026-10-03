@@ -1,4 +1,4 @@
-/* RENAISSANCE CIVILIZATION v1.4
+/* RENAISSANCE CIVILIZATION v1.5
  * Product law: civilization is visible; measurement is infrastructure.
  * Great works are encountered, not reduced to quiz objects.
  * The TODAY door is governed by the canonical Renaissance scheduler, never a parallel picker.
@@ -26,7 +26,8 @@ function workLabel(s){const works=(s&&s.works)||[];return works.length?works.sli
 function browse(id){if(window.RENAISSANCE_CAMPUS?.open){window.RENAISSANCE_CAMPUS.open(id);return;}const campus=$("#rcHost");if(campus)campus.scrollIntoView({behavior:"smooth",block:"start"});}
 function gateNow(){try{return window.RENAISSANCE?.gate?.(new Date())||null;}catch(e){return null;}}
 function todayState(){const gate=gateNow();if(!gate)return{gate:null,session:null};const sid=gate.open&&gate.plan&&gate.plan.sid;return{gate,session:sid?byId(sid):null};}
-function startToday(){try{if(window.RENAISSANCE?.open){window.RENAISSANCE.open(new Date());return;}}catch(e){}const t=todayState().session;if(t)browse(t.id);}
+function fault(msg,e){const r=$("#rsRuntime");if(r){r.className="rsRuntime error";r.textContent="civilization integrity error";}const b=$("#rsBuild");if(b)b.textContent="CIVILIZATION INTEGRITY FAILED · "+msg;try{console.error("[Renaissance civilization] "+msg,e||"");}catch(_){} }
+function startToday(){const R=window.RENAISSANCE;if(!R||typeof R.open!=="function"){fault("canonical study path unavailable");return;}try{const g=R.open(new Date());if(g&&g.open===false)render();}catch(e){fault("canonical study path threw while opening today's encounter",e);}}
 function restCopy(g){if(!g)return"Renaissance is loading its life governor.";return g.msg||({spent:"Today's encounter is complete. Nothing else is owed.",sleep:"Sleep wins right now.",week:"The weekly life limit is protecting the rest of your life.",exam:"Medicine and sleep have priority near the exam.",deepwait:"A deep encounter is waiting for its allowed day.",seasondone:"Everything currently authored is complete.",off:"Renaissance is switched off on this device."}[g.why]||"Renaissance is resting today.");}
 function render(){
  const host=$("#rvHost");if(!host)return;const ts=todayState(),gate=ts.gate,today=ts.session;
@@ -47,5 +48,5 @@ function civilizeCampus(){const host=$("#rcHost");if(!host)return;const patch=()
 function polishShell(){const nav=[...document.querySelectorAll(".rsNav a")];nav.forEach(a=>{if(/COURSE MAP|WORLDS/i.test(a.textContent||"")){a.textContent="WORLDS";a.href="#rvHost";}if(/READER OS|SOURCE LAB/i.test(a.textContent||"")){a.textContent="SOURCE LAB";a.href="#rvSourceLab";}if(/TODAY/i.test(a.textContent||"")){a.textContent="TODAY";a.href="#rvHost";}});const sub=document.querySelector(".rsBrand small");if(sub)sub.textContent="INTELLECTUALITY · PRIVATE CIVILIZATION";const build=$("#rsBuild");if(build)build.dataset.civilization="1";}
 function boot(){render();civilizeCampus();polishShell();watchStudyRoot();}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.RENAISSANCE_CIVILIZATION={version:"1.4",groups:()=>JSON.parse(JSON.stringify(GROUPS)),today:()=>todayState().session?.id||null,refresh:render,doctor:()=>{const ids=GROUPS.flatMap(g=>g.ids),missing=ids.filter(id=>!byId(id)),failures=missing.map(id=>"missing encounter "+id);if(typeof window.RENAISSANCE?.gate!=="function")failures.push("canonical life governor missing");if(typeof window.RENAISSANCE?.open!=="function")failures.push("canonical study path missing");return{ok:!failures.length,metrics:{worlds:GROUPS.length,encounters:ids.length,methodSteps:METHOD.length},failures};}};
+window.RENAISSANCE_CIVILIZATION={version:"1.5",groups:()=>JSON.parse(JSON.stringify(GROUPS)),today:()=>todayState().session?.id||null,refresh:render,doctor:()=>{const ids=GROUPS.flatMap(g=>g.ids),missing=ids.filter(id=>!byId(id)),failures=missing.map(id=>"missing encounter "+id);if(typeof window.RENAISSANCE?.gate!=="function")failures.push("canonical life governor missing");if(typeof window.RENAISSANCE?.open!=="function")failures.push("canonical study path missing");return{ok:!failures.length,metrics:{worlds:GROUPS.length,encounters:ids.length,methodSteps:METHOD.length},failures};}};
 })();
