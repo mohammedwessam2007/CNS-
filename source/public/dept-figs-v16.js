@@ -2,8 +2,11 @@
  * The department's own line drawings of the neck (cervical fascia, great vessels, glands, cranial
  * nerves IX–XII) and, since v18.5, the figures of the Kasr Al Ainy NEU 205 book (neuroanatomy, head and
  * neck, ear, embryology, and the physiology chapters) are shown in the LEARN section they belong to and
- * after an answer on that topic. Where a section has official drawings they come first and the section's
- * web photo folds behind a tap: still there, no longer in the way.
+ * after an answer on that topic. Since v18.7 the set also holds Dr Sameh Doss's labelled drawings (head, neck and
+ * neuroanatomy; 490 drawings cut from his notebook pages): each is in the lesson section it teaches AND is picked,
+ * by its caption against the question and its explanation, for the answers it explains. Where a section has
+ * official drawings they come first (best match first) and the section's web photo folds behind a tap: still there,
+ * no longer in the way.
  * The site is public, so the drawings are shipped ENCRYPTED (AES-256-GCM, dept/<id>.bin). The key
  * reaches the owner's app once, through a link (#ixk=<kid>.<key>), or pasted in the app from the lock line
  * shown where drawings belong; it is kept on the device and in
@@ -106,28 +109,55 @@
   /* ───────── where each drawing is taught ───────── */
   const BY_SEC = new Map();
   for (const f of D.figs) for (const s of f.sec || []) (BY_SEC.get(s) || BY_SEC.set(s, []).get(s)).push(f);
-  const words = (t) => new Set((String(t).toLowerCase().match(/[a-z]{4,}/g) || []).map((w) => w.slice(0, 6)));
+  // best match first: "sc" is the relevance of the drawing's caption to that section (made when the set was built);
+  // drawings without a score keep their place after the scored ones; the sort is stable
+  const scIn = (f, sid) => {
+    const i = (f.sec || []).indexOf(sid);
+    return i >= 0 && f.sc ? f.sc[i] || 0 : 0;
+  };
+  for (const [sid, list] of BY_SEC) list.sort((a, b) => scIn(b, sid) - scIn(a, sid));
+  const STOP = new Set("which following these those their there about after before with from that this have been were your other more most some such only upon onto into over under each both also than then them they where when while within without around behind inside outside above below along across through during between lies lying part parts side form forms formed type types".split(" "));
+  const STOP6 = new Set([...STOP].map((w) => w.slice(0, 6)));
+  const words = (t) => new Set((String(t).toLowerCase().match(/[a-z]{4,}/g) || []).filter((w) => !STOP.has(w) && !STOP6.has(w.slice(0, 6))).map((w) => w.slice(0, 6)));
+  const FIGW = new Map(D.figs.map((f) => [f.id, words(f.cap)]));
+  const DF = new Map();
+  for (const w of FIGW.values()) for (const t of w) DF.set(t, (DF.get(t) || 0) + 1);
+  const idf = (t) => Math.log(1 + D.figs.length / (1 + (DF.get(t) || 0)));
   // a CNS-levels drill item → its figure (shown above the question, not again in the explanation)
   const drillFig = (qid) => {
     const m = /^DEPT-LEVELS-HIST-MCQ-(\d+)\d$/.exec(qid || "");
     return m ? D.figs.find((f) => f.drill === +m[1]) || null : null;
   };
-  function bestFor(qid) {
-    if (drillFig(qid)) return null;
-    const q = (window.EHSAN_QBANK?.questions || []).find((x) => x.id === qid);
-    if (!q) return null;
-    const sid = safe(() => window.INTELLECTUALITY_V15?.bestSection(qid)?.id, null);
-    const cands = (sid && BY_SEC.get(sid)) || [];
-    if (!cands.length) return null;
-    const want = words(q.stem + " " + (q.options || []).filter((o) => (q.answerKeys || []).includes(o.key)).map((o) => o.text).join(" "));
-    let best = cands[0],
-      top = -1;
-    for (const f of cands) {
-      const sc = [...words(f.cap)].filter((w) => want.has(w)).length;
-      if (sc > top) (best = f), (top = sc);
+  // The drawings for an answer: the question's own LEARN section first (its drawings, scored by how much of the
+  // question, the right answer and the explanation their caption says), then any other drawing that says a lot
+  // of it. At most three, each after the first only if it is at least half as good, so a picture is never shown for a weak match.
+  const PICKS = new Map();
+  const MIN = 5, GLOBAL = 14, SECBONUS = 5, SECOND = 0.5, MAXN = 3;
+  function pickFor(qid) {
+    if (PICKS.has(qid)) return PICKS.get(qid);
+    let out = [];
+    if (!drillFig(qid)) {
+      const q = (window.EHSAN_QBANK?.questions || []).find((x) => x.id === qid);
+      if (q) {
+        const sid = safe(() => window.INTELLECTUALITY_V15?.bestSection(qid)?.id, null);
+        const ex = safe(() => window.INTELLECTUALITY_V16?.explain(qid), null);
+        const want = words(q.stem + " " + (q.options || []).filter((o) => (q.answerKeys || []).includes(o.key)).map((o) => o.text).join(" ") + " " + (ex && ex.key ? ex.key : ""));
+        const inSec = new Set(((sid && BY_SEC.get(sid)) || []).map((f) => f.id));
+        const cand = [];
+        for (const f of D.figs) {
+          let o = 0;
+          for (const t of FIGW.get(f.id)) if (want.has(t)) o += idf(t);
+          const here = inSec.has(f.id);
+          if (here ? o >= MIN : o >= GLOBAL) cand.push({ f, sc: o + (here ? SECBONUS + 0.04 * scIn(f, sid) : 0) });
+        }
+        cand.sort((a, b) => b.sc - a.sc);
+        if (cand.length) out = cand.slice(0, MAXN).filter((c, i) => i === 0 || c.sc >= SECOND * cand[0].sc).map((c) => c.f);
+      }
     }
-    return best;
+    PICKS.set(qid, out);
+    return out;
   }
+  const bestFor = (qid) => pickFor(qid)[0] || null;
 
   /* ───────── rendering ───────── */
   const URLS = new Map();
@@ -150,7 +180,7 @@
   function card(f, quiz) {
     return (
       '<figure class="ixDept" data-ix-dept="' + E(f.id) + '"><div class="ixDeptLab">' +
-      (f.book ? '<span lang="ar" dir="rtl">كتاب القصر العيني</span> KASR AL AINY BOOK · FIG ' + E(f.book) : '<span lang="ar" dir="rtl">رسمة القسم</span> DEPARTMENT DRAWING') + "</div>" +
+      (f.sameh ? '<span lang="ar" dir="rtl">رسمة د. سامح دوس</span> DR SAMEH DOSS · LABELLED DRAWING' : f.book ? '<span lang="ar" dir="rtl">كتاب القصر العيني</span> KASR AL AINY BOOK · FIG ' + E(f.book) : '<span lang="ar" dir="rtl">رسمة القسم</span> DEPARTMENT DRAWING') + "</div>" +
       '<div class="ixDeptImg" style="aspect-ratio:' + (f.w || 4) + " / " + (f.h || 3) + '"><div class="v14Skeleton"><span></span></div></div>' +
       "<figcaption>" + E(f.cap) + (f.ans && !quiz ? '<span class="ixDeptAns">' + E(f.ans) + "</span>" : "") + "</figcaption></figure>"
     );
@@ -215,9 +245,9 @@
     });
     player.querySelectorAll(".v16Explain[data-qid]:not([data-ix-dept])").forEach((el) => {
       el.dataset.ixDept = "1";
-      const f = bestFor(el.dataset.qid);
-      if (!f) return;
-      const html = '<div class="ixDeptWrap">' + block([f], 1) + "</div>",
+      const fs = pickFor(el.dataset.qid);
+      if (!fs.length) return;
+      const html = '<div class="ixDeptWrap">' + block(fs, Math.min(2, fs.length)) + "</div>",
         at = el.querySelector(".v16Pics");
       if (at) at.insertAdjacentHTML("beforebegin", html);
       else el.insertAdjacentHTML("beforeend", html);
@@ -260,5 +290,5 @@
 
   new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
   capture().finally(schedule);
-  window.INTELLECTUALITY_DEPT = { unlocked, count: () => D.figs.length, sections: () => [...BY_SEC.keys()], bestFor: (qid) => bestFor(qid)?.id || null, drillFig: (qid) => drillFig(qid)?.id || null };
+  window.INTELLECTUALITY_DEPT = { unlocked, count: () => D.figs.length, sections: () => [...BY_SEC.keys()], bestFor: (qid) => bestFor(qid)?.id || null, pickFor: (qid) => pickFor(qid).map((f) => f.id), inSection: (sid) => (BY_SEC.get(sid) || []).map((f) => f.id), drillFig: (qid) => drillFig(qid)?.id || null };
 })();

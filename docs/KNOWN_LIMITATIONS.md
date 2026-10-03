@@ -1,4 +1,12 @@
-# Known Limitations (v18.6 · MCQ exam + Renaissance)
+# Known Limitations (v18.7 · MCQ exam + Renaissance)
+
+## v18.7 Dr Sameh Doss's labelled drawings
+
+- **490 drawings were added** (cut from 280 notebook pages of his handwritten notes), each in its lesson section and offered after matching answers. Details, numbers and how to rebuild: `docs/SAMEH_DOSS_DRAWINGS.md`.
+- **About 200 of them are lesson-only**: no question in the bank matches their caption. Placement in answers is a word-match score, not understanding; spot checks found no wrong picture, but a second or third picture can be loosely related.
+- **The crops are boxes**: a heading or a neighbouring label sometimes comes along, and a few are cut tight. about a dozen doubtful crops were dropped. The notebook paragraphs are not in the app.
+- **The site now serves 878 drawings (70 MB)**, each loaded when its section or answer opens and then cached on the device; a drawing works offline only after it has been opened once online.
+- **Held-out questions** also get drawings in their explanations; the picker reads the question at display time only. No note or alias is made from a held-out item.
 
 ## v18.6 the drawings are unlocked
 

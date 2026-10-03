@@ -1,4 +1,4 @@
-// Publish the prepared department drawings and Kasr Al Ainy book figures as plain JPEGs. v18.6: the owner asked
+// Publish the prepared department drawings, Kasr Al Ainy book figures and Dr Sameh Doss's labelled drawings as plain JPEGs. v18.6: the owner asked
 // (27 Sep 2026) for the lock to be removed so they show like every other picture, with no key or link.
 // Usage: node scripts/dept-figs/publish.mjs <prepared_dir>
 // Copies <id>.jpg into source/public/dept/ and writes the manifest source/public/dept-figs-v16-data.js.
@@ -31,7 +31,7 @@ for (const f of map.figs) {
   const buf = readFileSync(join(src, f.id + ".jpg"));
   writeFileSync(join(out, f.id + ".jpg"), buf);
   const { w, h } = jpegSize(buf);
-  figs.push({ id: f.id, sec: f.sec, cap: f.cap, ...(f.ans ? { ans: f.ans } : {}), ...(f.drill ? { drill: f.drill } : {}), ...(f.book ? { book: f.book } : {}), w, h, src: f.pdf });
+  figs.push({ id: f.id, sec: f.sec, ...(f.sc ? { sc: f.sc } : {}), cap: f.cap, ...(f.ans ? { ans: f.ans } : {}), ...(f.drill ? { drill: f.drill } : {}), ...(f.book ? { book: f.book } : {}), ...(f.sameh ? { sameh: f.sameh } : {}), w, h, src: f.pdf });
 }
 writeFileSync(
   join(root, "source", "public", "dept-figs-v16-data.js"),

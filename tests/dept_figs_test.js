@@ -1,5 +1,5 @@
-// Department drawings and the Kasr Al Ainy NEU 205 book figures. Since v18.6 they are ordinary pictures on the site
-// (the owner removed the lock, 27 Sep 2026): no key, no link, the same on every device.
+// Department drawings, the Kasr Al Ainy NEU 205 book figures and (v18.7) Dr Sameh Doss's labelled drawings. Since v18.6 they
+// are ordinary pictures on the site (the owner removed the lock, 27 Sep 2026): no key, no link, the same on every device.
 // Usage: node tests/dept_figs_test.js [out.json]
 const fs = require('fs');
 const path = require('path');
@@ -20,7 +20,7 @@ const inject = ([secId, qid]) => {
     const all = await s.page.evaluate(async () => {
       const D = window.INTELLECTUALITY_DEPT_FIGS,
         secs = new Set((window.INTELLECTUALITY_LEARN_NOTES?.chapters || []).flatMap((c) => (c.s || []).map((x, i) => x.id || c.id + '#' + i))),
-        bad = [], ids = new Set(), books = new Set();
+        bad = [], ids = new Set(), books = new Set(), sameh = [];
       for (const f of D.figs) {
         if (ids.has(f.id)) bad.push(f.id + ':dup');
         ids.add(f.id);
@@ -30,12 +30,17 @@ const inject = ([secId, qid]) => {
           if (books.has(f.book) || !(f.book >= 1 && f.book <= 501)) bad.push(f.id + ':book');
           books.add(f.book);
         }
+        if (f.sameh) {
+          sameh.push(f);
+          if (!(f.sameh >= 1 && f.sameh <= 283) || !/^sd-\d{3}[a-h]?$/.test(f.id) || !f.sc || f.sc.length !== f.sec.length || f.book) bad.push(f.id + ':sameh');
+          if (!(f.w >= 150 && f.w <= 1100 && f.h >= 150 && f.h <= 1300)) bad.push(f.id + ':size');
+        }
         const res = await fetch('/dept/' + f.id + '.jpg'), b = new Uint8Array(await res.arrayBuffer());
         if (!res.ok || b.length < 1000 || !(b[0] === 0xff && b[1] === 0xd8)) bad.push(f.id + ':file');
       }
-      return { plain: D.plain, n: D.figs.length, book: books.size, secs: new Set(D.figs.flatMap((f) => f.sec)).size, notes: secs.size, nBad: bad.length, bad: bad.slice(0, 8) };
+      return { plain: D.plain, n: D.figs.length, book: books.size, sameh: sameh.length, samehPages: new Set(sameh.map((f) => f.sameh)).size, secs: new Set(D.figs.flatMap((f) => f.sec)).size, notes: secs.size, nBad: bad.length, bad: bad.slice(0, 8) };
     });
-    check('D1', 'The whole set is on the site as ordinary pictures (department drawings + Kasr Al Ainy NEU 205 book figures): every file a JPEG, every drawing placed in a LEARN section that exists and captioned, no book figure twice', all.plain === true && all.n >= 380 && all.book >= 330 && all.secs >= 190 && all.notes >= 250 && all.nBad === 0, all);
+    check('D1', 'The whole set is on the site as ordinary pictures (department drawings + Kasr Al Ainy NEU 205 book figures + Dr Sameh Doss\'s labelled drawings): every file a JPEG, every drawing placed in a LEARN section that exists and captioned, no book figure twice, every Sameh drawing from a notebook page 1-283 with a relevance score per placement', all.plain === true && all.n >= 860 && all.book >= 330 && all.sameh >= 480 && all.samehPages >= 270 && all.secs >= 190 && all.notes >= 250 && all.nBad === 0, all);
     await s.page.evaluate(inject, ['an-submandibular#3', 'EHSAN-ANAT-CAROTID-TRIANGLE-MCQ-7']);
     await s.page.waitForTimeout(1500);
     const r = await s.page.evaluate(() => {
@@ -44,11 +49,11 @@ const inject = ([secId, qid]) => {
       return {
         unlocked: INTELLECTUALITY_DEPT.unlocked(), locks: document.querySelectorAll('.ixDeptLock').length,
         secShown: sec.querySelectorAll('.ixDeptWrap > .ixDeptRow > .ixDept').length, secMore: sec.querySelectorAll('.ixDeptMore .ixDept').length, secImgs: imgs(sec), beforePics: !!sec.querySelector('.ixDeptWrap + .v15Pics'),
-        exFig: ex.querySelector('.ixDept')?.dataset.ixDept || null, exImgs: imgs(ex),
+        exPicks: INTELLECTUALITY_DEPT.pickFor(ex.dataset.qid).map((id) => window.INTELLECTUALITY_DEPT_FIGS.figs.find((f) => f.id === id).cap), exCards: ex.querySelectorAll('.ixDept').length, exOpen: ex.querySelectorAll('.ixDeptWrap > .ixDeptRow > .ixDept').length, exImgs: imgs(ex),
       };
     });
     check('D2', 'With no key and no link, a lesson section shows its drawings first (2 open, the rest one tap away), each a real picture; no lock line anywhere', r.unlocked && r.locks === 0 && r.secShown === 2 && r.secMore >= 1 && r.secImgs.length === 2 && r.secImgs.every((i) => i.w > 100 && i.jpg) && r.beforePics, r);
-    check('D3', 'After an answer: the one drawing that fits the question is shown (internal jugular vein question → the IJV drawing)', r.exFig === 'nv-ijv' && r.exImgs.length === 1 && r.exImgs[0].w > 100, r);
+    check('D3', 'After an answer: the drawings that fit the question are shown, best first, at most three and two open (internal jugular vein question → drawings that show the internal jugular vein and the carotid sheath)', r.exPicks.length >= 1 && r.exPicks.every((c) => /internal jugular|carotid sheath/i.test(c)) && r.exPicks.length <= 3 && r.exCards === r.exPicks.length && r.exOpen <= 2 && r.exImgs.length >= 1 && r.exImgs.every((i) => i.w > 100), r);
     // D4: a physiology section opens with the book's figures; its web photo folds behind a tap below them
     await s.page.evaluate(() => document.getElementById('player').insertAdjacentHTML('beforeend', '<div class="v15Sec" data-v15-sec="ph-vestibular#0"><div class="v15Head"><h3>t</h3></div><div class="v15Pics"><figure class="v15Pic" data-v15-done="1"><img alt="web photo"></figure></div><ul class="v15Pts"><li>x</li></ul></div>'));
     await s.page.waitForTimeout(1500);
@@ -64,6 +69,49 @@ const inject = ([secId, qid]) => {
     const z2 = await s.page.evaluate(() => !!document.querySelector('.ixDeptZoom'));
     check('D5', 'Tap a drawing → full screen; tap → back', z1 && !z2, { z1, z2 });
     check('D6', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
+    await s.close();
+  }
+  // ── D11–D16: Dr Sameh Doss's labelled drawings, in the lessons and in the answers ──
+  {
+    const s = await open({ v16: true, time: T, state: null, settle: 1500, viewport: { width: 390, height: 844 }, touch: true });
+    const m = await s.page.evaluate(() => {
+      const D = window.INTELLECTUALITY_DEPT_FIGS, QB = window.EHSAN_QBANK.questions, X = window.INTELLECTUALITY_DEPT;
+      const sameh = D.figs.filter((f) => f.sameh), inLesson = new Set(sameh.flatMap((f) => f.sec.map(() => f.id)));
+      const picks = new Map(QB.filter((q) => q.split === 'practice').map((q) => [q.id, X.pickFor(q.id)]));
+      const usedSameh = new Set([...picks.values()].flat().filter((i) => /^sd-/.test(i)));
+      const find = (frag) => QB.find((q) => q.split === 'practice' && q.stem.includes(frag));
+      const spot = {};
+      for (const [k, frag] of Object.entries({ abducent: 'Lateral rectus muscle of the eye is supplied by', fossa: 'interpeduncular fossa contain', ventricle: 'Concerning the lateral ventricle, choose one correct answer', rln: 'Regarding the left recurrent laryngeal nerve' })) { const q = find(frag); spot[k] = q ? X.pickFor(q.id) : null; }
+      const none = ['Nissl bodies', 'Ependymal cells', 'Information is carried away from the neuron cell body'].map((f) => { const q = find(f); return q ? X.pickFor(q.id) : null; });
+      const sectionsOf = (id) => D.figs.find((f) => f.id === id).sec;
+      return {
+        nSameh: sameh.length, inLesson: inLesson.size, practice: picks.size, withFig: [...picks.values()].filter((a) => a.length).length, withSameh: [...picks.values()].filter((a) => a.some((i) => /^sd-/.test(i))).length,
+        usedSameh: usedSameh.size, spot, none, maxPer: Math.max(...[...picks.values()].map((a) => a.length)), dupInPick: [...picks.values()].some((a) => new Set(a).size !== a.length),
+        secAbducent: sectionsOf('sd-080a'), ventSec: X.inSection('an-lateral-ventricle#1').filter((i) => /^sd-/.test(i)).length,
+      };
+    });
+    check('D11', 'Every one of the 490 Sameh drawings is in at least one LEARN section', m.nSameh >= 480 && m.inLesson === m.nSameh, m);
+    check('D12', 'In the answers: most practice questions get a fitting drawing (>= 700 of 1061), over 400 of them one of Dr Sameh Doss\'s, at most three per answer, never the same drawing twice, and 220+ of his drawings are the answer to some question', m.practice >= 1000 && m.withFig >= 700 && m.withSameh >= 400 && m.maxPer <= 3 && !m.dupInPick && m.usedSameh >= 220, m);
+    check('D13', 'The right drawing for the right question (cranial nerve VI → the abducent nerve drawing; interpeduncular fossa → its drawing; lateral ventricle → ventricle drawings; left recurrent laryngeal nerve → the recurrent nerve drawing)', m.spot.abducent?.[0] === 'sd-080a' && m.spot.fossa?.[0] === 'sd-216b' && m.spot.ventricle?.some((i) => /^sd-(278|196a|191[abc])$/.test(i)) && m.spot.rln?.[0] === 'sd-138b', m.spot);
+    check('D14', 'No picture is forced onto a question it does not explain (Nissl bodies, ependymal cells, axon: none)', m.none.every((a) => Array.isArray(a) && a.length === 0), m.none);
+    // rendered: a lesson section and an answer on a phone-size screen, labelled as Dr Sameh Doss's, all pictures load
+    await s.page.evaluate(() => {
+      const qid = window.EHSAN_QBANK.questions.find((q) => q.stem.includes('Lateral rectus muscle of the eye is supplied by')).id;
+      document.getElementById('player').insertAdjacentHTML('beforeend', '<div class="v15Sec" data-v15-sec="an-lateral-ventricle#1"><div class="v15Head"><h3>t</h3></div><div class="v15Pics"></div><ul class="v15Pts"><li>x</li></ul></div><div class="v16Explain" data-qid="' + qid + '"><div class="v16Row key">k</div></div>');
+    });
+    await s.page.waitForTimeout(2000);
+    const r = await s.page.evaluate(() => {
+      const sec = document.querySelector('.v15Sec[data-v15-sec="an-lateral-ventricle#1"]'), ex = document.querySelector('.v16Explain');
+      const ok = (el) => [...el.querySelectorAll('.ixDeptWrap > .ixDeptRow .ixDept img')].map((i) => i.naturalWidth);
+      const open = sec.querySelector('.ixDeptMore');
+      return { secLab: [...sec.querySelectorAll('.ixDeptWrap > .ixDeptRow .ixDeptLab')].map((l) => l.textContent), secW: ok(sec), exLab: [...ex.querySelectorAll('.ixDeptLab')].map((l) => l.textContent), exW: ok(ex), more: !!open, overflowX: document.documentElement.scrollWidth > innerWidth + 1 };
+    });
+    check('D15', 'On a phone-size screen: the lesson section and the answer show Dr Sameh Doss\'s drawings, labelled with his name, every picture loads, and the page does not scroll sideways', r.secLab.length === 2 && r.secLab.every((t) => /DR SAMEH DOSS/.test(t)) && r.secW.every((w) => w > 150) && r.exLab.length >= 1 && /DR SAMEH DOSS/.test(r.exLab[0]) && r.exW.every((w) => w > 150) && r.more && !r.overflowX, r);
+    // the folded drawings load when opened
+    await s.page.evaluate(() => document.querySelector('.v15Sec .ixDeptMore summary').click());
+    await s.page.waitForTimeout(1500);
+    const f = await s.page.evaluate(() => [...document.querySelectorAll('.v15Sec .ixDeptMore .ixDept img')].map((i) => i.naturalWidth));
+    check('D16', 'The "more drawings" fold opens and its pictures load; no page errors', f.length >= 1 && f.every((w) => w > 150) && s.log.errors.length === 0, { f, errors: s.log.errors.slice(0, 2) });
     await s.close();
   }
   // ── D7–D10: the CNS-levels drill (50 figure items) on a device with nothing stored ──
