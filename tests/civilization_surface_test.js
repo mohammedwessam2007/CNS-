@@ -1,8 +1,11 @@
 "use strict";
-const fs=require("fs"),path=require("path"),root=path.resolve(__dirname,"..");
+const fs=require("fs"),path=require("path"),vm=require("vm"),root=path.resolve(__dirname,"..");
 const read=p=>fs.readFileSync(path.join(root,p),"utf8");
 const index=read("source/public/index.html"),js=read("source/public/renaissance-civilization.js"),xp=read("source/public/renaissance-experience.js"),css=read("source/public/renaissance-civilization.css"),build=read("deploy/vercel/build.mjs"),sw=read("source/public/renaissance-sw.js");
 let n=0;function ok(name,cond){if(!cond)throw Error(name);console.log("PASS",++n,name);}
+function parses(name,src){try{new vm.Script(src,{filename:name});return true;}catch(e){console.error(e);return false;}}
+ok("civilization javascript parses",parses("renaissance-civilization.js",js));
+ok("experience javascript parses",parses("renaissance-experience.js",xp));
 for(const a of ["renaissance-civilization.css","renaissance-civilization.js","renaissance-experience.js"]){ok(a+" loaded",index.includes("/"+a));ok(a+" shipped",build.includes('"'+a+'"'));ok(a+" cached",sw.includes('"/'+a+'"'));}
 ok("civilization precedes source lab",index.indexOf('id="rvHost"')<index.indexOf('id="rvSourceLab"'));
 const surface=index+"\n"+js+"\n"+xp+"\n"+css;
