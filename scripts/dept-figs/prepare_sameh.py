@@ -41,7 +41,10 @@ def distinct_pages(folder):
     return pages
 
 
-def ocr_lines(im, scale):
+def ocr_lines(im, scale, n=None):
+    cache = os.environ.get("SAMEH_OCR_DIR")
+    if cache and n and os.path.exists(os.path.join(cache, "p%03d.tsv" % n)):
+        return read_lines(os.path.join(cache, "p%03d.tsv" % n), scale)
     g = im.convert("L")
     h = round(g.height * OCRW / g.width)
     with tempfile.TemporaryDirectory() as td:
@@ -49,8 +52,14 @@ def ocr_lines(im, scale):
         g.resize((OCRW, h), Image.LANCZOS).save(png)
         env = dict(os.environ, OMP_THREAD_LIMIT="1")
         subprocess.run(["tesseract", png, os.path.join(td, "p"), "--psm", "11", "tsv"], check=True, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return read_lines(os.path.join(td, "p.tsv"), scale)
+
+
+def read_lines(tsv, scale):
+    """OCR word boxes grouped into lines: bounding box, word count, mean confidence, letters"""
+    if True:
         out = {}
-        for r in csv.reader(open(os.path.join(td, "p.tsv"), encoding="utf8"), delimiter="\t", quoting=csv.QUOTE_NONE):
+        for r in csv.reader(open(tsv, encoding="utf8"), delimiter="\t", quoting=csv.QUOTE_NONE):
             if len(r) < 12 or r[0] != "5" or not r[11].strip():
                 continue
             try:
@@ -87,6 +96,30 @@ def whiten_text(im, lines, box, W):
     return Image.fromarray(arr)
 
 
+def clear_edges(crop):
+    """A scrap of a neighbouring line that the crop's edge cuts (half a word, the tail of a heading) is removed: a small,
+    line-high group of ink that touches the edge. Only those pixels are whitened, never a rectangle, so a drawing that
+    runs off the edge keeps its strokes (they belong to a big group)."""
+    rgb = np.asarray(crop.convert("RGB")).copy()
+    g = np.asarray(crop.convert("L"))
+    H, W = g.shape
+    ink = (g < 160).astype(np.uint8)
+    grp = cv2.dilate(ink, np.ones((5, 9), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(grp, connectivity=8)
+    for i in range(1, n):
+        x, y, w, h, _ = st[i]
+        edge = x <= 4 or y <= 4 or x + w >= W - 4 or y + h >= H - 4
+        if edge and h <= max(40, min(70, 0.07 * H)) and w <= 0.6 * W:
+            rgb[(lab == i) & (ink > 0)] = 255
+    return Image.fromarray(rgb)
+
+
+def colourful(im):
+    """a drawing printed in colour (red arteries, blue veins): more than 1.5% of its pixels clearly coloured"""
+    hsv = np.asarray(im.convert("HSV")).astype(int)
+    return ((hsv[..., 1] > 90) & (hsv[..., 2] > 60)).mean() > 0.015
+
+
 def main(folder, out):
     os.makedirs(out, exist_ok=True)
     m = json.load(open(os.path.join(os.path.dirname(__file__), "map.json"), encoding="utf8"))
@@ -101,9 +134,10 @@ def main(folder, out):
     for n, figs in sorted(wanted.items()):
         im = pages[n - 1]
         W, H = im.size
-        a = np.asarray(im).astype(int)
-        colour = np.abs(a[..., 0] - a[..., 2]).mean() > 12
-        lines = [] if colour else ocr_lines(im, W / OCRW)
+        hsv = np.asarray(im.convert("HSV")).astype(int)
+        colour = ((hsv[..., 1] > 90) & (hsv[..., 2] > 60)).mean() > 0.3  # a colour plate (a notes page with a coloured drawing is not)
+        lines = [] if colour else ocr_lines(im, W / OCRW, n)
+        orig = im
         if not colour:
             g0 = np.asarray(im.convert("L"))
             if np.median(g0) < 228:
@@ -113,21 +147,34 @@ def main(folder, out):
                 im = Image.fromarray(nrm).convert("RGB")
         for f in figs:
             x0, y0, x1, y1 = f["box"]
-            X0, X1 = max(0, int((x0 - PAD) / 100 * W)), min(W, int((x1 + PAD) / 100 * W))
-            Y0, Y1 = max(0, int((y0 - PAD) / 100 * H)), min(H, int((y1 + PAD) / 100 * H))
-            src = im if colour else whiten_text(im, lines, (X0, Y0, X1, Y1), W)
+            pad = f.get("pad", PAD)  # a smaller margin where notes sit right against the drawing
+            X0, X1 = max(0, int((x0 - pad) / 100 * W)), min(W, int((x1 + pad) / 100 * W))
+            Y0, Y1 = max(0, int((y0 - pad) / 100 * H)), min(H, int((y1 + pad) / 100 * H))
+            tint = colour or colourful(orig.crop((X0, Y0, X1, Y1)))  # a colour plate, or a coloured drawing on a notes page
+            base = orig if tint else im
+            src = base if colour else whiten_text(base, lines, (X0, Y0, X1, Y1), W)
+            if f.get("fill"):
+                arr = np.asarray(src).copy()
+                for fx0, fy0, fx1, fy1 in f["fill"]:
+                    arr[int(fy0 / 100 * H):int(fy1 / 100 * H), int(fx0 / 100 * W):int(fx1 / 100 * W)] = 255
+                src = Image.fromarray(arr)
             crop = src.crop((X0, Y0, X1, Y1))
             if not colour:
+                crop = clear_edges(crop)
                 mk = (np.asarray(crop.convert("L")) < 150).astype(np.uint8)
                 mk[:5, :] = 0; mk[-5:, :] = 0; mk[:, :5] = 0; mk[:, -5:] = 0
                 mk = cv2.morphologyEx(mk, cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
-                ys, xs = np.where(mk > 0)
+                # trim to the ink, but never through a label: only specks (a few pixels) are ignored, not the thin
+                # strokes of a small label at the edge (a percentile cut shaved those off)
+                n_, lab, st, _ = cv2.connectedComponentsWithStats(mk, connectivity=8)
+                keep = np.isin(lab, [i for i in range(1, n_) if st[i][4] >= 12])
+                ys, xs = np.where(keep)
                 if len(xs) > 50:
-                    tx0, tx1 = np.percentile(xs, [0.2, 99.8])
-                    ty0, ty1 = np.percentile(ys, [0.2, 99.8])
+                    tx0, tx1 = xs.min(), xs.max()
+                    ty0, ty1 = ys.min(), ys.max()
                     mg = 14
                     crop = crop.crop((max(0, int(tx0) - mg), max(0, int(ty0) - mg), min(crop.width, int(tx1) + mg), min(crop.height, int(ty1) + mg)))
-                crop = ImageOps.autocontrast(crop.convert("L"), cutoff=1)
+                crop = ImageOps.autocontrast(crop if tint else crop.convert("L"), cutoff=1)
             k = min(1.0, MAXW / crop.width, MAXH / crop.height)
             if k < 1.0:
                 crop = crop.resize((max(1, int(crop.width * k)), max(1, int(crop.height * k))), Image.LANCZOS)

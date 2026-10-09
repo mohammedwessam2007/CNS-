@@ -1,4 +1,13 @@
-# Known Limitations (v18.7 · MCQ exam + Renaissance)
+# Known Limitations (v18.8 · MCQ exam + Renaissance)
+
+## v18.8 fixes ("super buggy" round)
+
+- Phone/iPad top bar: the course-map button no longer pushes the course name and the date into a second row that covered the lesson.
+- Drawing viewer: full screen with ＋/－ magnify (to 3×), tap to magnify, drag to move, ✕/Esc to close; the page behind no longer scrolls.
+- Every one of Dr Sameh Doss's drawings re-boxed by hand (283 pages); notes inside drawings whitened, missed drawings added, split drawings joined; the trim no longer shaves small labels off the edge.
+- Drawings are matched to answers by meaning (see docs/SAMEH_DOSS_DRAWINGS.md). Not done by an AI model: a hand-made rule list.
+- Not verified: the live site after this push (only the Vercel deployment listing can be read from here).
+
 
 ## v18.7 Dr Sameh Doss's labelled drawings
 

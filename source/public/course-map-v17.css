@@ -81,3 +81,8 @@ html.ixMpNoScroll,html.ixMpNoScroll body{overflow:hidden}
 /* reader: the lesson's own white note cards */
 .ixMpReadBody{max-width:820px}
 .ixMpSec{margin:0 0 14px}
+/* v18.7 fix: the course-map button is a 4th item in the top bar. Below 900 px the menu button shows too, and the bar's
+   grid had one column too few, so the button stretched across the bar and the course name and calendar wrapped into a
+   second row that floated over the lesson. Give the button its own narrow column. */
+@media(max-width:900px){.courseTopbar{grid-template-columns:36px auto minmax(0,1fr) 120px}.courseTopbar .ixMpOpen{margin-left:0}}
+@media(max-width:600px){.courseTopbar{grid-template-columns:36px auto minmax(0,1fr)}}

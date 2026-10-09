@@ -62,12 +62,18 @@ const inject = ([secId, qid]) => {
       return { lab: sec.querySelector('.ixDeptLab')?.textContent || '', imgs: [...sec.querySelectorAll('.ixDept img')].filter((i) => i.naturalWidth > 100).length, folded: !!sec.querySelector(':scope > .v15Pics > details.ixWebPic:not([open]) figure.v15Pic'), order: !!sec.querySelector(':scope > .ixDeptWrap + .v15Pics') };
     });
     check('D4', 'A physiology section (vestibular hair cells) opens with the Kasr Al Ainy book figures, labelled with the book\'s figure number; the section\'s web photo folds behind a tap below them', /KASR AL AINY BOOK · FIG \d+/.test(b.lab) && b.imgs >= 1 && b.folded && b.order, b);
-    // D5: the drawing opens full screen and closes with a tap
+    // D5 (v18.8 viewer): tap a drawing → full screen; tap the drawing or ＋ to magnify (and drag to move); ✕ or Esc closes
     await s.page.click('.v15Sec[data-v15-sec="an-submandibular#3"] .ixDept img');
     const z1 = await s.page.evaluate(() => !!document.querySelector('.ixDeptZoom img'));
-    await s.page.click('.ixDeptZoom');
-    const z2 = await s.page.evaluate(() => !!document.querySelector('.ixDeptZoom'));
-    check('D5', 'Tap a drawing → full screen; tap → back', z1 && !z2, { z1, z2 });
+    const w0 = await s.page.evaluate(() => document.querySelector('.ixDeptZoom img').getBoundingClientRect().width);
+    await s.page.click('.ixDeptZoom [data-ixz="in"]');
+    const w1 = await s.page.evaluate(() => document.querySelector('.ixDeptZoom img').getBoundingClientRect().width);
+    await s.page.click('.ixDeptZoom [data-ixz="close"]');
+    const z2 = await s.page.evaluate(() => !!document.querySelector('.ixDeptZoom') || document.documentElement.classList.contains('ixDZOpen'));
+    await s.page.click('.v15Sec[data-v15-sec="an-submandibular#3"] .ixDept img');
+    await s.page.keyboard.press('Escape');
+    const z3 = await s.page.evaluate(() => !!document.querySelector('.ixDeptZoom'));
+    check('D5', 'Tap a drawing → full screen; ＋ magnifies it; ✕ and Esc close it', z1 && w1 > w0 * 1.5 && !z2 && !z3, { z1, w0, w1, z2, z3 });
     check('D6', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 2));
     await s.close();
   }
@@ -94,6 +100,20 @@ const inject = ([secId, qid]) => {
     check('D12', 'In the answers: most practice questions get a fitting drawing (>= 700 of 1061), over 400 of them one of Dr Sameh Doss\'s, at most three per answer, never the same drawing twice, and 220+ of his drawings are the answer to some question', m.practice >= 1000 && m.withFig >= 700 && m.withSameh >= 400 && m.maxPer <= 3 && !m.dupInPick && m.usedSameh >= 220, m);
     check('D13', 'The right drawing for the right question (cranial nerve VI → the abducent nerve drawing; interpeduncular fossa → its drawing; lateral ventricle → ventricle drawings; left recurrent laryngeal nerve → the recurrent nerve drawing)', m.spot.abducent?.[0] === 'sd-080a' && m.spot.fossa?.[0] === 'sd-216b' && m.spot.ventricle?.some((i) => /^sd-(278|196a|191[abc])$/.test(i)) && m.spot.rln?.[0] === 'sd-138b', m.spot);
     check('D14', 'No picture is forced onto a question it does not explain (Nissl bodies, ependymal cells, axon: none)', m.none.every((a) => Array.isArray(a) && a.length === 0), m.none);
+    // D17 (v18.8): matching by meaning, not only the same words. These questions never name the structure the drawing
+    // shows (or name it another way): a facial palsy and the masseter (a muscle of mastication, mandibular nerve);
+    // "Purkinje cells" and the cerebellar cortex; tabes dorsalis and the dorsal columns; a deaf child and the organ of Corti.
+    const u = await s.page.evaluate(() => {
+      const QB = window.EHSAN_QBANK.questions, X = window.INTELLECTUALITY_DEPT, C = window.INTELLECTUALITY_FIG_CONCEPTS;
+      const caps = (frag) => { const q = QB.find((x) => x.split === 'practice' && x.stem.includes(frag)); return q ? X.pickFor(q.id).map((id) => window.INTELLECTUALITY_DEPT_FIGS.figs.find((f) => f.id === id).cap.toLowerCase()) : null; };
+      const has = (t, w) => C.tokens(t).has(w);
+      return {
+        masseter: caps('wakes up with a facial nerve'), purkinje: caps('Purkinje cells are found in'), tabes: caps('Tabes dorsalis is'), deaf: caps('Cochlear implant was recommended'),
+        cn6: has('paralysis of CN VI', 'abduce'), lr: has('lateral rectus palsy', 'abduce'), pica: has('PICA occlusion', 'cerebe'), plural: has('the nuclei', 'nucleu') && has('fibers', 'fibre'), horner: has("Horner's syndrome", 'sympat'),
+      };
+    });
+    check('D17', 'Matching by meaning: a nerve number, a muscle, an abbreviation, a syndrome or a plural finds the drawing of what it means (facial palsy → the masseter/mastication drawing; Purkinje cells → the cerebellum; tabes dorsalis → the dorsal columns; a deaf child → the cochlea)',
+      u.masseter?.[0]?.includes('masseter') && u.purkinje?.[0]?.includes('cerebell') && u.tabes?.[0] && /gracil|dorsal column|posterior column/.test(u.tabes[0]) && u.deaf?.[0]?.includes('cochle') && u.cn6 && u.lr && u.pica && u.plural && u.horner, u);
     // rendered: a lesson section and an answer on a phone-size screen, labelled as Dr Sameh Doss's, all pictures load
     await s.page.evaluate(() => {
       const qid = window.EHSAN_QBANK.questions.find((q) => q.stem.includes('Lateral rectus muscle of the eye is supplied by')).id;

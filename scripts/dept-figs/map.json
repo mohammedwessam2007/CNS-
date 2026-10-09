@@ -5019,10 +5019,10 @@
 ],
 "cap": "The boundaries of the scalp seen from above: supra-orbital margins, superior temporal lines, external occipital protuberance, highest nuchal lines",
 "box": [
-56.0,
-6.0,
-84.0,
-27.0
+63.0,
+8.0,
+84.5,
+27.5
 ]
 },
 {
@@ -5037,8 +5037,8 @@
 ],
 "cap": "The five layers of the scalp (S.C.A.L.P.): skin, connective tissue, aponeurosis, loose areolar tissue, pericranium",
 "box": [
-46.0,
-29.0,
+57.0,
+28.5,
 99.0,
 67.0
 ]
@@ -5055,10 +5055,10 @@
 ],
 "cap": "The pericranium (periosteum) is firmly attached to the sutures of the skull",
 "box": [
-66.0,
-66.0,
-99.0,
-76.0
+67.0,
+67.0,
+98.5,
+75.5
 ]
 },
 {
@@ -5074,9 +5074,9 @@
 "cap": "The occipitofrontalis muscle: frontal and occipital bellies joined by the epicranial aponeurosis",
 "box": [
 58.0,
-76.0,
+77.5,
 99.0,
-97.0
+99.0
 ]
 },
 {
@@ -5095,8 +5095,8 @@
 ],
 "cap": "Norma basalis externa: the base of the skull seen from below, divided into anterior, middle and posterior parts",
 "box": [
-46.0,
-7.0,
+58.0,
+9.5,
 99.0,
 46.0
 ]
@@ -5115,7 +5115,7 @@
 ],
 "cap": "The hard (bony) palate: palatine process of the maxilla, horizontal plate of the palatine bone, incisive fossa, palatine crest, post-nasal spine",
 "box": [
-56.0,
+64.0,
 48.0,
 99.0,
 84.0
@@ -5133,10 +5133,18 @@
 ],
 "cap": "The skull of the newborn from the side: the antero-lateral (sphenoidal) and postero-lateral (mastoid) fontanelles",
 "box": [
-54.0,
-1.0,
-99.0,
-23.0
+53.0,
+3.0,
+98.0,
+22.5
+],
+"fill": [
+[
+50.0,
+0.0,
+57.5,
+7.5
+]
 ]
 },
 {
@@ -5152,9 +5160,9 @@
 "cap": "The skull of the newborn from above: frontal suture, anterior and posterior fontanelles",
 "box": [
 60.0,
-22.0,
-99.0,
-46.0
+23.5,
+98.0,
+45.5
 ]
 },
 {
@@ -5189,10 +5197,10 @@
 ],
 "cap": "The newborn temporal bone: squamous part, incomplete tympanic ring and undeveloped mastoid",
 "box": [
-66.0,
-80.0,
-99.0,
-97.0
+67.0,
+81.0,
+98.0,
+96.5
 ]
 },
 {
@@ -5210,9 +5218,9 @@
 "cap": "Norma frontalis: the front of the skull with labels (frontal eminence, glabella, nasion, supra-orbital notch, infra-orbital foramen, nasal bones, mental foramen)",
 "box": [
 0.0,
-6.0,
-94.0,
-50.0
+6.5,
+90.0,
+48.8
 ]
 },
 {
@@ -5229,8 +5237,8 @@
 ],
 "cap": "The zygomatic bone: frontal, temporal, maxillary and orbital processes",
 "box": [
-62.0,
-78.0,
+67.0,
+78.5,
 99.0,
 98.0
 ]
@@ -5247,10 +5255,10 @@
 ],
 "cap": "Norma lateralis: the side of the skull (temporal fossa, squamous temporal, mastoid process, styloid process, zygomatic arch, mandible) with the labelled bones",
 "box": [
-2.0,
+1.0,
 8.0,
-99.0,
-46.0
+97.5,
+46.8
 ]
 },
 {
@@ -5287,10 +5295,10 @@
 ],
 "cap": "The ramus of the mandible: condylar and coronoid processes, mandibular notch, angle and borders",
 "box": [
-52.0,
+56.5,
 46.0,
 99.0,
-71.0
+70.5
 ]
 },
 {
@@ -5323,10 +5331,10 @@
 ],
 "cap": "The maxilla: frontal process, orbital surface, anterior surface, canine fossa and eminence, alveolar process",
 "box": [
-67.0,
+68.5,
 2.0,
 99.0,
-33.0
+31.5
 ]
 },
 {
@@ -5364,8 +5372,8 @@
 "cap": "The posterior cranial fossa: foramen magnum, clivus, jugular foramen, hypoglossal canal, internal auditory meatus, sulci for the sigmoid, transverse and petrosal sinuses",
 "box": [
 2.0,
-50.0,
-99.0,
+50.5,
+97.5,
 94.0
 ]
 },
@@ -5403,10 +5411,24 @@
 ],
 "cap": "The incisive fossa and the greater palatine foramen on the hard palate, with the nerves passing through them",
 "box": [
+66.5,
+14.0,
+96.5,
+27.2
+],
+"fill": [
+[
 66.0,
-12.0,
+22.5,
+74.5,
+28.0
+],
+[
+79.5,
+24.5,
 97.0,
-30.0
+28.0
+]
 ]
 },
 {
@@ -5424,7 +5446,7 @@
 "cap": "The middle part of the norma basalis externa: vomer, body of the sphenoid, pterygoid process, petrous and tympanic parts of the temporal bone, basilar part of the occipital bone",
 "box": [
 30.0,
-50.0,
+51.5,
 99.0,
 99.0
 ]
@@ -5441,10 +5463,10 @@
 ],
 "cap": "The infratemporal region from below: maxillary tuberosity, medial and lateral pterygoid plates, pterygoid hamulus, foramen ovale, foramen spinosum, foramen lacerum",
 "box": [
-1.0,
-7.0,
-80.0,
-45.0
+0.0,
+7.5,
+80.5,
+44.8
 ]
 },
 {
@@ -5459,10 +5481,10 @@
 ],
 "cap": "The pterygoid plates: the lateral and medial pterygoid plates, the scaphoid fossa and the pterygoid tubercle",
 "box": [
-70.0,
-71.0,
-99.0,
-97.0
+72.5,
+71.5,
+98.5,
+93.0
 ]
 },
 {
@@ -5477,10 +5499,10 @@
 ],
 "cap": "The mandible: body, ramus, condylar and coronoid processes, mandibular notch, alveolar margin, symphysis menti, mental protuberance and foramen, oblique line",
 "box": [
-6.0,
-14.0,
-96.0,
-52.0
+8.0,
+15.5,
+93.0,
+51.2
 ]
 },
 {
@@ -5499,8 +5521,8 @@
 "box": [
 2.0,
 1.0,
-99.0,
-38.0
+98.0,
+36.6
 ]
 },
 {
@@ -5515,10 +5537,10 @@
 ],
 "cap": "The occipitofrontalis: occipital bellies and the epicranial aponeurosis seen from above",
 "box": [
-57.0,
+58.5,
 4.0,
 92.0,
-30.0
+27.8
 ]
 },
 {
@@ -5534,9 +5556,9 @@
 "cap": "The frontal bellies, the occipital bellies and the epicranial aponeurosis on the skull",
 "box": [
 56.0,
-30.0,
-92.0,
-55.0
+29.5,
+91.5,
+45.0
 ]
 },
 {
@@ -5615,10 +5637,18 @@
 ],
 "cap": "The muscles attached to the mandible: outer and inner surfaces (masseter, temporalis, lateral and medial pterygoid, platysma, mylohyoid, buccinator, digastric)",
 "box": [
-49.0,
-41.0,
-99.0,
-99.0
+49.5,
+40.5,
+98.0,
+97.5
+],
+"fill": [
+[
+46.0,
+40.0,
+64.0,
+44.5
+]
 ]
 },
 {
@@ -5635,10 +5665,10 @@
 ],
 "cap": "The pterygoid hamulus, the pterygoid fossa, the scaphoid fossa and the pterygoid tubercle on the base of the skull",
 "box": [
-62.0,
-1.0,
-99.0,
-41.0
+63.5,
+1.5,
+98.5,
+42.0
 ]
 },
 {
@@ -5655,9 +5685,9 @@
 ],
 "cap": "The infratemporal surface of the greater wing of the sphenoid with the foramen ovale, foramen spinosum and the spine of the sphenoid",
 "box": [
-66.0,
-43.0,
-99.0,
+67.5,
+42.8,
+98.5,
 70.0
 ]
 },
@@ -5676,9 +5706,9 @@
 "cap": "The norma occipitalis: the back of the skull with the lambda, inion, external occipital protuberance, sagittal, lambdoid and occipitomastoid sutures, parietal foramen and the nuchal lines",
 "box": [
 0.0,
-9.0,
+8.5,
 96.0,
-49.0
+46.5
 ]
 },
 {
@@ -5693,10 +5723,10 @@
 ],
 "cap": "The side of the skull showing the pterion, asterion and supramastoid triangle (red marks), with the squamous temporal bone, zygomatic arch and external auditory meatus",
 "box": [
-1.0,
-6.0,
-98.0,
-41.0
+0.0,
+5.5,
+98.5,
+37.8
 ]
 },
 {
@@ -5713,10 +5743,10 @@
 ],
 "cap": "The mastoid process and the styloid process on the side of the skull: muscles attached, the pterion, zygomatic arch, tympanic plate and mandibular fossa",
 "box": [
-49.0,
-20.0,
+50.0,
+21.0,
 99.0,
-55.0
+50.0
 ]
 },
 {
@@ -5733,10 +5763,18 @@
 ],
 "cap": "The pterygo-maxillary fissure: between the maxilla and the pterygoid process, leading to the pterygopalatine and infratemporal fossae",
 "box": [
+59.0,
+66.5,
+99.0,
+80.0
+],
+"fill": [
+[
 54.0,
 66.0,
-99.0,
-83.0
+72.0,
+69.6
+]
 ]
 },
 {
@@ -5753,10 +5791,10 @@
 ],
 "cap": "The pterygopalatine fossa drawn as an inverted pyramid: anterior, posterior, medial and lateral walls and the apex",
 "box": [
-59.0,
-82.0,
+67.5,
+80.5,
 99.0,
-97.0
+95.8
 ]
 },
 {
@@ -5771,10 +5809,10 @@
 ],
 "cap": "The middle cranial fossa: optic canal, superior orbital fissure, foramen rotundum, foramen ovale, foramen spinosum, foramen lacerum, sella turcica, anterior and posterior clinoid processes",
 "box": [
-4.0,
-51.0,
+3.0,
+47.4,
 98.0,
-79.0
+78.0
 ]
 },
 {
@@ -5811,10 +5849,10 @@
 ],
 "cap": "The base of the skull: the three processes (spine of the sphenoid, styloid process, mastoid process) in line with the three foramina, and the styloid apparatus",
 "box": [
-66.0,
-39.0,
-99.0,
-96.0
+67.0,
+38.0,
+96.0,
+89.5
 ]
 },
 {
@@ -5851,10 +5889,18 @@
 ],
 "cap": "The norma verticalis (the upper aspect of the skull): frontal, parietal and occipital bones, the coronal, sagittal and lambdoid sutures, bregma, vertex, lambda",
 "box": [
-49.0,
-5.0,
-99.0,
-47.0
+53.0,
+4.5,
+98.0,
+46.5
+],
+"fill": [
+[
+50.0,
+3.0,
+58.0,
+7.8
+]
 ]
 },
 {
@@ -5869,10 +5915,10 @@
 ],
 "cap": "The skull at birth from above: frontal suture, anterior and posterior fontanelles",
 "box": [
-51.0,
-52.0,
-99.0,
-78.0
+57.5,
+51.5,
+98.0,
+77.5
 ]
 },
 {
@@ -5887,10 +5933,10 @@
 ],
 "cap": "The inner surface of the skull cap: frontal crest, sagittal sulcus, granular foveolae, groove for the middle meningeal vessels, parietal emissary foramen",
 "box": [
-50.0,
-11.0,
+50.5,
+13.6,
 99.0,
-51.0
+50.0
 ]
 },
 {
@@ -5907,10 +5953,10 @@
 ],
 "cap": "The norma basalis interna: the anterior, middle and posterior cranial fossae",
 "box": [
-52.0,
-65.0,
-99.0,
-97.0
+52.5,
+68.6,
+98.0,
+97.5
 ]
 },
 {
@@ -5925,10 +5971,18 @@
 ],
 "cap": "The arteries related to the mandible: the inferior alveolar, mental, facial and superficial temporal arteries",
 "box": [
-52.0,
-8.0,
-99.0,
-45.0
+57.0,
+17.5,
+98.0,
+43.5
+],
+"fill": [
+[
+55.0,
+18.5,
+69.0,
+22.5
+]
 ]
 },
 {
@@ -5943,10 +5997,18 @@
 ],
 "cap": "The glands related to the mandible: the sublingual and submandibular salivary glands (sublingual and submandibular fossae)",
 "box": [
-50.0,
-46.0,
-99.0,
-60.0
+58.5,
+46.8,
+98.0,
+58.3
+],
+"fill": [
+[
+57.0,
+47.0,
+70.0,
+50.2
+]
 ]
 },
 {
@@ -5961,10 +6023,10 @@
 ],
 "cap": "How to know roughly the age of the mandible: the mandible at birth, at 4 years, in the adult and in old age (angle, mental foramen, alveolar margin)",
 "box": [
-3.0,
-62.0,
-99.0,
-97.0
+1.0,
+58.5,
+98.0,
+97.5
 ]
 },
 {
@@ -5983,8 +6045,8 @@
 "box": [
 3.0,
 20.0,
-99.0,
-50.0
+97.0,
+52.0
 ]
 },
 {
@@ -6001,10 +6063,10 @@
 ],
 "cap": "The anterior cranial fossa: frontal crest, foramen caecum, cribriform plate and crista galli of the ethmoid, orbital plates, jugum sphenoidale, lesser wing of the sphenoid, anterior clinoid process",
 "box": [
-2.0,
-8.0,
-99.0,
-40.0
+3.0,
+7.3,
+98.0,
+31.5
 ]
 },
 {
@@ -6020,9 +6082,17 @@
 "cap": "The temporomandibular ligament, the stylomandibular ligament and the lateral ligament of the temporomandibular joint",
 "box": [
 50.0,
-17.0,
+18.5,
 99.0,
-39.0
+38.5
+],
+"fill": [
+[
+49.0,
+16.5,
+64.0,
+19.8
+]
 ]
 },
 {
@@ -6037,10 +6107,10 @@
 ],
 "cap": "The sphenomandibular ligament (from the spine of the sphenoid to the lingula) and the pterygomandibular ligament",
 "box": [
-50.0,
-41.0,
+56.0,
+40.5,
 99.0,
-63.0
+62.5
 ]
 },
 {
@@ -6057,10 +6127,10 @@
 ],
 "cap": "The nerves related to the mandible: the inferior alveolar nerve, the nerve to the mylohyoid, the lingual nerve, the mental nerve and the masseteric nerve",
 "box": [
-50.0,
-66.0,
+51.0,
+62.5,
 99.0,
-93.0
+96.0
 ]
 },
 {
@@ -6075,10 +6145,10 @@
 ],
 "cap": "The base of the skull from below: foramen lacerum, carotid canal, jugular foramen and the foramen magnum with the sphenoid, temporal and occipital bones",
 "box": [
-58.0,
-17.0,
+69.0,
+18.6,
 99.0,
-50.0
+47.0
 ]
 },
 {
@@ -6097,9 +6167,9 @@
 ],
 "cap": "The hard palate with the incisive fossa, the greater and lesser palatine foramina",
 "box": [
-62.0,
-11.0,
-99.0,
+71.5,
+18.2,
+98.0,
 43.0
 ]
 },
@@ -6117,10 +6187,10 @@
 ],
 "cap": "The base of the skull from below: foramen ovale, foramen spinosum, stylomastoid foramen, sphenoid spine, mastoid process and the foramen magnum",
 "box": [
-55.0,
-55.0,
-99.0,
-94.0
+66.0,
+56.5,
+98.0,
+87.5
 ]
 },
 {
@@ -6139,10 +6209,18 @@
 ],
 "cap": "The parts of the norma lateralis: the supratemporal area, the temporal fossa, the infratemporal fossa and the stylomastoid region",
 "box": [
-45.0,
-1.0,
+51.0,
+1.5,
 99.0,
-20.0
+19.8
+],
+"fill": [
+[
+50.0,
+15.5,
+75.5,
+18.0
+]
 ]
 },
 {
@@ -6159,10 +6237,18 @@
 ],
 "cap": "The infratemporal fossa: its boundaries, the pterygomaxillary fissure and the skull bones around it",
 "box": [
-50.0,
-37.0,
+52.0,
+37.6,
 99.0,
-70.0
+68.5
+],
+"fill": [
+[
+51.0,
+41.0,
+65.5,
+44.0
+]
 ]
 },
 {
@@ -6179,10 +6265,10 @@
 ],
 "cap": "The posterior part of the norma basalis externa: foramen magnum, occipital condyles, external occipital protuberance and crest, superior and inferior nuchal lines, and the muscles inserted there",
 "box": [
-52.0,
-47.0,
+53.0,
+48.5,
 99.0,
-87.0
+82.5
 ]
 },
 {
@@ -6199,10 +6285,10 @@
 ],
 "cap": "The foramina of the middle cranial fossa drawn as a saddle and a crescent: optic canal, foramen lacerum, superior orbital fissure, foramen rotundum, foramen ovale, foramen spinosum",
 "box": [
-3.0,
-3.0,
-99.0,
-27.0
+2.0,
+2.5,
+98.0,
+28.4
 ]
 },
 {
@@ -6217,10 +6303,10 @@
 ],
 "cap": "The posterior condylar foramen and the foramen magnum on the base of the occipital bone",
 "box": [
-55.0,
-3.0,
+65.5,
+5.6,
 99.0,
-20.0
+20.3
 ]
 },
 {
@@ -6240,9 +6326,9 @@
 "cap": "The foramen magnum: the medulla oblongata, the vertebral arteries, the spinal roots of the accessory nerve and the anterior spinal artery passing through it",
 "box": [
 2.0,
-27.0,
-45.0,
-53.0
+26.5,
+37.5,
+51.5
 ]
 },
 {
@@ -6257,10 +6343,10 @@
 ],
 "cap": "The hidden foramina of the base of the skull: the pterygoid canal, the palatovaginal canal and the bony opening of the Eustachian tube",
 "box": [
-62.0,
-68.0,
+65.5,
+70.5,
 99.0,
-98.0
+97.5
 ]
 },
 {
@@ -6275,10 +6361,10 @@
 ],
 "cap": "The skull: the labelled bones of the lateral view (parietal, frontal, temporal, sphenoid, zygomatic, maxilla, mandible)",
 "box": [
-38.0,
+30.5,
 22.0,
-86.0,
-45.0
+98.0,
+47.0
 ]
 },
 {
@@ -6297,7 +6383,7 @@
 "box": [
 66.0,
 52.0,
-99.0,
+98.0,
 77.0
 ]
 },
@@ -6320,7 +6406,15 @@
 3.0,
 4.0,
 99.0,
-66.0
+66.3
+],
+"fill": [
+[
+10.0,
+64.2,
+56.0,
+67.5
+]
 ]
 },
 {
@@ -6335,10 +6429,10 @@
 ],
 "cap": "The nerves and vessels of the scalp: supratrochlear, supra-orbital, zygomaticotemporal, auriculotemporal, greater, lesser and third occipital nerves, posterior auricular and occipital vessels",
 "box": [
-8.0,
-6.0,
-99.0,
-47.0
+3.0,
+4.5,
+98.0,
+46.0
 ]
 },
 {
@@ -6376,9 +6470,9 @@
 "cap": "The parotid gland: its position below the auricle, the zygomatic arch, the mastoid process, the parotid duct and the masseter",
 "box": [
 5.0,
-10.0,
+9.6,
 99.0,
-49.0
+48.6
 ]
 },
 {
@@ -6397,10 +6491,18 @@
 ],
 "cap": "The lingual nerve: its origin from the posterior division of the mandibular nerve, its relation to the lateral and medial pterygoid muscles, the chorda tympani, the submandibular ganglion and the tongue",
 "box": [
-10.0,
-4.0,
-99.0,
-38.0
+3.0,
+3.0,
+98.0,
+41.0
+],
+"fill": [
+[
+2.0,
+35.2,
+41.0,
+40.8
+]
 ]
 },
 {
@@ -6419,10 +6521,10 @@
 ],
 "cap": "The lingual nerve and the submandibular duct: the nerve crosses the duct and ends in the tongue",
 "box": [
-54.0,
+62.5,
 66.0,
 99.0,
-97.0
+89.5
 ]
 },
 {
@@ -6455,10 +6557,10 @@
 ],
 "cap": "The sensory supply of the auriculotemporal, buccal and mental nerves to the skin of the side of the face",
 "box": [
-65.0,
-42.0,
-99.0,
-63.0
+66.5,
+43.6,
+98.0,
+63.5
 ]
 },
 {
@@ -6475,10 +6577,30 @@
 ],
 "cap": "The venous drainage of the face: the anterior facial vein, the deep facial vein, the retromandibular vein, the common facial vein and the external jugular vein, with the dangerous area of the face",
 "box": [
-41.0,
-8.0,
+45.0,
+7.5,
 93.0,
-65.0
+63.0
+],
+"fill": [
+[
+44.0,
+5.0,
+67.0,
+8.0
+],
+[
+45.0,
+40.3,
+55.0,
+46.3
+],
+[
+45.0,
+46.3,
+67.5,
+63.5
+]
 ]
 },
 {
@@ -6494,9 +6616,9 @@
 "cap": "The emissary veins: the parietal, mastoid, condylar, foramen ovale and foramen lacerum emissary veins connecting the dural venous sinuses with the veins outside the skull",
 "box": [
 2.0,
-2.0,
-99.0,
-33.0
+1.5,
+98.0,
+32.6
 ]
 },
 {
@@ -6512,9 +6634,23 @@
 "cap": "The sphenopalatine (pterygopalatine) ganglion: sensory root, sympathetic root (deep petrosal nerve), parasympathetic root (greater petrosal nerve) and its branches",
 "box": [
 3.0,
-6.0,
+5.8,
+98.0,
+26.2
+],
+"fill": [
+[
+2.0,
+23.2,
+52.0,
+31.0
+],
+[
+52.0,
+26.4,
 99.0,
 31.0
+]
 ]
 },
 {
@@ -6552,9 +6688,9 @@
 "cap": "The buccinator and the parotid duct on the side of the face with the masseter",
 "box": [
 55.0,
-22.0,
+21.5,
 99.0,
-50.0
+52.0
 ]
 },
 {
@@ -6569,10 +6705,10 @@
 ],
 "cap": "The orbicularis oris muscle with the mental slips and the incisive slips",
 "box": [
-57.0,
-74.0,
+58.0,
+79.0,
 99.0,
-98.0
+97.0
 ]
 },
 {
@@ -6587,11 +6723,12 @@
 ],
 "cap": "The relations of the parotid gland: the mastoid process, the sternomastoid and the posterior belly of the digastric, the styloid process, the carotid sheath, the mandible, the masseter and the medial pterygoid",
 "box": [
-40.0,
+47.5,
 1.0,
 99.0,
-41.0
-]
+41.5
+],
+"pad": 0.6
 },
 {
 "id": "sd-048b",
@@ -6607,11 +6744,12 @@
 ],
 "cap": "The upper end of the parotid gland and the structures leaving it",
 "box": [
-68.0,
-77.0,
+72.0,
+78.0,
 99.0,
-98.0
-]
+97.0
+],
+"pad": 0.8
 },
 {
 "id": "sd-049",
@@ -6628,7 +6766,7 @@
 2.0,
 3.0,
 99.0,
-33.0
+40.3
 ]
 },
 {
@@ -6645,11 +6783,12 @@
 ],
 "cap": "The lateral pterygoid muscle: the upper head and the lower head on the infratemporal fossa",
 "box": [
-52.0,
-5.0,
+54.0,
+4.5,
 99.0,
-28.0
-]
+31.5
+],
+"pad": 1.0
 },
 {
 "id": "sd-050b",
@@ -6663,10 +6802,19 @@
 ],
 "cap": "The relations of the lateral pterygoid muscle: the deep temporal, masseteric, buccal and lingual nerves and the inferior alveolar nerve and the maxillary artery",
 "box": [
-48.0,
-45.0,
-99.0,
-69.0
+41.5,
+46.0,
+98.0,
+69.5
+],
+"pad": 1.0,
+"fill": [
+[
+38.0,
+43.5,
+76.0,
+45.9
+]
 ]
 },
 {
@@ -6683,11 +6831,12 @@
 ],
 "cap": "The deep relations of the lateral pterygoid: sphenomandibular ligament, tensor palati, the middle meningeal artery, the chorda tympani and the otic ganglion",
 "box": [
-55.0,
-71.0,
-99.0,
+54.5,
+72.8,
+98.0,
 98.0
-]
+],
+"pad": 0.8
 },
 {
 "id": "sd-051",
@@ -6703,8 +6852,8 @@
 "box": [
 3.0,
 6.0,
-99.0,
-38.0
+98.0,
+38.5
 ]
 },
 {
@@ -6721,10 +6870,18 @@
 ],
 "cap": "The sensory supply of the face: the ophthalmic, maxillary and mandibular areas of the trigeminal nerve and the great auricular nerve",
 "box": [
-54.0,
-24.0,
-93.0,
+55.0,
+23.5,
+92.0,
 48.0
+],
+"fill": [
+[
+52.0,
+21.0,
+65.5,
+26.9
+]
 ]
 },
 {
@@ -6741,11 +6898,12 @@
 ],
 "cap": "The branches of the ophthalmic nerve: the lacrimal, frontal and nasociliary nerves",
 "box": [
-48.0,
-52.0,
-94.0,
-69.0
-]
+46.5,
+56.7,
+93.0,
+69.5
+],
+"pad": 0.8
 },
 {
 "id": "sd-052c",
@@ -6761,11 +6919,12 @@
 ],
 "cap": "The terminal branches of the ophthalmic nerve on the face: supra-orbital, supratrochlear, infratrochlear, external nasal and palpebral branches",
 "box": [
-50.0,
-71.0,
-99.0,
-99.0
-]
+53.5,
+70.5,
+97.0,
+95.3
+],
+"pad": 1.0
 },
 {
 "id": "sd-053a",
@@ -6803,11 +6962,12 @@
 ],
 "cap": "The branches of the otic ganglion: the nerve to the medial pterygoid, the motor twigs to the tensor tympani and tensor palati, and the communicating branch to the auriculotemporal nerve for the parotid gland",
 "box": [
-50.0,
-60.0,
+61.5,
+61.7,
 99.0,
-95.0
-]
+96.5
+],
+"pad": 0.8
 },
 {
 "id": "sd-054a",
@@ -6823,11 +6983,12 @@
 ],
 "cap": "The first part of the maxillary artery and its branches (middle meningeal, inferior alveolar, accessory meningeal, deep auricular, anterior tympanic)",
 "box": [
-65.0,
-6.0,
-99.0,
-30.0
-]
+72.5,
+7.5,
+98.0,
+29.5
+],
+"pad": 0.8
 },
 {
 "id": "sd-054b",
@@ -6843,11 +7004,12 @@
 ],
 "cap": "The surface anatomy of the middle meningeal artery on the skull: the main trunk, the anterior branch (pterion) and the posterior branch",
 "box": [
-53.0,
-61.0,
+58.5,
+59.0,
 99.0,
-94.0
-]
+80.3
+],
+"pad": 0.7
 },
 {
 "id": "sd-055",
@@ -6865,8 +7027,8 @@
 "box": [
 2.0,
 3.0,
-99.0,
-31.0
+98.0,
+31.5
 ]
 },
 {
@@ -6901,11 +7063,12 @@
 ],
 "cap": "The roots of the submandibular ganglion: the parasympathetic root from the chorda tympani, the sympathetic root from the facial artery plexus and the sensory root from the lingual nerve",
 "box": [
-50.0,
-55.0,
+51.5,
+54.5,
 99.0,
-94.0
-]
+84.3
+],
+"pad": 0.6
 },
 {
 "id": "sd-057a",
@@ -6957,10 +7120,18 @@
 ],
 "cap": "The tentorium cerebelli from above: the anterior and posterior clinoid processes, the free border (tentorial notch), the attached border and the straight sinus",
 "box": [
-46.0,
-3.0,
-99.0,
-46.0
+47.5,
+6.5,
+98.0,
+44.3
+],
+"fill": [
+[
+44.0,
+3.5,
+58.5,
+7.4
+]
 ]
 },
 {
@@ -6978,10 +7149,11 @@
 "cap": "The dural venous sinuses at the base of the skull: the cavernous sinuses, the basilar plexus, the sphenoparietal sinuses, the superior and inferior petrosal sinuses and the transverse and sigmoid sinuses",
 "box": [
 52.0,
-2.0,
-99.0,
-38.0
-]
+2.5,
+96.0,
+36.8
+],
+"pad": 1.0
 },
 {
 "id": "sd-060",
@@ -6997,10 +7169,18 @@
 ],
 "cap": "The masseter muscle: its superficial and deep heads from the zygomatic arch and their insertion into the ramus of the mandible",
 "box": [
-50.0,
-38.0,
+55.0,
+38.5,
 99.0,
-66.0
+68.5
+],
+"fill": [
+[
+52.0,
+37.0,
+67.0,
+42.6
+]
 ]
 },
 {
@@ -7015,11 +7195,12 @@
 ],
 "cap": "The muscles of the face (facial expression): frontalis, orbicularis oculi, levator labii superioris, zygomaticus, buccinator, orbicularis oris, depressor anguli oris, mentalis, platysma",
 "box": [
-49.0,
-36.0,
+49.5,
+36.5,
 92.0,
 69.0
-]
+],
+"pad": 0.8
 },
 {
 "id": "sd-062",
@@ -7033,10 +7214,10 @@
 ],
 "cap": "The falx cerebri and the falx cerebelli on a sagittal section: the apex, crista galli, the superior sagittal sinus, the inferior sagittal sinus, the straight sinus and the tentorium cerebelli",
 "box": [
-3.0,
-40.0,
-99.0,
-66.0
+1.0,
+37.5,
+98.0,
+65.8
 ]
 },
 {
@@ -7051,10 +7232,25 @@
 ],
 "cap": "The branches of the anterior division of the mandibular nerve: masseteric, deep temporal, nerve to the lateral pterygoid and the buccal nerve",
 "box": [
-68.0,
-14.0,
-99.0,
-41.0
+64.0,
+26.5,
+98.0,
+54.0
+],
+"pad": 0.8,
+"fill": [
+[
+60.0,
+26.0,
+77.0,
+29.0
+],
+[
+60.0,
+36.5,
+69.0,
+42.0
+]
 ]
 },
 {
@@ -7071,10 +7267,19 @@
 ],
 "cap": "The branches of the posterior division of the mandibular nerve: auriculotemporal, lingual and inferior alveolar nerves with the middle meningeal artery",
 "box": [
-61.0,
-65.0,
-99.0,
-90.0
+66.0,
+66.6,
+98.0,
+92.5
+],
+"pad": 0.6,
+"fill": [
+[
+64.0,
+66.0,
+78.0,
+69.0
+]
 ]
 },
 {
@@ -7089,10 +7294,19 @@
 ],
 "cap": "The inferior alveolar nerve and the lingual nerve: course on the medial surface of the mandible, the mandibular foramen and canal, the mental and incisive branches and the nerve to the mylohyoid",
 "box": [
-37.0,
-31.0,
-99.0,
-68.0
+51.0,
+31.5,
+98.0,
+66.5
+],
+"pad": 0.6,
+"fill": [
+[
+48.0,
+30.0,
+66.0,
+34.0
+]
 ]
 },
 {
@@ -7109,10 +7323,25 @@
 ],
 "cap": "The arterial supply of the face: the facial artery and its branches (superior and inferior labial, nasal, angular), the supratrochlear, supra-orbital, infra-orbital, superficial temporal and transverse facial arteries",
 "box": [
-50.0,
-3.0,
-99.0,
-45.0
+52.0,
+7.5,
+82.0,
+52.0
+],
+"pad": 0.8,
+"fill": [
+[
+49.0,
+4.5,
+58.0,
+13.0
+],
+[
+49.0,
+39.5,
+55.0,
+44.5
+]
 ]
 },
 {
@@ -7127,28 +7356,19 @@
 ],
 "cap": "The parotid duct on the side of the face: its course across the masseter, the buccal pad of fat, and the buccinator",
 "box": [
-60.0,
-2.0,
-99.0,
-31.0
+61.0,
+2.5,
+98.0,
+48.0
+],
+"pad": 0.8,
+"fill": [
+[
+59.5,
+18.5,
+61.5,
+26.0
 ]
-},
-{
-"id": "sd-066b",
-"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
-"sameh": 66,
-"sec": [
-"an-parotid#2"
-],
-"sc": [
-41.5
-],
-"cap": "The parotid duct piercing the buccinator and opening into the vestibule of the mouth opposite the upper second molar tooth",
-"box": [
-62.0,
-31.0,
-99.0,
-49.0
 ]
 },
 {
@@ -7163,10 +7383,18 @@
 ],
 "cap": "The facial nerve on the side of the head: the stylomastoid foramen, the post-auricular nerve, and the five terminal branches (temporal, zygomatic, buccal, marginal mandibular, cervical) inside the parotid gland",
 "box": [
-33.0,
+49.5,
 22.0,
+98.0,
+51.2
+],
+"fill": [
+[
+32.0,
+50.4,
 99.0,
-51.0
+53.0
+]
 ]
 },
 {
@@ -7181,10 +7409,19 @@
 ],
 "cap": "The temporalis muscle: the fan-shaped muscle filling the temporal fossa and its insertion into the coronoid process",
 "box": [
-38.0,
-5.0,
-99.0,
-39.0
+52.0,
+5.5,
+98.0,
+32.5
+],
+"pad": 0.6,
+"fill": [
+[
+50.0,
+20.0,
+58.0,
+32.0
+]
 ]
 },
 {
@@ -7201,11 +7438,12 @@
 ],
 "cap": "The medial pterygoid muscle: the deep head and superficial head, and the insertion on the medial surface of the angle of the mandible",
 "box": [
-52.0,
-62.0,
-99.0,
-91.0
-]
+58.0,
+61.3,
+98.0,
+89.5
+],
+"pad": 0.6
 },
 {
 "id": "sd-069a",
@@ -7219,11 +7457,12 @@
 ],
 "cap": "The superior sagittal sinus: arachnoid granulations, the parietal emissary vein and the great cerebral vein",
 "box": [
-3.0,
-36.0,
-55.0,
-53.0
-]
+9.0,
+34.5,
+61.0,
+50.5
+],
+"pad": 0.8
 },
 {
 "id": "sd-069b",
@@ -7239,10 +7478,19 @@
 ],
 "cap": "The superior sagittal sinus and the lacunae laterales: tributaries (superior cerebral veins, meningeal veins, diploic veins) and the arachnoid granulations",
 "box": [
-62.0,
-4.0,
-99.0,
-47.0
+64.0,
+8.5,
+98.0,
+49.5
+],
+"pad": 0.8,
+"fill": [
+[
+60.0,
+6.0,
+95.5,
+8.6
+]
 ]
 },
 {
@@ -7257,10 +7505,19 @@
 ],
 "cap": "The nerves of the scalp on the side of the head: the auriculotemporal, temporal, post-auricular, great auricular, lesser occipital and greater occipital nerves",
 "box": [
-58.0,
+59.0,
+2.5,
+98.0,
+32.5
+],
+"pad": 0.6,
+"fill": [
+[
+57.0,
 2.0,
-99.0,
-33.0
+60.0,
+32.0
+]
 ]
 },
 {
@@ -7275,11 +7532,12 @@
 ],
 "cap": "The orbicularis oculi: its orbital, palpebral and lacrimal parts around the eye",
 "box": [
-34.0,
-22.0,
-99.0,
-49.0
-]
+51.0,
+22.5,
+98.0,
+47.0
+],
+"pad": 0.6
 },
 {
 "id": "sd-072",
@@ -7293,11 +7551,12 @@
 ],
 "cap": "The veins of the scalp: the supratrochlear, supra-orbital, superficial temporal, post-auricular and occipital veins",
 "box": [
-60.0,
-46.0,
-99.0,
-71.0
-]
+61.5,
+46.5,
+98.0,
+70.5
+],
+"pad": 0.6
 },
 {
 "id": "sd-073a",
@@ -7313,10 +7572,19 @@
 ],
 "cap": "The relations of the anterior border of the parotid gland: the zygomatic branches of the facial nerve, the transverse facial artery, the parotid duct, the buccal and marginal mandibular branches",
 "box": [
-48.0,
-9.0,
+61.5,
+14.0,
 99.0,
-39.0
+40.5
+],
+"pad": 0.6,
+"fill": [
+[
+59.0,
+37.5,
+99.0,
+42.0
+]
 ]
 },
 {
@@ -7333,11 +7601,12 @@
 ],
 "cap": "The parotid gland on section: the deep parotid lymph nodes and the structures inside the gland",
 "box": [
-62.0,
-45.0,
-99.0,
-63.0
-]
+71.5,
+44.6,
+98.0,
+61.0
+],
+"pad": 0.6
 },
 {
 "id": "sd-074a",
@@ -7351,10 +7620,19 @@
 ],
 "cap": "The sternomastoid muscle: its sternal and clavicular heads, its insertion into the mastoid process and the superior nuchal line, and its superficial relations",
 "box": [
+50.5,
+5.0,
+98.0,
+45.8
+],
+"pad": 0.5,
+"fill": [
+[
 50.0,
-2.0,
-99.0,
-46.0
+1.0,
+59.0,
+6.0
+]
 ]
 },
 {
@@ -7369,11 +7647,12 @@
 ],
 "cap": "The deep relations of the sternomastoid: the sternoclavicular joint, scalenus anterior, the carotid sheath, the ansa cervicalis, the omohyoid and the levator scapulae",
 "box": [
-50.0,
-52.0,
-99.0,
-98.0
-]
+51.5,
+51.0,
+98.0,
+99.0
+],
+"pad": 0.5
 },
 {
 "id": "sd-075a",
@@ -7389,10 +7668,19 @@
 ],
 "cap": "The prevertebral fascia and the cervical fascia on a transverse section of the neck at the level of the thyroid gland: the carotid sheath, the pretracheal fascia, the investing fascia",
 "box": [
-50.0,
-2.0,
+47.0,
+2.5,
 99.0,
-48.0
+48.2
+],
+"pad": 0.5,
+"fill": [
+[
+45.0,
+46.5,
+52.0,
+48.5
+]
 ]
 },
 {
@@ -7407,11 +7695,12 @@
 ],
 "cap": "The general investing deep cervical fascia (the collar) enclosing the sternomastoid and the trapezius, with its attachments",
 "box": [
-58.0,
-51.0,
-99.0,
-84.0
-]
+53.0,
+50.5,
+98.0,
+84.5
+],
+"pad": 0.5
 },
 {
 "id": "sd-076a",
@@ -7425,10 +7714,19 @@
 ],
 "cap": "The scalenus anterior muscle: its four slips from the transverse processes of C3 to C6 and its insertion into the scalene tubercle of the first rib",
 "box": [
-66.0,
-21.0,
-99.0,
-56.0
+68.0,
+23.5,
+98.0,
+55.0
+],
+"pad": 0.6,
+"fill": [
+[
+65.0,
+20.5,
+85.0,
+24.2
+]
 ]
 },
 {
@@ -7446,9 +7744,24 @@
 "cap": "The anterior relations of the scalenus anterior: the phrenic nerve, the sternomastoid, the inferior belly of omohyoid, the subclavian vein, the internal jugular vein and the anterior jugular vein",
 "box": [
 56.0,
-55.0,
-99.0,
-98.0
+55.5,
+98.0,
+99.0
+],
+"pad": 0.4,
+"fill": [
+[
+54.0,
+55.3,
+63.0,
+58.2
+],
+[
+56.0,
+96.2,
+75.0,
+99.5
+]
 ]
 },
 {
@@ -7465,10 +7778,19 @@
 ],
 "cap": "The triangular spaces of the neck: the anterior triangle (digastric, carotid, muscular, submental) and the posterior triangle (occipital and omoclavicular parts) drawn on the side of the neck",
 "box": [
-40.0,
-7.0,
-98.0,
-52.0
+15.0,
+4.5,
+84.0,
+51.5
+],
+"pad": 0.6,
+"fill": [
+[
+18.0,
+3.5,
+56.0,
+7.8
+]
 ]
 },
 {
@@ -7485,11 +7807,12 @@
 ],
 "cap": "The cavernous sinus: its walls, the internal carotid artery, the abducent nerve, the nerves in the lateral wall (oculomotor, trochlear, ophthalmic, maxillary), the trigeminal ganglion, its tributaries and communications",
 "box": [
-2.0,
-5.0,
-98.0,
-45.0
-]
+3.0,
+11.5,
+99.0,
+46.6
+],
+"pad": 0.5
 },
 {
 "id": "sd-079a",
@@ -7505,11 +7828,12 @@
 ],
 "cap": "The submandibular salivary gland in the digastric triangle: its site and extent, the mylohyoid line and the body of the mandible",
 "box": [
-50.0,
-8.0,
+56.0,
+9.5,
 94.0,
-37.0
-]
+33.8
+],
+"pad": 0.6
 },
 {
 "id": "sd-079b",
@@ -7526,10 +7850,11 @@
 "cap": "The surfaces and relations of the superficial part of the submandibular gland: the inferolateral, lateral and medial surfaces, the facial artery, the mylohyoid and hyoglossus, the lingual nerve and the submandibular ganglion",
 "box": [
 2.0,
-41.0,
-94.0,
-68.0
-]
+43.0,
+92.0,
+66.5
+],
+"pad": 0.6
 },
 {
 "id": "sd-080a",
@@ -7548,10 +7873,11 @@
 "cap": "The abducent nerve: from the pons, up the clivus, through the cavernous sinus and the superior orbital fissure to the lateral rectus muscle",
 "box": [
 4.0,
-6.0,
-88.0,
-27.0
-]
+5.0,
+95.0,
+24.6
+],
+"pad": 0.6
 },
 {
 "id": "sd-080b",
@@ -7565,10 +7891,19 @@
 ],
 "cap": "The ophthalmic artery: its origin from the internal carotid artery, its course through the optic canal, and its branches (central artery of the retina, lacrimal, ciliary, ethmoidal, supra-orbital, supratrochlear, dorsal nasal arteries)",
 "box": [
-52.0,
-39.0,
-96.0,
-82.0
+59.5,
+40.5,
+98.0,
+77.0
+],
+"pad": 0.6,
+"fill": [
+[
+57.0,
+76.0,
+99.0,
+81.0
+]
 ]
 },
 {
@@ -7585,11 +7920,12 @@
 ],
 "cap": "The anterior belly of the digastric: its superficial relations on the mandible and the submandibular gland",
 "box": [
-52.0,
-8.0,
-96.0,
-28.0
-]
+59.5,
+11.5,
+98.0,
+27.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-081b",
@@ -7605,11 +7941,12 @@
 ],
 "cap": "The anterior belly of the digastric and the deep relations (mylohyoid, nerve to the mylohyoid)",
 "box": [
-52.0,
-27.0,
+59.5,
+28.5,
 96.0,
-48.0
-]
+47.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-081c",
@@ -7623,11 +7960,12 @@
 ],
 "cap": "The mylohyoid muscle: the floor of the mouth (oral diaphragm), the mylohyoid line, the median raphe and the body of the hyoid bone",
 "box": [
-52.0,
-49.0,
+54.0,
+49.5,
 97.0,
-77.0
-]
+76.5
+],
+"pad": 0.5
 },
 {
 "id": "sd-082a",
@@ -7641,11 +7979,12 @@
 ],
 "cap": "The muscular triangle of the neck: the infrahyoid muscles (sternohyoid, superior belly of omohyoid, sternothyroid, thyrohyoid)",
 "box": [
-58.0,
-5.0,
-94.0,
-36.0
-]
+69.5,
+3.5,
+97.0,
+35.5
+],
+"pad": 0.5
 },
 {
 "id": "sd-082b",
@@ -7659,11 +7998,12 @@
 ],
 "cap": "The infrahyoid (strap) muscles: sternohyoid, omohyoid (superior and inferior bellies with the fascial sling), sternothyroid and thyrohyoid, with the hyoid bone, the thyroid cartilage and the manubrium",
 "box": [
-32.0,
-44.0,
-96.0,
-94.0
-]
+61.5,
+39.0,
+99.0,
+96.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-083a",
@@ -7681,10 +8021,19 @@
 ],
 "cap": "The superficial (lower) relations of the mylohyoid: skin, platysma, the anterior belly of the digastric, the submental vessels and nodes, the submandibular salivary gland",
 "box": [
-50.0,
+54.0,
 5.0,
 99.0,
-27.0
+26.5
+],
+"pad": 0.4,
+"fill": [
+[
+50.0,
+3.5,
+72.5,
+7.0
+]
 ]
 },
 {
@@ -7699,10 +8048,19 @@
 ],
 "cap": "The deep (upper) relations of the mylohyoid: hyoglossus, the lingual nerve, the hypoglossal nerve, the submandibular duct, the styloglossus and the tongue",
 "box": [
-50.0,
-27.0,
+52.0,
+27.5,
 99.0,
-57.0
+56.0
+],
+"pad": 0.4,
+"fill": [
+[
+50.0,
+51.0,
+99.0,
+56.5
+]
 ]
 },
 {
@@ -7720,7 +8078,22 @@
 52.0,
 62.0,
 99.0,
-92.0
+91.0
+],
+"pad": 0.4,
+"fill": [
+[
+50.0,
+61.0,
+55.0,
+63.5
+],
+[
+50.0,
+85.0,
+69.0,
+91.5
+]
 ]
 },
 {
@@ -7735,10 +8108,19 @@
 ],
 "cap": "The thyroid gland: the isthmus, the pyramidal lobe, the inferior thyroid veins, the thyroidea ima artery and the anastomosis between the superior thyroid arteries",
 "box": [
-66.0,
-6.0,
+66.5,
+5.5,
 97.0,
-28.0
+26.3
+],
+"pad": 0.4,
+"fill": [
+[
+64.0,
+20.0,
+73.5,
+27.0
+]
 ]
 },
 {
@@ -7755,10 +8137,19 @@
 ],
 "cap": "The lateral lobe of the thyroid gland: its three surfaces, the posterior surface (parathyroid glands, common carotid, inferior thyroid artery, tracheal and oesophageal relations) and the anterolateral surface with the strap muscles",
 "box": [
-50.0,
-28.0,
-99.0,
-73.0
+52.0,
+27.5,
+98.0,
+72.0
+],
+"pad": 0.4,
+"fill": [
+[
+52.0,
+65.0,
+63.0,
+72.5
+]
 ]
 },
 {
@@ -7773,11 +8164,12 @@
 ],
 "cap": "The lateral wall of the nasal cavity: the superior, middle and inferior conchae and meatuses, the sphenoethmoidal recess, the bulla ethmoidalis, the hiatus semilunaris and the nasolacrimal duct",
 "box": [
-10.0,
-4.0,
-92.0,
-32.0
-]
+19.0,
+6.8,
+96.0,
+35.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-085b",
@@ -7791,11 +8183,12 @@
 ],
 "cap": "The arterial supply of the nasal cavity: the anterior and posterior ethmoidal arteries, the sphenopalatine artery, the greater palatine artery and the septal branch of the superior labial artery",
 "box": [
-50.0,
-69.0,
-97.0,
-98.0
-]
+55.0,
+72.5,
+99.0,
+96.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-086a",
@@ -7811,10 +8204,19 @@
 ],
 "cap": "The pituitary gland in the hypophyseal fossa: the diaphragma sellae, the cavernous sinuses and the internal carotid artery",
 "box": [
-52.0,
-17.0,
+66.0,
+18.0,
 99.0,
-29.0
+30.8
+],
+"pad": 0.4,
+"fill": [
+[
+60.0,
+16.5,
+76.0,
+21.5
+]
 ]
 },
 {
@@ -7829,11 +8231,12 @@
 ],
 "cap": "The pituitary gland on a coronal section with the cavernous sinuses, the internal carotid arteries and the sphenoidal air sinus",
 "box": [
-52.0,
-29.0,
-99.0,
-54.0
-]
+63.0,
+32.0,
+98.0,
+53.0
+],
+"pad": 0.4
 },
 {
 "id": "sd-086c",
@@ -7849,11 +8252,12 @@
 ],
 "cap": "The nerve supply of the dura mater: the ophthalmic, maxillary and mandibular nerves and the upper cervical nerves",
 "box": [
-52.0,
-66.0,
-99.0,
+59.0,
+64.5,
+98.0,
 97.0
-]
+],
+"pad": 0.4
 },
 {
 "id": "sd-087a",
@@ -7868,10 +8272,11 @@
 "cap": "The sublingual salivary gland: its position under the mucous membrane of the mouth floor, the sublingual fold, the mylohyoid, the genioglossus and the submandibular duct",
 "box": [
 3.0,
-5.0,
-99.0,
-32.0
-]
+8.5,
+98.0,
+31.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-087b",
@@ -7885,11 +8290,12 @@
 ],
 "cap": "The sublingual gland and the opening of the submandibular duct on the floor of the mouth",
 "box": [
-78.0,
+71.0,
 42.0,
-99.0,
-56.0
-]
+96.0,
+55.0
+],
+"pad": 0.4
 },
 {
 "id": "sd-088a",
@@ -7907,10 +8313,19 @@
 ],
 "cap": "The ophthalmic veins: the superior and inferior ophthalmic veins draining to the cavernous sinus",
 "box": [
-61.0,
-10.0,
+64.5,
+8.5,
 99.0,
 23.0
+],
+"pad": 0.4,
+"fill": [
+[
+60.0,
+18.5,
+64.5,
+22.5
+]
 ]
 },
 {
@@ -7927,11 +8342,12 @@
 ],
 "cap": "The orbital periosteum (periorbita) and the optic canal and superior orbital fissure",
 "box": [
-61.0,
-32.0,
-99.0,
-48.0
-]
+66.5,
+37.0,
+98.0,
+52.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-088c",
@@ -7947,11 +8363,12 @@
 ],
 "cap": "The orbital ligaments: the suspensory ligament of the eyeball and the medial and lateral check ligaments",
 "box": [
-61.0,
-70.0,
-99.0,
-95.0
-]
+69.0,
+74.5,
+98.0,
+91.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-089a",
@@ -7967,10 +8384,19 @@
 ],
 "cap": "The eyelid on section: the tarsal plate, the tarsal glands and the orbital septum",
 "box": [
-62.0,
-4.0,
-95.0,
-22.0
+68.0,
+5.0,
+96.0,
+21.5
+],
+"pad": 0.4,
+"fill": [
+[
+85.0,
+2.5,
+97.0,
+6.6
+]
 ]
 },
 {
@@ -7985,11 +8411,12 @@
 ],
 "cap": "The lacrimal apparatus: the lacrimal gland (main part and palpebral part), the lacrimal puncta, the lacrimal canaliculi, the lacrimal sac and the nasolacrimal duct",
 "box": [
-55.0,
-70.0,
-99.0,
-99.0
-]
+61.0,
+68.5,
+98.0,
+98.0
+],
+"pad": 0.4
 },
 {
 "id": "sd-090a",
@@ -8003,11 +8430,12 @@
 ],
 "cap": "The digastric muscle: the anterior belly (digastric fossa of the mandible), the posterior belly (mastoid notch), the intermediate tendon and its fibrous sling to the hyoid bone",
 "box": [
-47.0,
-4.0,
+54.5,
+4.5,
 99.0,
-41.0
-]
+32.5
+],
+"pad": 0.4
 },
 {
 "id": "sd-090b",
@@ -8023,11 +8451,12 @@
 ],
 "cap": "The relations of the posterior belly of the digastric: the parotid gland, the internal jugular vein, the internal carotid artery, the external carotid artery, the vagus and the accessory nerves",
 "box": [
-52.0,
+56.0,
 70.0,
-99.0,
-98.0
-]
+98.0,
+97.0
+],
+"pad": 0.4
 },
 {
 "id": "sd-090c",
@@ -8041,11 +8470,12 @@
 ],
 "cap": "The superficial relations of the posterior belly of the digastric: the mastoid process, the parotid gland and the angle of the mandible",
 "box": [
-58.0,
-55.0,
-97.0,
-70.0
-]
+56.5,
+54.0,
+98.0,
+72.0
+],
+"pad": 0.4
 },
 {
 "id": "sd-091a",
@@ -8061,11 +8491,12 @@
 ],
 "cap": "The roof and the floor of the nasal cavity: the nasal bone, the cribriform plate of the ethmoid, the body of the sphenoid, and the hard palate",
 "box": [
-52.0,
-12.0,
-93.0,
-28.0
-]
+54.0,
+12.8,
+92.0,
+26.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-091b",
@@ -8082,9 +8513,18 @@
 "cap": "The lateral wall and the medial wall (septum) of the nasal cavity: the conchae, the vestibule, the atrium, the perpendicular plate of the ethmoid, the septal cartilage and the vomer",
 "box": [
 3.0,
+29.5,
+97.0,
+64.0
+],
+"pad": 0.4,
+"fill": [
+[
+3.0,
 29.0,
-99.0,
-66.0
+49.0,
+34.0
+]
 ]
 },
 {
@@ -8101,11 +8541,12 @@
 ],
 "cap": "The scalenus anterior and the scalenus medius with the roots of the brachial plexus and the subclavian artery",
 "box": [
-52.0,
+59.0,
 3.0,
-97.0,
-24.0
-]
+98.0,
+23.0
+],
+"pad": 0.4
 },
 {
 "id": "sd-092b",
@@ -8119,11 +8560,12 @@
 ],
 "cap": "The vertebral triangle: the first part of the subclavian artery, the vertebral artery, the thyrocervical trunk, the sympathetic chain and the thoracic duct",
 "box": [
-52.0,
-26.0,
-99.0,
-60.0
-]
+58.5,
+25.5,
+98.0,
+53.3
+],
+"pad": 0.3
 },
 {
 "id": "sd-092c",
@@ -8139,11 +8581,12 @@
 ],
 "cap": "The other scalene muscles: the scalenus medius and the scalenus posterior on the cervical vertebrae and the first and second ribs",
 "box": [
-52.0,
-60.0,
+64.0,
+58.5,
 99.0,
-96.0
-]
+95.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-093a",
@@ -8159,10 +8602,25 @@
 ],
 "cap": "The platysma muscle in the superficial fascia of the neck",
 "box": [
-58.0,
-6.0,
+59.0,
+8.2,
 98.0,
 33.0
+],
+"pad": 0.3,
+"fill": [
+[
+55.0,
+5.5,
+66.0,
+9.0
+],
+[
+55.0,
+19.0,
+59.5,
+25.5
+]
 ]
 },
 {
@@ -8180,9 +8638,18 @@
 "cap": "The cutaneous branches of the cervical plexus: the lesser occipital, great auricular, transverse cutaneous and supraclavicular nerves",
 "box": [
 56.0,
-36.0,
+36.5,
 98.0,
-69.0
+64.6
+],
+"pad": 0.3,
+"fill": [
+[
+55.0,
+37.0,
+60.5,
+57.0
+]
 ]
 },
 {
@@ -8197,11 +8664,12 @@
 ],
 "cap": "The digastric triangle and the submandibular region on the mandible: the two bellies of the digastric muscle, the mylohyoid and the hyoid bone",
 "box": [
-16.0,
-13.0,
+15.0,
+12.5,
 80.0,
-40.0
-]
+39.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-095a",
@@ -8218,9 +8686,18 @@
 "cap": "The oculomotor nerve: its course through the lateral wall of the cavernous sinus and the superior orbital fissure, and its division into superior and inferior divisions supplying the extra-ocular muscles",
 "box": [
 3.0,
+3.5,
+97.0,
+22.3
+],
+"pad": 0.3,
+"fill": [
+[
 2.0,
-99.0,
-31.0
+20.8,
+56.0,
+24.0
+]
 ]
 },
 {
@@ -8238,10 +8715,11 @@
 "cap": "The trochlear nerve: its course around the midbrain, through the lateral wall of the cavernous sinus and the superior orbital fissure to the superior oblique muscle",
 "box": [
 3.0,
-62.0,
-99.0,
-83.0
-]
+61.5,
+97.0,
+71.6
+],
+"pad": 0.3
 },
 {
 "id": "sd-096a",
@@ -8255,11 +8733,12 @@
 ],
 "cap": "The four recti muscles: their origin from the common tendinous ring around the optic canal, with the roof, floor and the superior and inferior obliques",
 "box": [
-58.0,
-3.0,
+60.0,
+3.5,
 99.0,
-33.0
-]
+32.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-096b",
@@ -8273,11 +8752,12 @@
 ],
 "cap": "The insertion of the recti muscles into the sclera behind the corneoscleral junction, with the superior and inferior oblique muscles",
 "box": [
-58.0,
-34.0,
-99.0,
-58.0
-]
+58.5,
+32.8,
+98.0,
+57.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-096c",
@@ -8292,10 +8772,11 @@
 "cap": "The actions of the recti muscles: lateral rectus (abduction), medial rectus (adduction), superior rectus (elevation) and inferior rectus (depression) drawn on the eye in each position",
 "box": [
 58.0,
-61.0,
-99.0,
-98.0
-]
+60.0,
+98.0,
+97.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-097a",
@@ -8311,10 +8792,31 @@
 ],
 "cap": "The optic nerve: its exit from the eyeball, its course through the orbit and the tendinous ring, the optic canal and the optic chiasma, with the medial wall of the orbit",
 "box": [
+54.0,
+2.5,
+97.0,
+47.0
+],
+"pad": 0.3,
+"fill": [
+[
 50.0,
-2.0,
-99.0,
-41.0
+24.2,
+59.0,
+27.2
+],
+[
+50.0,
+40.3,
+56.0,
+42.3
+],
+[
+50.0,
+46.0,
+58.0,
+49.0
+]
 ]
 },
 {
@@ -8329,11 +8831,12 @@
 ],
 "cap": "The ophthalmic nerve in the orbit: the lacrimal, frontal and nasociliary branches, the superior orbital fissure and the trigeminal ganglion with the cavernous sinus",
 "box": [
-38.0,
-46.0,
-99.0,
+58.0,
+47.0,
+98.0,
 97.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-098",
@@ -8348,10 +8851,11 @@
 "cap": "The nerve supply of the nasal cavity: the olfactory nerves, and the branches of the trigeminal nerve on the lateral wall and on the medial wall (septum)",
 "box": [
 15.0,
-14.0,
-96.0,
-37.0
-]
+10.5,
+97.0,
+35.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-099",
@@ -8368,10 +8872,11 @@
 "cap": "The arterial supply of the dura mater: the meningeal arteries of the anterior, middle and posterior cranial fossae drawn on the inner surface of the skull base",
 "box": [
 53.0,
-8.0,
-99.0,
-50.0
-]
+8.5,
+98.0,
+49.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-100a",
@@ -8385,10 +8890,19 @@
 ],
 "cap": "The hyoglossus muscle: its origin from the greater horn of the hyoid bone and its insertion into the side of the tongue",
 "box": [
-35.0,
-4.0,
-99.0,
-32.0
+63.0,
+8.0,
+98.0,
+29.0
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
+18.0,
+66.0,
+28.0
+]
 ]
 },
 {
@@ -8403,10 +8917,19 @@
 ],
 "cap": "The superficial relations of the hyoglossus: the styloglossus, the lingual nerve, the submandibular ganglion and duct, the hypoglossal nerve, the mylohyoid and the mandible",
 "box": [
-48.0,
-43.0,
+63.0,
+42.5,
 99.0,
-76.0
+66.5
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
+62.0,
+99.0,
+68.0
+]
 ]
 },
 {
@@ -8421,11 +8944,12 @@
 ],
 "cap": "The deep relations of the hyoglossus: the genioglossus, the middle constrictor, the stylohyoid ligament, the glossopharyngeal nerve and the lingual artery",
 "box": [
-35.0,
-78.0,
+63.5,
+78.5,
 99.0,
-99.0
-]
+98.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-101a",
@@ -8441,10 +8965,19 @@
 ],
 "cap": "The deep part of the submandibular gland: the lingual nerve above, the hypoglossal nerve below, the mylohyoid and hyoglossus muscles",
 "box": [
-48.0,
-3.0,
-99.0,
-28.0
+50.0,
+6.5,
+98.0,
+30.5
+],
+"pad": 0.3,
+"fill": [
+[
+47.0,
+4.0,
+82.0,
+7.2
+]
 ]
 },
 {
@@ -8459,11 +8992,12 @@
 ],
 "cap": "The nerve supply of the submandibular gland: the parasympathetic secretomotor fibres from the chorda tympani and the submandibular ganglion",
 "box": [
-52.0,
-58.0,
-99.0,
+57.0,
+59.0,
+98.0,
 98.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-102",
@@ -8479,11 +9013,12 @@
 ],
 "cap": "The oblique muscles of the eye: the superior oblique (with the trochlea) and the inferior oblique, with the recti, the ciliary ganglion and the nerves",
 "box": [
-52.0,
-3.0,
-99.0,
-29.0
-]
+61.0,
+3.5,
+98.0,
+37.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-103a",
@@ -8500,8 +9035,9 @@
 63.0,
 4.0,
 98.0,
-38.0
-]
+37.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-103b",
@@ -8515,10 +9051,19 @@
 ],
 "cap": "The anterior jugular veins and the jugular arch above the sternum",
 "box": [
-62.0,
-38.0,
+64.0,
+38.5,
 98.0,
-63.0
+62.5
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
+61.5,
+66.0,
+64.0
+]
 ]
 },
 {
@@ -8533,11 +9078,12 @@
 ],
 "cap": "The pretracheal fascia: its attachment to the hyoid bone and thyroid cartilage, and its extension to the fibrous pericardium",
 "box": [
-52.0,
-72.0,
-99.0,
+66.0,
+74.5,
+98.0,
 98.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-104a",
@@ -8553,10 +9099,31 @@
 ],
 "cap": "The carotid sheath: its attachments at the base of the skull, and its contents (internal carotid artery, internal jugular vein, the lower four cranial nerves; common carotid artery, internal jugular vein and vagus nerve)",
 "box": [
-52.0,
+68.0,
 3.0,
 98.0,
-67.0
+63.0
+],
+"pad": 0.3,
+"fill": [
+[
+66.0,
+36.0,
+75.0,
+38.6
+],
+[
+66.0,
+48.0,
+79.5,
+50.5
+],
+[
+66.0,
+26.0,
+77.0,
+28.5
+]
 ]
 },
 {
@@ -8573,11 +9140,12 @@
 ],
 "cap": "The relations of the carotid sheath: the cervical vertebrae, the prevertebral muscles, the cervical plexus and the first part of the subclavian artery",
 "box": [
-56.0,
-68.0,
-97.0,
+67.0,
+69.5,
+98.0,
 98.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-105",
@@ -8611,11 +9179,12 @@
 ],
 "cap": "The nasociliary nerve in the orbit: the long ciliary nerves, the anterior and posterior ethmoidal nerves, the infratrochlear nerve and the ciliary ganglion",
 "box": [
-45.0,
-4.0,
+61.0,
+3.5,
 97.0,
-45.0
-]
+43.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-106b",
@@ -8631,10 +9200,19 @@
 ],
 "cap": "The ciliary ganglion: its roots (sensory from the nasociliary nerve, sympathetic, parasympathetic from the oculomotor nerve) and the short ciliary nerves to the eyeball",
 "box": [
-40.0,
-58.0,
-97.0,
+66.0,
+61.5,
+98.0,
 98.0
+],
+"pad": 0.3,
+"fill": [
+[
+66.0,
+88.5,
+72.5,
+99.0
+]
 ]
 },
 {
@@ -8649,10 +9227,19 @@
 ],
 "cap": "The thyroid gland: the two lateral lobes, the isthmus, the pyramidal lobe, the levator glandulae thyroideae and the thyroid cartilage",
 "box": [
-55.0,
-5.0,
+64.0,
+5.5,
+97.0,
+38.5
+],
+"pad": 0.3,
+"fill": [
+[
+62.0,
+39.0,
 99.0,
-40.0
+41.5
+]
 ]
 },
 {
@@ -8667,10 +9254,19 @@
 ],
 "cap": "The thyroid gland on a transverse section of the neck: the isthmus, the trachea, the lateral lobes and the anterior and posterior relations",
 "box": [
-52.0,
-76.0,
-99.0,
-98.0
+58.5,
+78.5,
+98.0,
+99.0
+],
+"pad": 0.3,
+"fill": [
+[
+56.0,
+79.5,
+65.0,
+83.5
+]
 ]
 },
 {
@@ -8685,10 +9281,19 @@
 ],
 "cap": "The ligamentum nuchae: its attachments to the external occipital protuberance and crest, the cervical spines and the spine of C7",
 "box": [
-58.0,
-80.0,
-99.0,
-98.0
+66.0,
+72.5,
+98.0,
+99.0
+],
+"pad": 0.3,
+"fill": [
+[
+64.0,
+78.0,
+74.0,
+80.3
+]
 ]
 },
 {
@@ -8703,11 +9308,12 @@
 ],
 "cap": "The conjunctival sac: the conjunctiva lining the eyelids and reflected onto the eyeball, the superior and inferior fornices",
 "box": [
-60.0,
-4.0,
-99.0,
+62.0,
+2.5,
+97.0,
 27.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-109b",
@@ -8721,11 +9327,12 @@
 ],
 "cap": "The levator palpebrae superioris: origin from the roof of the orbit, insertion into the upper eyelid, the tarsus and the superior fornix",
 "box": [
-52.0,
+56.5,
 61.0,
-99.0,
-84.0
-]
+98.0,
+85.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-110a",
@@ -8741,10 +9348,19 @@
 ],
 "cap": "The bony orbit: the optic canal, the superior and inferior orbital fissures, the walls and margins of the orbit with the ethmoidal foramina and the lacrimal fossa",
 "box": [
-50.0,
+41.5,
 6.0,
-96.0,
-33.0
+97.0,
+31.0
+],
+"pad": 0.3,
+"fill": [
+[
+40.0,
+20.3,
+47.8,
+22.2
+]
 ]
 },
 {
@@ -8763,11 +9379,12 @@
 ],
 "cap": "The eyelid on a sagittal section: skin, orbicularis oculi, tarsus, tarsal glands and the conjunctiva",
 "box": [
-52.0,
-75.0,
-99.0,
+67.5,
+75.5,
+98.0,
 98.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-111a",
@@ -8781,11 +9398,12 @@
 ],
 "cap": "The paranasal air sinuses: the frontal, ethmoidal and sphenoidal sinuses",
 "box": [
-78.0,
-8.0,
-99.0,
-30.0
-]
+62.0,
+7.5,
+98.0,
+28.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-111b",
@@ -8801,11 +9419,12 @@
 ],
 "cap": "The maxillary air sinus: its apex, base, roof and the opening of the sinus",
 "box": [
-78.0,
-30.0,
-99.0,
-51.0
-]
+61.0,
+43.5,
+94.0,
+64.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-111c",
@@ -8821,11 +9440,12 @@
 ],
 "cap": "The maxillary sinus on the maxilla: its walls and the posterior, middle and anterior superior alveolar nerves",
 "box": [
-54.0,
-60.0,
-99.0,
+66.0,
+72.5,
+97.0,
 93.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-112",
@@ -8858,9 +9478,18 @@
 "cap": "The common carotid artery: the carotid sheath, the vagus nerve, the thyroid gland, the trachea and the origin of the artery from the brachiocephalic trunk and the aortic arch",
 "box": [
 9.0,
-6.0,
+6.5,
 94.0,
-57.0
+58.0
+],
+"pad": 0.3,
+"fill": [
+[
+0.0,
+54.0,
+38.0,
+57.8
+]
 ]
 },
 {
@@ -8895,10 +9524,19 @@
 ],
 "cap": "The arterial supply of the pharynx and its lateral relations: the ascending pharyngeal artery, the tonsillar branch, the superior thyroid branches and the carotid sheath",
 "box": [
-55.0,
+61.5,
 2.0,
-99.0,
-33.0
+98.0,
+33.5
+],
+"pad": 0.3,
+"fill": [
+[
+58.0,
+29.0,
+68.0,
+32.0
+]
 ]
 },
 {
@@ -8915,11 +9553,12 @@
 ],
 "cap": "The relations of the pharynx: the base of the skull, the cervical vertebrae, the nasal cavity, the oral cavity and the larynx",
 "box": [
-55.0,
-36.0,
-99.0,
-62.0
-]
+64.0,
+35.5,
+98.0,
+54.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-114c",
@@ -8933,10 +9572,19 @@
 ],
 "cap": "The gaps in the lateral wall of the pharynx: the first gap (tensor palati and levator palati), the second gap (stylopharyngeus and glossopharyngeal nerve) and the third gap (internal laryngeal nerve)",
 "box": [
+67.5,
 55.0,
-66.0,
-99.0,
-98.0
+97.0,
+94.5
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
+55.0,
+72.0,
+58.5
+]
 ]
 },
 {
@@ -8969,11 +9617,12 @@
 ],
 "cap": "The submental triangle: the body of the hyoid bone, the anterior bellies of the digastric, the mylohyoid muscles and the median raphe, with the submental nodes and vessels",
 "box": [
-40.0,
-62.0,
-98.0,
-93.0
-]
+51.0,
+68.0,
+95.0,
+89.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-116",
@@ -8987,11 +9636,12 @@
 ],
 "cap": "The branches of the external carotid artery: the superior thyroid, lingual, facial, occipital, posterior auricular, ascending pharyngeal, maxillary and superficial temporal arteries, with the superior thyroid artery on the thyroid lobe",
 "box": [
-50.0,
+51.0,
 5.0,
-99.0,
-71.0
-]
+98.0,
+70.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-117",
@@ -9005,10 +9655,29 @@
 ],
 "cap": "The hypoglossal nerve (XII): its course in the carotid sheath behind the vagus, its loop round the occipital artery, the digastric and the tongue muscles (hyoglossus, genioglossus, styloglossus)",
 "box": [
+2.0,
 3.0,
-3.0,
-99.0,
-51.0
+97.0,
+45.5
+],
+"pad": 0.3
+},
+{
+"id": "sd-117b",
+"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
+"sameh": 117,
+"sec": [
+"an-cranial-nerves#4"
+],
+"sc": [
+13.8
+],
+"cap": "The branches of the hypoglossal nerve: the meningeal branch (C1), the nerves to the geniohyoid and the thyrohyoid (C1), the descendens hypoglossi, and the terminal branches to all the muscles of the tongue except palatoglossus",
+"box": [
+30.0,
+88.0,
+92.0,
+98.5
 ]
 },
 {
@@ -9025,10 +9694,31 @@
 ],
 "cap": "The intracranial and intratemporal course of the facial nerve: the pons, the internal auditory meatus, the facial canal, the geniculate ganglion, the nerve to stapedius, the chorda tympani and the stylomastoid foramen",
 "box": [
-45.0,
-4.0,
-99.0,
-48.0
+54.0,
+2.0,
+98.0,
+50.0
+],
+"pad": 0.3,
+"fill": [
+[
+50.0,
+9.5,
+72.0,
+20.8
+],
+[
+50.0,
+21.5,
+56.5,
+34.0
+],
+[
+50.0,
+3.0,
+58.0,
+9.5
+]
 ]
 },
 {
@@ -9045,11 +9735,12 @@
 ],
 "cap": "The extracranial course of the facial nerve: the stylomastoid foramen, the parotid gland and its five terminal branches on the face",
 "box": [
-50.0,
-74.0,
-99.0,
+58.5,
+75.0,
+98.0,
 99.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-119a",
@@ -9067,11 +9758,12 @@
 ],
 "cap": "The lingual artery and its three parts in relation to the hyoglossus muscle, with the loop over the greater horn of the hyoid",
 "box": [
-48.0,
-2.0,
-99.0,
-26.0
-]
+52.0,
+3.0,
+97.0,
+25.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-119b",
@@ -9085,10 +9777,19 @@
 ],
 "cap": "The facial artery in the neck and on the face: its course deep to the posterior belly of the digastric, its groove in the submandibular gland, its curve round the mandible and its tonsillar, glandular, submental and ascending palatine branches",
 "box": [
-45.0,
+47.0,
 48.0,
-99.0,
-98.0
+97.0,
+93.5
+],
+"pad": 0.3,
+"fill": [
+[
+45.0,
+91.6,
+69.5,
+93.6
+]
 ]
 },
 {
@@ -9105,10 +9806,19 @@
 ],
 "cap": "The posterior relations of the internal carotid artery in the neck: longus capitis, the superior cervical sympathetic ganglion, the superior laryngeal nerve, the last four cranial nerves",
 "box": [
-50.0,
+64.0,
 2.0,
-99.0,
+97.0,
 24.0
+],
+"pad": 0.3,
+"fill": [
+[
+58.0,
+21.6,
+64.5,
+24.6
+]
 ]
 },
 {
@@ -9123,10 +9833,25 @@
 ],
 "cap": "The lateral and medial relations of the internal carotid artery: the internal jugular vein, the vagus nerve, the pharynx",
 "box": [
-56.0,
-27.0,
-99.0,
-52.0
+66.0,
+25.5,
+97.0,
+49.0
+],
+"pad": 0.3,
+"fill": [
+[
+69.0,
+28.3,
+76.0,
+30.8
+],
+[
+69.0,
+31.0,
+75.5,
+33.5
+]
 ]
 },
 {
@@ -9143,10 +9868,19 @@
 ],
 "cap": "The intrapetrous part of the internal carotid artery in the carotid canal: its relation to the middle ear and the foramen lacerum",
 "box": [
+62.0,
+54.5,
+98.0,
+77.8
+],
+"pad": 0.3,
+"fill": [
+[
+58.0,
 52.0,
-54.0,
-99.0,
-79.0
+78.0,
+54.8
+]
 ]
 },
 {
@@ -9161,11 +9895,12 @@
 ],
 "cap": "The vagus nerve in the neck: the jugular foramen with the superior and inferior ganglia, its course in the carotid sheath between the internal jugular vein and the internal and common carotid arteries",
 "box": [
-50.0,
-2.0,
-99.0,
-52.0
-]
+61.0,
+2.5,
+97.0,
+55.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-121b",
@@ -9180,10 +9915,11 @@
 "cap": "The branches of the vagus in the neck: the meningeal and auricular branches, the pharyngeal branch to the pharyngeal plexus, the superior laryngeal nerve and the cardiac branches",
 "box": [
 48.0,
-58.0,
-99.0,
-98.0
-]
+57.5,
+98.0,
+99.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-122",
@@ -9197,11 +9933,12 @@
 ],
 "cap": "The relations of the subclavian artery: the first, second and third parts with the scalenus anterior, the first rib, the clavicle, the subclavian vein, the sternomastoid and the phrenic nerve",
 "box": [
-5.0,
-5.0,
+1.0,
+6.5,
 99.0,
-48.0
-]
+46.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-123a",
@@ -9217,10 +9954,25 @@
 ],
 "cap": "The superior thyroid artery and its relations to the thyroid gland, the external laryngeal nerve and the infrahyoid muscles",
 "box": [
-68.0,
-4.0,
-99.0,
-36.0
+69.0,
+3.0,
+97.0,
+34.5
+],
+"pad": 0.3,
+"fill": [
+[
+66.0,
+6.5,
+73.0,
+8.6
+],
+[
+66.0,
+20.0,
+72.0,
+22.0
+]
 ]
 },
 {
@@ -9235,10 +9987,19 @@
 ],
 "cap": "The veins of the thyroid gland: the superior, middle and inferior thyroid veins draining to the internal jugular and brachiocephalic veins",
 "box": [
-68.0,
-64.0,
-99.0,
-84.0
+69.5,
+61.5,
+98.0,
+82.0
+],
+"pad": 0.3,
+"fill": [
+[
+67.0,
+66.6,
+70.0,
+68.4
+]
 ]
 },
 {
@@ -9272,9 +10033,18 @@
 "cap": "The costocervical trunk: its origin from the second part of the subclavian artery, the superior intercostal and deep cervical arteries over the neck of the first rib and the apex of the lung",
 "box": [
 66.0,
-76.0,
-99.0,
-98.0
+77.3,
+97.0,
+91.0
+],
+"pad": 0.3,
+"fill": [
+[
+64.0,
+75.0,
+75.0,
+78.0
+]
 ]
 },
 {
@@ -9289,10 +10059,31 @@
 ],
 "cap": "The palatine tonsil in the tonsillar fossa: the palatoglossal and palatopharyngeal folds, the soft palate, the uvula and the oropharynx",
 "box": [
-52.0,
-6.0,
-99.0,
-40.0
+46.0,
+18.0,
+97.0,
+54.5
+],
+"pad": 0.3,
+"fill": [
+[
+44.0,
+31.5,
+60.5,
+46.5
+],
+[
+44.0,
+47.5,
+62.5,
+49.5
+],
+[
+44.0,
+21.0,
+64.5,
+23.4
+]
 ]
 },
 {
@@ -9307,11 +10098,12 @@
 ],
 "cap": "The laryngopharynx: the vallecula, the epiglottis, the piriform fossa and the laryngeal orifice",
 "box": [
-52.0,
+57.0,
 66.0,
-99.0,
-98.0
-]
+97.0,
+94.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-126a",
@@ -9325,10 +10117,19 @@
 ],
 "cap": "The internal jugular vein: from the jugular foramen to the brachiocephalic vein, the superior and inferior bulbs and the valves, with the surface anatomy on the neck",
 "box": [
-55.0,
-2.0,
-99.0,
-46.0
+64.0,
+7.0,
+97.0,
+46.5
+],
+"pad": 0.3,
+"fill": [
+[
+61.0,
+13.5,
+66.0,
+17.0
+]
 ]
 },
 {
@@ -9347,10 +10148,19 @@
 ],
 "cap": "The relations of the internal jugular vein: the sternomastoid, the styloid apparatus, the parotid gland, the posterior belly of the digastric, the accessory and descendens cervicalis nerves and the infrahyoid muscles",
 "box": [
-45.0,
-49.0,
-99.0,
-97.0
+53.0,
+47.0,
+98.0,
+96.0
+],
+"pad": 0.3,
+"fill": [
+[
+50.0,
+54.5,
+55.5,
+58.5
+]
 ]
 },
 {
@@ -9365,10 +10175,19 @@
 ],
 "cap": "The vestibulocochlear nerve (VIII): the cochlear and vestibular parts, the internal auditory meatus, the cochlea, utricle, saccule and the semicircular canals",
 "box": [
-49.0,
-8.0,
-99.0,
-28.0
+50.0,
+3.0,
+97.0,
+26.0
+],
+"pad": 0.3,
+"fill": [
+[
+48.0,
+2.0,
+69.0,
+8.8
+]
 ]
 },
 {
@@ -9383,11 +10202,12 @@
 ],
 "cap": "The glossopharyngeal nerve (IX): from the jugular foramen between the internal jugular vein and the internal carotid artery, deep to the styloid process, stylopharyngeus and the middle constrictor to the tongue",
 "box": [
-2.0,
+3.5,
 29.0,
-98.0,
-67.0
-]
+97.0,
+67.8
+],
+"pad": 0.2
 },
 {
 "id": "sd-128a",
@@ -9403,8 +10223,17 @@
 "box": [
 54.0,
 3.0,
-99.0,
-35.0
+97.0,
+35.5
+],
+"pad": 0.3,
+"fill": [
+[
+51.0,
+28.9,
+56.5,
+30.8
+]
 ]
 },
 {
@@ -9419,11 +10248,12 @@
 ],
 "cap": "The posterior (deep) relations of the common carotid artery: the transverse processes of the cervical vertebrae, the prevertebral muscles, the sympathetic chain, the vertebral artery and the thoracic duct",
 "box": [
-53.0,
-39.0,
-99.0,
-72.0
-]
+57.0,
+38.5,
+97.0,
+70.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-128c",
@@ -9437,11 +10267,12 @@
 ],
 "cap": "The lateral relations of the common carotid artery: the internal jugular vein and the vagus nerve, the carotid body and the carotid sinus",
 "box": [
-54.0,
-72.0,
-99.0,
+59.5,
+73.5,
+97.0,
 99.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-129a",
@@ -9457,10 +10288,25 @@
 ],
 "cap": "The anteromedial and posterior relations of the internal carotid artery in the neck: the last four cranial nerves, rectus capitis lateralis, the scalene muscles and the subclavian artery with its branches",
 "box": [
-54.0,
-3.0,
-99.0,
-36.0
+58.0,
+2.0,
+97.0,
+36.5
+],
+"pad": 0.3,
+"fill": [
+[
+55.0,
+5.9,
+64.5,
+8.4
+],
+[
+55.0,
+8.5,
+61.0,
+10.6
+]
 ]
 },
 {
@@ -9475,11 +10321,12 @@
 ],
 "cap": "The tributaries of the internal jugular vein: the inferior petrosal sinus, the pharyngeal, lingual, common facial, superior and middle thyroid veins",
 "box": [
-68.0,
-36.0,
-99.0,
+62.0,
+38.8,
+90.0,
 58.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-129c",
@@ -9495,10 +10342,19 @@
 ],
 "cap": "The subclavian vein: its relations to the clavicle, the subclavius, the first rib and the scalenus anterior, and its union with the internal jugular vein",
 "box": [
-62.0,
-60.0,
-99.0,
-95.0
+47.0,
+62.5,
+82.0,
+93.0
+],
+"pad": 0.3,
+"fill": [
+[
+45.0,
+63.0,
+54.5,
+83.5
+]
 ]
 },
 {
@@ -9531,10 +10387,25 @@
 ],
 "cap": "The subclavian artery: the aortic arch, the origin of the right and left subclavian arteries, and its three parts in relation to the scalenus anterior and the first rib",
 "box": [
-4.0,
-8.0,
-96.0,
-33.0
+3.0,
+8.5,
+85.0,
+42.0
+],
+"pad": 0.3,
+"fill": [
+[
+25.0,
+4.5,
+75.0,
+8.5
+],
+[
+31.5,
+8.6,
+69.8,
+12.8
+]
 ]
 },
 {
@@ -9549,11 +10420,12 @@
 ],
 "cap": "The surface anatomy of the subclavian artery: the clavicle, the sternoclavicular joint and the midclavicular point",
 "box": [
-56.0,
-82.0,
-99.0,
-98.0
-]
+61.0,
+78.8,
+94.0,
+96.8
+],
+"pad": 0.3
 },
 {
 "id": "sd-132",
@@ -9591,11 +10463,12 @@
 ],
 "cap": "The cervical part of the internal carotid artery: its anterolateral relations (sternomastoid, posterior belly of digastric, hypoglossal nerve, styloid process, styloglossus, stylopharyngeus, glossopharyngeal nerve, parotid gland) and the external carotid artery in front",
 "box": [
-35.0,
-44.0,
-98.0,
-98.0
-]
+41.0,
+47.5,
+97.0,
+97.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-134a",
@@ -9627,10 +10500,19 @@
 ],
 "cap": "The spinal accessory nerve in the neck: its course through the sternomastoid and across the posterior triangle to the trapezius",
 "box": [
-50.0,
-18.0,
-99.0,
-52.0
+51.0,
+15.5,
+97.0,
+50.5
+],
+"pad": 0.3,
+"fill": [
+[
+49.0,
+48.0,
+63.0,
+51.2
+]
 ]
 },
 {
@@ -9645,10 +10527,19 @@
 ],
 "cap": "The branches of the subclavian artery: the vertebral artery, thyrocervical trunk, internal mammary artery and the costocervical trunk",
 "box": [
-66.0,
-24.0,
-99.0,
-52.0
+63.0,
+26.5,
+95.0,
+52.5
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
+26.0,
+71.5,
+31.5
+]
 ]
 },
 {
@@ -9666,10 +10557,11 @@
 "cap": "The vertebral artery in the neck: its first part (vertebral triangle), second part (foramina transversaria of the upper six cervical vertebrae) and its relations",
 "box": [
 49.0,
-52.0,
-99.0,
-99.0
-]
+51.5,
+98.0,
+97.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-136",
@@ -9683,10 +10575,19 @@
 ],
 "cap": "The pharynx: the constrictor muscles of the pharynx (superior, middle, inferior) on the side of the head and neck, with the thyroid cartilage and the hyoid bone",
 "box": [
-48.0,
-7.0,
-99.0,
-59.0
+57.0,
+6.5,
+97.0,
+64.5
+],
+"pad": 0.3,
+"fill": [
+[
+55.0,
+59.0,
+73.0,
+64.5
+]
 ]
 },
 {
@@ -9701,10 +10602,19 @@
 ],
 "cap": "The cervical sympathetic chain: its relations to the carotid sheath, the superior, middle and inferior cervical ganglia, the grey rami communicantes and the cardiac branches",
 "box": [
-50.0,
-6.0,
-99.0,
-70.0
+59.0,
+8.0,
+97.0,
+72.5
+],
+"pad": 0.3,
+"fill": [
+[
+55.0,
+4.0,
+79.0,
+8.6
+]
 ]
 },
 {
@@ -9719,11 +10629,12 @@
 ],
 "cap": "The superior laryngeal nerve (internal and external laryngeal branches) and the cardiac branches of the vagus in the neck",
 "box": [
-61.0,
-4.0,
-99.0,
-40.0
-]
+61.5,
+3.0,
+98.0,
+35.3
+],
+"pad": 0.3
 },
 {
 "id": "sd-138b",
@@ -9739,11 +10650,12 @@
 ],
 "cap": "The recurrent laryngeal nerves: the right recurrent nerve hooking round the subclavian artery and the left round the aortic arch (ligamentum arteriosum), ascending in the groove between the trachea and oesophagus",
 "box": [
-51.0,
-55.0,
-99.0,
-97.0
-]
+52.0,
+42.0,
+98.0,
+98.8
+],
+"pad": 0.3
 },
 {
 "id": "sd-139a",
@@ -9759,11 +10671,12 @@
 ],
 "cap": "The nerves of the posterior triangle: the spinal accessory nerve on levator scapulae, the roots and trunks of the brachial plexus, and the cutaneous branches of the cervical plexus",
 "box": [
-47.0,
+46.0,
 3.0,
-99.0,
+97.0,
 41.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-139b",
@@ -9777,10 +10690,19 @@
 ],
 "cap": "The suboccipital triangle: its boundaries (rectus capitis posterior major, obliquus capitis superior and inferior), its roof and its contents (third part of the vertebral artery, suboccipital nerve, venous plexus)",
 "box": [
-30.0,
+40.0,
+58.5,
+97.0,
+92.0
+],
+"pad": 0.3,
+"fill": [
+[
+38.0,
 58.0,
-99.0,
-98.0
+47.0,
+63.0
+]
 ]
 },
 {
@@ -9795,11 +10717,12 @@
 ],
 "cap": "The intrapetrous part of the facial nerve in the facial canal: the geniculate ganglion, the greater petrosal nerve, the chorda tympani and the nerve to stapedius",
 "box": [
-20.0,
-3.0,
+41.0,
+2.5,
 99.0,
-31.0
-]
+29.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-141",
@@ -9814,9 +10737,18 @@
 "cap": "The intracavernous part of the internal carotid artery in the cavernous sinus: the body of the sphenoid, the abducent nerve and the nerves in the lateral wall of the sinus",
 "box": [
 52.0,
-5.0,
-99.0,
-30.0
+7.5,
+97.0,
+31.0
+],
+"pad": 0.3,
+"fill": [
+[
+50.0,
+28.6,
+74.0,
+31.5
+]
 ]
 },
 {
@@ -9831,10 +10763,25 @@
 ],
 "cap": "The branches of the glossopharyngeal nerve: the tympanic nerve (Jacobson's nerve) and the lesser petrosal nerve to the otic ganglion, the carotid branch, the pharyngeal branches to the plexus and the lingual branches",
 "box": [
-47.0,
+50.0,
 14.0,
 97.0,
-62.0
+60.5
+],
+"pad": 0.3,
+"fill": [
+[
+48.0,
+13.2,
+60.0,
+19.5
+],
+[
+48.0,
+54.0,
+50.8,
+57.0
+]
 ]
 },
 {
@@ -9849,11 +10796,12 @@
 ],
 "cap": "The posterior triangle of the neck: its floor (splenius capitis, levator scapulae, scalenus medius) drawn on the side of the neck, with the clavicle",
 "box": [
-50.0,
-7.0,
-99.0,
-50.0
-]
+52.5,
+9.0,
+97.0,
+47.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-143b",
@@ -9867,11 +10815,12 @@
 ],
 "cap": "The inferior belly of the omohyoid muscle crossing the posterior triangle, with the intermediate tendon and the supraclavicular triangle",
 "box": [
-50.0,
-68.0,
-99.0,
-98.0
-]
+57.5,
+67.5,
+97.0,
+97.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-144",
@@ -9889,11 +10838,12 @@
 ],
 "cap": "The arteries of the posterior triangle: the third part of the subclavian artery, the suprascapular artery, the transverse cervical artery and the occipital artery, with the sternomastoid, trapezius and levator scapulae",
 "box": [
-49.0,
+51.0,
 3.0,
-99.0,
+97.0,
 51.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-145a",
@@ -9907,11 +10857,12 @@
 ],
 "cap": "The external carotid artery and its superficial relations: the posterior belly of the digastric, the parotid gland, the retromandibular vein and the facial nerve",
 "box": [
-50.0,
-32.0,
-99.0,
-61.0
-]
+60.5,
+30.5,
+95.0,
+62.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-145b",
@@ -9925,11 +10876,12 @@
 ],
 "cap": "The deep relations of the external carotid artery: the styloid process, styloglossus, stylopharyngeus, glossopharyngeal nerve, the pharyngeal branch of the vagus and the parotid gland",
 "box": [
-55.0,
+60.0,
 62.0,
-99.0,
-96.0
-]
+97.0,
+95.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-146a",
@@ -9943,11 +10895,12 @@
 ],
 "cap": "The constrictor muscles of the pharynx from behind: the superior, middle and inferior constrictors, the pharyngeal tubercle and the median raphe",
 "box": [
-68.0,
+67.5,
 2.0,
-99.0,
+97.0,
 23.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-146b",
@@ -9961,11 +10914,12 @@
 ],
 "cap": "The other muscles of the pharynx: the stylopharyngeus, palatopharyngeus and salpingopharyngeus, the Eustachian tube and the palatopharyngeal fold",
 "box": [
-50.0,
+58.0,
 26.0,
-99.0,
-72.0
-]
+97.0,
+68.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-146c",
@@ -9979,11 +10933,12 @@
 ],
 "cap": "The nerve supply of the pharynx: the pharyngeal plexus on the outer surface of the middle constrictor",
 "box": [
-50.0,
+64.0,
 71.0,
-99.0,
-98.0
-]
+97.0,
+97.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-147a",
@@ -9999,11 +10954,12 @@
 ],
 "cap": "The vertebral artery on the atlas: its third part in the suboccipital triangle grooving the posterior arch of the atlas",
 "box": [
-60.0,
-3.0,
-99.0,
-23.0
-]
+61.0,
+4.0,
+97.0,
+21.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-147b",
@@ -10021,10 +10977,19 @@
 ],
 "cap": "The termination of the vertebral artery: the union of the two vertebral arteries to form the basilar artery",
 "box": [
+74.0,
+23.5,
+91.0,
+43.5
+],
+"pad": 0.3,
+"fill": [
+[
 70.0,
-23.0,
-99.0,
-46.0
+43.6,
+95.0,
+47.0
+]
 ]
 },
 {
@@ -10039,11 +11004,12 @@
 ],
 "cap": "The internal mammary (thoracic) artery along the sternum with its branches (anterior intercostal, perforating, musculophrenic, superior epigastric)",
 "box": [
-60.0,
-55.0,
-99.0,
-83.0
-]
+74.0,
+58.5,
+97.0,
+97.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-148a",
@@ -10057,11 +11023,12 @@
 ],
 "cap": "The occipital artery and the posterior auricular artery behind the digastric muscle and the mastoid process",
 "box": [
-56.0,
+59.0,
 3.0,
-99.0,
-28.0
-]
+97.0,
+27.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-148b",
@@ -10075,10 +11042,19 @@
 ],
 "cap": "The ascending pharyngeal artery on the pharyngeal wall: its pharyngeal, tonsillar and inferior tympanic branches",
 "box": [
-40.0,
+63.0,
+42.5,
+97.0,
+58.0
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
 40.0,
 99.0,
-56.0
+42.6
+]
 ]
 },
 {
@@ -10093,11 +11069,12 @@
 ],
 "cap": "The superficial temporal artery and its frontal and parietal branches on the scalp",
 "box": [
-61.0,
-68.0,
-99.0,
-83.0
-]
+66.0,
+70.0,
+97.0,
+89.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-149",
@@ -10115,10 +11092,25 @@
 ],
 "cap": "The trigeminal nerve (V): the pons, the sensory root and motor root, the trigeminal ganglion and its three divisions (ophthalmic, maxillary and mandibular nerves)",
 "box": [
-57.0,
-4.0,
-99.0,
-26.0
+40.0,
+3.5,
+97.0,
+30.0
+],
+"pad": 0.3,
+"fill": [
+[
+38.0,
+6.0,
+67.0,
+11.5
+],
+[
+38.0,
+12.0,
+44.3,
+29.0
+]
 ]
 },
 {
@@ -10135,11 +11127,12 @@
 ],
 "cap": "The olfactory nerve (I): the olfactory mucosa of the nasal roof, the nerve filaments through the cribriform plate, the olfactory bulb and the olfactory tract",
 "box": [
-62.0,
+61.0,
 50.0,
-99.0,
-74.0
-]
+97.0,
+72.0
+],
+"pad": 0.3
 },
 {
 "id": "sd-151",
@@ -10155,10 +11148,19 @@
 ],
 "cap": "The cervical plexus: its formation from the anterior rami of C1 to C4 under the sternomastoid, lying on levator scapulae and scalenus medius",
 "box": [
-64.0,
-31.0,
-98.0,
-62.0
+69.0,
+32.5,
+97.0,
+56.5
+],
+"pad": 0.3,
+"fill": [
+[
+63.0,
+56.6,
+99.0,
+60.0
+]
 ]
 },
 {
@@ -10173,10 +11175,31 @@
 ],
 "cap": "The styloid apparatus: the styloid process with the stylomandibular and stylohyoid ligaments and the stylopharyngeus, stylohyoid and styloglossus muscles, with the hyoid bone and the thyroid cartilage",
 "box": [
-50.0,
-33.0,
-99.0,
-98.0
+39.0,
+33.5,
+97.0,
+97.5
+],
+"pad": 0.2,
+"fill": [
+[
+38.0,
+39.0,
+47.0,
+43.5
+],
+[
+38.0,
+43.5,
+76.0,
+48.6
+],
+[
+38.0,
+57.5,
+52.3,
+99.0
+]
 ]
 },
 {
@@ -10191,11 +11214,12 @@
 ],
 "cap": "The superficial lymph nodes of the head: the occipital, post-auricular, parotid, buccal, submandibular and superficial cervical nodes drawn on the head",
 "box": [
-1.0,
-5.0,
-99.0,
-53.0
-]
+2.0,
+6.8,
+98.0,
+54.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-154a",
@@ -10211,11 +11235,12 @@
 ],
 "cap": "The postero-anterior radiograph of the skull: frontal bone and air sinus, orbit, conchae, nasal septum, maxillary air sinus, zygomatic arch and the ramus of the mandible",
 "box": [
-3.0,
+0.5,
 9.0,
 99.0,
-49.0
-]
+53.8
+],
+"pad": 0.2
 },
 {
 "id": "sd-154b",
@@ -10229,11 +11254,12 @@
 ],
 "cap": "The lateral radiograph of the skull: coronal suture, sella turcica, frontal and sphenoidal air sinuses, petrous part of the temporal bone, lambdoid suture, maxillary sinus and the posterior arch of the atlas",
 "box": [
-3.0,
-51.0,
+0.5,
+54.0,
 99.0,
-98.0
-]
+98.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-155a",
@@ -10249,10 +11275,25 @@
 ],
 "cap": "The epiglottis, the thyroid cartilage and the cricoid cartilage of the larynx",
 "box": [
-81.0,
-2.0,
+72.0,
+1.5,
 99.0,
-43.0
+46.0
+],
+"pad": 0.2,
+"fill": [
+[
+70.0,
+30.5,
+82.5,
+34.0
+],
+[
+70.0,
+42.0,
+82.0,
+47.0
+]
 ]
 },
 {
@@ -10267,10 +11308,19 @@
 ],
 "cap": "The arytenoid cartilage on the cricoid: apex, base, vocal process, muscular process, the corniculate cartilage and the vocal cord",
 "box": [
-64.0,
-48.0,
-99.0,
-76.0
+62.0,
+47.5,
+97.0,
+74.0
+],
+"pad": 0.2,
+"fill": [
+[
+60.0,
+46.5,
+85.0,
+49.3
+]
 ]
 },
 {
@@ -10285,11 +11335,12 @@
 ],
 "cap": "The ear: the external ear (auricle and external auditory meatus), the middle ear (tympanic cavity), the internal ear (cochlea and semicircular canals) and the Eustachian tube",
 "box": [
-4.0,
+3.0,
 6.0,
 98.0,
-34.0
-]
+33.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-156b",
@@ -10304,10 +11355,11 @@
 "cap": "The auricle (pinna): helix, antihelix, tragus, antitragus and lobule, with its cutaneous nerve supply",
 "box": [
 46.0,
-52.0,
-99.0,
-73.0
-]
+50.5,
+98.0,
+71.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-157",
@@ -10321,10 +11373,19 @@
 ],
 "cap": "The atlanto-occipital joints: the occipital condyles, the superior articular facets of the atlas, the foramen magnum and the anterior and posterior atlanto-occipital membranes",
 "box": [
-58.0,
+59.0,
 66.0,
 96.0,
-95.0
+93.6
+],
+"pad": 0.2,
+"fill": [
+[
+57.0,
+93.7,
+97.0,
+97.0
+]
 ]
 },
 {
@@ -10339,10 +11400,19 @@
 ],
 "cap": "The structures in the median region of the neck: the symphysis menti, the hyoid bone, the thyroid cartilage, the cricoid cartilage, the isthmus of the thyroid gland, the trachea and the suprasternal notch, with the infrahyoid muscles",
 "box": [
-50.0,
+56.5,
 4.0,
-98.0,
-91.0
+97.0,
+86.0
+],
+"pad": 0.2,
+"fill": [
+[
+54.0,
+5.0,
+61.5,
+8.3
+]
 ]
 },
 {
@@ -10357,10 +11427,19 @@
 ],
 "cap": "The muscles that adduct the vocal cords: the transverse arytenoid and the lateral cricoarytenoid, drawn on the arytenoid and cricoid cartilages",
 "box": [
-62.0,
+61.0,
 5.0,
-99.0,
-30.0
+79.0,
+29.5
+],
+"pad": 0.2,
+"fill": [
+[
+59.0,
+20.5,
+66.5,
+26.0
+]
 ]
 },
 {
@@ -10375,11 +11454,12 @@
 ],
 "cap": "The cavity of the larynx: the vestibule, the vestibular folds, the ventricle (sinus), the vocal folds, the rima glottidis and the infraglottic compartment",
 "box": [
-59.0,
-31.0,
-99.0,
-61.0
-]
+60.5,
+30.5,
+97.0,
+60.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-159c",
@@ -10393,11 +11473,12 @@
 ],
 "cap": "The laryngeal orifice (inlet): the epiglottis, the aryepiglottic folds and the interarytenoid fold",
 "box": [
-61.0,
+66.0,
 62.0,
-99.0,
+97.0,
 75.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-160",
@@ -10411,10 +11492,19 @@
 ],
 "cap": "The vertical group of the deep cervical lymph nodes along the internal jugular vein: the jugulo-digastric node, the jugulo-omohyoid node, the upper and lower deep cervical nodes and the jugular lymph trunk",
 "box": [
-45.0,
-10.0,
-99.0,
-56.0
+46.0,
+9.5,
+98.0,
+57.0
+],
+"pad": 0.2,
+"fill": [
+[
+44.0,
+45.5,
+56.5,
+58.0
+]
 ]
 },
 {
@@ -10429,11 +11519,12 @@
 ],
 "cap": "The muscles that close the laryngeal orifice: the transverse arytenoid and the aryepiglottic muscles, seen from above",
 "box": [
-60.0,
-4.0,
-99.0,
-36.0
-]
+71.5,
+7.0,
+96.5,
+31.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-161b",
@@ -10447,11 +11538,12 @@
 ],
 "cap": "The cricothyroid muscles that stretch the vocal cords: tilting the thyroid cartilage forward",
 "box": [
-60.0,
-41.0,
-99.0,
-53.0
-]
+56.5,
+36.0,
+97.0,
+51.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-161c",
@@ -10465,11 +11557,12 @@
 ],
 "cap": "The thyroarytenoid muscles that relax the vocal cords",
 "box": [
-57.0,
-62.0,
-99.0,
-72.0
-]
+63.0,
+56.0,
+97.0,
+73.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-161d",
@@ -10483,11 +11576,12 @@
 ],
 "cap": "The posterior cricoarytenoid muscles that abduct the vocal cords: the vocal process and the muscular process of the arytenoid",
 "box": [
-51.0,
-79.0,
-99.0,
-98.0
-]
+58.0,
+75.5,
+97.0,
+97.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-162a",
@@ -10501,11 +11595,12 @@
 ],
 "cap": "The axis (second cervical vertebra): the dens (odontoid process), the body, the superior articular process and the spine",
 "box": [
-48.0,
-4.0,
-99.0,
-21.0
-]
+44.5,
+3.0,
+98.0,
+25.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-162b",
@@ -10521,10 +11616,19 @@
 ],
 "cap": "The vertebra prominens (C7): the long blunt spine, the vertebral foramen, the small foramen transversarium and the arch",
 "box": [
-62.0,
-25.0,
-99.0,
-45.0
+61.0,
+24.5,
+98.0,
+53.5
+],
+"pad": 0.2,
+"fill": [
+[
+59.0,
+52.0,
+70.5,
+54.5
+]
 ]
 },
 {
@@ -10539,11 +11643,12 @@
 ],
 "cap": "A typical cervical vertebra (C3 to C6): the bifid spine, the foramen transversarium, the vertebral foramen, the body and the superior articular facets",
 "box": [
-67.0,
-20.0,
-99.0,
-43.0
-]
+70.0,
+20.8,
+97.0,
+40.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-163b",
@@ -10557,10 +11662,19 @@
 ],
 "cap": "The atlas (first cervical vertebra) from above: the anterior and posterior arches, the lateral masses, the superior articular facets and the transverse process with its foramen",
 "box": [
-54.0,
-49.0,
-99.0,
-69.0
+55.0,
+45.5,
+97.0,
+60.5
+],
+"pad": 0.2,
+"fill": [
+[
+53.0,
+57.6,
+71.8,
+61.0
+]
 ]
 },
 {
@@ -10575,10 +11689,19 @@
 ],
 "cap": "The atlas seen from below: the inferior articular facets and the anterior tubercle",
 "box": [
-54.0,
-83.0,
-99.0,
+58.0,
+81.5,
+97.0,
 98.0
+],
+"pad": 0.2,
+"fill": [
+[
+56.0,
+81.0,
+69.0,
+83.4
+]
 ]
 },
 {
@@ -10594,10 +11717,11 @@
 "cap": "The styloglossus muscle from the styloid process to the tongue with the hypoglossal nerve",
 "box": [
 58.0,
-5.0,
-99.0,
-22.0
-]
+4.5,
+97.0,
+16.4
+],
+"pad": 0.2
 },
 {
 "id": "sd-164b",
@@ -10615,10 +11739,19 @@
 ],
 "cap": "The stylohyoid muscle: from the styloid process to the hyoid bone, split by the digastric intermediate tendon",
 "box": [
-66.0,
-30.0,
-99.0,
+65.0,
+22.5,
+97.0,
 44.0
+],
+"pad": 0.2,
+"fill": [
+[
+63.0,
+43.6,
+99.0,
+46.0
+]
 ]
 },
 {
@@ -10634,9 +11767,18 @@
 "cap": "The stylopharyngeus muscle: from the styloid process to the thyroid cartilage and pharyngeal wall",
 "box": [
 66.0,
-62.0,
-99.0,
-90.0
+58.0,
+97.0,
+91.0
+],
+"pad": 0.2,
+"fill": [
+[
+64.0,
+62.3,
+71.8,
+64.6
+]
 ]
 },
 {
@@ -10651,11 +11793,12 @@
 ],
 "cap": "The middle ear cavity (tympanic cavity) as a box: the roof (tegmen tympani), the floor (jugular wall), the lateral wall (ear drum), the medial wall (promontory), the facial canal, the aditus, the mastoid antrum, the chorda tympani, the tensor tympani and the Eustachian tube",
 "box": [
-4.0,
+1.5,
 9.0,
-99.0,
-55.0
-]
+98.5,
+52.8
+],
+"pad": 0.2
 },
 {
 "id": "sd-166",
@@ -10670,10 +11813,11 @@
 "cap": "The extrinsic muscles of the tongue: the hyoglossus, styloglossus, palatoglossus and genioglossus drawn from the side with the hyoid bone, the styloid process and the palatine aponeurosis",
 "box": [
 3.0,
-7.0,
-96.0,
-47.0
-]
+7.5,
+95.0,
+43.4
+],
+"pad": 0.2
 },
 {
 "id": "sd-167",
@@ -10688,10 +11832,11 @@
 "cap": "The superficial circular lymph nodes of the neck: the submental, submandibular, anterior cervical and superficial cervical nodes drawn on the head and neck",
 "box": [
 12.0,
-7.0,
-80.0,
+8.0,
+89.0,
 51.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-168a",
@@ -10707,10 +11852,19 @@
 ],
 "cap": "The membranous labyrinth: the semicircular ducts with the ampullae, the utricle, the saccule, the ductus reuniens and the cochlear duct",
 "box": [
-48.0,
-6.0,
-99.0,
-50.0
+52.0,
+24.5,
+97.0,
+48.6
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+41.5,
+60.5,
+46.5
+]
 ]
 },
 {
@@ -10727,10 +11881,52 @@
 ],
 "cap": "The cochlear duct in section: the scala vestibuli, the scala tympani, the basilar membrane and the spiral organ of Corti",
 "box": [
-62.0,
-43.0,
-99.0,
-63.0
+61.5,
+48.8,
+98.0,
+66.0
+],
+"pad": 0.2,
+"fill": [
+[
+59.0,
+48.3,
+76.5,
+50.3
+],
+[
+59.0,
+50.3,
+65.0,
+52.2
+],
+[
+59.0,
+53.0,
+63.6,
+66.5
+]
+]
+},
+{
+"id": "sd-168c",
+"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
+"sameh": 168,
+"box": [
+74.0,
+4.5,
+97.0,
+14.5
+],
+"pad": 0.2,
+"cap": "A section of the cochlear canal: the spiral lamina dividing it into the scala vestibuli above and the scala tympani below",
+"sec": [
+"hi-ear#3",
+"hi-ear#2"
+],
+"sc": [
+18.8,
+17.6
 ]
 },
 {
@@ -10745,11 +11941,12 @@
 ],
 "cap": "The deep muscles of the back of the neck: semispinalis capitis and cervicis and longissimus capitis, with their origins on the vertebrae and insertion on the occipital bone",
 "box": [
-71.0,
-6.0,
-99.0,
+72.0,
+4.5,
+97.0,
 34.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-169b",
@@ -10765,10 +11962,19 @@
 ],
 "cap": "The suboccipital muscles: obliquus capitis superior and inferior, rectus capitis posterior major and minor around the suboccipital triangle",
 "box": [
-61.0,
-40.0,
-99.0,
-59.0
+60.5,
+39.0,
+97.5,
+60.2
+],
+"pad": 0.2,
+"fill": [
+[
+59.0,
+39.5,
+62.6,
+43.0
+]
 ]
 },
 {
@@ -10783,11 +11989,12 @@
 ],
 "cap": "The deep circular lymph nodes of the head and neck: the retropharyngeal, paratracheal, infrahyoid, prelaryngeal and pretracheal nodes drawn on the neck",
 "box": [
-31.0,
-8.0,
-83.0,
-63.0
-]
+17.0,
+9.6,
+84.0,
+62.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-171",
@@ -10801,10 +12008,19 @@
 ],
 "cap": "The muscles of the soft palate from behind: the tensor palati, the pterygoid hamulus, the levator palati, the palatoglossus and the palatopharyngeus, with the uvula and the palatine aponeurosis",
 "box": [
-50.0,
-3.0,
-99.0,
-57.0
+51.0,
+3.5,
+97.0,
+56.0
+],
+"pad": 0.2,
+"fill": [
+[
+49.0,
+39.5,
+55.5,
+52.5
+]
 ]
 },
 {
@@ -10819,10 +12035,19 @@
 ],
 "cap": "The temporomandibular joint: the articular fossa and tubercle of the temporal bone, the articular disc, the head of the mandible and the lateral pterygoid",
 "box": [
-50.0,
+50.5,
 9.0,
-99.0,
+97.0,
+32.6
+],
+"pad": 0.2,
+"fill": [
+[
+48.5,
+30.3,
+60.5,
 33.0
+]
 ]
 },
 {
@@ -10837,11 +12062,12 @@
 ],
 "cap": "The temporomandibular joint in section: the upper and lower compartments divided by the articular disc",
 "box": [
-50.0,
-36.0,
-99.0,
-55.0
-]
+61.0,
+36.5,
+97.0,
+47.4
+],
+"pad": 0.2
 },
 {
 "id": "sd-172c",
@@ -10855,10 +12081,55 @@
 ],
 "cap": "The accessory ligaments of the temporomandibular joint: the lateral (temporomandibular) ligament, the sphenomandibular ligament, the stylomandibular ligament and the pterygomandibular ligament",
 "box": [
-50.0,
+60.5,
+50.5,
+97.0,
+89.0
+],
+"pad": 0.2,
+"fill": [
+[
+58.0,
+57.5,
+66.5,
+59.2
+],
+[
+58.0,
+63.8,
+62.0,
+65.3
+],
+[
+58.0,
 67.0,
-99.0,
-95.0
+61.0,
+69.0
+],
+[
+58.0,
+70.6,
+64.0,
+72.6
+],
+[
+58.0,
+75.6,
+64.5,
+77.6
+],
+[
+58.0,
+77.8,
+62.0,
+79.4
+],
+[
+58.0,
+86.8,
+73.5,
+88.6
+]
 ]
 },
 {
@@ -10873,10 +12144,25 @@
 ],
 "cap": "The dorsum of the tongue: the sulcus terminalis, foramen caecum, vallate papillae and the lingual tonsil",
 "box": [
-58.0,
+53.0,
 3.0,
-99.0,
+97.0,
 21.0
+],
+"pad": 0.2,
+"fill": [
+[
+51.0,
+3.0,
+66.0,
+16.3
+],
+[
+51.0,
+21.0,
+99.0,
+24.0
+]
 ]
 },
 {
@@ -10893,10 +12179,19 @@
 ],
 "cap": "The structure of the eyeball in a sagittal section: sclera, choroid, retina, cornea, iris, lens, ciliary body, anterior and posterior chambers, vitreous body, optic disc and optic nerve with the dural sheath",
 "box": [
-4.0,
-6.0,
+2.0,
+6.3,
 98.0,
-40.0
+41.0
+],
+"pad": 0.2,
+"fill": [
+[
+0.0,
+39.4,
+50.0,
+43.0
+]
 ]
 },
 {
@@ -10912,10 +12207,11 @@
 "cap": "The hyoid bone: the body, the greater and lesser horns, and the muscles and ligaments attached to it (hyoglossus, middle constrictor, stylohyoid ligament, mylohyoid, geniohyoid, thyrohyoid, sternohyoid, omohyoid)",
 "box": [
 2.0,
-5.0,
-90.0,
+4.5,
+92.0,
 35.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-176",
@@ -10929,11 +12225,12 @@
 ],
 "cap": "The bony labyrinth: the three semicircular canals (superior, posterior, lateral), the vestibule and the cochlea with the oval window, the utricle and the saccule",
 "box": [
-50.0,
-37.0,
-99.0,
+52.0,
+38.5,
+97.0,
 88.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-177",
@@ -10947,10 +12244,19 @@
 ],
 "cap": "The contents of the middle ear: the three ossicles (malleus, incus, stapes), the tensor tympani and stapedius muscles, the chorda tympani and the tympanic plexus",
 "box": [
-28.0,
+42.0,
+4.5,
+97.0,
+29.8
+],
+"pad": 0.2,
+"fill": [
+[
+40.0,
 4.0,
 99.0,
-31.0
+8.3
+]
 ]
 },
 {
@@ -10965,10 +12271,25 @@
 ],
 "cap": "The four layers of the muscles of the back of the neck: trapezius, sternomastoid, levator scapulae, splenius, semispinalis capitis, longissimus and the suboccipital muscles with their attachments to the vertebrae",
 "box": [
-2.0,
-36.0,
-98.0,
-72.0
+1.5,
+43.8,
+97.5,
+71.8
+],
+"pad": 0.2,
+"fill": [
+[
+69.0,
+43.5,
+97.5,
+50.3
+],
+[
+1.5,
+43.5,
+69.0,
+46.2
+]
 ]
 },
 {
@@ -10983,11 +12304,12 @@
 ],
 "cap": "The splenius muscle (capitis and cervicis) from the nuchal ligament and spines of C7 to T6 to the mastoid process",
 "box": [
-60.0,
-76.0,
-99.0,
+58.5,
+75.5,
+97.0,
 99.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-178c",
@@ -11003,10 +12325,19 @@
 ],
 "cap": "The cutaneous nerve supply of the skin of the back of the neck by the dorsal rami of C2, C3 and C4",
 "box": [
-70.0,
+70.5,
 8.0,
-99.0,
-25.0
+97.0,
+25.3
+],
+"pad": 0.2,
+"fill": [
+[
+68.5,
+12.0,
+72.5,
+18.0
+]
 ]
 },
 {
@@ -11023,10 +12354,19 @@
 ],
 "cap": "The nerve supply of the larynx: the recurrent laryngeal nerve, the internal and external laryngeal nerves from the superior laryngeal nerve",
 "box": [
-54.0,
+63.5,
 3.0,
-99.0,
-24.0
+97.0,
+28.5
+],
+"pad": 0.2,
+"fill": [
+[
+61.0,
+10.5,
+65.3,
+12.8
+]
 ]
 },
 {
@@ -11043,8 +12383,35 @@
 "box": [
 50.0,
 39.0,
-99.0,
-90.0
+97.0,
+77.6
+],
+"pad": 0.2,
+"fill": [
+[
+48.0,
+38.8,
+68.0,
+42.4
+],
+[
+48.0,
+43.5,
+63.5,
+45.6
+],
+[
+48.0,
+46.2,
+61.5,
+48.3
+],
+[
+48.0,
+65.3,
+55.8,
+67.0
+]
 ]
 },
 {
@@ -11059,10 +12426,19 @@
 ],
 "cap": "The oral cavity on a sagittal section: the vestibule, the mouth proper, the tongue, the palate and the oropharynx",
 "box": [
-52.0,
+62.0,
 4.0,
-99.0,
-38.0
+97.0,
+37.0
+],
+"pad": 0.2,
+"fill": [
+[
+60.0,
+5.5,
+68.8,
+10.8
+]
 ]
 },
 {
@@ -11077,10 +12453,19 @@
 ],
 "cap": "The parts of the tongue: the tip, the buccal (palatine) part, the pharyngeal part and the root",
 "box": [
-54.0,
-62.0,
-99.0,
-78.0
+54.5,
+59.5,
+97.0,
+74.5
+],
+"pad": 0.2,
+"fill": [
+[
+52.0,
+67.3,
+60.0,
+69.3
+]
 ]
 },
 {
@@ -11095,10 +12480,19 @@
 ],
 "cap": "The floor of the mouth and the lower surface of the tongue: the frenulum linguae, the deep lingual vein and the fimbriated fold",
 "box": [
-52.0,
-78.0,
-99.0,
-98.0
+66.0,
+76.5,
+97.0,
+99.5
+],
+"pad": 0.2,
+"fill": [
+[
+64.0,
+76.0,
+72.5,
+95.5
+]
 ]
 },
 {
@@ -11115,10 +12509,25 @@
 ],
 "cap": "The tympanic membrane (ear drum): the pars flaccida, the pars tensa, the anterior and posterior malleolar folds, the handle of the malleus and the cone of light",
 "box": [
-45.0,
-26.0,
-99.0,
+49.0,
+27.0,
+97.0,
+64.0
+],
+"pad": 0.2,
+"fill": [
+[
+46.0,
+30.0,
+53.0,
 61.0
+],
+[
+46.0,
+58.5,
+77.5,
+62.5
+]
 ]
 },
 {
@@ -11133,10 +12542,19 @@
 ],
 "cap": "The back of the neck: the suboccipital triangle and the structures around it, with the dorsal rami of C1, C2 and C3",
 "box": [
-58.0,
-29.0,
-99.0,
-59.0
+59.0,
+31.5,
+97.0,
+53.5
+],
+"pad": 0.2,
+"fill": [
+[
+57.0,
+46.5,
+62.0,
+50.5
+]
 ]
 },
 {
@@ -11152,9 +12570,18 @@
 "cap": "The prevertebral muscles drawn on the front of the cervical spine: the longus colli, the longus capitis and the rectus capitis muscles",
 "box": [
 68.0,
+19.5,
+95.0,
+57.5
+],
+"pad": 0.2,
+"fill": [
+[
+66.0,
 8.0,
 99.0,
-57.0
+12.0
+]
 ]
 },
 {
@@ -11169,11 +12596,12 @@
 ],
 "cap": "The site of the larynx on a sagittal section of the head and neck (C3 to C6) with the tongue and the trachea",
 "box": [
-68.0,
+69.0,
 6.0,
-99.0,
-25.0
-]
+97.0,
+24.2
+],
+"pad": 0.2
 },
 {
 "id": "sd-184b",
@@ -11188,9 +12616,18 @@
 "cap": "The relations of the larynx on a transverse section (the lobes of the thyroid, the carotid sheath and the pharynx)",
 "box": [
 30.0,
+26.0,
+98.0,
+43.3
+],
+"pad": 0.2,
+"fill": [
+[
 28.0,
-99.0,
-41.0
+30.5,
+38.0,
+40.0
+]
 ]
 },
 {
@@ -11205,10 +12642,19 @@
 ],
 "cap": "The structure of the larynx: the cartilages (epiglottis, thyroid, cricoid, arytenoid, corniculate, cuneiform), the thyrohyoid membrane and the trachea seen from the front and from behind",
 "box": [
-2.0,
+3.0,
+48.0,
+95.0,
+72.5
+],
+"pad": 0.2,
+"fill": [
+[
+3.0,
 45.0,
-94.0,
-72.0
+33.0,
+52.0
+]
 ]
 },
 {
@@ -11223,10 +12669,19 @@
 ],
 "cap": "The thyrohyoid membrane of the larynx seen from the front",
 "box": [
-62.0,
+70.5,
 6.0,
-99.0,
-22.0
+97.0,
+20.5
+],
+"pad": 0.2,
+"fill": [
+[
+68.0,
+6.0,
+72.5,
+9.2
+]
 ]
 },
 {
@@ -11241,10 +12696,31 @@
 ],
 "cap": "The inner aspect of the larynx: the quadrate membrane, the false cord, the cricothyroid membrane and ligament, the vocal ligament and the arytenoid cartilage",
 "box": [
-58.0,
-29.0,
-99.0,
-70.0
+63.5,
+25.0,
+95.0,
+62.0
+],
+"pad": 0.2,
+"fill": [
+[
+61.0,
+47.5,
+66.0,
+50.8
+],
+[
+61.0,
+54.0,
+85.0,
+56.5
+],
+[
+61.0,
+56.5,
+76.0,
+62.5
+]
 ]
 },
 {
@@ -11259,11 +12735,12 @@
 ],
 "cap": "The median atlanto-axial joint: the odontoid process (dens) in an osseofibrous ring formed by the anterior arch of the atlas and the transverse ligament",
 "box": [
-63.0,
-46.0,
-99.0,
-67.0
-]
+59.0,
+46.5,
+97.0,
+63.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-187",
@@ -11299,10 +12776,19 @@
 ],
 "cap": "The blood supply of the spinal cord: the anterior spinal artery from the vertebral arteries, the two posterior spinal arteries, the basilar artery and pons, and the segmental radicular arteries",
 "box": [
-48.0,
-4.0,
-99.0,
-63.0
+53.0,
+3.5,
+97.0,
+58.5
+],
+"pad": 0.2,
+"fill": [
+[
+51.0,
+3.0,
+70.0,
+6.5
+]
 ]
 },
 {
@@ -11317,10 +12803,25 @@
 ],
 "cap": "The radicular arteries and the arteria radicularis magna (of Adamkiewicz) with the spinal nerve roots and the cauda equina",
 "box": [
-45.0,
-64.0,
-99.0,
-91.0
+45.5,
+64.5,
+97.0,
+90.5
+],
+"pad": 0.2,
+"fill": [
+[
+44.0,
+64.3,
+72.0,
+66.8
+],
+[
+44.0,
+77.5,
+50.5,
+81.0
+]
 ]
 },
 {
@@ -11338,10 +12839,11 @@
 "cap": "The brain on a median section with its morphological subdivisions labelled: cerebral hemisphere, diencephalon, midbrain (M.B.), pons, medulla and cerebellum",
 "box": [
 7.0,
-14.0,
-99.0,
-62.0
-]
+12.5,
+90.0,
+70.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-191a",
@@ -11357,10 +12859,19 @@
 ],
 "cap": "The anterior horn of the lateral ventricle in a coronal section: the body of the corpus callosum, the septum pellucidum, the head of the caudate nucleus and the rostrum of the corpus callosum",
 "box": [
-54.0,
+58.0,
 4.0,
-99.0,
-26.0
+96.0,
+30.0
+],
+"pad": 0.2,
+"fill": [
+[
+56.0,
+24.5,
+61.5,
+30.5
+]
 ]
 },
 {
@@ -11377,10 +12888,19 @@
 ],
 "cap": "The central part (body) of the lateral ventricle in a coronal section: the roof (corpus callosum), the medial wall (septum pellucidum), and the floor (caudate nucleus, thalamus, fornix)",
 "box": [
-54.0,
-28.0,
-99.0,
-53.0
+59.0,
+29.0,
+96.0,
+60.5
+],
+"pad": 0.2,
+"fill": [
+[
+56.0,
+29.0,
+62.0,
+33.0
+]
 ]
 },
 {
@@ -11395,11 +12915,12 @@
 ],
 "cap": "The posterior horn of the lateral ventricle: the tapetum of the corpus callosum, the bulb of the posterior horn and the calcar avis",
 "box": [
-55.0,
-65.0,
-99.0,
-92.0
-]
+61.0,
+66.5,
+96.0,
+88.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-192a",
@@ -11415,10 +12936,19 @@
 ],
 "cap": "The basal ganglia in a lateral view: the caudate nucleus (head, body, tail), the lentiform nucleus (putamen and globus pallidus), the amygdaloid nucleus and the claustrum",
 "box": [
+52.0,
+6.0,
+96.0,
+35.5
+],
+"pad": 0.2,
+"fill": [
+[
 50.0,
-7.0,
-99.0,
-31.0
+5.0,
+72.0,
+9.0
+]
 ]
 },
 {
@@ -11435,10 +12965,25 @@
 ],
 "cap": "The caudate nucleus on the medial aspect: the head, the body and the tail curving into the temporal lobe to the amygdaloid nucleus",
 "box": [
-52.0,
-38.0,
+52.5,
+37.0,
+96.0,
+61.5
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+36.5,
+61.0,
+41.0
+],
+[
+50.0,
+61.5,
 99.0,
-65.0
+64.0
+]
 ]
 },
 {
@@ -11453,10 +12998,19 @@
 ],
 "cap": "The body, the head and the tail of the caudate nucleus in relation to the lateral ventricle",
 "box": [
-57.0,
-68.0,
-99.0,
-91.0
+66.0,
+67.5,
+96.0,
+85.5
+],
+"pad": 0.2,
+"fill": [
+[
+63.0,
+67.0,
+69.0,
+72.0
+]
 ]
 },
 {
@@ -11473,10 +13027,19 @@
 ],
 "cap": "The fourth ventricle on a median section: the pons, the cerebellum, the choroid plexus, the subarachnoid space and the central canal of the closed medulla",
 "box": [
-58.0,
-12.0,
-97.0,
+59.0,
+10.5,
+96.0,
 50.0
+],
+"pad": 0.2,
+"fill": [
+[
+56.0,
+44.0,
+60.0,
+50.5
+]
 ]
 },
 {
@@ -11493,10 +13056,25 @@
 ],
 "cap": "The floor of the fourth ventricle (rhomboid fossa) with its boundaries (superior and inferior cerebellar peduncles, gracile and cuneate tubercles) and its angles and lateral recesses",
 "box": [
-48.0,
-50.0,
-97.0,
-96.0
+55.5,
+55.5,
+93.0,
+97.0
+],
+"pad": 0.2,
+"fill": [
+[
+54.0,
+55.0,
+60.0,
+70.0
+],
+[
+54.0,
+82.0,
+60.5,
+98.0
+]
 ]
 },
 {
@@ -11511,11 +13089,12 @@
 ],
 "cap": "The sulci and gyri of the superolateral surface of the cerebral hemisphere: the central, precentral and postcentral sulci, the frontal, temporal, parietal and occipital gyri, the lateral sulcus",
 "box": [
-38.0,
-24.0,
-99.0,
-55.0
-]
+18.0,
+29.5,
+97.0,
+56.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-195",
@@ -11529,10 +13108,19 @@
 ],
 "cap": "The sulci and gyri of the medial surface of the hemisphere: the cingulate gyrus, the corpus callosum, the paracentral lobule, the precuneus, the cuneus, the lingual gyrus, the fusiform gyrus and the parahippocampal gyrus",
 "box": [
-20.0,
-66.0,
-99.0,
-99.0
+19.0,
+67.5,
+97.0,
+99.5
+],
+"pad": 0.2,
+"fill": [
+[
+17.0,
+63.5,
+60.0,
+67.3
+]
 ]
 },
 {
@@ -11548,10 +13136,11 @@
 "cap": "The lateral ventricle seen through the surface of the hemisphere: its body in the parietal lobe, the anterior horn in the frontal lobe, the posterior horn in the occipital lobe and the inferior horn in the temporal lobe",
 "box": [
 17.0,
-11.0,
-82.0,
-36.0
-]
+10.5,
+83.0,
+36.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-196b",
@@ -11565,10 +13154,25 @@
 ],
 "cap": "The lateral ventricle and its communication with the third ventricle through the interventricular foramen (of Monro)",
 "box": [
+41.5,
+40.5,
+97.0,
+62.0
+],
+"pad": 0.2,
+"fill": [
+[
+39.0,
 40.0,
-40.0,
-99.0,
-56.0
+66.0,
+43.0
+],
+[
+39.0,
+54.0,
+48.0,
+58.0
+]
 ]
 },
 {
@@ -11585,10 +13189,19 @@
 ],
 "cap": "The subdivisions of the cerebellum on the upper surface: the anterior lobe, the middle lobe and the posterior (flocculonodular) lobe, the archicerebellum, paleocerebellum and neocerebellum with the primary and posterolateral fissures",
 "box": [
-33.0,
-29.0,
-99.0,
-56.0
+6.0,
+28.5,
+97.0,
+55.3
+],
+"pad": 0.2,
+"fill": [
+[
+4.0,
+54.4,
+42.0,
+58.0
+]
 ]
 },
 {
@@ -11605,11 +13218,12 @@
 ],
 "cap": "The brain on a median section and from above showing the cerebrum, the diencephalon and the brain stem",
 "box": [
-60.0,
-8.0,
-99.0,
+62.5,
+7.5,
+97.0,
 24.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-198b",
@@ -11625,11 +13239,12 @@
 ],
 "cap": "The cerebral hemispheres from above, separated by the longitudinal cerebral fissure, with the right and left hemispheres",
 "box": [
-69.0,
-24.0,
-99.0,
-47.0
-]
+71.5,
+24.5,
+95.0,
+48.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-198c",
@@ -11645,10 +13260,19 @@
 ],
 "cap": "The lateral surface of the cerebral hemisphere",
 "box": [
-66.0,
+69.5,
+55.5,
+97.0,
+70.5
+],
+"pad": 0.2,
+"fill": [
+[
+67.0,
 55.0,
-99.0,
-68.0
+70.7,
+60.5
+]
 ]
 },
 {
@@ -11665,11 +13289,12 @@
 ],
 "cap": "The medial surface of the cerebral hemisphere",
 "box": [
-66.0,
-69.0,
-99.0,
-80.0
-]
+71.0,
+70.5,
+97.0,
+82.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-198e",
@@ -11683,10 +13308,19 @@
 ],
 "cap": "The inferior surface of the cerebral hemisphere with the stem of the lateral sulcus, its orbital and tentorial parts",
 "box": [
-60.0,
-82.0,
-99.0,
-98.0
+66.5,
+84.0,
+97.0,
+99.5
+],
+"pad": 0.2,
+"fill": [
+[
+65.0,
+84.0,
+73.5,
+87.0
+]
 ]
 },
 {
@@ -11706,7 +13340,22 @@
 43.0,
 2.0,
 99.0,
-52.0
+52.5
+],
+"pad": 0.2,
+"fill": [
+[
+41.0,
+1.0,
+79.3,
+28.6
+],
+[
+41.0,
+28.0,
+45.2,
+51.0
+]
 ]
 },
 {
@@ -11724,10 +13373,11 @@
 "cap": "The spinal cord with its cervical and lumbar enlargements",
 "box": [
 82.0,
-55.0,
+55.5,
 99.0,
-85.0
-]
+85.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-200a",
@@ -11744,9 +13394,24 @@
 "cap": "The veins of the spinal cord: the six longitudinal veins with the dorsal and ventral nerve roots",
 "box": [
 48.0,
-3.0,
-99.0,
-22.0
+2.5,
+98.0,
+33.0
+],
+"pad": 0.2,
+"fill": [
+[
+46.0,
+1.5,
+59.0,
+10.6
+],
+[
+46.0,
+14.0,
+52.4,
+26.3
+]
 ]
 },
 {
@@ -11761,10 +13426,25 @@
 ],
 "cap": "The meningeal spaces of the spinal cord on a transverse section of the vertebra: the extradural, subdural and subarachnoid spaces",
 "box": [
-52.0,
-44.0,
-99.0,
+54.0,
+46.0,
+97.0,
 70.0
+],
+"pad": 0.2,
+"fill": [
+[
+52.0,
+46.5,
+61.0,
+49.7
+],
+[
+52.0,
+50.5,
+63.5,
+54.2
+]
 ]
 },
 {
@@ -11779,11 +13459,12 @@
 ],
 "cap": "Lumbar puncture: the needle entering the subarachnoid space between L3 and L4",
 "box": [
-52.0,
-83.0,
-99.0,
-98.0
-]
+64.0,
+82.5,
+97.0,
+99.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-201a",
@@ -11797,10 +13478,31 @@
 ],
 "cap": "The inferior horn of the lateral ventricle in section: the roof (tail of the caudate), the medial wall, the floor with the collateral eminence, the hippocampus and the fimbria",
 "box": [
-82.0,
-7.0,
-99.0,
-33.0
+62.0,
+3.0,
+96.0,
+29.5
+],
+"pad": 0.2,
+"fill": [
+[
+60.0,
+13.5,
+64.5,
+16.0
+],
+[
+60.0,
+23.3,
+76.0,
+25.8
+],
+[
+60.0,
+26.3,
+74.0,
+28.4
+]
 ]
 },
 {
@@ -11817,11 +13519,12 @@
 ],
 "cap": "The tela choroidea and the choroid plexuses of the lateral and third ventricles: the body of the fornix, the thalami and the roof of the third ventricle",
 "box": [
-60.0,
-65.0,
-99.0,
+59.0,
+64.5,
+97.0,
 94.0
-]
+],
+"pad": 0.2
 },
 {
 "id": "sd-202",
@@ -11835,10 +13538,19 @@
 ],
 "cap": "The functional areas of the lateral surface of the cerebral hemisphere with Brodmann's numbers: primary motor cortex (4), premotor (6), frontal eye field (8), Broca's area (44, 45), primary somatosensory (3, 1, 2), auditory (41, 42), Wernicke's area (22), visual association cortex (18, 19), primary visual cortex (17)",
 "box": [
-3.0,
+1.5,
 12.0,
-96.0,
-46.0
+94.0,
+46.5
+],
+"pad": 0.2,
+"fill": [
+[
+0.0,
+9.0,
+82.0,
+12.3
+]
 ]
 },
 {
@@ -11853,11 +13565,12 @@
 ],
 "cap": "The sulci and gyri of the medial and tentorial surfaces: the callosal, cingulate, parieto-occipital, calcarine, collateral, hippocampal and subparietal sulci, with the corpus callosum and the uncus",
 "box": [
-8.0,
-8.0,
-99.0,
-40.0
-]
+12.0,
+8.5,
+84.0,
+39.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-204",
@@ -11871,11 +13584,12 @@
 ],
 "cap": "The functional areas on the medial surface of the cerebral hemisphere: supplementary motor cortex (6), prefrontal cortex, somatosensory association (5, 7), limbic lobe, primary visual cortex (17) and visual association cortex (18, 19)",
 "box": [
-3.0,
-4.0,
-99.0,
-36.0
-]
+2.0,
+6.0,
+93.0,
+39.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-205a",
@@ -11889,10 +13603,25 @@
 ],
 "cap": "The cerebellum on a median section: its position behind the pons and medulla, below the tentorium cerebelli and the occipital lobe, with the fourth ventricle",
 "box": [
-54.0,
-6.0,
-99.0,
-31.0
+55.5,
+6.5,
+97.0,
+36.0
+],
+"pad": 0.2,
+"fill": [
+[
+53.0,
+21.5,
+60.5,
+23.5
+],
+[
+53.0,
+26.5,
+69.0,
+28.6
+]
 ]
 },
 {
@@ -11907,10 +13636,19 @@
 ],
 "cap": "The upper and lower surfaces of the cerebellum: the vermis, hemispheres, the vallecula, the flocculus, the tonsil, the horizontal fissure and the notches",
 "box": [
-3.0,
-40.0,
-99.0,
+2.5,
+40.5,
+97.0,
 66.0
+],
+"pad": 0.2,
+"fill": [
+[
+0.0,
+37.5,
+52.0,
+40.8
+]
 ]
 },
 {
@@ -11925,10 +13663,43 @@
 ],
 "cap": "The medulla oblongata: the pons, pyramids, olive, anterior median fissure, pyramidal decussation and the foramen magnum",
 "box": [
+52.0,
+1.5,
+97.0,
+37.0
+],
+"pad": 0.2,
+"fill": [
+[
 50.0,
-3.0,
-99.0,
+22.0,
+54.8,
+31.0
+],
+[
+50.0,
+32.5,
+70.0,
 38.0
+],
+[
+50.0,
+26.0,
+58.0,
+38.0
+],
+[
+70.0,
+35.3,
+90.0,
+38.5
+],
+[
+50.0,
+0.0,
+63.5,
+4.3
+]
 ]
 },
 {
@@ -11945,10 +13716,25 @@
 ],
 "cap": "The posterior surface of the medulla: the posterior median fissure, the gracile and cuneate tubercles, the medullary striae and the inferior cerebellar peduncle",
 "box": [
-56.0,
-66.0,
-99.0,
-94.0
+55.5,
+66.5,
+97.0,
+96.0
+],
+"pad": 0.2,
+"fill": [
+[
+53.0,
+74.0,
+61.5,
+79.5
+],
+[
+53.0,
+91.5,
+63.0,
+95.0
+]
 ]
 },
 {
@@ -11963,10 +13749,25 @@
 ],
 "cap": "The orbital surface of the hemisphere: the olfactory sulcus and bulb, the gyrus rectus and the H-shaped orbital sulci",
 "box": [
+60.0,
+71.0,
+95.0,
+93.5
+],
+"pad": 0.2,
+"fill": [
+[
+56.0,
+68.5,
+78.0,
+71.2
+],
+[
 58.0,
-69.0,
-99.0,
-94.0
+74.0,
+60.8,
+76.5
+]
 ]
 },
 {
@@ -11983,11 +13784,12 @@
 ],
 "cap": "The lower end of the spinal cord and its coverings: the conus medullaris, the filum terminale, the denticulate ligaments and the pia mater",
 "box": [
-55.0,
-3.0,
-99.0,
-41.0
-]
+58.0,
+9.5,
+97.0,
+40.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-208b",
@@ -12001,10 +13803,19 @@
 ],
 "cap": "The termination of the spinal cord and the dural sac on a sagittal section of the vertebral column: the cauda equina, the filum terminale, the lumbar cistern and the coccyx",
 "box": [
+52.0,
+44.5,
+97.0,
+98.5
+],
+"pad": 0.2,
+"fill": [
+[
 50.0,
-44.0,
-99.0,
-98.0
+43.5,
+68.0,
+46.2
+]
 ]
 },
 {
@@ -12021,10 +13832,25 @@
 ],
 "cap": "The anterior perforated substance on the base of the brain: the olfactory bulb, tract and trigone, the optic chiasma and tract, the lateral and medial olfactory striae",
 "box": [
-54.0,
+55.0,
+52.5,
+96.0,
+78.5
+],
+"pad": 0.2,
+"fill": [
+[
+53.0,
 52.0,
-99.0,
-99.0
+61.5,
+57.0
+],
+[
+53.0,
+58.0,
+58.5,
+61.0
+]
 ]
 },
 {
@@ -12039,10 +13865,67 @@
 ],
 "cap": "The posterior surface of the midbrain: the superior and inferior colliculi, the brachia and geniculate bodies, the superior cerebellar peduncles, the superior medullary velum and the trochlear nerve",
 "box": [
-56.0,
-33.0,
-99.0,
+55.0,
+33.5,
+97.0,
 70.0
+],
+"pad": 0.2,
+"fill": [
+[
+53.0,
+33.0,
+97.0,
+36.6
+],
+[
+53.0,
+39.0,
+61.5,
+41.6
+],
+[
+53.0,
+42.5,
+57.6,
+46.0
+],
+[
+53.0,
+49.0,
+62.5,
+51.6
+],
+[
+53.0,
+51.8,
+61.0,
+53.3
+],
+[
+53.0,
+54.3,
+60.5,
+56.0
+],
+[
+53.0,
+58.8,
+61.0,
+60.8
+],
+[
+53.0,
+62.3,
+61.0,
+64.3
+],
+[
+53.0,
+64.5,
+60.8,
+66.3
+]
 ]
 },
 {
@@ -12058,10 +13941,11 @@
 "cap": "The insula: the circular sulcus, the apex, the limen insulae, the frontoparietal, orbital and temporal opercula and the stem of the lateral sulcus",
 "box": [
 3.0,
-70.0,
+71.0,
 80.0,
-98.0
-]
+98.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-212a",
@@ -12077,10 +13961,43 @@
 ],
 "cap": "The posterior surface of the pons (floor of the fourth ventricle): the median sulcus, the medial eminence, the facial colliculus and the medullary striae",
 "box": [
-50.0,
-17.0,
-99.0,
-52.0
+59.0,
+17.5,
+95.0,
+48.8
+],
+"pad": 0.2,
+"fill": [
+[
+57.0,
+16.5,
+70.0,
+19.3
+],
+[
+57.0,
+33.0,
+63.5,
+35.2
+],
+[
+57.0,
+41.5,
+61.0,
+43.2
+],
+[
+57.0,
+43.8,
+63.5,
+45.6
+],
+[
+57.0,
+46.5,
+62.7,
+48.6
+]
 ]
 },
 {
@@ -12095,10 +14012,43 @@
 ],
 "cap": "The anterior surface of the midbrain: the cerebral peduncles, the interpeduncular fossa, the optic tracts and chiasma, with the tectum, tegmentum and the aqueduct",
 "box": [
-54.0,
-63.0,
-99.0,
+63.5,
+64.0,
+97.0,
 92.0
+],
+"pad": 0.2,
+"fill": [
+[
+61.5,
+69.5,
+64.3,
+74.0
+],
+[
+61.5,
+76.5,
+64.3,
+80.8
+],
+[
+61.5,
+81.0,
+65.5,
+83.0
+],
+[
+61.5,
+84.0,
+63.6,
+86.0
+],
+[
+61.5,
+86.7,
+64.5,
+90.7
+]
 ]
 },
 {
@@ -12113,11 +14063,12 @@
 ],
 "cap": "The anterior surface of the pons and medulla: the basilar groove, the transverse fibres, the trigeminal nerve, the middle cerebellar peduncle, the pyramid, the olive and the optic tracts",
 "box": [
-57.0,
-38.0,
-99.0,
-74.0
-]
+51.0,
+38.5,
+91.0,
+69.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-214a",
@@ -12131,11 +14082,12 @@
 ],
 "cap": "The transverse section of the spinal cord with the anterior and posterior roots, the spinal ganglion and the spinal nerve",
 "box": [
-68.0,
-4.0,
-99.0,
-31.0
-]
+66.5,
+3.5,
+97.0,
+31.8
+],
+"pad": 0.2
 },
 {
 "id": "sd-214b",
@@ -12150,9 +14102,30 @@
 "cap": "The spinal nerves and the vertebral column: the eight cervical, twelve thoracic, five lumbar, five sacral and one coccygeal nerve with the vertebrae",
 "box": [
 73.0,
-33.0,
-99.0,
-97.0
+35.6,
+97.0,
+96.0
+],
+"pad": 0.2,
+"fill": [
+[
+71.0,
+72.5,
+74.3,
+75.5
+],
+[
+71.0,
+76.0,
+74.6,
+78.3
+],
+[
+71.0,
+85.5,
+76.5,
+88.5
+]
 ]
 },
 {
@@ -12169,11 +14142,12 @@
 ],
 "cap": "The lentiform nucleus on a horizontal section of the hemisphere: the putamen, the globus pallidus, the head of the caudate, the claustrum and the external capsule",
 "box": [
-55.0,
+60.0,
 3.0,
-99.0,
-38.0
-]
+92.0,
+39.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-215b",
@@ -12189,10 +14163,31 @@
 ],
 "cap": "The corpus striatum on a coronal section: the caudate nucleus, the lentiform nucleus, the internal capsule, the thalamus and the claustrum",
 "box": [
+54.5,
+56.6,
+94.0,
+72.8
+],
+"pad": 0.2,
+"fill": [
+[
 55.0,
-53.0,
-99.0,
-82.0
+54.0,
+75.0,
+56.4
+],
+[
+55.0,
+57.5,
+60.5,
+61.2
+],
+[
+50.0,
+54.0,
+62.0,
+59.0
+]
 ]
 },
 {
@@ -12212,9 +14207,24 @@
 "cap": "The lateral surface of the midbrain: the brachium of the superior colliculus and the brachium of the inferior colliculus, the cerebral peduncle, the pons and the crossing structures (optic tract, basal vein, trochlear nerve, posterior cerebral artery)",
 "box": [
 62.0,
-3.0,
-99.0,
-40.0
+9.0,
+97.0,
+41.5
+],
+"pad": 0.2,
+"fill": [
+[
+60.0,
+9.5,
+64.0,
+11.5
+],
+[
+60.0,
+14.5,
+64.8,
+16.5
+]
 ]
 },
 {
@@ -12233,10 +14243,25 @@
 ],
 "cap": "The interpeduncular fossa: the optic chiasma, the optic tracts, the tuber cinereum, the infundibulum, the mamillary bodies, the cerebral peduncles and the pons",
 "box": [
-52.0,
+53.0,
 47.0,
-99.0,
-77.0
+92.0,
+77.5
+],
+"pad": 0.2,
+"fill": [
+[
+51.0,
+46.0,
+59.7,
+49.6
+],
+[
+51.0,
+65.8,
+57.4,
+74.5
+]
 ]
 },
 {
@@ -12251,10 +14276,25 @@
 ],
 "cap": "The lateral fissure (of Sylvius) and its rami, with the frontal, parietal, temporal and occipital lobes, the parieto-occipital sulcus and the pre-occipital notch",
 "box": [
-60.0,
-3.0,
-99.0,
-33.0
+65.5,
+8.5,
+94.0,
+31.5
+],
+"pad": 0.2,
+"fill": [
+[
+63.0,
+5.0,
+67.0,
+8.7
+],
+[
+63.0,
+29.0,
+70.5,
+31.6
+]
 ]
 },
 {
@@ -12269,11 +14309,12 @@
 ],
 "cap": "The cerebral hemisphere seen from the side: the superomedial, inferolateral and superciliary borders and the frontal, temporal and occipital poles",
 "box": [
-50.0,
-30.0,
-99.0,
-46.0
-]
+66.0,
+29.5,
+97.0,
+44.0
+],
+"pad": 0.2
 },
 {
 "id": "sd-218b",
@@ -12287,11 +14328,12 @@
 ],
 "cap": "The four lobes of the cerebral hemisphere (frontal, parietal, temporal, occipital) and the three major sulci (central, lateral, parieto-occipital)",
 "box": [
-50.0,
-52.0,
-99.0,
-76.0
-]
+64.5,
+49.3,
+97.0,
+72.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-219",
@@ -12307,10 +14349,19 @@
 ],
 "cap": "The blood supply of the cerebellum: the superior cerebellar, anterior inferior cerebellar and posterior inferior cerebellar arteries on the basilar and vertebral arteries",
 "box": [
-60.0,
-53.0,
+54.5,
+53.8,
 99.0,
-78.0
+77.3
+],
+"pad": 0.3,
+"fill": [
+[
+54.0,
+59.3,
+61.3,
+64.5
+]
 ]
 },
 {
@@ -12325,10 +14376,31 @@
 ],
 "cap": "The extrapyramidal centres on a coronal section of the brain (premotor area 6, corpus striatum, subthalamic nucleus) and the connections of the red nucleus, substantia nigra and the reticular formation",
 "box": [
+58.5,
+7.0,
+93.0,
+28.2
+],
+"pad": 0.3,
+"fill": [
+[
+84.0,
+4.0,
+95.0,
+8.5
+],
+[
 50.0,
-3.0,
-99.0,
-28.0
+12.0,
+59.6,
+16.5
+],
+[
+50.0,
+26.0,
+59.4,
+29.5
+]
 ]
 },
 {
@@ -12345,11 +14417,12 @@
 ],
 "cap": "The rubrospinal and tectospinal tracts on a section of the midbrain and pons",
 "box": [
-50.0,
-30.0,
-99.0,
-50.0
-]
+62.0,
+28.3,
+98.0,
+47.3
+],
+"pad": 0.3
 },
 {
 "id": "sd-221c",
@@ -12365,10 +14438,19 @@
 ],
 "cap": "The extrapyramidal tracts of the spinal cord on a diagram from the midbrain to the spinal cord: rubrospinal, tectospinal, vestibulospinal and olivospinal tracts",
 "box": [
-52.0,
-50.0,
-99.0,
-97.0
+51.0,
+47.3,
+98.0,
+92.5
+],
+"pad": 0.3,
+"fill": [
+[
+49.0,
+59.3,
+63.3,
+98.0
+]
 ]
 },
 {
@@ -12385,10 +14467,19 @@
 ],
 "cap": "The meninges of the brain on a sagittal section: the pia mater, arachnoid mater, dura mater and the subarachnoid cisterns (cisterna magna and pontine cistern) around the brain stem and cerebellum",
 "box": [
-54.0,
-72.0,
-99.0,
-98.0
+58.5,
+69.2,
+93.5,
+95.0
+],
+"pad": 0.3,
+"fill": [
+[
+56.0,
+66.0,
+80.5,
+70.8
+]
 ]
 },
 {
@@ -12403,11 +14494,12 @@
 ],
 "cap": "The pyramidal and extrapyramidal tracts compared: the course of the pyramidal tract from the motor cortex through the internal capsule, midbrain, pons and medulla to the spinal cord, and the many relays of the extrapyramidal tracts",
 "box": [
-39.0,
-38.0,
+39.3,
+38.8,
 99.0,
-97.0
-]
+97.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-224a",
@@ -12423,11 +14515,12 @@
 ],
 "cap": "The arterial supply of the brain from below: the internal carotid, anterior cerebral, anterior communicating, middle cerebral, posterior communicating, posterior cerebral, basilar and vertebral arteries on the base of the brain",
 "box": [
-3.0,
+2.0,
 8.0,
-99.0,
-50.0
-]
+96.0,
+53.5
+],
+"pad": 0.3
 },
 {
 "id": "sd-224b",
@@ -12441,10 +14534,19 @@
 ],
 "cap": "The intracranial part of the internal carotid artery near the sella turcica",
 "box": [
-58.0,
-83.0,
-99.0,
-98.0
+59.0,
+80.0,
+94.0,
+96.3
+],
+"pad": 0.3,
+"fill": [
+[
+54.0,
+84.0,
+59.4,
+89.5
+]
 ]
 },
 {
@@ -12462,9 +14564,18 @@
 "cap": "The internal structure of the pons on sections of the lower pons and the upper pons: the basilar part (pontine nuclei, transverse and longitudinal fibres), the tegmental part, the nuclei of the abducent, facial and trigeminal nerves, the medial lemniscus and the medial longitudinal bundle",
 "box": [
 3.0,
-6.0,
-99.0,
-38.0
+8.7,
+97.0,
+35.3
+],
+"pad": 0.3,
+"fill": [
+[
+84.0,
+4.0,
+97.0,
+8.8
+]
 ]
 },
 {
@@ -12482,10 +14593,11 @@
 "cap": "The internal structure of the medulla on sections at three levels: the lower medulla (motor decussation), the middle medulla (sensory decussation) and the upper (open) medulla, with the gracile and cuneate nuclei, the medial lemniscus, the pyramids and the olivary nucleus",
 "box": [
 0.0,
-3.0,
-98.0,
-31.0
-]
+0.5,
+96.5,
+30.4
+],
+"pad": 0.3
 },
 {
 "id": "sd-227a",
@@ -12499,10 +14611,25 @@
 ],
 "cap": "The middle cerebral artery on the base of the brain and its cortical branches on the lateral surface of the hemisphere",
 "box": [
-38.0,
-3.0,
+51.0,
+10.3,
 99.0,
-55.0
+56.8
+],
+"pad": 0.3,
+"fill": [
+[
+47.0,
+41.5,
+56.2,
+45.5
+],
+[
+82.0,
+54.8,
+100.0,
+58.5
+]
 ]
 },
 {
@@ -12517,10 +14644,19 @@
 ],
 "cap": "The central (striate) branches of the middle cerebral artery to the internal capsule and the corpus striatum, and the artery of cerebral haemorrhage",
 "box": [
-63.0,
-54.0,
-99.0,
-98.0
+64.3,
+55.4,
+98.0,
+98.5
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
+53.0,
+81.5,
+57.8
+]
 ]
 },
 {
@@ -12535,10 +14671,25 @@
 ],
 "cap": "The pyramidal tract (corticospinal and corticobulbar) from the motor area and the homunculus through the corona radiata, internal capsule, midbrain, pons, pyramid and pyramidal decussation to the spinal cord, drawn on a long diagram",
 "box": [
-59.0,
+58.5,
+7.6,
+98.0,
+88.6
+],
+"pad": 0.3,
+"fill": [
+[
+79.0,
 5.0,
-99.0,
-91.0
+90.0,
+9.6
+],
+[
+55.0,
+79.3,
+60.3,
+82.0
+]
 ]
 },
 {
@@ -12555,10 +14706,37 @@
 ],
 "cap": "The touch pathways (fine touch and simple touch): the receptors, the dorsal root ganglion, the spinal cord, the medulla, midbrain, thalamus, internal capsule and the sensory area, with the first, second and third order neurones labelled",
 "box": [
-15.0,
-10.0,
-99.0,
-64.0
+53.5,
+7.0,
+98.5,
+81.0
+],
+"pad": 0.3,
+"fill": [
+[
+49.0,
+9.5,
+56.0,
+15.0
+],
+[
+53.0,
+27.9,
+62.0,
+32.4
+],
+[
+53.0,
+36.6,
+62.0,
+57.3
+],
+[
+53.0,
+59.5,
+62.5,
+80.8
+]
 ]
 },
 {
@@ -12573,11 +14751,12 @@
 ],
 "cap": "The sensory receptors: Merkel's touch corpuscles, Meissner's corpuscles and the tufts of Bonet",
 "box": [
-64.0,
-82.0,
-99.0,
-98.0
-]
+65.3,
+80.5,
+98.5,
+94.6
+],
+"pad": 0.3
 },
 {
 "id": "sd-230a",
@@ -12593,10 +14772,25 @@
 ],
 "cap": "The pain and temperature pathways: the lateral spinothalamic tract from the spinal cord through the medulla, pons and midbrain to the thalamus and the sensory area, with the first, second and third order neurones",
 "box": [
-14.0,
-8.0,
-99.0,
-78.0
+53.3,
+11.4,
+98.0,
+77.5
+],
+"pad": 0.3,
+"fill": [
+[
+50.0,
+29.3,
+57.6,
+76.3
+],
+[
+50.0,
+76.3,
+65.5,
+79.0
+]
 ]
 },
 {
@@ -12615,10 +14809,19 @@
 ],
 "cap": "The receptors of pain and temperature: free nerve endings, Ruffini organ and Krause's end bulb",
 "box": [
-67.0,
+60.8,
+78.8,
+98.0,
+89.4
+],
+"pad": 0.3,
+"fill": [
+[
+58.0,
+89.4,
 80.0,
-99.0,
-98.0
+92.0
+]
 ]
 },
 {
@@ -12633,10 +14836,58 @@
 ],
 "cap": "The connections of the cerebellum with the extrapyramidal centres: the premotor area, the red nucleus (dentato-rubral tract), the inferior olivary nucleus and the reticular formation",
 "box": [
-52.0,
-36.0,
-99.0,
-90.0
+59.3,
+39.8,
+97.0,
+91.0
+],
+"pad": 0.3,
+"fill": [
+[
+50.0,
+40.5,
+63.5,
+45.0
+]
+]
+},
+{
+"id": "sd-231b",
+"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
+"sameh": 231,
+"box": [
+72.5,
+4.3,
+96.0,
+39.5
+],
+"pad": 0.3,
+"fill": [
+[
+60.0,
+6.0,
+75.0,
+8.9
+],
+[
+60.0,
+24.3,
+75.0,
+26.8
+],
+[
+86.0,
+0.0,
+97.0,
+5.2
+]
+],
+"cap": "The reticulospinal tracts: the medial reticulospinal tract from the pons (uncrossed, anterior column) and the lateral reticulospinal tract from the medulla (crossed, lateral column) descending to the spinal cord",
+"sec": [
+"ph-umn-lmn#1"
+],
+"sc": [
+2.7
 ]
 },
 {
@@ -12653,10 +14904,25 @@
 ],
 "cap": "The proprioceptive pathway to the cerebral cortex: the Pacinian corpuscles, muscle spindles and tendon spindles, the gracile and cuneate tracts and nuclei, the internal arcuate fibres, the medial lemniscus, the thalamus, the internal capsule and the sensory area",
 "box": [
+52.9,
+8.3,
+98.0,
+95.0
+],
+"pad": 0.2,
+"fill": [
+[
 50.0,
-8.0,
-93.0,
-94.0
+26.0,
+53.0,
+56.5
+],
+[
+50.0,
+56.5,
+59.3,
+98.0
+]
 ]
 },
 {
@@ -12673,11 +14939,12 @@
 ],
 "cap": "The descending tracts of the spinal cord on cross sections: the pyramidal tracts (lateral and anterior corticospinal), the extrapyramidal tracts (rubrospinal, olivospinal, lateral reticulospinal, tectospinal, vestibulospinal, medial reticulospinal) and the descending autonomic tracts",
 "box": [
-7.0,
-13.0,
-99.0,
-38.0
-]
+9.5,
+12.3,
+98.5,
+38.8
+],
+"pad": 0.3
 },
 {
 "id": "sd-233b",
@@ -12693,11 +14960,12 @@
 ],
 "cap": "The intersegmental tracts of the spinal cord on a cross section: the fasciculi proprii, the septomarginal tract, the comma-shaped tract and Lissauer's tract",
 "box": [
-66.0,
-79.0,
-99.0,
-98.0
-]
+67.5,
+74.8,
+97.5,
+93.3
+],
+"pad": 0.3
 },
 {
 "id": "sd-234",
@@ -12711,11 +14979,12 @@
 ],
 "cap": "The veins of the lateral surface of the cerebral hemisphere: the superior cerebral veins to the superior sagittal sinus, the superficial middle cerebral vein, the inferior cerebral veins, the cavernous sinus and the anastomotic veins",
 "box": [
-3.0,
-30.0,
-99.0,
-70.0
-]
+2.5,
+26.3,
+97.5,
+67.3
+],
+"pad": 0.3
 },
 {
 "id": "sd-235",
@@ -12729,10 +14998,19 @@
 ],
 "cap": "The veins of the medial surface of the hemisphere: the superior sagittal sinus, the inferior sagittal sinus, the internal cerebral veins, the great cerebral vein (of Galen), the basal vein and the striate veins around the corpus callosum",
 "box": [
-4.0,
+8.0,
 10.0,
-99.0,
-41.0
+97.0,
+42.2
+],
+"pad": 0.3,
+"fill": [
+[
+18.0,
+7.0,
+100.0,
+10.2
+]
 ]
 },
 {
@@ -12749,10 +15027,19 @@
 ],
 "cap": "The sensory lemnisci and pathways on a long diagram from the spinal cord to the cortex: the spinal lemniscus, the medial lemniscus, the trigeminal lemniscus and the lateral lemniscus in the medulla, pons, midbrain and thalamus",
 "box": [
-56.0,
+62.5,
 3.0,
-99.0,
-97.0
+98.3,
+71.3
+],
+"pad": 0.3,
+"fill": [
+[
+92.0,
+3.8,
+98.5,
+8.0
+]
 ]
 },
 {
@@ -12767,10 +15054,19 @@
 ],
 "cap": "The middle cerebral artery's cortical areas on the lateral surface of the hemisphere (motor and sensory areas, auditory area, motor speech area)",
 "box": [
-62.0,
-5.0,
-99.0,
-24.0
+54.5,
+4.3,
+95.8,
+24.3
+],
+"pad": 0.3,
+"fill": [
+[
+48.0,
+5.8,
+57.0,
+9.3
+]
 ]
 },
 {
@@ -12785,10 +15081,19 @@
 ],
 "cap": "The vertebro-basilar system on the base of the brain: the vertebral arteries, the posterior inferior cerebellar arteries, the anterior spinal artery and the basilar artery with its branches",
 "box": [
-62.0,
-28.0,
-99.0,
-78.0
+57.3,
+25.7,
+95.5,
+71.0
+],
+"pad": 0.3,
+"fill": [
+[
+48.0,
+26.0,
+65.0,
+30.5
+]
 ]
 },
 {
@@ -12804,10 +15109,11 @@
 "cap": "The posterior inferior cerebellar artery winding round the medulla to the cerebellum",
 "box": [
 60.0,
-80.0,
-99.0,
+76.0,
+97.0,
 98.0
-]
+],
+"pad": 0.3
 },
 {
 "id": "sd-238",
@@ -12821,10 +15127,55 @@
 ],
 "cap": "The superficial attachment of the cranial nerves on the base of the brain stem: the olfactory, optic, oculomotor, trochlear, trigeminal, abducent, facial, vestibulocochlear, glossopharyngeal, vagus, accessory and hypoglossal nerves",
 "box": [
-40.0,
-13.0,
-99.0,
-52.0
+39.5,
+5.7,
+95.0,
+52.3
+],
+"pad": 0.3,
+"fill": [
+[
+38.0,
+5.0,
+59.0,
+9.6
+],
+[
+38.0,
+9.6,
+54.0,
+12.3
+],
+[
+38.0,
+12.3,
+46.0,
+16.5
+],
+[
+38.0,
+18.5,
+44.0,
+21.5
+],
+[
+82.0,
+3.0,
+92.0,
+7.0
+],
+[
+36.0,
+28.0,
+40.5,
+45.3
+],
+[
+36.0,
+45.3,
+45.0,
+53.0
+]
 ]
 },
 {
@@ -12840,10 +15191,11 @@
 "cap": "The posterior cerebral artery: its origin from the basilar artery, its course round the cerebral peduncle, its cortical branches and its relation to the parieto-occipital fissure and the calcarine sulcus on the medial and lateral surfaces",
 "box": [
 3.0,
-3.0,
-99.0,
-38.0
-]
+8.3,
+94.0,
+35.2
+],
+"pad": 0.3
 },
 {
 "id": "sd-239b",
@@ -12857,10 +15209,43 @@
 ],
 "cap": "The central branches of the posterior cerebral artery (short and long groups) on the midbrain",
 "box": [
-62.0,
-82.0,
-99.0,
-98.0
+64.8,
+78.2,
+91.3,
+96.8
+],
+"pad": 0.2,
+"fill": [
+[
+55.0,
+76.0,
+83.0,
+78.25
+],
+[
+55.0,
+81.5,
+67.5,
+84.3
+],
+[
+55.0,
+84.3,
+66.6,
+86.7
+],
+[
+55.0,
+88.4,
+65.2,
+90.6
+],
+[
+55.0,
+91.5,
+65.0,
+93.8
+]
 ]
 },
 {
@@ -12875,11 +15260,12 @@
 ],
 "cap": "The diencephalon: the diagram of its structure with the base, apex, upper surface (thalamus, roof of the third ventricle, pineal body, habenular trigones), lateral surface, lower surface (hypothalamus, subthalamus, metathalamus) and the midbrain",
 "box": [
-2.0,
-5.0,
-62.0,
-38.0
-]
+1.5,
+8.3,
+43.0,
+36.6
+],
+"pad": 0.3
 },
 {
 "id": "sd-240b",
@@ -12895,10 +15281,25 @@
 ],
 "cap": "The diencephalon seen from behind: the right and left thalami, the habenular trigone, the pineal body, the medial and lateral geniculate bodies and the pulvinar",
 "box": [
-62.0,
-6.0,
-99.0,
-33.0
+46.5,
+7.0,
+96.0,
+36.6
+],
+"pad": 0.3,
+"fill": [
+[
+82.0,
+3.0,
+96.0,
+7.8
+],
+[
+44.0,
+2.0,
+56.0,
+7.2
+]
 ]
 },
 {
@@ -12915,10 +15316,67 @@
 ],
 "cap": "The corticobulbar fibres (tract): from the frontal eye field and the lower motor area through the genu of the internal capsule, the midbrain, the pons and the medulla to the nuclei of the cranial nerves (III, IV, VI and V, VII, IX, X, XI, XII)",
 "box": [
-52.0,
-22.0,
-99.0,
-76.0
+55.3,
+20.6,
+93.5,
+75.5
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+20.5,
+57.9,
+25.0
+],
+[
+50.0,
+25.0,
+59.3,
+27.0
+],
+[
+50.0,
+27.0,
+58.5,
+29.0
+],
+[
+50.0,
+29.0,
+57.5,
+33.2
+],
+[
+50.0,
+33.2,
+57.0,
+37.0
+],
+[
+50.0,
+41.5,
+56.5,
+45.0
+],
+[
+50.0,
+49.0,
+57.4,
+53.5
+],
+[
+50.0,
+54.5,
+57.2,
+62.5
+],
+[
+50.0,
+68.5,
+55.0,
+72.5
+]
 ]
 },
 {
@@ -12933,11 +15391,12 @@
 ],
 "cap": "The third ventricle on a median section: the roof, the floor (optic chiasma, infundibulum, tuber cinereum, mamillary bodies), the anterior wall (lamina terminalis, anterior commissure, column of the fornix), the posterior wall (pineal body, posterior commissure), the interventricular foramen and the aqueduct",
 "box": [
-4.0,
-8.0,
-99.0,
-48.0
-]
+1.0,
+8.5,
+98.0,
+46.8
+],
+"pad": 0.3
 },
 {
 "id": "sd-243a",
@@ -12951,10 +15410,25 @@
 ],
 "cap": "The posterior cerebral artery (post-choroidal branch) on the medial surface of the hemisphere with the choroid plexus",
 "box": [
-58.0,
-14.0,
-99.0,
-36.0
+62.5,
+16.0,
+97.0,
+35.15
+],
+"pad": 0.2,
+"fill": [
+[
+55.0,
+24.5,
+62.8,
+27.0
+],
+[
+55.0,
+32.5,
+66.0,
+35.6
+]
 ]
 },
 {
@@ -12969,10 +15443,49 @@
 ],
 "cap": "The circle of Willis: the anterior communicating artery, the anterior cerebral, internal carotid, posterior communicating, posterior cerebral and basilar arteries around the optic chiasma, the pituitary stalk and the mamillary bodies",
 "box": [
-51.0,
-35.0,
+60.8,
+36.3,
 99.0,
-66.0
+63.8
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+36.0,
+74.0,
+41.0
+],
+[
+55.0,
+41.0,
+69.8,
+44.6
+],
+[
+55.0,
+48.5,
+63.5,
+51.0
+],
+[
+55.0,
+54.5,
+61.0,
+56.0
+],
+[
+55.0,
+57.8,
+62.8,
+59.7
+],
+[
+55.0,
+60.0,
+61.5,
+62.3
+]
 ]
 },
 {
@@ -12988,10 +15501,11 @@
 "cap": "The anterior cerebral artery on the medial surface of the hemisphere: its cortical branches (medial surface, upper part of the lateral surface, orbital surface) and callosal branches",
 "box": [
 40.0,
-28.0,
-99.0,
-52.0
-]
+20.3,
+92.5,
+45.2
+],
+"pad": 0.2
 },
 {
 "id": "sd-244b",
@@ -13006,10 +15520,11 @@
 "cap": "The central branches of the anterior cerebral artery on a coronal section: the corpus striatum, the internal capsule and the septal region",
 "box": [
 55.0,
-50.0,
-99.0,
-80.0
-]
+46.3,
+92.0,
+67.5
+],
+"pad": 0.2
 },
 {
 "id": "sd-245a",
@@ -13025,10 +15540,25 @@
 ],
 "cap": "The branches of the internal carotid artery at the base of the brain: the anterior choroidal artery, the posterior communicating artery and the optic tract",
 "box": [
-50.0,
-33.0,
-99.0,
-53.0
+59.5,
+32.4,
+96.0,
+55.0
+],
+"pad": 0.2,
+"fill": [
+[
+45.0,
+32.0,
+61.5,
+36.2
+],
+[
+45.0,
+52.0,
+63.2,
+55.5
+]
 ]
 },
 {
@@ -13045,10 +15575,31 @@
 ],
 "cap": "The anterior cerebral artery above the optic chiasma and the anterior communicating artery in the median longitudinal fissure",
 "box": [
-62.0,
-76.0,
-99.0,
-98.0
+53.4,
+77.3,
+94.0,
+96.6
+],
+"pad": 0.2,
+"fill": [
+[
+45.0,
+74.0,
+96.0,
+77.45
+],
+[
+45.0,
+84.0,
+54.8,
+89.0
+],
+[
+45.0,
+92.5,
+58.0,
+96.0
+]
 ]
 },
 {
@@ -13065,11 +15616,12 @@
 ],
 "cap": "The ascending tracts that carry conscious sensations drawn on spinal cord sections: gracile, cuneate, lateral spinothalamic and anterior spinothalamic tracts, with their pathways to the medulla",
 "box": [
-84.0,
-11.0,
-99.0,
-46.0
-]
+77.8,
+10.3,
+97.5,
+50.3
+],
+"pad": 0.2
 },
 {
 "id": "sd-246b",
@@ -13083,11 +15635,12 @@
 ],
 "cap": "The ascending tracts that carry unconscious sensations drawn on spinal cord sections: posterior and anterior spinocerebellar, spino-olivary and spinotectal tracts",
 "box": [
-82.0,
-56.0,
+76.8,
+58.8,
 99.0,
-96.0
-]
+93.6
+],
+"pad": 0.2
 },
 {
 "id": "sd-247a",
@@ -13101,11 +15654,12 @@
 ],
 "cap": "The subdivisions of the diencephalon drawn as a thalamus with the epithalamus, subthalamus, hypothalamus and metathalamus",
 "box": [
-58.0,
-15.0,
-99.0,
-29.0
-]
+59.0,
+11.8,
+86.0,
+27.6
+],
+"pad": 0.2
 },
 {
 "id": "sd-247b",
@@ -13121,10 +15675,31 @@
 ],
 "cap": "The thalamus: its upper surface, lower surface and medial and lateral surfaces on a coronal section with the lateral ventricles, the third ventricle, the internal capsule, the lentiform nucleus and the tegmentum of the midbrain",
 "box": [
-54.0,
+51.2,
+44.5,
+96.0,
+87.3
+],
+"pad": 0.2,
+"fill": [
+[
+45.0,
 44.0,
-99.0,
-90.0
+61.0,
+56.6
+],
+[
+50.0,
+56.6,
+90.0,
+59.1
+],
+[
+45.0,
+73.5,
+52.8,
+75.5
+]
 ]
 },
 {
@@ -13141,10 +15716,43 @@
 ],
 "cap": "The hypothalamus and epithalamus on a median sagittal section: the infundibulum, tuber cinereum, mamillary bodies, the hypothalamic sulcus, the habenular trigone, the pineal body and the posterior commissure, the pons and the cerebellum",
 "box": [
-51.0,
-18.0,
-99.0,
-54.0
+46.3,
+18.3,
+90.3,
+45.2
+],
+"pad": 0.2,
+"fill": [
+[
+44.0,
+15.0,
+53.0,
+19.0
+],
+[
+44.0,
+21.5,
+48.5,
+24.5
+],
+[
+44.0,
+26.5,
+50.0,
+29.5
+],
+[
+44.0,
+36.5,
+47.6,
+38.8
+],
+[
+44.0,
+39.4,
+63.5,
+44.2
+]
 ]
 },
 {
@@ -13161,10 +15769,43 @@
 ],
 "cap": "The metathalamus seen from behind: the pulvinar, the medial and lateral geniculate bodies, the superior and inferior colliculi and the brachia",
 "box": [
-55.0,
-14.0,
-99.0,
-40.0
+48.3,
+15.3,
+98.0,
+42.0
+],
+"pad": 0.2,
+"fill": [
+[
+44.0,
+14.5,
+56.0,
+17.8
+],
+[
+44.0,
+19.3,
+52.6,
+21.3
+],
+[
+44.0,
+22.1,
+51.4,
+23.9
+],
+[
+44.0,
+24.4,
+48.5,
+26.0
+],
+[
+44.0,
+38.3,
+57.5,
+41.0
+]
 ]
 },
 {
@@ -13181,10 +15822,43 @@
 ],
 "cap": "The subthalamus on a coronal section: the thalamus, the third ventricle, the lentiform nucleus, the internal capsule, the cerebral peduncle and the tegmentum of the midbrain",
 "box": [
-55.0,
-66.0,
-99.0,
-99.0
+45.5,
+68.6,
+94.3,
+92.9
+],
+"pad": 0.2,
+"fill": [
+[
+44.0,
+64.0,
+58.5,
+68.6
+],
+[
+44.0,
+81.8,
+47.8,
+83.8
+],
+[
+44.0,
+87.2,
+49.8,
+89.2
+],
+[
+44.0,
+90.0,
+48.5,
+91.8
+],
+[
+44.0,
+93.0,
+80.0,
+96.0
+]
 ]
 },
 {
@@ -13199,10 +15873,49 @@
 ],
 "cap": "The circulation of the cerebrospinal fluid: the choroid plexus, the lateral ventricle, the interventricular foramen, the third ventricle, the aqueduct, the fourth ventricle, the foramina, the subarachnoid space and the arachnoid granulations draining into the superior sagittal sinus",
 "box": [
-44.0,
-10.0,
-99.0,
-53.0
+50.5,
+8.6,
+95.0,
+44.3
+],
+"pad": 0.2,
+"fill": [
+[
+40.0,
+9.0,
+58.8,
+15.0
+],
+[
+40.0,
+24.0,
+50.6,
+29.2
+],
+[
+40.0,
+33.3,
+59.8,
+35.7
+],
+[
+40.0,
+36.3,
+63.3,
+38.0
+],
+[
+64.3,
+36.3,
+68.2,
+38.0
+],
+[
+40.0,
+39.3,
+66.0,
+41.1
+]
 ]
 },
 {
@@ -13217,10 +15930,97 @@
 ],
 "cap": "The lateral lemniscus and the trapezoid body: first, second and third order neurones of the auditory pathway in the pons and midbrain",
 "box": [
-56.0,
-55.0,
-99.0,
-97.0
+63.8,
+56.8,
+94.5,
+91.0
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+56.6,
+74.8,
+58.9
+],
+[
+50.0,
+59.5,
+72.6,
+61.1
+],
+[
+50.0,
+61.6,
+69.2,
+63.4
+],
+[
+50.0,
+64.0,
+66.0,
+65.3
+],
+[
+50.0,
+66.0,
+69.0,
+67.6
+],
+[
+50.0,
+68.0,
+70.2,
+69.4
+],
+[
+50.0,
+70.6,
+71.1,
+72.2
+],
+[
+50.0,
+72.5,
+70.3,
+74.0
+],
+[
+50.0,
+76.6,
+71.3,
+78.2
+],
+[
+50.0,
+78.9,
+68.6,
+80.5
+],
+[
+50.0,
+82.2,
+63.5,
+83.8
+],
+[
+50.0,
+84.2,
+63.2,
+85.6
+],
+[
+50.0,
+86.2,
+63.9,
+87.6
+],
+[
+50.0,
+88.0,
+74.4,
+89.5
+]
 ]
 },
 {
@@ -13235,10 +16035,25 @@
 ],
 "cap": "The spinal cord on a transverse section with the lateral, central and medial groups of anterior horn nuclei",
 "box": [
-55.0,
-3.0,
-99.0,
-22.0
+48.4,
+5.75,
+93.3,
+21.6
+],
+"pad": 0.1,
+"fill": [
+[
+40.0,
+0.0,
+100.0,
+5.68
+],
+[
+40.0,
+19.6,
+53.4,
+21.8
+]
 ]
 },
 {
@@ -13255,10 +16070,49 @@
 ],
 "cap": "The basilar artery and the vertebral arteries on the base of the brain: the pontine, anterior inferior cerebellar, internal auditory, superior cerebellar and the two posterior cerebral arteries",
 "box": [
-60.0,
-46.0,
-99.0,
-96.0
+62.0,
+44.0,
+99.3,
+77.8
+],
+"pad": 0.2,
+"fill": [
+[
+45.0,
+46.5,
+67.4,
+48.0
+],
+[
+94.2,
+46.5,
+100.0,
+48.0
+],
+[
+45.0,
+48.5,
+65.2,
+53.5
+],
+[
+45.0,
+55.4,
+63.5,
+57.4
+],
+[
+45.0,
+65.7,
+61.9,
+68.0
+],
+[
+45.0,
+75.0,
+73.5,
+77.5
+]
 ]
 },
 {
@@ -13273,10 +16127,25 @@
 ],
 "cap": "The internal structure of the spinal cord on a transverse section: the outer white matter, the inner grey matter, the central canal, the grey and white commissures and the anterior and posterior horns",
 "box": [
-54.0,
-9.0,
-99.0,
-33.0
+58.5,
+16.2,
+99.4,
+32.1
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+14.5,
+81.5,
+16.6
+],
+[
+50.0,
+29.6,
+61.0,
+31.8
+]
 ]
 },
 {
@@ -13311,10 +16180,48 @@
 ],
 "cap": "The white matter of the spinal cord: the posterior, lateral and anterior columns around the grey matter with the dorsal and ventral nerve roots",
 "box": [
-65.0,
-4.0,
-99.0,
-22.0
+66.0,
+6.1,
+97.8,
+29.2
+],
+"pad": 0.2,
+"fill": [
+[
+92.3,
+7.0,
+100.0,
+11.2
+]
+]
+},
+{
+"id": "sd-256b",
+"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
+"sameh": 256,
+"box": [
+8.5,
+66.3,
+99.5,
+99.8
+],
+"pad": 0.2,
+"fill": [
+[
+55.0,
+69.0,
+62.0,
+72.0
+]
+],
+"cap": "The ascending tracts of the spinal cord on two half sections: the four tracts carrying conscious sensations (gracile, cuneate, lateral and ventral spinothalamic) and the four carrying unconscious sensations (dorsal and ventral spinocerebellar, spino-olivary and spinotectal)",
+"sec": [
+"an-spinal-cord#3",
+"ph-sensory-pathways#2"
+],
+"sc": [
+7.0,
+30.2
 ]
 },
 {
@@ -13336,6 +16243,39 @@
 ]
 },
 {
+"id": "sd-258a",
+"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
+"sameh": 258,
+"box": [
+71.9,
+56.2,
+90.4,
+78.3
+],
+"pad": 0.2,
+"fill": [
+[
+60.0,
+71.4,
+71.9,
+73.3
+],
+[
+79.6,
+75.4,
+96.0,
+76.4
+]
+],
+"cap": "The internal capsule and its blood supply: the anterior cerebral artery to the front of the anterior limb, the middle cerebral artery to the rest of the anterior limb, the genu and the posterior limb, and the anterior choroidal artery to the retrolentiform and sublentiform parts",
+"sec": [
+"an-white-matter#1"
+],
+"sc": [
+26.3
+]
+},
+{
 "id": "sd-259a",
 "pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
 "sameh": 259,
@@ -13349,10 +16289,49 @@
 ],
 "cap": "The lateral geniculate body and the optic radiation: the retina, optic nerve, optic chiasma, optic tract, lateral geniculate body in the midbrain region and the visual sensory area",
 "box": [
-68.0,
-5.0,
-99.0,
-33.0
+65.2,
+4.2,
+96.0,
+36.6
+],
+"pad": 0.2,
+"fill": [
+[
+90.5,
+4.5,
+100.0,
+9.0
+],
+[
+60.0,
+9.0,
+75.2,
+11.0
+],
+[
+60.0,
+13.4,
+72.0,
+15.3
+],
+[
+60.0,
+16.0,
+72.2,
+17.8
+],
+[
+60.0,
+22.3,
+65.2,
+24.4
+],
+[
+60.0,
+34.2,
+79.0,
+35.8
+]
 ]
 },
 {
@@ -13367,10 +16346,37 @@
 ],
 "cap": "The medial geniculate body and the auditory radiation to the superior temporal gyrus",
 "box": [
-59.0,
-40.0,
-99.0,
-55.0
+63.6,
+37.2,
+95.5,
+55.95
+],
+"pad": 0.1,
+"fill": [
+[
+55.0,
+41.4,
+64.9,
+43.8
+],
+[
+55.0,
+47.2,
+63.4,
+49.5
+],
+[
+55.0,
+49.7,
+64.4,
+51.9
+],
+[
+55.0,
+52.3,
+62.5,
+54.3
+]
 ]
 },
 {
@@ -13387,10 +16393,37 @@
 ],
 "cap": "The subthalamus: the posterior part (medial and spinal lemnisci, trigeminal lemniscus, superior cerebellar peduncle) and the anterior part (ansa lenticularis, fasciculus lenticularis, red nucleus, substantia nigra)",
 "box": [
-49.0,
-60.0,
-99.0,
-98.0
+55.9,
+57.3,
+97.0,
+88.3
+],
+"pad": 0.2,
+"fill": [
+[
+55.0,
+55.0,
+75.0,
+58.6
+],
+[
+40.0,
+58.6,
+56.6,
+77.0
+],
+[
+40.0,
+78.8,
+56.0,
+81.4
+],
+[
+40.0,
+85.5,
+58.0,
+88.5
+]
 ]
 },
 {
@@ -13407,10 +16440,61 @@
 ],
 "cap": "The hypothalamus on a sagittal section: the optic, tuberal and mamillary parts with the supraoptic, paraventricular, ventromedial, dorsomedial, posterior and lateral nuclei, the mamillary bodies and the corpus callosum",
 "box": [
-51.0,
-6.0,
-99.0,
-40.0
+52.0,
+8.2,
+96.4,
+47.3
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+4.0,
+74.5,
+8.65
+],
+[
+74.5,
+4.0,
+81.0,
+8.25
+],
+[
+86.5,
+5.0,
+100.0,
+9.0
+],
+[
+50.0,
+14.5,
+51.9,
+16.8
+],
+[
+50.0,
+21.4,
+53.0,
+23.6
+],
+[
+50.0,
+24.4,
+57.5,
+26.1
+],
+[
+50.0,
+27.5,
+59.2,
+29.7
+],
+[
+68.5,
+42.5,
+100.0,
+48.0
+]
 ]
 },
 {
@@ -13425,10 +16509,37 @@
 ],
 "cap": "The connections of the hypothalamus: the fornix, the mamillothalamic tract, the pituitary and the limbic system",
 "box": [
-54.0,
+51.7,
+43.7,
+94.0,
+70.3
+],
+"pad": 0.2,
+"fill": [
+[
+55.0,
+42.0,
+68.0,
+47.5
+],
+[
 50.0,
-99.0,
-77.0
+59.3,
+55.8,
+61.2
+],
+[
+50.0,
+62.3,
+55.8,
+64.3
+],
+[
+50.0,
+65.0,
+55.2,
+66.7
+]
 ]
 },
 {
@@ -13445,10 +16556,91 @@
 ],
 "cap": "The nuclei of the trigeminal nerve: the main sensory nucleus in the pons, the spinal nucleus in the medulla, the mesencephalic nucleus in the midbrain and the motor nucleus, with the trigeminal ganglion",
 "box": [
-52.0,
-4.0,
-99.0,
-38.0
+47.2,
+3.8,
+94.5,
+49.5
+],
+"pad": 0.2,
+"fill": [
+[
+45.0,
+3.0,
+53.0,
+6.5
+],
+[
+85.0,
+3.0,
+100.0,
+8.5
+],
+[
+45.0,
+14.2,
+55.8,
+16.4
+],
+[
+45.0,
+17.0,
+56.0,
+19.0
+],
+[
+45.0,
+19.8,
+55.0,
+21.8
+],
+[
+45.0,
+22.0,
+47.0,
+24.0
+],
+[
+45.0,
+25.8,
+46.8,
+27.6
+],
+[
+45.0,
+28.6,
+47.2,
+30.4
+],
+[
+45.0,
+31.3,
+46.8,
+32.7
+],
+[
+45.0,
+34.2,
+54.2,
+36.2
+],
+[
+45.0,
+40.8,
+55.5,
+42.7
+],
+[
+45.0,
+43.5,
+57.4,
+45.4
+],
+[
+45.0,
+46.4,
+57.0,
+48.2
+]
 ]
 },
 {
@@ -13463,10 +16655,37 @@
 ],
 "cap": "The nucleus of the abducent nerve in the lower pons, the facial colliculus and the fourth ventricle",
 "box": [
+55.6,
+76.0,
+92.0,
+96.0
+],
+"pad": 0.2,
+"fill": [
+[
+45.0,
+78.5,
 54.0,
-77.0,
-99.0,
-97.0
+80.2
+],
+[
+45.0,
+81.4,
+55.6,
+83.2
+],
+[
+45.0,
+84.4,
+55.6,
+86.2
+],
+[
+45.0,
+90.4,
+61.4,
+92.0
+]
 ]
 },
 {
@@ -13481,10 +16700,25 @@
 ],
 "cap": "The thalamus divided by the Y-shaped internal medullary lamina into anterior, medial and lateral parts",
 "box": [
-57.0,
-14.0,
-99.0,
-36.0
+61.0,
+10.6,
+94.0,
+24.2
+],
+"pad": 0.2,
+"fill": [
+[
+50.0,
+9.8,
+65.5,
+12.2
+],
+[
+50.0,
+23.4,
+75.0,
+25.5
+]
 ]
 },
 {
@@ -13499,10 +16733,55 @@
 ],
 "cap": "The thalamic nuclei: the medial group, anterior group, lateral group (dorsolateral and posterolateral) and ventral group (anterior ventral, intermediate ventral, posterior ventral) and the pulvinar",
 "box": [
-54.0,
-42.0,
-99.0,
-62.0
+53.6,
+41.3,
+96.3,
+59.1
+],
+"pad": 0.2,
+"fill": [
+[
+45.0,
+40.5,
+63.8,
+43.6
+],
+[
+45.0,
+45.0,
+53.5,
+47.0
+],
+[
+45.0,
+47.6,
+53.5,
+49.6
+],
+[
+45.0,
+50.0,
+53.0,
+51.5
+],
+[
+45.0,
+51.8,
+55.9,
+53.3
+],
+[
+45.0,
+53.6,
+56.6,
+55.4
+],
+[
+45.0,
+56.6,
+59.0,
+58.2
+]
 ]
 },
 {
@@ -13519,10 +16798,49 @@
 ],
 "cap": "The nuclei of the midbrain on a transverse section at the level of the superior colliculus: the nucleus of the oculomotor nerve, the red nucleus, the substantia nigra, the crus cerebri and the medial longitudinal bundle",
 "box": [
-50.0,
+55.0,
+40.9,
+98.0,
+60.6
+],
+"pad": 0.15,
+"fill": [
+[
 45.0,
-99.0,
-62.0
+41.0,
+60.5,
+45.4
+],
+[
+45.0,
+50.3,
+54.6,
+52.3
+],
+[
+45.0,
+52.7,
+52.0,
+55.0
+],
+[
+45.0,
+54.9,
+55.6,
+56.9
+],
+[
+45.0,
+57.0,
+56.5,
+59.0
+],
+[
+45.0,
+59.85,
+64.5,
+61.3
+]
 ]
 },
 {
@@ -13537,10 +16855,43 @@
 ],
 "cap": "The nucleus of the trochlear nerve at the level of the inferior colliculus: the decussation of the superior cerebellar peduncles and the medial lemniscus",
 "box": [
-55.0,
-62.0,
-99.0,
-80.0
+55.7,
+61.15,
+99.2,
+79.9
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+66.6,
+57.2,
+68.7
+],
+[
+45.0,
+69.6,
+53.5,
+71.2
+],
+[
+45.0,
+72.0,
+55.3,
+74.1
+],
+[
+45.0,
+75.2,
+58.6,
+77.2
+],
+[
+45.0,
+77.5,
+61.3,
+79.3
+]
 ]
 },
 {
@@ -13555,11 +16906,12 @@
 ],
 "cap": "The midbrain on a cross section: the tectum, tegmentum, substantia nigra and crus cerebri (cerebral peduncle)",
 "box": [
-56.0,
-6.0,
-82.0,
+64.0,
+8.7,
+96.2,
 19.0
-]
+],
+"pad": 0.15
 },
 {
 "id": "sd-264a",
@@ -13575,10 +16927,67 @@
 ],
 "cap": "The nuclei of the facial nerve: the facial motor nucleus, the superior salivatory nucleus, the solitary nucleus and the geniculate ganglion with the greater petrosal nerve and the chorda tympani",
 "box": [
+51.8,
+4.5,
+96.0,
+31.4
+],
+"pad": 0.15,
+"fill": [
+[
+88.8,
+2.5,
+100.0,
+5.6
+],
+[
+45.0,
+9.5,
+53.5,
+12.0
+],
+[
+45.0,
+13.3,
+52.5,
+15.3
+],
+[
+45.0,
+16.2,
+53.5,
+18.3
+],
+[
+45.0,
+19.0,
 50.0,
-4.0,
-99.0,
-28.0
+21.3
+],
+[
+45.0,
+21.0,
+54.4,
+23.3
+],
+[
+45.0,
+24.6,
+50.5,
+26.5
+],
+[
+45.0,
+27.2,
+51.5,
+29.1
+],
+[
+45.0,
+29.7,
+52.5,
+31.8
+]
 ]
 },
 {
@@ -13597,10 +17006,19 @@
 ],
 "cap": "The cochlear nuclei and the trapezoid body of the auditory pathway",
 "box": [
-55.0,
-52.0,
-99.0,
-70.0
+48.6,
+51.2,
+95.6,
+73.0
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+51.0,
+72.0,
+53.9
+]
 ]
 },
 {
@@ -13617,10 +17035,19 @@
 ],
 "cap": "The vestibular nuclei and the semicircular canals",
 "box": [
-60.0,
-82.0,
-99.0,
-98.0
+52.8,
+80.9,
+95.7,
+95.3
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+79.0,
+57.0,
+85.5
+]
 ]
 },
 {
@@ -13637,10 +17064,73 @@
 ],
 "cap": "The connections of the basal ganglia drawn as a circuit: the corpus striatum (caudate nucleus and putamen, globus pallidus), corticostriate and thalamostriate fibres, substantia nigra, subthalamic nucleus, ansa and fasciculus lenticularis, red nucleus, and the pathways to the brain stem and spinal cord",
 "box": [
-52.0,
-8.0,
-99.0,
-78.0
+54.3,
+8.3,
+94.0,
+69.2
+],
+"pad": 0.15,
+"fill": [
+[
+93.5,
+5.0,
+100.0,
+8.8
+],
+[
+46.0,
+10.5,
+53.0,
+13.0
+],
+[
+46.0,
+13.0,
+60.1,
+17.5
+],
+[
+46.0,
+24.5,
+55.0,
+29.3
+],
+[
+46.0,
+29.7,
+54.3,
+32.0
+],
+[
+46.0,
+33.8,
+54.3,
+41.6
+],
+[
+46.0,
+45.8,
+54.2,
+48.3
+],
+[
+46.0,
+48.8,
+54.0,
+50.2
+],
+[
+46.0,
+51.4,
+54.3,
+53.4
+],
+[
+46.0,
+55.0,
+56.0,
+66.6
+]
 ]
 },
 {
@@ -13657,10 +17147,61 @@
 ],
 "cap": "The amygdaloid nucleus and the stria terminalis curving in the roof of the inferior horn of the lateral ventricle, with the septal nuclei and the nuclei of the hypothalamus",
 "box": [
-60.0,
-80.0,
-99.0,
-98.0
+64.4,
+81.4,
+95.0,
+99.0
+],
+"pad": 0.15,
+"fill": [
+[
+50.0,
+78.0,
+92.0,
+81.3
+],
+[
+50.0,
+82.0,
+67.0,
+84.0
+],
+[
+50.0,
+85.0,
+63.0,
+87.3
+],
+[
+50.0,
+87.4,
+64.0,
+89.3
+],
+[
+50.0,
+89.6,
+65.8,
+91.4
+],
+[
+50.0,
+91.8,
+66.0,
+93.6
+],
+[
+50.0,
+93.8,
+62.0,
+95.4
+],
+[
+50.0,
+95.6,
+67.0,
+97.5
+]
 ]
 },
 {
@@ -13675,11 +17216,12 @@
 ],
 "cap": "The commissural fibres on a median section of the brain: the corpus callosum, the lamina terminalis, the anterior commissure, the posterior commissure, the habenular commissure and the pineal body",
 "box": [
-3.0,
-6.0,
-99.0,
-41.0
-]
+6.5,
+9.6,
+90.0,
+41.3
+],
+"pad": 0.15
 },
 {
 "id": "sd-267a",
@@ -13693,10 +17235,67 @@
 ],
 "cap": "The fibres of the inferior cerebellar peduncle (afferent and efferent) entering the cerebellum",
 "box": [
-66.0,
-8.0,
-99.0,
-37.0
+69.2,
+12.5,
+99.3,
+39.5
+],
+"pad": 0.1,
+"fill": [
+[
+60.0,
+13.4,
+71.5,
+15.3
+],
+[
+60.0,
+15.3,
+70.8,
+17.3
+],
+[
+60.0,
+20.7,
+68.8,
+22.5
+],
+[
+60.0,
+22.5,
+66.6,
+24.0
+],
+[
+60.0,
+26.3,
+76.2,
+28.3
+],
+[
+60.0,
+28.2,
+77.8,
+29.9
+],
+[
+60.0,
+31.8,
+81.5,
+32.3
+],
+[
+60.0,
+32.5,
+82.0,
+34.5
+],
+[
+60.0,
+35.0,
+82.0,
+39.7
+]
 ]
 },
 {
@@ -13711,10 +17310,61 @@
 ],
 "cap": "The middle cerebellar peduncle: the pontocerebellar fibres from the pons to the cerebellum",
 "box": [
-69.0,
-59.0,
-99.0,
-78.0
+73.9,
+55.0,
+99.4,
+77.1
+],
+"pad": 0.1,
+"fill": [
+[
+60.0,
+56.5,
+63.0,
+58.0
+],
+[
+60.0,
+59.8,
+74.0,
+61.7
+],
+[
+60.0,
+62.7,
+76.9,
+64.4
+],
+[
+60.0,
+65.4,
+73.5,
+67.1
+],
+[
+60.0,
+68.1,
+77.0,
+70.0
+],
+[
+60.0,
+70.8,
+75.0,
+72.6
+],
+[
+60.0,
+73.0,
+77.6,
+74.9
+],
+[
+60.0,
+75.2,
+78.0,
+77.0
+]
 ]
 },
 {
@@ -13729,11 +17379,12 @@
 ],
 "cap": "The association fibres: the arcuate fibres (short) and the superior longitudinal, inferior longitudinal, cingulum and uncinate bundles (long) on the lateral and medial surfaces of the hemisphere",
 "box": [
-2.0,
-7.0,
-98.0,
-35.0
-]
+5.0,
+7.9,
+89.0,
+33.6
+],
+"pad": 0.15
 },
 {
 "id": "sd-269a",
@@ -13749,10 +17400,43 @@
 ],
 "cap": "The corpus callosum on a median section: the rostrum, genu, body (trunk) and splenium with the lamina terminalis, the septum pellucidum and the fornix",
 "box": [
-48.0,
+44.0,
 5.0,
-99.0,
-28.0
+96.5,
+28.7
+],
+"pad": 0.15,
+"fill": [
+[
+40.0,
+7.0,
+49.5,
+9.2
+],
+[
+40.0,
+10.0,
+47.3,
+12.0
+],
+[
+40.0,
+19.3,
+48.6,
+22.2
+],
+[
+89.5,
+5.0,
+100.0,
+9.2
+],
+[
+40.0,
+27.75,
+65.6,
+30.0
+]
 ]
 },
 {
@@ -13769,10 +17453,37 @@
 ],
 "cap": "The corpus callosum on a horizontal section: the forceps minor and the forceps major",
 "box": [
-55.0,
-33.0,
-99.0,
-53.0
+65.8,
+37.4,
+96.8,
+57.8
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+34.5,
+92.0,
+37.2
+],
+[
+45.0,
+45.3,
+66.0,
+47.6
+],
+[
+45.0,
+49.9,
+67.5,
+52.5
+],
+[
+45.0,
+56.3,
+69.5,
+58.6
+]
 ]
 },
 {
@@ -13787,10 +17498,31 @@
 ],
 "cap": "The body of the corpus callosum on a coronal section with the lateral ventricles",
 "box": [
-55.0,
-54.0,
-99.0,
-82.0
+65.6,
+64.9,
+95.0,
+82.3
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+70.6,
+61.0,
+72.8
+],
+[
+45.0,
+73.5,
+64.5,
+75.7
+],
+[
+45.0,
+77.4,
+65.6,
+79.2
+]
 ]
 },
 {
@@ -13807,11 +17539,12 @@
 ],
 "cap": "The fornix and the hippocampal commissure: the crus, body, column of the fornix, the alveus, fimbria and hippocampus, the mamillary bodies and the anterior commissure",
 "box": [
-3.0,
-5.0,
-99.0,
-33.0
-]
+10.4,
+8.8,
+98.0,
+33.1
+],
+"pad": 0.15
 },
 {
 "id": "sd-270b",
@@ -13827,10 +17560,43 @@
 ],
 "cap": "The body of the fornix: the two bodies joined by the hippocampal commissure to form the common triangular body under the corpus callosum",
 "box": [
+66.5,
+55.1,
+97.0,
+73.6
+],
+"pad": 0.15,
+"fill": [
+[
+50.0,
+52.0,
+98.0,
+55.0
+],
+[
+50.0,
+58.2,
+68.6,
+60.2
+],
+[
+50.0,
 62.0,
-54.0,
-99.0,
-85.0
+69.5,
+64.2
+],
+[
+50.0,
+66.7,
+68.0,
+69.0
+],
+[
+50.0,
+70.3,
+69.0,
+72.4
+]
 ]
 },
 {
@@ -13847,11 +17613,12 @@
 ],
 "cap": "The internal capsule: its position between the lentiform nucleus, the head of the caudate and the thalamus drawn on a horizontal section of the hemisphere, with the anterior limb, genu, posterior limb, retrolentiform and sublentiform parts and the external capsule and claustrum",
 "box": [
-1.0,
-7.0,
-99.0,
-34.0
-]
+7.5,
+13.5,
+98.6,
+36.9
+],
+"pad": 0.15
 },
 {
 "id": "sd-272",
@@ -13865,10 +17632,49 @@
 ],
 "cap": "The connections of the superior cerebellar peduncle: the dentatothalamic, cerebellorubral, dentato-olivary and fastigioreticular tracts and the tectocerebellar and anterior spinocerebellar tracts drawn on the brain stem",
 "box": [
-49.0,
-8.0,
-99.0,
-61.0
+51.0,
+13.3,
+94.0,
+60.1
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+6.0,
+100.0,
+13.3
+],
+[
+45.0,
+23.4,
+53.2,
+26.2
+],
+[
+45.0,
+34.5,
+51.5,
+37.0
+],
+[
+45.0,
+38.0,
+52.5,
+41.0
+],
+[
+45.0,
+46.0,
+58.4,
+48.3
+],
+[
+45.0,
+53.2,
+59.4,
+57.4
+]
 ]
 },
 {
@@ -13885,10 +17691,85 @@
 ],
 "cap": "The limbic system on the medial surface of the hemisphere: the olfactory bulb and tract, the anterior perforated substance, the amygdaloid nucleus, the cingulate gyrus, the parahippocampal gyrus, the hippocampal formation, the fornix, the corpus callosum and the mamillary body",
 "box": [
-56.0,
+44.4,
+3.5,
+95.0,
+40.0
+],
+"pad": 0.15,
+"fill": [
+[
+40.0,
 3.0,
-99.0,
-38.0
+49.0,
+7.5
+],
+[
+40.0,
+7.5,
+46.6,
+9.2
+],
+[
+40.0,
+9.8,
+45.3,
+11.5
+],
+[
+40.0,
+12.3,
+45.3,
+14.2
+],
+[
+40.0,
+14.6,
+48.6,
+17.0
+],
+[
+40.0,
+17.3,
+46.2,
+19.3
+],
+[
+40.0,
+20.2,
+43.0,
+21.4
+],
+[
+40.0,
+23.5,
+41.5,
+25.0
+],
+[
+40.0,
+29.0,
+45.0,
+31.0
+],
+[
+40.0,
+31.5,
+46.3,
+33.5
+],
+[
+40.0,
+34.5,
+46.3,
+36.4
+],
+[
+40.0,
+37.3,
+50.0,
+39.4
+]
 ]
 },
 {
@@ -13907,10 +17788,97 @@
 ],
 "cap": "The connections of the red nucleus: afferent fibres from the cortex, cerebellum and basal ganglia, and the efferent fibres (rubrospinal, rubrobulbar and rubrothalamic tracts) drawn on the midbrain, with the ventral tegmental decussation",
 "box": [
-50.0,
-5.0,
-99.0,
-54.0
+53.7,
+5.3,
+95.5,
+54.5
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+6.8,
+71.0,
+8.8
+],
+[
+45.0,
+11.4,
+66.6,
+13.4
+],
+[
+45.0,
+14.0,
+61.2,
+16.0
+],
+[
+45.0,
+16.7,
+61.5,
+18.6
+],
+[
+45.0,
+18.5,
+66.3,
+22.6
+],
+[
+45.0,
+23.3,
+60.6,
+25.2
+],
+[
+45.0,
+26.4,
+59.2,
+28.6
+],
+[
+45.0,
+29.0,
+55.4,
+31.0
+],
+[
+45.0,
+31.5,
+60.3,
+33.3
+],
+[
+45.0,
+36.7,
+61.3,
+39.0
+],
+[
+45.0,
+39.5,
+62.6,
+41.3
+],
+[
+45.0,
+42.6,
+62.6,
+44.6
+],
+[
+45.0,
+45.0,
+55.0,
+47.4
+],
+[
+45.0,
+49.4,
+100.0,
+56.0
+]
 ]
 },
 {
@@ -13927,10 +17895,43 @@
 ],
 "cap": "The inferior colliculus and its connections: the lateral lemniscus, the brachium of the inferior colliculus and the medial geniculate body",
 "box": [
-52.0,
-83.0,
-99.0,
-98.0
+59.5,
+72.7,
+95.2,
+97.8
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+66.0,
+100.0,
+72.6
+],
+[
+45.0,
+72.6,
+58.0,
+74.5
+],
+[
+45.0,
+82.5,
+63.0,
+84.8
+],
+[
+45.0,
+88.6,
+64.0,
+91.8
+],
+[
+45.0,
+94.3,
+72.2,
+96.7
+]
 ]
 },
 {
@@ -13945,10 +17946,61 @@
 ],
 "cap": "The epithalamus: the habenular trigones, the habenular and posterior commissures and the pineal body seen from above",
 "box": [
-50.0,
-8.0,
-99.0,
-38.0
+45.8,
+4.6,
+90.5,
+32.3
+],
+"pad": 0.15,
+"fill": [
+[
+40.0,
+3.0,
+56.0,
+5.8
+],
+[
+82.0,
+3.0,
+100.0,
+7.0
+],
+[
+40.0,
+6.5,
+49.0,
+9.0
+],
+[
+40.0,
+9.5,
+48.2,
+11.6
+],
+[
+40.0,
+12.2,
+46.8,
+14.2
+],
+[
+40.0,
+15.0,
+44.7,
+16.5
+],
+[
+40.0,
+23.5,
+51.4,
+25.5
+],
+[
+40.0,
+26.3,
+53.5,
+28.3
+]
 ]
 },
 {
@@ -13963,10 +18015,91 @@
 ],
 "cap": "The habenular nucleus and its connections (stria medullaris thalami, the reticular formation) drawn on the epithalamus and the midbrain",
 "box": [
-49.0,
+50.5,
+35.1,
+84.7,
+71.8
+],
+"pad": 0.15,
+"fill": [
+[
+40.0,
+29.0,
+72.0,
+34.6
+],
+[
+40.0,
 38.0,
-99.0,
-76.0
+54.2,
+39.5
+],
+[
+40.0,
+40.5,
+51.5,
+42.2
+],
+[
+40.0,
+43.0,
+53.0,
+44.8
+],
+[
+40.0,
+45.2,
+52.5,
+47.1
+],
+[
+40.0,
+47.7,
+51.5,
+49.6
+],
+[
+40.0,
+52.5,
+52.2,
+54.3
+],
+[
+40.0,
+54.9,
+51.0,
+56.4
+],
+[
+40.0,
+57.0,
+46.5,
+58.4
+],
+[
+40.0,
+64.7,
+60.8,
+66.8
+],
+[
+40.0,
+67.3,
+62.5,
+69.4
+],
+[
+40.0,
+69.9,
+63.5,
+71.8
+],
+[
+40.0,
+72.0,
+60.5,
+74.3
+]
 ]
 },
 {
@@ -13983,10 +18116,31 @@
 ],
 "cap": "The nuclei of the glossopharyngeal nerve (nucleus ambiguus, inferior salivatory and solitary nuclei) and their distribution to the pharynx, parotid gland and the tongue",
 "box": [
-51.0,
-5.0,
-99.0,
-41.0
+45.0,
+9.0,
+93.5,
+32.3
+],
+"pad": 0.15,
+"fill": [
+[
+86.0,
+3.0,
+100.0,
+7.6
+],
+[
+45.0,
+9.0,
+49.5,
+12.0
+],
+[
+45.0,
+17.0,
+47.8,
+21.5
+]
 ]
 },
 {
@@ -14001,10 +18155,49 @@
 ],
 "cap": "The nuclei of the vagus nerve (dorsal motor nucleus, nucleus ambiguus and solitary nucleus) and their distribution to the larynx, pharynx and viscera",
 "box": [
+47.7,
+40.6,
+94.0,
+63.3
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+40.0,
+47.6,
+47.0
+],
+[
+45.0,
+48.7,
+53.5,
+51.3
+],
+[
+45.0,
+51.6,
+52.5,
+54.5
+],
+[
+45.0,
+57.5,
+50.0,
+59.5
+],
+[
+45.0,
+60.5,
+52.0,
+63.0
+],
+[
+92.0,
 51.0,
-41.0,
-99.0,
-77.0
+100.0,
+66.0
+]
 ]
 },
 {
@@ -14019,10 +18212,19 @@
 ],
 "cap": "The nucleus of the hypoglossal nerve in the floor of the fourth ventricle",
 "box": [
-78.0,
-87.0,
-99.0,
-98.0
+79.7,
+86.0,
+92.8,
+98.1
+],
+"pad": 0.15,
+"fill": [
+[
+60,
+84,
+79.4,
+88.5
+]
 ]
 },
 {
@@ -14035,30 +18237,81 @@
 "sc": [
 11.5
 ],
-"cap": "The connections of the superior colliculus: the retina, optic nerve, chiasma and tract, the lateral geniculate body, the occipital cortex and the tectospinal and tectobulbar fibres, drawn on a section of the midbrain",
+"cap": "The connections of the superior colliculus in one drawing: the eyes, optic nerves, chiasma and tracts, the lateral geniculate bodies and the brachium of the superior colliculus, the optic radiation to the occipital cortex, and the efferent tectobulbar and tectospinal fibres descending from the upper part of the midbrain past the lower part (inferior colliculus, nuclei of the 3rd, 4th and 6th cranial nerves)",
 "box": [
+56.3,
+0.3,
+92.0,
+42.4
+],
+"pad": 0.15,
+"fill": [
+[
+84.0,
+0.0,
+100.0,
+6.5
+],
+[
+45.0,
+5.8,
+56.0,
+7.6
+],
+[
+45.0,
+8.4,
 53.0,
-6.0,
-99.0,
-34.0
-]
-},
-{
-"id": "sd-277b",
-"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
-"sameh": 277,
-"sec": [
-"an-brain-stem#3"
+10.5
 ],
-"sc": [
-9.6
+[
+45.0,
+17.3,
+56.0,
+19.6
 ],
-"cap": "The pathway of the efferent fibres of the superior colliculus (tectobulbar and tectospinal fibres) on a section of the lower midbrain",
-"box": [
+[
+45.0,
+20.4,
+57.3,
+22.4
+],
+[
+45.0,
+22.7,
+58.6,
+24.6
+],
+[
+45.0,
+24.8,
+59.4,
+26.4
+],
+[
+45.0,
+28.4,
+54.0,
+30.6
+],
+[
+45.0,
+37.0,
+57.5,
+39.4
+],
+[
+45.0,
+39.5,
+58.0,
+41.5
+],
+[
+45.0,
+41.5,
 59.0,
-31.0,
-99.0,
-46.0
+43.5
+]
 ]
 },
 {
@@ -14077,11 +18330,12 @@
 ],
 "cap": "The internal structure of the cerebral hemisphere on a coronal section of the brain: the cerebral cortex (grey matter), the white matter, the basal ganglia and the cavity of the lateral ventricle",
 "box": [
-11.0,
-12.0,
+16.5,
+13.8,
 78.0,
-46.0
-]
+44.4
+],
+"pad": 0.15
 },
 {
 "id": "sd-279a",
@@ -14093,30 +18347,81 @@
 "sc": [
 23.8
 ],
-"cap": "The medial longitudinal bundle: its position on transverse sections of the midbrain, pons, medulla and spinal cord with the nuclei of the cranial nerves III, IV, VI",
+"cap": "The medial longitudinal bundle from the midbrain to the spinal cord on transverse sections at five levels (upper and lower midbrain, pons, medulla, spinal cord): it begins at the interstitial nucleus of Cajal and the nucleus of the posterior commissure and links the oculomotor, trochlear, abducent and facial nuclei",
 "box": [
-68.0,
-8.0,
-99.0,
-34.0
+66.8,
+3.2,
+97.8,
+60.6
+],
+"pad": 0.15,
+"fill": [
+[
+58.0,
+2.5,
+66.6,
+5.5
+],
+[
+58.0,
+6.2,
+66.6,
+8.2
+],
+[
+58.0,
+12.4,
+68.5,
+14.4
+],
+[
+58.0,
+17.4,
+67.0,
+19.4
+],
+[
+58.0,
+20.4,
+71.3,
+22.4
+],
+[
+58.0,
+22.8,
+70.8,
+24.7
+],
+[
+58.0,
+26.6,
+67.5,
+28.5
+],
+[
+58.0,
+35.5,
+67.6,
+37.4
+],
+[
+58.0,
+38.2,
+69.4,
+40.1
+],
+[
+58.0,
+44.2,
+71.3,
+46.4
+],
+[
+58.0,
+46.9,
+71.8,
+49.1
 ]
-},
-{
-"id": "sd-279b",
-"pdf": "Sameh Doss labelled drawings (Kasr Al Ainy)",
-"sameh": 279,
-"sec": [
-"ph-vestibular+vestibular-reflexes-pathways-tests-and-m"
-],
-"sc": [
-23.8
-],
-"cap": "The medial longitudinal bundle on sections of the midbrain, pons, medulla and spinal cord, with the vestibular nuclei",
-"box": [
-65.0,
-34.0,
-99.0,
-58.0
 ]
 },
 {
@@ -14135,11 +18440,12 @@
 ],
 "cap": "The internal structure of the cerebellum: the cortex (molecular, Purkinje and granular layers) and the deep nuclei (fastigial, globose, emboliform, dentate)",
 "box": [
-54.0,
-8.0,
-99.0,
-22.0
-]
+53.5,
+6.3,
+81.3,
+18.6
+],
+"pad": 0.15
 },
 {
 "id": "sd-280b",
@@ -14155,10 +18461,25 @@
 ],
 "cap": "The cerebellar peduncles: the superior, middle and inferior cerebellar peduncles connecting the cerebellum with the midbrain, pons and medulla",
 "box": [
-30.0,
-54.0,
-99.0,
-90.0
+52.2,
+54.8,
+90.0,
+82.4
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+58.8,
+53.3,
+61.3
+],
+[
+52.5,
+70.0,
+53.9,
+71.7
+]
 ]
 },
 {
@@ -14175,10 +18496,85 @@
 ],
 "cap": "The medial longitudinal bundle in the brain stem: the nuclei of the cranial nerves III, IV, VI, VII, XII and the vestibular nuclei connected by the bundle, down to the anterior intersegmental tract",
 "box": [
-52.0,
-4.0,
-99.0,
-52.0
+58.8,
+4.3,
+95.0,
+52.5
+],
+"pad": 0.15,
+"fill": [
+[
+84.0,
+3.0,
+100.0,
+7.2
+],
+[
+45.0,
+5.8,
+66.0,
+8.2
+],
+[
+45.0,
+8.5,
+66.3,
+10.6
+],
+[
+45.0,
+18.0,
+66.8,
+20.3
+],
+[
+45.0,
+20.5,
+67.2,
+22.4
+],
+[
+45.0,
+24.0,
+64.5,
+26.2
+],
+[
+45.0,
+26.5,
+67.0,
+28.4
+],
+[
+45.0,
+28.9,
+65.3,
+31.0
+],
+[
+45.0,
+31.3,
+67.2,
+33.8
+],
+[
+45.0,
+44.0,
+64.0,
+46.2
+],
+[
+45.0,
+46.6,
+66.3,
+48.6
+],
+[
+45.0,
+49.2,
+66.3,
+51.5
+]
 ]
 },
 {
@@ -14193,10 +18589,49 @@
 ],
 "cap": "The reticular formation of the brain stem: its connections to the cerebral cortex, thalamus, cerebellum and spinal cord, with the ascending and descending reticular pathways",
 "box": [
-52.0,
+61.0,
+55.9,
+91.5,
+81.2
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
 56.0,
-99.0,
+63.6,
+59.8
+],
+[
+45.0,
+60.6,
+62.2,
+62.4
+],
+[
+45.0,
+65.7,
+61.3,
+67.6
+],
+[
+45.0,
+73.4,
+64.8,
+75.4
+],
+[
+45.0,
+75.9,
+72.3,
+77.6
+],
+[
+45.0,
+78.0,
+70.0,
 80.0
+]
 ]
 },
 {
@@ -14213,10 +18648,25 @@
 ],
 "cap": "The splenium of the corpus callosum and its relations (pineal body, tela choroidea, cerebral aqueduct, forceps major) on a median section",
 "box": [
-50.0,
-4.0,
-99.0,
-28.0
+42.6,
+3.1,
+82.5,
+27.8
+],
+"pad": 0.15,
+"fill": [
+[
+30.0,
+5.8,
+44.7,
+8.3
+],
+[
+30.0,
+24.8,
+44.4,
+26.7
+]
 ]
 },
 {
@@ -14233,11 +18683,12 @@
 ],
 "cap": "The splenium and the tapetum of the corpus callosum on a horizontal section with the posterior horn of the lateral ventricle",
 "box": [
-53.0,
-28.0,
-99.0,
-53.0
-]
+58.5,
+32.1,
+86.0,
+46.8
+],
+"pad": 0.15
 },
 {
 "id": "sd-282c",
@@ -14251,10 +18702,25 @@
 ],
 "cap": "The anterior commissure, the habenular commissure and the posterior commissure on a median section",
 "box": [
-53.0,
-55.0,
-99.0,
-70.0
+59.5,
+51.7,
+82.5,
+66.8
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+56.0,
+59.8,
+57.6
+],
+[
+45.0,
+66.2,
+62.0,
+68.2
+]
 ]
 },
 {
@@ -14273,10 +18739,25 @@
 ],
 "cap": "The oculomotor nucleus on a transverse section of the midbrain at the level of the superior colliculus (tectum, tegmentum, substantia nigra, basis pedunculi, aqueduct)",
 "box": [
-62.0,
-4.0,
-99.0,
-28.0
+63.5,
+7.0,
+96.5,
+27.8
+],
+"pad": 0.15,
+"fill": [
+[
+50.0,
+14.6,
+66.0,
+16.7
+],
+[
+50.0,
+25.8,
+64.3,
+27.7
+]
 ]
 },
 {
@@ -14293,10 +18774,37 @@
 ],
 "cap": "The oculomotor nucleus complex: the Edinger-Westphal nucleus, the lateral cell mass, the central nucleus of Perlia, and the fibres leaving as the oculomotor nerve",
 "box": [
-62.0,
-28.0,
-99.0,
-52.0
+64.4,
+28.3,
+91.0,
+52.5
+],
+"pad": 0.15,
+"fill": [
+[
+50.0,
+29.6,
+67.3,
+31.3
+],
+[
+50.0,
+31.4,
+65.2,
+33.1
+],
+[
+50.0,
+34.8,
+66.6,
+37.1
+],
+[
+50.0,
+45.1,
+64.4,
+46.9
+]
 ]
 },
 {
@@ -14313,10 +18821,31 @@
 ],
 "cap": "The trochlear nucleus on a section of the midbrain at the level of the inferior colliculus, and the trochlear nerve emerging below the inferior colliculus over the superior medullary velum",
 "box": [
-58.0,
-55.0,
-99.0,
-99.0
+63.3,
+55.6,
+93.0,
+95.8
+],
+"pad": 0.15,
+"fill": [
+[
+45.0,
+61.3,
+64.3,
+63.6
+],
+[
+45.0,
+65.2,
+63.8,
+67.4
+],
+[
+45.0,
+86.9,
+65.5,
+89.2
+]
 ]
 }
 ]

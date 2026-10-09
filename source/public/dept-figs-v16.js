@@ -116,23 +116,27 @@
     return i >= 0 && f.sc ? f.sc[i] || 0 : 0;
   };
   for (const [sid, list] of BY_SEC) list.sort((a, b) => scIn(b, sid) - scIn(a, sid));
-  const STOP = new Set("which following these those their there about after before with from that this have been were your other more most some such only upon onto into over under each both also than then them they where when while within without around behind inside outside above below along across through during between lies lying part parts side form forms formed type types".split(" "));
-  const STOP6 = new Set([...STOP].map((w) => w.slice(0, 6)));
-  const words = (t) => new Set((String(t).toLowerCase().match(/[a-z]{4,}/g) || []).filter((w) => !STOP.has(w) && !STOP6.has(w.slice(0, 6))).map((w) => w.slice(0, 6)));
-  const FIGW = new Map(D.figs.map((f) => [f.id, words(f.cap)]));
+  // v18.8: matching by meaning. fig-concepts-v18.js turns a caption or a question into weighted word stems: the words
+  // it uses (weight 1) and the words it stands for (0.5: "CN VI" -> abducent, "lateral rectus" -> abducent nerve, "PICA" ->
+  // posterior inferior cerebellar artery, "Horner" -> cervical sympathetic, plurals and spellings folded together).
+  const CON = window.INTELLECTUALITY_FIG_CONCEPTS;
+  const weighted = (t) => CON.weighted(t);
+  const FIGW = new Map(D.figs.map((f) => [f.id, weighted(f.cap)]));
   const DF = new Map();
-  for (const w of FIGW.values()) for (const t of w) DF.set(t, (DF.get(t) || 0) + 1);
+  for (const w of FIGW.values()) for (const t of w.keys()) DF.set(t, (DF.get(t) || 0) + 1);
   const idf = (t) => Math.log(1 + D.figs.length / (1 + (DF.get(t) || 0)));
   // a CNS-levels drill item → its figure (shown above the question, not again in the explanation)
   const drillFig = (qid) => {
     const m = /^DEPT-LEVELS-HIST-MCQ-(\d+)\d$/.exec(qid || "");
     return m ? D.figs.find((f) => f.drill === +m[1]) || null : null;
   };
-  // The drawings for an answer: the question's own LEARN section first (its drawings, scored by how much of the
-  // question, the right answer and the explanation their caption says), then any other drawing that says a lot
-  // of it. At most three, each after the first only if it is at least half as good, so a picture is never shown for a weak match.
+  // The drawings for an answer. A drawing scores by the meaning its caption shares with the question, the right answer
+  // and the explanation (rarer words count more; words of the right answer count 1.5 times; a caption that names the
+  // whole answer gets a bonus). Drawings of the question's own LEARN section need less; any other drawing must share a lot
+  // and include the answer itself. At least two shared words, or one rare one in the question itself. At most three,
+  // each after the first only if it is at least 60% as good, so a picture is never shown for a weak match.
   const PICKS = new Map();
-  const MIN = 5, GLOBAL = 14, SECBONUS = 5, SECOND = 0.5, MAXN = 3;
+  const P = { MIN: 7, MINSPEC: 4.5, SPEC: 3.8, GLOBAL: 14, STRONG: 22, ONE: 3.5, SECBONUS: 5, SECOND: 0.6, MAXN: 3, ANS: 1.5, COVER: 4, ANSO: 15 };
   function pickFor(qid) {
     if (PICKS.has(qid)) return PICKS.get(qid);
     let out = [];
@@ -141,17 +145,35 @@
       if (q) {
         const sid = safe(() => window.INTELLECTUALITY_V15?.bestSection(qid)?.id, null);
         const ex = safe(() => window.INTELLECTUALITY_V16?.explain(qid), null);
-        const want = words(q.stem + " " + (q.options || []).filter((o) => (q.answerKeys || []).includes(o.key)).map((o) => o.text).join(" ") + " " + (ex && ex.key ? ex.key : ""));
+        const right = (q.options || []).filter((o) => (q.answerKeys || []).includes(o.key)).map((o) => o.text).join(" ");
+        const ans = weighted(right);
+        const sa = weighted(q.stem + " " + right);
+        const want = weighted(q.stem + " " + right + " " + (ex && ex.key ? ex.key : ""));
+        const lit = [...ans].filter(([t, w]) => w === 1 && idf(t) > 2).map(([t]) => t);
         const inSec = new Set(((sid && BY_SEC.get(sid)) || []).map((f) => f.id));
         const cand = [];
         for (const f of D.figs) {
-          let o = 0;
-          for (const t of FIGW.get(f.id)) if (want.has(t)) o += idf(t);
+          const fw = FIGW.get(f.id);
+          let o = 0, n = 0;
+          const hit = [];
+          for (const [t, wf] of fw) {
+            const wq = want.get(t);
+            if (!wq) continue;
+            o += idf(t) * Math.min(wq, wf) * (ans.has(t) ? P.ANS : 1);
+            if (Math.min(wq, wf) === 1) n++;
+            hit.push(t);
+          }
+          if (!hit.length) continue;
           const here = inSec.has(f.id);
-          if (here ? o >= MIN : o >= GLOBAL) cand.push({ f, sc: o + (here ? SECBONUS + 0.04 * scIn(f, sid) : 0) });
+          if (n < 2 && !(here && n === 1 && hit.some((t) => fw.get(t) === 1 && want.get(t) === 1 && idf(t) >= P.ONE))) continue;
+          const spec = hit.some((t) => fw.get(t) === 1 && sa.get(t) === 1 && idf(t) >= P.SPEC);
+          if (here ? o < (spec ? P.MINSPEC : P.MIN) : o < P.GLOBAL) continue;
+          if (!here && o < P.STRONG && n < 4 && !hit.some((t) => ans.get(t) === 1 && (idf(t) >= P.SPEC || o >= P.ANSO))) continue;
+          const cover = lit.length && lit.every((t) => fw.get(t) === 1) ? P.COVER : 0;
+          cand.push({ f, n, sc: o + cover + (here ? P.SECBONUS + 0.04 * scIn(f, sid) : 0) });
         }
         cand.sort((a, b) => b.sc - a.sc);
-        if (cand.length) out = cand.slice(0, MAXN).filter((c, i) => i === 0 || c.sc >= SECOND * cand[0].sc).map((c) => c.f);
+        out = cand.slice(0, P.MAXN).filter((c, i) => i === 0 || (c.n >= 2 && c.sc >= P.SECOND * cand[0].sc)).map((c) => c.f);
       }
     }
     PICKS.set(qid, out);
@@ -275,17 +297,57 @@
     });
   }
 
-  // tap a drawing → full screen (pinch to zoom); tap again → back
+  // tap a drawing → a full-screen viewer: the drawing fits the screen; tap it (or ＋) to magnify 2× then 3× and drag
+  // to move around the labels; ✕, Esc, or a tap on the dark background closes it. Pinch zoom also works.
+  const LEVELS = [1, 2, 3];
+  function setZoom(o, lv, cx, cy) {
+    const sc = o.querySelector(".ixDZScroll"), im = sc && sc.querySelector("img");
+    if (!im) return;
+    const old = +o.dataset.lv || 1, rx = (sc.scrollLeft + (cx ?? sc.clientWidth / 2)) / (sc.scrollWidth || 1), ry = (sc.scrollTop + (cy ?? sc.clientHeight / 2)) / (sc.scrollHeight || 1);
+    o.dataset.lv = String(lv);
+    o.classList.toggle("ixDZBig", lv > 1);
+    im.style.width = lv > 1 ? lv * 100 + "%" : "";
+    o.querySelector("[data-ixz=\"out\"]").disabled = lv <= 1;
+    o.querySelector("[data-ixz=\"in\"]").disabled = lv >= LEVELS[LEVELS.length - 1];
+    if (lv !== old) requestAnimationFrame(() => {
+      sc.scrollLeft = rx * sc.scrollWidth - (cx ?? sc.clientWidth / 2);
+      sc.scrollTop = ry * sc.scrollHeight - (cy ?? sc.clientHeight / 2);
+    });
+  }
+  function closeZoom() {
+    document.querySelectorAll(".ixDeptZoom").forEach((z) => z.remove());
+    document.documentElement.classList.remove("ixDZOpen");
+  }
+  document.addEventListener("keydown", (ev) => ev.key === "Escape" && document.querySelector(".ixDeptZoom") && closeZoom());
   document.addEventListener("click", (ev) => {
     if (ev.target.closest("[data-ix-unlock]")) return void paste();
     const z = ev.target.closest(".ixDeptZoom");
-    if (z) return z.remove();
+    if (z) {
+      const b = ev.target.closest("[data-ixz]");
+      const lv = +z.dataset.lv || 1;
+      if (b) {
+        if (b.dataset.ixz === "close") return closeZoom();
+        return setZoom(z, b.dataset.ixz === "in" ? Math.min(3, lv + 1) : Math.max(1, lv - 1));
+      }
+      if (ev.target.tagName === "IMG") {
+        const r = z.querySelector(".ixDZScroll").getBoundingClientRect();
+        return setZoom(z, lv >= 3 ? 1 : lv + 1, ev.clientX - r.left, ev.clientY - r.top);
+      }
+      return closeZoom();
+    }
     const img = ev.target.closest(".ixDept img");
     if (!img) return;
+    closeZoom();
     const o = document.createElement("div");
     o.className = "ixDeptZoom";
-    o.innerHTML = '<img src="' + img.src + '" alt="' + E(img.alt) + '"><div class="ixDeptZoomCap">' + E(img.alt) + " · tap to close</div>";
+    o.dataset.lv = "1";
+    o.setAttribute("role", "dialog");
+    o.setAttribute("aria-label", img.alt);
+    o.innerHTML =
+      '<div class="ixDZBar"><button type="button" data-ixz="out" aria-label="Zoom out" disabled>－</button><button type="button" data-ixz="in" aria-label="Zoom in">＋</button><span class="ixDZHint">Tap the drawing to zoom · drag to move</span><button type="button" data-ixz="close" aria-label="Close">✕</button></div>' +
+      '<div class="ixDZScroll"><img src="' + img.src + '" alt="' + E(img.alt) + '"></div><div class="ixDeptZoomCap">' + E(img.alt) + "</div>";
     document.body.appendChild(o);
+    document.documentElement.classList.add("ixDZOpen");
   });
 
   new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
