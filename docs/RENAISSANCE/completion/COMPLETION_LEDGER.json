@@ -1,19 +1,73 @@
 {
- "generated": "2026-10-03T21:29:22.890Z",
- "log": "receipts/v18_7/full_regression.log",
+ "generated": "2026-10-09T11:45:24.424Z",
+ "log": "receipts/v18_8/full_regression.log",
  "suitesInLog": {
   "host": 1,
   "rn": 2,
   "v3": 2,
-  "om": 1,
-  "co": 1
+  "om": 1
  },
  "sections": 711,
  "requirements": 192,
  "controllable": 174,
- "completed": 174,
+ "completed": 167,
  "open": [],
- "failed": [],
+ "failed": [
+  {
+   "id": "noselfgrant",
+   "name": "Self-improvement never self-grants authority; no unsafe autonomous real-world action (§248–249)",
+   "fails": [
+    "test co:CO6 was not run in receipts/v18_8/full_regression.log"
+   ]
+  },
+  {
+   "id": "frontierradar",
+   "name": "Frontier radar and knowledge recompiler (M1 §105–106, M2 §74–75, §133): time-sensitive claims re-verified on a half-life",
+   "fails": [
+    "test co:CO10 was not run in receipts/v18_8/full_regression.log"
+   ]
+  },
+  {
+   "id": "oracle",
+   "name": "Coverage oracle, requirement graph, zero silent omissions, the gap loop (§3–5, §184–185, §250, §266–267, §271, §299)",
+   "fails": [
+    "test co:CO1 was not run in receipts/v18_8/full_regression.log",
+    "test co:CO2 was not run in receipts/v18_8/full_regression.log",
+    "test co:CO3 was not run in receipts/v18_8/full_regression.log",
+    "test co:CO4 was not run in receipts/v18_8/full_regression.log",
+    "test co:CO5 was not run in receipts/v18_8/full_regression.log"
+   ]
+  },
+  {
+   "id": "ledger",
+   "name": "Completion ledger, the two meanings of 100%, no fake 100% (§6–7, §191–192, §277, M1 §115, M2 §173)",
+   "fails": [
+    "test co:CO8 was not run in receipts/v18_8/full_regression.log"
+   ]
+  },
+  {
+   "id": "artifacts",
+   "name": "The 50 required artifacts (§214), each located",
+   "fails": [
+    "test co:CO9 was not run in receipts/v18_8/full_regression.log"
+   ]
+  },
+  {
+   "id": "implement",
+   "name": "Implementation law: implementable requirements are code, not markdown; no fake placeholders (§215, §218, §260–261, M1 §176, M2 §156–157)",
+   "fails": [
+    "test co:CO5 was not run in receipts/v18_8/full_regression.log"
+   ]
+  },
+  {
+   "id": "blockers",
+   "name": "Blocker discipline (§186): only real external blockers, each documented with its preparatory work",
+   "fails": [
+    "test co:CO2 was not run in receipts/v18_8/full_regression.log",
+    "test co:CO5 was not run in receipts/v18_8/full_regression.log"
+   ]
+  }
+ ],
  "blockedExternal": [
   {
    "id": "L12",
@@ -154,7 +208,7 @@
  },
  "structuralErrors": [],
  "controllableIncludingDispositions": 177,
- "completedIncludingDispositions": 177,
- "percentControllable": 100,
- "declaration": "100% CONTROLLABLE RENAISSANCE COMPLETION criteria met by the oracle (the other §7 analyses must also be run)"
+ "completedIncludingDispositions": 170,
+ "percentControllable": 96,
+ "declaration": "not declared: 0 open, 7 contradicted, 0 structural errors"
 }
