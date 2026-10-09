@@ -592,7 +592,7 @@ ALL 11 PASSED
 === strict coverage
 STRICT practice taught 1021/1059 (96.4%)
 STRICT held-out taught 213/398 (53.5%)  [counts only]
-=== ALL DONE
+=== coverage_oracle_test (CO1-CO10)
 PASS CO1 Zero silent omissions (§5): all 711 numbered sections of the three missions (226 + 184 + 301) are parsed and each maps to at least one requirement; every requirement names its source sections
 PASS CO2 Requirement graph schema (§4): every requirement has id, name, source, rationale, category, dependencies, status, artifact, code, test and benchmark locations, user effect, blocker, evidence and supersession; statuses come from the allowed list; merges, rejections, blocks and empirical items carry what they must
 PASS CO3 No claim beyond its evidence: every file, symbol and test that a requirement relies on exists and every named test passed in the regression log the oracle read
@@ -604,3 +604,4 @@ PASS CO8 Completion ledger (§191–192): its counts add up (controllable = comp
 PASS CO9 The 50 required artifacts (§214): the index lists every one in order with at least one location, and every location exists
 PASS CO10 Knowledge half-life and re-verification (§100, §133): every provenance claim has a year and a class (stable, slow, medium, fast) with its re-verification date; the committed schedule matches the claims in the seasons
 ALL 10 PASSED
+=== ALL DONE

@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-09T11:45:24.424Z",
+ "generated": "2026-10-09T11:45:37.344Z",
  "log": "receipts/v18_8/full_regression.log",
  "inventory": {
   "seasons": 3,
@@ -5476,13 +5476,11 @@
     "M3.248",
     "M3.249"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
-   "fails": [
-    "test co:CO6 was not run in receipts/v18_8/full_regression.log"
-   ],
+   "fails": [],
    "open": [],
-   "lastVerified": null,
+   "lastVerified": "2026-10-09",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6319,13 +6317,11 @@
     "M2.75",
     "M3.133"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
-   "fails": [
-    "test co:CO10 was not run in receipts/v18_8/full_regression.log"
-   ],
+   "fails": [],
    "open": [],
-   "lastVerified": null,
+   "lastVerified": "2026-10-09",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6794,17 +6790,11 @@
     "M3.271",
     "M3.299"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
-   "fails": [
-    "test co:CO1 was not run in receipts/v18_8/full_regression.log",
-    "test co:CO2 was not run in receipts/v18_8/full_regression.log",
-    "test co:CO3 was not run in receipts/v18_8/full_regression.log",
-    "test co:CO4 was not run in receipts/v18_8/full_regression.log",
-    "test co:CO5 was not run in receipts/v18_8/full_regression.log"
-   ],
+   "fails": [],
    "open": [],
-   "lastVerified": null,
+   "lastVerified": "2026-10-09",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6842,13 +6832,11 @@
     "M3.192",
     "M3.277"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
-   "fails": [
-    "test co:CO8 was not run in receipts/v18_8/full_regression.log"
-   ],
+   "fails": [],
    "open": [],
-   "lastVerified": null,
+   "lastVerified": "2026-10-09",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6877,13 +6865,11 @@
    "sources": [
     "M3.214"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
-   "fails": [
-    "test co:CO9 was not run in receipts/v18_8/full_regression.log"
-   ],
+   "fails": [],
    "open": [],
-   "lastVerified": null,
+   "lastVerified": "2026-10-09",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -6916,13 +6902,11 @@
     "M3.260",
     "M3.261"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
-   "fails": [
-    "test co:CO5 was not run in receipts/v18_8/full_regression.log"
-   ],
+   "fails": [],
    "open": [],
-   "lastVerified": null,
+   "lastVerified": "2026-10-09",
    "registryCandidates": 0,
    "strongest": []
   },
@@ -7027,14 +7011,11 @@
     "M3.186",
     "M3.277"
    ],
-   "closed": false,
+   "closed": true,
    "class": "controllable",
-   "fails": [
-    "test co:CO2 was not run in receipts/v18_8/full_regression.log",
-    "test co:CO5 was not run in receipts/v18_8/full_regression.log"
-   ],
+   "fails": [],
    "open": [],
-   "lastVerified": null,
+   "lastVerified": "2026-10-09",
    "registryCandidates": 0,
    "strongest": []
   },
