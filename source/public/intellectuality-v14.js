@@ -2022,7 +2022,8 @@
   }
 
   /* ───────────────────────── decorate after each render ───────────────────────── */
-  let parkedShown = 0;
+  let parkedShown = 0,
+    stepTapNet = false;
   function decorate() {
     const cal = V().calendar?.today ? V().calendar : syncCalendar();
     const top = document.querySelector(".courseTopbar");
@@ -2067,6 +2068,28 @@
         banner = stage.querySelector(".v14Carryover");
       if (banner) banner.insertAdjacentHTML("afterend", tag);
       else stage.insertAdjacentHTML("afterbegin", tag);
+    }
+    // v18.8.1 (owner's request, 11 Oct): a Skip button under every lesson step, in case its own button gets stuck.
+    // Skip counts as done: the step is marked finished exactly like its own button would; answers, wrong-answer
+    // repeats and every other saved record are untouched. Past-paper (question) steps keep their own flow.
+    const segNow = kind === "SEGMENT" ? safe(() => currentLessonSegment(), null) : null;
+    if (stage && segNow && segNow.seg && segNow.seg.type !== "question" && !stage.querySelector(".v14SkipStep")) {
+      stage.insertAdjacentHTML(
+        "beforeend",
+        '<div class="v14SkipStep"><button type="button" data-act="finish-segment" data-key="' + E(segNow.key) + '" data-method="user_skip">Skip this step → next</button><span>Counts as done. Use it if the button above is stuck.</span></div>',
+      );
+      // the app binds its buttons when it draws the screen; this one is added after, so it is bound here
+      const sb = stage.querySelector(".v14SkipStep button");
+      if (sb) sb.onclick = () => safe(() => window.act(sb));
+    }
+    if (!stepTapNet) {
+      // Safety net: a step button that was redrawn after the screen was drawn has no tap handler and does nothing
+      // (a stuck "I SEE IT" / "MAP REBUILT" / "LESSON LEARNED"). Such a tap is passed to the app's own handler.
+      stepTapNet = true;
+      document.addEventListener("click", (ev) => {
+        const b = ev.target.closest?.('#player button[data-act="finish-segment"], #player button[data-act="visual-hide"]');
+        if (b && !b.onclick && typeof window.act === "function") safe(() => window.act(b));
+      });
     }
     const note = V().notice;
     if (stage && note && note.kind === "parked" && parkedShown !== note.at) {
