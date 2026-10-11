@@ -656,8 +656,9 @@
 
   /* ───────────────────────── hydration ───────────────────────── */
   function hydratePics(root = document) {
-    const onPage = new Set([...root.querySelectorAll("#player [data-v15-key], #player [data-v14-vkey]")].map((a) => (a.dataset.v15Key || a.dataset.v14Vkey || "").replace(/^exact:/, "")));
-    root.querySelectorAll("#player figure.v15Pic:not([data-v15-done])").forEach((fig) => {
+    // v18.8: also the lessons opened from the course map (.ixMpRead), whose pictures were never loaded (an empty grey box)
+    const onPage = new Set([...root.querySelectorAll("#player [data-v15-key], #player [data-v14-vkey], .ixMpRead [data-v15-key], .ixMpRead [data-v14-vkey]")].map((a) => (a.dataset.v15Key || a.dataset.v14Vkey || "").replace(/^exact:/, "")));
+    root.querySelectorAll("#player figure.v15Pic:not([data-v15-done]), .ixMpRead figure.v15Pic:not([data-v15-done])").forEach((fig) => {
       fig.dataset.v15Done = "1";
       const term = fig.dataset.v15Term,
         subj = fig.dataset.v15Subj;

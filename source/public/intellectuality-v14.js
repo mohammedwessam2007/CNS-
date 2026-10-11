@@ -205,6 +205,13 @@
   }
   const partStem = (t) => String(t || "").replace(/\s+(I{1,3}|IV)$/, "").trim().toLowerCase();
   const partNo = (t) => (String(t || "").match(/\s(I{1,3}|IV)$/) || [])[1] || "";
+  const safeDone = (d, l) => {
+    try {
+      return lessonDoneN(d, l);
+    } catch (e) {
+      return 0;
+    }
+  };
   function applySpreads() {
     const P = pristine(),
       cal = V().calendar || {};
@@ -258,7 +265,16 @@
     }
     for (const d of C.days || []) {
       if (!d._spread) continue;
-      const ls = d.lessons || [];
+      // v18.8: the timetable gives some lessons on two days running (e.g. "Cornea and sclera" on 12 and 13 Oct); when
+      // catch-up spreading puts both copies on the same day, the same lesson showed twice. One copy per day is kept.
+      // The copy with more of it already done is the one kept, so no progress is hidden.
+      const keep = new Map();
+      for (const l of d.lessons || []) {
+        const k = keep.get(l.id);
+        if (!k || safeDone(d, l) > safeDone(d, k)) keep.set(l.id, l);
+      }
+      d.lessons = (d.lessons || []).filter((l) => keep.get(l.id) === l);
+      const ls = d.lessons;
       d.estimatedMinutes = ls.reduce((z, l) => z + (l.segments || []).reduce((y, g) => y + (g.minutes || 3), 0), 0) + 7;
       d.title = ls.slice(0, 2).map((l) => l.topic).join(" + ") + (ls.length > 2 ? " …" : "");
     }

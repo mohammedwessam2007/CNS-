@@ -8,7 +8,7 @@
 .v15Big{border:1px solid #3a4f8f;background:#101a33;border-radius:14px;padding:12px 14px;color:#dbe5ff}
 .v15Big p{margin:6px 0 0;font-size:15px;line-height:1.55}
 .v15Kicker{font-size:10px;font-weight:900;letter-spacing:.09em;color:#9fb3e8}
-.v15Sec{display:grid;gap:10px;background:#fff;color:#1f2937;border-radius:14px;padding:14px;border:1px solid #e2e7ed}
+.v15Sec{display:grid;grid-template-columns:minmax(0,1fr);min-width:0;gap:10px;background:#fff;color:#1f2937;border-radius:14px;padding:14px;border:1px solid #e2e7ed}
 .v15Head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
 .v15Head h3{margin:0;font-size:20px;line-height:1.25;color:#0f172a}
 .v15Cmd{display:grid;justify-items:end;gap:1px;padding:5px 10px;border-radius:10px;background:#101a33;color:#e8eeff}
