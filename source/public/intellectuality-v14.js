@@ -2083,13 +2083,87 @@
       if (sb) sb.onclick = () => safe(() => window.act(sb));
     }
     if (!stepTapNet) {
-      // Safety net: a step button that was redrawn after the screen was drawn has no tap handler and does nothing
-      // (a stuck "I SEE IT" / "MAP REBUILT" / "LESSON LEARNED"). Such a tap is passed to the app's own handler.
+      // v18.9.1 (owner, 12 Oct 2026: "when I click I SEE IT → HIDE LABELS or the skip button it doesn't work").
+      // Every tap on a lesson step button is handled here, once: by the app's own handler first; then, whatever
+      // happened inside it, the step is checked and moved on directly if it did not move. A touch is taken on
+      // finger-up, so a click the phone never sends is not lost; a mouse or keyboard press comes as a click.
+      // Anything that went wrong is kept (S.v14.tapLog) and shown in "Share my progress".
       stepTapNet = true;
-      document.addEventListener("click", (ev) => {
-        const b = ev.target.closest?.('#player button[data-act="finish-segment"], #player button[data-act="visual-hide"]');
-        if (b && !b.onclick && typeof window.act === "function") safe(() => window.act(b));
-      });
+      const SEL = '#player button[data-act="finish-segment"], #player button[data-act="visual-hide"]';
+      let lastTap = { id: "", at: 0 },
+        down = null;
+      const log = (x) =>
+        safe(() => {
+          const v = V();
+          v.tapLog = (v.tapLog || []).concat([Object.assign({ at: new Date().toISOString(), app: (document.title.match(/v[\d.]+/) || [""])[0] }, x)]).slice(-20);
+        });
+      const stepTap = (b, via) => {
+        const id = b.dataset.act + "|" + (b.dataset.key || "");
+        if (lastTap.id === id && Date.now() - lastTap.at < 900) return;
+        lastTap = { id, at: Date.now() };
+        const a = b.dataset.act,
+          key = b.dataset.key || "";
+        const cur0 = safe(() => currentLessonSegment(), null),
+          k0 = cur0 && cur0.key;
+        let err = null;
+        try {
+          window.act(b);
+        } catch (e) {
+          err = String((e && e.message) || e).slice(0, 160);
+        }
+        let fixed = false;
+        if (a === "visual-hide") {
+          if (!S.visualBlind) S.visualBlind = {};
+          if (key && !S.visualBlind[key]) (S.visualBlind[key] = true), (fixed = true);
+        } else {
+          if (!S.segments) S.segments = {};
+          if (key && !S.segments[key]) (S.segments[key] = true), (fixed = true);
+          const cur1 = safe(() => currentLessonSegment(), null);
+          // the step on screen did not move although its own key is now done: finish the step that is current
+          if (cur1 && k0 && cur1.key === k0 && !S.segments[k0]) (S.segments[k0] = true), (fixed = true);
+        }
+        if (err || fixed) {
+          log({ act: a, key, via, err, fixed });
+          safe(() => save());
+          safe(() => render());
+        }
+      };
+      document.addEventListener(
+        "touchstart",
+        (ev) => {
+          const b = ev.target.closest?.(SEL),
+            t = ev.touches && ev.touches[0];
+          down = b && t && ev.touches.length === 1 ? { b, x: t.clientX, y: t.clientY, sy: scrollY } : null;
+        },
+        { capture: true, passive: true },
+      );
+      document.addEventListener(
+        "touchend",
+        (ev) => {
+          const d = down,
+            t = ev.changedTouches && ev.changedTouches[0];
+          down = null;
+          if (!d || !t) return;
+          const over = document.elementFromPoint(t.clientX, t.clientY);
+          if (!over || over.closest?.(SEL) !== d.b) return;
+          // a tap, not a scroll
+          if (Math.abs(t.clientX - d.x) > 12 || Math.abs(t.clientY - d.y) > 12 || Math.abs(scrollY - d.sy) > 12) return;
+          ev.preventDefault(); // no second (ghost) click on whatever is drawn under the finger next
+          safe(() => stepTap(d.b, "touch"));
+        },
+        { capture: true, passive: false },
+      );
+      document.addEventListener(
+        "click",
+        (ev) => {
+          const b = ev.target.closest?.(SEL);
+          if (!b || typeof window.act !== "function") return;
+          ev.stopImmediatePropagation();
+          ev.preventDefault();
+          safe(() => stepTap(b, "click"));
+        },
+        true,
+      );
     }
     const note = V().notice;
     if (stage && note && note.kind === "parked" && parkedShown !== note.at) {

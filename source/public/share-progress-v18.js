@@ -56,6 +56,11 @@
     if (doneTopics.length) L.push("Last lessons done: " + doneTopics.slice(-6).join(" · "));
     L.push("Past-paper MCQs answered: " + recs.length + " · wrong last time: " + wrongNow.length + " · ever wrong: " + everWrong.length + " · due for review now: " + due);
     L.push("Mocks taken: " + (((St.v16 && St.v16.mocks) || []).length || 0));
+    const taps = (St.v14 && St.v14.tapLog) || [];
+    if (taps.length) {
+      L.push("Step buttons that needed the backup (last " + taps.length + "):");
+      for (const t of taps.slice(-8)) L.push("- " + t.at.slice(5, 16).replace("T", " ") + " " + t.app + " " + t.act + " " + t.key + " via " + t.via + (t.err ? " · error: " + t.err : "") + (t.fixed ? " · moved on" : ""));
+    }
     if (wrongNow.length) {
       L.push("");
       L.push("Questions I got wrong (they come back for review):");
