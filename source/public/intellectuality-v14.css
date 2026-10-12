@@ -204,3 +204,11 @@ details.v14OptMore>summary{cursor:pointer;font-size:12px;color:#3157d5;min-heigh
 .v14SkipStep{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:16px 0 4px;padding-top:12px;border-top:1px dashed #2c4058}
 .v14SkipStep button{min-height:44px;padding:0 16px;border-radius:12px;border:1px solid #3c5f7a;background:#0f1621;color:#e8f2ff;font-weight:800;cursor:pointer}
 .v14SkipStep span{color:#8ea3bb;font-size:12px}
+/* v18.8.3: share my progress with Claude */
+.ixShare{position:fixed;inset:0;z-index:10060;background:rgba(4,8,14,.82);display:flex;align-items:center;justify-content:center;padding:16px}
+.ixShareBox{width:min(560px,100%);max-height:100%;overflow:auto;background:#0d1622;border:1px solid #2c4058;border-radius:16px;padding:16px;color:#e8f2ff}
+.ixShareHd{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.ixShareHd button{min-width:44px;min-height:44px;border-radius:12px;border:1px solid #3c5f7a;background:#0f1621;color:#e8f2ff;font-size:18px}
+.ixShareP{color:#b8c7d9;font-size:13px;line-height:1.45;margin:6px 0}.ixShareP.small{font-size:12px;color:#8ea3bb}
+.ixShareT{width:100%;box-sizing:border-box;min-height:260px;border-radius:10px;border:1px solid #2c4058;background:#06101a;color:#dce8f6;font:12px/1.45 ui-monospace,Menlo,monospace;padding:10px;resize:vertical}
+.ixShareRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.ixShareRow button{min-height:44px;padding:0 16px;border-radius:12px;font-weight:800}
