@@ -159,27 +159,25 @@
       st = load();
     if (off()) return { open: false, why: "off" };
     if (!season()) return { open: false, why: "nocontent" };
-    if (!cnsDone()) return { open: false, why: "cns" };
-    const toExam = daysBetween(today, EXAM_DAY);
-    if (toExam >= 0 && toExam <= 2) return { open: false, why: "exam", msg: "Exam weekend. Medicine and sleep win; Renaissance waits until after the exam." };
-    const h = t.getHours();
-    if (h >= 1 && h < 5) return { open: false, why: "sleep", msg: "It is past 1 am. Sleep is worth more tonight than anything Renaissance can teach." };
-    const week = weekMinutes(st, today);
-    if (week >= WEEK_STOP) return { open: false, why: "week", msg: "Renaissance took " + Math.round(week) + " minutes this week. It rests today so the rest of your life keeps its time." };
-    const doneToday = Object.values(st.sessions).some((s) => s.endDay === today);
-    if (doneToday) return { open: false, why: "spent", msg: "Today's session is done. Nothing more is owed; the rest of the day is yours." };
+    // v18.9 (owner, 12 Oct 2026): "make it everyday, I don't care if it's late". It opens every day at any hour,
+    // before or after the CNS work; the hour no longer matters, and what used to shut it (exam weekend, a heavy week) now only shortens it.
     const reasons = [];
     let dose = DOSE.full;
+    const toExam = daysBetween(today, EXAM_DAY);
+    if (!cnsDone()) reasons.push("today's CNS work is not finished yet (medicine still comes first; this is here when you want it)");
+    if (toExam >= 0 && toExam <= 2) {
+      dose = DOSE.short;
+      reasons.push("exam weekend");
+    }
+    const week = weekMinutes(st, today);
+    const doneToday = Object.values(st.sessions).some((s) => s.endDay === today);
+    if (doneToday) return { open: false, why: "spent", msg: "Today's session is done. Nothing more is owed; the rest of the day is yours." };
     const spentToday = st.days[today] || 0;
     if (toExam >= 0 && toExam <= 7) {
       dose = DOSE.short;
       reasons.push("exam week");
     }
-    if ((h === 23 && t.getMinutes() >= 30) || h === 0) {
-      dose = DOSE.short;
-      reasons.push("it is late");
-    }
-    if (week >= WEEK_CAP) {
+    if (week >= WEEK_CAP || week >= WEEK_STOP) {
       dose = DOSE.short;
       reasons.push("a heavy week (" + Math.round(week) + " min)");
     }
@@ -1812,9 +1810,9 @@
     const c = document.getElementById("commuteBtn");
     if (!c) return;
     let b = document.getElementById("rnToolsBtn");
-    // before the CNS is done the gate answers at once; after it, it plans a session, so at most every 3 s
+    // the gate plans a session, so at most every 3 s (at once when today's CNS work has just finished)
     const cd = cnsDone();
-    if (b && cd && doorCd && Date.now() - doorAt < 3000) return;
+    if (b && cd === doorCd && Date.now() - doorAt < 3000) return;
     doorAt = Date.now();
     doorCd = cd;
     if (!b) {

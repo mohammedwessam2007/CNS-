@@ -56,15 +56,13 @@ async function runToEnd(p) {
   {
     const s = await open({ v16: true, time: '2026-09-26T19:00:00+03:00', state: null, settle: 1800, viewport: { width: 820, height: 1180 } });
     const p = s.page;
-    const before = await p.evaluate(() => ({ why: RENAISSANCE.gate().why, entry: !!document.querySelector('.rnEntry'), kind: nextAction().kind }));
-    check('R1', 'While the medicine day is unfinished Renaissance stays shut: no door, gate says "cns"', before.kind !== 'STOP' && before.why === 'cns' && !before.entry, before);
+    const before = await p.evaluate(() => ({ open: RENAISSANCE.gate().open, why: RENAISSANCE.gate().why, entry: !!document.querySelector('.rnEntry'), kind: nextAction().kind }));
+    check('R1', 'Every day, at any hour (owner, 12 Oct 2026): before the medicine day is finished the gate is already open, and the CNS screen stays medicine-only (no card in the lesson)', before.kind !== 'STOP' && before.why === undefined && before.open === true && !before.entry, before);
     const tools0 = await p.evaluate(() => {
       const b = document.getElementById('rnToolsBtn');
-      b?.click();
-      const w = document.getElementById('rnToolsWhy');
-      return { text: b?.textContent || '', why: w && !w.hidden ? w.textContent : '', session: !!RENAISSANCE.current() };
+      return { text: b?.textContent || '', open: !!b?.hasAttribute('data-rn-open'), session: !!RENAISSANCE.current() };
     });
-    check('R1b', 'Renaissance can always be found: Tools has its door, which before today\'s CNS reads "opens after today\'s CNS" and, tapped, says why and opens nothing', /opens after today's CNS/.test(tools0.text) && /Medicine comes first/.test(tools0.why) && !tools0.session, tools0);
+    check('R1b', 'Renaissance can always be found: before today\'s CNS the Tools door already reads "open · N min today" and nothing has started on its own', /Renaissance: open · \d+ min today/.test(tools0.text) && tools0.open && !tools0.session, tools0);
 
     await p.evaluate(STOP);
     await p.waitForTimeout(250);
@@ -200,12 +198,12 @@ async function runToEnd(p) {
     const late = await at('2026-09-28T01:30:00+03:00', null, g);
     const week = await at('2026-11-10T18:00:00+02:00', null, g);
     const full = await at('2026-09-28T18:00:00+03:00', null, g);
-    check('R16', 'Life first: exam weekend → shut; 01:00–05:00 → shut (sleep); exam week → a real 10-minute dose (the session continues another day)', !exam.open && exam.why === 'exam' && !late.open && late.why === 'sleep' && week.open && week.dose === 10 && week.short && week.n < full.n && week.min <= 12 && full.min <= 30, { exam, late, week, full });
+    check('R16', 'Every day, any hour (owner, 12 Oct 2026): exam weekend and exam week → a real 10-minute dose, not a shut door; 01:30 → open (the hour no longer matters)', exam.open && exam.dose === 10 && exam.short && late.open && week.open && week.dose === 10 && week.short && week.n < full.n && week.min <= 12 && full.min <= 30, { exam, late, week, full });
     const days = {}; for (let i = 1; i <= 7; i++) days['2026-09-' + String(28 - i).padStart(2, '0')] = 55;
     const heavy = await at('2026-09-28T18:00:00+03:00', { v: 1, sessions: {}, days, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, lastWarm: '' }, g);
     const days2 = {}; for (let i = 1; i <= 7; i++) days2['2026-09-' + String(28 - i).padStart(2, '0')] = 42;
     const warm = await at('2026-09-28T18:00:00+03:00', { v: 1, sessions: {}, days: days2, answers: [], hooks: {}, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, lastWarm: '' }, g);
-    check('R17', 'Human-life test: when Renaissance takes too much of the week it shrinks itself (≥245 min → 10-min dose) and then rests (≥300 min → shut)', !heavy.open && heavy.why === 'week' && warm.open && warm.dose === 10, { heavy, warm });
+    check('R17', 'Human-life test: when Renaissance takes a lot of the week it shrinks itself to a 10-minute dose (≥245 min) instead of resting, so it still comes every day', heavy.open && heavy.dose === 10 && warm.open && warm.dose === 10, { heavy, warm });
     const gap = await at('2026-10-09T18:00:00+03:00', { v: 1, sessions: { commit: { start: 1, done: true, end: 2, endDay: '2026-09-26' } }, days: { '2026-09-26': 24 }, answers: [], hooks: { 'commit.h1': { due: '2026-09-27', gap: 1, n: 0, ok: 0 }, 'commit.h2': { due: '2026-10-03', gap: 7, n: 0, ok: 0 } }, bugs: {}, xray: {}, reps: {}, clicks: [], forge: {}, reality: {}, lastWarm: '' }, () => {
       const x = RENAISSANCE.gate();
       render();

@@ -126,9 +126,11 @@ capability ontology and lets the learner pick one of three unfamiliar primitives
 v1 is a **hand-authored season** plus a small planner:
 
 ```
-gate(): flag on · CNS day finished (nextAction().kind === "STOP") · not an exam weekend · not 01:00–05:00 · weekly
-        minutes under 245 · today's dose not spent
-dose(): 25 min normal · 10 min (core steps only) in exam week, after 23:30, or when the 7-day average is above 35
+gate() (v18.9, owner 12 Oct 2026: "make it everyday, I don't care if it's late"): flag on · content loaded ·
+        today's session not yet done · today's dose not spent. Any hour, before or after the CNS day; nothing else shuts it.
+dose(): 25 min normal · 10 min (core steps only) on exam weekend, in exam week, or when the week passes 245 min
+        (before v18.9: shut before the CNS day was done, on exam weekend, 01:00–05:00 and above 300 min a week)
+The Library (renaissance-library.js): one long reading a day, any hour, door in the side menu; progress in S.rnLib.
 pick(): the first unfinished session in authored order (the order is interleaved by primitive family),
         with due hooks as the warm-up · season finished → hooks-only review, then stop
 ```

@@ -1,4 +1,12 @@
-# Known Limitations (v18.8 · MCQ exam + Renaissance)
+# Known Limitations (v18.9 · MCQ exam + Renaissance + the Library)
+
+## v18.9 Renaissance every day, and the Library
+
+- **Renaissance opens every day at any hour**, before or after the CNS work (owner, 12 Oct 2026: "make it everyday, I don't care if it's late"). The 01:00–05:00 and 23:30 shut-offs are gone; exam week, exam weekend and a heavy week now only shorten it to 10 minutes instead of closing it. One session a day is still the limit, and the lesson screen stays medicine-only: before the day's CNS is done the door is in Study mode (Tools); after it, also on the finished-day screen.
+- **The Library** (side menu, "📖 TODAY'S READING"): 21 long readings (about 1,000–1,400 words each, 6–8 minutes), each with the literature quoted at length, backstage facts, a close reading, a medical link and three recall questions. One is offered a day; any can be opened from "All readings". Progress is saved in the app state (`rnLib`), so it syncs like the rest.
+- **What the readings are not:** they are written for this app from general knowledge, not checked against a library by a human. Disputed points are marked as disputed in the text; English quotations are from public-domain translations where named, and a few short quotations are widely quoted modern renderings (marked as such). Arabic verse comes with a plain working translation written here. Report any error and it is a one-line fix in `source/public/renaissance-library-*.js`.
+- **21 readings last three weeks.** More shelves can be added in the same format (see the header of `renaissance-library.js`).
+- Not verified: the live site after this push (only the Vercel deployment listing can be read from here).
 
 ## v18.8 fixes ("super buggy" round)
 
