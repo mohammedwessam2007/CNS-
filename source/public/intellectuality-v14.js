@@ -2233,6 +2233,29 @@
     const a = safe(() => nextAction(), {}) || {};
     return [S.day, a.kind, a.l?.id, a.si, a.e?.id, a.e?.retestIndex, S.mock?.active ? S.mock.i : "", a.kind === "MOCK" ? "m" : ""].join(":");
   }
+  function markRepeatTeaching() {
+    const d = day();
+    if (!d || d.mode !== "TEACHING") return;
+    let changed = false;
+    for (const l of d.lessons || []) {
+      (l.segments || []).forEach((g, si) => {
+        if (!g || g.type === "question") return;
+        const k = segmentKey(d, l, si);
+        if (S.segments[k]) return;
+        for (const dd of C.days || [])
+          for (const ll of dd.lessons || []) {
+            if (ll.id !== l.id || (dd === d && ll === l)) continue;
+            const k2 = segmentKey(dd, ll, si);
+            if (k2 !== k && S.segments[k2]) {
+              S.segments[k] = true;
+              changed = true;
+              return;
+            }
+          }
+      });
+    }
+    if (changed) safe(() => save());
+  }
   function install() {
     V();
     prepConcepts();
@@ -2242,6 +2265,14 @@
       baseQKey = questionKey,
       baseQbKey = qbankKey;
     segmentKey = (d, l, si) => (l && l._from ? "d" + l._from + ":" + l.id + ":s" + si : baseSegKey(d, l, si));
+    // v18.8.4: the timetable gives some lessons on two days running (Maxillary nerve, Cornea and sclera, …). The
+    // second copy is the same lesson, so its teaching steps (map, notes, video, recall) count as done when they
+    // were done in the other copy; only its past-paper block is new. Answers and reviews are untouched.
+    const baseCurSeg = currentLessonSegment;
+    currentLessonSegment = function () {
+      safe(markRepeatTeaching);
+      return baseCurSeg.apply(this, arguments);
+    };
     // After a spread, a mock only asks about lessons already scheduled on or before today.
     const baseMockPool = mockQuestionPool;
     mockQuestionPool = function () {
