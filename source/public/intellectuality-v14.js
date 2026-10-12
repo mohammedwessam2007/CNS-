@@ -2342,6 +2342,22 @@
     // v18.8.4: the timetable gives some lessons on two days running (Maxillary nerve, Cornea and sclera, …). The
     // second copy is the same lesson, so its teaching steps (map, notes, video, recall) count as done when they
     // were done in the other copy; only its past-paper block is new. Answers and reviews are untouched.
+    // v18.9.2 (owner, 12 Oct 2026, with a screenshot and the progress file: "make the progress start from this
+    // screen, I have done everything before it" = Motor cortex, Visual map, plan day 23). Once, and only on that
+    // exact progress: the four question steps still open before it (Mandibular nerve, Cornea and sclera) are
+    // counted as done. Their past papers stay in the review rounds; nothing else changes.
+    safe(() => {
+      const v = V();
+      if (v.startHere1012) return;
+      const g = S.segments || {};
+      const before = ["d23:T046:s0", "d23:T046:s1", "d23:T046:s2", "d23:T045:s0", "d23:T045:s1", "d23:T045:s2", "d23:T044:s4"];
+      const open = ["d23:T046:s3", "d23:T046:s4", "d23:T045:s3", "d23:T045:s4"];
+      if (!before.every((k) => g[k]) || g["d23:T047:s0"] || !open.some((k) => !g[k])) return;
+      for (const k of open) g[k] = true;
+      v.startHere1012 = new Date().toISOString();
+      if (S.map && Array.isArray(S.map.log)) S.map.log.push({ at: v.startHere1012, what: "owner: start from Motor cortex visual map (day 23); open question steps before it counted as done" });
+      save();
+    });
     const baseCurSeg = currentLessonSegment;
     currentLessonSegment = function () {
       safe(markRepeatTeaching);
