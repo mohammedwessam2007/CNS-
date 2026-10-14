@@ -2368,8 +2368,44 @@
       if (S.map && Array.isArray(S.map.log)) S.map.log.push({ at: v.startHere1012b, what: "owner: start from Motor cortex (day 23); " + n + " earlier lesson steps counted as done" });
       save();
     }
+    // v18.9.4 (owner, 14 Oct 2026: "I finished October 14 and it's bugging, mark all of October 14 as completely
+    // done and start October 15 now"). Once per device, on the owner's progress only: every plan day dated up to
+    // 14 Oct is finished: all its lesson steps done and the day itself done (not "skipped"); the course moves to
+    // the first plan day dated 15 Oct. Answers, reviews and the questions you got wrong are not touched.
+    function finishThrough1014() {
+      const v = V();
+      if (v.done1014 || typeof C === "undefined" || !C || !Array.isArray(C.days)) return;
+      const ymd = safe(() => cairoYMD(), null) || new Date().toISOString().slice(0, 10);
+      if (ymd < "2026-10-14" || !Object.keys(S.segments || {}).some((k) => /^d2[23]:/.test(k) && S.segments[k])) return;
+      const target = C.days.find((d) => d.date >= "2026-10-15");
+      if (!target) return;
+      v.done1014 = new Date().toISOString();
+      const g = (S.segments = S.segments || {});
+      S.doneDays = Array.isArray(S.doneDays) ? S.doneDays : [];
+      let n = 0;
+      for (const dd of C.days) {
+        // a lesson the app moved to a later day still belongs to its original day (l._from)
+        for (const l of dd.lessons || []) {
+          if (!((l._from || dd.day) < target.day)) continue;
+          (l.segments || []).forEach((_, i) => {
+            const k = safe(() => segmentKey(dd, l, i), null);
+            if (k && !g[k]) (g[k] = true), n++;
+          });
+        }
+        if (dd.day < target.day && !S.doneDays.includes(dd.day)) S.doneDays.push(dd.day);
+      }
+      S.doneDays.sort((a, b) => a - b);
+      if (!(S.day >= target.day)) {
+        S.day = target.day;
+        S.blockStart = Date.now();
+      }
+      v.startHere1012b = v.startHere1012b || v.done1014; // the Motor cortex start is behind us now
+      if (S.map && Array.isArray(S.map.log)) S.map.log.push({ at: v.done1014, what: "owner: every day up to 14 Oct finished (" + n + " lesson steps marked done); start day " + target.day + " (" + target.date + ")" });
+      save();
+    }
     const baseCurSeg = currentLessonSegment;
     currentLessonSegment = function () {
+      safe(finishThrough1014);
       safe(startAtMotorCortex);
       safe(markRepeatTeaching);
       return baseCurSeg.apply(this, arguments);
