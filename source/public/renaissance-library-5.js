@@ -1,56 +1,6 @@
 /* THE LIBRARY. Medicine removed from the readings (owner, 16 Oct 2026). */
 (window.RN_LIBRARY = window.RN_LIBRARY || []).push(
 {
-  "id": "caravaggio",
-  "shelf": "Shelf V · Seeing and hearing",
-  "title": "Caravaggio: the painter with a death sentence",
-  "kicker": "He invented the dramatic lighting of modern cinema, threw a plate of artichokes at a waiter, killed a man over a tennis match, and painted his own severed head as a plea for mercy.",
-  "body": [
-    "Michelangelo Merisi was born in 1571 and grew up in the small town of Caravaggio, near Milan, which gave him his name. When he was six, the plague swept through Milan and killed his father and grandfather on the same day. He trained as a painter in Milan and arrived in Rome around 1592, about twenty years old, penniless, talented and violent.",
-    "Rome at the time was the capital of the Catholic world and full of building: new churches, new chapels, cardinals competing to decorate them. Painting was mostly idealised and elegant: smooth saints in rosy light. Caravaggio painted something else.",
-    "## Real bodies",
-    "His early pictures are of street boys: a boy selling fruit, a boy with a basket, and a **Boy Bitten by a Lizard**, his face caught in the instant of pain and shock as a lizard hidden in the fruit bites his finger. Another is a self-portrait he called **Sick Bacchus**, painted around 1593, after a long stay in the Hospital of Santa Maria della Consolazione. The god of wine is a sallow young man with greyish lips and yellowish skin. Art historians and doctors have offered diagnoses: jaundice, malaria, anaemia. It is a portrait of convalescence, made with a mirror.",
-    "He painted from life, directly onto the canvas, often without preparatory drawings, using real people from the streets as models: labourers with dirty feet, prostitutes, beggars. When he painted saints, they had the cracked heels and wrinkled foreheads of the poor. Church authorities were often scandalised. His **Death of the Virgin** was rejected by the church that commissioned it, partly because the Virgin's body was swollen and her bare feet showed, and a rumour spread that the model had been a drowned woman from the Tiber.",
-    "## The beam of light",
-    "His great breakthrough came in 1600 with two large canvases for the Contarelli Chapel in the church of San Luigi dei Francesi. In **The Calling of Saint Matthew**, a group of men sit counting money at a table in a dark room, dressed in the fashionable clothes of Caravaggio's own day. From the right, Christ enters, almost hidden in shadow, and points. A beam of light from a high window cuts diagonally across the dark wall and falls on the faces at the table. One of the men points to himself, as if to say, *Me?*",
-    "This is **chiaroscuro** pushed to its extreme: figures picked out of near-black darkness by a single strong light, as if by a spotlight. The style was soon called **tenebrism** (from the Italian for darkness). Painters all over Europe copied it within a generation: Rembrandt, Velázquez, Georges de La Tour. Film-makers still use it; when a director lights a face from one side and lets the background fall into blackness, they are using Caravaggio's light.",
-    "## The police records",
-    "Caravaggio's life is unusually well documented, mostly because he kept getting arrested. The Roman police records list carrying a sword without a licence, insulting officers, throwing stones at a house, writing insulting verses about a rival painter, and assault. In April 1604, in a tavern called the Moro, he asked a waiter which of the artichokes on his plate were cooked in butter and which in oil. The waiter told him to smell them and find out. Caravaggio threw the plate in his face, and, according to the waiter's complaint, reached for his sword.",
-    "## The killing",
-    "On 28 May 1606, near the Campo Marzio in Rome, Caravaggio fought a man named **Ranuccio Tomassoni**, a young man from a powerful family with connections to the local militia. The traditional story is that it began over a disputed game of tennis; other accounts point to a gambling debt, or a woman, the courtesan Fillide Melandroni, who modelled for Caravaggio and was close to Tomassoni. Whatever the cause, it was a fight with swords and seconds. Tomassoni was wounded in the groin (some say Caravaggio was trying to castrate him, a ritual humiliation) and bled to death. Caravaggio was wounded in the head.",
-    "He was sentenced to death in his absence by a *bando capitale*: anyone in the Papal States who recognised him could kill him and collect a reward. He fled.",
-    "## Four years on the run",
-    "The rest of his life was flight. He went to Naples, where he was a sensation and painted some of his greatest altarpieces. In 1607 he went to Malta and painted for the Knights of Saint John; in July 1608 they made him a knight, an honour he desperately wanted. Within weeks he was in a brawl that wounded a senior knight, and was thrown into a dungeon cut in the rock of Fort Sant'Angelo. He escaped, somehow, down the walls and by boat to Sicily. The Order expelled him in his absence as *a foul and rotten member*.",
-    "> tamquam membrum putridum et foetidum",
-    "— the sentence of the Knights of Malta, 1 December 1608: 'as a rotten and fetid limb'",
-    "The phrase is surgical. A knight who had dishonoured the Order was cut away like a gangrenous limb, so that the rot would not spread to the body.",
-    "His great painting in Malta, **The Beheading of Saint John the Baptist**, is the only work he ever signed. He signed it in the blood flowing from the saint's neck: *f. Michelangelo* ('f' for *fra*, brother, the title of a knight).",
-    "In October 1609, back in Naples, he was attacked outside a tavern, the Osteria del Cerriglio, by several men, possibly sent by the knight he had wounded. His face was so badly slashed that reports reached Rome that he was dead.",
-    "## The head of Goliath",
-    "Around this time he painted **David with the Head of Goliath**, now in the Galleria Borghese in Rome. A young David holds out the giant's severed head by the hair. David's expression is not triumph; it is sorrow, almost pity. And the head of Goliath, mouth open, eyes unfocused, one eyelid drooping, blood dripping from the neck, is a **self-portrait** of Caravaggio himself, aged and battered.",
-    "The painting was almost certainly meant for Cardinal Scipione Borghese, the Pope's nephew, who had the power to arrange a pardon and who was a passionate collector of his work. It is a plea: *here is my head; have mercy.*",
-    "* Caravaggio's art and life were made of the same extremes: the brightest light against the deepest dark. He painted holy subjects with the bodies of the poor, and his own guilt into his most personal picture.",
-    "## The end",
-    "In the summer of 1610, news came that a pardon was being prepared. Caravaggio took a boat north from Naples towards Rome with paintings meant as gifts for Borghese. What happened next is confused. He was arrested, apparently by mistake, at Palo; the boat left with his paintings; he tried to follow it along the coast. He died at Porto Ercole on 18 July 1610, aged 38, probably of a fever. The pardon was on its way.",
-    "! In 2010 Italian researchers claimed to have found his bones in a churchyard in Porto Ercole, with high levels of lead, and suggested lead poisoning from his paints contributed to his violence and death. In 2018 another team, studying dental pulp from the same remains, reported traces of *Staphylococcus aureus* and argued he died of sepsis from an infected wound. Both claims depend on whether the bones are really his, which is disputed."
-  ],
-  "q": [
-    [
-      "What is tenebrism, and why is it so effective on the visual system?",
-      "Extreme chiaroscuro: figures lit by a single strong light against near-black darkness. The visual system responds most to contrast and edges (sharpened by lateral inhibition), and these pictures are built of strong edges."
-    ],
-    [
-      "Why did Caravaggio paint his own face as Goliath?",
-      "As a plea for a pardon for killing Tomassoni: the painting was meant for Cardinal Scipione Borghese, who could arrange it."
-    ],
-    [
-      "How did he sign The Beheading of Saint John the Baptist?",
-      "In the blood flowing from the saint's neck: 'f. Michelangelo' (the only painting he signed)."
-    ]
-  ],
-  "further": "Andrew Graham-Dixon, *Caravaggio: A Life Sacred and Profane* (2010). If you are ever in Rome, the Contarelli Chapel in San Luigi dei Francesi is free; bring a coin for the light."
-},
-{
   "id": "vermeer",
   "shelf": "Shelf V · Seeing and hearing",
   "title": "The man who fooled the experts, and sold a fake Vermeer to Göring",
@@ -76,7 +26,7 @@
     "## The arrest",
     "After the liberation in 1945, Allied officers found the 'Vermeer' in a salt mine in Austria where Göring had hidden his collection, and traced the sale back to van Meegeren. On 29 May 1945 he was arrested for collaboration: he had sold a Dutch national treasure to the enemy. The penalty could be death.",
     "After some weeks in prison, he made a confession that astonished everyone. It was not a Vermeer. He had painted it. And not only that one: the *Supper at Emmaus* in the Boijmans, and the rest of them too.",
-    "Nobody believed him. The *Emmaus* was a national treasure. So the authorities agreed to a test: he would paint a new 'Vermeer' under guard, in front of witnesses. Between July and September 1945 he painted **Jesus Among the Doctors** in the style of his forgeries. (He refused to age it, saying that would spoil it; that was perhaps wise, since the court expert had to see it was new.)",
+    "Nobody believed him. The *Emmaus* was a national treasure. So the authorities agreed to a test: he would paint a new 'Vermeer' under guard, in front of witnesses. Between July and September 1945 he painted **the young Jesus in the Temple** in the style of his forgeries. (He refused to age it, saying that would spoil it; that was perhaps wise, since the court expert had to see it was new.)",
     "## The trial",
     "A commission of experts examined the forgeries, found Bakelite in the paint and the old paintings underneath, and confirmed his story. The charge of collaboration was dropped; the charge became fraud. At his trial in October and November 1947 he was something of a folk hero: the man who had swindled Göring. He was sentenced to one year in prison. He died of a heart attack on 30 December 1947, before serving it, aged 58.",
     "! A story that Göring, in his cell at Nuremberg, was told that his Vermeer was a fake, and looked as if he had discovered for the first time that there was evil in the world, is often repeated. It comes from a single second-hand source and may be too good to be true.",
@@ -95,47 +45,5 @@
     ]
   ],
   "further": "Edward Dolnick, *The Forger's Spell* (2008). Then look at a real Vermeer, *The Milkmaid*, beside the *Supper at Emmaus* and see what Bredius could not."
-},
-{
-  "id": "kulthum",
-  "shelf": "Shelf V · Seeing and hearing",
-  "title": "Umm Kulthum, the first Thursday of the month",
-  "kicker": "Once a month for nearly forty years, the Arab world stopped to listen to one woman sing a single song for an hour or more.",
-  "body": [
-    "In a village called Tamay al-Zahayra in the Nile Delta, in the province of Dakahlia, around 1898 to 1904 (the records differ), a girl was born to a poor family. Her father was the imam of the village mosque, who earned extra money singing religious songs at weddings and festivals with his son. The girl learned the songs by listening at the door while her father taught her brother. When he heard her voice, he took her along too.",
-    "Respectable families did not let girls sing in public. So he dressed her as a boy, in a coat and a Bedouin headdress, and she sang religious songs at village weddings across the Delta. Her name was **Fatima Ibrahim al-Sayyid al-Beltagi**. The world knows her as **Umm Kulthum**.",
-    "## Cairo",
-    "In the early 1920s, her family moved to Cairo. She was a country girl in a sophisticated city, mocked for her rural clothes and manners. She set about learning: she studied Arabic poetry and music with masters, and above all she worked with the poet **Ahmad Rami**, who taught her literature and French poetry and would write more than a hundred songs for her, and with the composer and oud player **Muhammad al-Qasabgi**, who built her a modern ensemble.",
-    "She was also a shrewd businesswoman, the most powerful figure in Egyptian music for decades: she negotiated her own contracts, chose her poets and composers, and became president of the Musicians' Union.",
-    "## The first Thursday",
-    "In 1934 Egyptian State Radio began broadcasting, and Umm Kulthum sang on its first day. From 1937, her concerts were broadcast live on the first Thursday of every month, from October to June. Over the following decades this became a ritual across the Arab world. Streets in Cairo, Baghdad, Beirut and Casablanca emptied. People gathered around radios in cafés and homes. It was said that the leaders of Arab countries timed their speeches so as not to clash with her.",
-    "A single song could last an hour or more, sometimes two. The reason is **tarab**: the musical ecstasy that a great singer creates with an audience. Umm Kulthum would repeat a single line again and again, each time differently, changing the ornament, the emphasis, the stretch of a syllable, depending on the response of the audience in the hall. When they cried out *Allah!* or *again!*, she would sing it again, and the line would grow and change. A poem of a few verses could become an hour of music. No two performances were the same.",
-    "* Tarab is a kind of feedback loop: the singer reads the audience, the audience responds, and the singer goes deeper. It is why the recordings run so long, and why listeners describe being transported.",
-    "## The ruins",
-    "Her most celebrated song, many would say, is **al-Atlal** (*The Ruins*), first performed in 1966, with music by **Riad al-Sunbati**. Its words are by **Ibrahim Nagi** (1898–1953), and Ibrahim Nagi was a **physician**: a Cairo doctor who wrote romantic poetry in his spare time, and who died years before the song made him immortal. The lyrics are drawn mainly from his long poem of the same name, with some lines from another of his poems.",
-    "The title echoes the oldest convention of Arabic poetry: the poet stops at the ruins of an abandoned camp where his beloved once lived, and weeps. Nagi turned it inward. The ruin is a love affair. The song begins:",
-    "> يا فؤادي لا تسل أين الهوى ... كان صرحًا من خيالٍ فهوى",
-    "> O my heart, do not ask where love has gone: it was a palace built of imagination, and it fell.",
-    "— Ibrahim Nagi, al-Atlal, as sung by Umm Kulthum (1966)",
-    "In Arabic, the line is a pun that cannot be translated: *hawā* means *love*, and *hawā* also means *it fell*. Love, by its very name, is something that collapses. A rhyme that is also an argument.",
-    "Later comes the line that audiences in 1966 heard as more than a love song:",
-    "> أعطني حريتي أطلق يديّ",
-    "> Give me my freedom, untie my hands.",
-    "— al-Atlal",
-    "## 1967",
-    "In June 1967, Egypt was defeated in six days of war by Israel, the *Naksa*. The country was in shock. Umm Kulthum, then in her late sixties, responded by touring: she gave concerts across Egypt and the Arab world, and in November 1967 at the Olympia in Paris, her only concerts in the West, and gave the proceeds, a large sum in gold and money, to the Egyptian state for the rebuilding of the army. Al-Atlal's 'give me my freedom' became an anthem.",
-    "## Her eyes",
-    "In photographs from the later decades, Umm Kulthum almost always wears dark glasses, and holds a silk handkerchief in one hand while she sings.",
-    "If you have just studied the eye this week: the retro-orbital fat and muscles in Graves' disease swell with inflammation and push the eyeball forward. The patient may not be able to close the eyes fully; the cornea dries and becomes painful. Dark glasses are often what patients choose.",
-    "## The funeral",
-    "Umm Kulthum died in Cairo on 3 February 1975, of kidney failure. Her funeral was one of the largest gatherings in human history: estimates run to several million people in the streets of Cairo, more than for President Nasser's funeral five years before. The crowd took her coffin from the official bearers and carried it through the city on their shoulders for about three hours, taking it to the mosque of al-Husayn, which they believed she would have wanted, before returning it to the official route."
-  ],
-  "q": [
-    [
-      "What is tarab, and how did it shape the length of her songs?",
-      "Musical ecstasy created between singer and audience; she repeated and varied lines in response to the audience, so a short poem could become an hour or more of music."
-    ]
-  ],
-  "further": "Virginia Danielson, *The Voice of Egypt: Umm Kulthum, Arabic Song, and Egyptian Society* (1997). Then listen to al-Atlal live, the whole thing, once."
 }
 );

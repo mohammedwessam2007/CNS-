@@ -11,13 +11,11 @@
     "> أنا الذي نظر الأعمى إلى أدبي ... وأسمعت كلماتي من به صممُ",
     "> I am the one whose writing the blind can see, and whose words have made the deaf hear.",
     "— al-Mutanabbi",
-    "As a medical student you can enjoy the boast: he is claiming to cure blindness and deafness by literature alone.",
     "## The prince and the slave",
     "For nine years (948–957) al-Mutanabbi lived at the court of Sayf al-Dawla, the Hamdanid prince of Aleppo, a soldier who fought the Byzantines every summer. The poems he wrote there, battle odes in which the prince is a storm and the enemy are grass, made both men immortal. Then court rivals turned the prince against him. In one quarrel a grammarian is said to have thrown an inkpot at the poet's head in front of the prince, and the prince said nothing.",
     "Al-Mutanabbi left in anger and went to Egypt, to the court of **Kafur al-Ikhshidi**, the effective ruler of the country. Kafur had been born in East Africa, sold as a slave, and had risen through the army to govern Egypt and Syria. Al-Mutanabbi wanted a governorship, a province of his own, and he wrote Kafur splendid praise poems to get it.",
     "Kafur paid him well, kept him close, and never gave him a province. Some say he was wise enough to see that a poet who had claimed to be a prophet would not stay a loyal governor for long.",
     "## The fever",
-    "In Fustat (old Cairo) al-Mutanabbi fell ill with a fever that came and went. He described it in a poem that Arabic teachers still recite, because it is a love poem in which the beloved is a disease. Read it as a physician:",
     "> وزائرتي كأن بها حياءً ... فليس تزور إلا في الظلامِ",
     "> بذلت لها المطارف والحشايا ... فعافتها وباتت في عظامي",
     "> يضيق الجلد عن نفسي وعنها ... فتوسعه بأنواع السقامِ",
@@ -69,7 +67,6 @@
   "body": [
     "Macbeth is near the end. He has murdered his king, his friend Banquo, and the wife and children of Macduff. Scotland has risen against him. He is shut in his castle at Dunsinane, an English army is marching on it, and he is clinging to a prophecy that he cannot be beaten until Birnam Wood comes to Dunsinane.",
     "Earlier in the scene, a cry of women is heard off stage. Macbeth notices that he no longer feels fear: he has 'supped full with horrors'. Then his servant Seyton returns with the news: *The queen, my lord, is dead.*",
-    "Lady Macbeth, who pushed him to the first murder, has been sleepwalking, washing imaginary blood from her hands. Her doctor watched her and said he could do nothing: *More needs she the divine than the physician.* Now she is dead, probably by her own hand. And Macbeth answers:",
     "> She should have died hereafter;",
     "> There would have been a time for such a word.",
     "> To-morrow, and to-morrow, and to-morrow,",
@@ -171,99 +168,5 @@
     ]
   ],
   "further": "Read all twelve chapters in the King James Version: about half an hour. Then read chapter 3 ('To every thing there is a season') aloud."
-},
-{
-  "id": "ivan",
-  "shelf": "Shelf II · Words that last",
-  "title": "The Death of Ivan Ilyich: what the doctors would not say",
-  "kicker": "Tolstoy's short novel about a judge who is dying, and the lie everyone tells him.",
-  "body": [
-    "Leo Tolstoy published *The Death of Ivan Ilyich* in 1886. He was in his late fifties, had written *War and Peace* and *Anna Karenina*, and had gone through a spiritual crisis so severe that he hid ropes and guns from himself so that he would not kill himself. The question that tormented him was simple: if I am going to die, what is the meaning of my life?",
-    "The novel is short (about sixty pages) and it begins at the end, with Ivan's colleagues in the law courts reading of his death in the newspaper. Their first thoughts are about who will get his job, and their second thought is relief that it is him and not them. At the funeral, his friend Peter Ivanovich is mainly worried about missing his card game.",
-    "Then Tolstoy goes back and tells the life. The first sentence of the second chapter is one of the most famous in Russian literature:",
-    "> Ivan Ilych's life had been most simple and most ordinary and therefore most terrible.",
-    "— Leo Tolstoy, The Death of Ivan Ilych, tr. Louise and Aylmer Maude",
-    "## A proper life",
-    "Ivan is a successful, ordinary man. He rises in the judiciary, marries suitably, decorates his new apartment with great care (the drawing room is his pride), plays cards, and arranges his life so that it is 'pleasant and decorous'. He handles the people who come before his court with perfect correctness and complete detachment: he removes everything human from a case and treats it as paperwork.",
-    "One day, while hanging curtains in the new apartment, he climbs a ladder, slips, and knocks his side against the knob of a window frame. It bruises and seems to heal. But a strange taste comes into his mouth, and a dull pain in his side that does not go away.",
-    "## The doctors",
-    "He consults a celebrated doctor, and here Tolstoy writes the scene that medical teachers have been reading to students ever since. The doctor is courteous, important and busy. He talks about a 'floating kidney', chronic catarrh, the caecum. What Ivan wants to know is one thing: *is it serious?* The doctor does not answer. He talks over the question, as if it were improper.",
-    "And Ivan recognises the manner. It is exactly his own manner in court: the professional who has turned a human being into a case. Tolstoy says the doctor summed it up 'just as brilliantly' as Ivan had done a thousand times to the accused. The judge has become the defendant.",
-    "## The syllogism",
-    "As the illness progresses (Tolstoy never names it, though readers have guessed at a cancer of the abdomen), Ivan comes face to face with something he has known all his life and never believed.",
-    "> The syllogism he had learnt from Kiesewetter's Logic: 'Caius is a man, men are mortal, therefore Caius is mortal,' had always seemed to him correct as applied to Caius, but certainly not as applied to himself.",
-    "— The Death of Ivan Ilych, chapter VI, tr. Louise and Aylmer Maude",
-    "This is the heart of the book. Everyone knows, in general, that people die. Almost nobody believes, in particular, that *I* will. Ivan was not Caius, an abstract man; he had been little Vanya, with a mother and a father, with toys and the smell of a leather ball. Caius could die. Not him.",
-    "## The lie",
-    "What tortures Ivan most is not the pain. It is the lie. His wife, his daughter, his colleagues, the doctors: all of them behave as though he is only ill and will get better with the right treatment. They require him to take part in the pretence. Nobody will say what everyone knows, and so he is completely alone.",
-    "There is one exception: **Gerasim**, a young peasant who works as a servant in the house. Gerasim is healthy, cheerful and unembarrassed. He cleans up after Ivan without disgust. When Ivan finds that his pain eases if his legs are raised, Gerasim sits through the night holding Ivan's legs on his shoulders. And he does not lie. When Ivan apologises for the trouble, Gerasim says simply, in effect: *We shall all of us die, so why should I grudge a little trouble?*",
-    "In the whole house, only the servant treats the dying man as a dying man, and only he gives comfort.",
-    "## The light",
-    "For three days at the end Ivan screams. He feels himself being pushed into a black sack and cannot get through. Then, Tolstoy writes, his hand falls on his young son's head; the boy kisses it and cries. Ivan sees his wife weeping too, and for the first time feels sorry for them rather than for himself. He tries to say 'forgive me' (*prosti*) and it comes out as 'let me through' (*propusti*). He understands that his life was 'not the right thing', but that it can still be put right. He looks for his old fear of death and cannot find it. In place of death, there is light.",
-    "## Backstage",
-    "! Tolstoy's own death, in 1910, was its own kind of spectacle. At 82, he fled his home secretly at night, caught pneumonia on a train, and died in the stationmaster's house at the small railway station of Astapovo, with newsreel cameras and reporters camped outside."
-  ],
-  "q": [
-    [
-      "What is the syllogism Ivan remembers, and why does it matter to him?",
-      "'Caius is a man, men are mortal, therefore Caius is mortal.' He had accepted it in general but never believed it applied to himself; his illness forces him to."
-    ],
-    [
-      "Who is Gerasim and what does he do differently?",
-      "The young peasant servant: he cares for Ivan's body without disgust, holds his legs up to ease the pain, and does not take part in the lie that Ivan is not dying."
-    ],
-    [
-      "Who was the real-life model for Ivan Ilyich, and how is he connected to immunology?",
-      "Ivan Ilyich Mechnikov, a Tula prosecutor who died of cancer in 1881; his brother was Élie Metchnikoff, discoverer of phagocytosis and Nobel laureate (1908)."
-    ]
-  ],
-  "further": "The novel itself is short enough to read in two evenings. Pair it with Atul Gawande's *Being Mortal* (2014), which quotes it."
-},
-{
-  "id": "montaigne",
-  "shelf": "Shelf II · Words that last",
-  "title": "Montaigne falls off his horse",
-  "kicker": "In about 1569 a French nobleman was knocked unconscious in a riding accident and nearly died. What he noticed while coming back to life turned him into the inventor of the essay.",
-  "body": [
-    "Michel de Montaigne was a minor nobleman from near Bordeaux, a lawyer and magistrate, a man of no special distinction in his thirties. His upbringing had been eccentric: his father arranged for him to be woken every morning by music, and to hear only Latin until he was six, so that Latin became his first language. In his youth he had a deep friendship with the writer Étienne de La Boétie, who died of dysentery in 1563 with Montaigne at his bedside. Montaigne never got over it. Asked later why they had loved each other, he wrote the most famous answer in the literature of friendship: *Because it was he; because it was I.*",
-    "> Par ce que c'estoit luy; par ce que c'estoit moy.",
-    "— Michel de Montaigne, Of Friendship (Essais I.28), in his own sixteenth-century spelling",
-    "Look at the manuscript of the 1588 edition he annotated by hand and you can see the sentence arrive in two stages: first he added *because it was he*, in the margin; later, in different ink, *because it was I*. Even the most famous line on friendship was a revision.",
-    "## The accident",
-    "One day, around 1569 or 1570, during the French wars of religion, Montaigne went out riding near his home on a small, gentle horse, with some servants. One of his men, a large, strong fellow on a powerful horse, came galloping up behind him to show off his riding, and crashed straight into him. Montaigne and his little horse were thrown to the ground. He was knocked unconscious and lay there, he says, like a dead man, bleeding, his sword ten paces away, his belt in pieces.",
-    "His servants carried him home. On the way he began to come round. What he noticed while it happened, and what he later wrote down in an essay called 'Of Practice' (*De l'exercitation*, Book II, chapter 6), is one of the earliest first-person descriptions of recovering consciousness after a head injury.",
-    "## What he noticed",
-    "He coughed up a great deal of blood. He was moving and speaking, tearing at his doublet as if to free himself of a weight, and he called for a horse for his wife, whom he saw struggling on the rough road. But he was, he says, not there: he remembered none of it. His actions came, he wrote, from somewhere other than his will. His eyes were open but his sight was dim, weak and dead; he could see the light but not tell what it was.",
-    "And then the surprise: it did not feel terrible. It felt pleasant. He had the sensation of letting himself slide away, gently, as one drifts into sleep, and he felt no fear and no pain. He was aware of being near death and did not care. Only later, when his strength came back, did the pain arrive, and for two or three nights afterwards he felt so battered that he thought he would die again, this time unpleasantly.",
-    "The last thing to come back was the memory of the accident itself. Hours later, when it finally returned, he says it felt as if he had been struck by lightning.",
-    "## Why it changed him",
-    "Montaigne had been afraid of death. Like every educated man of his time he had read the Stoics, who said that 'to philosophise is to learn to die' (he wrote an essay with that very title). But the accident taught him more than the books. Dying, or nearly dying, had felt like falling asleep. Perhaps, he concluded, we fear death more than we need to; perhaps nature knows how to do it without our help.",
-    "The bigger lesson was about method. He had learnt something important not by reading Seneca but by paying close attention to his own experience. He decided that this was the subject most worth studying, and the one he could know best: himself.",
-    "## The tower",
-    "In 1571, aged 38, he retired from public life to the round tower of his château. On the ceiling beams of his library on the top floor he had dozens of sayings painted, in Latin and Greek, from Scripture and the classical writers; many are still visible today. One of them, from Sextus Empiricus, means roughly *I suspend judgement.* He had a medal struck with a pair of balanced scales and his motto, in French: **Que sais-je?** *What do I know?*",
-    "There he began writing short pieces that he called *essais*: attempts, tries, trials. Nobody had written quite like this before. The subjects were anything at all: cannibals, thumbs, smells, idleness, sadness, cruelty, friendship, coaches, sleep. The method was always the same: start with a question, look at what the ancient writers said, look at what he himself had experienced, and follow his thought wherever it went, contradictions and all.",
-    "He was candid about his body in a way that shocked readers then and delights them now. He wrote about his digestion, his sex life, his poor memory, and what he liked to eat.",
-    "## The stone",
-    "From his forties Montaigne suffered from **kidney stones**, like his father before him. The attacks were agonising, and he passed stones (sometimes large ones) for the rest of his life. He wrote about it constantly: in his travel journal he recorded his urine, his pains and the stones he passed, day by day, with a patient's obsessive precision.",
-    "In the last essay of Book II, 'Of the Resemblance of Children to Fathers', he wonders how a tiny drop of seed could carry his father's tendency to stones into him, years before the stone appeared. It is a question about inheritance that would not be answered until genetics. He also mounts a long and very funny attack on the physicians of his day: their contradictory theories, their disgusting remedies, their failures. He trusted nature, exercise and the hot springs more than he trusted them, and he was probably right: in the sixteenth century, avoiding doctors was often good for your health.",
-    "## His cat",
-    "In the longest of his essays, the 'Apology for Raymond Sebond', Montaigne asks whether humans are really so far above the animals, and gives one of his most quoted observations: when he plays with his cat, who knows whether he is a pastime to her more than she is to him?",
-    "It is a small sentence with a large idea: that the other creature in the room has a point of view of its own, and that we cannot be sure ours is the one that matters. Many readers think it the most modern sentence written in the sixteenth century."
-  ],
-  "q": [
-    [
-      "Which features of a head injury did Montaigne describe after his fall?",
-      "Loss of consciousness, a period of confused action and speech without memory (post-traumatic amnesia), dim vision, and retrograde amnesia for the moments before the impact, which returned last."
-    ],
-    [
-      "What does 'essai' mean, and what was Montaigne's motto?",
-      "An attempt or trial; 'Que sais-je?' ('What do I know?')."
-    ],
-    [
-      "What chronic illness did Montaigne have, and what question about it interested him?",
-      "Kidney stones, like his father; he wondered how a tiny drop of seed could pass on a tendency that appeared decades later (heredity)."
-    ]
-  ],
-  "further": "Sarah Bakewell, *How to Live: A Life of Montaigne* (2010) is a delight. Then try the essays 'Of Practice' and 'Of Friendship'."
 }
 );

@@ -43,46 +43,6 @@
   "further": "Jim Al-Khalili, *Pathfinders: The Golden Age of Arabic Science* (2010), has a chapter on him. Revisit your notes on the refractive media of the eye with this story in mind."
 },
 {
-  "id": "darwin",
-  "shelf": "Shelf III · How we found out",
-  "title": "The letter from Ternate: Darwin, Wallace and the race to publish",
-  "kicker": "Darwin dropped out of medical school because he could not bear to watch surgery.",
-  "body": [
-    "In 1825, at 16, Charles Darwin was sent by his father, a wealthy doctor, to study medicine at Edinburgh, the best medical school in Britain. He hated it. He found the lectures dull, and he twice watched operations in the hospital theatre, one of them on a child, in the years before anaesthesia. He ran out before they were finished and never went back. He wrote in his autobiography, half a century later, that the two cases fairly haunted him for many a long year.",
-    "His father, exasperated, told him: *You care for nothing but shooting, dogs, and rat-catching, and you will be a disgrace to yourself and all your family.* He was sent to Cambridge to become a clergyman instead. There he collected beetles obsessively. And in 1831 he was offered an unpaid place on a naval survey ship, HMS *Beagle*, as a gentleman companion to its captain. The voyage, planned for two years, lasted five.",
-    "## Twenty years of silence",
-    "On the voyage he saw the fossils of giant extinct mammals in Argentina, and the finches and mockingbirds and giant tortoises of the Galápagos, which differed from island to island. By 1838, back in London, reading the economist Thomas Malthus on population, he had the idea: in every generation, more creatures are born than can survive; any variation that helps an individual survive and breed will tend to be passed on; over immense time, this **natural selection** will change species into new ones.",
-    "Then he did something extraordinary. He told almost nobody. He wrote a sketch in 1842, a longer essay in 1844, and gave his wife a letter to publish it if he died. And then for fourteen years he worked on other things: eight years on barnacles alone, collecting evidence, breeding pigeons, testing whether seeds could survive in seawater. He was afraid. The idea implied that humans, too, were animals shaped by blind processes, and he was a respectable gentleman with a devout wife. He was also, through all these years, chronically ill with vomiting, palpitations and exhaustion that no doctor could explain.",
-    "## The letter",
-    "Meanwhile, on the other side of the world, another Englishman was thinking along the same lines. **Alfred Russel Wallace** was everything Darwin was not: poor, self-taught, a former surveyor who paid his way by collecting specimens in the tropics and selling them to museums. He had spent four years in the Amazon, and lost almost all his collections when his ship caught fire and sank on the way home. He then went to the Malay Archipelago, where he would spend eight years and collect over 125,000 specimens.",
-    "In February 1858, on the island of Gilolo (now Halmahera), or perhaps on nearby Ternate (the letter was headed from there), Wallace was lying ill with an attack of malarial fever, shivering and burning by turns. He later wrote that during the attack, with nothing to do but think, his mind went to Malthus, and suddenly the answer came: in every generation the weakest die and the fittest survive. He waited for the fever to pass, and over the next evenings wrote out his theory in an essay, *On the Tendency of Varieties to Depart Indefinitely from the Original Type*. He posted it to the one naturalist he knew was interested in the question: Charles Darwin.",
-    "It arrived at Down House in June 1858. Darwin read it, and wrote that same day to his friend, the geologist Charles Lyell:",
-    "> I never saw a more striking coincidence. If Wallace had my M.S. sketch written out in 1842 he could not have made a better short abstract! Even his terms now stand as Heads of my Chapters ... So all my originality, whatever it may amount to, will be smashed.",
-    "— Charles Darwin to Charles Lyell, 18 June 1858",
-    "## The joint paper",
-    "Darwin's friends, Lyell and the botanist Joseph Hooker, arranged a solution. On 1 July 1858, at a meeting of the Linnean Society in London, the secretary read out three documents together: extracts from Darwin's 1844 essay, a letter Darwin had written to an American botanist in 1857 outlining the theory (proof that he had it first), and Wallace's essay. Neither author was there. Wallace was in the jungle and did not even know; Darwin was at home, where his baby son Charles Waring had died of scarlet fever three days earlier.",
-    "! The president of the Linnean Society, summing up the year in his annual report, famously said that 1858 had not been marked by any of those striking discoveries which at once revolutionise a department of science. The papers that would revolutionise all of biology had been read out at his own meeting.",
-    "Darwin, shocked into action, wrote the 'abstract' of his big book in thirteen months. *On the Origin of Species* was published on 24 November 1859. The first printing of 1,250 copies sold out to booksellers on the day of publication.",
-    "## The last paragraph",
-    "The book is long, careful and full of pigeons. But it ends with a paragraph that is among the finest prose in science:",
-    "> It is interesting to contemplate an entangled bank, clothed with many plants of many kinds, with birds singing on the bushes, with various insects flitting about, and with worms crawling through the damp earth, and to reflect that these elaborately constructed forms, so different from each other, and dependent on each other in so complex a manner, have all been produced by laws acting around us ...",
-    "> Thus, from the war of nature, from famine and death, the most exalted object which we are capable of conceiving, namely, the production of the higher animals, directly follows. There is grandeur in this view of life, with its several powers, having been originally breathed into a few forms or into one; and that, whilst this planet has gone cycling on according to the fixed law of gravity, from so simple a beginning endless forms most beautiful and most wonderful have been, and are being, evolved.",
-    "— Charles Darwin, On the Origin of Species (1859), closing paragraph",
-    "Notice two things. First, the word *evolved* is the very last word of the book: it appears nowhere else in the first edition. Second, the movement from small to vast: a muddy riverbank, then 'the war of nature', then the planet itself turning under Newton's gravity, and then back to life's 'endless forms'. The sentence puts biology beside physics: one law moves the planets; another, just as lawful, makes the living world.",
-    "! In the second edition, published a few weeks later, Darwin changed 'breathed into a few forms' to 'breathed **by the Creator** into a few forms', probably to soothe religious readers. He later told Hooker he regretted having 'truckled to public opinion'.",
-    "## The gentleman's agreement",
-    "Wallace could have been bitter. He was not. He called his own great book on the theory *Darwinism* (1889), and for the rest of his life deferred to Darwin as the senior discoverer. Darwin, for his part, helped secure Wallace a government pension when he was poor in old age. When Darwin died in 1882, Wallace was one of the pallbearers at his funeral in Westminster Abbey.",
-    "* Two men, one rich and cautious, one poor and fevered, reached the same idea from the same clue (Malthus) by watching nature. Discovery is often 'in the air'; what made Darwin's name was twenty years of evidence."
-  ],
-  "q": [
-    [
-      "What is the last word of the first edition of the Origin, and what was added in the second edition?",
-      "'Evolved'. The second edition added 'by the Creator' to 'breathed into a few forms'."
-    ]
-  ],
-  "further": "Read the last paragraph of the *Origin* aloud. Then try Janet Browne's two-volume biography of Darwin, or Wallace's own *The Malay Archipelago* (1869), a great travel book."
-},
-{
   "id": "newton",
   "shelf": "Shelf III · How we found out",
   "title": "Newton put a needle behind his eye",
@@ -122,52 +82,5 @@
     ]
   ],
   "further": "Thomas Levenson, *Newton and the Counterfeiter* (2009), reads like a crime novel. James Gleick's short *Isaac Newton* (2003) is an excellent biography."
-},
-{
-  "id": "curie",
-  "shelf": "Shelf III · How we found out",
-  "title": "Marie Curie's second Nobel, and the year Paris turned on her",
-  "kicker": "In November 1911 she learnt she had won a second Nobel Prize. The same week, the newspapers published her love letters. The Nobel Committee asked her not to come. She went.",
-  "body": [
-    "Maria Skłodowska was born in Warsaw in 1867, in a part of Poland ruled by Russia, where the occupying authorities banned the teaching of Polish history and women could not attend university. She and her sister made a pact: Maria would work as a governess to pay for her sister's medical studies in Paris, and then her sister would pay for hers. Maria went to Paris at 24, lived in a freezing attic on bread and tea, once fainted from hunger in the library, and came top of her class in physics at the Sorbonne in 1893.",
-    "She married a quiet, brilliant physicist, Pierre Curie, in 1895. For her doctorate she chose to study the strange rays that the French physicist Henri Becquerel had found coming from uranium salts.",
-    "## A shed and four tonnes of ore",
-    "She discovered that the strength of the rays depended only on the amount of uranium, not on its chemical form: the radiation came from inside the atom itself. She called the phenomenon **radioactivity**. Then she found that a uranium ore called pitchblende was more radioactive than the uranium in it could explain. There had to be something else in it, something unknown and immensely active.",
-    "Pierre dropped his own research to join her. In 1898 they announced two new elements: **polonium**, which she named after her occupied country, and **radium**. But to prove it to the chemists, they needed to isolate enough of the pure substance to weigh. For four years, in a leaking wooden shed in the yard of the School of Physics and Chemistry, which a visiting German chemist said looked like a cross between a stable and a potato cellar, Marie processed tonnes of pitchblende residue, stirring boiling cauldrons with an iron rod nearly as tall as she was. In 1902 she had one tenth of a gram of radium chloride.",
-    "At night, she wrote, they would go back to the shed and see their products glowing faintly in the dark on the shelves, *like faint fairy lights*.",
-    "In 1903 Becquerel and the two Curies shared the Nobel Prize in Physics. The committee had originally planned to leave Marie out; Pierre insisted she be included.",
-    "## The cart",
-    "On 19 April 1906, on a rainy day in Paris, Pierre stepped into the Rue Dauphine without looking and was knocked down by a horse-drawn wagon loaded with military uniforms. A wheel crushed his skull. He was 46.",
-    "Marie was offered a widow's pension and refused it. The Sorbonne gave her Pierre's chair, and she became the first woman to teach there. She began her first lecture, before a packed hall of reporters and curious onlookers, at exactly the sentence where Pierre's last lecture had stopped.",
-    "## 1911",
-    "Some years later, Marie fell in love with **Paul Langevin**, a former student of Pierre's and a brilliant physicist, who was married, unhappily, with four children. They rented a small flat together near the Sorbonne. Langevin's wife found out, obtained their letters, and in November 1911 the letters were leaked to the nationalist press.",
-    "The timing was savage. That same year, Marie had been rejected by one vote for membership of the French Academy of Sciences, in a campaign in which she was attacked as a woman, a foreigner and, falsely, a Jew. Now the papers called her a home-wrecker and a Polish adventuress. A crowd gathered outside her house in Sceaux and threw stones; she and her daughters had to take refuge with friends.",
-    "! Langevin challenged the editor of one newspaper, Gustave Téry, to a duel with pistols. They met on 25 November 1911. Neither fired. Téry said he did not want to deprive France of one of its finest minds; Langevin said he did not want to be a murderer. The seconds ended it.",
-    "In the middle of this, a telegram came from Stockholm: she had been awarded the 1911 Nobel Prize in Chemistry, alone, for the discovery of polonium and radium and the isolation of radium. She was the first person ever to win two Nobel Prizes.",
-    "## The letter",
-    "Then a second letter arrived from Sweden, from the chemist Svante Arrhenius, a member of the committee. Given the scandal, he wrote, the Academy suggested that she should not come to Stockholm to receive the prize, and should perhaps say she would not accept it until the matter was cleared up.",
-    "Marie Curie replied with a letter that is a model of how to say no:",
-    "> The action that you advise would appear to me a grave error on my part. In fact the prize has been awarded for the discovery of radium and polonium. I believe that there is no connection between my scientific work and the facts of private life ... I cannot accept the idea in principle that the appreciation of the value of scientific work should be influenced by libel and slander concerning private life.",
-    "— Marie Curie to Svante Arrhenius, December 1911 (translated)",
-    "She went to Stockholm, with her sister and her 14-year-old daughter Irène, and gave her Nobel lecture on 11 December 1911. Shortly afterwards she collapsed with a severe kidney illness and depression, and disappeared from public life for most of a year under an assumed name.",
-    "! Albert Einstein, who had met her at a conference that autumn, wrote to her during the scandal: if the rabble continued to occupy itself with her, she should simply not read that drivel, and leave it to the reptile for whom it was manufactured.",
-    "## The little Curies",
-    "When the First World War began in 1914, Marie Curie saw that wounded soldiers were dying because surgeons could not find the bullets and shrapnel inside them. X-ray machines existed, but only in city hospitals. She designed mobile X-ray units built into cars, persuaded wealthy women to donate vehicles, learnt to drive and to repair engines, and drove to the front herself with Irène, then 17, as her assistant. The soldiers called the cars *petites Curies*. Some twenty mobile units and about two hundred fixed installations were set up, and an estimated more than a million wounded men were X-rayed.",
-    "## The price",
-    "Nobody in the early years understood the dangers of radiation. Marie carried test tubes of radium in her pockets and kept them in her desk drawer. Her fingers were cracked and scarred. She developed cataracts. She died on 4 July 1934, aged 66, of **aplastic anaemia**: her bone marrow, bombarded for decades, had stopped making blood cells.",
-    "! Her notebooks from the 1890s are still radioactive today, contaminated with radium-226, which has a half-life of about 1,600 years. They are kept in lead-lined boxes at the Bibliothèque nationale in Paris; readers who want to consult them must sign a waiver and wear protective clothing.",
-    "In 1995 her remains, and Pierre's, were moved to the Panthéon in Paris. She was the first woman to be buried there on her own merits."
-  ],
-  "q": [
-    [
-      "Which two elements did the Curies discover, and why the name polonium?",
-      "Polonium and radium (1898); polonium was named after Poland, her country, then under Russian rule."
-    ],
-    [
-      "What did the Nobel Committee ask in 1911, and how did she answer?",
-      "That she not come to Stockholm because of the Langevin scandal; she refused, saying the prize was for her science and private life had no bearing on its value, and she went."
-    ]
-  ],
-  "further": "Eve Curie's biography of her mother, *Madame Curie* (1937), and Barbara Goldsmith's *Obsessive Genius* (2005)."
 }
 );

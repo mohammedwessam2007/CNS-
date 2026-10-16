@@ -19,7 +19,6 @@
     "> Such was the end, Echecrates, of our friend; concerning whom I may truly say, that of all the men of his time whom I have known, he was the wisest and justest and best.",
     "— Plato, Phaedo 117e–118a, tr. Benjamin Jowett (1871)",
     "## The cock for Asclepius",
-    "Socrates' last words have puzzled readers for two thousand years. Asclepius was the god of medicine; people who recovered from an illness sacrificed a cockerel to him in thanks. Why would a dying man owe a thank-offering for a cure?",
     "The most famous answer is Nietzsche's: Socrates meant that *life is a disease*, and death is the cure. Others reject that as too gloomy for a man who spent the day arguing cheerfully about the soul. Some think he was simply remembering a real vow, perhaps made for someone else's recovery, and wanted his debts paid; a just man settles his accounts. Others think the 'cure' is from the fear of death, or from false beliefs, which the day's argument had treated. The puzzle is part of the gift: his last words, like his whole life, leave you with a question.",
     "! Plato was not there. In the dialogue, Phaedo lists the friends present and says simply: *Plato, I believe, was ill.* It is one of only three times Plato mentions himself in all his works. He may have been too grief-stricken to watch; he may have been genuinely sick; or he may have wanted to make clear that what follows is a reconstruction, not an eyewitness account.",
     "## The painting",
@@ -36,46 +35,6 @@
     ]
   ],
   "further": "Read Plato's *Apology* (Socrates' defence speech), about forty minutes, then the last pages of the *Phaedo*."
-},
-{
-  "id": "marcus",
-  "shelf": "Shelf IV · The ancients and the long view",
-  "title": "The emperor, the plague and the doctor who cut a pig's nerve",
-  "kicker": "Marcus Aurelius wrote private notes to himself while a pandemic killed millions.",
-  "body": [
-    "In about 165 AD, Roman legions returning from a war in Mesopotamia brought something back with them. Soldiers began to fall ill with fever, diarrhoea and a rash that turned into pustules and scabs, black in some patients. Over the next fifteen years the disease swept through the Roman Empire, from Syria to Gaul. Modern estimates of the dead range from a few million to ten million or more. It is called the **Antonine Plague**, after the dynasty that ruled at the time. From the descriptions, most historians think it was **smallpox**.",
-    "The emperor was Marcus Aurelius. He had not wanted the job. He was a serious, bookish man who from the age of twelve had dressed in the rough cloak of a philosopher and slept on the floor until his mother persuaded him to use a bed. He came to the throne in 161, and almost his whole reign was crisis: plague, floods, famine, and wars on the Danube against Germanic tribes, which kept him in army camps in the cold north for years.",
-    "## The notebook",
-    "In those camps, at night, Marcus wrote notes to himself in Greek. They were never meant to be published. The manuscript tradition gives them the title *Ta eis heauton*, 'Things to himself'; we call them the **Meditations**. They are reminders, exhortations and arguments with himself about how to be a good man while doing a job that would crush most people. They are the private notebook of the most powerful man in the world, and much of it is him telling himself to stop complaining and get on with it.",
-    "The second book opens with one of the most famous passages. It is a morning exercise: prepare for the day by expecting difficult people.",
-    "> Begin the morning by saying to thyself, I shall meet with the busy-body, the ungrateful, arrogant, deceitful, envious, unsocial. All these things happen to them by reason of their ignorance of what is good and evil. But I who have seen the nature of the good that it is beautiful, and of the bad that it is ugly, and the nature of him who does wrong, that it is akin to me, not only of the same blood or seed, but that it participates in the same intelligence and the same portion of the divinity, I can neither be injured by any of them, for no one can fix on me what is ugly, nor can I be angry with my kinsman, nor hate him. For we are made for co-operation, like feet, like hands, like eyelids, like the rows of the upper and lower teeth. To act against one another then is contrary to nature; and it is acting against one another to be vexed and to turn away.",
-    "— Marcus Aurelius, Meditations II.1, tr. George Long (1862)",
-    "Notice the anatomy. We are made to work together *like feet, like hands, like eyelids, like the rows of the upper and lower teeth*: paired parts of one body, which are useless if they fight each other. Marcus argues that other people, even rude ones, are parts of the same body as you. Their bad behaviour comes from ignorance, not from malice you need to take personally.",
-    "And here is the passage for every student who has ever struggled to get out of bed before a long day:",
-    "> In the morning when thou risest unwillingly, let this thought be present—I am rising to the work of a human being. Why then am I dissatisfied if I am going to do the things for which I exist and for which I was brought into the world? Or have I been made for this, to lie in the bed-clothes and keep myself warm?",
-    "— Meditations V.1, tr. George Long",
-    "* Stoicism in one line: you do not control what happens; you control how you judge it and what you do next. Marcus wrote it down every night because, like everyone, he kept forgetting.",
-    "## The doctor",
-    "The emperor's physician was **Galen of Pergamon**, the most famous doctor of the ancient world, and one of the most argumentative. He had trained for over a decade, travelled to Alexandria to study anatomy, and made his name as physician to the gladiators of Pergamon, where (he boasted) far fewer of them died of their wounds under his care than under his predecessor's. Gladiators' wounds were, he said, windows into the body.",
-    "In Rome he became a celebrity by giving public anatomical demonstrations, rather like a showman. His most famous was on the **voice**. The question was hotly disputed: did the voice come from the heart, as the followers of Aristotle and the Stoics believed (the heart was the seat of the mind, and speech came from the chest), or from the brain?",
-    "Galen took a live pig, which squealed loudly as pigs do when held. He exposed the small nerves that run up beside the trachea to the larynx and tied or cut them. The pig went on struggling, fully conscious, but stopped squealing. Release the ligatures, and the squealing returned. He had shown, before an audience, that the voice depended on nerves that came, ultimately, from the brain, not on the heart. He called these the 'recurrent' nerves because of the way they loop back up.",
-    "## Galen and the plague",
-    "When the plague reached Rome in 166, Galen left the city abruptly and went home to Pergamon. Critics then and since have called it running away; Galen said he had always planned to go. Marcus summoned him back in 168 to join the army in the north, where the plague had broken out in the camps at Aquileia. Galen saw many cases and described them: fever, black diarrhoea in some, and an eruption over the whole body that dried into scabs and fell off. That is how we can guess it was smallpox.",
-    "Galen made Marcus a daily dose of **theriac**, an ancient remedy of dozens of ingredients that contained opium. Some historians have wondered whether the emperor's calm, detached tone in the *Meditations* owes something to a daily dose of opium. Most think that is unfair: the calm was hard-won, and the notebook is full of a man struggling not to be angry or despairing.",
-    "## The end",
-    "Marcus Aurelius died on 17 March 180, in an army camp on the Danube, probably at Vindobona (modern Vienna) or Sirmium. Some ancient sources say he died of the plague; according to one, he sent his son away from his deathbed so he would not catch it. That son was **Commodus**, who became emperor, fought as a gladiator in the arena, renamed Rome after himself, and was strangled in his bath by a wrestler in 192. The age of the 'good emperors' ended with the philosopher's death.",
-    "Galen lived on into his seventies or eighties, writing so much that his surviving works fill some twenty volumes. His authority on anatomy went almost unchallenged for 1,300 years, until Vesalius in 1543 showed that much of it was based on animals, not humans."
-  ],
-  "q": [
-    [
-      "What was the Antonine Plague probably, and why do historians think so?",
-      "Smallpox: Galen's descriptions of fever, black diarrhoea and a pustular rash drying into scabs."
-    ],
-    [
-      "Which parts of the body does Marcus use as images of cooperation in II.1?",
-      "Feet, hands, eyelids and the rows of upper and lower teeth."
-    ]
-  ]
 },
 {
   "id": "gettysburg",
