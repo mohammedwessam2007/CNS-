@@ -3,7 +3,7 @@
 {
   "id": "keats",
   "shelf": "Shelf I · The body and the mind",
-  "title": "The medical student who became a poet",
+  "title": "Keats reads Homer all night",
   "kicker": "John Keats trained at Guy's Hospital and passed his licence to practise.",
   "body": [
     "In October 1815, a 19-year-old from a family of London stable-keepers registered as a student at Guy's Hospital, across the river from the City. His name was John Keats. His father had died after a fall from a horse when he was eight; his mother died of tuberculosis when he was fourteen, and he had nursed her. A guardian had apprenticed him to a surgeon-apothecary, and now he had come to Guy's to finish his training.",
