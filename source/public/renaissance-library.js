@@ -195,6 +195,33 @@
     };
     refreshDoor();
   }
+  // v18.9.8 (owner, 16 Oct 2026: "integrate it in the course, each day has its reading, don't ruin the university
+  // stuff"): when the day's CNS work is finished, the finished-day screen shows that day's reading as a card. It only
+  // reads the app's state; lessons, answers and reviews are never touched, and before the CNS work is done nothing
+  // appears in the lesson screen.
+  function dayCard() {
+    const p = document.getElementById("player");
+    if (!p || !LIB.length) return;
+    const done = safe(() => typeof nextAction === "function" && nextAction().kind === "STOP", false);
+    const have = p.querySelector(".rlDayCard");
+    if (!done) return void (have && have.remove());
+    if (have) return;
+    const t = todays();
+    if (!t.r) return;
+    p.insertAdjacentHTML(
+      "afterbegin",
+      '<div class="rlDayCard"><small>TODAY\'S READING · ' + minutes(t.r) + " min" + (t.finished ? " · ✓ read" : "") + "</small><b>" + inl(t.r.title) + "</b><p>" + inl(t.r.kicker || "") + '</p><button type="button" class="rlBtn">' + (t.finished ? "Read it again" : "Open today's reading") + "</button></div>",
+    );
+    p.querySelector(".rlDayCard button").onclick = () => open(t.r.id);
+  }
+  let dq = false;
+  safe(() =>
+    new MutationObserver(() => {
+      if (dq) return;
+      dq = true;
+      requestAnimationFrame(() => ((dq = false), safe(dayCard)));
+    }).observe(document.documentElement, { childList: true, subtree: true }),
+  );
   window.RN_LIBRARY_UI = { open, shelf, close, todays, count: () => LIB.length, words };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(install, 300));
   else setTimeout(install, 300);
