@@ -17,16 +17,16 @@
     guide: [
       "Epictetus was born a slave in Asia Minor, lame (by tradition his master twisted his leg until it broke), freed in Rome, banished with all philosophers by the emperor Domitian, and taught for the rest of his life in a small school in Greece. He wrote nothing. A student, Arrian, took notes, and boiled the teaching down into this little handbook, the *Encheiridion*, 'the thing you keep at hand'. Marcus Aurelius, an emperor, learned his philosophy from the words of a former slave.",
       "## The one idea",
-      "It opens with the sentence that the whole of Stoicism hangs on: some things are in our power and some are not. In our power: our opinions, our impulses, our desires, our aversions, in a word, our own actions. Not in our power: the body, property, reputation, office. Everything else in the book is that idea applied: to loss, insult, fear, ambition, the dinner party, the theatre, the bath.",
+      "It opens with the sentence that the whole of Stoicism hangs on: some things are up to us, and some are not up to us. Up to us: our judgements, our impulses, our desires, our aversions, in a word, our own doing. Not up to us: the body, property, reputation, positions of power. Everything else in the book is that idea applied: to loss, insult, fear, ambition, the dinner party, the theatre, the bath.",
       "## What to watch for",
-      "* 'Men are disturbed not by the things which happen, but by the opinions about the things.' (V)",
-      "* Never say 'I have lost it', but 'I have restored it.' (XI)",
-      "* The banquet: take your share politely when the dish comes round; if it passes you, don't stretch out for it. (XV)",
-      "* You are an actor in a play chosen by another; your business is to act the part well. (XVII)",
+      "* 'What troubles people is not things, but their judgements about things.' (5)",
+      "* Never say 'I have lost it', but 'I have given it back.' (11)",
+      "* The banquet: take your share politely when the dish comes round; if it passes you, don't hold it back; if it hasn't reached you yet, wait. (15)",
+      "* You are an actor in a play chosen by another; your business is to play well the part you are given. (17)",
       "## Carry this",
-      "Before reacting to anything this week, ask: is this in my power or not?",
+      "Before reacting to anything this week, ask: is this up to me or not?",
     ],
-    prompts: ["List three things that upset you this week. Which were in your power?", "Which sentence would you keep in your pocket, and why?", "Where are you stretching out for a dish that has passed you?"],
+    prompts: ["List three things that upset you this week. Which were up to you?", "Which sentence would you keep in your pocket, and why?", "Where are you stretching out for a dish that has passed you?"],
   });
   add({
     id: "shortness",
@@ -225,7 +225,7 @@
   const APPLY = {
     underground: ["Notice one moment today when you chose spite or pride over what you actually wanted. Name it to yourself, without excuses.", "Do one thing today that someone could predict you would do, and do it fully. Freedom is not only refusal.", "Accept one kindness today without explaining it away.", "Write down a 'Crystal Palace' you believe in (a system that will fix everything). What would the Underground Man say to it?", "Liza offered love and he paid her. Today, give someone something you cannot pay back: attention, time, an apology."],
     apology: ["Ask one person a real question today and keep asking until you both reach the edge of what you know.", "Find one belief you hold only because people around you hold it. Examine it for five minutes."],
-    enchiridion: ["Every time something annoys you today, say: 'in my power, or not?' Act only on the first kind.", "Before an exam, a meeting or a hard conversation, rehearse what is in your power and let the rest go."],
+    enchiridion: ["Every time something annoys you today, say: 'up to me, or not?' Act only on the first kind.", "Before an exam, a meeting or a hard conversation, rehearse what is up to you and let the rest go."],
     shortness: ["Track today in 30-minute blocks. At night, mark which blocks were truly yours.", "Do the one thing you keep saying you will do 'later', for 20 minutes, today."],
     phaedo: ["Spend ten minutes thinking about your own death calmly, as Socrates did. Notice what suddenly seems unimportant.", "When an argument fails you today, do not give up on reasoning itself. Find a better argument."],
     cave: ["Name one 'shadow' you spent time on today (a feed, a rumour, a fear). Turn away from it once.", "Teach one thing you understand well to someone who doesn't yet, patiently, even if they laugh."],
