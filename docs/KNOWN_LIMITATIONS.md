@@ -1,5 +1,13 @@
 # Known Limitations (v18.9 · MCQ exam + Renaissance + the Library)
 
+## v18.10 The Great Books Hour
+
+- **One sitting a day of a real book, about an hour**: Notes from Underground, the Apology, Phaedo, the Meditations, Thus Spake Zarathustra, Crime and Punishment, The Brothers Karamazov, Anna Karenina: 118 sittings (about four months). Public-domain translations (Garnett, Jowett, Long, Common) from Project Gutenberg, built by `scripts/library/build_books.py` into `source/public/books/*.json` (6 MB, each book downloaded only when opened, then kept for offline reading).
+- Each book opens with a guide written for this app (who is who, what to watch for, questions to carry) and its companion essay. Each sitting resumes where you stopped (on this device), counts reading minutes, and ends with three lines to write (saved in the app state, so they sync).
+- It sits in the course on the finished-day screen and behind the side-menu door; it never appears inside a lesson and changes no lesson, answer or review.
+- **Not included**: Camus and Kafka are only in the companion essays (Camus is in copyright; the free Kafka translations carry their own copyright). The novels mention doctors where the story has them; the essays do not.
+- The storage cleanup now runs only when the device's storage is nearly full (it had also removed the copy kept before a restore).
+
 ## v18.9 Renaissance every day, and the Library
 
 - **Renaissance opens every day at any hour**, before or after the CNS work (owner, 12 Oct 2026: "make it everyday, I don't care if it's late"). The 01:00–05:00 and 23:30 shut-offs are gone; exam week, exam weekend and a heavy week now only shorten it to 10 minutes instead of closing it. One session a day is still the limit, and the lesson screen stays medicine-only: before the day's CNS is done the door is in Study mode (Tools); after it, also on the finished-day screen.

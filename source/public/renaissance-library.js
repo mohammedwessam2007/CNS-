@@ -176,6 +176,13 @@
   function refreshDoor() {
     const b = document.getElementById("rlDoor");
     if (!b || !LIB.length) return;
+    if (window.RN_HOUR && window.RN_HOUR.count()) {
+      const ht = window.RN_HOUR.todays(),
+        m = window.RN_HOUR.minutesToday();
+      b.innerHTML = "📖 THE GREAT BOOKS HOUR · " + (ht.finished ? "✓ today" : m ? m + " of 60 min" : "today");
+      b.title = window.RN_HOUR.label(ht.key).title;
+      return;
+    }
     const t = todays();
     b.innerHTML = t.all ? "📖 THE LIBRARY · all " + LIB.length + " read" : t.finished ? "📖 TODAY'S READING ✓ · read the next" : "📖 TODAY'S READING · " + minutes(t.r) + " min";
     b.title = t.r ? t.r.title : "";
@@ -186,6 +193,7 @@
     if (!anchor) return;
     anchor.insertAdjacentHTML("beforebegin", '<button id="rlDoor" class="wide rlDoor" type="button"></button>');
     document.getElementById("rlDoor").onclick = () => {
+      if (window.RN_HOUR && window.RN_HOUR.count()) return window.RN_HOUR.open();
       const t = todays();
       if (t.finished && !t.all) {
         const nx = nextAfter(t.r);
@@ -206,6 +214,19 @@
     const have = p.querySelector(".rlDayCard");
     if (!done) return void (have && have.remove());
     if (have) return;
+    const HR = window.RN_HOUR;
+    if (HR && HR.count()) {
+      const t = HR.todays(),
+        L = HR.label(t.key),
+        m = HR.minutesToday();
+      p.insertAdjacentHTML(
+        "afterbegin",
+        '<div class="rlDayCard"><small>THE GREAT BOOKS HOUR · TODAY · ' + (t.finished ? "✓ read" : m ? m + " of 60 min" : "about an hour") + "</small><b>" + E(L.title) + " · sitting " + L.n + " of " + L.of + "</b><p>" + (L.n === 1 ? "A new book begins: its guide and companion essay open first." : "Your place is kept. Read until the sitting ends, then write your three lines.") + '</p><button type="button" class="rlBtn" data-rlday="hour">' + (t.finished ? "Open it again" : m ? "Continue reading" : "Begin today's hour") + '</button> <button type="button" class="rlBtn ghost" data-rlday="books">All books</button></div>',
+      );
+      p.querySelector('.rlDayCard [data-rlday="hour"]').onclick = () => HR.open(t.key);
+      p.querySelector('.rlDayCard [data-rlday="books"]').onclick = () => HR.shelf();
+      return;
+    }
     const t = todays();
     if (!t.r) return;
     p.insertAdjacentHTML(
@@ -222,7 +243,7 @@
       requestAnimationFrame(() => ((dq = false), safe(dayCard)));
     }).observe(document.documentElement, { childList: true, subtree: true }),
   );
-  window.RN_LIBRARY_UI = { open, shelf, close, todays, count: () => LIB.length, words };
+  window.RN_LIBRARY_UI = { refresh: () => (refreshDoor(), safe(() => document.querySelector(".rlDayCard")?.remove()), safe(dayCard)), open, shelf, close, todays, count: () => LIB.length, words };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(install, 300));
   else setTimeout(install, 300);
   setTimeout(install, 2000);

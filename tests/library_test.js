@@ -29,8 +29,8 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
   const p = s.page;
   const seg0 = await p.evaluate(() => JSON.stringify(S.segments || {}) + JSON.stringify((S.v16 && S.v16.q) || {}));
   const door = await p.evaluate(() => { const b = document.getElementById('rlDoor'); return { here: !!b, text: b ? b.textContent : '', menu: !!b?.closest('aside') }; });
-  check('L4', 'The door "TODAY\'S READING" is in the side menu at 23:55, before the medicine day is finished', door.here && door.menu && /TODAY'S READING · \d+ min/.test(door.text), door);
-  await p.evaluate(() => document.getElementById('rlDoor').click());
+  check('L4', 'The door "TODAY\'S READING" is in the side menu at 23:55, before the medicine day is finished', door.here && door.menu && /GREAT BOOKS HOUR/.test(door.text), door);
+  await p.evaluate(() => RN_LIBRARY_UI.open());
   await p.waitForTimeout(300);
   const r = await p.evaluate(() => {
     const o = document.querySelector('.rlRead'), pg = o && o.querySelector('.rlPage');
@@ -50,7 +50,7 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
     const saved = JSON.parse(localStorage.getItem('intellectuality_v41_launch_state') || '{}');
     return { first, done: S.rnLib.done[first], savedDone: saved.rnLib && saved.rnLib.done && saved.rnLib.done[first], doneLine: !!document.querySelector('.rlRead .rlDone'), next: !!document.querySelector('.rlRead [data-rl="next"]'), door: document.getElementById('rlDoor').textContent };
   });
-  check('L8', '"I read it" saves to the app state (it syncs with the rest), shows ✓ and offers the next reading', fin.done && fin.savedDone === fin.done && fin.doneLine && fin.next && /✓/.test(fin.door), fin);
+  check('L8', '"I read it" saves to the app state (it syncs with the rest), shows ✓ and offers the next reading', fin.done && fin.savedDone === fin.done && fin.doneLine && fin.next, fin);
   const nx = await p.evaluate(() => { document.querySelector('.rlRead [data-rl="next"]').click(); return { title: document.querySelector('.rlRead h2')?.textContent, n: document.querySelector('.rlRead .rlBarT')?.textContent }; });
   check('L9', 'Next reading opens the second one', /2 of/.test(nx.n || ''), nx);
   const sh = await p.evaluate(() => { document.querySelector('.rlRead [data-rl="shelf"]').click(); return { items: document.querySelectorAll('.rlRead .rlItem').length, done: document.querySelectorAll('.rlRead .rlItem.done').length, shelves: document.querySelectorAll('.rlRead .rlList h3').length }; });
