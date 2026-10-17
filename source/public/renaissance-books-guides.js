@@ -90,7 +90,7 @@ window.RN_BOOKS = [
       "Thomas Common's translation (1909) is old-fashioned and high-flown, which suits the book. Read it aloud when you can.",
       "## The big ideas",
       "* **The death of God** (read the companion essay on the madman first): with the old foundation gone, what will human beings live for?",
-      "* **The Übermensch** ('Superman' in this translation, better 'Overman'): not a race or a tyrant but the human being who creates his own values instead of borrowing them. 'Man is a rope, tied between beast and Superman, a rope over an abyss.'",
+      "* **The Übermensch** ('Overman' in the new translation of the first sitting; 'Superman' in Thomas Common's older translation of the later ones): not a race or a tyrant but the human being who creates his own values instead of borrowing them. 'Man is a rope, tied between beast and Overman: a rope over an abyss.'",
       "* **The last man**: the opposite, the comfortable creature who has 'invented happiness', blinks, and wants nothing great. Ask whether the modern world is full of him.",
       "* **The three metamorphoses** of the spirit: camel (bearing duty), lion (saying 'I will' against the dragon 'Thou shalt'), child (a new beginning, a sacred Yes).",
       "* **The will to power**: life as self-overcoming, not mere survival.",
