@@ -87,10 +87,10 @@ window.RN_BOOKS = [
     years: "1883–1885",
     guide: [
       "Nietzsche called this his greatest gift to humanity, and it is the strangest book you will read here. It is not an argument but a kind of scripture: a prophet called Zarathustra comes down from ten years alone on a mountain to teach the people, fails, and spends four parts teaching a few disciples, going back to his solitude, and returning. It is written in the rhythm of the Bible and of Luther's German, full of parables, songs and riddles.",
-      "Thomas Common's translation (1909) is old-fashioned and high-flown, which suits the book. Read it aloud when you can.",
+      "Every sitting on this plan's route is in a new translation made for this app from Nietzsche's German, in plain modern English; the four sittings off the route (3, 6, 8 and 9, if you choose to read every chapter) are still Thomas Common's high-flown 1909 version. Either way, read it aloud when you can: it was written to be heard.",
       "## The big ideas",
       "* **The death of God** (read the companion essay on the madman first): with the old foundation gone, what will human beings live for?",
-      "* **The Übermensch** ('Overman' in the new translation of the first sitting; 'Superman' in Thomas Common's older translation of the later ones): not a race or a tyrant but the human being who creates his own values instead of borrowing them. 'Man is a rope, tied between beast and Overman: a rope over an abyss.'",
+      "* **The Übermensch** ('Overman' in the new translation; 'Superman' in Thomas Common's older one): not a race or a tyrant but the human being who creates his own values instead of borrowing them. 'Man is a rope, tied between beast and Overman: a rope over an abyss.'",
       "* **The last man**: the opposite, the comfortable creature who has 'invented happiness', blinks, and wants nothing great. Ask whether the modern world is full of him.",
       "* **The three metamorphoses** of the spirit: camel (bearing duty), lion (saying 'I will' against the dragon 'Thou shalt'), child (a new beginning, a sacred Yes).",
       "* **The will to power**: life as self-overcoming, not mere survival.",
