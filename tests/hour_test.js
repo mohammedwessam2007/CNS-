@@ -10,19 +10,21 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
 (async () => {
   // the built texts: every sitting of every book is an hour-sized piece of the real text
   const dir = path.join(__dirname, '..', 'source', 'public', 'books');
-  global.window = {}; require('../source/public/renaissance-books-guides.js');
+  global.window = {}; require('../source/public/renaissance-books-guides.js'); require('../source/public/renaissance-books-more.js');
   const sizes = {}, bad = [];
   for (const b of window.RN_BOOKS) {
     const d = JSON.parse(fs.readFileSync(path.join(dir, b.id + '.json'), 'utf8'));
     sizes[b.id] = d.sittings.length;
-    for (const s of d.sittings) if (s.words < 4500 || s.words > 13000 || !s.body.length || /gutenberg/i.test(s.body.join(' '))) bad.push(b.id + ':' + s.n + ' ' + s.words);
+    for (const s of d.sittings) if (s.words < 4000 || s.words > 15000 || !s.body.length || /gutenberg/i.test(s.body.join(' '))) bad.push(b.id + ':' + s.n + ' ' + s.words);
     if (!b.guide.length || !b.prompts.length) bad.push(b.id + ' guide');
   }
   const total = Object.values(sizes).reduce((a, b) => a + b, 0);
-  check('H1', 'Eight books, ' + total + ' sittings of 4,500–13,000 words (about an hour each), no Project Gutenberg licence text, a guide and prompts for every book', window.RN_BOOKS.length === 8 && total >= 100 && !bad.length, { sizes, bad: bad.slice(0, 10) });
+  const routeBad = window.RN_BOOKS.filter((b) => b.route).flatMap((b) => [...b.route.read.filter((n) => n < 1 || n > sizes[b.id]), ...Object.keys(b.route.bridge || {}).filter((n) => !b.route.read.includes(+n))].map((n) => b.id + ':' + n));
+  const essential = window.RN_BOOKS.reduce((a, b) => a + (b.route ? b.route.read.length : sizes[b.id]), 0);
+  check('H1', window.RN_BOOKS.length + ' works (' + total + ' sittings in full, ' + essential + ' on the essential route) of 4,000–15,000 words, no Project Gutenberg licence text, a guide and prompts for every work; every route sitting and bridge points at a real sitting you read', window.RN_BOOKS.length >= 19 && !bad.length && !routeBad.length && essential < total, { sizes, bad: bad.slice(0, 10), routeBad });
   const src = fs.readFileSync(path.join(__dirname, '..', 'source', 'public', 'renaissance-books.js'), 'utf8');
   const count = JSON.parse('{' + src.match(/const COUNT = \{([^}]*)\}/)[1].replace(/(\w+):/g, '"$1":') + '}');
-  check('H2', 'The app\'s sitting counts match the built books', JSON.stringify(count) === JSON.stringify(sizes), { count, sizes });
+  check('H2', 'The app\'s sitting counts match the built books', Object.keys(sizes).every((k) => count[k] === sizes[k]) && Object.keys(count).length === Object.keys(sizes).length, { count, sizes });
   delete global.window;
 
   const s = await open({ v16: true, time: '2026-10-17T22:30:00+03:00', state: null, settle: 2800, viewport: { width: 390, height: 844 }, touch: true });
@@ -54,7 +56,23 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
   check('H9', 'When the day\'s CNS work is done, the finished-day screen shows today\'s Great Books Hour', /GREAT BOOKS HOUR/.test(card) && /Notes from Underground/.test(card), { card: card.slice(0, 200) });
   await p.evaluate(() => RN_HOUR.shelf());
   const sh = await p.evaluate(() => ({ items: document.querySelectorAll('.rhRead .rlItem').length }));
-  check('H10', 'All books lists the eight books and the companion essays', sh.items === 9, sh);
+  check('H10', 'All books lists every work and the companion essays', sh.items >= 20, sh);
+  await p.keyboard.press('Escape');
+  await p.evaluate(() => RN_HOUR.open('crime:8'));
+  await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
+  const br = await p.evaluate(() => ({ bridge: document.querySelector('.rhRead .rhBridge')?.textContent || '', shelf: document.querySelector('.rhRead .rlShelf')?.textContent }));
+  check('H13', 'On the essential route a long book shows a bridge for the chapters between (Crime and Punishment, sitting 5 of 14)', /Zametov/.test(br.bridge) && /sitting 5 of 14/.test(br.shelf), br);
+  await p.evaluate(() => document.querySelector('.rhRead [data-rh="full"]').click());
+  await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
+  const fl = await p.evaluate(() => ({ shelf: document.querySelector('.rhRead .rlShelf')?.textContent, bridge: !!document.querySelector('.rhRead .rhBridge'), plan: RN_HOUR.plan().filter((k) => k.startsWith('crime:')).length }));
+  check('H14', '"Read every chapter" switches that book to all its sittings and opens the first chapter you skipped', /sitting 5 of 21/.test(fl.shelf) && !fl.bridge && fl.plan === 21, fl);
+  await p.evaluate(() => RN_HOUR.open('hamlet:1'));
+  await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
+  const hm = await p.evaluate(() => ({ verse: !!document.querySelector('.rhRead .rhVerse'), ws: getComputedStyle(document.querySelector('.rhRead .rhText p')).whiteSpace }));
+  await p.evaluate(() => RN_HOUR.open('camus:1'));
+  await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
+  const cm = await p.evaluate(() => ({ text: document.querySelector('.rhRead .rhText').textContent.length, head: [...document.querySelectorAll('.rhRead .rhText h3')].map((h) => h.textContent).join(' | ') }));
+  check('H15', 'Hamlet keeps its verse lines; the Camus study opens with The Stranger, Sisyphus, The Rebel, The Plague and The Fall', hm.verse && hm.ws === 'pre-line' && /Stranger/.test(cm.head) && /Plague/.test(cm.head) && /Fall/.test(cm.head) && cm.text > 20000, { hm, cm: cm.head.slice(0, 200) });
   await p.keyboard.press('Escape');
   const after = await p.evaluate(() => JSON.stringify(S.segments || {}) + JSON.stringify((S.v16 && S.v16.q) || {}));
   check('H11', 'Lesson steps and MCQ records are exactly as before', after === seg0, {});

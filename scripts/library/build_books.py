@@ -31,6 +31,28 @@ BOOKS = [
     ("anna", "1399.txt", "Anna Karenina", "Leo Tolstoy", "Constance Garnett",
      r"^PART ONE$", r"^\*\*\* END OF", r"^(PART [A-Z]+|Chapter \d+)$"),
 ]
+BOOKS += [
+    ("enchiridion", "10661.txt", "The Enchiridion (Manual)", "Epictetus", "George Long",
+     r"^THE ENCHEIRIDION, OR MANUAL\.$", r"^\*\*\* END OF", r"^$^", {"after": 100}),
+    ("shortness", "64576.txt", "On the Shortness of Life", "Seneca", "Aubrey Stewart",
+     r"^OF THE SHORTNESS OF LIFE\.$", r"^THE ELEVENTH BOOK", r"^$^", {}),
+    ("cave", "1497.txt", "The Republic, Book VII: the Cave", "Plato", "Benjamin Jowett",
+     r"^ BOOK VII\.$", r"^ BOOK VIII\.$", r"^$^", {"after": 18000}),
+    ("symposium", "1600.txt", "Symposium", "Plato", "Benjamin Jowett",
+     r"^PERSONS OF THE DIALOGUE", r"^\*\*\* END OF", r"^$^", {"after": 900}),
+    ("ridiculous", "40745.txt", "The Dream of a Ridiculous Man", "Fyodor Dostoevsky", "Constance Garnett",
+     r"^THE DREAM OF A RIDICULOUS MAN$", r"^THE END$", rf"^{ROMAN}$", {"after": 1000}),
+    ("overcoat", "36238.txt", "The Overcoat (The Mantle)", "Nikolai Gogol", "Claud Field",
+     r"^THE MANTLE$", r"^THE NOSE$", r"^$^", {"after": 300}),
+    ("ladydog", "13415.txt", "The Lady with the Dog", "Anton Chekhov", "Constance Garnett",
+     r"^THE LADY WITH THE DOG$", r"^A DOCTOR'S VISIT$", rf"^{ROMAN}$", {"after": 60}),
+    ("bartleby", "11231.txt", "Bartleby, the Scrivener", "Herman Melville", "",
+     r"^I am a rather elderly man", r"^\*\*\* END OF", r"^$^", {}),
+    ("hamlet", "1524.txt", "Hamlet", "William Shakespeare", "",
+     r"^ACT I$", r"^\*\*\* END OF", rf"^(ACT {ROMAN}|SCENE {ROMAN}\..*)$", {"verse": True}),
+    ("bge", "4363.txt", "Beyond Good and Evil", "Friedrich Nietzsche", "Helen Zimmern",
+     r"^PREFACE$", r"^FROM THE HEIGHTS$", rf"^CHAPTER {ROMAN}\..*$", {"after": 70}),
+]
 LO, HI = 8500, 12500
 
 def blocks(lines):
@@ -44,11 +66,12 @@ def blocks(lines):
             cur.append(ln)
     return out
 
-def build(bid, fn, title, author, tr, start, end, head):
+def build(bid, fn, title, author, tr, start, end, head, opt=None):
+    opt = opt or {}
     raw = open(os.path.join(SRC, fn), encoding="utf-8").read().replace("\r", "")
     lines = raw.split("\n")
-    i0 = next(i for i, l in enumerate(lines) if re.match(start, l))
-    i1 = next(i for i, l in enumerate(lines) if i > i0 and re.match(end, l.strip()))
+    i0 = next(i for i, l in enumerate(lines) if i >= opt.get("after", 0) and re.match(start, l))
+    i1 = next(i for i, l in enumerate(lines) if i > i0 and (re.match(end, l) or re.match(end, l.strip())))
     chapters, cur = [], {"h": "", "p": []}
     for b in blocks(lines[i0:i1]):
         first = b[0].strip()
@@ -64,7 +87,7 @@ def build(bid, fn, title, author, tr, start, end, head):
             continue
         if b[0].startswith("    [") or re.match(r"^\[[A-Z0-9]+\]", first):  # editor's footnotes
             continue
-        txt = " ".join(x.strip() for x in b)
+        txt = ("\n" if opt.get("verse") else " ").join(x.strip() for x in b)
         txt = re.sub(r"\[[A-Z]\]", "", txt)  # footnote markers
         txt = re.sub(r"_([^_]+)_", r"\1", txt)  # Gutenberg italics markers
         if re.fullmatch(r"[*\s.]+", txt):
@@ -97,17 +120,21 @@ def build(bid, fn, title, author, tr, start, end, head):
         if wc([x for x in s["p"] if isinstance(x, str)]) >= LO:
             close()
     close()
-    # a short tail joins the previous sitting
+    # a short work stays one sitting; a short tail joins the previous sitting
+    if len(sittings) > 1 and sum(wc(x["p"]) for x in sittings) < 16000:
+        sittings = [{"heads": sum((x["heads"] for x in sittings), []), "p": sum((x["p"] for x in sittings), [])}]
     if len(sittings) > 1 and wc([x for x in sittings[-1]["p"] if isinstance(x, str)]) < 3500:
         sittings[-2]["p"] += sittings[-1]["p"]; sittings[-2]["heads"] += sittings[-1]["heads"]; sittings.pop()
-    out = {"id": bid, "title": title, "author": author, "translator": tr, "source": "Project Gutenberg (public domain)",
+    out = {"verse": bool(opt.get("verse")), "id": bid, "title": title, "author": author, "translator": tr, "source": "Project Gutenberg (public domain)",
            "sittings": [{"n": k + 1, "from": (x["heads"] or [""])[0], "to": (x["heads"] or [""])[-1],
                          "words": wc([p for p in x["p"] if isinstance(p, str)]),
-                         "body": [p if isinstance(p, str) else "## " + p["h"] for p in x["p"] if isinstance(p, str) or p["h"]]}
+                         "body": [p if isinstance(p, str) else "## " + p["h"] for p in x["p"] if isinstance(p, str) or p["h"].replace("(continued)", "").strip()]}
                         for k, x in enumerate(sittings)]}
     json.dump(out, open(os.path.join(OUT, bid + ".json"), "w"), ensure_ascii=False, separators=(",", ":"))
     ws = [x["words"] for x in out["sittings"]]
     print(f"{bid:12} chapters={len(chapters):4} sittings={len(ws):3} words={sum(ws):7} min/max={min(ws)}/{max(ws)} first='{out['sittings'][0]['body'][0][:50]}'")
 
+only = set(sys.argv[2:])
 for b in BOOKS:
-    build(*b)
+    if not only or b[0] in only:
+        build(*b)

@@ -1,5 +1,12 @@
 # Known Limitations (v18.9 · MCQ exam + Renaissance + the Library)
 
+## v18.11 More classics, Camus, and the essential route
+
+- **19 works now**: added Epictetus (Enchiridion), Seneca (On the Shortness of Life), Plato (the Cave, Symposium), Dostoevsky (The Dream of a Ridiculous Man), Gogol (The Overcoat), Chekhov (The Lady with the Dog), Melville (Bartleby), Shakespeare (Hamlet, verse lines kept), Nietzsche (Beyond Good and Evil), and a Camus study.
+- **Camus is a study, not his text**: his books are in copyright (in the US and most of the world), so the app carries an original study of The Stranger, The Myth of Sisyphus, The Rebel, The Plague and The Fall (about 25 minutes) with only short quotations. It is not a substitute for reading him; it says so.
+- **The essential route (default)**: in the long books you read the chapters that carry the book (Crime and Punishment 14 of 21 sittings, The Brothers Karamazov 16 of 36, Anna Karenina 11 of 37, Zarathustra 6 of 10, Beyond Good and Evil 3 of 7, Meditations 2 of 5, Phaedo 2 of 3) and a written bridge sums up what happens in between. 73 sittings in all instead of 138. The bridges are written from knowledge of the books, not generated from the text; report any slip. Any book can be switched to every chapter in "All books" or from a bridge.
+- The order alternates long and short works.
+
 ## v18.10 The Great Books Hour
 
 - **One sitting a day of a real book, about an hour**: Notes from Underground, the Apology, Phaedo, the Meditations, Thus Spake Zarathustra, Crime and Punishment, The Brothers Karamazov, Anna Karenina: 118 sittings (about four months). Public-domain translations (Garnett, Jowett, Long, Common) from Project Gutenberg, built by `scripts/library/build_books.py` into `source/public/books/*.json` (6 MB, each book downloaded only when opened, then kept for offline reading).

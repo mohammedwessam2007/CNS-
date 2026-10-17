@@ -20,9 +20,13 @@
   const today = () => safe(() => window.INTELLECTUALITY_V14.cairoYMD(), null) || new Date().toISOString().slice(0, 10);
   const BOOKS = () => window.RN_BOOKS || [];
   // sittings per book (from scripts/library/build_books.py); the plan is known before any book is downloaded
-  const COUNT = { underground: 5, apology: 1, phaedo: 3, meditations: 5, zarathustra: 10, crime: 21, karamazov: 36, anna: 37 };
-  const TITLES = { underground: "Notes from Underground", apology: "The Apology of Socrates", phaedo: "Phaedo", meditations: "Meditations", zarathustra: "Thus Spake Zarathustra", crime: "Crime and Punishment", karamazov: "The Brothers Karamazov", anna: "Anna Karenina" };
-  const PLAN = () => BOOKS().flatMap((b) => Array.from({ length: COUNT[b.id] || 0 }, (_, i) => b.id + ":" + (i + 1)));
+  const COUNT = {anna: 37, apology: 1, bartleby: 1, bge: 7, camus: 1, cave: 1, crime: 21, enchiridion: 1, hamlet: 3, karamazov: 36, ladydog: 1, meditations: 5, overcoat: 1, phaedo: 3, ridiculous: 1, shortness: 1, symposium: 2, underground: 5, zarathustra: 10};
+  const TITLES = { underground: "Notes from Underground", apology: "The Apology of Socrates", phaedo: "Phaedo", meditations: "Meditations", zarathustra: "Thus Spake Zarathustra", crime: "Crime and Punishment", karamazov: "The Brothers Karamazov", anna: "Anna Karenina", enchiridion: "Epictetus: the Enchiridion", shortness: "Seneca: On the Shortness of Life", cave: "Plato: the Cave (Republic VII)", symposium: "Plato: Symposium", ridiculous: "Dostoevsky: The Dream of a Ridiculous Man", overcoat: "Gogol: The Overcoat", ladydog: "Chekhov: The Lady with the Dog", bartleby: "Melville: Bartleby, the Scrivener", hamlet: "Shakespeare: Hamlet", camus: "Camus: the four great works", bge: "Nietzsche: Beyond Good and Evil" };
+  // v18.11: the essential route by default (the sittings that carry the book; bridges sum up the rest); any book
+  // can be switched to every chapter (S.rnLib.hour.full[id])
+  const fullOf = (id) => !!(H().full || {})[id];
+  const sittingsOf = (b) => (b.route && !fullOf(b.id) ? b.route.read.slice() : Array.from({ length: COUNT[b.id] || 0 }, (_, i) => i + 1));
+  const PLAN = () => BOOKS().flatMap((b) => sittingsOf(b).map((n) => b.id + ":" + n));
   const cache = {};
   function H() {
     const S0 = typeof S !== "undefined" && S ? S : null;
@@ -52,7 +56,8 @@
   function label(key) {
     const [id, n] = key.split(":"),
       b = book(id);
-    return { b, n: +n, of: COUNT[id], title: (b && b.title) || id };
+    const seq = b ? sittingsOf(b) : [];
+    return { b, n: +n, k: seq.indexOf(+n) + 1 || +n, of: seq.length || COUNT[id], title: (b && b.title) || id };
   }
 
   async function load(id) {
@@ -99,7 +104,7 @@
   async function open(key) {
     close();
     key = key || todays().key;
-    const { b, n, of } = label(key);
+    const { b, n, k, of } = label(key);
     if (!b) return;
     const o = document.createElement("div");
     o.className = "rlRead rhRead";
@@ -122,19 +127,23 @@
     const s = data.sittings[n - 1];
     const h = H(),
       note = h.notes[key] || {};
-    const first = n === 1;
+    const first = k === 1;
+    const bridge = !fullOf(b.id) && b.route && b.route.bridge && b.route.bridge[n];
+    const tail = !fullOf(b.id) && b.route && b.route.tail && b.route.tail[n];
     const words = s.words,
       mins = Math.round(words / 190);
     page.innerHTML =
-      '<p class="rlShelf">' + E(b.title.toUpperCase()) + " · " + E(data.author) + " · sitting " + n + " of " + of + " · about " + mins + " min</p>" +
+      '<p class="rlShelf">' + E(b.title.toUpperCase()) + " · " + E(data.author) + " · " + (of > 1 ? "sitting " + k + " of " + of + " · " : "") + "about " + mins + " min" + (b.route && !fullOf(b.id) ? " · essential route" : "") + "</p>" +
       "<h2>" + E(b.title) + "</h2>" +
       '<p class="rlKicker">' + E(data.author) + " (" + E(b.years) + "), translated by " + E(data.translator) + ". Today: " + E(s.from.replace(/ · /g, ", ")) + (s.to && s.to !== s.from ? " → " + E(s.to.replace(/ · /g, ", ")) : "") + "</p>" +
       (first
         ? '<section class="rhGuide"><h3 class="rhGuideH">Before you begin</h3>' + guideHTML(b) + (b.essay ? '<p><button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay) + '">Read the companion essay first (10 min)</button>' + (b.essay2 ? ' <button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay2) + '">…and the second one</button>' : "") + "</p>" : "") + "</section>"
         : '<p class="rhAgain"><button type="button" class="rlBtn ghost" data-rh="guide">The guide to this book (who is who, what to watch for)</button></p><div class="rhGuide" hidden>' + guideHTML(b) + "</div>") +
-      '<div class="rhText">' +
+      (bridge ? '<aside class="rhBridge" role="note"><b>What happened in the chapters between</b><p>' + E(bridge) + '</p><button type="button" class="rlBtn ghost" data-rh="full">Read every chapter of this book instead</button></aside>' : "") +
+      '<div class="rhText' + (data.verse ? " rhVerse" : "") + '">' +
       s.body.map((p) => (p.startsWith("## ") ? "<h3>" + E(p.slice(3)) + "</h3>" : "<p>" + E(p) + "</p>")).join("") +
       "</div>" +
+      (tail ? '<aside class="rhBridge" role="note"><b>The rest of the book, in brief</b><p>' + E(tail) + "</p></aside>" : "") +
       '<section class="rlQs rhEnd"><h3>After today\'s sitting</h3><p class="rlQsLead">Three lines, written from memory. Writing it is what makes it yours.</p>' +
       '<label>What happened, or what was argued, in one sentence<textarea data-rh-note="sum" rows="2">' + E(note.sum || "") + "</textarea></label>" +
       '<label>The line you want to keep (copy it exactly)<textarea data-rh-note="keep" rows="2">' + E(note.keep || "") + "</textarea></label>" +
@@ -175,6 +184,16 @@
         const g = o.querySelector(".rhGuide");
         g.hidden = !g.hidden;
       } else if (a === "essay") safe(() => window.RN_LIBRARY_UI.open(x.dataset.e));
+      else if (a === "full") {
+        const hh = H(),
+          read = (b.route && b.route.read) || [];
+        hh.full = Object.assign({}, hh.full, { [b.id]: true });
+        persist();
+        // open the first of the chapters this bridge was summing up
+        let m = n;
+        while (m > 1 && !read.includes(m - 1)) m--;
+        open(b.id + ":" + m);
+      }
       else if (a === "finish") {
         H().done[key] = today();
         persist();
@@ -203,14 +222,16 @@
     const done = Object.keys(h.done).length,
       total = PLAN().length;
     o.innerHTML =
-      '<div class="rlBar"><button type="button" class="rlX" data-rh="close" aria-label="Close">✕</button><div class="rlBarT">THE GREAT BOOKS HOUR · ' + done + " of " + total + ' sittings read</div></div><div class="rlScroll"><article class="rlPage rlList"><h2>The books</h2><p class="rlKicker">One sitting a day, about an hour. ' + total + " sittings: about four months of the greatest books ever written.</p>" +
+      '<div class="rlBar"><button type="button" class="rlX" data-rh="close" aria-label="Close">✕</button><div class="rlBarT">THE GREAT BOOKS HOUR · ' + done + " of " + total + ' sittings read</div></div><div class="rlScroll"><article class="rlPage rlList"><h2>The books</h2><p class="rlKicker">One sitting a day, about an hour. ' + total + " sittings on the essential route: the chapters that carry each book, with short bridges between. Any long book can be switched to every chapter.</p>" +
       BOOKS()
-        .map((b) => {
-          const n = COUNT[b.id] || 0,
-            k = Array.from({ length: n }, (_, i) => b.id + ":" + (i + 1)),
+        .map((b0) => {
+          const b = book(b0.id),
+            k = sittingsOf(b).map((m) => b.id + ":" + m),
+            n = k.length,
             d = k.filter((x) => h.done[x]).length;
           const nextK = k.find((x) => !h.done[x]) || k[0];
-          return '<button type="button" class="rlItem' + (d === n ? " done" : "") + '" data-rh-open="' + E(nextK) + '"><span>' + E(b.title) + " <small>· " + E(b.years) + "</small></span><small>" + (d === n ? "✓ finished" : d + " of " + n + " sittings" + (t.key.startsWith(b.id + ":") ? " · today" : "")) + "</small></button>";
+          const mode = b.route ? '<small class="rhMode">' + (fullOf(b.id) ? "every chapter · " : "essential route · ") + '<a href="#" data-rh-mode="' + E(b.id) + '">' + (fullOf(b.id) ? "switch to the essential route" : "switch to every chapter") + "</a></small>" : "";
+          return '<div class="rhShelfRow"><button type="button" class="rlItem' + (d === n ? " done" : "") + '" data-rh-open="' + E(nextK) + '"><span>' + E(b.title) + " <small>· " + E(b.years) + "</small></span><small>" + (d === n ? "✓ finished" : d + " of " + n + (n === 1 ? " sitting" : " sittings") + (t.key.startsWith(b.id + ":") ? " · today" : "")) + "</small></button>" + mode + "</div>";
         })
         .join("") +
       '<h3>Companion essays</h3><button type="button" class="rlItem" data-rh="essays"><span>Short essays on Nietzsche, Dostoevsky, Tolstoy, Camus, Kafka and more</span><small>10 min each</small></button>' +
@@ -218,6 +239,15 @@
     document.body.appendChild(o);
     document.documentElement.classList.add("rlOpen");
     o.onclick = (ev) => {
+      const md = ev.target.closest("[data-rh-mode]");
+      if (md) {
+        ev.preventDefault();
+        const hh = H(),
+          id = md.dataset.rhMode;
+        hh.full = Object.assign({}, hh.full, { [id]: !fullOf(id) });
+        persist();
+        return shelf();
+      }
       const b = ev.target.closest("[data-rh-open]");
       if (b) return open(b.dataset.rhOpen);
       if (ev.target.closest('[data-rh="essays"]')) return (close(), safe(() => window.RN_LIBRARY_UI.shelf()));
