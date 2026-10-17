@@ -127,7 +127,7 @@
     ridiculous: "The main thing is to love others as yourself; that is the main thing, and that is everything.",
     howmuch: "The labourer dug a grave for Pakhom exactly as long as he measured from his feet to his head, six feet.",
     overcoat: "Leave me alone; why do you insult me? ... I am your brother.",
-    meditations: "Do every act of thy life as if it were the last.",
+    meditations: "Do every act of your life as if it were your last.",
     ladydog: "It seemed that a little more, and the solution would be found, and then a new and beautiful life would begin.",
     zarathustra: "Man is a rope, tied between beast and Overman: a rope over an abyss.",
     genealogy: "Man would rather will nothingness than not will at all.",
