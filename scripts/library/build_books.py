@@ -52,6 +52,8 @@ BOOKS += [
      r"^ACT I$", r"^\*\*\* END OF", rf"^(ACT {ROMAN}|SCENE {ROMAN}\..*)$", {"verse": True}),
     ("bge", "4363.txt", "Beyond Good and Evil", "Friedrich Nietzsche", "Helen Zimmern",
      r"^PREFACE$", r"^FROM THE HEIGHTS$", rf"^CHAPTER {ROMAN}\..*$", {"after": 70}),
+    ("genealogy", "52319.txt", "On the Genealogy of Morals", "Friedrich Nietzsche", "Horace B. Samuel",
+     r'^FIRST ESSAY\. "GOOD AND EVIL', r"^PEOPLES AND COUNTRIES\. Translated", r"^((FIRST|SECOND|THIRD) ESSAY.*|WHAT IS THE MEANING OF ASCETIC IDEALS\?|\d+\.)$", {"after": 300, "sections": True}),
 ]
 LO, HI = 8500, 12500
 
@@ -130,6 +132,21 @@ def build(bid, fn, title, author, tr, start, end, head, opt=None):
                          "words": wc([p for p in x["p"] if isinstance(p, str)]),
                          "body": [p if isinstance(p, str) else "## " + p["h"] for p in x["p"] if isinstance(p, str) or p["h"].replace("(continued)", "").strip()]}
                         for k, x in enumerate(sittings)]}
+    ENAME = {"FIRST ESSAY": "First Essay: 'Good and Evil', 'Good and Bad'", "SECOND ESSAY": "Second Essay: 'Guilt', 'Bad Conscience' and the like", "THIRD ESSAY": "Third Essay: What Is the Meaning of Ascetic Ideals?"}
+    if opt.get("sections"):  # numbered sections: "## 15." becomes "## §15" and the span reads "Essay II §15"
+        ess = ""
+        for x in out["sittings"]:
+            labels = []
+            for i, p in enumerate(x["body"]):
+                if p.startswith("## "):
+                    parts = [y.strip() for y in p[3:].split(" · ")]
+                    for y in parts:
+                        m = re.match(r"(FIRST|SECOND|THIRD) ESSAY", y)
+                        if m: ess = {"FIRST": "I", "SECOND": "II", "THIRD": "III"}[m.group(1)]
+                    num = next((y for y in parts if re.fullmatch(r"\d+\.", y)), None)
+                    if num: labels.append("Essay " + ess + " §" + num[:-1])
+                    x["body"][i] = "## " + " · ".join(("§" + y[:-1]) if re.fullmatch(r"\d+\.", y) else ENAME.get(y.split(".")[0], y) for y in parts if not y.startswith("WHAT IS THE MEANING"))
+            if labels: x["from"], x["to"] = labels[0], labels[-1]
     json.dump(out, open(os.path.join(OUT, bid + ".json"), "w"), ensure_ascii=False, separators=(",", ":"))
     ws = [x["words"] for x in out["sittings"]]
     print(f"{bid:12} chapters={len(chapters):4} sittings={len(ws):3} words={sum(ws):7} min/max={min(ws)}/{max(ws)} first='{out['sittings'][0]['body'][0][:50]}'")
