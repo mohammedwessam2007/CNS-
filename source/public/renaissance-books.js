@@ -60,6 +60,28 @@
     return { b, n: +n, k: seq.indexOf(+n) + 1 || +n, of: seq.length || COUNT[id], title: (b && b.title) || id };
   }
 
+  // v18.12: new translations made for this app from the originals replace the old ones sitting by sitting
+  const fresh = {};
+  async function loadFresh(id) {
+    if (id in fresh) return fresh[id];
+    try {
+      const r = await fetch("/books/" + id + ".fresh.json");
+      fresh[id] = r.ok ? await r.json() : null;
+    } catch (e) {
+      fresh[id] = null;
+    }
+    return fresh[id];
+  }
+  const oldTr = {};
+  function para(p) {
+    if (p.startsWith("## ")) return "<h3>" + E(p.slice(3)) + "</h3>";
+    if (p.startsWith(">")) {
+      const lines = p.split("\n"),
+        src = lines.filter((l) => l.startsWith("—")).join(" ");
+      return '<blockquote class="rlQuote">' + lines.filter((l) => l.startsWith(">")).map((l) => "<span>" + E(l.replace(/^>\s?/, "")) + "</span>").join("") + (src ? "<cite>" + E(src.replace(/^—\s*/, "")) + "</cite>" : "") + "</blockquote>";
+    }
+    return "<p>" + E(p) + "</p>";
+  }
   async function load(id) {
     if (cache[id]) return cache[id];
     const r = await fetch("/books/" + id + ".json");
@@ -124,7 +146,10 @@
       o.onclick = (ev) => (ev.target.closest('[data-rh="close"]') ? close() : ev.target.closest('[data-rh="retry"]') ? open(key) : null);
       return;
     }
-    const s = data.sittings[n - 1];
+    const fr = await loadFresh(b.id),
+      frS = fr && fr.sittings && fr.sittings[String(n)];
+    const useFresh = !!frS && !oldTr[key];
+    const s = useFresh ? Object.assign({}, data.sittings[n - 1], { body: frS.body, words: frS.words }) : data.sittings[n - 1];
     const h = H(),
       note = h.notes[key] || {};
     const first = k === 1;
@@ -140,10 +165,12 @@
         ? '<section class="rhGuide"><h3 class="rhGuideH">Before you begin</h3>' + guideHTML(b) + (b.essay ? '<p><button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay) + '">Read the companion essay first (10 min)</button>' + (b.essay2 ? ' <button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay2) + '">…and the second one</button>' : "") + "</p>" : "") + "</section>"
         : '<p class="rhAgain"><button type="button" class="rlBtn ghost" data-rh="guide">The guide to this book (who is who, what to watch for)</button></p><div class="rhGuide" hidden>' + guideHTML(b) + "</div>") +
       (bridge ? '<aside class="rhBridge" role="note"><b>What happened in the chapters between</b><p>' + E(bridge) + '</p><button type="button" class="rlBtn ghost" data-rh="full">Read every chapter of this book instead</button></aside>' : "") +
+      (frS ? '<p class="rhTrNote">' + (useFresh ? 'New translation, made for this app from the Russian original. <a href="#" data-rh="oldtr">Show the old Garnett translation</a>' : 'Old translation (Constance Garnett, 1912). <a href="#" data-rh="oldtr">Back to the new translation</a>') + "</p>" : "") +
       '<div class="rhText' + (data.verse ? " rhVerse" : "") + '">' +
-      s.body.map((p) => (p.startsWith("## ") ? "<h3>" + E(p.slice(3)) + "</h3>" : "<p>" + E(p) + "</p>")).join("") +
+      s.body.map(para).join("") +
       "</div>" +
       (tail ? '<aside class="rhBridge" role="note"><b>The rest of the book, in brief</b><p>' + E(tail) + "</p></aside>" : "") +
+      (b.apply ? '<aside class="rhApply" role="note"><b>Use it today</b><p>' + E(b.apply[(k - 1) % b.apply.length]) + "</p></aside>" : "") +
       '<section class="rlQs rhEnd"><h3>After today\'s sitting</h3><p class="rlQsLead">Three lines, written from memory. Writing it is what makes it yours.</p>' +
       '<label>What happened, or what was argued, in one sentence<textarea data-rh-note="sum" rows="2">' + E(note.sum || "") + "</textarea></label>" +
       '<label>The line you want to keep (copy it exactly)<textarea data-rh-note="keep" rows="2">' + E(note.keep || "") + "</textarea></label>" +
@@ -184,7 +211,11 @@
         const g = o.querySelector(".rhGuide");
         g.hidden = !g.hidden;
       } else if (a === "essay") safe(() => window.RN_LIBRARY_UI.open(x.dataset.e));
-      else if (a === "full") {
+      else if (a === "oldtr") {
+        ev.preventDefault();
+        oldTr[key] = !oldTr[key];
+        open(key);
+      } else if (a === "full") {
         const hh = H(),
           read = (b.route && b.route.read) || [];
         hh.full = Object.assign({}, hh.full, { [b.id]: true });

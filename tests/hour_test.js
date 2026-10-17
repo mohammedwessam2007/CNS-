@@ -36,7 +36,7 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
   check('H4', 'The side-menu door is "THE GREAT BOOKS HOUR"', /GREAT BOOKS HOUR/.test(door), { door });
   await p.evaluate(() => document.getElementById('rlDoor').click());
   await p.waitForSelector('.rhRead .rhText p', { timeout: 15000 });
-  const r = await p.evaluate(() => { const o = document.querySelector('.rhRead'); return { guide: !!o.querySelector('.rhGuide:not([hidden])'), essay: !!o.querySelector('[data-rh="essay"]'), paras: o.querySelectorAll('.rhText p').length, first: o.querySelector('.rhText p')?.textContent.slice(0, 40), notes: o.querySelectorAll('[data-rh-note]').length, sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, over: [...o.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).length }; });
+  const r = await p.evaluate(() => { const o = document.querySelector('.rhRead'); return { guide: !!o.querySelector('.rhGuide:not([hidden])'), essay: !!o.querySelector('[data-rh="essay"]'), paras: o.querySelectorAll('.rhText p').length, first: [...o.querySelectorAll('.rhText p')].slice(0, 3).map((x) => x.textContent.slice(0, 40)).join(' | '), notes: o.querySelectorAll('[data-rh-note]').length, sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, over: [...o.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).length }; });
   check('H5', 'Today opens Notes from Underground, sitting 1: guide and companion essay first, then the whole text, then three lines to write', r.guide && r.essay && r.paras > 20 && /sick man/.test(r.first) && r.notes === 3, r);
   check('H6', 'On a 390 px phone nothing scrolls sideways', r.sw <= r.cw && r.over === 0, r);
   await p.fill('.rhRead [data-rh-note="keep"]', 'I am a spiteful man.');
@@ -73,6 +73,21 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
   await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
   const cm = await p.evaluate(() => ({ text: document.querySelector('.rhRead .rhText').textContent.length, head: [...document.querySelectorAll('.rhRead .rhText h3')].map((h) => h.textContent).join(' | ') }));
   check('H15', 'Hamlet keeps its verse lines; the Camus study opens with The Stranger, Sisyphus, The Rebel, The Plague and The Fall', hm.verse && hm.ws === 'pre-line' && /Stranger/.test(cm.head) && /Plague/.test(cm.head) && /Fall/.test(cm.head) && cm.text > 20000, { hm, cm: cm.head.slice(0, 200) });
+  await p.evaluate(() => RN_HOUR.open('karamazov:12'));
+  await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
+  const gi = await p.evaluate(() => ({ note: document.querySelector('.rhRead .rhTrNote')?.textContent || '', burn: /Tomorrow I shall burn you/.test(document.querySelector('.rhRead .rhText').textContent), verse: document.querySelectorAll('.rhRead .rhText blockquote').length, apply: document.querySelector('.rhRead .rhApply')?.textContent || '' }));
+  check('H16', 'The Grand Inquisitor opens in the new translation made from the Russian, with its verse quotations, and ends with a "Use it today" action', /New translation/.test(gi.note) && gi.burn && gi.verse === 3 && /Use it today/.test(gi.apply), gi);
+  await p.evaluate(() => document.querySelector('.rhRead [data-rh="oldtr"]').click());
+  await p.waitForFunction(() => /Old translation/.test(document.querySelector('.rhRead .rhTrNote')?.textContent || ''), null, { timeout: 20000 });
+  const old = await p.evaluate(() => /burn thee/i.test(document.querySelector('.rhRead .rhText').textContent));
+  check('H17', 'The old Garnett translation is one tap away', old, { old });
+  const ug = [];
+  for (const k of ['underground:1', 'underground:2']) {
+    await p.evaluate((k) => RN_HOUR.open(k), k);
+    await p.waitForFunction(() => /New translation/.test(document.querySelector('.rhRead .rhTrNote')?.textContent || ''), null, { timeout: 20000 });
+    ug.push(await p.evaluate(() => { const t = document.querySelector('.rhRead .rhText').textContent; return { len: t.length, sick: /I am a sick man/.test(t), wall: /stone wall/.test(t), simonov: /last seen Simonov/.test(t), nekrasov: !!document.querySelector('.rhRead .rhText blockquote') }; }));
+  }
+  check('H18', 'Notes from Underground, sittings 1 and 2, open complete in the new translation', ug[0].sick && ug[0].wall && ug[0].len > 50000 && ug[1].simonov && ug[1].nekrasov && ug[1].len > 50000, ug);
   await p.keyboard.press('Escape');
   const after = await p.evaluate(() => JSON.stringify(S.segments || {}) + JSON.stringify((S.v16 && S.v16.q) || {}));
   check('H11', 'Lesson steps and MCQ records are exactly as before', after === seg0, {});

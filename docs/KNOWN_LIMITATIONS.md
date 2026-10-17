@@ -1,5 +1,14 @@
 # Known Limitations (v18.9 · MCQ exam + Renaissance + the Library)
 
+## v18.12 New translations from the Russian, and "Use it today"
+
+- New, plain modern English translations made directly from the Russian originals (public domain) now replace Constance Garnett's in: Notes from Underground sittings 1 and 2 (all of Part One, plus Part Two chapters I and II), The Grand Inquisitor (Karamazov sitting 12) and The Dream of a Ridiculous Man. Every other sitting still uses Garnett. The old translation is one tap away on each new one.
+- These translations were made for this app. They follow the Russian closely, but they have not been checked by a professional translator.
+- The Nekrasov epigraph to Part Two is a plain line-by-line rendering; the poem's middle lines are left out, as Dostoevsky also cut it short.
+- After each sitting a "Use it today" box gives one small action to try that day.
+- No legal route exists to include Camus or recent copyrighted translations (Pevear and Volokhonsky and others); the Camus sitting stays a study guide in our own words.
+- Not checked on the live site: this session cannot reach it.
+
 ## v18.11 More classics, Camus, and the essential route
 
 - **19 works now**: added Epictetus (Enchiridion), Seneca (On the Shortness of Life), Plato (the Cave, Symposium), Dostoevsky (The Dream of a Ridiculous Man), Gogol (The Overcoat), Chekhov (The Lady with the Dog), Melville (Bartleby), Shakespeare (Hamlet, verse lines kept), Nietzsche (Beyond Good and Evil), and a Camus study.

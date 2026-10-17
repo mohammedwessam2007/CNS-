@@ -219,3 +219,29 @@
   const ORDER = ["underground", "apology", "enchiridion", "shortness", "phaedo", "cave", "ridiculous", "overcoat", "meditations", "ladydog", "zarathustra", "bartleby", "symposium", "hamlet", "camus", "bge", "crime", "karamazov", "anna"];
   B.sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
 })();
+/* v18.12 · "Use it today" (owner: "life-changing, same benefits"). Every sitting ends with one small action drawn
+   from the book, rotating through the book's list; the action is the point where reading turns into a changed day. */
+(function () {
+  const APPLY = {
+    underground: ["Notice one moment today when you chose spite or pride over what you actually wanted. Name it to yourself, without excuses.", "Do one thing today that someone could predict you would do, and do it fully. Freedom is not only refusal.", "Accept one kindness today without explaining it away.", "Write down a 'Crystal Palace' you believe in (a system that will fix everything). What would the Underground Man say to it?", "Liza offered love and he paid her. Today, give someone something you cannot pay back: attention, time, an apology."],
+    apology: ["Ask one person a real question today and keep asking until you both reach the edge of what you know.", "Find one belief you hold only because people around you hold it. Examine it for five minutes."],
+    enchiridion: ["Every time something annoys you today, say: 'in my power, or not?' Act only on the first kind.", "Before an exam, a meeting or a hard conversation, rehearse what is in your power and let the rest go."],
+    shortness: ["Track today in 30-minute blocks. At night, mark which blocks were truly yours.", "Do the one thing you keep saying you will do 'later', for 20 minutes, today."],
+    phaedo: ["Spend ten minutes thinking about your own death calmly, as Socrates did. Notice what suddenly seems unimportant.", "When an argument fails you today, do not give up on reasoning itself. Find a better argument."],
+    cave: ["Name one 'shadow' you spent time on today (a feed, a rumour, a fear). Turn away from it once.", "Teach one thing you understand well to someone who doesn't yet, patiently, even if they laugh."],
+    ridiculous: ["Help one person today who asks, even if you are tired of everything.", "Love others as yourself for one hour today, in small acts. Notice how it changes the hour."],
+    overcoat: ["Speak kindly to the person in your world whom everyone overlooks.", "Before you mock someone today, remember 'I am your brother'."],
+    meditations: ["Tomorrow morning, before you get up, say: 'I am rising to the work of a human being.'", "Tonight, write your own Book I: three people, and what each taught you."],
+    ladydog: ["Look closely at one ordinary person today as if they were the centre of a story.", "Notice one moment when you are bored and cynical. Ask what you are protecting yourself from."],
+    zarathustra: ["Name one value you live by that you never chose. Keep it or change it, but choose it today.", "Do one hard thing today for no audience: the camel's discipline that makes the lion possible.", "Look at your day and ask: would I live this exact day again, forever? Change one hour so the answer is yes.", "Write a 'new tablet': three rules you choose for yourself.", "Spend ten minutes doing something you are bad at, on purpose, to grow.", "Say yes to one thing today you would normally complain about."],
+    bartleby: ["Notice one thing you do only because it is expected. Would you 'prefer not to'? Decide honestly.", "Check on someone who has gone quiet."],
+    symposium: ["Tell someone today, specifically, what you admire in them.", "Ask: what am I really longing for, under what I say I want?"],
+    hamlet: ["Is there something you keep thinking about instead of doing? Take the first concrete step today.", "Before a decision, write: 'The readiness is all.' Prepare well, then act."],
+    camus: ["Do your most repetitive task today with full attention, as Sisyphus walking down the mountain.", "Say no to one thing that crosses your line today, and notice the yes inside the no.", "Do one decent thing today that nobody will see. That is The Plague's whole moral."],
+    bge: ["Pick one moral judgement you made today and ask: what does it confess about me?", "When you fight something today, check you are not becoming it."],
+    crime: ["Catch one moment today when you tell yourself a clever story to justify something. Write the honest version.", "Notice one person who carries a heavy burden quietly, as Sonia does. Make their day lighter.", "Be the Razumihin today: loyal, practical, cheerful help for a friend."],
+    karamazov: ["Do one act of 'active love' today: concrete, small, for someone specific.", "When you hear 'everything is permitted' in your head today, answer it with one action.", "Remember one good childhood memory. Alyosha says one such memory can save a person."],
+    anna: ["Notice whose point of view you never take. Take it for five minutes today.", "Do one physical task today wholeheartedly, as Levin mows: lose yourself in it.", "Ask Levin's question at the end of the day: did I live for my belly, or for my soul?"],
+  };
+  for (const b of window.RN_BOOKS || []) if (APPLY[b.id]) b.apply = APPLY[b.id];
+})();
