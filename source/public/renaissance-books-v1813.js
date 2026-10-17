@@ -126,7 +126,7 @@
     cave: "To them the truth would be literally nothing but the shadows of the images.",
     ridiculous: "The main thing is to love others as yourself; that is the main thing, and that is everything.",
     howmuch: "The labourer dug a grave for Pakhom exactly as long as he measured from his feet to his head, six feet.",
-    overcoat: "Am I not your brother?",
+    overcoat: "Leave me alone; why do you insult me? ... I am your brother.",
     meditations: "Do every act of thy life as if it were the last.",
     ladydog: "It seemed that a little more, and the solution would be found, and then a new and beautiful life would begin.",
     zarathustra: "Man is a rope, tied between beast and Overman: a rope over an abyss.",

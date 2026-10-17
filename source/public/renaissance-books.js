@@ -22,6 +22,8 @@
   // sittings per book (from scripts/library/build_books.py); the plan is known before any book is downloaded
   const COUNT = {genealogy: 5, howmuch: 1, ivan: 2, anna: 37, apology: 1, bartleby: 1, bge: 7, camus: 1, cave: 1, crime: 21, enchiridion: 1, hamlet: 3, karamazov: 36, ladydog: 1, meditations: 5, overcoat: 1, phaedo: 3, ridiculous: 1, shortness: 1, symposium: 2, underground: 5, zarathustra: 10};
   const TITLES = { underground: "Notes from Underground", apology: "The Apology of Socrates", phaedo: "Phaedo", meditations: "Meditations", zarathustra: "Thus Spake Zarathustra", crime: "Crime and Punishment", karamazov: "The Brothers Karamazov", anna: "Anna Karenina", enchiridion: "Epictetus: the Enchiridion", shortness: "Seneca: On the Shortness of Life", cave: "Plato: the Cave (Republic VII)", symposium: "Plato: Symposium", ridiculous: "Dostoevsky: The Dream of a Ridiculous Man", overcoat: "Gogol: The Overcoat", ladydog: "Chekhov: The Lady with the Dog", bartleby: "Melville: Bartleby, the Scrivener", hamlet: "Shakespeare: Hamlet", camus: "Camus: the four great works", bge: "Nietzsche: Beyond Good and Evil", ivan: "Tolstoy: The Death of Ivan Ilyich", howmuch: "Tolstoy: How Much Land Does a Man Need?", genealogy: "Nietzsche: On the Genealogy of Morals" };
+  // v18.13: which books (or parts) are in the app's own new translations from the originals
+  const NEWTR = { underground: "new translation", ridiculous: "new translation", ivan: "new translation", howmuch: "new translation", ladydog: "new translation", overcoat: "new translation", karamazov: "the Grand Inquisitor in a new translation", zarathustra: "first sitting in a new translation" };
   // v18.11: the essential route by default (the sittings that carry the book; bridges sum up the rest); any book
   // can be switched to every chapter (S.rnLib.hour.full[id])
   const fullOf = (id) => !!(H().full || {})[id];
@@ -232,7 +234,7 @@
     page.innerHTML =
       '<p class="rlShelf">' + E(b.title.toUpperCase()) + " · " + E(data.author) + " · " + (of > 1 ? "sitting " + k + " of " + of + " · " : "") + "about " + mins + " min" + (b.route && !fullOf(b.id) ? " · essential route" : "") + "</p>" +
       "<h2>" + E(b.title) + "</h2>" +
-      '<p class="rlKicker">' + E(data.author) + " (" + E(b.years) + "), translated by " + E(data.translator) + ". Today: " + E(s.from.replace(/ · /g, ", ")) + (s.to && s.to !== s.from ? " → " + E(s.to.replace(/ · /g, ", ")) : "") + "</p>" +
+      '<p class="rlKicker">' + E(data.author) + " (" + E(b.years) + "), " + (/^a new translation/.test(useFresh ? fr.translator : data.translator) ? "in " + E(useFresh ? fr.translator : data.translator) : "translated by " + E(data.translator)) + ". Today: " + E(s.from.replace(/ · /g, ", ")) + (s.to && s.to !== s.from ? " → " + E(s.to.replace(/ · /g, ", ")) : "") + "</p>" +
       warmHTML(key, b, n) +
       (first
         ? '<section class="rhGuide"><h3 class="rhGuideH">Before you begin</h3>' + guideHTML(b) + (b.threads ? "<h3>In conversation with the others</h3><p>" + E(b.threads) + "</p>" : "") + (b.essay ? '<p><button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay) + '">Read the companion essay first (10 min)</button>' + (b.essay2 ? ' <button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay2) + '">…and the second one</button>' : "") + "</p>" : "") + "</section>"
@@ -369,7 +371,7 @@
             d = k.filter((x) => h.done[x]).length;
           const nextK = k.find((x) => !h.done[x]) || k[0];
           const mode = b.route ? '<small class="rhMode">' + (fullOf(b.id) ? "every chapter · " : "essential route · ") + '<a href="#" data-rh-mode="' + E(b.id) + '">' + (fullOf(b.id) ? "switch to the essential route" : "switch to every chapter") + "</a></small>" : "";
-          return '<div class="rhShelfRow"><button type="button" class="rlItem' + (d === n ? " done" : "") + '" data-rh-open="' + E(nextK) + '"><span>' + E(b.title) + " <small>· " + E(b.years) + "</small></span><small>" + (d === n ? "✓ finished" : d + " of " + n + (n === 1 ? " sitting" : " sittings") + (t.key.startsWith(b.id + ":") ? " · today" : "")) + "</small></button>" + mode + "</div>";
+          return '<div class="rhShelfRow"><button type="button" class="rlItem' + (d === n ? " done" : "") + '" data-rh-open="' + E(nextK) + '"><span>' + E(b.title) + " <small>· " + E(b.years) + (NEWTR[b.id] ? " · " + E(NEWTR[b.id]) : "") + "</small></span><small>" + (d === n ? "✓ finished" : d + " of " + n + (n === 1 ? " sitting" : " sittings") + (t.key.startsWith(b.id + ":") ? " · today" : "")) + "</small></button>" + mode + "</div>";
         })
         .join("") +
       '<h3>Your reading life</h3><p class="rhStats">' + statsLine() + '</p><p class="rlKicker">The rule: an hour when you can, fifteen minutes when you can\'t, and never miss two days in a row.</p><button type="button" class="rlItem" data-rh="commonplace"><span>Your commonplace book</span><small>all you kept</small></button>' +

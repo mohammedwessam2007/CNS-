@@ -9,7 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "..", "source", "public", "books")
 SOURCES = {"karamazov": "Братья Карамазовы (1880)", "ridiculous": "Сон смешного человека (1877)", "underground": "Записки из подполья (1864)",
            "ivan": "Смерть Ивана Ильича (1886)", "howmuch": "Много ли человеку земли нужно (1886)", "ladydog": "Дама с собачкой (1899)",
-           "zarathustra": "Also sprach Zarathustra (1883)"}
+           "zarathustra": "Also sprach Zarathustra (1883)", "overcoat": "Шинель (1842)"}
 LANG = {"zarathustra": "German"}
 # v18.13: books with no older public-domain English text in the app are written out whole as <book>.json
 OWN = {"ivan": ("The Death of Ivan Ilyich", "Leo Tolstoy"), "howmuch": ("How Much Land Does a Man Need?", "Leo Tolstoy")}

@@ -91,6 +91,7 @@ def build(bid, fn, title, author, tr, start, end, head, opt=None):
             continue
         txt = ("\n" if opt.get("verse") else " ").join(x.strip() for x in b)
         txt = re.sub(r"\[[A-Z]\]", "", txt)  # footnote markers
+        txt = re.sub(r"\s*\(\[Greek: [^\]]*\]\)|\s*\[Greek: [^\]]*\]", "", txt)  # scholars' Greek transliterations
         txt = re.sub(r"_([^_]+)_", r"\1", txt)  # Gutenberg italics markers
         if re.fullmatch(r"[*\s.]+", txt):
             continue
