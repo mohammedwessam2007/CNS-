@@ -1,5 +1,10 @@
 # Known Limitations (v18.14 · MCQ exam + Renaissance + the Great Books Hour)
 
+## v18.14.1 Menu taps press the button you touch
+
+- The owner (18 Oct 2026): "the menu is clicking on its own". On a phone the menu's pinned footer (Great Books, Professor vision, cloud, Study mode) covered "Resume learning" and "Share my progress", so a tap on one pressed another. The footer now scrolls with the rest of the menu, and on a wide screen the menu leaves room for the game bar. Test: `tests/menu_tap_test.js` (phone, iPad, desktop; it fails on the old layout).
+- Checked in an automated Chromium browser, not on the owner's phone.
+
 ## v18.14 The reading follows your exam calendar
 
 - **Tonight's dose comes from the course calendar** (MCQ 15 Nov, written 15 Jan, practical 15 Feb): the full hour when no exam is within 35 days; 30 minutes a night in exam season; 15 in exam week; none the night before an exam or on the day. After midnight in exam season it is 15 minutes, then sleep.

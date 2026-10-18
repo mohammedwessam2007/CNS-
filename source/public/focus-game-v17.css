@@ -91,3 +91,5 @@ body.ixGOn{padding-bottom:calc(66px + env(safe-area-inset-bottom))}
 
 /* rematch badge on the returning items */
 .v16Kind.kagain::before,.v16Kind.kchg::before,.v16Kind.kfinal::before{content:"⚔️ ";}
+/* v18.14.1: on a wide screen the course menu stands beside the lesson, so its last buttons ended under this bar; room for the bar at its foot */
+@media(min-width:901px){body.ixGOn.courseUx .shell>aside{padding-bottom:calc(80px + env(safe-area-inset-bottom))}}

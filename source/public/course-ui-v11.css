@@ -56,4 +56,5 @@
  .courseUx main{min-height:100vh}.courseUx .topline{display:block}.courseUx .topline>.chips{margin-top:10px;justify-content:flex-start}
 }
 @media(max-width:600px){.courseTopbar{grid-template-columns:36px minmax(0,1fr);height:50px}.courseTopProgress{display:none}.courseUx .hero{padding:18px 10px 48px}.courseUx .stage{padding:14px;border-radius:9px}.courseUx .hero h1{font-size:24px}.courseUx .topline>.chips{display:none}.courseUx #dayText{display:none}.courseUx .truth{font-size:8px}}
-@media(prefers-reduced-motion:reduce){.courseUx aside{transition:none!important}}
+@media(prefers-reduced-motion:reduce){.courseUx aside{transition:none!important}}/* v18.14.1 (owner, 18 Oct 2026: "the menu is clicking on its own"): on a phone the pinned footer covered "Resume learning" and "Share my progress", so a tap on one pressed "Professor vision" or "Great Books" instead. The footer now scrolls with the rest and covers nothing. */
+.courseUx #railFooter{position:static}
