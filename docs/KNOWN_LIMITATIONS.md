@@ -1,4 +1,15 @@
-# Known Limitations (v18.9 · MCQ exam + Renaissance + the Library)
+# Known Limitations (v18.13 · MCQ exam + Renaissance + the Great Books Hour)
+
+## v18.13 The whole reading route in new translations, a reading protocol, and a storage guard
+
+- **New translations for the whole essential route** of the Russian novels and Zarathustra, made for this app from the originals (public domain): Notes from Underground (5 sittings), Crime and Punishment (14), The Brothers Karamazov (16), Anna Karenina (11), Thus Spake Zarathustra (6), plus Meditations books I–VI, the Enchiridion, The Dream of a Ridiculous Man, The Overcoat, The Lady with the Dog. About 590,000 words. They follow the originals closely but have not been checked by a professional translator. The old translation stays one tap away.
+- Sittings outside the essential route ("Read every chapter") still use the older public-domain translations (Garnett, Common, Long).
+- Names in the guides now match the new translations (Zosima, Ilyusha, Krasotkin, Khokhlakova, Zamyotov, Alexei). The quotation registers in the Renaissance seasons keep Garnett's wording and spelling on purpose, because they quote her text.
+- **New books**: The Death of Ivan Ilyich and How Much Land Does a Man Need? (both in new translations) and Nietzsche's Genealogy of Morals (public-domain Samuel translation).
+- **The protocol around each sitting**: lines you keep come back for spaced recall; "Use it today" is followed up the next day; a weekly review every seventh day; a streak; each book ends with a verdict ("The book, in the end"); the commonplace book gathers everything you wrote. See docs/READING_PROTOCOL_RATING.md (6/10 before, 10/10 after, by its own rubric).
+- **Phone storage full** (uni course): if the phone's storage fills, the app first removes spare copies, then trims old logs, and only if that is not enough shows a banner pointing to "Share my progress". Your progress and sync code are never removed. Tested with a filled-up storage stand-in, not on a real full phone.
+- **Cloud sync is still off** until the owner connects a Vercel Blob store. docs/CLOUD_SYNC_GPT_PROMPT.md is a step-by-step prompt for an agent with browser access; the owner signs in themselves.
+- Not checked on the live site in a browser: this session's network cannot open it.
 
 ## v18.12 New translations from the Russian, and "Use it today"
 

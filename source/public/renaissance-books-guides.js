@@ -137,7 +137,7 @@ window.RN_BOOKS = [
       "* **Fyodor Pavlovich Karamazov**: the father. A buffoon, a sensualist, a miser and a clown. Everyone has reason to hate him.",
       "* **Dmitri ('Mitya')**: the eldest son, an ex-officer, passionate, generous and reckless, in a violent quarrel with his father over money and over a woman.",
       "* **Ivan**: the second son, a brilliant intellectual who 'returns his ticket' to a world in which children suffer. Author of 'The Grand Inquisitor'.",
-      "* **Alexey ('Alyosha')**: the youngest, a novice at the monastery, the hero according to Dostoevsky. Watch how quietly he changes people.",
+      "* **Alexei ('Alyosha')**: the youngest, a novice at the monastery, the hero according to Dostoevsky. Watch how quietly he changes people.",
       "* **Smerdyakov**: the servant, probably Fyodor's illegitimate son. Watch him carefully.",
       "* **Father Zosima**: Alyosha's elder at the monastery.",
       "* **Grushenka** and **Katerina Ivanovna ('Katya')**: the two women at the centre of Dmitri's life.",

@@ -61,7 +61,7 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
   await p.evaluate(() => RN_HOUR.open('crime:8'));
   await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
   const br = await p.evaluate(() => ({ bridge: document.querySelector('.rhRead .rhBridge')?.textContent || '', shelf: document.querySelector('.rhRead .rlShelf')?.textContent }));
-  check('H13', 'On the essential route a long book shows a bridge for the chapters between (Crime and Punishment, sitting 5 of 14)', /Zametov/.test(br.bridge) && /sitting 5 of 14/.test(br.shelf), br);
+  check('H13', 'On the essential route a long book shows a bridge for the chapters between (Crime and Punishment, sitting 5 of 14)', /Zam(yo|e)tov/.test(br.bridge) && /sitting 5 of 14/.test(br.shelf), br);
   await p.evaluate(() => document.querySelector('.rhRead [data-rh="full"]').click());
   await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
   const fl = await p.evaluate(() => ({ shelf: document.querySelector('.rhRead .rlShelf')?.textContent, bridge: !!document.querySelector('.rhRead .rhBridge'), plan: RN_HOUR.plan().filter((k) => k.startsWith('crime:')).length }));
@@ -88,6 +88,13 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
     ug.push(await p.evaluate(() => { const t = document.querySelector('.rhRead .rhText').textContent; return { len: t.length, sick: /I am a sick man/.test(t), wall: /stone wall/.test(t), simonov: /last seen Simonov/.test(t), nekrasov: !!document.querySelector('.rhRead .rhText blockquote') }; }));
   }
   check('H18', 'Notes from Underground, sittings 1 and 2, open complete in the new translation', ug[0].sick && ug[0].wall && ug[0].len > 50000 && ug[1].simonov && ug[1].nekrasov && ug[1].len > 50000, ug);
+  const ak = [];
+  for (const k of ['anna:1', 'anna:37']) {
+    await p.evaluate((k) => RN_HOUR.open(k), k);
+    await p.waitForFunction(() => /New translation/.test(document.querySelector('.rhRead .rhTrNote')?.textContent || ''), null, { timeout: 20000 });
+    ak.push(await p.evaluate(() => { const t = document.querySelector('.rhRead .rhText').textContent; return { len: t.length, first: /All happy families are alike; each unhappy family is unhappy in its own way/.test(t), garnett: /Everything was in confusion in the Oblonskys/.test(t), last: /the undoubted meaning of the good/.test(t) }; }));
+  }
+  check('H18b', 'Anna Karenina opens in the new translation from the Russian, from its first sentence to its last', ak[0].first && ak[0].garnett && ak[0].len > 40000 && ak[1].last && ak[1].len > 40000, ak);
   // v18.13: the protocol around the reading
   await p.evaluate(() => RN_HOUR.open('ivan:1'));
   await p.waitForSelector('.rhRead .rhText p', { timeout: 20000 });
