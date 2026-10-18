@@ -1,4 +1,15 @@
-# Known Limitations (v18.13 · MCQ exam + Renaissance + the Great Books Hour)
+# Known Limitations (v18.14 · MCQ exam + Renaissance + the Great Books Hour)
+
+## v18.14 The reading follows your exam calendar
+
+- **Tonight's dose comes from the course calendar** (MCQ 15 Nov, written 15 Jan, practical 15 Feb): the full hour when no exam is within 35 days; 30 minutes a night in exam season; 15 in exam week; none the night before an exam or on the day. After midnight in exam season it is 15 minutes, then sleep.
+- **Nothing is skipped**: a sitting longer than tonight's dose is split into nightly parts at a paragraph (a chapter break when one is near). "Done for tonight" saves the place in the synced state; the next evening opens at that line with what you read folded away. "Keep reading tonight" opens the rest.
+- **Your own speed**: minutes are planned at 190 words a minute and then adjust to your measured reading speed (120–320).
+- **Finish date**: the finished-day card and All books show when the whole route will be finished at this pace (with the owner's progress on 18 Oct 2026: 17 February 2027).
+- **Less evening work in exam season**: the Renaissance session drops to its 10-minute dose 8–35 days before any exam, so the evening after the CNS work is about 40 minutes instead of 85.
+- Rest nights do not break the reading streak.
+- The exam dates are the course's planning anchors; if the real dates change, the anchors in the course data need updating too.
+- Fixed: the app's side-menu style was also applied to notes inside the reader (bridges, "Use it today"), making them screen-tall.
 
 ## v18.13 The whole reading route in new translations, a reading protocol, and a storage guard
 

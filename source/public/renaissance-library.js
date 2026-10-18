@@ -177,10 +177,9 @@
     const b = document.getElementById("rlDoor");
     if (!b || !LIB.length) return;
     if (window.RN_HOUR && window.RN_HOUR.count()) {
-      const ht = window.RN_HOUR.todays(),
-        m = window.RN_HOUR.minutesToday();
-      b.innerHTML = "📖 THE GREAT BOOKS HOUR · " + (ht.finished ? "✓ today" : m ? m + " of 60 min" : "today");
-      b.title = window.RN_HOUR.label(ht.key).title;
+      const tn = window.RN_HOUR.tonight();
+      b.innerHTML = "📖 THE GREAT BOOKS HOUR · " + (tn.read ? "✓ tonight" : !tn.dose ? "rest tonight" : tn.minutes ? tn.minutes + " of " + tn.dose + " min" : tn.dose + " min tonight");
+      b.title = tn.title + " · " + tn.why;
       return;
     }
     const t = todays();
@@ -216,12 +215,13 @@
     if (have) return;
     const HR = window.RN_HOUR;
     if (HR && HR.count()) {
-      const t = HR.todays(),
-        L = HR.label(t.key),
-        m = HR.minutesToday();
+      // v18.14: tonight's reading, sized by the exam calendar (see RN_HOUR.pace)
+      const t = HR.tonight();
+      const head = t.read ? "✓ read tonight" : !t.dose ? "rest tonight" : t.minutes ? t.minutes + " of " + t.dose + " min tonight" : "about " + t.dose + " min tonight";
+      const what = t.all ? "Every book on the route is read." : !t.dose ? "No reading tonight: " + t.why + ". Sleep is the best revision now; the books wait for you." : t.read ? "Tonight's part is read. Tomorrow carries on from the next line." : (t.k === 1 && !t.started ? "A new book begins: its guide opens first. " : t.started ? "You carry on from the line where you stopped. " : "") + "Tonight's part is marked in the text; the rest of the sitting comes tomorrow. " + t.why.charAt(0).toUpperCase() + t.why.slice(1) + ".";
       p.insertAdjacentHTML(
         "afterbegin",
-        '<div class="rlDayCard"><small>THE GREAT BOOKS HOUR · TODAY · ' + (t.finished ? "✓ read" : m ? m + " of 60 min" : "about an hour") + "</small><b>" + E(L.title) + " · sitting " + L.n + " of " + L.of + "</b><p>" + (L.n === 1 ? "A new book begins: its guide and companion essay open first." : "Your place is kept. Read until the sitting ends, then write your three lines.") + '</p><button type="button" class="rlBtn" data-rlday="hour">' + (t.finished ? "Open it again" : m ? "Continue reading" : "Begin today's hour") + '</button> <button type="button" class="rlBtn ghost" data-rlday="books">All books</button></div>',
+        '<div class="rlDayCard"><small>THE GREAT BOOKS HOUR · ' + E(head) + "</small><b>" + E(t.title) + (t.of > 1 ? " · sitting " + t.k + " of " + t.of : "") + "</b><p>" + E(what) + " " + E(HR.projLine()) + '</p><button type="button" class="rlBtn" data-rlday="hour">' + (t.read || !t.dose ? "Open the book anyway" : t.started ? "Carry on reading" : "Start tonight's reading") + '</button> <button type="button" class="rlBtn ghost" data-rlday="books">All books</button></div>',
       );
       p.querySelector('.rlDayCard [data-rlday="hour"]').onclick = () => HR.open(t.key);
       p.querySelector('.rlDayCard [data-rlday="books"]').onclick = () => HR.shelf();

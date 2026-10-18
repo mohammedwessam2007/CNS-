@@ -37,8 +37,12 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
   await p.evaluate(() => document.getElementById('rlDoor').click());
   await p.waitForSelector('.rhRead .rhText p', { timeout: 15000 });
   const r = await p.evaluate(() => { const o = document.querySelector('.rhRead'); return { guide: !!o.querySelector('.rhGuide:not([hidden])'), essay: !!o.querySelector('[data-rh="essay"]'), paras: o.querySelectorAll('.rhText p').length, first: [...o.querySelectorAll('.rhText p')].slice(0, 3).map((x) => x.textContent.slice(0, 40)).join(' | '), notes: o.querySelectorAll('[data-rh-note]').length, sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, over: [...o.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).length }; });
-  check('H5', 'Today opens Notes from Underground, sitting 1: guide and companion essay first, then the whole text, then three lines to write', r.guide && r.essay && r.paras > 20 && /sick man/.test(r.first) && r.notes === 3, r);
+  check('H5', 'Today opens Notes from Underground, sitting 1: guide and companion essay first, then the text, then three lines to write', r.guide && r.essay && r.paras > 20 && /sick man/.test(r.first) && r.notes === 3, r);
   check('H6', 'On a 390 px phone nothing scrolls sideways', r.sw <= r.cw && r.over === 0, r);
+  // v18.14: in exam season tonight's part ends early; "Keep reading tonight" opens the rest of the sitting
+  const part0 = await p.evaluate(() => ({ stop: !!document.querySelector('.rhRead .rhStop [data-rh="partdone"]'), finish: !!document.querySelector('.rhRead [data-rh="finish"]'), pace: document.querySelector('.rhRead .rhPace')?.textContent || '' }));
+  check('P1', 'Exam season (the MCQ in 29 days): the first sitting opens with tonight\'s 30-minute part marked, the reason given, and no "I read the sitting" until the sitting is read', part0.stop && !part0.finish && /exam season/.test(part0.pace) && /29 days/.test(part0.pace), part0);
+  await p.evaluate(() => document.querySelector('.rhRead [data-rh="keepgo"]').click());
   await p.fill('.rhRead [data-rh-note="keep"]', 'I am a spiteful man.');
   await p.waitForTimeout(1000);
   await p.evaluate(() => document.querySelector('.rhRead [data-rh="finish"]').click());
@@ -135,6 +139,43 @@ const check = (id, what, ok, detail) => { results.push({ id, what, ok: !!ok, det
   check('H11', 'Lesson steps and MCQ records are exactly as before', after === seg0, {});
   check('H12', 'No page errors', !s.log.errors.length, s.log.errors.slice(0, 4));
   await s.close();
+
+  // v18.14 · THE PACE: the reading follows the exam calendar; long sittings are split into nightly parts
+  {
+    const q = await open({ v16: true, time: '2026-10-18T21:00:00+03:00', state: null, settle: 2400, viewport: { width: 390, height: 844 }, touch: true });
+    const pg = q.page;
+    const pc = await pg.evaluate(() => Object.fromEntries(['2026-10-18', '2026-11-10', '2026-11-14', '2026-11-15', '2026-11-16', '2026-12-20', '2027-03-01'].map((d) => { const x = RN_HOUR.pace(d); return [d, x.phase + ':' + x.dose]; })));
+    check('P2', 'The dose follows the calendar: 30 min in exam season, 15 in exam week, none the day before and on the day, the full hour after, exam season again before the written exam', pc['2026-10-18'] === 'season:30' && pc['2026-11-10'] === 'week:15' && pc['2026-11-14'] === 'rest:0' && pc['2026-11-15'] === 'rest:0' && pc['2026-11-16'] === 'free:60' && pc['2026-12-20'] === 'season:30' && pc['2027-03-01'] === 'free:60', pc);
+    await pg.evaluate(() => RN_HOUR.open('crime:1'));
+    await pg.waitForSelector('.rhRead .rhStop', { timeout: 20000 });
+    const a1 = await pg.evaluate(() => { const w = (sel) => [...document.querySelectorAll(sel)].reduce((a, x) => a + x.textContent.split(/\s+/).length, 0); return { tonight: w('.rhRead .rhText > [data-i]'), rest: w('.rhRead .rhRest [data-i]') }; });
+    check('P3', 'Tonight\'s part is about 30 minutes of reading (at 190 words a minute) and the rest of the sitting is kept for tomorrow, not dropped', a1.tonight > 4000 && a1.tonight < 7800 && a1.rest > 2500, a1);
+    await pg.evaluate(() => document.querySelector('.rhRead [data-rh="partdone"]').click());
+    const a2 = await pg.evaluate(() => { const L = JSON.parse(localStorage.getItem('intellectuality_v41_launch_state') || '{}'), h = L.rnLib.hour; return { at: h.at['crime:1'], night: h.night['2026-10-18'], msg: document.querySelector('.rhRead .rhStop')?.textContent || '', door: document.getElementById('rlDoor')?.textContent || '', t: RN_HOUR.tonight() }; });
+    check('P4', '"Done for tonight" saves the place in the synced state, says where tomorrow starts and when the route will be finished; the door says tonight is read', a2.at > 5 && a2.night && a2.night.key === 'crime:1' && /Tomorrow you start at/.test(a2.msg) && /finish the whole route on/.test(a2.msg) && a2.t.read && /✓ tonight/.test(a2.door), { at: a2.at, msg: a2.msg.slice(0, 200), door: a2.door });
+    await q.close();
+    const st = JSON.parse(JSON.stringify(await (async () => { const r = await open({ v16: true, time: '2026-10-18T21:30:00+03:00', state: null, settle: 600 }); const x = await r.page.evaluate(() => localStorage.getItem('intellectuality_v41_launch_state')); await r.close(); return JSON.parse(x); })()));
+    st.rnLib = { hour: { done: {}, min: { '2026-10-18': 31 }, notes: {}, at: { 'crime:1': 40 }, atw: { 'crime:1': 5600 }, night: { '2026-10-18': { key: 'crime:1', from: 0, to: 40 } } } };
+    // underground is read; crime 1 is part-read
+    for (let i = 1; i <= 5; i++) st.rnLib.hour.done['underground:' + i] = '2026-10-1' + i;
+    const q2 = await open({ v16: true, time: '2026-10-19T21:00:00+03:00', state: st, settle: 2400, viewport: { width: 390, height: 844 }, touch: true });
+    const t2 = await q2.page.evaluate(() => { const h = S.rnLib.hour, P = RN_HOUR.plan(); for (const k of P.slice(0, P.indexOf('crime:1'))) h.done[k] = h.done[k] || '2026-10-15'; save(); return RN_HOUR.tonight(); });
+    await q2.page.evaluate(() => RN_HOUR.open());
+    await q2.page.waitForSelector('.rhRead .rhResume', { timeout: 20000 });
+    const b2 = await q2.page.evaluate(() => ({ prevHidden: !!document.querySelector('.rhRead .rhPrev[hidden]'), firstShown: +(document.querySelector('.rhRead .rhText > [data-i]')?.dataset.i || -1), pace: document.querySelector('.rhRead .rhPace')?.textContent || '' }));
+    check('P5', 'The next evening opens the same sitting at the line where you stopped, with what you read folded away and the minutes left in the sitting', t2.key === 'crime:1' && t2.started && b2.prevHidden && b2.firstShown === 40 && /left in this sitting|to the end of the sitting/.test(b2.pace), { t2: { key: t2.key, started: t2.started, left: t2.left }, b2 });
+    await q2.page.keyboard.press('Escape');
+    await q2.page.evaluate(() => { nextAction = () => ({ kind: 'STOP' }); render(); });
+    await q2.page.waitForTimeout(500);
+    const c2 = await q2.page.evaluate(() => document.querySelector('#player .rlDayCard')?.textContent || '');
+    check('P6', 'The finished-day card shows tonight\'s minutes, why, where you carry on, and the projected finish date', /30 min tonight/.test(c2) && /exam season/i.test(c2) && /Carry on reading/.test(c2) && /finish the whole route on/.test(c2), { c2: c2.slice(0, 300) });
+    check('P8', 'No page errors with the pace', !q2.log.errors.length, q2.log.errors.slice(0, 4));
+    await q2.close();
+    const q3 = await open({ v16: true, time: '2026-11-14T21:00:00+02:00', state: st, settle: 2400 });
+    const t3 = await q3.page.evaluate(() => { nextAction = () => ({ kind: 'STOP' }); render(); return new Promise((r) => setTimeout(() => r({ t: RN_HOUR.tonight(), card: document.querySelector('#player .rlDayCard')?.textContent || '', door: document.getElementById('rlDoor')?.textContent || '', streak: RN_HOUR.streak() }), 500)); });
+    check('P7', 'The night before the exam is a rest night: nothing is owed, the card says why, and it does not break the streak', t3.t.dose === 0 && /rest tonight/.test(t3.card) && /tomorrow/.test(t3.card) && /rest tonight/.test(t3.door), { card: t3.card.slice(0, 200), door: t3.door });
+    await q3.close();
+  }
   const passed = results.filter((x) => x.ok).length;
   console.log(`\n${passed}/${results.length} hour checks passed`);
   if (process.argv[2]) fs.writeFileSync(process.argv[2], JSON.stringify({ suite: 'hour', passed, total: results.length, results }, null, 2));

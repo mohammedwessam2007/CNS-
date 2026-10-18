@@ -17,6 +17,7 @@
   const KEY = "renaissance_v1";
   const EXAM_DAY = "2026-11-15";
   const DOSE = { full: 25, short: 10, deep: 45 };
+  let seasonShort = false; // v18.14: the short dose is only for exam season (the scheduled progress checks still come)
   const WEEK_CAP = 245; // minutes in 7 days before the dose shrinks
   const WEEK_STOP = 300; // minutes in 7 days before Renaissance rests
   const CONF = { sure: 0.9, think: 0.7, guess: 0.45 };
@@ -163,7 +164,9 @@
     // before or after the CNS work; the hour no longer matters, and what used to shut it (exam weekend, a heavy week) now only shortens it.
     const reasons = [];
     let dose = DOSE.full;
-    const toExam = daysBetween(today, EXAM_DAY);
+    // v18.14: the next exam of the course calendar (MCQ, written, practical), not only the MCQ
+    const nextExam = safe(() => ((typeof C !== "undefined" && C.examAnchors) || []).map((x) => x && x.date).filter((d) => d && d >= today).sort()[0], null) || EXAM_DAY;
+    const toExam = daysBetween(today, nextExam);
     if (!cnsDone()) reasons.push("today's CNS work is not finished yet (medicine still comes first; this is here when you want it)");
     if (toExam >= 0 && toExam <= 2) {
       dose = DOSE.short;
@@ -177,8 +180,17 @@
       dose = DOSE.short;
       reasons.push("exam week");
     }
+    // v18.14 (owner, 18 Oct 2026: "less work more, but not half assing"): in exam season (8–35 days before an exam)
+    // the evening belongs to the CNS work and the book; Renaissance keeps its daily thread in a 10-minute dose
+    seasonShort = false;
+    if (toExam > 7 && toExam <= 35 && dose !== DOSE.short) {
+      dose = DOSE.short;
+      seasonShort = true;
+      reasons.push("exam season (" + toExam + " days to go): a 10-minute dose, so the evening stays short (the scheduled progress checks still come)");
+    }
     if (week >= WEEK_CAP || week >= WEEK_STOP) {
       dose = DOSE.short;
+      seasonShort = false;
       reasons.push("a heavy week (" + Math.round(week) + " min)");
     }
     if (spentToday >= dose + 10) return { open: false, why: "spent", msg: "You have given Renaissance " + Math.round(spentToday) + " minutes today. That is the dose; the rest of the day is yours." };
@@ -1088,7 +1100,7 @@
     return out.sort((a, b) => rank(a.it.form) - rank(b.it.form) || a.at - b.at || (a.it.order || 0) - (b.it.order || 0));
   }
   function dueProbes(st, today, dose) {
-    if (probesOff() || dose <= DOSE.short) return [];
+    if (probesOff() || (dose <= DOSE.short && !seasonShort)) return [];
     const list = probeDue(st, today).slice(0, 2);
     return list
       .map(({ key, it }) => {

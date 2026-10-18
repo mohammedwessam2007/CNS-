@@ -35,7 +35,7 @@
     if (!S0) return { done: {}, min: {}, notes: {} };
     if (!S0.rnLib || typeof S0.rnLib !== "object") S0.rnLib = {};
     const h = (S0.rnLib.hour = S0.rnLib.hour && typeof S0.rnLib.hour === "object" ? S0.rnLib.hour : {});
-    for (const k of ["done", "min", "notes", "rev", "did", "week", "reck"]) if (!h[k] || typeof h[k] !== "object") h[k] = {};
+    for (const k of ["done", "min", "notes", "rev", "did", "week", "reck", "at", "atw", "night"]) if (!h[k] || typeof h[k] !== "object") h[k] = {};
     return h;
   }
   const persist = () => safe(() => save());
@@ -51,10 +51,20 @@
       plan = PLAN();
     const doneToday = plan.find((k) => h.done[k] === t);
     if (doneToday) return { key: doneToday, finished: true };
+    const nt = h.night[t];
+    if (nt && nt.key && !h.done[nt.key]) return { key: nt.key, finished: false, partDone: true };
     const next = plan.find((k) => !h.done[k]);
     return next ? { key: next, finished: false } : { key: plan[plan.length - 1], finished: true, all: true };
   }
   const minutesToday = () => Math.round(H().min[today()] || 0);
+  // tonight, for the cards and the door: the dose, why, the sitting, how much of it is left, whether tonight is read
+  function tonight() {
+    const t = todays(), p = pace(today(), true), h = H(), L = label(t.key);
+    const left = Math.max(0, Math.round((SITTING_WORDS(t.key) - (+h.atw[t.key] || 0)) / wpm()));
+    const m = minutesToday();
+    const read = t.finished || t.partDone || (p.dose > 0 && m >= p.dose);
+    return Object.assign({}, p, { key: t.key, title: L.title, k: L.k, of: L.of, started: (+h.atw[t.key] || 0) > 0, left, minutes: m, read, finished: t.finished, partDone: !!t.partDone, all: !!t.all });
+  }
   function label(key) {
     const [id, n] = key.split(":"),
       b = book(id);
@@ -65,12 +75,61 @@
   // v18.13: the protocol around the reading (owner: "add everything so it's 10/10")
   const addDays = (d, n) => { const x = new Date(d + "T12:00:00Z"); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
   const daysBetween = (a, b) => Math.round((new Date(b + "T12:00:00Z") - new Date(a + "T12:00:00Z")) / 864e5);
-  // the streak: days with at least 15 minutes read; today counts once it reaches 15
+  /* v18.14 · THE PACE (owner, 18 Oct 2026: "integrate it perfectly with my schedule, less work more, but not half
+     assing"). The evening's reading follows the exam calendar of the course (C.examAnchors: MCQ, written, practical):
+     the full hour when no exam is near, 30 minutes a night in exam season (35 days before), 15 in exam week, none the
+     night before or on the day. Nothing is skipped: a sitting is split into nightly parts at a paragraph (a chapter
+     break when one is close), and tomorrow starts at the next line. The minutes are measured against your own reading
+     speed, and the finish date of the whole route is projected from the calendar. Lessons and answers are untouched. */
+  const exams = () => safe(() => ((typeof C !== "undefined" && C.examAnchors) || []).filter((x) => x && x.date).slice().sort((a, b) => (a.date < b.date ? -1 : 1)), []) || [];
+  const cairoHour = () => safe(() => +new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Cairo", hour: "2-digit", hourCycle: "h23" }).format(new Date()), 20);
+  const SEASON = 35, WEEK = 7;
+  function pace(d, live) {
+    d = d || today();
+    const nx = exams().find((x) => x.date >= d), to = nx ? daysBetween(d, nx.date) : 9999, name = nx ? String(nx.label || nx.id).replace(/ wave$/i, "") + " exam" : "";
+    let p;
+    if (to <= 1) p = { phase: "rest", dose: 0, why: to === 0 ? "the " + name + " is today" : "the " + name + " is tomorrow" };
+    else if (to <= WEEK) p = { phase: "week", dose: 15, why: "exam week: the " + name + " is in " + to + " days" };
+    else if (to <= SEASON) p = { phase: "season", dose: 30, why: "exam season: the " + name + " is in " + to + " days" };
+    else p = { phase: "free", dose: 60, why: nx ? "no exam in the next " + SEASON + " days" : "no exam ahead" };
+    // after midnight in exam season or week: 15 minutes, then sleep (sleep is part of the revision)
+    if (live && (p.phase === "season" || p.phase === "week") && cairoHour() < 5) Object.assign(p, { dose: 15, late: true, why: p.why + "; it is late, so 15 minutes, then sleep" });
+    return Object.assign(p, { exam: nx || null, to });
+  }
+  const wpm = () => Math.max(120, Math.min(320, +H().wpm || 190));
+  const SITTING_WORDS = (key) => { const [id, n] = key.split(":"); return safe(() => window.RN_BOOK_WORDS[id][+n - 1], 0) || 10000; };
+  // where tonight's part ends: about the dose in words, at a chapter break if one is near, never leaving a stub
+  function partEnd(body, start, budget) {
+    const w = body.map((p) => (p.startsWith("## ") ? 0 : p.split(/\s+/).length));
+    let rem = 0;
+    for (let i = start; i < w.length; i++) rem += w[i];
+    if (budget <= 0 || rem <= budget * 1.35) return body.length;
+    let acc = 0, i = start;
+    while (i < body.length && acc < budget) acc += w[i++];
+    if (rem - acc < budget * 0.35) return body.length;
+    for (let j = i, a = acc; j < body.length && a < budget * 1.25; a += w[j++]) if (body[j].startsWith("## ") && j > start) return j;
+    return i;
+  }
+  // the finish date of the route at this pace, from the calendar
+  function projection() {
+    const h = H(), t = today(), plan = PLAN().filter((k) => !h.done[k]);
+    if (!plan.length) return null;
+    let words = plan.reduce((a, k) => a + SITTING_WORDS(k), 0) - plan.slice(0, 1).reduce((a, k) => a + (+h.atw[k] || 0), 0);
+    const tn = tonight();
+    let d = tn.read ? addDays(t, 1) : t, n = 0;
+    while (words > 0 && n++ < 3000) { words -= pace(d).dose * wpm(); if (words > 0) d = addDays(d, 1); }
+    return d;
+  }
+  // the streak: days you read at least the night's dose (15 minutes at most); rest nights before an exam never break it
   function streak() {
-    const m = H().min;
-    let d = today(), n = 0;
-    if ((m[d] || 0) < 15) d = addDays(d, -1);
-    while ((m[d] || 0) >= 15) { n++; d = addDays(d, -1); }
+    const m = H().min, need = (d) => Math.min(15, pace(d).dose);
+    let d = today(), n = 0, g = 0;
+    if (!need(d) || (m[d] || 0) < need(d)) d = addDays(d, -1);
+    while (g++ < 4000) {
+      const q = need(d);
+      if (!q) { d = addDays(d, -1); continue; }
+      if ((m[d] || 0) >= q) { n++; d = addDays(d, -1); } else break;
+    }
     return n;
   }
   // spaced review of the lines you kept (and each finished book's line to know by heart): 1, 3, 7, 21, 60, 180 days
@@ -147,6 +206,7 @@
     return fresh[id];
   }
   const oldTr = {};
+  const extra = {};
   function para(p) {
     if (p.startsWith("## ")) return "<h3>" + E(p.slice(3)) + "</h3>";
     if (p.startsWith(">")) {
@@ -170,6 +230,7 @@
     timer = null;
   }
   let timer = null;
+  const minsLabel = () => { const p = pace(today(), true); return minutesToday() + (p.dose ? " of " + p.dose + " min tonight" : " min · a rest night"); };
   function startTimer() {
     clearInterval(timer);
     let last = Date.now();
@@ -180,7 +241,7 @@
           t = today();
         h.min[t] = (h.min[t] || 0) + Math.min(1, (now - last) / 60000);
         const m = document.querySelector(".rhRead .rhMins");
-        if (m) m.textContent = minutesToday() + " of 60 min today";
+        if (m) m.textContent = minsLabel();
         persist();
       }
       last = now;
@@ -206,7 +267,7 @@
     o.className = "rlRead rhRead";
     o.setAttribute("role", "dialog");
     o.setAttribute("aria-label", b.title);
-    o.innerHTML = '<div class="rlBar"><button type="button" class="rlX" data-rh="close" aria-label="Close">✕</button><div class="rlBarT">THE GREAT BOOKS HOUR · <span class="rhMins">' + minutesToday() + ' of 60 min today</span>' + (streak() ? ' · <span class="rhStreak">' + streak() + (streak() === 1 ? " day" : " days") + " in a row</span>" : "") + '</div><div class="rlProg"><span></span></div></div><div class="rlScroll"><article class="rlPage"><p class="rlShelf">Loading ' + E(b.title) + "…</p></article></div>";
+    o.innerHTML = '<div class="rlBar"><button type="button" class="rlX" data-rh="close" aria-label="Close">✕</button><div class="rlBarT">THE GREAT BOOKS HOUR · <span class="rhMins">' + minsLabel() + '</span>' + (streak() ? ' · <span class="rhStreak">' + streak() + (streak() === 1 ? " day" : " days") + " in a row</span>" : "") + '</div><div class="rlProg"><span></span></div></div><div class="rlScroll"><article class="rlPage"><p class="rlShelf">Loading ' + E(b.title) + "…</p></article></div>";
     document.body.appendChild(o);
     document.documentElement.classList.add("rlOpen");
     const page = o.querySelector(".rlPage"),
@@ -230,20 +291,33 @@
     const bridge = !fullOf(b.id) && b.route && b.route.bridge && b.route.bridge[n];
     const tail = !fullOf(b.id) && b.route && b.route.tail && b.route.tail[n];
     const words = s.words,
-      mins = Math.round(words / 190);
+      mins = Math.round(words / wpm());
+    // v18.14: tonight's part of the sitting
+    const pc = pace(today(), true),
+      budget = (pc.dose || 15) * wpm() + (extra[key] || 0) * (pc.dose || 15) * wpm(),
+      start = h.done[key] ? 0 : Math.min(+h.at[key] || 0, s.body.length - 1),
+      end = h.done[key] ? s.body.length : partEnd(s.body, start, budget),
+      wAt = (i) => s.body.slice(0, i).reduce((a, x) => a + (x.startsWith("## ") ? 0 : x.split(/\s+/).length), 0),
+      partMin = Math.round((wAt(end) - wAt(start)) / wpm()),
+      leftMin = Math.round((words - wAt(start)) / wpm());
+    const tagged = (from, to) => s.body.slice(from, to).map((x, j) => para(x).replace(/^<(\w+)/, '<$1 data-i="' + (from + j) + '"')).join("");
     page.innerHTML =
       '<p class="rlShelf">' + E(b.title.toUpperCase()) + " · " + E(data.author) + " · " + (of > 1 ? "sitting " + k + " of " + of + " · " : "") + "about " + mins + " min" + (b.route && !fullOf(b.id) ? " · essential route" : "") + "</p>" +
       "<h2>" + E(b.title) + "</h2>" +
       '<p class="rlKicker">' + E(data.author) + " (" + E(b.years) + "), " + (/^a new translation/.test(useFresh ? fr.translator : data.translator) ? "in " + E(useFresh ? fr.translator : data.translator) : "translated by " + E(data.translator)) + ". Today: " + (s.from ? E(s.from.replace(/ · /g, ", ")) + (s.to && s.to !== s.from ? " → " + E(s.to.replace(/ · /g, ", ")) : "") : "the whole book") + "</p>" +
+      '<p class="rhPace">' + (h.done[key] ? "" : pc.dose ? "Tonight: about " + partMin + " min" + (end < s.body.length ? " of the " + leftMin + " left in this sitting" : start > 0 ? ", to the end of the sitting" : "") + " · " + E(pc.why) + "." : "A rest night (" + E(pc.why) + "). Nothing is owed; sleep is the best revision now. If you want to read, a short part is marked.") + "</p>" +
       warmHTML(key, b, n) +
       (first
         ? '<section class="rhGuide"><h3 class="rhGuideH">Before you begin</h3>' + guideHTML(b) + (b.threads ? "<h3>In conversation with the others</h3><p>" + E(b.threads) + "</p>" : "") + (b.essay ? '<p><button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay) + '">Read the companion essay first (10 min)</button>' + (b.essay2 ? ' <button type="button" class="rlBtn ghost" data-rh="essay" data-e="' + E(b.essay2) + '">…and the second one</button>' : "") + "</p>" : "") + "</section>"
         : '<p class="rhAgain"><button type="button" class="rlBtn ghost" data-rh="guide">The guide to this book (who is who, what to watch for)</button></p><div class="rhGuide" hidden>' + guideHTML(b) + "</div>") +
       (bridge ? '<aside class="rhBridge" role="note"><b>What happened in the chapters between</b><p>' + E(bridge) + '</p><button type="button" class="rlBtn ghost" data-rh="full">Read every chapter of this book instead</button></aside>' : "") +
       (frS ? '<p class="rhTrNote">' + (useFresh ? "New translation, made for this app from the " + E(fr.language || "Russian") + ' original. <a href="#" data-rh="oldtr">Show the old translation (' + E(data.translator) + ")</a>" : "Old translation (" + E(data.translator) + '). <a href="#" data-rh="oldtr">Back to the new translation</a>') + "</p>" : /^a new translation/.test(data.translator || "") ? '<p class="rhTrNote">New translation, made for this app from the Russian original.</p>' : "") +
+      (start > 0 ? '<p class="rhAgain"><button type="button" class="rlBtn ghost" data-rh="prevshow">Show the part you have already read</button></p><div class="rhPrev" hidden>' + tagged(0, start) + '</div><p class="rhResume">You stopped here last time.</p>' : "") +
       '<div class="rhText' + (data.verse ? " rhVerse" : "") + '">' +
-      s.body.map(para).join("") +
+      tagged(start, end) +
+      (end < s.body.length ? '<div class="rhStop" role="note"><b>🌙 Tonight\'s part ends here</b><p>That is tonight\'s ' + (pc.dose || 15) + ' minutes. The sitting goes on tomorrow from the next line; nothing is skipped.</p><p><button type="button" class="rlBtn" data-rh="partdone">✓ Done for tonight</button> <button type="button" class="rlBtn ghost" data-rh="keepgo">Keep reading tonight</button></p></div><div class="rhRest" hidden>' + tagged(end, s.body.length) + "</div>" : "") +
       "</div>" +
+      (end < s.body.length ? '<div class="rhAfter" hidden>' : "<div>") +
       (tail ? '<aside class="rhBridge" role="note"><b>The rest of the book, in brief</b><p>' + E(tail) + "</p></aside>" : "") +
       (b.apply ? '<aside class="rhApply" role="note"><b>Use it today</b><p>' + E(b.apply[(k - 1) % b.apply.length]) + "</p></aside>" : "") +
       '<section class="rlQs rhEnd"><h3>After today\'s sitting</h3><p class="rlQsLead">Three lines, written from memory. Writing it is what makes it yours.</p>' +
@@ -252,13 +326,15 @@
       "<label>" + E(b.prompts[(n - 1) % b.prompts.length]) + '<textarea data-rh-note="q" rows="3">' + E(note.q || "") + "</textarea></label>" +
       "</section>" +
       (k === of ? reckHTML(b) : "") +
+      "</div>" +
       '<div class="rlEnd">' +
-      (h.done[key] ? '<p class="rlDone">✓ Read on ' + E(h.done[key]) + "</p>" : '<button type="button" class="rlBtn" data-rh="finish">✓ I read today\'s sitting</button>') +
-      (n < of || PLAN().indexOf(key) < PLAN().length - 1 ? '<button type="button" class="rlBtn ghost" data-rh="next">Next sitting →</button>' : "") +
+      (h.done[key] ? '<p class="rlDone">✓ Read on ' + E(h.done[key]) + "</p>" : end < s.body.length ? "" : '<button type="button" class="rlBtn" data-rh="finish">✓ I read today\'s sitting</button>') +
+      ((n < of || PLAN().indexOf(key) < PLAN().length - 1) && (h.done[key] || end >= s.body.length) ? '<button type="button" class="rlBtn ghost" data-rh="next">Next sitting →</button>' : "") +
       '<button type="button" class="rlBtn ghost" data-rh="shelf">All books</button></div></article>';
     // resume where you stopped
     const pos = getPos()[key];
     if (pos) requestAnimationFrame(() => (sc.scrollTop = pos * (sc.scrollHeight - sc.clientHeight)));
+    else if (start > 0) requestAnimationFrame(() => safe(() => o.querySelector(".rhResume").scrollIntoView({ block: "start" })));
     let st = 0;
     sc.addEventListener(
       "scroll",
@@ -334,8 +410,47 @@
         while (m > 1 && !read.includes(m - 1)) m--;
         open(b.id + ":" + m);
       }
+      else if (a === "prevshow") {
+        o.querySelector(".rhPrev").hidden = false;
+        x.remove();
+      } else if (a === "keepgo") {
+        o.querySelector(".rhRest").hidden = false;
+        o.querySelectorAll(".rhAfter").forEach((z) => (z.hidden = false));
+        const fin = o.querySelector(".rlEnd");
+        if (fin && !fin.querySelector('[data-rh="finish"]') && !h.done[key]) fin.insertAdjacentHTML("afterbegin", '<button type="button" class="rlBtn" data-rh="finish">✓ I read today\'s sitting</button>');
+        x.closest(".rhStop").innerHTML = '<b>🌙 Reading on</b><p>Read as far as you like. When you stop, the place is kept; tomorrow starts where you stopped tonight.</p><p><button type="button" class="rlBtn ghost" data-rh="stophere">Stop here for tonight</button></p>';
+      } else if (a === "partdone" || a === "stophere") {
+        const hh = H(), t = today();
+        let to = end;
+        if (a === "stophere") {
+          // the first paragraph that is still below the top of the screen
+          const top = sc.getBoundingClientRect().top + 40;
+          const ps = [...o.querySelectorAll(".rhText [data-i]")].filter((el) => el.getBoundingClientRect().top > top);
+          to = ps.length ? +ps[0].dataset.i : s.body.length;
+        }
+        if (to >= s.body.length) {
+          hh.done[key] = t;
+        } else {
+          const read = wAt(to) - wAt(start);
+          hh.at[key] = to;
+          hh.atw[key] = wAt(to);
+          // calibrate the reading speed from tonight (only on an evening of at least 5 minutes)
+          const m = hh.min[t] || 0;
+          if (m >= 5 && read > 300) hh.wpm = Math.round(0.7 * wpm() + 0.3 * Math.max(120, Math.min(320, read / m)));
+        }
+        hh.night[t] = { key, from: start, to: Math.min(to, s.body.length), d: t };
+        persist();
+        setPos(key, 0);
+        extra[key] = 0;
+        if (hh.done[key]) return open(key);
+        const nx = (s.body[to] || "").replace(/^## /, "").split(/\s+/).slice(0, 8).join(" ");
+        const stop = o.querySelector(".rhStop");
+        if (stop) stop.innerHTML = '<b>✓ Tonight\'s part is read</b><p>Tomorrow you start at: “' + E(nx) + ' …”. ' + E(projLine()) + '</p><p><button type="button" class="rlBtn" data-rh="close">Close</button></p>';
+        safe(() => window.RN_LIBRARY_UI.refresh());
+      }
       else if (a === "finish") {
         H().done[key] = today();
+        H().night[today()] = { key, d: today(), end: true };
         persist();
         setPos(key, 0);
         open(key);
@@ -374,7 +489,7 @@
           return '<div class="rhShelfRow"><button type="button" class="rlItem' + (d === n ? " done" : "") + '" data-rh-open="' + E(nextK) + '"><span>' + E(b.title) + " <small>· " + E(b.years) + (NEWTR[b.id] ? " · " + E(NEWTR[b.id]) : "") + "</small></span><small>" + (d === n ? "✓ finished" : d + " of " + n + (n === 1 ? " sitting" : " sittings") + (t.key.startsWith(b.id + ":") ? " · today" : "")) + "</small></button>" + mode + "</div>";
         })
         .join("") +
-      '<h3>Your reading life</h3><p class="rhStats">' + statsLine() + '</p><p class="rlKicker">The rule: an hour when you can, fifteen minutes when you can\'t, and never miss two days in a row.</p><button type="button" class="rlItem" data-rh="commonplace"><span>Your commonplace book</span><small>all you kept</small></button>' +
+      '<h3>Your reading life</h3><p class="rhStats">' + statsLine() + '</p><p class="rlKicker">Your pace follows your exams: the full hour when no exam is near, 30 minutes a night in exam season, 15 in exam week, and none the night before or on the day. Long sittings are split into nightly parts; nothing is skipped. ' + E(projLine()) + '</p><button type="button" class="rlItem" data-rh="commonplace"><span>Your commonplace book</span><small>all you kept</small></button>' +
       '<h3>Companion essays</h3><button type="button" class="rlItem" data-rh="essays"><span>Short essays on Nietzsche, Dostoevsky, Tolstoy, Camus, Kafka and more</span><small>10 min each</small></button>' +
       "</article></div>";
     document.body.appendChild(o);
@@ -398,6 +513,12 @@
     document.addEventListener("keydown", onKey);
   }
 
+  function projLine() {
+    const d = projection();
+    if (!d) return "Every book on the route is read.";
+    const f = safe(() => new Date(d + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }), d);
+    return "At this pace you finish the whole route on " + f + ".";
+  }
   function statsLine() {
     const h = H(),
       mins = Object.values(h.min).reduce((a, x) => a + (+x || 0), 0),
@@ -436,5 +557,5 @@
     document.addEventListener("keydown", onKey);
   }
 
-  window.RN_HOUR = { todays, open, shelf, close, label, minutesToday, plan: PLAN, count: () => PLAN().length, streak, dueLines, commonplace };
+  window.RN_HOUR = { todays, open, shelf, close, label, minutesToday, plan: PLAN, count: () => PLAN().length, streak, dueLines, commonplace, pace, tonight, projection, projLine };
 })();
