@@ -6,8 +6,15 @@
  * A link with #sync=CODE carries it to another device.
  *
  * Saving: the device copy (localStorage) updates on every action, exactly as before. Cloud writes
- * are batched to at most one per MIN_GAP while studying, plus an immediate write when the app is
+ * are batched to at most one per MIN_GAP (30 min) while studying, plus an immediate write when the app is
  * hidden/closed or the cloud button is tapped.
+ *
+ * The page never reloads by itself while open (v18.14.1). With two copies open (two devices, or a tab
+ * and the home-screen app) every cloud write of one made the other load the cloud copy and reload, which
+ * saved and made the first reload: the page restarted every few seconds. Now a newer cloud copy found
+ * while studying is held: this device keeps its copy and stops writing to the cloud, and the cloud
+ * button says so; tapping it loads the newer copy (this device's copy is kept as a local backup), or
+ * saves this device's copy if it now has more learning. On the next app start the rules below apply.
  *
  * Which copy wins is decided by CLOUD VERSION and LEARNING, never by device clocks. Every page load
  * re-saves with a fresh timestamp, so timestamps alone let an idle device overwrite newer progress,
@@ -31,7 +38,10 @@
     GAP_KEY = "intellectuality_sync_gap_ms", // test hook; bounded below
     A32 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567",
     EPOCH = "1970-01-01T00:00:00.000Z";
-  var MIN_GAP = 120000;
+  // v18.14.1 (owner, 18 Oct 2026, screen recording: the page restarted by itself every ~10 s): a cloud write while
+  // studying at most every 30 minutes (was 2), plus at once when the app is hidden or closed, or the cloud button is
+  // tapped. The device copy still saves on every action.
+  var MIN_GAP = 1800000;
   try {
     var g = Number(localStorage.getItem(GAP_KEY));
     if (g >= 1000 && g <= 600000) MIN_GAP = g;
@@ -113,6 +123,7 @@
   var code = clean(ls(CODE_KEY)),
     linkedFromUrl = false,
     restoring = false,
+    held = null, // a newer cloud copy found while the app is open: {state, version}, loaded only on a tap
     cloudOff = false; // the host has no cloud store connected: device-only saving, no retries
   function adoptCode(c) {
     // Linking this device to an existing code: that code's cloud copy loads on the next read.
@@ -197,6 +208,22 @@
     label("☁ RESTORED", true);
     location.reload();
   }
+  var HELD_LABEL = "☁ NEWER PROGRESS IN CLOUD · TAP TO LOAD";
+  function hold(state, version) {
+    held = { state: state, version: Number(version) || 0 };
+    dirty = false;
+    label(HELD_LABEL);
+  }
+  // The learner tapped the cloud button while a newer cloud copy is held: load it if it still wins
+  // (flush() saves this device's copy instead when it has since learned more).
+  function release() {
+    if (decide(held.state) === "cloud") {
+      var h = held;
+      held = null;
+      return restore(h.state, h.version, "newer-cloud-copy");
+    }
+    flush("manual");
+  }
   function localAhead() {
     var st = localState();
     return !!(st && st._clientUpdatedAt && st._clientUpdatedAt !== meta.pushedAt);
@@ -215,6 +242,18 @@
       timer = null;
     }
     if (reason !== "timer" && reason !== "conflict" && localAhead()) dirty = true; // e.g. hidden before the app's own save debounce
+    if (held) {
+      // the held copy still wins: keep this device's copy here, write nothing to the cloud
+      if (decide(held.state) === "cloud") {
+        label(HELD_LABEL);
+        return Promise.resolve(false);
+      }
+      // this device has since learned more than the held copy: its copy goes to the cloud as usual
+      meta.version = held.version;
+      held = null;
+      dirty = true;
+      force = true;
+    }
     if (cloudOff || restoring || !dirty || inflight || ls(ADOPT_KEY) === "1") return Promise.resolve(false);
     var state = localState();
     if (!state) return Promise.resolve(false);
@@ -257,8 +296,8 @@
     }
     if (r.status === 409 && j && j.state) {
       if (decide(j.state) === "cloud") {
-        restore(j.state, j.stateVersion, "newer-cloud-copy");
-        return true;
+        hold(j.state, j.stateVersion);
+        return false;
       }
       if (!wasForce) {
         dirty = true;
@@ -329,7 +368,8 @@
     // POST from the app: queue it and answer at once with the agreed version. The app labels the button
     // after reading this answer, so the honest label is applied a moment later.
     function relabel() {
-      if (cloudOff) label("☁ SAVED ON THIS DEVICE");
+      if (held) label(HELD_LABEL);
+      else if (cloudOff) label("☁ SAVED ON THIS DEVICE");
       else if (dirty && !inflight && !restoring) label("☁ SAVED ON DEVICE · CLOUD ≤" + Math.max(1, Math.round(MIN_GAP / 60000)) + " MIN");
     }
     setTimeout(relabel, 60);
@@ -364,7 +404,8 @@
       var t = e.target && e.target.closest ? e.target.closest("#cloudBtn") : null;
       if (t)
         setTimeout(function () {
-          flush("manual");
+          if (held) release();
+          else flush("manual");
         }, 60);
     },
     true
@@ -406,7 +447,7 @@
       return flush("manual");
     },
     status: function () {
-      return { text: status.text, pending: dirty, inflight: inflight, stateVersion: meta.version, lastSync: meta.lastSync, gapMs: MIN_GAP, cloud: cloudOff ? "not-configured" : "on" };
+      return { text: status.text, pending: dirty, inflight: inflight, stateVersion: meta.version, lastSync: meta.lastSync, gapMs: MIN_GAP, cloud: cloudOff ? "not-configured" : "on", held: held ? held.version : null };
     },
     backup: function () {
       return jget(BACKUP_KEY);

@@ -86,14 +86,37 @@ const T = "2026-09-22T10:00:00+03:00";
   check("H10", "A device that studied keeps its progress over a housekeeping-only cloud change", vF.state.__hostTestMarker === "B-learned-2" && vF.state.xp === vB.state.xp + 20, { v: vF.stateVersion, xp: vF.state.xp });
 
   // Both devices studied while apart: more learning wins; the other copy is kept as a local backup.
-  await A.page.evaluate(() => INTELLECTUALITY_SYNC.status());
+  // v18.14.1: found while the app is open, the newer cloud copy is held (no reload by itself); a tap on the cloud
+  // button loads it.
+  let navs = { A: 0, B: 0 };
+  A.page.on("framenavigated", (f) => { if (f === A.page.mainFrame()) navs.A++; });
+  B.page.on("framenavigated", (f) => { if (f === B.page.mainFrame()) navs.B++; });
+  await learn(A.page, "A-small", 5); // A's base version is stale → 409 → both learned → B (more) wins
+  await A.page.waitForTimeout(1500);
+  const aHeld = await A.page.evaluate(() => ({ marker: S.__hostTestMarker, held: INTELLECTUALITY_SYNC.status().held, btn: (document.getElementById("cloudBtn") || {}).textContent }));
+  const vHeld = (await api(code)).j;
+  check("H14", "Both studied, found while open: no reload by itself; the cloud keeps the copy with more learning and the button offers it", navs.A === 0 && aHeld.marker === "A-small" && aHeld.held && /TAP TO LOAD/.test(aHeld.btn) && vHeld.state.__hostTestMarker === "B-learned-2", { navs, aHeld, cloud: vHeld.state.__hostTestMarker });
   const navA2 = A.page.waitForNavigation({ timeout: 8000 }).catch(() => null);
-  await learn(A.page, "A-small", 5); // A's base version is stale → 409 → both learned → B (more) wins on A
+  await A.page.evaluate(() => document.getElementById("cloudBtn").click());
   await navA2;
   await A.page.waitForTimeout(1500);
   const aAfter = await A.page.evaluate(() => ({ marker: S.__hostTestMarker, backup: (INTELLECTUALITY_SYNC.backup() || {}).reason || null }));
   const vG = (await api(code)).j;
-  check("H14", "Both studied: the copy with more learning wins, the other is kept as a backup", aAfter.marker === "B-learned-2" && vG.state.__hostTestMarker === "B-learned-2" && aAfter.backup === "newer-cloud-copy", { aAfter, cloud: vG.state.__hostTestMarker });
+  check("H14b", "A tap on the cloud button loads the newer copy; this device's copy is kept as a backup", aAfter.marker === "B-learned-2" && vG.state.__hostTestMarker === "B-learned-2" && aAfter.backup === "newer-cloud-copy", { aAfter, cloud: vG.state.__hostTestMarker });
+
+  // The owner's screen recording (18 Oct): two copies open, each cloud write made the other reload, every few
+  // seconds. Both open and saving in turn: neither page reloads by itself.
+  navs = { A: 0, B: 0 };
+  const house = (pg, mk) => pg.evaluate((m) => { S.__housekeeping = m; save(); return INTELLECTUALITY_SYNC.flush(); }, mk);
+  for (let i = 0; i < 3; i++) {
+    await house(B.page, "B" + i);
+    await B.page.waitForTimeout(400);
+    await house(A.page, "A" + i);
+    await A.page.waitForTimeout(400);
+  }
+  await A.page.waitForTimeout(1500);
+  const ping = await Promise.all([A, B].map((d) => d.page.evaluate(() => ({ held: INTELLECTUALITY_SYNC.status().held, marker: S.__hostTestMarker }))));
+  check("H15", "Two copies open and saving in turn: neither page reloads by itself, and no learning is lost", navs.A === 0 && navs.B === 0 && ping.every((x) => x.marker === "B-learned-2"), { navs, ping });
 
   // ── Sync page
   const P = await open({ browser, time: T, settle: 600, path: "login?next=/", localStorage: { intellectuality_sync_code_v1: code } });
