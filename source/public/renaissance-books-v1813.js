@@ -105,14 +105,14 @@
     meditations: "An emperor's private notes to himself, putting Epictetus into practice. Nietzsche admired the discipline and rejected the resignation; Camus's 'one must imagine Sisyphus happy' is a modern Stoic sentence.",
     ladydog: "Chekhov shows a cynical man changed by love without any preaching at all; compare Tolstoy's preaching in Ivan Ilyich and Anna Karenina, and decide which convinces you more.",
     zarathustra: "Nietzsche's answer to Socrates, to Christianity and to the Stoics: God is dead, so create your own values and say yes to life, even to its eternal recurrence. Dostoevsky's Ivan Karamazov argues the same premise to the opposite conclusion.",
-    genealogy: "The sharpest attack on the morality the Russian novels defend. Read it, then read Dostoevsky's Grand Inquisitor and Zossima, and judge between them. The Underground Man's spite is Nietzsche's ressentiment.",
+    genealogy: "The sharpest attack on the morality the Russian novels defend. Read it, then read Dostoevsky's Grand Inquisitor and Zosima, and judge between them. The Underground Man's spite is Nietzsche's ressentiment.",
     bartleby: "'I would prefer not to': the Underground Man's refusal without the talk. Camus's Stranger is Bartleby's grandson.",
     symposium: "Love as a ladder from one beautiful body to beauty itself. Compare Anna's love, which destroys her, and Levin's, which makes him a father and a farmer.",
     hamlet: "The thinking man who cannot act: Shakespeare's version of the Underground Man, two hundred and sixty years earlier. 'The readiness is all' is Hamlet's Stoic ending.",
     camus: "The twentieth century's answer to the whole shelf without God: the absurd, revolt, and decency anyway. He learned it from Dostoevsky, whose Possessed he adapted for the stage, and from Nietzsche.",
     bge: "Nietzsche's map of 'the philosophy of the future'. The Genealogy is its working-out; Crime and Punishment is the novel that tests what happens when a man believes he is beyond good and evil.",
     crime: "Raskolnikov tests the Underground Man's freedom and Nietzsche's 'extraordinary man' with an axe, and Sonya answers both. Ivan Karamazov's 'everything is permitted' is the same idea grown up.",
-    karamazov: "Dostoevsky's last word, with every voice on the shelf in it: the Grand Inquisitor against freedom, Ivan's rebellion against God, Zossima's active love, Alyosha's childhood memory that can save a life.",
+    karamazov: "Dostoevsky's last word, with every voice on the shelf in it: the Grand Inquisitor against freedom, Ivan's rebellion against God, Zosima's active love, Alyosha's childhood memory that can save a life.",
     anna: "Tolstoy sets two lives side by side: Anna, who lives for passion, and Levin, who searches for the meaning of life and finds it in a peasant's sentence. It is Ivan Ilyich's question asked by the living.",
   };
   // one line worth knowing by heart (in the app's own translations where the book is ours)
