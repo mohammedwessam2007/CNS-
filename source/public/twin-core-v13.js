@@ -29,7 +29,8 @@ function ensure(){
  persist();return S.v13.twin
 }
 function twin(){return S.v13?.twin||ensure()}
-function persist(){if(!S.v13?.twin)return;S.v13.twin.updatedAt=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(S.v13.twin))}catch(_){}}
+function persist(){if(!S.v13?.twin)return;S.v13.twin.updatedAt=new Date().toISOString();if(window.IX_LS_TIGHT)return; // storage full: the twin lives in the progress itself; skip the duplicate copy
+try{localStorage.setItem(KEY,JSON.stringify(S.v13.twin))}catch(_){}}
 function bucket(){const h=new Date().getHours();return h<6?'night':h<12?'morning':h<18?'afternoon':h<22?'evening':'night'}
 function session(force=false){
  const t=twin(),last=t.sessions.at(-1),n=Date.now(),seen=last?Date.parse(last.lastSeen||last.startedAt):0;

@@ -62,7 +62,24 @@ function cloudMeta(){try{return JSON.parse(localStorage.getItem(CLOUD_META_KEY)|
 function setCloudMeta(x){localStorage.setItem(CLOUD_META_KEY,JSON.stringify(x||{}))}
 function cloudButton(label,good=false){const b=$('#cloudBtn');if(!b)return;b.textContent=label;b.style.borderColor=good?'#365d45':'';b.style.color=good?'#a8f1bc':''}
 function cloudSchedule(){if(!cloudUser)return;clearTimeout(cloudTimer);cloudTimer=setTimeout(()=>cloudPush(false),900)}
-function save(){S._clientUpdatedAt=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(S));cloudSchedule()}
+// v18.13 (owner's progress file, 12 Oct: "The quota has been exceeded"): when the phone's storage is full the
+// progress save used to throw, so the tap did nothing and nothing was kept. Now spare copies are cleared first
+// (picture cache, the learning-twin duplicate, old backups), then old activity logs are shortened; the progress
+// itself is never dropped. If it still cannot be kept, the app says so and offers the progress download.
+const LS_SPARE=['intellectuality_v14_vcache_v1','intellectuality_learning_twin_v1','intellectuality_pre_v12_backup','intellectuality_state_backup_before_link'];
+function lsFull(e){return !!e&&(e.name==='QuotaExceededError'||e.name==='NS_ERROR_DOM_QUOTA_REACHED'||e.code===22||e.code===1014||/quota/i.test(String(e.message||e)))}
+function lsTry(k,v){try{localStorage.setItem(k,v);return true}catch(e){if(!lsFull(e))lsNote('save error: '+String(e&&e.message||e).slice(0,120));return false}}
+function lsNote(what){try{const v=S.storageLog=Array.isArray(S.storageLog)?S.storageLog:[];v.push({at:new Date().toISOString(),what});if(v.length>12)v.splice(0,v.length-12)}catch(_){}}
+function lsTrimLogs(){let n=0;const cut=(o,f,m)=>{if(o&&Array.isArray(o[f])&&o[f].length>m){n+=o[f].length-m;o[f]=o[f].slice(-m)}};cut(S.v13,'history',150);cut(S.v12,'evidence',250);cut(S.v12,'outcomes',150);cut(S,'mockHistory',12);if(S.v13&&S.v13.twin){cut(S.v13.twin,'sessions',60);cut(S.v13.twin,'evidence',250)}return n}
+function lsPutState(){
+ const k=KEY;let j=JSON.stringify(S);if(lsTry(k,j)){if(window.IX_LS_FULL){window.IX_LS_FULL=false;storageBanner(false)}return true}
+ window.IX_LS_TIGHT=true;
+ const spare=LS_SPARE.concat(Object.keys(localStorage).filter(x=>/_corrupt_\d+$/.test(x)));
+ for(const x of spare){if(x===k)continue;let had=null;try{had=localStorage.getItem(x)}catch(_){}if(had===null)continue;try{localStorage.removeItem(x)}catch(_){}lsNote('storage full: cleared '+x);j=JSON.stringify(S);if(lsTry(k,j)){storageBanner(false);return true}}
+ const cut=lsTrimLogs();if(cut){lsNote('storage full: shortened old activity logs by '+cut+' entries');j=JSON.stringify(S);if(lsTry(k,j)){storageBanner(false);return true}}
+ window.IX_LS_FULL=true;storageBanner(true);return false}
+function storageBanner(on){try{let b=document.getElementById('ixStorageFull');if(!on){if(b)b.remove();return}if(b)return;b=document.createElement('div');b.id='ixStorageFull';b.setAttribute('role','alert');b.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#5a1e1e;color:#fff;border:1px solid #c66;border-radius:10px;padding:10px 12px;font:14px/1.35 system-ui,sans-serif';b.innerHTML='<b>Phone storage is full — this step could not be saved on the phone.</b><br>Your progress is still open on this screen. Open <b>Share my progress</b> and download it now, then free some space (Settings → Safari → Website Data) or turn on cloud sync.';document.body.appendChild(b)}catch(_){}}
+function save(){S._clientUpdatedAt=new Date().toISOString();lsPutState();cloudSchedule()}
 async function cloudPush(force=false){
   if(!cloudUser||cloudBusy)return;cloudBusy=true;cloudButton('☁ SAVING…');
   try{

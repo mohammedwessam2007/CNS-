@@ -892,6 +892,7 @@
         .forEach((x) => delete c[x]);
     clearTimeout(lsTimer);
     lsTimer = setTimeout(() => {
+      if (window.IX_LS_TIGHT) return; // phone storage full: the picture cache yields to the progress save
       try {
         localStorage.setItem(LS_KEY, JSON.stringify(c));
       } catch (_) {}

@@ -61,6 +61,11 @@
       L.push("Step buttons that needed the backup (last " + taps.length + "):");
       for (const t of taps.slice(-8)) L.push("- " + t.at.slice(5, 16).replace("T", " ") + " " + t.app + " " + t.act + " " + t.key + " via " + t.via + (t.err ? " · error: " + t.err : "") + (t.fixed ? " · moved on" : ""));
     }
+    const sl = Array.isArray(St.storageLog) ? St.storageLog : [];
+    if (sl.length) {
+      L.push("Phone storage events (last " + Math.min(6, sl.length) + "):");
+      for (const t of sl.slice(-6)) L.push("- " + String(t.at).slice(5, 16).replace("T", " ") + " " + t.what);
+    }
     if (wrongNow.length) {
       L.push("");
       L.push("Questions I got wrong (they come back for review):");
