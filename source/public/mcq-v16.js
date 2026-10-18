@@ -113,8 +113,10 @@
     }
     return OWN.get(q.id);
   }
-  let TM = null;
+  let TM = null,
+    HOLD = null; // v18.14.1: held for one read-only pass (minutesLeft), which asked for it once per question
   function taught() {
+    if (HOLD) return HOLD;
     const cal = S.v14?.calendar || {},
       k = Object.values(S.segments || {}).filter(Boolean).length + ":" + S.day + ":" + (cal.spreads || []).length + ":" + (cal.policy || "");
     if (TM && TM.k === k) return TM;
@@ -1066,6 +1068,15 @@
     };
   }
   function minutesLeft(d) {
+    const held = HOLD;
+    HOLD = taught();
+    try {
+      return minutesLeftNow(d);
+    } finally {
+      HOLD = held;
+    }
+  }
+  function minutesLeftNow(d) {
     let m = 0;
     const pace = safe(() => window.INTELLECTUALITY_PACE?.(), 1) || 1;
     if (d.mode === "TEACHING")

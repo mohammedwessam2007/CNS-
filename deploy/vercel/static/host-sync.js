@@ -335,9 +335,14 @@
     setTimeout(relabel, 60);
     setTimeout(relabel, 400);
     if (cloudOff) return Promise.resolve(jsonResponse({ error: "cloud_not_configured" }, 503));
-    try {
-      if (JSON.parse(init.body || "{}").force) force = true;
-    } catch (_) {}
+    // the app's body is JSON.stringify({ state, baseVersion, clientUpdatedAt, force }): "force" is its last key, so it is
+    // read from the end instead of parsing ~740 KB of progress for one flag (v18.14.1, lag on a slow phone)
+    var body = typeof init.body === "string" ? init.body : "";
+    if (body.endsWith('"force":true}')) force = true;
+    else if (body && !body.endsWith('"force":false}'))
+      try {
+        if (JSON.parse(body).force) force = true;
+      } catch (_) {}
     dirty = true;
     schedule();
     return Promise.resolve(jsonResponse({ ok: true, queued: true, stateVersion: meta.version }, 200));

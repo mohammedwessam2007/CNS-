@@ -1,9 +1,11 @@
 # Known Limitations (v18.14 · MCQ exam + Renaissance + the Great Books Hour)
 
-## v18.14.1 Menu taps press the button you touch
+## v18.14.1 Menu taps press the button you touch, and taps are faster
 
 - The owner (18 Oct 2026): "the menu is clicking on its own". On a phone the menu's pinned footer (Great Books, Professor vision, cloud, Study mode) covered "Resume learning" and "Share my progress", so a tap on one pressed another. The footer now scrolls with the rest of the menu, and on a wide screen the menu leaves room for the game bar. Test: `tests/menu_tap_test.js` (phone, iPad, desktop; it fails on the old layout).
+- Lag (owner: "it's very laggy", same day). Measured with the owner's progress at 6× slower CPU (a slow phone): one tap on a lesson button saved the whole progress (738 KB) three times, about 160 ms each, and redrawing worked out "minutes left" by recounting every lesson step for every one of ~1,300 questions and building a new date formatter each time. On top of that the page glided (smooth scroll) to the next section while it was still busy, so a second tap could land on whatever slid under the finger. Now: the saves of one tap become one save, made right after the screen changes (`save-batch-v18.js`; made at once if anything reads the progress, the page is hidden or closed, or the save is not from a tap); "minutes left" counts once per pass and the date formatter is made once (same results, checked on every course day: identical before and after); on a touch screen the page jumps instead of gliding; the cloud adapter reads its one flag from the end of the request instead of re-reading 738 KB. Result at 6× slower CPU: one save per tap instead of three, the longest freeze per tap about 150 ms instead of 300–440 ms, about half the total work per tap. Test: `tests/save_batch_test.js`.
 - Checked in an automated Chromium browser, not on the owner's phone.
+- Not live yet when this was written: Vercel's free plan refused the deploy of these commits ("Deployment rate limited — retry in 24 hours", 18 Oct 2026 20:31 UTC). The live site stays on v18.14 until a deploy goes through.
 
 ## v18.14 The reading follows your exam calendar
 

@@ -146,10 +146,12 @@
   /* ───────────────────────── calendar truth ───────────────────────── */
   const MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
   const WD = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  let YMDF = null; // v18.14.1: one formatter, made once (a new one per call cost ~100 ms per tap on a slow phone)
   function cairoYMD(d = new Date()) {
     try {
       const p = {};
-      for (const x of new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(d)) p[x.type] = x.value;
+      YMDF = YMDF || new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" });
+      for (const x of YMDF.formatToParts(d)) p[x.type] = x.value;
       if (p.year && p.month && p.day) return p.year + "-" + p.month + "-" + p.day;
     } catch (_) {}
     const z = (n) => String(n).padStart(2, "0");
