@@ -96,7 +96,7 @@
     apology: "Socrates is the first answer to the Underground Man: a man who knows he knows nothing, and lives calmly and dies calmly because of it. Nietzsche will attack him; the Stoics will follow him.",
     enchiridion: "The Stoic toolkit: what is up to you and what is not. Marcus Aurelius read Epictetus every day; Ivan Ilyich lived as if everything were up to him until the one thing that was not.",
     shortness: "Seneca's question, 'how much of your life was really yours?', is the question Ivan Ilyich asks on his deathbed, too late. Read it again after Tolstoy.",
-    ivan: "Tolstoy's answer to Seneca and to the Phaedo: death shows what a life was worth. Gerasim is a cousin of Sonia in Crime and Punishment and of Alyosha Karamazov; Levin in Anna Karenina asks Ivan's question while he is still healthy.",
+    ivan: "Tolstoy's answer to Seneca and to the Phaedo: death shows what a life was worth. Gerasim is a cousin of Sonya in Crime and Punishment and of Alyosha Karamazov; Levin in Anna Karenina asks Ivan's question while he is still healthy.",
     phaedo: "Socrates dies like the opposite of Ivan Ilyich: prepared, curious, surrounded by friends, joking about a debt of a cock to Asclepius. Philosophy, he says, is practice for dying.",
     cave: "The image behind the whole shelf: we live among shadows we take for reality. Ivan Ilyich's drawing room is a cave; Zarathustra comes down from his mountain like the freed prisoner coming back.",
     ridiculous: "Dostoevsky's own answer to the Underground Man: a man about to shoot himself is saved by a little girl he refused to help, and by a dream of paradise. 'Love others as yourself' is the whole of it.",
@@ -111,7 +111,7 @@
     hamlet: "The thinking man who cannot act: Shakespeare's version of the Underground Man, two hundred and sixty years earlier. 'The readiness is all' is Hamlet's Stoic ending.",
     camus: "The twentieth century's answer to the whole shelf without God: the absurd, revolt, and decency anyway. He learned it from Dostoevsky, whose Possessed he adapted for the stage, and from Nietzsche.",
     bge: "Nietzsche's map of 'the philosophy of the future'. The Genealogy is its working-out; Crime and Punishment is the novel that tests what happens when a man believes he is beyond good and evil.",
-    crime: "Raskolnikov tests the Underground Man's freedom and Nietzsche's 'extraordinary man' with an axe, and Sonia answers both. Ivan Karamazov's 'everything is permitted' is the same idea grown up.",
+    crime: "Raskolnikov tests the Underground Man's freedom and Nietzsche's 'extraordinary man' with an axe, and Sonya answers both. Ivan Karamazov's 'everything is permitted' is the same idea grown up.",
     karamazov: "Dostoevsky's last word, with every voice on the shelf in it: the Grand Inquisitor against freedom, Ivan's rebellion against God, Zossima's active love, Alyosha's childhood memory that can save a life.",
     anna: "Tolstoy sets two lives side by side: Anna, who lives for passion, and Levin, who searches for the meaning of life and finds it in a peasant's sentence. It is Ivan Ilyich's question asked by the living.",
   };
@@ -136,7 +136,7 @@
     hamlet: "If it be not now, yet it will come. The readiness is all.",
     camus: "One must imagine Sisyphus happy.",
     bge: "He who fights with monsters should be careful lest he thereby become a monster.",
-    crime: "Go at once, this very minute, stand at the cross-roads, bow down, first kiss the earth which you have defiled.",
+    crime: "Go now, this very minute, stand at the crossroads, bow down, first kiss the earth which you have defiled.",
     karamazov: "Some good, sacred memory, preserved from childhood, is perhaps the best education.",
     anna: "Happy families are all alike; every unhappy family is unhappy in its own way.",
   };
