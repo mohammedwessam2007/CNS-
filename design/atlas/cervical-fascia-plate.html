@@ -1,0 +1,650 @@
+<title>Cervical Fascia Plate</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout: an open anatomical atlas. The engraved, hand-coloured plate holds the left page; the lesson is
+   the right page; a myelinated axon runs under it as progress (one saltatory pulse per section learned).
+   One committed dark world: the ink of an intaglio plate, lines in bone, layers in historical pigments. */
+:root {
+  color-scheme: dark;
+  --ink: #0a0b11;
+  --ink-2: #10121a;
+  --ink-3: #161a25;
+  --bone: #ece2cc;
+  --bone-2: #bdb29c;
+  --bone-3: #847b6b;
+  --hair: rgba(236, 226, 204, 0.14);
+  --hair-2: rgba(236, 226, 204, 0.28);
+  --gilt: #dcab52;
+  --gilt-deep: #9a7330;
+  --madder: #dc7187;
+  --verdigris: #63baa6;
+  --lapis: #89a5f2;
+  --artery: #e3685c;
+  --vein: #5f7bc6;
+  --nerve: #f2da8e;
+  --display: "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif;
+  --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --arabic: "Amiri", "Geeza Pro", "Noto Naskh Arabic", serif;
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+html { background: var(--ink); }
+body {
+  background: var(--ink);
+  color: var(--bone);
+  font: 400 17px/1.62 var(--body);
+  margin: 0;
+  padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+/* atmosphere: a reading lamp over the plate, a vignette, and paper grain */
+.atmos { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.atmos::before {
+  content: ""; position: absolute; left: -10%; top: -20%; width: 80%; height: 110%;
+  background: radial-gradient(closest-side, rgba(220, 171, 82, 0.13), rgba(220, 171, 82, 0.04) 55%, transparent 75%);
+  animation: lamp 16s ease-in-out infinite alternate;
+}
+.atmos::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .92  0 0 0 0 .88  0 0 0 0 .8  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.09;
+  mix-blend-mode: screen;
+}
+@keyframes lamp { from { transform: translate(0, 0) scale(1); opacity: 0.85; } to { transform: translate(4%, 3%) scale(1.07); opacity: 1; } }
+
+.wrap { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; }
+
+/* masthead */
+.mast { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; padding-block: 18px 14px; border-bottom: 1px solid var(--hair); }
+.menu { width: 40px; height: 40px; display: grid; place-items: center; background: none; border: 1px solid var(--hair); border-radius: 2px; color: var(--bone); cursor: pointer; }
+.menu svg { width: 18px; height: 18px; }
+.mark { display: flex; align-items: baseline; gap: 14px; min-width: 0; }
+.mark b { font: 500 21px/1 var(--display); letter-spacing: 0.16em; text-transform: uppercase; font-variant: small-caps; white-space: nowrap; }
+.mark span { color: var(--bone-3); font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.today { display: flex; align-items: center; gap: 10px; color: var(--bone-2); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.today svg { width: 30px; height: 30px; transform: rotate(-90deg); }
+
+/* the spread */
+.spread { display: grid; grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); gap: clamp(24px, 3.4vw, 52px); padding-block: 26px 34px; align-items: start; }
+.leaf-plate { position: sticky; top: 16px; }
+.plate { margin: 0; position: relative; padding: 14px; }
+/* the plate frame: double gilt hairline with registration ticks at the corners */
+.plate::before { content: ""; position: absolute; inset: 0; border: 1px solid rgba(220, 171, 82, 0.42); pointer-events: none; }
+.plate::after { content: ""; position: absolute; inset: 6px; border: 1px solid rgba(220, 171, 82, 0.16); pointer-events: none; }
+.tick { position: absolute; width: 14px; height: 14px; border-color: var(--gilt); border-style: solid; opacity: 0.9; }
+.tick.tl { left: -7px; top: -7px; border-width: 1px 0 0 1px; }
+.tick.tr { right: -7px; top: -7px; border-width: 1px 1px 0 0; }
+.tick.bl { left: -7px; bottom: -7px; border-width: 0 0 1px 1px; }
+.tick.br { right: -7px; bottom: -7px; border-width: 0 1px 1px 0; }
+#plate { display: block; width: 100%; height: auto; max-width: 100%; overflow: hidden; }
+.plate figcaption { display: grid; gap: 4px; padding: 12px 6px 2px; border-top: 1px solid var(--hair); margin-top: 6px; }
+.fig { font: italic 400 14px/1.45 var(--display); color: var(--bone-2); }
+.fig b { font-style: normal; font-weight: 600; letter-spacing: 0.12em; font-size: 11px; color: var(--gilt); margin-right: 8px; }
+#fact { font: 400 15px/1.5 var(--body); color: var(--bone); min-height: 3em; transition: color 0.4s; }
+#fact i { font-family: var(--display); font-size: 16px; }
+
+/* engraving */
+#plate text { font-family: var(--display); }
+.lbl { font-style: italic; font-size: 18px; fill: var(--bone); }
+.lbl-cap { font-style: normal; font-size: 11px; letter-spacing: 0.22em; fill: var(--bone-3); }
+.zl { font-style: italic; font-size: 5px; fill: var(--bone); }
+.zl-cap { font-style: normal; font-size: 3.3px; letter-spacing: 0.22em; fill: var(--lapis); }
+.lead { fill: none; stroke: var(--bone-2); stroke-width: 0.7; }
+.zlead { fill: none; stroke: var(--bone-2); stroke-width: 0.25; }
+.lay { transition: opacity 0.55s var(--ease); cursor: pointer; }
+#plate.focusing .lay { opacity: 0.16; }
+#plate.focusing .lay.on { opacity: 1; }
+#plate .lay.on .gl { filter: url(#glow); }
+.labs, .zlabs, .lab { transition: opacity 0.6s var(--ease); }
+.lab.off, .labs.off, .zlabs.off { opacity: 0; pointer-events: none; }
+#plate.focusing .lab:not(.on) { opacity: 0.22; }
+
+/* the ink draws itself once, on arrival */
+.ink { stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: ink 1.5s var(--ease) var(--d, 0s) forwards; }
+.wash { opacity: 0; animation: wash 1.1s ease var(--d, 0s) forwards; }
+@keyframes ink { to { stroke-dashoffset: 0; } }
+@keyframes wash { to { opacity: 1; } }
+.swallow { transform-box: fill-box; transform-origin: center; animation: swallow 1.6s var(--ease) 2; }
+@keyframes swallow { 0%, 100% { transform: translateY(0) scale(1); } 40% { transform: translateY(-5px) scale(1.04); } }
+
+/* the lesson page */
+.leaf-text { min-width: 0; display: grid; gap: 26px; }
+.page { display: grid; gap: 22px; transition: opacity 0.28s ease, transform 0.36s var(--ease); }
+.page.out { opacity: 0; transform: translateY(12px); }
+.eyebrow { font: 600 11.5px/1.3 var(--body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--gilt); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.eyebrow::after { content: ""; flex: 1 1 40px; height: 1px; background: linear-gradient(90deg, rgba(220, 171, 82, 0.5), transparent); }
+h1, h2 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; color: var(--bone); }
+h1 { font-size: clamp(42px, 5.4vw, 74px); line-height: 0.98; letter-spacing: -0.015em; }
+h2 { font-size: clamp(34px, 4vw, 52px); line-height: 1.02; letter-spacing: -0.01em; }
+h1 em, h2 em { font-style: italic; color: var(--gilt); font-weight: 400; }
+.ar { display: inline-flex; align-items: baseline; gap: 12px; color: var(--bone-2); font-size: 13px; letter-spacing: 0.06em; }
+.ar [lang="ar"] { font: 700 24px/1 var(--arabic); color: var(--bone); letter-spacing: 0; }
+.lede { font-size: 19px; line-height: 1.66; max-width: 34em; margin: 0; color: var(--bone); }
+.lede i { font-family: var(--display); font-size: 1.08em; }
+.meta { font-size: 13px; color: var(--bone-3); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+
+.term { font: inherit; font-weight: 600; color: var(--c); background: none; border: 0; padding: 0 1px; cursor: pointer;
+  text-decoration: underline; text-decoration-style: dotted; text-decoration-thickness: 1.5px; text-underline-offset: 4px;
+  transition: text-shadow 0.3s, color 0.3s; }
+.term:hover, .term[aria-pressed="true"] { text-shadow: 0 0 18px var(--c); text-decoration-style: solid; }
+.term:focus-visible, button:focus-visible { outline: 1px solid var(--gilt); outline-offset: 3px; }
+
+/* pigment key: the plate's colouring, named as the colourist named it */
+.key { display: grid; gap: 0; border-top: 1px solid var(--hair); }
+.key button { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 14px; align-items: center; text-align: left; padding: 12px 2px; background: none; border: 0; border-bottom: 1px solid var(--hair); color: var(--bone); font: 500 16px/1.3 var(--body); cursor: pointer; transition: background 0.3s; }
+.key button:hover, .key button[aria-pressed="true"] { background: linear-gradient(90deg, rgba(236, 226, 204, 0.05), transparent); }
+.sw { width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c) 70%, white), var(--c) 55%, color-mix(in srgb, var(--c) 55%, black)); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4), 0 0 18px -4px var(--c); }
+.key .pig { font: italic 400 15px/1 var(--display); color: var(--bone-3); }
+.key small { display: block; font-weight: 400; color: var(--bone-2); font-size: 14px; margin-top: 3px; }
+
+/* layer rows (section II) */
+.rows { display: grid; gap: 0; border-top: 1px solid var(--hair); }
+.row { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--hair); }
+.row .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-top: 9px; box-shadow: 0 0 14px var(--c); }
+.row p { margin: 0; color: var(--bone-2); font-size: 16px; }
+.row p strong { color: var(--bone); font-weight: 600; }
+
+/* framed notes: hairline frame with registration ticks, never a heavy card */
+.note { position: relative; padding: 18px 20px 18px; border: 1px solid var(--hair); background: linear-gradient(180deg, rgba(236, 226, 204, 0.035), rgba(236, 226, 204, 0.01)); }
+.note::before, .note::after { content: ""; position: absolute; width: 9px; height: 9px; border-color: var(--nc, var(--gilt)); border-style: solid; }
+.note::before { left: -1px; top: -1px; border-width: 1px 0 0 1px; }
+.note::after { right: -1px; bottom: -1px; border-width: 0 1px 1px 0; }
+.note .cap { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font: 600 11px/1.2 var(--body); letter-spacing: 0.2em; text-transform: uppercase; color: var(--nc, var(--gilt)); margin-bottom: 10px; }
+.note .cap [lang="ar"] { font: 700 19px/1 var(--arabic); letter-spacing: 0; text-transform: none; color: var(--bone-2); }
+.note p { margin: 0; }
+.q { font: 500 22px/1.3 var(--display); color: var(--bone); margin: 0 0 14px; text-wrap: balance; }
+.answer { font-size: 17px; color: var(--bone); filter: blur(7px); opacity: 0.55; transition: filter 0.7s var(--ease), opacity 0.7s; user-select: none; }
+.revealed .answer { filter: none; opacity: 1; user-select: text; }
+.recall-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; align-items: center; }
+.btn-line { font: 500 15px/1 var(--body); color: var(--bone); background: rgba(236, 226, 204, 0.04); border: 1px solid var(--hair-2); padding: 12px 18px; cursor: pointer; border-radius: 1px; transition: border-color 0.3s, background 0.3s; }
+.btn-line:hover { border-color: var(--gilt); background: rgba(220, 171, 82, 0.08); }
+.verdict { font: italic 400 16px/1.3 var(--display); color: var(--verdigris); }
+.lists { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.lists h3 { font: 600 11px/1.2 var(--body); letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 8px; color: var(--c); }
+.lists ul { margin: 0; padding-left: 18px; color: var(--bone-2); font-size: 16px; display: grid; gap: 6px; }
+.lists li strong { color: var(--bone); font-weight: 600; }
+
+/* the call to go on */
+.go { display: grid; gap: 10px; }
+.cta { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; width: 100%; text-align: left;
+  padding: 20px 24px; cursor: pointer; color: #1a1206; border: 0; border-radius: 1px;
+  background: linear-gradient(115deg, #f0cd83 0%, var(--gilt) 42%, #b98a3c 100%);
+  box-shadow: 0 1px 0 rgba(255, 240, 200, 0.6) inset, 0 18px 40px -18px rgba(220, 171, 82, 0.7); transition: transform 0.25s var(--ease), box-shadow 0.3s; }
+.cta:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255, 240, 200, 0.6) inset, 0 24px 50px -18px rgba(220, 171, 82, 0.85); }
+.cta:active { transform: translateY(1px) scale(0.995); }
+.cta::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 252, 240, 0.55) 50%, transparent 65%); transform: translateX(-120%); animation: sheen 5.5s ease-in-out 2.4s infinite; }
+@keyframes sheen { 0%, 70% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+.cta b { font: 600 22px/1.1 var(--display); letter-spacing: 0.01em; }
+.cta small { display: block; font: 600 11px/1.2 var(--body); letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.7; margin-top: 6px; }
+.cta [lang="ar"] { font: 700 22px/1 var(--arabic); }
+.cta-sub { font-size: 13px; color: var(--bone-3); }
+
+/* the axon */
+.axon { display: grid; gap: 6px; padding-top: 6px; border-top: 1px solid var(--hair); }
+.axon-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-3); }
+.axon-head em { font: italic 400 15px/1 var(--display); letter-spacing: 0; text-transform: none; color: var(--bone-2); }
+#axon { width: 100%; height: auto; max-width: 100%; display: block; overflow: visible; }
+#axon .my { fill: rgba(236, 226, 204, 0.07); stroke: rgba(236, 226, 204, 0.22); stroke-width: 0.8; transition: fill 0.4s, stroke 0.4s; }
+#axon .my.lit { fill: rgba(220, 171, 82, 0.2); stroke: rgba(220, 171, 82, 0.75); }
+#axon .core { stroke: rgba(236, 226, 204, 0.3); stroke-width: 1.2; }
+#axon .node { fill: var(--ink); stroke: var(--bone-3); stroke-width: 1.2; transition: fill 0.3s, stroke 0.3s; }
+#axon .node.big { stroke-width: 1.6; }
+#axon .node.lit { fill: var(--gilt); stroke: var(--gilt); }
+#axon text { font: italic 400 13px var(--display); fill: var(--bone-3); }
+#axon text.lit { fill: var(--gilt); }
+.toast { position: absolute; right: 0; top: -34px; font: italic 500 17px/1 var(--display); color: var(--gilt); opacity: 0; transform: translateY(8px); transition: opacity 0.4s, transform 0.6s var(--ease); pointer-events: none; white-space: nowrap; }
+.toast.on { opacity: 1; transform: translateY(0); }
+.axon-wrap { position: relative; }
+
+.colophon { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding-block: 18px 30px; border-top: 1px solid var(--hair); color: var(--bone-3); font-size: 13px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.colophon i { font-family: var(--display); }
+
+@media (max-width: 960px) {
+  .spread { grid-template-columns: minmax(0, 1fr); }
+  .leaf-plate { position: relative; top: 0; }
+}
+@media (max-width: 560px) {
+  .mark span { display: none; }
+  .lede { font-size: 17.5px; }
+  .cta { padding: 18px; }
+  .cta b { font-size: 20px; }
+  .plate { padding: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atmos::before, .cta::after, .swallow { animation: none; }
+  .ink { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+  .wash { animation: none; opacity: 1; }
+  .page, .lay, .lab, .labs, .zlabs, .answer, .cta { transition: none; }
+}
+</style>
+
+<div class="atmos" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="mast">
+    <button class="menu" type="button" aria-label="Course outline"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M1 4h16M1 9h11M1 14h16" stroke="currentColor" stroke-width="1.2" fill="none"/></svg></button>
+    <div class="mark"><b>Intellectuality</b><span>NEU-205 · Day 29 of 148 · Monday 19 October</span></div>
+    <div class="today" aria-label="Today 40 percent done">
+      <svg viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="12" fill="none" stroke="rgba(236,226,204,.16)" stroke-width="2"/><circle cx="15" cy="15" r="12" fill="none" stroke="#dcab52" stroke-width="2" stroke-linecap="round" pathLength="100" stroke-dasharray="40 100"/></svg>
+      <span>Today <b>40%</b></span>
+    </div>
+  </header>
+
+  <main class="spread">
+    <section class="leaf-plate" aria-label="Plate">
+      <figure class="plate">
+        <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+        <svg id="plate" viewBox="0 0 860 560" role="img" aria-label="Engraved transverse section of the neck at C6 showing the layers of deep cervical fascia"></svg>
+        <figcaption>
+          <div class="fig"><b>FIG. 29</b>Transverse section of the neck at the level of C6, viewed from above. Anterior at top.</div>
+          <div id="fact" aria-live="polite">Tap a sleeve, on the plate or in the text, to trace it.</div>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="leaf-text" aria-label="Lesson">
+      <div id="page" class="page"></div>
+      <div class="go">
+        <button id="cta" class="cta" type="button"><span><b id="cta-en">Got it · next section</b><small id="cta-sub">Section I of III</small></span><span lang="ar" dir="rtl">فهمتها ← اللي بعدها</span></button>
+      </div>
+      <div class="axon">
+        <div class="axon-head"><span>Progress through this lesson</span><em id="axon-cap">Node I of III</em></div>
+        <div class="axon-wrap"><span id="toast" class="toast">+5 XP · section learned</span><svg id="axon" viewBox="0 0 640 74" aria-hidden="true"></svg></div>
+      </div>
+    </section>
+  </main>
+</div>
+<footer class="colophon"><span><i>Plate XXIX</i> · drawn for Intellectuality · NEU-205 Anatomy</span><span>Design preview of the lesson screen. Nothing here saves to your course.</span></footer>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function el(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function f(n) { return Math.round(n * 10) / 10; }
+
+  /* ───── geometry of the section (drawing units; the drawing sits at +50,+10 in the plate) ───── */
+  var C = { x: 380, y: 270 };
+  function P(rx, ry, deg) { var t = deg * Math.PI / 180; return [C.x + rx * Math.cos(t), C.y + ry * Math.sin(t)]; }
+  function pts(a) { return a.map(function (p) { return f(p[0]) + " " + f(p[1]); }).join(" L"); }
+  // a muscle belly lying along the neck's curve: tapered at both ends
+  function lens(rx, ry, d0, d1, th) {
+    var out = [], inn = [], n = 30;
+    for (var i = 0; i <= n; i++) {
+      var s = i / n, d = d0 + (d1 - d0) * s, w = th * Math.pow(Math.sin(Math.PI * s), 0.55);
+      out.push(P(rx, ry, d)); inn.push(P(rx - w, ry - w, d));
+    }
+    return { d: "M" + pts(out) + " L" + pts(inn.slice().reverse()) + " Z", inner: "M" + pts(inn) };
+  }
+  function mirror(d) { return d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, function (m, x, y) { return f(760 - parseFloat(x)) + " " + y; }); }
+
+  var svg = document.getElementById("plate");
+  var defs = el("defs", {}, svg);
+  var hatch = el("pattern", { id: "hatch", width: 4.2, height: 4.2, patternUnits: "userSpaceOnUse", patternTransform: "rotate(38)" }, defs);
+  el("rect", { width: 4.2, height: 4.2, fill: "rgba(236,226,204,.045)" }, hatch);
+  el("line", { x1: 0, y1: 0, x2: 0, y2: 4.2, stroke: "rgba(236,226,204,.42)", "stroke-width": 0.55 }, hatch);
+  var hatch2 = el("pattern", { id: "hatchR", width: 4.2, height: 4.2, patternUnits: "userSpaceOnUse", patternTransform: "rotate(-38)" }, defs);
+  el("rect", { width: 4.2, height: 4.2, fill: "rgba(236,226,204,.045)" }, hatch2);
+  el("line", { x1: 0, y1: 0, x2: 0, y2: 4.2, stroke: "rgba(236,226,204,.42)", "stroke-width": 0.55 }, hatch2);
+  var stip = el("pattern", { id: "stipple", width: 5, height: 5, patternUnits: "userSpaceOnUse" }, defs);
+  el("rect", { width: 5, height: 5, fill: "rgba(236,226,204,.10)" }, stip);
+  el("circle", { cx: 1.3, cy: 1.3, r: 0.6, fill: "rgba(236,226,204,.55)" }, stip);
+  el("circle", { cx: 3.8, cy: 3.6, r: 0.45, fill: "rgba(236,226,204,.4)" }, stip);
+  var gland = el("pattern", { id: "gland", width: 6, height: 6, patternUnits: "userSpaceOnUse" }, defs);
+  el("rect", { width: 6, height: 6, fill: "rgba(220,113,135,.16)" }, gland);
+  el("circle", { cx: 3, cy: 3, r: 1.5, fill: "none", stroke: "rgba(236,226,204,.38)", "stroke-width": 0.45 }, gland);
+  var glow = el("filter", { id: "glow", x: "-30%", y: "-30%", width: "160%", height: "160%" }, defs);
+  el("feGaussianBlur", { stdDeviation: 3.2, result: "b" }, glow);
+  var fm = el("feMerge", {}, glow); el("feMergeNode", { in: "b" }, fm); el("feMergeNode", { in: "b" }, fm); el("feMergeNode", { in: "SourceGraphic" }, fm);
+
+  // plate furniture
+  el("text", { x: 430, y: 30, "text-anchor": "middle", class: "lbl-cap" }, svg, "PLATE  XXIX");
+  el("text", { x: 430, y: 52, "text-anchor": "middle", class: "lbl", style: "font-size:14px;fill:var(--bone-3)" }, svg, "Anterior");
+  el("text", { x: 430, y: 545, "text-anchor": "middle", class: "lbl", style: "font-size:14px;fill:var(--bone-3)" }, svg, "Posterior");
+  var sb = el("g", { transform: "translate(40 530)" }, svg);
+  el("line", { x1: 0, y1: 0, x2: 40, y2: 0, stroke: "var(--bone-2)", "stroke-width": 1 }, sb);
+  el("line", { x1: 0, y1: -4, x2: 0, y2: 4, stroke: "var(--bone-2)", "stroke-width": 1 }, sb);
+  el("line", { x1: 40, y1: -4, x2: 40, y2: 4, stroke: "var(--bone-2)", "stroke-width": 1 }, sb);
+  el("text", { x: 50, y: 4, class: "lbl", style: "font-size:13px;fill:var(--bone-3)" }, sb, "1 cm");
+  el("text", { x: 820, y: 534, "text-anchor": "end", class: "lbl-cap" }, svg, "C6 · TRANSVERSE");
+
+  var cam = el("g", {}, svg); // what the camera moves over
+  var D = el("g", { transform: "translate(50 10)" }, cam);
+  var layers = {};
+  function layer(name, delay) { var g = el("g", { class: "lay", "data-layer": name }, D); layers[name] = g; g.style.setProperty("--d", delay + "s"); return g; }
+  function ink(parent, tag, attrs, delay) { attrs.pathLength = 1; attrs.class = (attrs.class ? attrs.class + " " : "") + "ink"; var e = el(tag, attrs, parent); e.style.setProperty("--d", delay + "s"); return e; }
+  function wash(parent, tag, attrs, delay) { attrs.class = (attrs.class ? attrs.class + " " : "") + "wash"; var e = el(tag, attrs, parent); e.style.setProperty("--d", delay + "s"); return e; }
+
+  // skin
+  var skin = el("g", {}, D);
+  wash(skin, "ellipse", { cx: 380, cy: 270, rx: 262, ry: 212, fill: "rgba(236,226,204,.025)" }, 0);
+  ink(skin, "ellipse", { cx: 380, cy: 270, rx: 262, ry: 212, fill: "none", stroke: "rgba(236,226,204,.7)", "stroke-width": 1.1 }, 0);
+  ink(skin, "path", { d: "M380 458 L380 482", fill: "none", stroke: "rgba(236,226,204,.4)", "stroke-width": 0.8 }, 0.6);
+
+  // superficial fascia: platysma, external and anterior jugular veins
+  var sup = layer("superficial", 0.2);
+  el("ellipse", { cx: 380, cy: 270, rx: 249, ry: 201, fill: "none", stroke: "rgba(236,226,204,.42)", "stroke-width": 1, "stroke-dasharray": "1.5 4", class: "gl wash" }, sup).style.setProperty("--d", "0.5s");
+  var pl1 = lens(258, 208, 206, 262, 8), pl2 = lens(258, 208, 278, 334, 8);
+  wash(sup, "path", { d: pl1.d, fill: "url(#hatchR)", stroke: "rgba(236,226,204,.55)", "stroke-width": 0.6 }, 0.6);
+  wash(sup, "path", { d: pl2.d, fill: "url(#hatch)", stroke: "rgba(236,226,204,.55)", "stroke-width": 0.6 }, 0.6);
+  var ejL = P(246, 198, 222), ejR = P(246, 198, 318);
+  wash(sup, "circle", { cx: f(ejL[0]), cy: f(ejL[1]), r: 5.5, fill: "var(--vein)", stroke: "rgba(236,226,204,.6)", "stroke-width": 0.5 }, 0.9);
+  wash(sup, "circle", { cx: f(ejR[0]), cy: f(ejR[1]), r: 5.5, fill: "var(--vein)", stroke: "rgba(236,226,204,.6)", "stroke-width": 0.5 }, 0.9);
+  wash(sup, "circle", { cx: 366, cy: 72, r: 3.4, fill: "var(--vein)" }, 0.9);
+  wash(sup, "circle", { cx: 394, cy: 72, r: 3.4, fill: "var(--vein)" }, 0.9);
+
+  // investing layer: the collar, splitting around sternomastoid and trapezius
+  var inv = layer("investing", 0.3);
+  var scmL = lens(236, 190, 197, 241, 30), scmR = lens(236, 190, 299, 343, 30);
+  var trL = lens(236, 190, 112, 158, 22), trR = lens(236, 190, 22, 68, 22);
+  [[scmL, "url(#hatch)"], [scmR, "url(#hatchR)"], [trL, "url(#hatchR)"], [trR, "url(#hatch)"]].forEach(function (m) {
+    wash(inv, "path", { d: m[0].d, fill: m[1], stroke: "rgba(236,226,204,.6)", "stroke-width": 0.7 }, 0.8);
+  });
+  ink(inv, "ellipse", { cx: 380, cy: 270, rx: 236, ry: 190, fill: "none", stroke: "var(--gilt)", "stroke-width": 2.3, class: "gl" }, 0.3);
+  [scmL, scmR, trL, trR].forEach(function (m) { ink(inv, "path", { d: m.inner, fill: "none", stroke: "var(--gilt)", "stroke-width": 1.8, class: "gl" }, 1.0); });
+
+  // pretracheal layer: thyroid, trachea, oesophagus, infrahyoid muscles
+  var pre = layer("pretracheal", 0.6);
+  var neckFront = el("g", {}, pre);
+  wash(neckFront, "ellipse", { cx: 352, cy: 98, rx: 20, ry: 6, transform: "rotate(-14 352 98)", fill: "url(#hatch)", stroke: "rgba(236,226,204,.55)", "stroke-width": 0.6 }, 1.0);
+  wash(neckFront, "ellipse", { cx: 408, cy: 98, rx: 20, ry: 6, transform: "rotate(14 408 98)", fill: "url(#hatchR)", stroke: "rgba(236,226,204,.55)", "stroke-width": 0.6 }, 1.0);
+  var swallowG = el("g", {}, neckFront);
+  // oesophagus, a little to the left of the midline
+  wash(swallowG, "ellipse", { cx: 366, cy: 202, rx: 22, ry: 11, fill: "rgba(236,226,204,.06)", stroke: "rgba(236,226,204,.7)", "stroke-width": 2.6 }, 1.1);
+  wash(swallowG, "path", { d: "M356 202 L376 202 M366 197 L366 207", stroke: "rgba(236,226,204,.5)", "stroke-width": 0.8, fill: "none" }, 1.2);
+  // trachea: C-shaped cartilage open behind, trachealis closing it
+  wash(swallowG, "circle", { cx: 380, cy: 148, r: 28, fill: "rgba(10,11,17,.85)" }, 1.0);
+  var a0 = 118 * Math.PI / 180, a1 = 62 * Math.PI / 180;
+  ink(swallowG, "path", { d: "M" + f(380 + 28 * Math.cos(a0)) + " " + f(148 + 28 * Math.sin(a0)) + " A28 28 0 1 1 " + f(380 + 28 * Math.cos(a1)) + " " + f(148 + 28 * Math.sin(a1)), fill: "none", stroke: "var(--bone)", "stroke-width": 4.5, "stroke-linecap": "round" }, 1.0);
+  ink(swallowG, "path", { d: "M" + f(380 + 28 * Math.cos(a0)) + " " + f(148 + 28 * Math.sin(a0)) + " Q380 " + f(148 + 32) + " " + f(380 + 28 * Math.cos(a1)) + " " + f(148 + 28 * Math.sin(a1)), fill: "none", stroke: "rgba(236,226,204,.6)", "stroke-width": 1.2 }, 1.2);
+  // thyroid: two lobes and the isthmus over the rings
+  var lobe = "M352 116 C324 114 306 140 312 180 C316 204 334 214 348 204 C340 182 342 152 352 136 Z";
+  var thy = el("g", {}, swallowG);
+  wash(thy, "path", { d: lobe, fill: "url(#gland)", stroke: "var(--madder)", "stroke-width": 1 }, 1.1);
+  wash(thy, "path", { d: mirror(lobe), fill: "url(#gland)", stroke: "var(--madder)", "stroke-width": 1 }, 1.1);
+  wash(thy, "path", { d: "M352 116 C366 109 394 109 408 116 L408 128 C394 122 366 122 352 128 Z", fill: "url(#gland)", stroke: "var(--madder)", "stroke-width": 1 }, 1.2);
+  ink(pre, "path", { d: "M326 90 C350 80 410 80 434 90 C462 100 466 150 454 192 C444 222 420 232 380 232 C340 232 316 222 306 192 C294 150 298 100 326 90 Z", fill: "none", stroke: "var(--madder)", "stroke-width": 2.1, class: "gl" }, 0.6);
+
+  // prevertebral layer: vertebra, the muscles around it, the spinal cord
+  var pv = layer("prevertebral", 0.9);
+  wash(pv, "path", { d: "M350 318 L330 342 L366 404 Q380 420 394 404 L430 342 L410 318 Z", fill: "url(#stipple)", stroke: "rgba(236,226,204,.75)", "stroke-width": 1 }, 1.2);
+  wash(pv, "rect", { x: 306, y: 289, width: 40, height: 22, rx: 8, fill: "url(#stipple)", stroke: "rgba(236,226,204,.75)", "stroke-width": 1 }, 1.2);
+  wash(pv, "rect", { x: 414, y: 289, width: 40, height: 22, rx: 8, fill: "url(#stipple)", stroke: "rgba(236,226,204,.75)", "stroke-width": 1 }, 1.2);
+  wash(pv, "rect", { x: 343, y: 277, width: 74, height: 46, rx: 16, fill: "url(#stipple)", stroke: "rgba(236,226,204,.85)", "stroke-width": 1.2 }, 1.2);
+  [[322, 300], [438, 300]].forEach(function (c) {
+    wash(pv, "circle", { cx: c[0], cy: c[1], r: 6, fill: "var(--ink)", stroke: "rgba(236,226,204,.6)", "stroke-width": 0.6 }, 1.3);
+    wash(pv, "circle", { cx: c[0], cy: c[1], r: 3.2, fill: "var(--artery)" }, 1.4);
+  });
+  wash(pv, "path", { d: "M356 324 L342 342 Q380 372 418 342 L404 324 Z", fill: "var(--ink)", stroke: "rgba(236,226,204,.5)", "stroke-width": 0.7 }, 1.3);
+  wash(pv, "ellipse", { cx: 380, cy: 339, rx: 16, ry: 10, fill: "rgba(236,226,204,.12)", stroke: "rgba(236,226,204,.75)", "stroke-width": 0.8 }, 1.4);
+  wash(pv, "path", { d: "M371 334 Q376 339 380 337 Q384 339 389 334 M371 344 Q376 340 380 341 Q384 340 389 344 M380 337 L380 341", fill: "none", stroke: "rgba(236,226,204,.6)", "stroke-width": 0.9 }, 1.5);
+  [["ellipse", { cx: 360, cy: 264, rx: 13, ry: 9 }], ["ellipse", { cx: 400, cy: 264, rx: 13, ry: 9 }],
+   ["ellipse", { cx: 288, cy: 304, rx: 18, ry: 12, transform: "rotate(25 288 304)" }], ["ellipse", { cx: 472, cy: 304, rx: 18, ry: 12, transform: "rotate(-25 472 304)" }],
+   ["ellipse", { cx: 296, cy: 380, rx: 17, ry: 13 }], ["ellipse", { cx: 464, cy: 380, rx: 17, ry: 13 }],
+   ["ellipse", { cx: 340, cy: 402, rx: 24, ry: 17 }], ["ellipse", { cx: 420, cy: 402, rx: 24, ry: 17 }]].forEach(function (m, i) {
+    m[1].fill = i % 2 ? "url(#hatchR)" : "url(#hatch)"; m[1].stroke = "rgba(236,226,204,.6)"; m[1]["stroke-width"] = 0.7;
+    wash(pv, m[0], m[1], 1.3);
+  });
+  ink(pv, "ellipse", { cx: 380, cy: 345, rx: 120, ry: 100, fill: "none", stroke: "var(--verdigris)", "stroke-width": 2.1, class: "gl" }, 0.9);
+
+  // carotid sheaths and what they hold
+  var car = layer("carotid", 1.2);
+  [[282, 1], [478, -1]].forEach(function (s) {
+    var x = s[0], k = s[1];
+    wash(car, "circle", { cx: x, cy: 218, r: 28, fill: "rgba(137,165,242,.07)" }, 1.4);
+    wash(car, "circle", { cx: x - 14 * k, cy: 216, r: 12, fill: "var(--vein)", stroke: "rgba(236,226,204,.55)", "stroke-width": 0.5 }, 1.6);
+    wash(car, "circle", { cx: x + 14 * k, cy: 216, r: 9.5, fill: "var(--artery)", stroke: "rgba(236,226,204,.6)", "stroke-width": 0.6 }, 1.6);
+    wash(car, "circle", { cx: x, cy: 234, r: 4.5, fill: "var(--nerve)" }, 1.7);
+    wash(car, "circle", { cx: x, cy: 191, r: 2.4, fill: "var(--nerve)", stroke: "var(--ink)", "stroke-width": 0.4 }, 1.8);
+    wash(car, "circle", { cx: x + 8 * k, cy: 266, r: 3.5, fill: "var(--nerve)", opacity: 0.85 }, 1.8);
+    ink(car, "circle", { cx: x, cy: 218, r: 28, fill: "none", stroke: "var(--lapis)", "stroke-width": 2, class: "gl" }, 1.2);
+  });
+
+  /* ───── labels: an atlas's italic captions on leader lines ───── */
+  var labs = el("g", { class: "labs" }, cam);
+  var LAB = [
+    // side, label y, target (drawing coords), text, layer, stage
+    ["R", 52, [505, 97], "Superficial fascia", "superficial", 1],
+    ["R", 116, [462, 140], "Pretracheal layer", "pretracheal", 1],
+    ["L", 280, [144, 270], "Investing layer", "investing", 1],
+    ["L", 228, [254, 218], "Carotid sheath", "carotid", 1],
+    ["R", 344, [500, 345], "Prevertebral layer", "prevertebral", 1],
+    ["L", 112, [358, 138], "Trachea", "pretracheal", 2],
+    ["L", 164, [204, 166], "Sternocleidomastoid", "investing", 2],
+    ["L", 334, [288, 304], "Scalene muscles", "prevertebral", 2],
+    ["L", 388, [340, 402], "Deep back muscles", "prevertebral", 2],
+    ["L", 440, [227, 401], "Trapezius", "investing", 2],
+    ["R", 172, [432, 168], "Thyroid gland", "pretracheal", 2],
+    ["R", 224, [388, 203], "Oesophagus", "pretracheal", 2],
+    ["R", 292, [415, 300], "Body of C6", "prevertebral", 2],
+    ["R", 394, [395, 341], "Spinal cord", "prevertebral", 2]
+  ];
+  LAB.forEach(function (L, i) {
+    var left = L[0] === "L", y = L[1] + 10, tx = L[2][0] + 50, ty = L[2][1] + 10;
+    var g = el("g", { class: "lab" + (L[5] > 1 ? " off" : ""), "data-layer": L[4], "data-stage": L[5] }, labs);
+    var x0 = left ? 188 : 672, elbow = left ? 202 : 658;
+    var d = "M" + x0 + " " + (y - 6) + " L" + elbow + " " + (y - 6) + " L" + f(tx) + " " + f(ty);
+    var p = el("path", { d: d, class: "lead ink", pathLength: 1 }, g);
+    p.style.setProperty("--d", (L[5] > 1 ? 0 : 1.5 + i * 0.08) + "s");
+    el("circle", { cx: f(tx), cy: f(ty), r: 1.8, fill: "var(--bone)" }, g);
+    var t = el("text", { x: left ? 182 : 678, y: y, "text-anchor": left ? "end" : "start", class: "lbl wash" }, g, L[3]);
+    t.style.setProperty("--d", (L[5] > 1 ? 0 : 1.7 + i * 0.08) + "s");
+  });
+
+  // the close-up of the left carotid sheath (section III)
+  var zl = el("g", { class: "zlabs off" }, cam);
+  function zlab(x, y, anchor, text, tx, ty) {
+    el("path", { d: "M" + x + " " + (y - 1.6) + " L" + tx + " " + ty, class: "zlead" }, zl);
+    el("circle", { cx: tx, cy: ty, r: 0.6, fill: "var(--bone)" }, zl);
+    el("text", { x: anchor === "end" ? x - 1 : anchor === "start" ? x + 1 : x, y: y, "text-anchor": anchor, class: "zl" }, zl, text);
+  }
+  el("text", { x: 250, y: 181, class: "zl-cap" }, zl, "CAROTID SHEATH · LEFT");
+  zlab(300, 214, "end", "Internal jugular vein", 316, 224);
+  zlab(362, 214, "start", "Common carotid artery", 348, 224);
+  zlab(305, 262, "end", "Vagus nerve", 330, 244);
+  zlab(346, 196, "start", "Ansa cervicalis, in the wall", 333, 201);
+  zlab(352, 283, "start", "Sympathetic trunk, behind", 340, 276);
+
+  /* ───── layer focus ───── */
+  var FACT = {
+    superficial: "<i>Superficial fascia.</i> Holds the platysma, the external jugular vein and the cutaneous nerves.",
+    investing: "<i>Investing layer, the collar.</i> Splits around sternomastoid and trapezius; roof of the posterior triangle; attached to the hyoid.",
+    pretracheal: "<i>Pretracheal layer.</i> Thyroid, trachea, oesophagus and infrahyoid muscles. Tied to the hyoid and thyroid cartilage, so the thyroid rises when you swallow.",
+    prevertebral: "<i>Prevertebral layer.</i> Over the prevertebral and scalene muscles; floor of the posterior triangle; continues into the axilla as the axillary sheath.",
+    carotid: "<i>Carotid sheath.</i> Carotid arteries medially, internal jugular vein laterally, vagus between and behind."
+  };
+  var COLOR = { superficial: "var(--bone)", investing: "var(--gilt)", pretracheal: "var(--madder)", prevertebral: "var(--verdigris)", carotid: "var(--lapis)" };
+  var fact = document.getElementById("fact"), DEFAULT_FACT = fact.innerHTML;
+  var focused = null;
+  function focus(name, keep) {
+    if (!keep && focused === name) name = null;
+    focused = name;
+    svg.classList.toggle("focusing", !!name);
+    Object.keys(layers).forEach(function (k) { layers[k].classList.toggle("on", k === name); });
+    Array.prototype.forEach.call(svg.querySelectorAll(".lab"), function (g) { g.classList.toggle("on", g.getAttribute("data-layer") === name); });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-layer]"), function (b) { if (b.tagName === "BUTTON") b.setAttribute("aria-pressed", b.getAttribute("data-layer") === name ? "true" : "false"); });
+    fact.innerHTML = name ? FACT[name] : DEFAULT_FACT;
+    fact.style.color = name ? COLOR[name] : "";
+  }
+  Object.keys(layers).forEach(function (k) { layers[k].addEventListener("click", function () { if (stage < 3) focus(k); }); });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("button[data-layer]");
+    if (b) focus(b.getAttribute("data-layer"));
+  });
+
+  /* ───── camera ───── */
+  var VB = [0, 0, 860, 560], ZOOM = [242, 170, 180, 117.2];
+  var camAnim = null;
+  function camera(to, ms) {
+    if (camAnim) cancelAnimationFrame(camAnim);
+    var from = VB.slice(), t0 = performance.now();
+    if (reduce || !ms) { VB = to.slice(); svg.setAttribute("viewBox", VB.join(" ")); return; }
+    (function step(now) {
+      var s = Math.min(1, (now - t0) / ms), e = s < 0.5 ? 4 * s * s * s : 1 - Math.pow(-2 * s + 2, 3) / 2;
+      VB = from.map(function (v, i) { return v + (to[i] - v) * e; });
+      svg.setAttribute("viewBox", VB.map(function (v) { return v.toFixed(2); }).join(" "));
+      if (s < 1) camAnim = requestAnimationFrame(step);
+    })(t0);
+  }
+
+  /* ───── the axon ───── */
+  var ax = document.getElementById("axon");
+  var NODES = [], GAP = 62, X0 = 22, NK = 10, SEC = [0, 3, 6, 9];
+  for (var k = 0; k < NK; k++) NODES.push(X0 + k * GAP);
+  el("line", { x1: 0, y1: 28, x2: NODES[NK - 1], y2: 28, class: "core" }, ax);
+  var MY = [];
+  for (k = 0; k < NK - 1; k++) MY.push(el("rect", { x: NODES[k] + 6, y: 21, width: GAP - 12, height: 14, rx: 7, class: "my" }, ax));
+  var NODE_EL = NODES.map(function (x, i) {
+    var big = SEC.indexOf(i) >= 0;
+    return el("circle", { cx: x, cy: 28, r: big ? 5.5 : 2.6, class: "node" + (big ? " big" : "") }, ax);
+  });
+  el("circle", { cx: NODES[NK - 1] + 18, cy: 28, r: 9, fill: "none", stroke: "var(--bone-3)", "stroke-width": 1.2 }, ax); // the terminal bouton
+  el("line", { x1: NODES[NK - 1], y1: 28, x2: NODES[NK - 1] + 9, y2: 28, class: "core" }, ax);
+  var SECTXT = ["I", "II", "III", "Done"].map(function (t, i) { return el("text", { x: NODES[SEC[i]] + (i === 3 ? 18 : 0), y: 62, "text-anchor": "middle" }, ax, t); });
+  var axGlow = el("filter", { id: "axg", x: "-200%", y: "-200%", width: "500%", height: "500%" }, el("defs", {}, ax));
+  el("feGaussianBlur", { stdDeviation: 3 }, axGlow);
+  var halo = el("circle", { cx: NODES[0], cy: 28, r: 9, fill: "var(--gilt)", opacity: 0.55, filter: "url(#axg)" }, ax);
+  var spark = el("circle", { cx: NODES[0], cy: 28, r: 4, fill: "#fff3d6" }, ax);
+  function lightTo(kk) {
+    NODE_EL.forEach(function (n, i) { n.classList.toggle("lit", i <= kk); });
+    MY.forEach(function (m, i) { m.classList.toggle("lit", i < kk); });
+    SECTXT.forEach(function (t, i) { t.classList.toggle("lit", SEC[i] <= kk); });
+  }
+  lightTo(0);
+  function conduct(from, to, done) {
+    var hop = from;
+    function next() {
+      if (hop >= to) { if (done) done(); return; }
+      var x0 = NODES[hop], x1 = NODES[hop + 1], t0 = performance.now(), ms = reduce ? 0 : 120;
+      (function step(now) {
+        var s = ms ? Math.min(1, (now - t0) / ms) : 1, e = 1 - Math.pow(1 - s, 3), x = x0 + (x1 - x0) * e;
+        spark.setAttribute("cx", x.toFixed(1)); halo.setAttribute("cx", x.toFixed(1));
+        if (s < 1) requestAnimationFrame(step);
+        else { hop++; lightTo(hop); setTimeout(next, reduce ? 0 : 55); }
+      })(t0);
+    }
+    next();
+  }
+
+  /* ───── the lesson ───── */
+  var T = function (layer, text) { return '<button type="button" class="term" data-layer="' + layer + '" style="--c:' + COLOR[layer] + '" aria-pressed="false">' + text + "</button>"; };
+  var RECALL = function (q, a) {
+    return '<div class="note recall" style="--nc:var(--bone-2)"><div class="cap"><span>Cover it · answer in your head</span><span lang="ar" dir="rtl">رجّعها من دماغك</span></div>' +
+      '<p class="q">' + q + '</p><p class="answer">' + a + '</p><div class="recall-actions"><button type="button" class="btn-line" data-recall="show">Show the answer</button></div></div>';
+  };
+  var SECTIONS = [
+    { cap: "Section I of III", next: "Got it · next section",
+      html: '<div class="eyebrow">Section I of III · The whole picture</div>' +
+        '<h1>Deep cervical <em>fascia</em></h1>' +
+        '<div class="ar"><span lang="ar" dir="rtl">فرّق النسيج</span><span>Read the tissue</span></div>' +
+        '<p class="lede">The neck is packed in <i>sleeves of deep fascia</i>. The ' + T("investing", "investing layer") + ' wraps everything like a collar and splits around the sternomastoid and trapezius. The ' + T("pretracheal", "pretracheal layer") + ' wraps the thyroid, trachea and oesophagus. The ' + T("prevertebral", "prevertebral layer") + ' covers the muscles in front of the spine. The ' + T("carotid", "carotid sheath") + ' is a tube around the main vessels and the vagus. Each layer decides where pus spreads and what moves with swallowing.</p>' +
+        '<div class="key" role="group" aria-label="The plate\'s colouring">' +
+        [["investing", "Investing layer", "Gilt"], ["pretracheal", "Pretracheal layer", "Rose madder"], ["prevertebral", "Prevertebral layer", "Verdigris"], ["carotid", "Carotid sheath", "Lapis lazuli"]].map(function (r) {
+          return '<button type="button" data-layer="' + r[0] + '" aria-pressed="false" style="--c:' + COLOR[r[0]] + '"><span class="sw"></span><span>' + r[1] + '</span><span class="pig">' + r[2] + "</span></button>";
+        }).join("") + "</div>" +
+        '<div class="meta">Anatomy · exam tier C · 4 sources · about 15 minutes</div>' },
+    { cap: "Section II of III", next: "Got it · next section",
+      html: '<div class="eyebrow">Section II of III · Layers of deep cervical fascia</div>' +
+        '<h2>Four sleeves, <em>four jobs</em></h2>' +
+        '<div class="rows">' +
+        [["superficial", "Superficial fascia", "contains the <strong>platysma</strong>, the external jugular vein and the cutaneous nerves."],
+         ["investing", "Investing layer", "surrounds the neck and <strong>splits to enclose the sternomastoid and trapezius</strong>. It forms the <strong>roof of the posterior triangle</strong> and the capsules of the parotid and submandibular glands, and it is attached to the hyoid bone."],
+         ["pretracheal", "Pretracheal layer", "encloses the <strong>thyroid gland</strong>, trachea, oesophagus and infrahyoid muscles. It is attached to the hyoid and the thyroid cartilage, so the <strong>thyroid moves up with swallowing</strong>."],
+         ["prevertebral", "Prevertebral layer", "covers the prevertebral and scalene muscles and forms the <strong>floor of the posterior triangle</strong>. It is prolonged into the axilla as the <strong>axillary sheath</strong> around the subclavian artery and brachial plexus."]].map(function (r) {
+          return '<div class="row" style="--c:' + COLOR[r[0]] + '"><span class="dot"></span><p>' + T(r[0], r[1]) + ": " + r[2] + "</p></div>";
+        }).join("") + "</div>" +
+        '<div class="note" style="--nc:var(--madder)"><div class="cap"><span>The written exam asks this section as</span><span lang="ar" dir="rtl">السؤال المقالي</span></div><p>List the contents of the posterior triangle of the neck, and the external jugular vein. Answer it in your head as headings from the points above before you go on.</p></div>' +
+        RECALL("Which fascial layer makes the thyroid move with swallowing?", "The <strong>pretracheal fascia</strong>, attached to the hyoid and the thyroid cartilage.") ,
+      onReveal: function () { focus("pretracheal", true); swallowG.classList.remove("swallow"); void swallowG.getBBox(); swallowG.classList.add("swallow"); } },
+    { cap: "Section III of III", next: "Finish the plate",
+      html: '<div class="eyebrow">Section III of III · Carotid sheath</div>' +
+        '<h2>The carotid <em>sheath</em></h2>' +
+        '<p class="lede">A fascial tube from the base of the skull to the root of the neck. The plate has moved in on the left one.</p>' +
+        '<div class="lists"><div style="--c:var(--lapis)"><h3>Inside</h3><ul><li>The <strong>common and internal carotid arteries</strong>, medially</li><li>The <strong>internal jugular vein</strong>, laterally</li><li>The <strong>vagus nerve</strong>, between and behind them</li><li>Deep cervical lymph nodes</li></ul></div>' +
+        '<div style="--c:var(--bone-2)"><h3>Not inside</h3><ul><li>The <strong>external carotid artery</strong>, outside the sheath</li><li>The external jugular vein</li><li>The <strong>ansa cervicalis</strong>, in the anterior wall, not inside it</li><li>The <strong>sympathetic trunk</strong>, behind the sheath</li></ul></div></div>' +
+        '<div class="note" style="--nc:var(--artery)"><div class="cap"><span>Exam trap</span></div><p>The <strong>external</strong> carotid is <strong>not</strong> in the carotid sheath. The <strong>internal</strong> carotid is.</p></div>' +
+        RECALL("What are the contents of the carotid sheath?", "The common and internal carotid arteries, the internal jugular vein and the vagus nerve, with the deep cervical nodes.") },
+    { cap: "Lesson complete", next: "See the plate again",
+      html: '<div class="eyebrow">Lesson complete</div>' +
+        '<h2>Plate XXIX, <em>learned.</em></h2>' +
+        '<p class="lede">Three sections, four sleeves, one sheath. Next on today\'s plan: <i>Cerebellum physiology</i>.</p>' +
+        '<div class="meta">The axon below has fired end to end. In the course this step would now count as done.</div>' }
+  ];
+
+  var page = document.getElementById("page"), stage = 1;
+  var ctaEn = document.getElementById("cta-en"), ctaSub = document.getElementById("cta-sub"), cap = document.getElementById("axon-cap"), toast = document.getElementById("toast");
+  function render(i) {
+    var s = SECTIONS[i];
+    page.innerHTML = s.html;
+    ctaEn.textContent = s.next;
+    ctaSub.textContent = i < 3 ? s.cap + " · tap when it is clear" : "Starts the lesson again";
+    cap.textContent = i < 3 ? "Node " + ["I", "II", "III"][i] + " of III" : "Fired end to end";
+  }
+  function setStage(n) {
+    stage = n;
+    Array.prototype.forEach.call(svg.querySelectorAll(".lab"), function (g) { g.classList.toggle("off", Number(g.getAttribute("data-stage")) > n); });
+    if (n === 3) {
+      labs.classList.add("off"); zl.classList.remove("off");
+      focus("carotid", true); camera(ZOOM, 1700);
+      fact.innerHTML = "<i>Close-up, left carotid sheath.</i> Vein lateral, artery medial, vagus between and behind; the ansa sits in the wall, the sympathetic trunk outside it.";
+    } else {
+      labs.classList.remove("off"); zl.classList.add("off");
+      if (VB[2] !== 860) camera([0, 0, 860, 560], 1300);
+      focus(null, true);
+    }
+  }
+  page.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-recall]");
+    if (!b) return;
+    var box = b.closest(".recall"), act = b.getAttribute("data-recall"), acts = box.querySelector(".recall-actions");
+    if (act === "show") {
+      box.classList.add("revealed");
+      acts.innerHTML = '<button type="button" class="btn-line" data-recall="yes">I had it</button><button type="button" class="btn-line" data-recall="no">Not yet</button>';
+      var s = SECTIONS[cur]; if (s.onReveal) s.onReveal();
+    } else {
+      acts.innerHTML = '<span class="verdict" style="color:' + (act === "yes" ? "var(--verdigris)" : "var(--madder)") + '">' + (act === "yes" ? "Locked in." : "It comes back once before practice.") + "</span>";
+    }
+  });
+
+  var cur = 0, busy = false;
+  document.getElementById("cta").addEventListener("click", function () {
+    if (busy) return;
+    busy = true;
+    if (cur === 3) {
+      cur = 0;
+      spark.setAttribute("cx", NODES[0]); halo.setAttribute("cx", NODES[0]); lightTo(0);
+      turn(0, function () { setStage(1); busy = false; });
+      return;
+    }
+    toast.classList.add("on");
+    setTimeout(function () { toast.classList.remove("on"); }, 1500);
+    conduct(SEC[cur], SEC[cur + 1], function () { busy = false; });
+    cur++;
+    turn(cur, function () { setStage(cur === 1 ? 2 : cur === 2 ? 3 : 2); });
+  });
+  function turn(i, after) {
+    page.classList.add("out");
+    setTimeout(function () {
+      render(i);
+      page.classList.remove("out");
+      if (after) after();
+      var top = page.getBoundingClientRect().top;
+      if (top < 0 || top > innerHeight * 0.6) page.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    }, reduce ? 0 : 300);
+  }
+  render(0);
+})();
+</script>
