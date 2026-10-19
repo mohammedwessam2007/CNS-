@@ -252,6 +252,7 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   var scene = new THREE.Scene();
   if (THREE.RoomEnvironment) { var pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new THREE.RoomEnvironment(), 0.04).texture; }
   var camera = new THREE.PerspectiveCamera(34, 1, 0.05, 100);
@@ -264,7 +265,8 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   controls.autoRotate = !reduce; controls.autoRotateSpeed = 0.55;
 
   scene.add(new THREE.HemisphereLight(0xbfd4ff, 0x10131c, 0.25));
-  var key = new THREE.DirectionalLight(0xfff4e8, 0.9); key.position.set(4, 7, 6); scene.add(key);
+  var key = new THREE.DirectionalLight(0xfff4e8, 1.0); key.position.set(3, 9, 5); key.castShadow = true; key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.left = key.shadow.camera.bottom = -4.5; key.shadow.camera.right = key.shadow.camera.top = 4.5; key.shadow.camera.near = 1; key.shadow.camera.far = 24; key.shadow.bias = -0.0006; key.shadow.normalBias = 0.02; scene.add(key);
   var rimA = new THREE.DirectionalLight(0x7ea6ff, 1.1); rimA.position.set(-6, 2, -5); scene.add(rimA);
   var rimB = new THREE.DirectionalLight(0xf2b45a, 0.6); rimB.position.set(6, -3, -4); scene.add(rimB);
 
@@ -281,15 +283,28 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   }
   function solid(color, o) {
     o = o || {};
-    var m = new THREE.MeshPhysicalMaterial({ color: new THREE.Color(color), roughness: o.r == null ? 0.55 : o.r, metalness: o.m || 0.0, emissive: new THREE.Color(o.e || "#000000"), emissiveIntensity: o.ei || 0, transparent: !!o.t, opacity: o.t || 1, depthWrite: !o.t,
-      clearcoat: o.cc == null ? 0.55 : o.cc, clearcoatRoughness: 0.32, envMapIntensity: o.env == null ? 0.9 : o.env });
+    var m = new THREE.MeshPhysicalMaterial({ color: new THREE.Color(color), map: o.map || null, roughness: o.r == null ? 0.55 : o.r, metalness: 0, emissive: new THREE.Color(o.e || "#000000"), emissiveIntensity: o.ei || 0, transparent: !!o.t, opacity: o.t || 1, depthWrite: !o.t,
+      clearcoat: o.cc == null ? 0.55 : o.cc, clearcoatRoughness: 0.32, envMapIntensity: o.env == null ? 0.9 : o.env, side: o.ds ? THREE.DoubleSide : THREE.FrontSide });
     m.userData = { base: o.t || 1, fade: 1, fadeTo: 1, glow: 0, glowTo: 0, ei: o.ei || 0, glowCol: new THREE.Color(o.gc || color) }; mats.push(m); return m;
   }
+  /* ───── the cut faces: what a real section shows ───── */
+  var rs = 11; function rr() { rs = (rs * 16807) % 2147483647; return rs / 2147483647; }
+  function canvasTex(draw) { var c = document.createElement("canvas"); c.width = c.height = 256; draw(c.getContext("2d"), 256); var t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; return t; }
+  var TX = {
+    muscle: canvasTex(function (x, n) { x.fillStyle = "#7a2128"; x.fillRect(0, 0, n, n); for (var i = 0; i < 300; i++) { var r = 5 + rr() * 10; x.beginPath(); x.ellipse(rr() * n, rr() * n, r, r * (0.6 + rr() * 0.5), rr() * 3, 0, 6.3); x.fillStyle = "rgba(" + (140 + rr() * 50 | 0) + "," + (34 + rr() * 22 | 0) + "," + (42 + rr() * 20 | 0) + ",.6)"; x.fill(); x.strokeStyle = "rgba(48,6,10,.6)"; x.lineWidth = 1.1; x.stroke(); } }),
+    bone: canvasTex(function (x, n) { x.fillStyle = "#e4d6ba"; x.fillRect(0, 0, n, n); for (var i = 0; i < 1100; i++) { x.fillStyle = "rgba(118,92,54," + (0.12 + rr() * 0.35) + ")"; x.beginPath(); x.arc(rr() * n, rr() * n, 0.5 + rr() * 2.4, 0, 6.3); x.fill(); } }),
+    gland: canvasTex(function (x, n) { x.fillStyle = "#a43c55"; x.fillRect(0, 0, n, n); for (var i = 0; i < 170; i++) { x.beginPath(); x.arc(rr() * n, rr() * n, 4 + rr() * 8, 0, 6.3); x.fillStyle = "rgba(244,176,150,.32)"; x.fill(); x.strokeStyle = "rgba(80,14,30,.65)"; x.lineWidth = 1.2; x.stroke(); } }),
+    fat: canvasTex(function (x, n) { x.fillStyle = "#b58f3e"; x.fillRect(0, 0, n, n); for (var i = 0; i < 140; i++) { x.beginPath(); x.arc(rr() * n, rr() * n, 5 + rr() * 11, 0, 6.3); x.strokeStyle = "rgba(96,62,16,.6)"; x.lineWidth = 1.4; x.stroke(); } }),
+    cord: canvasTex(function (x, n) { x.fillStyle = "#eadfcd"; x.fillRect(0, 0, n, n); for (var i = 0; i < 600; i++) { x.fillStyle = "rgba(150,128,104," + (rr() * 0.25) + ")"; x.fillRect(rr() * n, rr() * n, 1.6, 1.6); } })
+  };
   var M = {
-    muscle: solid("#5c1519", { r: 0.62 }), muscle2: solid("#6e1f24", { r: 0.62 }), bone: solid("#cdbfa5", { r: 0.6, cc: 0.15 }), disc: solid("#a9c4d6", { r: 0.3, t: 0.55 }),
-    cart: solid("#bcd2de", { r: 0.25, e: "#1b2a3c", ei: 0.2, cc: 0.9 }), thyroid: solid("#a13a52", { r: 0.45, e: "#2a0610", ei: 0.35, cc: 0.8 }), oes: solid("#8e3f3c", { r: 0.6 }),
-    artery: solid("#d8332a", { r: 0.28, e: "#3a0603", ei: 0.45, cc: 1 }), vein: solid("#3552b8", { r: 0.28, e: "#0a1438", ei: 0.4, cc: 1 }), nerve: solid("#f1c95e", { r: 0.4, e: "#4a3608", ei: 0.7, cc: 0.6 }),
-    cord: solid("#ddd0bb", { r: 0.45, cc: 0.7 }), skin: holo("#c9d6f2", 0.11)
+    muscle: solid("#5c1519", { r: 0.62 }), muscle2: solid("#6e1f24", { r: 0.62 }), muscleCut: solid("#ffffff", { map: TX.muscle, r: 0.7, cc: 0.45 }),
+    bone: solid("#cdbfa5", { r: 0.6, cc: 0.15 }), boneCut: solid("#ffffff", { map: TX.bone, r: 0.75, cc: 0.1 }), disc: solid("#a9c4d6", { r: 0.3, t: 0.55 }),
+    cart: solid("#bcd2de", { r: 0.25, e: "#1b2a3c", ei: 0.2, cc: 0.9 }), thyroid: solid("#a13a52", { r: 0.45, e: "#2a0610", ei: 0.35, cc: 0.8 }), thyroidCut: solid("#ffffff", { map: TX.gland, r: 0.55, cc: 0.6 }),
+    oes: solid("#8e3f3c", { r: 0.6 }), artery: solid("#d8332a", { r: 0.28, e: "#3a0603", ei: 0.45, cc: 1, ds: true }), arteryCut: solid("#f08a7c", { r: 0.4, cc: 0.6 }),
+    vein: solid("#3552b8", { r: 0.28, e: "#0a1438", ei: 0.4, cc: 1, ds: true }), veinCut: solid("#8ea2e8", { r: 0.4, cc: 0.6 }), blood: solid("#3d0608", { r: 0.2, cc: 1 }), bloodV: solid("#101a46", { r: 0.2, cc: 1 }),
+    nerve: solid("#f1c95e", { r: 0.4, e: "#4a3608", ei: 0.7, cc: 0.6, ds: true }), cord: solid("#ddd0bb", { r: 0.45, cc: 0.7 }), cordCut: solid("#ffffff", { map: TX.cord, r: 0.6, cc: 0.4 }),
+    fat: solid("#d9d2c4", { map: TX.fat, r: 0.7, cc: 0.3, ds: true, env: 0.5 }), skin: holo("#c9d6f2", 0.11)
   };
 
   /* ───── geometry helpers ───── */
@@ -305,36 +320,98 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   }
   function shell(pts, k, h, y0, mat) { return extrude(pts, [scaleAbout(pts, k).reverse()], h, y0, mat); }
   function ringShell(s, thick, h, y0, mat) { return extrude(ringPts(s), [ringPts(s - thick).reverse()], h, y0, mat); }
-  function tube(points, r, mat, seg) { var c = new THREE.CatmullRomCurve3(points); return new THREE.Mesh(new THREE.TubeGeometry(c, seg || 60, r, 12, false), mat); }
-  function vcyl(X, Y, rx, rz, y0, y1, mat) { var g0 = new THREE.CylinderGeometry(1, 1, y1 - y0, 24, 1); g0.scale(rx / 100, 1, rz / 100); var m = new THREE.Mesh(g0, mat); m.position.set(U(X), (y0 + y1) / 2, Z(Y)); return m; }
+  function tube(points, r, mat, seg) { var c = new THREE.CatmullRomCurve3(points); return new THREE.Mesh(new THREE.TubeGeometry(c, seg || 60, r, 14, false), mat); }
+  // A living solid: the section outline lofted up the neck, swelling, twisting and leaning as a real structure does,
+  // with softened edges and a flat cut face (its own material) at each end of the slab.
+  function loft(outer, hole, y0, h, o, capMat, sideMat) {
+    o = o || {};
+    var bulge = o.bulge || 0, twist = (o.twist || 0) * Math.PI / 180, lean = o.lean || [0, 0], bow = o.bow || [0, 0], taper = o.taper || 0;
+    var toXZ = function (p) { return [U(p[0]), Z(p[1])]; };
+    var P0 = outer.map(toXZ), H0 = hole ? hole.map(toXZ) : null;
+    var cx = 0, cz = 0; P0.forEach(function (p) { cx += p[0]; cz += p[1]; }); cx /= P0.length; cz /= P0.length;
+    var bev = o.bevel === false || h < 0.25 ? 0 : Math.min(0.05, h * 0.08);
+    var T = [0]; if (bev) T.push(bev * 0.35 / h, bev / h);
+    var steps = Math.max(2, Math.round(h / 0.12)); for (var i = 1; i < steps; i++) T.push(i / steps);
+    if (bev) T.push(1 - bev / h, 1 - bev * 0.35 / h); T.push(1);
+    T.sort(function (a, b) { return a - b; });
+    function edge(t) { if (!bev) return 1; var d = Math.min(t, 1 - t) * h; return d >= bev ? 1 : 0.955 + 0.045 * Math.sqrt(d / bev); }
+    function xf(pts, t) {
+      var s = (1 + bulge * Math.sin(Math.PI * t)) * (1 + taper * (0.5 - t)) * edge(t), a = twist * (t - 0.5), ca = Math.cos(a), sa = Math.sin(a);
+      var ox = lean[0] * (t - 0.5) + bow[0] * Math.sin(Math.PI * t), oz = lean[1] * (t - 0.5) + bow[1] * Math.sin(Math.PI * t);
+      return pts.map(function (p) { var dx = (p[0] - cx) * s, dz = (p[1] - cz) * s; return [cx + dx * ca - dz * sa + ox, cz + dx * sa + dz * ca + oz]; });
+    }
+    var pos = [], uv = [], idx = [], capIdx = [];
+    function sideOf(base, inward) {
+      var n = base.length, start = pos.length / 3, rings = T.map(function (t) { return xf(base, t); });
+      rings.forEach(function (rg, r) { rg.forEach(function (p, j) { pos.push(p[0], y0 + h * T[r], p[1]); uv.push(j / n, T[r]); }); });
+      // which winding faces outward (or into the hole) is decided from the first quad
+      var a = rings[0][0], b = rings[0][1 % n], mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], ccx = 0, ccz = 0;
+      base.forEach(function (p) { ccx += p[0]; ccz += p[1]; }); ccx /= n; ccz /= n;
+      var ex = b[0] - a[0], ez = b[1] - a[1], nx = -ez, nz = ex, out = (mid[0] - ccx) * nx + (mid[1] - ccz) * nz > 0;
+      var flip = inward ? out : !out;
+      for (var r2 = 0; r2 < T.length - 1; r2++) for (var j = 0; j < n; j++) {
+        var A = start + r2 * n + j, B = start + r2 * n + (j + 1) % n, Cc = start + (r2 + 1) * n + (j + 1) % n, D = start + (r2 + 1) * n + j;
+        if (flip) idx.push(A, B, Cc, A, Cc, D); else idx.push(A, Cc, B, A, D, Cc);
+      }
+    }
+    sideOf(P0, false); if (H0) sideOf(H0, true);
+    var sideCount = idx.length;
+    [0, 1].forEach(function (end) {
+      var t = end, oc = xf(P0, t), hc = H0 ? xf(H0, t) : null, start = pos.length / 3;
+      var contour = oc.map(function (p) { return new THREE.Vector2(p[0], p[1]); }), holes = hc ? [hc.map(function (p) { return new THREE.Vector2(p[0], p[1]); })] : [];
+      var tris = THREE.ShapeUtils.triangulateShape(contour, holes), all = oc.concat(hc || []);
+      all.forEach(function (p) { pos.push(p[0], y0 + h * t, p[1]); uv.push(p[0] * 0.9, p[1] * 0.9); });
+      tris.forEach(function (tr) {
+        var p1 = all[tr[0]], p2 = all[tr[1]], p3 = all[tr[2]], ny = (p2[1] - p1[1]) * (p3[0] - p1[0]) - (p2[0] - p1[0]) * (p3[1] - p1[1]);
+        var up = end === 1; if ((ny > 0) === up) capIdx.push(start + tr[0], start + tr[1], start + tr[2]); else capIdx.push(start + tr[0], start + tr[2], start + tr[1]);
+      });
+    });
+    var geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+    geo.setIndex(idx.concat(capIdx));
+    geo.addGroup(0, sideCount, 1); geo.addGroup(sideCount, capIdx.length, 0);
+    geo.computeVertexNormals();
+    return new THREE.Mesh(geo, [capMat || sideMat, sideMat]);
+  }
+  function capRing(outer, hole, y, mat) { var g0 = new THREE.ShapeGeometry(shapeFrom(outer, hole ? [hole] : [])); g0.rotateX(-Math.PI / 2); g0.translate(0, y, 0); var uvA = g0.attributes.uv; for (var i = 0; i < uvA.count; i++) uvA.setXY(i, g0.attributes.position.getX(i) * 0.9, g0.attributes.position.getZ(i) * 0.9); return new THREE.Mesh(g0, mat); }
+  function vessel(X, Y, rx, rz, wall, y0, y1, side, cut, blood, o) {
+    var outer = ellPts(X, Y, rx, rz, 0, 26), inner = ellPts(X, Y, rx - wall, Math.max(0.6, rz - wall * (rz / rx)), 0, 26);
+    var g0 = new THREE.Group();
+    g0.add(loft(outer, inner, y0, y1 - y0, Object.assign({ bevel: false }, o), cut, side));
+    g0.add(loft(inner, null, y0 + 0.004, y1 - y0 - 0.008, Object.assign({ bevel: false }, o), blood, blood));
+    return g0;
+  }
 
   /* ───── build the neck ───── */
   var root = new THREE.Group(); scene.add(root);
   var G = {}, PICK = [];
   ["skin", "superficial", "investing", "pretracheal", "prevertebral", "carotid"].forEach(function (k) { var g0 = new THREE.Group(); g0.userData = { layer: k, y: 0, yTo: 0 }; G[k] = g0; root.add(g0); });
-  function add(group, mesh, name) { mesh.userData.name = name; mesh.userData.layer = group.userData.layer; group.add(mesh); PICK.push(mesh); return mesh; }
+  function add(group, obj, name) {
+    obj.traverse(function (m) { if (m.isMesh) { m.userData.name = name; m.userData.layer = group.userData.layer; PICK.push(m); } });
+    group.add(obj); return obj;
+  }
   var Y0 = -H / 2, SH = H + 0.44, SY0 = Y0 - 0.22;
 
-  // skin
+  // skin, and the subcutaneous fat seen on the cut faces
   add(G.skin, ringShell(1, 0.012, H, Y0, M.skin), "Skin");
+  add(G.skin, capRing(ringPts(0.988), ringPts(0.905).reverse(), H / 2 - 0.002, M.fat), "Subcutaneous fat");
+  add(G.skin, capRing(ringPts(0.988), ringPts(0.905).reverse(), Y0 + 0.002, M.fat), "Subcutaneous fat");
 
-  // superficial fascia: platysma sheets, external and anterior jugular veins, its own faint sleeve
+  // superficial fascia: platysma sheets, external jugular veins, its own faint sleeve
   var mSup = holo(COL.superficial, 0.16);
   add(G.superficial, ringShell(0.955, 0.006, SH, SY0, mSup), "Superficial fascia");
-  [[206, 262], [278, 334]].forEach(function (r) { add(G.superficial, extrude(lensPts(0.985, r[0], r[1], 0.026), null, H * 0.92, Y0, M.muscle2), "Platysma"); });
-  [222, 318].forEach(function (t) { var p = S(t, 0.95); add(G.superficial, vcyl(p[0], p[1], 5.6, 4.4, Y0, H / 2, M.vein), "External jugular vein"); });
+  [[206, 262], [278, 334]].forEach(function (r) { add(G.superficial, loft(lensPts(0.985, r[0], r[1], 0.026), null, Y0, H, { bulge: 0.02 }, M.muscleCut, M.muscle2), "Platysma"); });
+  [222, 318].forEach(function (t, i) { var p = S(t, 0.95); add(G.superficial, vessel(p[0], p[1], 5.8, 4.6, 1.2, Y0, H / 2, M.vein, M.veinCut, M.bloodV, { bow: [i ? -0.03 : 0.03, 0.02] }), "External jugular vein"); });
 
   // investing layer: the collar, splitting around sternomastoid and trapezius
   var mInv = holo(COL.investing, 0.34);
   add(G.investing, ringShell(0.9, 0.01, SH, SY0, mInv), "Investing layer");
-  [[197, 241, 0.118, -1], [299, 343, 0.118, 1]].forEach(function (m) {
-    var mesh = extrude(lensPts(0.9, m[0], m[1], m[2]), null, H, Y0, M.muscle);
+  [[197, 241, 1], [299, 343, -1]].forEach(function (m) {
     // the sternomastoid runs obliquely: higher up it lies further back and further out
-    var sx = m[3] < 0 ? 1 : -1, sh = new THREE.Matrix4().set(1, sx * 0.1, 0, 0, 0, 1, 0, 0, 0, -0.16, 1, 0, 0, 0, 0, 1);
-    mesh.geometry.applyMatrix4(sh);
-    add(G.investing, mesh, "Sternocleidomastoid");
+    add(G.investing, loft(lensPts(0.9, m[0], m[1], 0.118), null, Y0, H, { bulge: 0.1, twist: 9 * m[2], lean: [0.14 * m[2], -0.2] }, M.muscleCut, M.muscle), "Sternocleidomastoid");
   });
-  [[112, 158], [22, 68]].forEach(function (m) { add(G.investing, extrude(lensPts(0.9, m[0], m[1], 0.088), null, H, Y0, M.muscle), "Trapezius"); });
+  [[112, 158, 1], [22, 68, -1]].forEach(function (m) { add(G.investing, loft(lensPts(0.9, m[0], m[1], 0.088), null, Y0, H, { bulge: 0.06, twist: 4 * m[2] }, M.muscleCut, M.muscle), "Trapezius"); });
   [-1, 1].forEach(function (k) { add(G.investing, tube([V3(380 + k * -122, 330, H / 2), V3(380 + k * -148, 358, 0), V3(380 + k * -172, 392, Y0)], 0.024, M.nerve), "Accessory nerve"); });
 
   // pretracheal layer: thyroid, trachea, oesophagus, infrahyoid muscles
@@ -342,24 +419,24 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   var preD = "M326 90 C350 80 410 80 434 90 C462 100 466 150 454 192 C444 222 420 232 380 232 C340 232 316 222 306 192 C294 150 298 100 326 90 Z";
   add(G.pretracheal, shell(pathPts(preD, 12), 0.975, SH, SY0, mPre), "Pretracheal layer");
   [[352, 95, 18, 5, -12], [340, 106, 12, 4.4, -26]].forEach(function (m) {
-    add(G.pretracheal, extrude(ellPts(m[0], m[1], m[2], m[3], m[4]), null, H * 0.9, Y0, M.muscle2), "Infrahyoid muscles");
-    add(G.pretracheal, extrude(mirrorPts(ellPts(m[0], m[1], m[2], m[3], m[4])), null, H * 0.9, Y0, M.muscle2), "Infrahyoid muscles");
+    add(G.pretracheal, loft(ellPts(m[0], m[1], m[2], m[3], m[4]), null, Y0, H, { bulge: 0.12, lean: [0.03, 0.02] }, M.muscleCut, M.muscle2), "Infrahyoid muscles");
+    add(G.pretracheal, loft(mirrorPts(ellPts(m[0], m[1], m[2], m[3], m[4])), null, Y0, H, { bulge: 0.12, lean: [-0.03, 0.02] }, M.muscleCut, M.muscle2), "Infrahyoid muscles");
   });
-  var lobeD = "M352 116 C324 114 306 140 312 180 C316 204 334 214 348 204 C340 182 342 152 352 136 Z";
-  var lobe = pathPts(lobeD, 10);
-  add(G.pretracheal, extrude(lobe, null, H, Y0, M.thyroid), "Thyroid gland");
-  add(G.pretracheal, extrude(mirrorPts(lobe), null, H, Y0, M.thyroid), "Thyroid gland");
-  add(G.pretracheal, extrude(pathPts("M352 116 C366 109 394 109 408 116 L408 128 C394 122 366 122 352 128 Z", 8), null, 0.5, -0.25, M.thyroid), "Thyroid gland");
+  var lobe = pathPts("M352 116 C324 114 306 140 312 180 C316 204 334 214 348 204 C340 182 342 152 352 136 Z", 10);
+  var swallow = new THREE.Group(); swallow.userData = { layer: "pretracheal" }; G.pretracheal.add(swallow);
+  add(swallow, loft(lobe, null, Y0, H, { bulge: 0.14, taper: 0.22, lean: [0.03, 0] }, M.thyroidCut, M.thyroid), "Thyroid gland");
+  add(swallow, loft(mirrorPts(lobe), null, Y0, H, { bulge: 0.14, taper: 0.22, lean: [-0.03, 0] }, M.thyroidCut, M.thyroid), "Thyroid gland");
+  add(swallow, loft(pathPts("M352 116 C366 109 394 109 408 116 L408 128 C394 122 366 122 352 128 Z", 8), null, -0.3, 0.55, { bulge: 0.2 }, M.thyroidCut, M.thyroid), "Thyroid gland");
   function pol(r, deg) { var t = deg * Math.PI / 180; return [380 + r * Math.cos(t), 148 + r * Math.sin(t)]; }
   var cRing = [], d0;
   for (d0 = 118; d0 <= 422; d0 += 8) cRing.push(pol(29.5, d0));
   for (d0 = 422; d0 >= 118; d0 -= 8) cRing.push(pol(23.5, d0));
-  for (var ry = Y0 + 0.04; ry < H / 2 - 0.1; ry += 0.2) add(G.pretracheal, extrude(cRing, null, 0.13, ry, M.cart), "Trachea");
+  for (var ry = Y0 + 0.04; ry < H / 2 - 0.1; ry += 0.2) add(swallow, loft(cRing, null, ry, 0.13, { bevel: false, bulge: 0.02 }, M.cart, M.cart), "Trachea");
   var tm = [pol(29, 62), pol(27, 76), pol(26.5, 90), pol(27, 104), pol(29, 118), pol(25, 112), pol(24, 90), pol(25, 68)];
-  add(G.pretracheal, extrude(tm, null, H - 0.08, Y0, M.oes), "Trachea");
-  add(G.pretracheal, extrude(ellPts(366, 202, 22, 11.5, 0, 32), [ellPts(366, 202, 15, 5, 0, 20).reverse()], H, Y0, M.oes), "Oesophagus");
+  add(swallow, loft(tm, null, Y0, H - 0.08, { bevel: false }, M.muscleCut, M.oes), "Trachea");
+  add(swallow, loft(ellPts(366, 202, 22, 11.5, 0, 32), ellPts(366, 202, 15, 4, 0, 20), Y0, H, { bow: [0.02, 0], bevel: false }, M.muscleCut, M.oes), "Oesophagus");
 
-  // prevertebral layer: C3 to C7, scalenes, longus, deep back muscles, cord, roots, phrenic
+  // prevertebral layer: C5 and C6, scalenes, longus, deep back muscles, cord, roots, phrenic
   var mPv = holo(COL.prevertebral, 0.36);
   var pvPts = catmullClosed([[380, 244], [420, 247], [452, 260], [494, 288], [506, 325], [498, 372], [472, 414], [432, 442], [380, 450], [328, 442], [288, 414], [262, 372], [254, 325], [266, 288], [308, 260], [340, 247]], 8);
   add(G.prevertebral, shell(pvPts, 0.985, SH, SY0, mPv), "Prevertebral layer");
@@ -370,23 +447,23 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   var VH = 0.5, VG = 0.18;
   for (var v = 0; v < 2; v++) {
     var y = Y0 + 0.06 + v * (VH + VG);
-    add(G.prevertebral, extrude(bodyP, null, VH, y, M.bone), "Cervical vertebrae");
-    add(G.prevertebral, extrude(tpP, [ellPts(326, 301, 5.8, 5.8, 0, 16).reverse()], VH * 0.7, y + 0.07, M.bone), "Cervical vertebrae");
-    add(G.prevertebral, extrude(mirrorPts(tpP), [ellPts(434, 301, 5.8, 5.8, 0, 16).reverse()], VH * 0.7, y + 0.07, M.bone), "Cervical vertebrae");
-    add(G.prevertebral, extrude(archP, [canalP.slice().reverse()], VH * 0.8, y + 0.04, M.bone), "Cervical vertebrae");
-    if (v < 1) add(G.prevertebral, extrude(scaleAbout(bodyP, 0.97), null, VG, y + VH, M.disc), "Intervertebral disc");
+    add(G.prevertebral, loft(bodyP, null, y, VH, { bulge: -0.05 }, M.boneCut, M.bone), "Cervical vertebrae");
+    add(G.prevertebral, loft(tpP, ellPts(326, 301, 5.8, 5.8, 0, 16), y + 0.07, VH * 0.7, {}, M.boneCut, M.bone), "Cervical vertebrae");
+    add(G.prevertebral, loft(mirrorPts(tpP), ellPts(434, 301, 5.8, 5.8, 0, 16), y + 0.07, VH * 0.7, {}, M.boneCut, M.bone), "Cervical vertebrae");
+    add(G.prevertebral, loft(archP, canalP, y + 0.04, VH * 0.8, {}, M.boneCut, M.bone), "Cervical vertebrae");
+    if (v < 1) add(G.prevertebral, loft(scaleAbout(bodyP, 0.97), null, y + VH, VG, { bevel: false, bulge: 0.06 }, M.disc, M.disc), "Intervertebral disc");
   }
-  add(G.prevertebral, extrude(ellPts(380, 338, 14, 9.5, 0, 28), null, H, Y0, M.cord), "Spinal cord");
-  [[362, 264, 12, 8, 0], [282, 290, 12, 8.5, 35], [274, 318, 14, 9.5, 35], [282, 372, 16, 12, 20], [344, 410, 15, 10, 0], [322, 416, 20, 10, 25]].forEach(function (m, i) {
+  add(G.prevertebral, loft(ellPts(380, 338, 14, 9.5, 0, 28), null, Y0, H, { bevel: false }, M.cordCut, M.cord), "Spinal cord");
+  [[362, 264, 12, 8, 0, 0.12, 0], [282, 290, 12, 8.5, 35, 0.12, 0.12], [274, 318, 14, 9.5, 35, 0.1, 0.14], [282, 372, 16, 12, 20, 0.12, 0.1], [344, 410, 15, 10, 0, 0.1, 0], [322, 416, 20, 10, 25, 0.08, 0.05]].forEach(function (m, i) {
     var nm = i === 0 ? "Longus colli" : i < 3 ? "Scalene muscles" : "Deep back muscles";
-    add(G.prevertebral, extrude(ellPts(m[0], m[1], m[2], m[3], m[4]), null, H, Y0, i % 2 ? M.muscle : M.muscle2), nm);
-    add(G.prevertebral, extrude(mirrorPts(ellPts(m[0], m[1], m[2], m[3], m[4])), null, H, Y0, i % 2 ? M.muscle2 : M.muscle), nm);
+    add(G.prevertebral, loft(ellPts(m[0], m[1], m[2], m[3], m[4]), null, Y0, H, { bulge: m[5], lean: [m[6], 0], twist: 6 }, M.muscleCut, i % 2 ? M.muscle : M.muscle2), nm);
+    add(G.prevertebral, loft(mirrorPts(ellPts(m[0], m[1], m[2], m[3], m[4])), null, Y0, H, { bulge: m[5], lean: [-m[6], 0], twist: -6 }, M.muscleCut, i % 2 ? M.muscle2 : M.muscle), nm);
   });
   [-1, 1].forEach(function (k) {
     var X = function (x) { return k < 0 ? x : 760 - x; };
-    add(G.prevertebral, vcyl(X(326), 301, 3.1, 3.1, Y0, H / 2, M.artery), "Vertebral artery");
+    add(G.prevertebral, vessel(X(326), 301, 3.3, 3.3, 0.9, Y0, H / 2, M.artery, M.arteryCut, M.blood), "Vertebral artery");
     add(G.prevertebral, tube([V3(X(296), 282, H / 2), V3(X(292), 280, 0.3), V3(X(290), 278, Y0)], 0.022, M.nerve), "Phrenic nerve");
-    [0.32, -0.26].forEach(function (yy, j) {
+    [0.32, -0.26].forEach(function (yy) {
       add(G.prevertebral, tube([V3(X(318), 300, yy + 0.05), V3(X(282), 306, yy - 0.03), V3(X(236), 316, yy - 0.12), V3(X(200), 330, yy - 0.25)], 0.03, M.nerve), "Roots of the brachial plexus");
     });
   });
@@ -396,15 +473,18 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   [-1, 1].forEach(function (k) {
     var X = function (x) { return k < 0 ? x : 760 - x; };
     add(G.carotid, extrude(ellPts(X(282), 218, 29, 26, 0, 40), [ellPts(X(282), 218, 27.6, 24.6, 0, 40).reverse()], TOPV + 0.08 - SY0, SY0, mCar), "Carotid sheath");
-    add(G.carotid, vcyl(X(296), 216, 9.5, 9.5, Y0, SPLIT + 0.05, M.artery), "Common carotid artery");
+    add(G.carotid, vessel(X(296), 216, 9.5, 9.5, 2.4, Y0, SPLIT + 0.05, M.artery, M.arteryCut, M.blood, { bow: [0.015 * k, 0] }), "Common carotid artery");
     add(G.carotid, tube([V3(X(296), 216, SPLIT), V3(X(292), 222, SPLIT + 0.4), V3(X(288), 224, TOPV)], 0.085, M.artery), "Internal carotid artery");
     add(G.carotid, tube([V3(X(296), 216, SPLIT), V3(X(304), 205, SPLIT + 0.35), V3(X(322), 190, SPLIT + 0.75), V3(X(338), 170, TOPV)], 0.07, M.artery), "External carotid artery");
-    add(G.carotid, vcyl(X(268), 216, 13, 10, Y0, TOPV, M.vein), "Internal jugular vein");
-    add(G.carotid, vcyl(X(282), 234, 4.6, 4.6, Y0, TOPV, M.nerve), "Vagus nerve");
+    var bif = new THREE.Mesh(new THREE.SphereGeometry(0.098, 20, 14), M.artery); bif.scale.set(1, 1.25, 1); bif.position.copy(V3(X(296), 216, SPLIT)); add(G.carotid, bif, "Common carotid artery");
+    add(G.carotid, vessel(X(268), 216, 13, 10, 1.4, Y0, TOPV, M.vein, M.veinCut, M.bloodV, { bow: [-0.03 * k, 0.02] }), "Internal jugular vein");
+    add(G.carotid, tube([V3(X(282), 234, Y0), V3(X(281), 235, 0.6), V3(X(283), 233, 1.6), V3(X(282), 234, TOPV)], 0.046, M.nerve), "Vagus nerve");
     add(G.carotid, tube([V3(X(286), 192, 2.15), V3(X(290), 192.5, 1.7), V3(X(292), 193, 1.2), V3(X(282), 191, 0.98), V3(X(270), 193, 1.2), V3(X(268), 194, 1.85)], 0.02, M.nerve), "Ansa cervicalis");
-    add(G.carotid, vcyl(X(290), 266, 3.2, 3.2, Y0, 2.1, M.nerve), "Sympathetic trunk");
+    add(G.carotid, tube([V3(X(290), 266, Y0), V3(X(291), 266, 0.8), V3(X(290), 266, 2.1)], 0.032, M.nerve), "Sympathetic trunk");
     var gang = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 12), M.nerve); gang.scale.set(1, 1.8, 1); gang.position.copy(V3(X(290), 266, 1.45)); add(G.carotid, gang, "Sympathetic trunk");
   });
+  // soft shadows where structures meet
+  root.traverse(function (o) { if (o.isMesh) { var holoM = !Array.isArray(o.material) && o.material.userData && o.material.userData.holo; o.castShadow = !holoM; o.receiveShadow = !holoM; } });
   root.position.y = 0.05;
 
   /* ───── labels ───── */
@@ -451,15 +531,18 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
       var on = !layer || k === layer || (k === "skin" && !layer);
       G[k].traverse(function (o) {
         if (!o.material) return;
-        var mu = o.material.userData;
-        mu.fadeTo = on ? 1 : (k === "skin" ? 0.12 : 0.05);
-        mu.glowTo = layer && k === layer ? 1 : 0;
+        (Array.isArray(o.material) ? o.material : [o.material]).forEach(function (mm) {
+          var mu = mm.userData;
+          mu.fadeTo = on ? 1 : (k === "skin" ? 0.08 : 0.02);
+          mu.glowTo = layer && k === layer ? 1 : 0;
+        });
       });
     });
     Array.prototype.forEach.call(document.querySelectorAll("[data-layer]"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-layer") === layer ? "true" : "false"); });
   }
   // shared materials across layers: give each mesh its own material clone so layers fade independently
-  PICK.forEach(function (o) { var mm = o.material.clone(); mm.userData = Object.assign({}, o.material.userData); if (o.material.uniforms) { mm.uniforms = THREE.UniformsUtils.clone(o.material.uniforms); } o.material = mm; mats.push(mm); });
+  function cloneMat(m0) { var mm = m0.clone(); mm.userData = Object.assign({}, m0.userData); if (m0.uniforms) mm.uniforms = THREE.UniformsUtils.clone(m0.uniforms); mats.push(mm); return mm; }
+  PICK.forEach(function (o) { o.material = Array.isArray(o.material) ? o.material.map(cloneMat) : cloneMat(o.material); });
 
   /* ───── camera moves ───── */
   var flight = null;
@@ -477,8 +560,9 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
     var r = canvas.getBoundingClientRect();
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
-    var hits = ray.intersectObjects(PICK, false).filter(function (h) { var mu = h.object.material.userData; return h.object.userData.layer !== "skin" && mu.fade > 0.5; });
-    var h = hits.find(function (x) { return !x.object.material.userData.holo; }) || hits[0];
+    var m0 = function (o) { return Array.isArray(o.material) ? o.material[1] : o.material; };
+    var hits = ray.intersectObjects(PICK, false).filter(function (h) { return h.object.userData.layer !== "skin" && m0(h.object).userData.fade > 0.5; });
+    var h = hits.find(function (x) { return !m0(x.object).userData.holo; }) || hits[0];
     clearTimeout(pickT);
     if (!h) { pickEl.classList.remove("on"); if (stage < 3) setFocus(null); return; }
     var nm = h.object.userData.name, lay = h.object.userData.layer;
@@ -499,6 +583,15 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   var INTRO = { prevertebral: 0.0, carotid: 0.25, pretracheal: 0.5, investing: 0.75, superficial: 1.0, skin: 1.2 };
   Object.keys(G).forEach(function (k) { G[k].userData.y = reduce ? 0 : 5 + INTRO[k] * 2; });
   var introDone = reduce;
+  var camIntro = null;
+  if (!reduce) {
+    var off0 = new THREE.Vector3().subVectors(HOME.pos, HOME.target), sEnd = new THREE.Spherical().setFromVector3(off0);
+    var sStart = new THREE.Spherical(sEnd.radius * 1.7, 1.42, sEnd.theta + 2.4);
+    camIntro = { a: sStart, b: sEnd, t0: performance.now(), ms: 3600 };
+    controls.enabled = false; controls.autoRotate = false;
+    camera.position.setFromSpherical(sStart).add(HOME.target);
+  }
+  var swallowT = 0;
   function resize() {
     var r = stageEl.getBoundingClientRect();
     renderer.setSize(r.width, r.height, false);
@@ -509,17 +602,17 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   if (window.ResizeObserver) new ResizeObserver(resize).observe(stageEl); else addEventListener("resize", resize);
   var hudRot = document.getElementById("hud-rot"), hudTilt = document.getElementById("hud-tilt");
   function frame() {
-    var dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
+    var rdt = Math.min(0.5, clock.getDelta()), dt = Math.min(0.05, rdt), t = clock.elapsedTime;
     if (!introDone) {
       introT = (performance.now() - introStart) / 1000;
       Object.keys(G).forEach(function (k) { if (introT > INTRO[k] * 0.9) G[k].userData.yTo = exploded ? EXPLODE[k] : 0; });
       if (introT > 2.4) introDone = true;
     }
-    Object.keys(G).forEach(function (k) { var u = G[k].userData; u.y += (u.yTo - u.y) * (1 - Math.pow(0.0009, dt)); G[k].position.y = u.y; });
+    Object.keys(G).forEach(function (k) { var u = G[k].userData; u.y += (u.yTo - u.y) * (1 - Math.pow(0.0009, Math.min(0.12, rdt))); G[k].position.y = u.y; });
     mats.forEach(function (m) {
       var u = m.userData; if (!u) return;
-      u.fade += (u.fadeTo - u.fade) * (1 - Math.pow(0.002, dt));
-      u.glow += (u.glowTo - u.glow) * (1 - Math.pow(0.002, dt));
+      u.fade += (u.fadeTo - u.fade) * (1 - Math.pow(0.002, rdt));
+      u.glow += (u.glowTo - u.glow) * (1 - Math.pow(0.002, rdt));
       if (u.holo) { m.uniforms.uOpacity.value = u.base * u.fade; m.uniforms.uGlow.value = u.glow * (0.75 + 0.25 * Math.sin(t * 3)); }
       else {
         var o = u.base * u.fade, want = o < 0.995;
@@ -530,6 +623,15 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
         else { m.emissive.copy(u.e0); m.emissiveIntensity = u.ei; }
       }
     });
+    if (camIntro) {
+      var q = Math.min(1, (performance.now() - camIntro.t0) / camIntro.ms), qe = 1 - Math.pow(1 - q, 3);
+      var sp = new THREE.Spherical(camIntro.a.radius + (camIntro.b.radius - camIntro.a.radius) * qe, camIntro.a.phi + (camIntro.b.phi - camIntro.a.phi) * qe, camIntro.a.theta + (camIntro.b.theta - camIntro.a.theta) * qe);
+      camera.position.setFromSpherical(sp).add(controls.target);
+      if (q >= 1) { camIntro = null; controls.enabled = true; controls.autoRotate = true; }
+    }
+    if (swallowT > 0) { swallowT = Math.max(0, swallowT - dt); var ph = (2.4 - swallowT) / 1.2; swallow.position.y = 0.2 * Math.max(0, Math.sin(Math.PI * ph)); }
+    // a structure faded almost to nothing leaves the scene, so the focus reads cleanly
+    root.traverse(function (o) { if (o.isMesh) { var m1 = Array.isArray(o.material) ? o.material[1] : o.material; o.visible = !m1.userData || m1.userData.fade > 0.035; } });
     if (flight) {
       var s = Math.min(1, (performance.now() - flight.start) / flight.ms), e = s < 0.5 ? 4 * s * s * s : 1 - Math.pow(-2 * s + 2, 3) / 2;
       camera.position.lerpVectors(flight.p0, flight.p1, e); controls.target.lerpVectors(flight.t0, flight.t1, e);
@@ -615,7 +717,7 @@ button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
   page.addEventListener("click", function (e) {
     var b = e.target.closest("[data-r]"); if (!b) return;
     var box = b.closest(".recall"), r = b.getAttribute("data-r"), row = box.querySelector(".row-btns");
-    if (r === "show") { box.classList.add("revealed"); row.innerHTML = '<button type="button" class="ghost" data-r="yes">I had it</button><button type="button" class="ghost" data-r="no">Not yet</button>'; if (cur === 1) setFocus("pretracheal"); }
+    if (r === "show") { box.classList.add("revealed"); row.innerHTML = '<button type="button" class="ghost" data-r="yes">I had it</button><button type="button" class="ghost" data-r="no">Not yet</button>'; if (cur === 1) { setFocus("pretracheal"); swallowT = reduce ? 0 : 2.4; } }
     else row.innerHTML = '<span class="verdict" style="color:' + (r === "yes" ? "var(--prevertebral)" : "var(--pretracheal)") + '">' + (r === "yes" ? "Locked in." : "It comes back once before practice.") + "</span>";
   });
   document.addEventListener("click", function (e) {
