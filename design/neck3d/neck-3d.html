@@ -1,0 +1,637 @@
+<title>Neck in Layers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@500;700&display=swap">
+<style>
+/* Layout: an app screen. A live 3D stage of the neck (C3 to C7) fills the left; a glass lesson panel floats
+   on the right; on narrow screens the stage sits on top and the panel scrolls beneath it.
+   One dark world, lit like a scanner bay; each fascial layer keeps its own colour everywhere it appears. */
+:root {
+  color-scheme: dark;
+  --void: #04060b;
+  --deep: #0b1120;
+  --glass: rgba(18, 24, 38, 0.62);
+  --line: rgba(190, 210, 255, 0.14);
+  --line-2: rgba(190, 210, 255, 0.26);
+  --text: #eef2fb;
+  --text-2: #a8b2c8;
+  --text-3: #6d7891;
+  --investing: #f2b45a;
+  --pretracheal: #f07a95;
+  --prevertebral: #4fd1b5;
+  --carotid: #7ea6ff;
+  --superficial: #d9dfea;
+  --artery: #ff5a4e;
+  --vein: #5577e6;
+  --nerve: #ffd36e;
+  --sans: "Geist", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", "SF Mono", Menlo, monospace;
+  --arabic: "Noto Naskh Arabic", "Geeza Pro", serif;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--void); color: var(--text); font: 400 16px/1.6 var(--sans);
+  padding-block: 0; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-font-smoothing: antialiased; overflow: hidden;
+}
+.app { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 440px); gap: 18px; padding-block: 14px; box-sizing: border-box; }
+
+/* stage */
+.stage { position: relative; min-height: 0; border-radius: 26px; overflow: hidden; isolation: isolate;
+  background: radial-gradient(120% 90% at 50% 38%, #142038 0%, #0a101d 46%, var(--void) 100%);
+  box-shadow: 0 0 0 1px var(--line) inset; }
+.stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: radial-gradient(70% 55% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.45) 100%); }
+#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; z-index: 1; }
+.hud { position: absolute; z-index: 4; font: 500 11px/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); pointer-events: none; }
+.hud b { color: var(--text-2); font-weight: 500; }
+.hud.tl { left: 20px; top: 18px; }
+.hud.bl { left: 20px; bottom: 18px; display: grid; gap: 3px; }
+.hud.tr { right: 20px; top: 18px; text-align: right; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--text); font: 600 13px/1 var(--sans); letter-spacing: 0.02em; text-transform: none; }
+.brand i { width: 8px; height: 8px; border-radius: 50%; background: var(--prevertebral); box-shadow: 0 0 12px var(--prevertebral); }
+.tools { position: absolute; z-index: 5; right: 16px; bottom: 16px; display: flex; gap: 8px; }
+.tools button { font: 500 13px/1 var(--sans); color: var(--text); background: rgba(20, 28, 46, 0.7); border: 1px solid var(--line-2); border-radius: 999px; padding: 10px 14px; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: background 0.25s, border-color 0.25s; }
+.tools button:hover, .tools button[aria-pressed="true"] { background: rgba(60, 80, 130, 0.55); border-color: rgba(190, 210, 255, 0.45); }
+.labels { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.tag { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 7px; transform: translate(-50%, -50%); white-space: nowrap;
+  font: 500 12.5px/1 var(--sans); color: var(--text); padding: 6px 10px 6px 8px; border-radius: 999px;
+  background: rgba(8, 12, 22, 0.72); border: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.4s var(--ease); }
+.tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.tag.hide { opacity: 0; }
+.tag.big { font-size: 13.5px; padding: 8px 12px 8px 10px; border-color: color-mix(in srgb, var(--c) 55%, transparent); }
+#pick { position: absolute; z-index: 6; left: 0; top: 0; transform: translate(-50%, calc(-100% - 14px)); pointer-events: none; max-width: 250px;
+  padding: 10px 13px; border-radius: 14px; background: rgba(8, 12, 22, 0.88); border: 1px solid var(--line-2); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0; transition: opacity 0.25s; }
+#pick.on { opacity: 1; }
+#pick b { display: block; font: 600 14px/1.25 var(--sans); }
+#pick span { display: block; font-size: 12.5px; line-height: 1.4; color: var(--text-2); margin-top: 3px; }
+#pick span:empty { display: none; }
+.nogl { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; color: var(--text-2); z-index: 4; }
+
+/* lesson panel */
+.panel { min-height: 0; overflow-y: auto; border-radius: 26px; background: var(--glass); box-shadow: 0 0 0 1px var(--line) inset, 0 30px 80px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); display: flex; flex-direction: column; overscroll-behavior: contain; }
+.panel-in { padding: 22px 24px 0; display: grid; gap: 20px; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.steps i { height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; position: relative; }
+.steps i::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--prevertebral), var(--carotid)); transform: scaleX(var(--p, 0)); transform-origin: left; transition: transform 0.9s var(--ease); }
+.meta { display: flex; justify-content: space-between; gap: 10px; font: 500 11.5px/1.3 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+.page { display: grid; gap: 18px; transition: opacity 0.3s, transform 0.45s var(--ease); }
+.page.out { opacity: 0; transform: translateY(14px); }
+h1, h2 { margin: 0; font-weight: 600; letter-spacing: -0.035em; text-wrap: balance; }
+h1 { font-size: clamp(34px, 3.6vw, 46px); line-height: 1.02; }
+h2 { font-size: clamp(28px, 3vw, 38px); line-height: 1.05; }
+.grad { background: linear-gradient(100deg, var(--investing), var(--pretracheal) 45%, var(--carotid)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ar { font: 700 20px/1.2 var(--arabic); color: var(--text-2); }
+.ar small { font: 500 12px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-inline-start: 10px; }
+.lede { margin: 0; font-size: 17px; line-height: 1.65; color: var(--text); }
+.lede i { font-style: normal; color: var(--text-2); }
+.chip { font: inherit; font-weight: 600; color: var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); border: 0; border-radius: 8px; padding: 1px 7px; cursor: pointer; transition: background 0.25s, box-shadow 0.25s; }
+.chip:hover, .chip[aria-pressed="true"] { background: color-mix(in srgb, var(--c) 26%, transparent); box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 60%, transparent); }
+button:focus-visible { outline: 2px solid var(--carotid); outline-offset: 2px; }
+.layers { display: grid; gap: 8px; }
+.layer { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; align-items: start; text-align: left; width: 100%; padding: 12px 14px; border-radius: 16px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.035); border: 1px solid rgba(255, 255, 255, 0.07); color: var(--text); font: inherit; transition: background 0.25s, border-color 0.25s; }
+.layer:hover, .layer[aria-pressed="true"] { background: color-mix(in srgb, var(--c) 10%, transparent); border-color: color-mix(in srgb, var(--c) 45%, transparent); }
+.orb { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c) 40%, white), var(--c) 60%, color-mix(in srgb, var(--c) 40%, black)); box-shadow: 0 0 20px -2px var(--c); }
+.layer b { display: block; font-weight: 600; font-size: 15px; }
+.layer span { display: block; font-size: 14px; color: var(--text-2); line-height: 1.5; margin-top: 2px; }
+.card { border-radius: 18px; padding: 16px 18px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); }
+.card .cap { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font: 500 11px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--cc, var(--text-3)); margin-bottom: 8px; }
+.card .cap [lang="ar"] { font: 700 16px/1 var(--arabic); letter-spacing: 0; text-transform: none; color: var(--text-2); }
+.card p { margin: 0; font-size: 15px; }
+.q { font-size: 18px !important; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 10px !important; }
+.answer { filter: blur(8px); opacity: 0.5; transition: filter 0.6s var(--ease), opacity 0.6s; user-select: none; }
+.revealed .answer { filter: none; opacity: 1; user-select: text; }
+.row-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+.ghost { font: 500 14px/1 var(--sans); color: var(--text); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14); padding: 11px 16px; border-radius: 999px; cursor: pointer; }
+.ghost:hover { background: rgba(255, 255, 255, 0.11); }
+.verdict { font-weight: 600; font-size: 14px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.cols h3 { margin: 0 0 6px; font: 500 11px/1.2 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--c); }
+.cols ul { margin: 0; padding-left: 16px; display: grid; gap: 5px; font-size: 14.5px; color: var(--text-2); }
+.cols li b { color: var(--text); font-weight: 600; }
+.go { position: sticky; bottom: 0; margin-top: auto; padding: 18px 24px calc(20px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, rgba(14, 19, 31, 0.98) 55%, rgba(14, 19, 31, 0)); }
+.cta { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 17px 20px 17px 22px; border: 0; border-radius: 18px; cursor: pointer;
+  color: #06101e; background: linear-gradient(180deg, #ffffff, #dfe7f6); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 14px 40px -12px rgba(126, 166, 255, 0.7);
+  font: 600 17px/1.15 var(--sans); text-align: left; transition: transform 0.2s var(--ease), box-shadow 0.25s; }
+.cta:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 18px 50px -12px rgba(126, 166, 255, 0.9); }
+.cta:active { transform: scale(0.985); }
+.cta small { display: block; font: 500 11.5px/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #4a5872; margin-top: 4px; }
+.cta [lang="ar"] { font: 700 18px/1 var(--arabic); color: #22314c; }
+.cta .arrow { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: #0a1324; color: #fff; flex: none; }
+
+@media (max-width: 900px) {
+  body { overflow: hidden; }
+  .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(260px, 48%) minmax(0, 1fr); gap: 12px; padding-block: 10px; }
+  .stage, .panel { border-radius: 22px; }
+  .hud.bl { display: none; }
+}
+@media (max-width: 480px) {
+  .panel-in { padding: 18px 18px 0; }
+  .go { padding-inline: 18px; }
+  .tag { font-size: 11.5px; padding: 5px 9px 5px 7px; }
+  .tools button { padding: 9px 12px; font-size: 12px; }
+  .hud.tr { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page, .steps i::after, .answer, .tag { transition: none; }
+}
+</style>
+
+<div class="app">
+  <section class="stage" id="stage" aria-label="3D model of a slab of the neck at C5 and C6">
+    <canvas id="gl"></canvas>
+    <div class="labels" id="labels"></div>
+    <div id="pick" aria-hidden="true"><b></b><span></span></div>
+    <div class="hud tl"><div class="brand"><i></i>Intellectuality</div><div style="margin-top:8px">NEU-205 · Anatomy · Day 29</div></div>
+    <div class="hud tr">Neck slab, C5 to C6<br><b id="hud-mode">Assembled</b></div>
+    <div class="hud bl"><span>Rotation <b id="hud-rot">000°</b></span><span>Tilt <b id="hud-tilt">00°</b></span><span>Drag to turn · pinch to zoom · tap to name</span></div>
+    <div class="tools"><button type="button" id="explode" aria-pressed="false">Slide sleeves apart</button><button type="button" id="reset">Reset view</button></div>
+  </section>
+
+  <aside class="panel" aria-label="Lesson">
+    <div class="panel-in">
+      <div class="steps" aria-hidden="true"><i id="s1"></i><i id="s2"></i><i id="s3"></i></div>
+      <div class="meta"><span id="meta-l">Section 1 of 3</span><span>Exam tier C · 15 min</span></div>
+      <div class="page" id="page"></div>
+    </div>
+    <div class="go">
+      <button type="button" class="cta" id="cta"><span><span id="cta-t">Got it, next section</span><small id="cta-s">The whole picture</small></span><span lang="ar" dir="rtl">فهمتها</span><span class="arrow" aria-hidden="true">→</span></button>
+    </div>
+  </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var stageEl = document.getElementById("stage"), canvas = document.getElementById("gl");
+  var COL = { superficial: "#d9dfea", investing: "#f2b45a", pretracheal: "#f07a95", prevertebral: "#4fd1b5", carotid: "#7ea6ff" };
+  var NAME = { superficial: "Superficial fascia", investing: "Investing layer", pretracheal: "Pretracheal layer", prevertebral: "Prevertebral layer", carotid: "Carotid sheath" };
+  var FACT = {
+    superficial: "Holds the platysma, the external jugular vein and the cutaneous nerves.",
+    investing: "The collar. Splits around sternomastoid and trapezius; roof of the posterior triangle.",
+    pretracheal: "Thyroid, trachea, oesophagus, infrahyoid muscles. Tied to the hyoid, so the thyroid rises when you swallow.",
+    prevertebral: "Over the prevertebral and scalene muscles; floor of the posterior triangle; becomes the axillary sheath.",
+    carotid: "Carotid arteries medially, internal jugular vein laterally, vagus between and behind."
+  };
+  var NOTE = {
+    "Common carotid artery": "Inside the sheath, medially. Splits at the upper border of the thyroid cartilage (C4).",
+    "Internal carotid artery": "Continues up inside the carotid sheath.",
+    "External carotid artery": "Leaves the sheath at the split. It is not a content of the carotid sheath.",
+    "Internal jugular vein": "Inside the sheath, laterally.",
+    "Vagus nerve": "Inside the sheath, between and behind the vessels.",
+    "Ansa cervicalis": "A loop embedded in the front wall of the sheath, not inside it.",
+    "Sympathetic trunk": "Behind the sheath, on the prevertebral fascia. Its middle ganglion sits near C6.",
+    "Phrenic nerve": "Runs down on scalenus anterior, under the prevertebral fascia.",
+    "Roots of the brachial plexus": "Emerge between scalenus anterior and medius, sheathed by the prevertebral layer as they leave.",
+    "Accessory nerve": "Crosses the posterior triangle just under the investing layer.",
+    "Vertebral artery": "Climbs through the foramina transversaria from C6 to C1.",
+    "Thyroid gland": "In the pretracheal layer, so it rises with swallowing.",
+    "Trachea": "C-shaped cartilage rings, open behind.",
+    "Oesophagus": "Behind the trachea, a little to the left.",
+    "Sternocleidomastoid": "Runs from mastoid to sternum and clavicle, enclosed by the investing layer.",
+    "Trapezius": "Enclosed by the investing layer.",
+    "Cervical vertebrae": "C5 and C6, with the spinal cord in the canal.",
+    "Spinal cord": "In the vertebral canal.",
+    "Scalene muscles": "Inside the prevertebral layer.",
+    "Platysma": "A thin muscle in the superficial fascia.",
+    "External jugular vein": "In the superficial fascia, over the sternomastoid."
+  };
+
+  /* ───── the cross-section, in plate coordinates (one unit = 0.1 mm-ish; 100 units = one scene unit) ───── */
+  var C = { x: 380, y: 270 }, RX = 262, RY = 212, H = 1.4, SPLIT = 1.05, TOPV = 2.35;
+  function g(t, mu, sig, a) { var d = ((t - mu + 540) % 360) - 180; return a * Math.exp(-0.5 * (d / sig) * (d / sig)); }
+  function mod(t) { return 1 + g(t, 90, 7, -0.05) + g(t, 60, 22, 0.02) + g(t, 120, 22, 0.02) + g(t, 215, 14, 0.022) + g(t, 325, 14, 0.022) + g(t, 270, 22, -0.035) + g(t, 270, 6, 0.012) + g(t, 180, 16, -0.012) + g(t, 0, 16, -0.012); }
+  function S(t, s) { var r = t * Math.PI / 180, m = mod(t); return [C.x + RX * s * m * Math.cos(r), C.y + RY * s * m * Math.sin(r)]; }
+  function ringPts(s) { var a = []; for (var t = 0; t < 360; t += 3) a.push(S(t, s)); return a; }
+  function lensPts(s0, t0, t1, ds) {
+    var out = [], inn = [], n = 30;
+    for (var i = 0; i <= n; i++) { var u = i / n, t = t0 + (t1 - t0) * u, w = ds * Math.pow(Math.sin(Math.PI * u), 0.55); out.push(S(t, s0)); inn.push(S(t, s0 - w)); }
+    return out.concat(inn.reverse());
+  }
+  function ellPts(cx, cy, rx, ry, rot, n) { var a = [], r = (rot || 0) * Math.PI / 180; n = n || 28; for (var i = 0; i < n; i++) { var t = i / n * Math.PI * 2, x = rx * Math.cos(t), y = ry * Math.sin(t); a.push([cx + x * Math.cos(r) - y * Math.sin(r), cy + x * Math.sin(r) + y * Math.cos(r)]); } return a; }
+  // cubic Bézier path string (absolute M/C/L/Z) to points
+  function pathPts(d, step) {
+    var tok = d.match(/[MLCZ]|-?\d+(?:\.\d+)?/g), pts = [], i = 0, cur = [0, 0], cmd = "";
+    step = step || 10;
+    while (i < tok.length) {
+      if (/[MLCZ]/.test(tok[i])) cmd = tok[i++];
+      if (cmd === "M" || cmd === "L") { cur = [+tok[i], +tok[i + 1]]; i += 2; pts.push(cur); }
+      else if (cmd === "C") {
+        var p0 = cur, p1 = [+tok[i], +tok[i + 1]], p2 = [+tok[i + 2], +tok[i + 3]], p3 = [+tok[i + 4], +tok[i + 5]]; i += 6;
+        for (var k = 1; k <= step; k++) { var t = k / step, u = 1 - t; pts.push([u * u * u * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t * t * t * p3[0], u * u * u * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t * t * t * p3[1]]); }
+        cur = p3;
+      } else if (cmd === "Z") { break; }
+    }
+    return pts;
+  }
+  function mirrorPts(a) { return a.map(function (p) { return [760 - p[0], p[1]]; }); }
+  function scaleAbout(a, k) { var cx = 0, cy = 0; a.forEach(function (p) { cx += p[0]; cy += p[1]; }); cx /= a.length; cy /= a.length; return a.map(function (p) { return [cx + (p[0] - cx) * k, cy + (p[1] - cy) * k]; }); }
+  function catmullClosed(a, per) { var out = [], n = a.length; per = per || 8; for (var i = 0; i < n; i++) { var p0 = a[(i - 1 + n) % n], p1 = a[i], p2 = a[(i + 1) % n], p3 = a[(i + 2) % n]; for (var k = 0; k < per; k++) { var t = k / per, t2 = t * t, t3 = t2 * t; out.push([0.5 * ((2 * p1[0]) + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3), 0.5 * ((2 * p1[1]) + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3)]); } } return out; }
+  // plate → scene: patient's right is −x when anterior faces the viewer (+z)
+  function U(X) { return -(X - C.x) / 100; }
+  function Z(Y) { return -(Y - C.y) / 100; }
+  function V3(X, Y, y) { return new THREE.Vector3(U(X), y, Z(Y)); }
+
+  if (!window.THREE || !THREE.OrbitControls) { stageEl.insertAdjacentHTML("beforeend", '<div class="nogl">The 3D model needs an internet connection the first time it opens.</div>'); return start2D(); }
+  if (THREE.ColorManagement) THREE.ColorManagement.legacyMode = false; // colours as written, not brightened
+  var renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: "high-performance" }); }
+  catch (e) { stageEl.insertAdjacentHTML("beforeend", '<div class="nogl">This device could not start 3D.</div>'); return start2D(); }
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+  var scene = new THREE.Scene();
+  if (THREE.RoomEnvironment) { var pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new THREE.RoomEnvironment(), 0.04).texture; }
+  var camera = new THREE.PerspectiveCamera(34, 1, 0.05, 100);
+  var HOME = { pos: new THREE.Vector3(4.6, 7.6, 8.8), target: new THREE.Vector3(0, 0.2, 0) };
+  camera.position.copy(HOME.pos);
+  var controls = new THREE.OrbitControls(camera, canvas);
+  controls.target.copy(HOME.target);
+  controls.enableDamping = true; controls.dampingFactor = 0.08; controls.enablePan = false;
+  controls.minDistance = 1.2; controls.maxDistance = 16; controls.rotateSpeed = 0.7;
+  controls.autoRotate = !reduce; controls.autoRotateSpeed = 0.55;
+
+  scene.add(new THREE.HemisphereLight(0xbfd4ff, 0x10131c, 0.25));
+  var key = new THREE.DirectionalLight(0xfff4e8, 0.9); key.position.set(4, 7, 6); scene.add(key);
+  var rimA = new THREE.DirectionalLight(0x7ea6ff, 1.1); rimA.position.set(-6, 2, -5); scene.add(rimA);
+  var rimB = new THREE.DirectionalLight(0xf2b45a, 0.6); rimB.position.set(6, -3, -4); scene.add(rimB);
+
+  /* ───── materials ───── */
+  var holoVS = "varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }";
+  var holoFS = "uniform vec3 uColor; uniform float uOpacity; uniform float uGlow; varying vec3 vN; varying vec3 vV;" +
+    "void main(){ float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.4); float a = uOpacity * (0.10 + 0.9 * f) * (1.0 + uGlow * 1.6);" +
+    " gl_FragColor = vec4(uColor * (0.55 + 0.9 * f + 0.8 * uGlow), clamp(a, 0.0, 1.0)); }";
+  var mats = [];
+  function holo(color, opacity) {
+    var m = new THREE.ShaderMaterial({ vertexShader: holoVS, fragmentShader: holoFS, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+      uniforms: { uColor: { value: new THREE.Color(color).convertLinearToSRGB() }, uOpacity: { value: opacity }, uGlow: { value: 0 } } });
+    m.userData = { holo: true, base: opacity, fade: 1, fadeTo: 1, glow: 0, glowTo: 0 }; mats.push(m); return m;
+  }
+  function solid(color, o) {
+    o = o || {};
+    var m = new THREE.MeshPhysicalMaterial({ color: new THREE.Color(color), roughness: o.r == null ? 0.55 : o.r, metalness: o.m || 0.0, emissive: new THREE.Color(o.e || "#000000"), emissiveIntensity: o.ei || 0, transparent: !!o.t, opacity: o.t || 1, depthWrite: !o.t,
+      clearcoat: o.cc == null ? 0.55 : o.cc, clearcoatRoughness: 0.32, envMapIntensity: o.env == null ? 0.9 : o.env });
+    m.userData = { base: o.t || 1, fade: 1, fadeTo: 1, glow: 0, glowTo: 0, ei: o.ei || 0, glowCol: new THREE.Color(o.gc || color) }; mats.push(m); return m;
+  }
+  var M = {
+    muscle: solid("#5c1519", { r: 0.62 }), muscle2: solid("#6e1f24", { r: 0.62 }), bone: solid("#cdbfa5", { r: 0.6, cc: 0.15 }), disc: solid("#a9c4d6", { r: 0.3, t: 0.55 }),
+    cart: solid("#bcd2de", { r: 0.25, e: "#1b2a3c", ei: 0.2, cc: 0.9 }), thyroid: solid("#a13a52", { r: 0.45, e: "#2a0610", ei: 0.35, cc: 0.8 }), oes: solid("#8e3f3c", { r: 0.6 }),
+    artery: solid("#d8332a", { r: 0.28, e: "#3a0603", ei: 0.45, cc: 1 }), vein: solid("#3552b8", { r: 0.28, e: "#0a1438", ei: 0.4, cc: 1 }), nerve: solid("#f1c95e", { r: 0.4, e: "#4a3608", ei: 0.7, cc: 0.6 }),
+    cord: solid("#ddd0bb", { r: 0.45, cc: 0.7 }), skin: holo("#c9d6f2", 0.11)
+  };
+
+  /* ───── geometry helpers ───── */
+  function shapeFrom(pts, holes) {
+    var sh = new THREE.Shape(pts.map(function (p) { return new THREE.Vector2(-(p[0] - C.x) / 100, (p[1] - C.y) / 100); }));
+    (holes || []).forEach(function (h) { sh.holes.push(new THREE.Path(h.map(function (p) { return new THREE.Vector2(-(p[0] - C.x) / 100, (p[1] - C.y) / 100); }))); });
+    return sh;
+  }
+  function extrude(pts, holes, h, y0, mat) {
+    var geo = new THREE.ExtrudeGeometry(shapeFrom(pts, holes), { depth: h, bevelEnabled: false, curveSegments: 4, steps: 1 });
+    geo.rotateX(-Math.PI / 2); geo.translate(0, y0, 0);
+    return new THREE.Mesh(geo, mat);
+  }
+  function shell(pts, k, h, y0, mat) { return extrude(pts, [scaleAbout(pts, k).reverse()], h, y0, mat); }
+  function ringShell(s, thick, h, y0, mat) { return extrude(ringPts(s), [ringPts(s - thick).reverse()], h, y0, mat); }
+  function tube(points, r, mat, seg) { var c = new THREE.CatmullRomCurve3(points); return new THREE.Mesh(new THREE.TubeGeometry(c, seg || 60, r, 12, false), mat); }
+  function vcyl(X, Y, rx, rz, y0, y1, mat) { var g0 = new THREE.CylinderGeometry(1, 1, y1 - y0, 24, 1); g0.scale(rx / 100, 1, rz / 100); var m = new THREE.Mesh(g0, mat); m.position.set(U(X), (y0 + y1) / 2, Z(Y)); return m; }
+
+  /* ───── build the neck ───── */
+  var root = new THREE.Group(); scene.add(root);
+  var G = {}, PICK = [];
+  ["skin", "superficial", "investing", "pretracheal", "prevertebral", "carotid"].forEach(function (k) { var g0 = new THREE.Group(); g0.userData = { layer: k, y: 0, yTo: 0 }; G[k] = g0; root.add(g0); });
+  function add(group, mesh, name) { mesh.userData.name = name; mesh.userData.layer = group.userData.layer; group.add(mesh); PICK.push(mesh); return mesh; }
+  var Y0 = -H / 2, SH = H + 0.44, SY0 = Y0 - 0.22;
+
+  // skin
+  add(G.skin, ringShell(1, 0.012, H, Y0, M.skin), "Skin");
+
+  // superficial fascia: platysma sheets, external and anterior jugular veins, its own faint sleeve
+  var mSup = holo(COL.superficial, 0.16);
+  add(G.superficial, ringShell(0.955, 0.006, SH, SY0, mSup), "Superficial fascia");
+  [[206, 262], [278, 334]].forEach(function (r) { add(G.superficial, extrude(lensPts(0.985, r[0], r[1], 0.026), null, H * 0.92, Y0, M.muscle2), "Platysma"); });
+  [222, 318].forEach(function (t) { var p = S(t, 0.95); add(G.superficial, vcyl(p[0], p[1], 5.6, 4.4, Y0, H / 2, M.vein), "External jugular vein"); });
+
+  // investing layer: the collar, splitting around sternomastoid and trapezius
+  var mInv = holo(COL.investing, 0.34);
+  add(G.investing, ringShell(0.9, 0.01, SH, SY0, mInv), "Investing layer");
+  [[197, 241, 0.118, -1], [299, 343, 0.118, 1]].forEach(function (m) {
+    var mesh = extrude(lensPts(0.9, m[0], m[1], m[2]), null, H, Y0, M.muscle);
+    // the sternomastoid runs obliquely: higher up it lies further back and further out
+    var sx = m[3] < 0 ? 1 : -1, sh = new THREE.Matrix4().set(1, sx * 0.1, 0, 0, 0, 1, 0, 0, 0, -0.16, 1, 0, 0, 0, 0, 1);
+    mesh.geometry.applyMatrix4(sh);
+    add(G.investing, mesh, "Sternocleidomastoid");
+  });
+  [[112, 158], [22, 68]].forEach(function (m) { add(G.investing, extrude(lensPts(0.9, m[0], m[1], 0.088), null, H, Y0, M.muscle), "Trapezius"); });
+  [-1, 1].forEach(function (k) { add(G.investing, tube([V3(380 + k * -122, 330, H / 2), V3(380 + k * -148, 358, 0), V3(380 + k * -172, 392, Y0)], 0.024, M.nerve), "Accessory nerve"); });
+
+  // pretracheal layer: thyroid, trachea, oesophagus, infrahyoid muscles
+  var mPre = holo(COL.pretracheal, 0.4);
+  var preD = "M326 90 C350 80 410 80 434 90 C462 100 466 150 454 192 C444 222 420 232 380 232 C340 232 316 222 306 192 C294 150 298 100 326 90 Z";
+  add(G.pretracheal, shell(pathPts(preD, 12), 0.975, SH, SY0, mPre), "Pretracheal layer");
+  [[352, 95, 18, 5, -12], [340, 106, 12, 4.4, -26]].forEach(function (m) {
+    add(G.pretracheal, extrude(ellPts(m[0], m[1], m[2], m[3], m[4]), null, H * 0.9, Y0, M.muscle2), "Infrahyoid muscles");
+    add(G.pretracheal, extrude(mirrorPts(ellPts(m[0], m[1], m[2], m[3], m[4])), null, H * 0.9, Y0, M.muscle2), "Infrahyoid muscles");
+  });
+  var lobeD = "M352 116 C324 114 306 140 312 180 C316 204 334 214 348 204 C340 182 342 152 352 136 Z";
+  var lobe = pathPts(lobeD, 10);
+  add(G.pretracheal, extrude(lobe, null, H, Y0, M.thyroid), "Thyroid gland");
+  add(G.pretracheal, extrude(mirrorPts(lobe), null, H, Y0, M.thyroid), "Thyroid gland");
+  add(G.pretracheal, extrude(pathPts("M352 116 C366 109 394 109 408 116 L408 128 C394 122 366 122 352 128 Z", 8), null, 0.5, -0.25, M.thyroid), "Thyroid gland");
+  function pol(r, deg) { var t = deg * Math.PI / 180; return [380 + r * Math.cos(t), 148 + r * Math.sin(t)]; }
+  var cRing = [], d0;
+  for (d0 = 118; d0 <= 422; d0 += 8) cRing.push(pol(29.5, d0));
+  for (d0 = 422; d0 >= 118; d0 -= 8) cRing.push(pol(23.5, d0));
+  for (var ry = Y0 + 0.04; ry < H / 2 - 0.1; ry += 0.2) add(G.pretracheal, extrude(cRing, null, 0.13, ry, M.cart), "Trachea");
+  var tm = [pol(29, 62), pol(27, 76), pol(26.5, 90), pol(27, 104), pol(29, 118), pol(25, 112), pol(24, 90), pol(25, 68)];
+  add(G.pretracheal, extrude(tm, null, H - 0.08, Y0, M.oes), "Trachea");
+  add(G.pretracheal, extrude(ellPts(366, 202, 22, 11.5, 0, 32), [ellPts(366, 202, 15, 5, 0, 20).reverse()], H, Y0, M.oes), "Oesophagus");
+
+  // prevertebral layer: C3 to C7, scalenes, longus, deep back muscles, cord, roots, phrenic
+  var mPv = holo(COL.prevertebral, 0.36);
+  var pvPts = catmullClosed([[380, 244], [420, 247], [452, 260], [494, 288], [506, 325], [498, 372], [472, 414], [432, 442], [380, 450], [328, 442], [288, 414], [262, 372], [254, 325], [266, 288], [308, 260], [340, 247]], 8);
+  add(G.prevertebral, shell(pvPts, 0.985, SH, SY0, mPv), "Prevertebral layer");
+  var bodyP = pathPts("M346 286 C346 276 360 272 380 272 C400 272 414 276 414 286 L416 306 C416 318 404 322 394 320 C388 318 372 318 366 320 C356 322 344 318 344 306 Z", 8);
+  var tpP = pathPts("M346 288 C332 282 316 280 306 281 C300 282 298 290 304 292 C310 294 316 294 320 295 C316 300 312 304 306 307 C300 310 300 318 308 318 C320 318 334 314 346 312 Z", 8);
+  var archP = pathPts("M350 316 C336 322 324 332 328 346 C334 364 354 382 368 396 L365 410 C367 416 374 416 376 410 L380 402 L384 410 C386 416 393 416 395 410 L392 396 C406 382 426 364 432 346 C436 332 424 322 410 316 C400 322 360 322 350 316 Z", 8);
+  var canalP = pathPts("M358 322 C352 330 350 340 356 350 C364 360 396 360 404 350 C410 340 408 330 402 322 C394 318 366 318 358 322 Z", 8);
+  var VH = 0.5, VG = 0.18;
+  for (var v = 0; v < 2; v++) {
+    var y = Y0 + 0.06 + v * (VH + VG);
+    add(G.prevertebral, extrude(bodyP, null, VH, y, M.bone), "Cervical vertebrae");
+    add(G.prevertebral, extrude(tpP, [ellPts(326, 301, 5.8, 5.8, 0, 16).reverse()], VH * 0.7, y + 0.07, M.bone), "Cervical vertebrae");
+    add(G.prevertebral, extrude(mirrorPts(tpP), [ellPts(434, 301, 5.8, 5.8, 0, 16).reverse()], VH * 0.7, y + 0.07, M.bone), "Cervical vertebrae");
+    add(G.prevertebral, extrude(archP, [canalP.slice().reverse()], VH * 0.8, y + 0.04, M.bone), "Cervical vertebrae");
+    if (v < 1) add(G.prevertebral, extrude(scaleAbout(bodyP, 0.97), null, VG, y + VH, M.disc), "Intervertebral disc");
+  }
+  add(G.prevertebral, extrude(ellPts(380, 338, 14, 9.5, 0, 28), null, H, Y0, M.cord), "Spinal cord");
+  [[362, 264, 12, 8, 0], [282, 290, 12, 8.5, 35], [274, 318, 14, 9.5, 35], [282, 372, 16, 12, 20], [344, 410, 15, 10, 0], [322, 416, 20, 10, 25]].forEach(function (m, i) {
+    var nm = i === 0 ? "Longus colli" : i < 3 ? "Scalene muscles" : "Deep back muscles";
+    add(G.prevertebral, extrude(ellPts(m[0], m[1], m[2], m[3], m[4]), null, H, Y0, i % 2 ? M.muscle : M.muscle2), nm);
+    add(G.prevertebral, extrude(mirrorPts(ellPts(m[0], m[1], m[2], m[3], m[4])), null, H, Y0, i % 2 ? M.muscle2 : M.muscle), nm);
+  });
+  [-1, 1].forEach(function (k) {
+    var X = function (x) { return k < 0 ? x : 760 - x; };
+    add(G.prevertebral, vcyl(X(326), 301, 3.1, 3.1, Y0, H / 2, M.artery), "Vertebral artery");
+    add(G.prevertebral, tube([V3(X(296), 282, H / 2), V3(X(292), 280, 0.3), V3(X(290), 278, Y0)], 0.022, M.nerve), "Phrenic nerve");
+    [0.32, -0.26].forEach(function (yy, j) {
+      add(G.prevertebral, tube([V3(X(318), 300, yy + 0.05), V3(X(282), 306, yy - 0.03), V3(X(236), 316, yy - 0.12), V3(X(200), 330, yy - 0.25)], 0.03, M.nerve), "Roots of the brachial plexus");
+    });
+  });
+
+  // carotid sheaths: CCA splits at C4; the ICA stays in, the ECA leaves
+  var mCar = holo(COL.carotid, 0.42);
+  [-1, 1].forEach(function (k) {
+    var X = function (x) { return k < 0 ? x : 760 - x; };
+    add(G.carotid, extrude(ellPts(X(282), 218, 29, 26, 0, 40), [ellPts(X(282), 218, 27.6, 24.6, 0, 40).reverse()], TOPV + 0.08 - SY0, SY0, mCar), "Carotid sheath");
+    add(G.carotid, vcyl(X(296), 216, 9.5, 9.5, Y0, SPLIT + 0.05, M.artery), "Common carotid artery");
+    add(G.carotid, tube([V3(X(296), 216, SPLIT), V3(X(292), 222, SPLIT + 0.4), V3(X(288), 224, TOPV)], 0.085, M.artery), "Internal carotid artery");
+    add(G.carotid, tube([V3(X(296), 216, SPLIT), V3(X(304), 205, SPLIT + 0.35), V3(X(322), 190, SPLIT + 0.75), V3(X(338), 170, TOPV)], 0.07, M.artery), "External carotid artery");
+    add(G.carotid, vcyl(X(268), 216, 13, 10, Y0, TOPV, M.vein), "Internal jugular vein");
+    add(G.carotid, vcyl(X(282), 234, 4.6, 4.6, Y0, TOPV, M.nerve), "Vagus nerve");
+    add(G.carotid, tube([V3(X(286), 192, 2.15), V3(X(290), 192.5, 1.7), V3(X(292), 193, 1.2), V3(X(282), 191, 0.98), V3(X(270), 193, 1.2), V3(X(268), 194, 1.85)], 0.02, M.nerve), "Ansa cervicalis");
+    add(G.carotid, vcyl(X(290), 266, 3.2, 3.2, Y0, 2.1, M.nerve), "Sympathetic trunk");
+    var gang = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 12), M.nerve); gang.scale.set(1, 1.8, 1); gang.position.copy(V3(X(290), 266, 1.45)); add(G.carotid, gang, "Sympathetic trunk");
+  });
+  root.position.y = 0.05;
+
+  /* ───── labels ───── */
+  var labelsEl = document.getElementById("labels"), TAGS = [];
+  function tag(text, layer, pos, stage, cls) {
+    var el = document.createElement("div"); el.className = "tag hide" + (cls ? " " + cls : ""); el.style.setProperty("--c", COL[layer] || "#fff"); el.textContent = text;
+    labelsEl.appendChild(el); TAGS.push({ el: el, layer: layer, pos: pos, stage: stage, group: G[layer] }); return el;
+  }
+  var TOP = H / 2 + 0.26;
+  tag("Investing layer", "investing", S(196, 0.9).concat([TOP]), [1, 2], "big");
+  tag("Pretracheal layer", "pretracheal", [458, 128, TOP], [1, 2], "big");
+  tag("Prevertebral layer", "prevertebral", [508, 336, TOP], [1, 2], "big");
+  tag("Carotid sheath", "carotid", [252, 222, TOP], [1, 2], "big");
+  tag("Trachea", "pretracheal", [380, 120, TOP], [2]);
+  tag("Thyroid gland", "pretracheal", [448, 168, H / 2 + 0.02], [2]);
+  tag("Sternocleidomastoid", "investing", S(322, 0.82).concat([TOP]), [2]);
+  tag("Trapezius", "investing", S(45, 0.85).concat([TOP]), [2]);
+  tag("C5 and C6", "prevertebral", [380, 300, H / 2 + 0.02], [2]);
+  tag("Brachial plexus roots", "prevertebral", [560, 330, 0.1], [2]);
+  tag("Common carotid", "carotid", [296, 216, 0.85], [3], "big");
+  tag("Internal carotid · inside", "carotid", [288, 224, 1.95], [3], "big");
+  tag("External carotid · leaves", "carotid", [334, 176, 2.05], [3], "big");
+  tag("Internal jugular vein", "carotid", [258, 214, 1.55], [3]);
+  tag("Vagus nerve", "carotid", [282, 238, 1.25], [3]);
+  tag("Ansa cervicalis · in the wall", "carotid", [280, 190, 1.0], [3]);
+  tag("Sympathetic trunk · behind", "carotid", [290, 270, 1.6], [3]);
+  var tmpV = new THREE.Vector3();
+
+  /* ───── state, focus, sleeves ───── */
+  var stage = 1, focusLayer = null, exploded = false;
+  var EXPLODE = { superficial: 2.7, investing: 1.95, pretracheal: 1.2, carotid: 0.6, prevertebral: 0, skin: 3.3 };
+  function setExplode(on) {
+    exploded = on;
+    Object.keys(G).forEach(function (k) { G[k].userData.yTo = on ? EXPLODE[k] : 0; });
+    document.getElementById("explode").setAttribute("aria-pressed", on ? "true" : "false");
+    document.getElementById("explode").textContent = on ? "Put sleeves back" : "Slide sleeves apart";
+    document.getElementById("hud-mode").textContent = on ? "Sleeves apart" : "Assembled";
+    if (on) fly(new THREE.Vector3(6.6, 7.6, 12.6), new THREE.Vector3(0, 1.35, 0), 1400);
+    else if (stage < 3) fly(HOME.pos, HOME.target, 1200);
+  }
+  function setFocus(layer) {
+    focusLayer = layer;
+    Object.keys(G).forEach(function (k) {
+      var on = !layer || k === layer || (k === "skin" && !layer);
+      G[k].traverse(function (o) {
+        if (!o.material) return;
+        var mu = o.material.userData;
+        mu.fadeTo = on ? 1 : (k === "skin" ? 0.12 : 0.05);
+        mu.glowTo = layer && k === layer ? 1 : 0;
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-layer]"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-layer") === layer ? "true" : "false"); });
+  }
+  // shared materials across layers: give each mesh its own material clone so layers fade independently
+  PICK.forEach(function (o) { var mm = o.material.clone(); mm.userData = Object.assign({}, o.material.userData); if (o.material.uniforms) { mm.uniforms = THREE.UniformsUtils.clone(o.material.uniforms); } o.material = mm; mats.push(mm); });
+
+  /* ───── camera moves ───── */
+  var flight = null;
+  function fly(pos, target, ms) {
+    if (reduce) { camera.position.copy(pos); controls.target.copy(target); return; }
+    flight = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos.clone(), t1: target.clone(), start: performance.now(), ms: ms || 1300 };
+  }
+
+  /* ───── tap to name ───── */
+  var ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), pickEl = document.getElementById("pick"), pickT = null, down = null;
+  canvas.addEventListener("pointerdown", function (e) { down = { x: e.clientX, y: e.clientY, t: performance.now() }; controls.autoRotate = false; });
+  canvas.addEventListener("pointerup", function (e) {
+    if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 8 || performance.now() - down.t > 600) { down = null; return; }
+    down = null;
+    var r = canvas.getBoundingClientRect();
+    ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    var hits = ray.intersectObjects(PICK, false).filter(function (h) { var mu = h.object.material.userData; return h.object.userData.layer !== "skin" && mu.fade > 0.5; });
+    var h = hits.find(function (x) { return !x.object.material.userData.holo; }) || hits[0];
+    clearTimeout(pickT);
+    if (!h) { pickEl.classList.remove("on"); if (stage < 3) setFocus(null); return; }
+    var nm = h.object.userData.name, lay = h.object.userData.layer;
+    pickEl.querySelector("b").textContent = nm;
+    pickEl.querySelector("span").textContent = NOTE[nm] || FACT[lay] || "";
+    pickEl.style.left = (e.clientX - stageEl.getBoundingClientRect().left) + "px";
+    pickEl.style.top = (e.clientY - stageEl.getBoundingClientRect().top) + "px";
+    pickEl.classList.add("on");
+    pickT = setTimeout(function () { pickEl.classList.remove("on"); }, 2600);
+    if (stage < 3) setFocus(lay);
+  });
+  document.getElementById("explode").addEventListener("click", function () { setExplode(!exploded); });
+  document.getElementById("reset").addEventListener("click", function () { if (stage === 3) toCarotid(); else { setExplode(false); fly(HOME.pos, HOME.target, 1100); } });
+
+  /* ───── render loop ───── */
+  var clock = new THREE.Clock(), introStart = performance.now(), introT = 0;
+  // opening: the sleeves slide down into place one after another
+  var INTRO = { prevertebral: 0.0, carotid: 0.25, pretracheal: 0.5, investing: 0.75, superficial: 1.0, skin: 1.2 };
+  Object.keys(G).forEach(function (k) { G[k].userData.y = reduce ? 0 : 5 + INTRO[k] * 2; });
+  var introDone = reduce;
+  function resize() {
+    var r = stageEl.getBoundingClientRect();
+    renderer.setSize(r.width, r.height, false);
+    camera.aspect = r.width / Math.max(1, r.height); camera.updateProjectionMatrix();
+    camera.zoom = r.width < 520 ? 1.08 : camera.aspect > 1.2 ? 1.3 : 1; camera.updateProjectionMatrix();
+  }
+  resize();
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(stageEl); else addEventListener("resize", resize);
+  var hudRot = document.getElementById("hud-rot"), hudTilt = document.getElementById("hud-tilt");
+  function frame() {
+    var dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
+    if (!introDone) {
+      introT = (performance.now() - introStart) / 1000;
+      Object.keys(G).forEach(function (k) { if (introT > INTRO[k] * 0.9) G[k].userData.yTo = exploded ? EXPLODE[k] : 0; });
+      if (introT > 2.4) introDone = true;
+    }
+    Object.keys(G).forEach(function (k) { var u = G[k].userData; u.y += (u.yTo - u.y) * (1 - Math.pow(0.0009, dt)); G[k].position.y = u.y; });
+    mats.forEach(function (m) {
+      var u = m.userData; if (!u) return;
+      u.fade += (u.fadeTo - u.fade) * (1 - Math.pow(0.002, dt));
+      u.glow += (u.glowTo - u.glow) * (1 - Math.pow(0.002, dt));
+      if (u.holo) { m.uniforms.uOpacity.value = u.base * u.fade; m.uniforms.uGlow.value = u.glow * (0.75 + 0.25 * Math.sin(t * 3)); }
+      else {
+        var o = u.base * u.fade, want = o < 0.995;
+        if (m.transparent !== want) { m.transparent = want; m.depthWrite = !want; m.needsUpdate = true; }
+        m.opacity = o;
+        if (!u.e0) u.e0 = m.emissive.clone();
+        if (u.glow > 0.01) { m.emissive.copy(u.e0).lerp(u.glowCol, Math.min(1, u.glow) * 0.6); m.emissiveIntensity = u.ei + u.glow * (0.45 + 0.25 * Math.sin(t * 3)); }
+        else { m.emissive.copy(u.e0); m.emissiveIntensity = u.ei; }
+      }
+    });
+    if (flight) {
+      var s = Math.min(1, (performance.now() - flight.start) / flight.ms), e = s < 0.5 ? 4 * s * s * s : 1 - Math.pow(-2 * s + 2, 3) / 2;
+      camera.position.lerpVectors(flight.p0, flight.p1, e); controls.target.lerpVectors(flight.t0, flight.t1, e);
+      if (s >= 1) flight = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    // labels
+    var r = canvas.getBoundingClientRect(), placed = [];
+    TAGS.forEach(function (tg) {
+      var show = tg.stage.indexOf(stage) >= 0 && introDone && (!focusLayer || focusLayer === tg.layer || stage === 3);
+      tmpV.set(U(tg.pos[0]), tg.pos[2], Z(tg.pos[1])); tmpV.y += tg.group.position.y + root.position.y;
+      tmpV.project(camera);
+      var vis = show && tmpV.z < 1 && Math.abs(tmpV.x) < 1.05 && Math.abs(tmpV.y) < 1.05;
+      var px = (tmpV.x * 0.5 + 0.5) * r.width, py = (-tmpV.y * 0.5 + 0.5) * r.height;
+      if (vis) {
+        var w = (tg.w = tg.w || tg.el.offsetWidth || 120) / 2 + 4, h = 17;
+        vis = !placed.some(function (b) { return Math.abs(b.x - px) < b.w + w && Math.abs(b.y - py) < h * 2; });
+        if (vis) placed.push({ x: px, y: py, w: w });
+      }
+      tg.el.classList.toggle("hide", !vis);
+      if (vis) tg.el.style.transform = "translate(" + px.toFixed(1) + "px," + py.toFixed(1) + "px) translate(-50%,-50%)";
+    });
+    var az = THREE.MathUtils.radToDeg(controls.getAzimuthalAngle()), po = THREE.MathUtils.radToDeg(controls.getPolarAngle());
+    hudRot.textContent = String(Math.round((az + 360) % 360)).padStart(3, "0") + "°";
+    hudTilt.textContent = String(Math.round(90 - po)).padStart(2, "0") + "°";
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  function toCarotid() {
+    setFocus("carotid");
+    // the patient's right sheath (+x here), from the front and the side, at the split above the slab
+    fly(new THREE.Vector3(5.2, 3.6, 5.4), new THREE.Vector3(0.95, 1.15, 0.45), 1700);
+  }
+  window.__neck = { setStage: function (n) { applyStage(n); } };
+
+  /* ───── lesson ───── */
+  var page = document.getElementById("page");
+  function chip(layer, text) { return '<button type="button" class="chip" data-layer="' + layer + '" style="--c:' + COL[layer] + '" aria-pressed="false">' + text + "</button>"; }
+  function recall(q, a) { return '<div class="card recall"><div class="cap"><span>Cover it · answer in your head</span><span lang="ar" dir="rtl">رجّعها من دماغك</span></div><p class="q">' + q + '</p><p class="answer">' + a + '</p><div class="row-btns"><button type="button" class="ghost" data-r="show">Show the answer</button></div></div>'; }
+  var SECTIONS = [
+    { label: "The whole picture",
+      html: '<h1>Deep cervical <span class="grad">fascia</span></h1><div class="ar" dir="rtl" lang="ar">فرّق النسيج<small dir="ltr">Read the tissue</small></div>' +
+        '<p class="lede">The neck is packed in <i>sleeves of deep fascia</i>. The ' + chip("investing", "investing layer") + ' wraps everything like a collar and splits around the sternomastoid and trapezius. The ' + chip("pretracheal", "pretracheal layer") + ' wraps the thyroid, trachea and oesophagus. The ' + chip("prevertebral", "prevertebral layer") + ' covers the muscles in front of the spine. The ' + chip("carotid", "carotid sheath") + ' is a tube around the main vessels and the vagus. Each layer decides where pus spreads and what moves with swallowing.</p>' +
+        '<div class="card" style="--cc:var(--text-3)"><div class="cap"><span>Try it</span></div><p>Drag the model to turn it. Tap any part to name it, or tap a coloured word to light up its sleeve.</p></div>' },
+    { label: "Layers of deep cervical fascia",
+      html: '<h2>Four sleeves, <span class="grad">four jobs</span></h2><div class="layers">' +
+        [["superficial", "Superficial fascia", "Contains the platysma, the external jugular vein and the cutaneous nerves."],
+         ["investing", "Investing layer", "Splits to enclose the sternomastoid and trapezius. Roof of the posterior triangle; capsules of the parotid and submandibular glands; attached to the hyoid."],
+         ["pretracheal", "Pretracheal layer", "Encloses the thyroid, trachea, oesophagus and infrahyoid muscles. Attached to the hyoid and thyroid cartilage, so the thyroid moves up with swallowing."],
+         ["prevertebral", "Prevertebral layer", "Covers the prevertebral and scalene muscles. Floor of the posterior triangle; prolonged into the axilla as the axillary sheath."]].map(function (r) {
+          return '<button type="button" class="layer" data-layer="' + r[0] + '" aria-pressed="false" style="--c:' + COL[r[0]] + '"><span class="orb"></span><span><b>' + r[1] + "</b><span>" + r[2] + "</span></span></button>";
+        }).join("") + "</div>" +
+        '<div class="card" style="--cc:var(--pretracheal)"><div class="cap"><span>Written exam asks</span><span lang="ar" dir="rtl">السؤال المقالي</span></div><p>List the contents of the posterior triangle of the neck, and the external jugular vein.</p></div>' +
+        recall("Which fascial layer makes the thyroid move with swallowing?", "The <b>pretracheal fascia</b>, attached to the hyoid and the thyroid cartilage.") },
+    { label: "Carotid sheath",
+      html: '<h2>The carotid <span class="grad">sheath</span></h2><p class="lede">A fascial tube from the base of the skull to the root of the neck. Watch the common carotid split at C4: the internal carotid stays inside, the external carotid leaves.</p>' +
+        '<div class="cols"><div style="--c:var(--carotid)"><h3>Inside</h3><ul><li><b>Common and internal carotid</b>, medially</li><li><b>Internal jugular vein</b>, laterally</li><li><b>Vagus nerve</b>, between and behind</li><li>Deep cervical lymph nodes</li></ul></div>' +
+        '<div style="--c:var(--text-3)"><h3>Not inside</h3><ul><li><b>External carotid</b>, outside</li><li>External jugular vein</li><li><b>Ansa cervicalis</b>, in the front wall</li><li><b>Sympathetic trunk</b>, behind</li></ul></div></div>' +
+        '<div class="card" style="--cc:var(--artery)"><div class="cap"><span>Exam trap</span></div><p>The <b>external</b> carotid is <b>not</b> in the carotid sheath. The <b>internal</b> carotid is.</p></div>' +
+        recall("What are the contents of the carotid sheath?", "The common and internal carotid arteries, the internal jugular vein and the vagus nerve, with the deep cervical nodes.") },
+    { label: "Lesson complete",
+      html: '<h2>Lesson <span class="grad">complete</span></h2><p class="lede">Three sections, four sleeves, one sheath. Next on today\'s plan: <b>Cerebellum physiology</b>.</p><div class="card" style="--cc:var(--prevertebral)"><div class="cap"><span>+15 XP</span></div><p>In the course this step would now count as done.</p></div>' }
+  ];
+  var cur = 0;
+  var ctaT = document.getElementById("cta-t"), ctaS = document.getElementById("cta-s"), metaL = document.getElementById("meta-l");
+  function render(i) {
+    page.innerHTML = SECTIONS[i].html;
+    metaL.textContent = i < 3 ? "Section " + (i + 1) + " of 3 · " + SECTIONS[i].label : "Done";
+    ctaT.textContent = i < 2 ? "Got it, next section" : i === 2 ? "Finish the lesson" : "Start again";
+    ctaS.textContent = i < 2 ? "Next: " + SECTIONS[i + 1].label : i === 2 ? "Wraps up this lesson" : "From the whole picture";
+    ["s1", "s2", "s3"].forEach(function (id, k) { document.getElementById(id).style.setProperty("--p", k < i ? 1 : k === i ? 0.35 : 0); });
+  }
+  function applyStage(n) {
+    stage = n;
+    if (n === 1) { setExplode(false); setFocus(null); fly(HOME.pos, HOME.target, 1300); }
+    if (n === 2) { setFocus(null); setExplode(true); }
+    if (n === 3) { setExplode(false); toCarotid(); }
+    if (n === 4) { setFocus(null); setExplode(false); fly(new THREE.Vector3(-5.2, 6.4, 9.2), HOME.target, 1800); controls.autoRotate = !reduce; controls.autoRotateSpeed = 2.4; setTimeout(function () { controls.autoRotateSpeed = 0.55; }, 2600);
+      ["prevertebral", "carotid", "pretracheal", "investing"].forEach(function (k, i) { setTimeout(function () { setFocus(k); }, 300 + i * 420); }); setTimeout(function () { setFocus(null); }, 300 + 4 * 420); }
+  }
+  page.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-r]"); if (!b) return;
+    var box = b.closest(".recall"), r = b.getAttribute("data-r"), row = box.querySelector(".row-btns");
+    if (r === "show") { box.classList.add("revealed"); row.innerHTML = '<button type="button" class="ghost" data-r="yes">I had it</button><button type="button" class="ghost" data-r="no">Not yet</button>'; if (cur === 1) setFocus("pretracheal"); }
+    else row.innerHTML = '<span class="verdict" style="color:' + (r === "yes" ? "var(--prevertebral)" : "var(--pretracheal)") + '">' + (r === "yes" ? "Locked in." : "It comes back once before practice.") + "</span>";
+  });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-layer]"); if (!b) return;
+    var l = b.getAttribute("data-layer");
+    if (stage === 3) return;
+    setFocus(focusLayer === l ? null : l);
+  });
+  document.getElementById("cta").addEventListener("click", function () {
+    var next = cur === 3 ? 0 : cur + 1;
+    page.classList.add("out");
+    setTimeout(function () { cur = next; render(cur); page.classList.remove("out"); document.querySelector(".panel").scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); }, reduce ? 0 : 280);
+    applyStage(next + 1);
+  });
+  render(0);
+
+  function start2D() { /* without 3D the lesson still works */ }
+})();
+</script>
