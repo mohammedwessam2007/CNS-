@@ -289,3 +289,10 @@ v16.0 is **not** "100% perfect". This file lists what is unproven, what is heuri
 
 - **Vercel:** promote a previous deployment, or delete the project (`docs/DEPLOYMENT_VERCEL.md`).
 - **Hatchable:** v53 is untouched. The exact v53 files are commit `6e3ebec` (`python3 scripts/verify_exact_source.py`). `tests/rollback_probe.js` shows that v53 loads v14.x state without errors, and that returning to v14.x keeps progress.
+
+## v18.14.2 · Vercel paused, a free copy on GitHub Pages (20 Oct 2026)
+
+- The Vercel project went over the Hobby plan's monthly limit and was paused by Vercel; it comes back when the limit resets. The likely cause is the cloud-save storm fixed in v18.14.1 (not confirmed: the connector cannot read the project).
+- A second, free copy builds on every push through `.github/workflows/pages.yml` to `https://mohammedwessam2007.github.io/cns-/`, once the owner turns Pages on (Settings → Pages → Source: GitHub Actions). It is the same app with the same bundled pictures; root paths are made relative (`IX_HOST=pages` in `deploy/vercel/build.mjs`) because Pages serves under `/cns-/`.
+- No cloud save on the Pages copy (there is no server). The cloud button says so. Progress stays on the device; 📤 Share my progress → 💾 Save full progress file is the backup.
+- Moving progress: on the paused Vercel copy (opened offline from the iPad's saved copy), save the progress file; on the Pages copy, 📥 Load a progress file. The device's previous progress is kept under `…_backup_before_import`. Tested in `tests/pages_host_test.js` (P1–P4).

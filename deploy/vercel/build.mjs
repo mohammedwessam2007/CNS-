@@ -8,19 +8,23 @@ import { createHash } from "node:crypto";
 import { bundlePictures, readNoteSources } from "./pics.mjs";
 
 const here = (p) => new URL(p, import.meta.url);
+// IX_HOST=pages (v18.14.2): the same app for GitHub Pages, free, while the Vercel project is paused. Pages serves
+// a project site under /<repo>/, so the app's root paths are made relative, and there is no server: no cloud save
+// (the device copy and the progress file stay), no sync-code page.
+const PAGES = process.env.IX_HOST === "pages";
 const SRC = here("../../source/public/"),
-  OUT = here("./dist/");
+  OUT = here(PAGES ? "./dist-pages/" : "./dist/");
 
 await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 await cp(SRC, OUT, { recursive: true });
-await cp(here("./static/"), OUT, { recursive: true, force: true });
+if (!PAGES) await cp(here("./static/"), OUT, { recursive: true, force: true });
 
 const indexUrl = new URL("index.html", OUT);
 let html = await readFile(indexUrl, "utf8");
 const tag = '<script src="/host-sync.js"></script>',
   anchor = '<meta charset="utf-8">';
-if (!html.includes(tag)) {
+if (!PAGES && !html.includes(tag)) {
   if (html.split(anchor).length !== 2) throw new Error("build: expected exactly one charset meta in index.html");
   html = html.replace(anchor, anchor + tag);
 }
@@ -61,7 +65,37 @@ if (!html.includes(axisTag)) {
   for (const p of refs) await access(new URL(p, OUT)).catch(() => { throw new Error("build: index.html names /" + p + " but it is not in dist"); });
   console.log("[build] " + refs.length + " app scripts/styles present");
 }
+if (PAGES) html = await relativise(html);
 await writeFile(indexUrl, html);
+
+// Pages: every path the app names from the site root becomes relative to the page. Each rewrite must find its target.
+async function relativise(page) {
+  const edits = [
+    ["sw.js", [[/\^\\\/pics\\\//, "(?:^|\\/)pics\\/"], ['c.add("/")', 'c.add("./")'], ['caches.match("/")', 'caches.match("./")']]],
+    ["learn-v15.js", [['register("/sw.js")', 'register("sw.js")']]],
+    ["renaissance-books.js", [[/"\/books\//g, '"books/']]],
+    ["dept-figs-v16.js", [[/"\/dept\//g, '"dept/']]],
+    ["intellectuality-v14.js", [[/"\/assets\//g, '"assets/']]],
+  ];
+  if (pics && pics.stats.images > 0) edits.push(["pics/manifest.js", [[/"\/pics\//g, '"pics/']]]);
+  for (const [file, reps] of edits) {
+    const u = new URL(file, OUT);
+    let t = await readFile(u, "utf8");
+    for (const [a, b] of reps) {
+      const n = t.replace(a, b);
+      if (n === t) throw new Error("build(pages): " + file + " has no " + a);
+      t = n;
+    }
+    await writeFile(u, t);
+  }
+  const n0 = page.length;
+  page = page.replace(/(\s(?:src|href))="\/(?!\/)/g, '$1="');
+  const login = "location.href='/login?next=/'";
+  if (!page.includes(login)) throw new Error("build(pages): index.html cloud button changed");
+  page = page.replace(login, "alert('Cloud backup is off on this copy of the app. To keep a backup, open 📤 SHARE MY PROGRESS and tap 💾 Save full progress file.')");
+  console.log("[build] pages: root paths made relative (" + (n0 - page.length) + " chars)");
+  return page;
+}
 
 const info = {
   app: "INTELLECTUALITY CNS",

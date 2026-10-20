@@ -1,0 +1,47 @@
+# v18.14.2: a free copy of the app on GitHub Pages (https://mohammedwessam2007.github.io/cns-/) while the
+# Vercel project is paused for the rest of the month. Same app, same pictures; no cloud save (no server here).
+# Publishes only once the owner turns Pages on (Settings → Pages → Source: GitHub Actions).
+name: github-pages-copy
+
+on:
+  push:
+    branches:
+      - claude/intellectuality-v14-upgrade-e2e4vt
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build the Pages copy
+        working-directory: deploy/vercel
+        env:
+          IX_HOST: pages
+          PICS_MINUTES: "7"
+        run: node build.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: deploy/vercel/dist-pages
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

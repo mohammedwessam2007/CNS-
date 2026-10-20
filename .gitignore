@@ -1,3 +1,4 @@
 tests/out/
 node_modules/
 deploy/vercel/dist/
+deploy/vercel/dist-pages/

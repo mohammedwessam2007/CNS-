@@ -93,6 +93,49 @@
     }, 1500);
   }
 
+  // v18.14.2: the other way. A progress file saved on one copy of the app (another address, another device) is
+  // loaded here; this device's progress is kept aside first, under its own key, so nothing is lost.
+  const KEY = "intellectuality_v41_launch_state",
+    KEPT = "intellectuality_v41_launch_state_backup_before_import";
+  function loadFile(btn) {
+    const inp = document.createElement("input");
+    inp.type = "file";
+    inp.accept = "application/json,.json";
+    inp.onchange = () => {
+      const f = inp.files && inp.files[0];
+      if (!f) return;
+      const rd = new FileReader();
+      rd.onload = () => {
+        const j = safe(() => JSON.parse(String(rd.result)), null);
+        const st = j && j.kind === "intellectuality-progress" && j.state && typeof j.state === "object" ? j.state : null;
+        if (!st || Array.isArray(st)) {
+          btn.textContent = "✕ Not a progress file";
+          return;
+        }
+        const when = safe(() => new Date(j.made).toLocaleString(), "an unknown date");
+        if (!confirm("Load the progress saved on " + when + "?\n\nIt replaces the progress on this device. This device's progress is kept as a backup.")) return;
+        const cur = safe(() => localStorage.getItem(KEY), null);
+        safe(() => cur && localStorage.setItem(KEPT, cur));
+        try {
+          localStorage.setItem(KEY, JSON.stringify(st));
+        } catch (e) {
+          btn.textContent = "✕ This device is out of space";
+          return;
+        }
+        // the page is about to restart: nothing may write the old progress back on the way out
+        const set = Storage.prototype.setItem;
+        Storage.prototype.setItem = function (k, v) {
+          if (this === window.localStorage && k === KEY) return;
+          return set.apply(this, arguments);
+        };
+        btn.textContent = "✓ Loaded, restarting…";
+        setTimeout(() => location.reload(), 300);
+      };
+      rd.readAsText(f);
+    };
+    inp.click();
+  }
+
   function open() {
     close();
     const text = safe(summary, "The summary could not be built on this device.");
@@ -103,8 +146,8 @@
       '<div class="ixShareBox"><div class="ixShareHd"><b>Share my progress with Claude</b><button type="button" data-ixs="close" aria-label="Close">✕</button></div>' +
       '<p class="ixShareP">Copy this and paste it to Claude in the chat. It shows where you are and the questions you got wrong. It does not change anything, and your sync code is not in it.</p>' +
       '<textarea class="ixShareT" readonly>' + E(text) + "</textarea>" +
-      '<div class="ixShareRow"><button type="button" class="primary" data-ixs="copy">📋 Copy</button><button type="button" data-ixs="file">💾 Save full progress file</button></div>' +
-      '<p class="ixShareP small">The file has everything (every answer); attach it in the chat if Claude asks for more detail.</p></div>';
+      '<div class="ixShareRow"><button type="button" class="primary" data-ixs="copy">📋 Copy</button><button type="button" data-ixs="file">💾 Save full progress file</button><button type="button" data-ixs="load">📥 Load a progress file</button></div>' +
+      '<p class="ixShareP small">The file has everything (every answer); attach it in the chat if Claude asks for more detail. To move your progress to another copy of the app, save the file here and load it there.</p></div>';
     document.body.appendChild(o);
     o.addEventListener("click", (ev) => {
       const b = ev.target.closest("[data-ixs]");
@@ -115,6 +158,7 @@
       const a = b.dataset.ixs;
       if (a === "close") close();
       else if (a === "file") safe(fullFile);
+      else if (a === "load") safe(() => loadFile(b));
       else if (a === "copy") {
         const t = o.querySelector(".ixShareT");
         const done = () => (b.textContent = "✓ Copied");
@@ -140,7 +184,7 @@
     anchor.insertAdjacentHTML("afterend", '<button id="shareProgressBtn" class="ghost wide" style="margin-top:8px">📤 SHARE MY PROGRESS WITH CLAUDE</button>');
     document.getElementById("shareProgressBtn").onclick = open;
   }
-  window.INTELLECTUALITY_SHARE = { summary, open };
+  window.INTELLECTUALITY_SHARE = { summary, open, loadFile };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install);
   else install();
   setTimeout(install, 1500);
