@@ -1,0 +1,140 @@
+  /* ───── Dr Doss's drawing ↔ the specimen: a label he wrote finds the same structure in the real neck ───── */
+  var DOSS = window.DOSS_FIGS || {};
+  var sketchEl = document.getElementById("sketch"), skWrap = document.getElementById("sk-wrap"), skImg = document.getElementById("sk-img"), skSpots = document.getElementById("sk-spots"), skCap = document.getElementById("sk-cap");
+  var skCur = null;
+  function showDrawing(id, keepSize) {
+    var d = DOSS[id]; if (!d) return;
+    skCur = id; skImg.src = d.src; skImg.alt = "Dr Sameh Doss: " + d.cap; skCap.textContent = d.cap;
+    skSpots.innerHTML = "";
+    d.spots.forEach(function (s, i) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "sk-spot"; b.style.left = s[0] + "%"; b.style.top = s[1] + "%";
+      var L = s[3].L || (BYNAME[s[3].n] && BYNAME[s[3].n][0] && BYNAME[s[3].n][0].layer) || "carotid";
+      b.style.setProperty("--c", COL[L] || "#fff"); b.setAttribute("aria-label", s[2] + ": find it in the neck"); b.dataset.i = i;
+      b.innerHTML = "<i></i><span>" + s[2] + "</span>";
+      skSpots.appendChild(b);
+    });
+    if (!keepSize && stageEl.clientWidth >= 520) sketchEl.dataset.size = "mini";
+    sketchEl.classList.remove("swap"); void sketchEl.offsetWidth; sketchEl.classList.add("swap");
+    sizeSketch();
+  }
+  function sizeSketch() {
+    var d = DOSS[skCur]; if (!d) return;
+    var sw = stageEl.clientWidth, sh = stageEl.clientHeight, big = sketchEl.dataset.size === "big", phone = sw < 520;
+    var maxW = big ? Math.min(sw * (phone ? 0.86 : 0.62), 520) : Math.max(112, Math.min(sw * 0.26, 240));
+    var maxH = big ? sh - (phone ? 120 : 150) : sh * (phone ? 0.36 : 0.5);
+    var w = Math.min(maxW, maxH * d.w / d.h);
+    skWrap.style.width = w.toFixed(0) + "px"; skWrap.style.height = (w * d.h / d.w).toFixed(0) + "px";
+    sketchEl.style.width = (w + 20).toFixed(0) + "px";
+  }
+  document.getElementById("sk-size").addEventListener("click", function () { sketchEl.dataset.size = sketchEl.dataset.size === "big" ? "mini" : "big"; sizeSketch(); });
+  skSpots.addEventListener("click", function (e) {
+    var b = e.target.closest(".sk-spot"); if (!b) return;
+    stopTour();
+    var s = DOSS[skCur].spots[+b.dataset.i];
+    if (stageEl.clientWidth < 520 && sketchEl.dataset.size === "big") { sketchEl.dataset.size = "mini"; sizeSketch(); }
+    link(Object.assign({ label: s[2] }, s[3]), b);
+  });
+
+  var LINK = null, threadSvg = document.getElementById("thread"), thPath = document.getElementById("th-path"), thFlow = document.getElementById("th-flow"), thDot = document.getElementById("th-dot"), thRing = document.getElementById("th-ring"), thTag = document.getElementById("th-tag");
+  function hiPair(e) {
+    if (e.hiF) return e;
+    var f0 = e.front.material, c0 = e.cap.material, f = f0.clone(), c = c0.clone();
+    f.clippingPlanes = f0.clippingPlanes; f.clipShadows = true; track(f, 1, "#ffffff", f0.userData.ei); f.userData.hi = true;
+    c.clippingPlanes = c0.clippingPlanes; c.clipping = true; c.uniforms.map.value = c0.uniforms.map.value; track(c, 1, "#ffffff"); c.userData.cap = true; c.userData.hi = true;
+    e.f0 = f0; e.c0 = c0; e.hiF = f; e.hiC = c; return e;
+  }
+  function anchorOf(n, s, z) {
+    var p = z != null ? at(n, z, s, 3) : null;
+    if (p) return p;
+    p = at(n, ST - 3, s, 3); if (p) return p;
+    var sx = 0, sy = 0, sz = 0, c = 0;
+    (BYNAME[n] || []).forEach(function (e) {
+      if (s && e.side !== s) return; var P = e.P;
+      for (var i = 0; i < P.length; i += 3) { var zz = P[i + 2] / 10; if (zz < SB || zz > ST) continue; sx += P[i] / 10; sy += P[i + 1] / 10; sz += zz; c++; }
+    });
+    return c ? [sx / c, sy / c, sz / c] : null;
+  }
+  var RINGDIR = { superficial: ["superficial", -0.6, -0.8], investing: ["investing", -0.75, -0.66], pretracheal: ["pretracheal", 0.45, -0.9], prevertebral: ["prevertebral", 0.95, 0.3], carotid: ["carotidR", -0.9, -0.3] };
+  function link(spec, fromEl) {
+    unlink(true);
+    var list = [], layer = spec.L;
+    if (spec.n) {
+      list = (BYNAME[spec.n] || []).filter(function (e) { return !spec.s || e.side === spec.s; });
+      if (!list.length) list = BYNAME[spec.n] || [];
+      if (!list.length) return false;
+      layer = list[0].layer;
+    }
+    if (layer === "carotid") openSheath(!!spec.hi || stage === 3 || stage === 4);
+    var mm = spec.n ? anchorOf(spec.n, spec.s, spec.z) : (function () { var r = RINGDIR[layer]; return onRing(r[0], spec.hi ? 70 : ST + 3, r[1], r[2]); })();
+    if (!mm) return false;
+    Object.keys(G).forEach(function (k) {
+      G[k].traverse(function (o) {
+        if (!o.material) return; var mu = o.material.userData; if (mu.hi) return;
+        if (spec.n) { mu.fadeTo = mu.holo ? (k === layer ? 0.55 : 0.1) : (k === "skin" ? 0.04 : 0.12); mu.glowTo = 0; }
+        else { mu.fadeTo = k === layer ? 1 : (k === "skin" ? 0.04 : 0.1); mu.glowTo = k === layer ? 1 : 0; }
+      });
+    });
+    list.forEach(function (e) {
+      hiPair(e); e.front.material = e.hiF; e.cap.material = e.hiC;
+      [e.hiF, e.hiC].forEach(function (m) { m.userData.fadeTo = 1; m.userData.glowTo = 1; m.userData.glowCol.set(COL[layer] || "#ffffff"); });
+    });
+    LINK = { list: list, layer: layer, mm: mm, from: fromEl || null, t0: performance.now(), label: spec.label || spec.n };
+    var col = COL[layer] || "#ffffff";
+    threadSvg.style.setProperty("--c", col); thTag.style.setProperty("--c", col);
+    var said = spec.label && spec.n && spec.label.toLowerCase() !== spec.n.toLowerCase() && !spec.mcq ? "“" + spec.label + "” in his drawing. " : "";
+    thTag.innerHTML = "<b>" + (spec.n || SNAME[RINGDIR[layer][0]]) + "</b><span>" + said + (spec.n ? (NOTE[spec.n] || "") : (FACT[layer] || "")) + "</span>";
+    Array.prototype.forEach.call(document.querySelectorAll(".sk-spot.on,.linking"), function (x) { x.classList.remove("on", "linking"); });
+    if (fromEl) fromEl.classList.add(fromEl.classList.contains("sk-spot") ? "on" : "linking");
+    var w = new THREE.Vector3(wx(mm[0]), wy(mm[2]) + layerY(layer), wz(mm[1]));
+    var dir = camera.position.clone().sub(controls.target).normalize(); dir.y = Math.max(dir.y, 0.5); dir.normalize();
+    var dist = (spec.n ? (layer === "carotid" && spec.hi ? 10.5 : 8.2) : 10) * (stageEl.clientWidth < 520 ? 1.35 : 1);
+    fly(w.clone().add(dir.multiplyScalar(dist)), w, 1100);
+    controls.autoRotate = false;
+    return true;
+  }
+  function unlink(quiet) {
+    if (LINK) LINK.list.forEach(function (e) { e.front.material = e.f0; e.cap.material = e.c0; e.hiF.userData.fadeTo = e.hiC.userData.fadeTo = 0; });
+    LINK = null; threadSvg.classList.remove("on"); thTag.classList.remove("on");
+    Array.prototype.forEach.call(document.querySelectorAll(".sk-spot.on,.linking"), function (x) { x.classList.remove("on", "linking"); });
+    if (!quiet) { if (stage === 3 || stage === 4) setFocus("carotid", true); else setFocus(null); }
+  }
+  function drawThread() {
+    if (!LINK) return;
+    tmpV.set(wx(LINK.mm[0]), wy(LINK.mm[2]) + layerY(LINK.layer), wz(LINK.mm[1])).project(camera);
+    var cr = canvas.getBoundingClientRect(), ex = cr.left + (tmpV.x * 0.5 + 0.5) * cr.width, ey = cr.top + (-tmpV.y * 0.5 + 0.5) * cr.height;
+    var fr = LINK.from && LINK.from.isConnected ? LINK.from.getBoundingClientRect() : null, has = fr && fr.width > 0 && fr.bottom > 0 && fr.top < innerHeight;
+    var inView = tmpV.z < 1 && ex > cr.left - 40 && ex < cr.right + 40 && ey > cr.top - 40 && ey < cr.bottom + 40;
+    threadSvg.classList.toggle("on", inView); thTag.classList.toggle("on", inView);
+    if (!inView) return;
+    var p = Math.min(1, (performance.now() - LINK.t0) / 750), pe = 1 - Math.pow(1 - p, 3);
+    if (has) {
+      var big = fr.width > 60, sx = !big ? fr.left + fr.width / 2 : (ex < fr.left ? fr.left + 4 : ex > fr.right ? fr.right - 4 : fr.left + fr.width / 2), sy = fr.top + fr.height / 2, bend = Math.min(160, Math.abs(ex - sx) * 0.35 + 40);
+      var d = "M" + sx.toFixed(1) + " " + sy.toFixed(1) + " C" + (sx + (ex > sx ? bend : -bend)).toFixed(1) + " " + sy.toFixed(1) + " " + (ex + (ex > sx ? -bend : bend)).toFixed(1) + " " + (ey - 30).toFixed(1) + " " + ex.toFixed(1) + " " + ey.toFixed(1);
+      thPath.setAttribute("d", d); thFlow.setAttribute("d", d);
+      var len = thPath.getTotalLength(); thPath.style.strokeDasharray = len + " " + len; thPath.style.strokeDashoffset = (len * (1 - pe)).toFixed(1);
+      thFlow.style.opacity = pe;
+    } else { thPath.setAttribute("d", ""); thFlow.setAttribute("d", ""); }
+    thDot.setAttribute("cx", ex.toFixed(1)); thDot.setAttribute("cy", ey.toFixed(1)); thDot.style.opacity = pe;
+    thRing.setAttribute("cx", ex.toFixed(1)); thRing.setAttribute("cy", ey.toFixed(1));
+    var fromRight = has && fr.left + fr.width / 2 > ex, tw = thTag.offsetWidth;
+    var tagLeft = fromRight ? ex - 16 - tw : ex + 16;
+    if (tagLeft + tw > innerWidth - 8) tagLeft = ex - 16 - tw;
+    if (tagLeft < 8) tagLeft = Math.min(innerWidth - tw - 8, ex + 16);
+    thTag.style.transform = "translate(" + tagLeft.toFixed(0) + "px," + (ey - 20).toFixed(0) + "px)"; thTag.style.opacity = pe;
+  }
+  // a short tour of his labels, one thread after another
+  var tourT = null;
+  function startTour(ids) {
+    stopTour(); var i = 0;
+    function step() {
+      var s = DOSS[skCur].spots[ids[i % ids.length]], b = skSpots.querySelector('[data-i="' + ids[i % ids.length] + '"]');
+      link(Object.assign({ label: s[2] }, s[3]), b); i++;
+      tourT = setTimeout(i < ids.length ? step : function () { tourT = null; unlink(); fly(HOME.pos, HOME.target, 1200); document.querySelectorAll("[data-tour]").forEach(function (x) { x.textContent = "▶ Play the tour again"; }); }, 2700);
+    }
+    step();
+  }
+  function stopTour() { if (tourT) { clearTimeout(tourT); tourT = null; } }
+  window.addEventListener("resize", sizeSketch);
+  if (window.ResizeObserver) new ResizeObserver(sizeSketch).observe(stageEl);
+  showDrawing("sd-075a");
+

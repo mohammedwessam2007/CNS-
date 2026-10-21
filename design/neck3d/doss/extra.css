@@ -1,0 +1,79 @@
+
+/* Dr Doss's page, pinned on the specimen table: warm paper on the dark stage, his ink untouched */
+.sketch { position: absolute; z-index: 5; left: 16px; top: 66px; margin: 0; padding: 10px 10px 8px; box-sizing: border-box;
+  background: #f3ede1; color: #2a2620; border-radius: 6px; transform: rotate(-1.2deg); transform-origin: 20% 0;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 22px 50px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.35);
+  transition: width 0.45s var(--ease), transform 0.45s var(--ease); }
+.sketch::before { content: ""; position: absolute; top: -9px; left: 50%; width: 64px; height: 18px; transform: translateX(-50%) rotate(2deg);
+  background: rgba(236, 226, 196, 0.72); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18); border-radius: 2px; }
+.sketch[data-size="big"] { transform: rotate(0deg); z-index: 7; }
+.sketch.swap { animation: skIn 0.5s var(--ease); }
+@keyframes skIn { from { opacity: 0; transform: rotate(-4deg) translateY(10px); } }
+.sk-hd { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 7px; }
+.sk-who { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.sk-who b { font: 600 11.5px/1.2 var(--sans); letter-spacing: 0.02em; color: #2a2620; }
+.sk-who span { font: 700 13px/1.2 var(--arabic); color: #6b5f4b; }
+.sk-size { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(42, 38, 32, 0.25); background: rgba(255, 255, 255, 0.6); color: #2a2620; font: 600 14px/1 var(--sans); cursor: pointer; }
+.sk-wrap { position: relative; margin: 0 auto; }
+.sk-wrap img { display: block; width: 100%; height: 100%; mix-blend-mode: multiply; filter: contrast(1.08); user-select: none; -webkit-user-drag: none; }
+.sk-spots { position: absolute; inset: 0; }
+.sk-spot { position: absolute; transform: translate(-50%, -50%); width: 22px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; }
+.sk-spot i { position: absolute; inset: 4px; border-radius: 50%; background: color-mix(in srgb, var(--c) 35%, transparent); box-shadow: 0 0 0 2px var(--c), 0 0 10px var(--c); animation: spot 2.4s ease-in-out infinite; }
+.sk-spot span { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translateX(-50%); white-space: nowrap; pointer-events: none; opacity: 0;
+  font: 600 11px/1 var(--sans); color: #fff; background: rgba(8, 12, 22, 0.88); padding: 5px 7px; border-radius: 7px; transition: opacity 0.2s; }
+.sk-spot:hover span, .sk-spot:focus-visible span, .sk-spot.on span { opacity: 1; }
+.sk-spot.on i { background: var(--c); animation: none; box-shadow: 0 0 0 3px #fff, 0 0 18px var(--c); }
+.sketch[data-size="mini"] .sk-spot { width: 16px; height: 16px; }
+.sketch[data-size="mini"] .sk-spot i { inset: 3px; }
+@keyframes spot { 50% { transform: scale(1.35); opacity: 0.7; } }
+.sk-cap { margin: 7px 2px 0; font: 400 11px/1.35 var(--sans); color: #5c5345; }
+.sketch[data-size="mini"] .sk-cap { display: none; }
+
+/* the thread from his label to the specimen */
+#thread { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; opacity: 0; transition: opacity 0.25s; overflow: visible; }
+#thread.on { opacity: 1; }
+#th-path { fill: none; stroke: var(--c); stroke-width: 2.2; stroke-linecap: round; filter: drop-shadow(0 0 6px var(--c)); }
+#th-flow { fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 2 14; animation: flow 1s linear infinite; opacity: 0; mix-blend-mode: screen; }
+@keyframes flow { to { stroke-dashoffset: -16; } }
+#th-dot { fill: #fff; stroke: var(--c); stroke-width: 3; filter: drop-shadow(0 0 8px var(--c)); }
+#th-ring { fill: none; stroke: var(--c); stroke-width: 2; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; animation: ring 1.6s ease-out infinite; }
+@keyframes ring { from { transform: scale(1); opacity: 0.9; } to { transform: scale(5); opacity: 0; } }
+#th-tag { position: fixed; left: 0; top: 0; z-index: 41; pointer-events: none; max-width: 230px; padding: 9px 12px; border-radius: 13px;
+  background: rgba(8, 12, 22, 0.9); border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0; transition: opacity 0.2s; display: none; }
+#th-tag.on { display: block; }
+#th-tag b { display: block; font: 600 14px/1.25 var(--sans); color: var(--text); }
+#th-tag span { display: block; font-size: 12px; line-height: 1.4; color: var(--text-2); margin-top: 3px; }
+.linking { box-shadow: 0 0 0 2px var(--c, var(--carotid)) !important; }
+
+/* lesson: drawings in the syllabus */
+.doss-row { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: none; }
+.doss-row::-webkit-scrollbar { display: none; }
+.doss-chip { flex: none; width: 104px; border: 0; padding: 7px 7px 8px; border-radius: 10px; background: #f3ede1; cursor: pointer; text-align: left; transition: transform 0.25s var(--ease), box-shadow 0.25s; }
+.doss-chip img { display: block; width: 100%; height: 92px; object-fit: contain; mix-blend-mode: multiply; }
+.doss-chip span { display: block; margin-top: 6px; font: 500 10.5px/1.3 var(--sans); color: #4a4234; }
+.doss-chip[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--carotid), 0 10px 26px rgba(0, 0, 0, 0.4); transform: translateY(-2px); }
+.sig { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: linear-gradient(120deg, rgba(243, 237, 225, 0.1), rgba(243, 237, 225, 0.03)); border: 1px solid rgba(243, 237, 225, 0.16); }
+.sig .seal { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #f3ede1; color: #2a2620; font: 700 15px/1 var(--arabic); }
+.sig p { margin: 0; font-size: 14px; color: var(--text-2); }
+.sig b { color: var(--text); }
+.ghost.play { border-color: rgba(243, 237, 225, 0.35); }
+.layer .thumb { width: 34px; height: 34px; border-radius: 8px; background: #f3ede1 center/contain no-repeat; box-shadow: 0 0 0 2px var(--c); }
+.mcq .src { font: 500 11px/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+.opts { display: grid; gap: 8px; margin-top: 4px; }
+.opt { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 11px 12px; border-radius: 14px; cursor: pointer;
+  font: inherit; font-size: 15px; color: var(--text); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); transition: background 0.2s, border-color 0.2s; }
+.opt .k { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 600 13px/1 var(--mono); background: rgba(255, 255, 255, 0.08); }
+.opt .find { font: 500 11.5px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--carotid); opacity: 0; transition: opacity 0.3s; white-space: nowrap; }
+.answered .opt .find { opacity: 1; }
+.opt:hover { background: rgba(255, 255, 255, 0.07); }
+.opt.right { border-color: rgba(79, 209, 181, 0.7); background: rgba(79, 209, 181, 0.1); }
+.opt.right .k { background: var(--prevertebral); color: #04201a; }
+.opt.wrong { border-color: rgba(240, 122, 149, 0.7); background: rgba(240, 122, 149, 0.08); }
+.opt.wrong .k { background: var(--pretracheal); color: #2a0610; }
+.why { display: none; margin-top: 12px; font-size: 14.5px; color: var(--text-2); }
+.answered .why { display: block; }
+.why p { margin: 0 0 6px !important; font-size: 14.5px !important; }
+.why b { color: var(--text); }
+@media (max-width: 480px) { #th-tag { max-width: 180px; padding: 7px 10px; } #th-tag b { font-size: 12.5px; } #th-tag span { font-size: 11px; } .sketch { left: 10px; top: 60px; padding: 7px 7px 6px; } .sk-who span { display: none; } .sk-who b { font-size: 10px; } }
+@media (prefers-reduced-motion: reduce) { .sk-spot i, #th-flow, #th-ring, .sketch.swap { animation: none; } }

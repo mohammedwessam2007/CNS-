@@ -1,0 +1,112 @@
+  /* ───── lesson: NEU-205 · Day 29 · T057 Cervical fascia, in the course's own words, with Dr Doss's drawings ───── */
+  var page = document.getElementById("page");
+  function chip(layer, text) { return '<button type="button" class="chip" data-layer="' + layer + '" style="--c:' + COL[layer] + '" aria-pressed="false">' + text + "</button>"; }
+  function recall(q, a) { return '<div class="card recall"><div class="cap"><span>Cover it · answer in your head</span><span lang="ar" dir="rtl">رجّعها من دماغك</span></div><p class="q">' + q + '</p><p class="answer">' + a + '</p><div class="row-btns"><button type="button" class="ghost" data-r="show">Show the answer</button></div></div>'; }
+  function md(s) { return s.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); }
+  function dossRow(ids) {
+    return '<div class="doss-row">' + ids.map(function (id) { var d = DOSS[id]; return '<button type="button" class="doss-chip" data-doss="' + id + '" aria-pressed="false"><img src="' + d.src + '" alt=""><span>' + d.short + "</span></button>"; }).join("") + "</div>";
+  }
+  var SIG = '<div class="sig"><span class="seal" lang="ar">س.د</span><p><b>Dr Sameh Doss</b> drew these in his notes (Kasr Al Ainy). Every pulsing dot on his page is one of his labels: tap it and a thread finds that structure in a real neck.</p></div>';
+  var LAYERS4 = [["superficial", "Superficial fascia", "Contains the **platysma**, the external jugular vein and the cutaneous nerves.", "sd-093a"],
+    ["investing", "Investing layer", "Surrounds the neck and **splits to enclose the sternomastoid and trapezius**. It forms the **roof of the posterior triangle** and the capsules of the parotid and submandibular glands, and it is attached to the hyoid bone.", "sd-075b"],
+    ["pretracheal", "Pretracheal layer", "Encloses the **thyroid gland**, trachea, oesophagus and infrahyoid muscles. It is attached to the hyoid and the thyroid cartilage, so the **thyroid moves up with swallowing**.", "sd-103c"],
+    ["prevertebral", "Prevertebral layer", "Covers the prevertebral and scalene muscles and forms the **floor of the posterior triangle**. It is prolonged into the axilla as the **axillary sheath** around the subclavian artery and brachial plexus.", "sd-183"]];
+  // two practice questions of the bank on this lesson (held-out mock questions are never shown here)
+  var MCQ = [
+    { src: "Past paper · 2013", stem: "The following structures are contents of the carotid sheath except", key: "a",
+      o: [["a", "External carotid artery.", { n: "External carotid artery", s: -1, hi: 1, z: 60 }], ["b", "Internal carotid artery.", { n: "Internal carotid artery", s: -1, hi: 1, z: 80 }], ["c", "Internal jugular vein.", { n: "Internal jugular vein", s: -1, hi: 1, z: 60 }], ["d", "Vagus nerve.", { n: "Vagus nerve", s: -1, hi: 1, z: 40 }]],
+      why: ["The carotid sheath holds the **common and internal carotid**, the **internal jugular vein** and the **vagus**; the **external carotid** lies outside it.", "b: The internal carotid is a content.", "c: The internal jugular vein is a content.", "d: The vagus is a content (between artery and vein, behind)."] },
+    { src: "Department book", stem: "One of the following structures is a content of the carotid sheath", key: "c",
+      o: [["a", "Ansa cervicalis.", { n: "Ansa cervicalis", s: -1, hi: 1, z: 20 }], ["b", "External carotid artery.", { n: "External carotid artery", s: -1, hi: 1, z: 60 }], ["c", "Internal carotid artery.", { n: "Internal carotid artery", s: -1, hi: 1, z: 80 }], ["d", "External jugular vein.", { n: "External jugular vein", s: -1 }]],
+      why: ["The **internal carotid artery** runs inside the carotid sheath.", "a: The ansa cervicalis lies **on/in the anterior wall** of the sheath, not inside it.", "b: The external carotid is outside the sheath.", "d: The external jugular vein is superficial, on the sternomastoid."] }];
+  function mcqHtml(q, i) {
+    return '<div class="card mcq" data-q="' + i + '"><div class="cap"><span class="src">' + q.src + '</span><span>T057 · practice</span></div><p class="q">' + q.stem + '</p><div class="opts">' +
+      q.o.map(function (o) { return '<button type="button" class="opt" data-o="' + o[0] + '"><span class="k">' + o[0] + "</span><span>" + o[1] + '</span><span class="find">Find it ↗</span></button>'; }).join("") +
+      '</div><div class="why">' + q.why.map(function (w) { return "<p>" + md(w) + "</p>"; }).join("") + "</div></div>";
+  }
+  var SECTIONS = [
+    { label: "The whole picture", doss: "sd-075a",
+      html: '<h1>Deep cervical <span class="grad">fascia</span></h1><div class="ar" dir="rtl" lang="ar">فرّق النسيج<small dir="ltr">Read the tissue</small></div>' +
+        '<p class="lede">The neck is packed in <i>sleeves of deep fascia</i>. The ' + chip("investing", "investing layer") + ' wraps everything like a collar (and splits around the SCM and trapezius). The ' + chip("pretracheal", "pretracheal layer") + ' wraps the thyroid, trachea and oesophagus. The ' + chip("prevertebral", "prevertebral layer") + ' covers the muscles in front of the spine. The ' + chip("carotid", "carotid sheath") + ' is a tube around the main vessels and the vagus. Each layer decides where pus spreads and what moves with swallowing.</p>' +
+        SIG + '<div class="card" style="--cc:var(--text-3)"><div class="cap"><span>His page, the same cut</span><span lang="ar" dir="rtl">نفس المقطع</span></div><p>His transverse section through the thyroid is the level of this slab. Watch his labels find the real structures one by one, or tap any dot yourself.</p><div class="row-btns"><button type="button" class="ghost play" data-tour="1">▶ Play the tour of his labels</button></div></div>' },
+    { label: "Layers of deep cervical fascia", doss: "sd-075b",
+      html: '<h2>Four sleeves, <span class="grad">four jobs</span></h2><div class="layers">' +
+        LAYERS4.map(function (r) { return '<button type="button" class="layer" data-layer="' + r[0] + '" data-doss="' + r[3] + '" aria-pressed="false" style="--c:' + COL[r[0]] + '"><span class="thumb" style="background-image:url(' + DOSS[r[3]].src + ')"></span><span><b>' + r[1] + "</b><span>" + md(r[2]) + "</span></span></button>"; }).join("") + "</div>" +
+        '<div class="card" style="--cc:var(--text-3)"><div class="cap"><span>Each sleeve, in his hand</span></div><p>Tap a layer: his drawing of it is pinned on the model, and that sleeve lights up.</p></div>' +
+        recall("Which fascial layer makes the thyroid move with swallowing?", "The <b>pretracheal fascia</b> (attached to the hyoid and thyroid cartilage).") },
+    { label: "Carotid sheath", doss: "sd-104a",
+      html: '<h2>The carotid <span class="grad">sheath</span></h2><p class="lede">A fascial tube from the base of the skull to the root of the neck. The common carotid splits at C4: the internal carotid stays inside, the external carotid leaves.</p>' +
+        dossRow(["sd-104a", "sd-105", "sd-137"]) +
+        '<div class="cols"><div style="--c:var(--carotid)"><h3>Contents</h3><ul><li><b>Common and internal carotid</b>, medially</li><li><b>Internal jugular vein</b>, laterally</li><li><b>Vagus nerve</b>, between and behind</li><li>Deep cervical lymph nodes</li></ul></div>' +
+        '<div style="--c:var(--text-3)"><h3>Not contents</h3><ul><li><b>External carotid</b>, outside the sheath</li><li>External jugular vein</li><li><b>Ansa cervicalis</b>, in the anterior wall</li><li><b>Sympathetic trunk</b>, behind</li></ul></div></div>' +
+        '<div class="card" style="--cc:var(--artery)"><div class="cap"><span>Exam trap</span><span lang="ar" dir="rtl">فخ الامتحان</span></div><p>The <b>external</b> carotid is <b>not</b> in the carotid sheath; the <b>internal</b> carotid is.</p></div>' +
+        recall("What are the contents of the carotid sheath?", "The common and internal carotid arteries, the internal jugular vein and the vagus nerve (with deep cervical nodes).") },
+    { label: "Past papers", doss: "sd-104a",
+      html: '<h2>Check it like the <span class="grad">exam</span></h2><p class="lede">Two questions from your bank on this lesson. Answer, then tap any option: a thread shows you where it really lies.</p>' + MCQ.map(mcqHtml).join("") },
+    { label: "Lesson complete",
+      html: '<h2>Lesson <span class="grad">complete</span></h2><p class="lede">Four sleeves, one sheath, his drawings and the real neck side by side. In the course this step would now count as done.</p><div class="card" style="--cc:var(--prevertebral)"><div class="cap"><span>+15 XP</span><span>Day 29 · T057</span></div><p>Next on the plan: the posterior triangle and the external jugular vein.</p></div>' }
+  ];
+  var N = 4, cur = 0;
+  var ctaT = document.getElementById("cta-t"), ctaS = document.getElementById("cta-s"), metaL = document.getElementById("meta-l");
+  function render(i) {
+    page.innerHTML = SECTIONS[i].html;
+    metaL.textContent = i < N ? "Section " + (i + 1) + " of " + N + " · " + SECTIONS[i].label : "Done";
+    ctaT.textContent = i < N - 1 ? "Got it, next section" : i === N - 1 ? "Finish the lesson" : "Start again";
+    ctaS.textContent = i < N - 1 ? "Next: " + SECTIONS[i + 1].label : i === N - 1 ? "Wraps up this lesson" : "From the whole picture";
+    ["s1", "s2", "s3", "s4"].forEach(function (id, k) { var el = document.getElementById(id); if (el) el.style.setProperty("--p", k < i ? 1 : k === i ? 0.35 : 0); });
+    if (SECTIONS[i].doss) { showDrawing(SECTIONS[i].doss); markDoss(SECTIONS[i].doss); }
+  }
+  function markDoss(id) { Array.prototype.forEach.call(document.querySelectorAll(".doss-chip"), function (b) { b.setAttribute("aria-pressed", b.dataset.doss === id ? "true" : "false"); }); }
+  function applyStage(n) {
+    stopTour(); unlink(true);
+    stage = n;
+    if (n !== 3 && n !== 4) openSheath(false);
+    if (n === 1) { setExplode(false); setFocus(null); fly(HOME.pos, HOME.target, 1300); }
+    if (n === 2) { setFocus(null); setExplode(true); }
+    if (n === 3 || n === 4) { setExplode(false); toCarotid(); }
+    if (n === 5) { setFocus(null); setExplode(false); fly(new THREE.Vector3(-5.2, 6.4, 9.2), HOME.target, 1800); controls.autoRotate = !reduce; controls.autoRotateSpeed = 2.4; setTimeout(function () { controls.autoRotateSpeed = 0.5; }, 2600);
+      ["prevertebral", "carotid", "pretracheal", "investing"].forEach(function (k, i) { setTimeout(function () { setFocus(k); }, 300 + i * 420); }); setTimeout(function () { setFocus(null); }, 300 + 4 * 420); }
+  }
+  page.addEventListener("click", function (e) {
+    var t = e.target;
+    var tour = t.closest("[data-tour]");
+    if (tour) { if (stage !== 1) applyStage(1); startTour([0, 3, 4, 5, 7, 9, 8, 10, 12, 19]); tour.textContent = "Playing… tap anywhere on the model to stop"; return; }
+    var dc = t.closest(".doss-chip");
+    if (dc) { showDrawing(dc.dataset.doss); markDoss(dc.dataset.doss); return; }
+    var opt = t.closest(".opt");
+    if (opt) {
+      var box = opt.closest(".mcq"), q = MCQ[+box.dataset.q], o = opt.dataset.o, spec = q.o.filter(function (x) { return x[0] === o; })[0][2];
+      if (!box.classList.contains("answered")) {
+        box.classList.add("answered");
+        Array.prototype.forEach.call(box.querySelectorAll(".opt"), function (b) { if (b.dataset.o === q.key) b.classList.add("right"); else if (b.dataset.o === o) b.classList.add("wrong"); });
+      }
+      showDrawing("sd-104a", true);
+      link(Object.assign({ mcq: true }, spec), opt);
+      return;
+    }
+    var b = t.closest("[data-r]"); if (!b) return;
+    var rbox = b.closest(".recall"), r = b.getAttribute("data-r"), row = rbox.querySelector(".row-btns");
+    if (r === "show") { rbox.classList.add("revealed"); row.innerHTML = '<button type="button" class="ghost" data-r="yes">I had it</button><button type="button" class="ghost" data-r="no">Not yet</button>'; if (cur === 1) { unlink(true); setFocus("pretracheal"); swallowT = reduce ? 0 : 2.4; } }
+    else row.innerHTML = '<span class="verdict" style="color:' + (r === "yes" ? "var(--prevertebral)" : "var(--pretracheal)") + '">' + (r === "yes" ? "Locked in." : "It comes back once before practice.") + "</span>";
+  });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("[data-layer]"); if (!b) return;
+    var l = b.getAttribute("data-layer");
+    stopTour();
+    if (b.dataset.doss) showDrawing(b.dataset.doss);
+    if (b.classList.contains("chip") || b.classList.contains("layer")) {
+      if (LINK && LINK.layer === l && !LINK.list.length) { unlink(); return; }
+      link({ L: l, hi: l === "carotid" && stage >= 3 }, b);
+      Array.prototype.forEach.call(document.querySelectorAll("[data-layer]"), function (x) { x.setAttribute("aria-pressed", x.getAttribute("data-layer") === l ? "true" : "false"); });
+    }
+  });
+  document.getElementById("cta").addEventListener("click", function () {
+    var next = cur === N ? 0 : cur + 1;
+    page.classList.add("out");
+    setTimeout(function () { cur = next; render(cur); page.classList.remove("out"); document.querySelector(".panel").scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); }, reduce ? 0 : 280);
+    applyStage(next + 1);
+  });
+  render(0);
+  window.__neck = { setStage: function (n) { applyStage(n); }, link: link, unlink: unlink, tour: startTour, show: showDrawing, ready: function () { return introDone && !camIntro && !flight; } };
+})();
+</script>
