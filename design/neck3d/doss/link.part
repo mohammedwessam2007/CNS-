@@ -60,7 +60,7 @@
     var list = [], layer = spec.L;
     if (spec.n) {
       list = (BYNAME[spec.n] || []).filter(function (e) { return !spec.s || e.side === spec.s; });
-      if (!list.length) list = BYNAME[spec.n] || [];
+      if (!list.length) { list = BYNAME[spec.n] || []; spec = Object.assign({}, spec, { s: 0 }); }   // the library has only one side of a few structures
       if (!list.length) return false;
       layer = list[0].layer;
     }

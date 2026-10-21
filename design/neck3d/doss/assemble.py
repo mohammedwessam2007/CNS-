@@ -37,6 +37,8 @@ sc = rep(sc, '  /* ───── render loop ───── */', link + '  /*
 sc = rep(sc, '    down = null;\n    var r = canvas.getBoundingClientRect();', '    down = null;\n    stopTour(); if (LINK) unlink();\n    var r = canvas.getBoundingClientRect();')
 sc = rep(sc, 'var show = tg.stage.indexOf(stage) >= 0 && introDone &&', 'var show = tg.stage.indexOf(stage) >= 0 && introDone && !LINK &&')
 sc = rep(sc, '    var az = THREE.MathUtils.radToDeg', '    drawThread();\n    var az = THREE.MathUtils.radToDeg')
+for url, f in [('https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js', 'three.min.js'), ('https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js', 'OrbitControls.js'), ('https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js', 'RoomEnvironment.js')]:
+    h = rep(h, '<script src="%s"></script>' % url, '<script>/* three.js r147, MIT, inlined so the page works with no internet */\n' + open(NEO + 'lib/' + f).read() + '\n</script>')
 out = h + sc + les
 open('neck-doss.html', 'w').write(out)
 print(len(out) // 1024, 'KB')
