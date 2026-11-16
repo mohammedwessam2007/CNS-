@@ -46,7 +46,22 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => IX_TUTOR.ask('summarise my notes', null)); await p.waitForTimeout(1200);
   const sys2 = sent[sent.length - 1].body.messages[0].content;
   check('T5', 'Lecture notes for the open topic reach the tutor', /DOCTOR SAID/.test(sys2), { has: /LECTURE NOTES/.test(sys2) });
+  // T6 Why?: a tapped line opens the professor with how the exam asks it; held-out items never travel
+  const probe = await p.evaluate(() => {
+    const q = EHSAN_QBANK.questions.find((x) => x.split === 'practice' && /carotid sheath/i.test(x.stem));
+    const el = document.createElement('p'); el.id = 'whyProbe'; el.textContent = 'The external carotid artery is not a content of the carotid sheath; the internal carotid is.';
+    (document.getElementById('player') || document.body).prepend(el);
+    return { has: !!q, held: EHSAN_QBANK.questions.filter((x) => x.split === 'heldout').map((x) => x.stem) };
+  });
+  await p.evaluate(() => IX_TUTOR.close());
+  await p.click('#whyProbe'); await p.waitForTimeout(300);
+  const bub = await p.evaluate(() => { const b = document.querySelector('.ixTwhy'); return !!b && b.style.display === 'block'; });
+  const n1 = sent.length;
+  await p.click('.ixTwhy'); await p.waitForTimeout(1500);
+  const last = sent[sent.length - 1], sys3 = last ? last.body.messages[0].content : '';
+  const leaked = probe.held.filter((st) => st.length > 30 && sys3.includes(st)).length;
+  check('T6', 'Why? on a tapped line asks the professor model with exam relevance, and no held-out item travels', bub && sent.length === n1 + 1 && last.body.model === 'openai/gpt-6.1-terra' && /EXAM RELEVANCE/.test(sys3) && /about \d+ past questions/.test(sys3) && leaked === 0, { bub, model: last && last.body.model, leaked, rel: (sys3.match(/about \d+ past questions[^\n]*/) || [''])[0].slice(0, 90) });
   await b.close();
-  console.log(fails ? fails + ' FAILED' : '5/5 TUTOR checks passed');
+  console.log(fails ? fails + ' FAILED' : '6/6 TUTOR checks passed');
   process.exit(fails ? 1 : 0);
 })();

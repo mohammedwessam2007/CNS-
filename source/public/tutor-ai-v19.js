@@ -13,8 +13,12 @@
 (function () {
   "use strict";
   if (window.IX_TUTOR) return;
-  const KEY = "ix_tutor_key_v1", MODEL = "ix_tutor_model_v1", CHAT = "ix_tutor_chat_v1", NOTES = "ix_tutor_notes_v1";
-  const DEFAULT_MODEL = "google/gemini-2.5-flash";
+  const KEY = "ix_tutor_key_v1", MODEL = "ix_tutor_model_v1", MODEL_PRO = "ix_tutor_model_pro_v1", CHAT = "ix_tutor_chat_v1", NOTES = "ix_tutor_notes_v1";
+  // two tiers (OpenRouter list prices read on 16 Nov 2026, per million tokens in/out): a fast, cheap model for chat
+  // and quizzes, and a stronger "professor" for Why? and explanations. Both can be changed in ⚙︎.
+  const DEFAULT_MODEL = "anthropic/claude-haiku-5.5", DEFAULT_PRO = "openai/gpt-6.1-terra";
+  const PRESETS = [["anthropic/claude-haiku-5.5", "Fast · $0.10 / $0.50"], ["openai/gpt-6-luna", "Fast · $0.10 / $0.50"], ["deepseek/deepseek-v4.1-flash", "Fast · $0.14 / $0.42"],
+    ["openai/gpt-6.1-terra", "Professor · $1 / $5"], ["anthropic/claude-sonnet-5.5", "Professor+ · $2 / $10"], ["google/gemini-3.8-flash", "Professor · $0.83 / $4.12"]];
   const API = "https://openrouter.ai/api/v1";
   const ls = {
     get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } },
@@ -52,6 +56,32 @@
   function notesFor(k) { return notesAll()[k] || ""; }
   function saveNotes(k, text) { const all = notesAll(); if (text.trim()) all[k] = text.slice(0, 20000); else delete all[k]; return ls.set(NOTES, JSON.stringify(all)); }
 
+  /* ───── how the exam asks it: the practice half of the past-paper bank (held-out items are never used) ───── */
+  const STOP = new Set("the and for with from that this which what when where into onto than then they them their there these those have has had been were was are is its it's not but all any each other such only also more most less very just about above below between through during after before under over same some both either neither nor can may might must should would could will shall our your his her him she he you who whom whose why how one two three four five first second third part parts type types called known form forms found make makes made used uses using cause causes caused lead leads due following true false except correct regarding".split(" "));
+  function words(t) { return Array.from(new Set(String(t || "").toLowerCase().replace(/[^a-z0-9 -]/g, " ").split(/\s+/).filter((w) => w.length > 3 && !STOP.has(w)))); }
+  function relevance(text) {
+    const bank = (window.EHSAN_QBANK && window.EHSAN_QBANK.questions) || [];
+    const ws = words(text).slice(0, 24); if (!ws.length || !bank.length) return null;
+    const hits = [];
+    for (const q of bank) {
+      if (q.split !== "practice") continue;
+      const hay = (q.stem + " " + (q.answerText || "") + " " + (q.options || []).map((o) => o.text).join(" ")).toLowerCase();
+      let n = 0; for (const w of ws) if (hay.includes(w)) n++;
+      if (n >= Math.min(3, Math.max(2, Math.ceil(ws.length / 4)))) hits.push([n, q]);
+    }
+    hits.sort((a, b) => b[0] - a[0]);
+    const top = hits.slice(0, 40), src = new Set(top.map(([, q]) => q.sourceTag).filter(Boolean)), ch = {};
+    top.forEach(([, q]) => { ch[q.chapter] = (ch[q.chapter] || 0) + 1; });
+    return { n: top.length, sources: Array.from(src).slice(0, 8), chapters: Object.entries(ch).sort((a, b) => b[1] - a[1]).slice(0, 3).map((x) => x[0]),
+      examples: top.slice(0, 3).map(([, q]) => q.stem + " → " + (q.answerText || "")) };
+  }
+  function relevanceText(text) {
+    const r = relevance(text);
+    if (!r) return "EXAM RELEVANCE: not known (no past-paper data).";
+    if (!r.n) return "EXAM RELEVANCE (past-paper bank we have): no past question matches this closely. Say so honestly: it may still come from the lectures, but it has not been a classic past-paper point.";
+    return "EXAM RELEVANCE (from the practice half of the student's past-paper bank, by matching words, so approximate): about " + r.n + " past questions touch this" + (r.sources.length ? " (sources: " + r.sources.join(", ") + ")" : "") + (r.chapters.length ? "; chapters: " + r.chapters.join(", ") : "") + ".\nExamples of how it was asked:\n- " + r.examples.join("\n- ");
+  }
+
   const SYSTEM = [
     "You are the personal tutor of a 2nd-year medical student at Kasr Al Ainy (Cairo University), course NEU-205 (CNS: anatomy, physiology, histology, embryology), and later the GIT block.",
     "Goal: high marks with the least study time, by real understanding, not memorising.",
@@ -59,6 +89,7 @@
     "Always end with ONE short check question that needs understanding (why / what happens if / which lesion), not a fact to recall, and wait for the answer.",
     "When the student answers: say clearly if it is right, fix the exact misunderstanding, and give the next check.",
     "Kasr Al Ainy exams: MCQs (often clinical or 'all except'), written essays (lists, comparisons, draw-and-label), practical (identify on a slide or specimen). Point out exam traps.",
+    "The student has ADHD: short chunks, one idea per line, bold the key words, no walls of text, and make it vivid.",
     "If the lecture notes below disagree with general textbooks, follow the lecture notes and say so. If you are not sure of a fact, say you are not sure; never invent page numbers, sources or 'the doctor said'.",
   ].join("\n");
 
@@ -72,12 +103,13 @@
 
   /* ───── OpenRouter ───── */
   let busy = null;
-  async function ask(userText, mode) {
+  async function ask(userText, mode, extraContext) {
     const key = ls.get(KEY, "");
     if (!key) { openSetup("Add your key first."); return; }
     if (mockRunning()) { addMsg("tutor", "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."); return; }
     const history = chat().slice(-12).map((m) => ({ role: m.who === "me" ? "user" : "assistant", content: m.text }));
-    const sys = SYSTEM + "\n\n" + context(MODES[mode] ? MODES[mode].brief : "");
+    const sys = SYSTEM + "\n\n" + context((MODES[mode] ? MODES[mode].brief : "") + (extraContext ? "\n\n" + extraContext : ""));
+    const model = MODES[mode] && MODES[mode].pro ? ls.get(MODEL_PRO, DEFAULT_PRO) : ls.get(MODEL, DEFAULT_MODEL);
     addMsg("me", userText);
     const out = addMsg("tutor", "", true);
     const ctrl = new AbortController(); busy = ctrl; setBusy(true);
@@ -86,7 +118,7 @@
       const r = await fetch(API + "/chat/completions", {
         method: "POST", signal: ctrl.signal,
         headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
-        body: JSON.stringify({ model: ls.get(MODEL, DEFAULT_MODEL), stream: true, messages: [{ role: "system", content: sys }].concat(history, [{ role: "user", content: userText }]) }),
+        body: JSON.stringify({ model, stream: true, max_tokens: 1100, messages: [{ role: "system", content: sys }].concat(history, [{ role: "user", content: userText }]) }),
       });
       if (!r.ok) {
         const j = await r.json().catch(() => ({}));
@@ -118,11 +150,12 @@
     }
   }
   const MODES = {
-    explain: { label: "Explain this", prompt: "Explain what I am looking at now, simply, from the mechanism. Then check me.", brief: "TASK: explain the open topic from first principles, then ask one understanding check." },
+    why: { label: "Why?", pro: true, hidden: true, brief: "TASK: the student tapped WHY on the text in SELECTED. Answer in exactly these parts, each short:\n**🧠 Why** — the mechanism behind it, from first principles, 3-5 short lines.\n**👁 Picture it** — one vivid image, analogy or everyday comparison.\n**🔒 Lock it in** — one memory hook or mnemonic, and what to link it to that they already know.\n**🎯 In the exam** — use EXAM RELEVANCE honestly: how often and how it was asked, the classic trap, and whether it is a written-exam point too. If the data shows no past question, say that plainly.\n**✅ Check** — one question that needs understanding. Then wait." },
+    explain: { pro: true, label: "Explain this", prompt: "Explain what I am looking at now, simply, from the mechanism. Then check me.", brief: "TASK: explain the open topic from first principles, then ask one understanding check." },
     quiz: { label: "New exam question", prompt: "Give me ONE new exam-style MCQ on this topic (not a copy of a question on my screen), with 4 or 5 options. Do not give the answer until I reply.", brief: "TASK: write ONE new Kasr Al Ainy style MCQ on the open topic that tests understanding (clinical or mechanism), different from any question on screen. 4-5 options a-e. Wait for the student's answer, then explain every option." },
     teach: { label: "I'll explain it", prompt: "I will explain this topic in my own words. Ask me to start, then grade me.", brief: "TASK: teach-back. Ask the student to explain the topic in their own words. Then grade it out of 10 for understanding, list what was missing or wrong, and give one follow-up question." },
     wrong: { label: "Why was I wrong?", prompt: "I got the question on my screen wrong. Find the exact misunderstanding behind my mistake and fix it.", brief: "TASK: the student just answered the question on screen wrongly. Diagnose the likely misunderstanding (not just restate the key), fix it with the mechanism, then give a NEW question on the same idea." },
-    written: { label: "Written answer", prompt: "Give me the written-exam question most likely on this topic, then the model answer as the department wants it (headings, lists, a diagram described).", brief: "TASK: written exam. Give the most likely essay question on this topic and a model answer in the format Kasr Al Ainy examiners mark: headings, numbered points, what to draw and label." },
+    written: { label: "Written answer", pro: true, prompt: "Give me the written-exam question most likely on this topic, then the model answer as the department wants it (headings, lists, a diagram described).", brief: "TASK: written exam. Give the most likely essay question on this topic and a model answer in the format Kasr Al Ainy examiners mark: headings, numbered points, what to draw and label." },
   };
 
   /* ───── chat store ───── */
@@ -137,7 +170,7 @@
     root.className = "ixT"; root.setAttribute("role", "dialog"); root.setAttribute("aria-label", "AI tutor");
     root.innerHTML =
       '<div class="ixTbox"><div class="ixThd"><b>🧠 Tutor</b><span class="ixTsub" id="ixTsub"></span><button type="button" data-t="notes" title="My lecture notes for this topic">📝</button><button type="button" data-t="setup" title="Key and model">⚙︎</button><button type="button" data-t="close" aria-label="Close">✕</button></div>' +
-      '<div class="ixTmodes">' + Object.keys(MODES).map((k) => '<button type="button" data-mode="' + k + '">' + MODES[k].label + "</button>").join("") + "</div>" +
+      '<div class="ixTmodes">' + Object.keys(MODES).filter((k) => !MODES[k].hidden).map((k) => '<button type="button" data-mode="' + k + '">' + MODES[k].label + "</button>").join("") + "</div>" +
       '<div class="ixTlog" id="ixTlog"></div>' +
       '<form class="ixTin"><textarea rows="2" placeholder="Ask anything about this topic…" id="ixTq"></textarea><button type="submit" class="primary" id="ixTsend">Send</button></form></div>';
     document.body.appendChild(root);
@@ -196,14 +229,16 @@
       "<p>It is saved <b>only on this device</b>. It is not in your progress, the cloud save, the progress file or the app's code. Never paste it in a chat.</p>" +
       '<ol class="ixTsteps"><li>openrouter.ai → <b>Keys</b> → <b>Create key</b>.</li><li>Give it a <b>credit limit</b> (for example $5): then even a leaked key cannot spend more.</li><li>Copy it and paste it here.</li></ol>' +
       '<label>Key<input type="password" id="ixTkey" autocomplete="off" spellcheck="false" placeholder="' + (has ? "saved · paste a new one to replace it" : "sk-or-v1-…") + '"></label>' +
-      '<label>Model <small>(change it any time)</small><input type="text" id="ixTmodel" spellcheck="false" value="' + E(ls.get(MODEL, DEFAULT_MODEL)) + '"></label>' +
-      '<p class="ixTsmall">Cheap and good for studying: google/gemini-2.5-flash. Stronger and dearer: anthropic/claude-sonnet-4.5 or openai/gpt-5. Any name from openrouter.ai/models works.</p>' +
+      '<label>Professor model <small>(Why?, Explain this, Written answer)</small><input type="text" id="ixTpro" spellcheck="false" list="ixTlist" value="' + E(ls.get(MODEL_PRO, DEFAULT_PRO)) + '"></label>' +
+      '<label>Fast model <small>(chat, quizzes, teach-back)</small><input type="text" id="ixTmodel" spellcheck="false" list="ixTlist" value="' + E(ls.get(MODEL, DEFAULT_MODEL)) + '"></label>' +
+      '<datalist id="ixTlist">' + PRESETS.map((p) => '<option value="' + p[0] + '">' + p[1] + "</option>").join("") + "</datalist>" +
+      '<p class="ixTsmall">Prices are per million tokens (in / out), read from OpenRouter on 16 Nov 2026. A Why? answer with the professor costs about $0.01; with a fast model about $0.001. Any name from openrouter.ai/models works.</p>' +
       '<div class="ixTrow"><button type="button" class="primary" id="ixTsave">Save and test</button>' + (has ? '<button type="button" id="ixTforget">Remove key</button>' : "") + '<button type="button" data-x>Close</button></div><p class="ixTstatus" id="ixTstatus"></p>'
     );
     const st = s.querySelector("#ixTstatus");
     s.querySelector("#ixTsave").onclick = async () => {
       const k = s.querySelector("#ixTkey").value.trim(), m = s.querySelector("#ixTmodel").value.trim() || DEFAULT_MODEL;
-      ls.set(MODEL, m);
+      ls.set(MODEL, m); ls.set(MODEL_PRO, s.querySelector("#ixTpro").value.trim() || DEFAULT_PRO);
       if (k) { if (!/^sk-or-/.test(k)) { st.textContent = "That does not look like an OpenRouter key (it starts with sk-or-)."; return; } ls.set(KEY, k); }
       const key = ls.get(KEY, ""); if (!key) { st.textContent = "Paste your key first."; return; }
       st.textContent = "Testing…";
@@ -235,6 +270,40 @@
     };
   }
 
+  /* ───── Why? on anything: tap a line of a lesson, a question or an explanation, then 🤔 Why? ───── */
+  let bubble = null, picked = "";
+  function why(text) {
+    text = String(text || "").replace(/\s+/g, " ").trim().slice(0, 900);
+    if (!text) return;
+    build(); root.classList.add("on"); renderLog(); sub();
+    if (!ls.get(KEY, "")) { openSetup("Add your key first, then tap Why? again."); return; }
+    ask("Why? → " + (text.length > 160 ? text.slice(0, 160) + "…" : text), "why", "SELECTED (what the student tapped):\n" + text + "\n\n" + relevanceText(text));
+  }
+  function hideBubble() { if (bubble) bubble.style.display = "none"; }
+  function showBubble(x, y, text) {
+    if (!bubble) {
+      bubble = document.createElement("button"); bubble.type = "button"; bubble.className = "ixTwhy"; bubble.textContent = "🤔 Why?";
+      bubble.addEventListener("click", (e) => { e.stopPropagation(); hideBubble(); why(bubble._t); });
+      document.body.appendChild(bubble);
+    }
+    bubble._t = text; bubble.style.display = "block";
+    const w = 96; bubble.style.left = Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)) + "px"; bubble.style.top = Math.max(8, y - 54) + "px";
+    clearTimeout(bubble._h); bubble._h = setTimeout(hideBubble, 4000);
+  }
+  const ZONES = "#player, #drawerBody";
+  document.addEventListener("click", (e) => {
+    if (e.target.closest && e.target.closest(".ixTwhy, .ixT")) return;
+    const zone = e.target.closest && e.target.closest(ZONES);
+    if (!zone || mockRunning()) { hideBubble(); return; }
+    if (e.target.closest("button, a, input, textarea, select, label, summary, [contenteditable]")) { hideBubble(); return; }
+    const sel = String(window.getSelection ? window.getSelection() : "").trim();
+    const el = e.target.closest("p, li, td, h2, h3, h4, blockquote, figcaption, .explain, .why, div");
+    const text = sel.length > 3 ? sel : el ? (el.innerText || "").trim() : "";
+    if (!text || text.length < 12 || text.length > 1500) { hideBubble(); return; }
+    showBubble(e.clientX, e.clientY, text);
+  }, true);
+  document.addEventListener("scroll", hideBubble, true);
+
   /* ───── doors: a tab on the screen edge, and a button in the side menu ───── */
   function install() {
     if (!document.getElementById("ixTtab")) {
@@ -247,7 +316,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY };
+  window.IX_TUTOR = { open, close, ask, why, relevance, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();

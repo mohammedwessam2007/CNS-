@@ -39,3 +39,4 @@
 .ixTstatus{min-height:20px;font-weight:700;color:#9fe6c9!important}
 .ixTwarn{color:#ffc58a!important;font-weight:700}
 @media(max-width:600px){.ixTbox{width:100%}.ixTtab{top:auto;bottom:calc(150px + env(safe-area-inset-bottom));padding:8px 12px}}
+.ixTwhy{position:fixed;z-index:75;display:none;width:96px;height:40px;border-radius:999px;border:0;background:#ffd36e;color:#1a1205;font-weight:900;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);cursor:pointer}
