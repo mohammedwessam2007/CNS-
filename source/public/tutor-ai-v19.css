@@ -46,3 +46,18 @@
 .ixTverdict{display:inline-block;margin:0 0 6px;padding:2px 9px;border-radius:999px;font-size:12.5px;font-weight:800}
 .ixTverdict.v-correct{background:rgba(79,209,181,.2);color:#9fe6c9}.ixTverdict.v-partly{background:rgba(255,211,110,.2);color:#ffd36e}.ixTverdict.v-wrong{background:rgba(240,122,149,.2);color:#ffb3c4}
 .ixTmodes button[data-mode="loop"]{background:#ffd36e;color:#1a1205;border-color:#ffd36e}
+/* v20.3 the professor on every screen: inline bars and inline answers */
+.ixAiBar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0;padding:6px 8px;border-radius:14px;background:rgba(126,166,255,.08);border:1px dashed rgba(126,166,255,.35)}
+.ixAiMark{font-size:15px;margin-right:2px}
+.ixAiBar button{min-height:36px;padding:0 12px;border-radius:999px;border:1px solid rgba(126,166,255,.45);background:rgba(126,166,255,.12);color:inherit;font-weight:700;font-size:13px;cursor:pointer}
+.ixAiBar button.main{background:#ffd36e;color:#1a1205;border-color:#ffd36e}
+.ixAiBar .ixAiLang{margin-left:auto;min-width:40px;padding:0 8px;opacity:.85}
+.ixAiOut{margin:8px 0 12px;padding:12px 14px;border-radius:14px;background:rgba(15,21,38,.92);color:#eef2fb;border:1px solid rgba(255,211,110,.35);font-size:15px;line-height:1.55}
+.ixAiOut .ixTtxt p{margin:0 0 7px}.ixAiOut ul{margin:4px 0 8px;padding:0;padding-inline-start:20px}.ixAiOut h4{margin:6px 0 4px}
+.ixAiOut.live .ixTtxt::after{content:"▍";opacity:.6;animation:ixTblink 1s steps(1) infinite}
+.ixAiReply{display:flex;gap:6px;margin-top:8px}
+.ixAiReply input{flex:1;min-width:0;min-height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#141c33;color:#fff;font:inherit;font-size:16px;padding:0 10px}
+.ixAiReply button{min-width:42px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;font-weight:800;cursor:pointer}
+.ixAiFig .ixAiBar{margin-top:4px}
+.ixAiOut .ixTtxt :is(p,h4),.ixTm .ixTtxt :is(p,h4){unicode-bidi:plaintext;text-align:start}
+.ixAiOut[dir=rtl] ul,.ixAiOut[dir=rtl] li{direction:rtl;text-align:right}

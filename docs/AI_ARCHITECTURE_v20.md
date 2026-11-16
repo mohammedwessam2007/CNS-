@@ -96,3 +96,22 @@ Every method below is either built into the professor (a mode in the tutor drawe
 - Not yet verified with a real OpenRouter key or on the live Pages site.
 
 Sources for this pass: Larsen 2009 (https://www.gwern.net/docs/spaced-repetition/2013-larsen.pdf, https://learningscientists.org/blog/2023/3/30); Anki and Step 1 (https://pmc.ncbi.nlm.nih.gov/articles/PMC8651966, https://pmc.ncbi.nlm.nih.gov/articles/PMC10176558); drawing (https://link.springer.com/article/10.1007/s10648-025-10067-7, https://ecrhub.org/publications/drawing-boundary-conditions-learning-drawing); SketchJudge (https://arxiv.org/abs/2601.06944v1); hypercorrection (https://learningscientists.org/blog/2023/8/3-1); method of loci (https://www.pubmed.gov/33658191/); XR anatomy (https://aminer.org/pub/65cbd89f939a5f40827389cf, https://pmc.ncbi.nlm.nih.gov/articles/PMC8316386); MCII (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8149892/, https://researchers.mq.edu.au/en/publications/mental-contrasting-with-implementation-intentions-increases-study/); wakeful rest (https://www.epistemonikos.org/pt/documents/84bd5a512c1e88fe13e2b867c467d39d67fbb3ac); voice tutors (https://brookings.edu/articles/what-the-research-shows-about-generative-ai-in-tutoring).
+
+## v20.3: the professor on every screen
+
+Owner: "everything powered by AI, insert the AI assistant in everything". `ai-everywhere-v20.js` puts a professor bar on every screen, and the answer streams **inside the page**, under what was asked about, with a reply box (↵) and ↗ to continue in the drawer.
+
+| Screen | Buttons | What the professor gets |
+|---|---|---|
+| Teaching step (visual map, professor feed…) | ▶ Learn this with me · 🤯 Simpler · ❓ Quiz me · 🔒 Memory hook · 🧭 What now? | the page text + exam relevance; progress for What now? |
+| Lesson (Learn first) | ▶ Learn this · Try first · Plan today; on every section: Simpler · Quiz me · Memory hook · Draw it | the section text + exam relevance |
+| MCQ, not yet answered | 💡 Hint (not the answer) | the stem and options, **never the key**; hint ladder only |
+| MCQ, answered | 💬 Why was I wrong? / Why is it right? · Every option · 🔁 Twin question · 🩺 As a case | stem, options, key, his choice |
+| Any picture (course figure, Wikimedia picture, large app drawing) | 👁 Explain this picture · 🎯 Quiz me on it | **the picture itself** (vision; a cross-site picture goes as its web address), its caption, exam relevance |
+| Mock result | 📊 Analyse my mock | the result page: patterns, then tomorrow's 15 minutes |
+| Drawer pages (atlas, tools) | same as a teaching step, plus pictures | the page text |
+| Sealed mock | nothing | nothing: AI off |
+
+Every bar has **ع / EN**: Egyptian Arabic explanations with the exam's English terms, or plain English. Held-out firewall: an MCQ bar appears only for practice items, or held-out items already used in a finished mock (the same rule as `consumedSet()`).
+
+Tests `tests/ai_everywhere_test.js` 8/8 on the real course flow against a fake OpenRouter; screenshot `docs/ai-everywhere-phone.png`. Not yet verified with a real key.

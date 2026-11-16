@@ -121,28 +121,54 @@
   }
   const TAG = /^\s*\[\[(correct|partly|wrong)\]\]\s*/i;
 
+  /* ───── language: plain English, or Egyptian Arabic with the exam's English terms ───── */
+  const LANG = "ix_tutor_lang_v1";
+  const AR_RULE = "LANGUAGE: explain in simple Egyptian Arabic (Arabic script, the way a friend explains in Cairo), but keep every medical term, structure name and exam keyword in English exactly as the exam writes it. Questions and options you write stay in English, as in the real exam.";
+  function lang(v) { if (v === "ar" || v === "en") ls.set(LANG, v); return ls.get(LANG, "en"); }
+
+  /* ───── inline answers: the professor answers inside the screen, where the question is ───── */
+  function inlineCard(host) {
+    let c = host.querySelector(":scope > .ixAiOut");
+    if (!c) {
+      c = document.createElement("div"); c.className = "ixAiOut";
+      c.innerHTML = '<div class="ixTtxt"></div><form class="ixAiReply"><input type="text" placeholder="Answer or ask a follow-up…" aria-label="Reply to the professor"><button type="submit">↵</button><button type="button" data-ai-open title="Continue in the tutor">↗</button></form>';
+      c.querySelector("form").addEventListener("submit", (e) => { e.preventDefault(); const i = c.querySelector("input"), q = i.value.trim(); if (!q || busy) return; i.value = ""; ask(q, null, null, { inline: host }); });
+      c.querySelector("[data-ai-open]").onclick = () => open();
+      host.appendChild(c);
+    }
+    c.classList.add("live"); c.dir = ls.get(LANG, "en") === "ar" ? "rtl" : "ltr";
+    return c;
+  }
+  function inlinePaint(c, text) {
+    const m = TAG.exec(text), body = m ? text.replace(TAG, "") : text;
+    c.querySelector(".ixTtxt").innerHTML = (m ? '<span class="ixTverdict v-' + m[1].toLowerCase() + '">' + VBADGE[m[1].toLowerCase()] + "</span>" : "") + (md(body) || "<p class='ixTdots'>…</p>");
+  }
+
   /* ───── OpenRouter ───── */
   let busy = null;
-  async function ask(userText, mode, extraContext) {
+  async function ask(userText, mode, extraContext, opts) {
+    opts = opts || {}; build();
     const key = ls.get(KEY, "");
     if (!key) { openSetup("Add your key first."); return; }
-    if (mockRunning()) { addMsg("tutor", "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."); return; }
+    if (mockRunning()) { const lockT = "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."; addMsg("tutor", lockT); if (opts.inline) inlinePaint(inlineCard(opts.inline), lockT); return; }
     const history = chat().slice(-12).map((m) => ({ role: m.who === "me" ? "user" : "assistant", content: m.text }));
     const lastTutor = (chat().filter((m) => m.who === "tutor").pop() || {}).text || "";
     const myConf = conf;
     if (myConf) userText = userText + "\n(confidence: " + (myConf === "guess" ? "guessing" : myConf) + ")";
     if (mode === "classmate" || mode === "traps") extraContext = (extraContext ? extraContext + "\n\n" : "") + "THE STUDENT'S OWN TRAPS (questions they were sure about and got wrong):\n- " + (jget(TRAPS).slice(-12).map((t) => t.q.replace(/\s+/g, " ").slice(0, 220)).join("\n- ") || "(none yet: use the classic traps of this topic)");
-    const sys = SYSTEM + "\n\n" + context((MODES[mode] ? MODES[mode].brief : "") + (extraContext ? "\n\n" + extraContext : ""));
-    const model = MODES[mode] && MODES[mode].pro ? ls.get(MODEL_PRO, DEFAULT_PRO) : ls.get(MODEL, DEFAULT_MODEL);
+    const sys = SYSTEM + (ls.get(LANG, "en") === "ar" ? "\n" + AR_RULE : "") + "\n\n" + context((MODES[mode] ? MODES[mode].brief : "") + (extraContext ? "\n\n" + extraContext : ""));
+    const model = (MODES[mode] && MODES[mode].pro) || (opts.images && opts.images.length) ? ls.get(MODEL_PRO, DEFAULT_PRO) : ls.get(MODEL, DEFAULT_MODEL);
     addMsg("me", userText);
     const out = addMsg("tutor", "", true);
+    const card = opts.inline ? inlineCard(opts.inline) : null;
+    const userContent = opts.images && opts.images.length ? [{ type: "text", text: userText }].concat(opts.images.map((u) => ({ type: "image_url", image_url: { url: u } }))) : userText;
     const ctrl = new AbortController(); busy = ctrl; setBusy(true);
     let text = "";
     try {
       const r = await fetch(API + "/chat/completions", {
         method: "POST", signal: ctrl.signal,
         headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
-        body: JSON.stringify({ model, stream: true, max_tokens: 1100, messages: [{ role: "system", content: sys }].concat(history, [{ role: "user", content: userText }]) }),
+        body: JSON.stringify({ model, stream: true, max_tokens: 1100, messages: [{ role: "system", content: sys }].concat(history, [{ role: "user", content: userContent }]) }),
       });
       if (!r.ok) {
         const j = await r.json().catch(() => ({}));
@@ -161,7 +187,7 @@
           if (!line.startsWith("data:")) continue;
           const d = line.slice(5).trim();
           if (d === "[DONE]") continue;
-          try { const j = JSON.parse(d), piece = j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content; if (piece) { text += piece; paint(out, text); } } catch (e) {}
+          try { const j = JSON.parse(d), piece = j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content; if (piece) { text += piece; paint(out, text); if (card) inlinePaint(card, text); } } catch (e) {}
         }
       }
       if (!text) text = "(No answer came back. Try again, or pick another model in ⚙︎.)";
@@ -172,7 +198,7 @@
       const m = TAG.exec(text);
       if (m) { conf = myConf; record(m[1].toLowerCase(), lastTutor); out.classList.add("v-" + m[1].toLowerCase()); }
       conf = null; markConf();
-      paint(out, text); out.classList.remove("live");
+      paint(out, text); out.classList.remove("live"); if (card) { inlinePaint(card, text); card.classList.remove("live"); }
       const c = chat(); c.push({ who: "tutor", text, at: Date.now() }); saveChat(c); sub();
     }
   }
@@ -189,6 +215,16 @@
     palace: { label: "Memory hook", prompt: "This list will not stick. Build me a memory hook for it.", brief: "TASK: mnemonics for arbitrary lists only (branches, contents, order). First say in one line whether this needs a hook or is better understood from the mechanism. If a hook fits: build a short memory palace (5-7 places along a route the student knows, e.g. home to college) or an acronym, one vivid odd image per item, then make them recall it back once now. Keep every fact exactly as the course states it." },
     plan: { label: "Plan today", prompt: "Help me plan today's study in 2 minutes.", brief: "TASK: WOOP plus an implementation intention, in at most 4 short turns. Ask: Wish (what to finish today, small), Outcome (how it feels), Obstacle (the inner one, e.g. phone, starting), Plan: write ONE 'If [obstacle], then I will [action]' and ONE 'When [time/place], I will start [first 2-minute step]'. End with the two lines only, so they can screenshot them." },
     outline: { label: "Blank page", pro: true, prompt: "Give me a written-exam question on this topic; I will write the outline from a blank page and you grade it.", brief: "TASK: written-exam retrieval. Give one likely essay question on the open topic. The student writes the outline (headings and key points) from memory. Grade against what a Kasr Al Ainy examiner rewards: list each point present, each missing point, and an estimated mark range (not one number; say grading by AI is a coach, not the examiner). Then give the 3 missing points to rewrite tomorrow." },
+    hint: { label: "Hint", hidden: true, brief: "TASK: the student is stuck on the MCQ in QUESTION and has NOT answered. NEVER say or hint which option is right, never eliminate options by letter. Give rung 1 of the hint ladder only: one short nudge that points to the mechanism or the key word in the stem (2-3 lines). If they ask again, give rung 2: a narrower question that makes them reason. Stop there." },
+    optwhy: { label: "Why this answer", pro: true, hidden: true, brief: "TASK: the student just answered the MCQ in QUESTION (their choice and the key are given). If wrong: name the exact false belief that makes their option look right, then the mechanism that makes the key right, in under 8 lines. If right: say what they must have understood, and the one change to the stem that would flip the answer. End with one new check question on the same idea, not the same wording." },
+    optall: { label: "Every option", hidden: true, brief: "TASK: for the MCQ in QUESTION, go through EVERY option in one line each: why it is right or why it is wrong, and when it WOULD be the answer (the stem change that makes it right). Then one line: the trap the examiner built." },
+    twin: { label: "A twin question", hidden: true, brief: "TASK: write ONE new MCQ that tests the same idea as QUESTION from a different angle (clinical case, 'all except', or a lesion), never the same wording, 4-5 options a-e. Do not give the answer until the student replies; then explain every option and tag your judgement." },
+    simple: { label: "Simpler", pro: true, hidden: true, brief: "TASK: the student did not get the lesson part in SECTION. Re-explain it as if to a smart 14-year-old: the mechanism in 4-6 short lines, one everyday analogy, then the exam fact in bold. End with one check question." },
+    secquiz: { label: "Quiz me", hidden: true, brief: "TASK: ask THREE quick recall-and-reason questions on SECTION only, one at a time, waiting each time (attempt first). Mix: one 'why', one 'what happens if it is cut', one exam-style trap. Tag each judgement." },
+    picture: { label: "Explain the picture", pro: true, hidden: true, brief: "TASK: the student is looking at the picture attached (a drawing, scan or slide from their course; its caption is given). If you can see it: walk them through it like a demonstrator in 5-8 short lines: orientation first (what view, which side), then the 4-6 structures that matter and how to find each one from a landmark, then what the exam asks about it. Then ask them to point out one structure from memory. If no image arrived, work from the caption and say so." },
+    picquiz: { label: "Quiz the picture", pro: true, hidden: true, brief: "TASK: practical-exam drill on the attached picture: ask the student to identify ONE structure at a time by describing where it is ('the structure just lateral to …'), wait, judge with a tag, then the next one; 4 rounds. Never reveal the answer before they try." },
+    result: { label: "Analyse my mock", pro: true, hidden: true, brief: "TASK: the student finished a mock; RESULT holds the score and the questions they missed. Find the 2-3 PATTERNS behind the misses (a topic, a type of trap, reading the stem too fast, look-alikes), not a list of facts. For each pattern: one line on the fix and which tutor tool to use (Tell them apart, My traps, Draw it, Patient case). End with the 15-minute plan for tomorrow. Be honest about the score; no grade words." },
+    coach: { label: "What now?", hidden: true, brief: "TASK: study coach. From PROGRESS (what the app knows about today) and the screen, say in at most 5 short lines: the single next step with the most marks per minute, how long it takes, and when to stop for today. Then ask: 'Start now?'" },
     why: { label: "Why?", pro: true, hidden: true, brief: "TASK: the student tapped WHY on the text in SELECTED. Answer in exactly these parts, each short:\n**🧠 Why** — the mechanism behind it, from first principles, 3-5 short lines.\n**👁 Picture it** — one vivid image, analogy or everyday comparison.\n**🔒 Lock it in** — one memory hook or mnemonic, and what to link it to that they already know.\n**🎯 In the exam** — use EXAM RELEVANCE honestly: how often and how it was asked, the classic trap, and whether it is a written-exam point too. If the data shows no past question, say that plainly.\n**✅ Check** — one question that needs understanding. Then wait." },
     explain: { pro: true, label: "Explain this", prompt: "Explain what I am looking at now, simply, from the mechanism. Then check me.", brief: "TASK: explain the open topic from first principles, then ask one understanding check." },
     quiz: { label: "New exam question", prompt: "Give me ONE new exam-style MCQ on this topic (not a copy of a question on my screen), with 4 or 5 options. Do not give the answer until I reply.", brief: "TASK: write ONE new Kasr Al Ainy style MCQ on the open topic that tests understanding (clinical or mechanism), different from any question on screen. 4-5 options a-e. Wait for the student's answer, then explain every option." },
@@ -208,7 +244,7 @@
     root = document.createElement("div");
     root.className = "ixT"; root.setAttribute("role", "dialog"); root.setAttribute("aria-label", "AI tutor");
     root.innerHTML =
-      '<div class="ixTbox"><div class="ixThd"><b>🧠 Tutor</b><span class="ixTsub" id="ixTsub"></span><button type="button" data-t="notes" title="My lecture notes for this topic">📝</button><button type="button" data-t="setup" title="Key and model">⚙︎</button><button type="button" data-t="close" aria-label="Close">✕</button></div>' +
+      '<div class="ixTbox"><div class="ixThd"><b>🧠 Tutor</b><span class="ixTsub" id="ixTsub"></span><button type="button" data-t="lang" title="Explain in Egyptian Arabic / English" id="ixTlang"></button><button type="button" data-t="notes" title="My lecture notes for this topic">📝</button><button type="button" data-t="setup" title="Key and model">⚙︎</button><button type="button" data-t="close" aria-label="Close">✕</button></div>' +
       '<div class="ixTmodes">' + Object.keys(MODES).filter((k) => !MODES[k].hidden).map((k) => '<button type="button" data-mode="' + k + '">' + MODES[k].label + "</button>").join("") + "</div>" +
       '<div class="ixTlog" id="ixTlog"></div>' +
       '<div class="ixTconf" role="group" aria-label="How sure are you?"><span>How sure?</span><button type="button" data-conf="guess">😬 Guessing</button><button type="button" data-conf="unsure">🤔 Unsure</button><button type="button" data-conf="sure">😎 Sure</button></div>' +
@@ -220,6 +256,7 @@
       if (b.dataset.t === "close") close();
       else if (b.dataset.t === "setup") openSetup();
       else if (b.dataset.t === "notes") openNotes();
+      else if (b.dataset.t === "lang") { lang(lang() === "ar" ? "en" : "ar"); markLang(); }
       else if (b.dataset.t === "clear") { saveChat([]); renderLog(); }
       else if (b.dataset.conf) { conf = conf === b.dataset.conf ? null : b.dataset.conf; markConf(); }
       else if (b.dataset.mode && !busy) ask(MODES[b.dataset.mode].prompt, b.dataset.mode);
@@ -231,6 +268,7 @@
     });
     input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); root.querySelector("form").requestSubmit(); } });
   }
+  function markLang() { document.querySelectorAll("#ixTlang, [data-ai-lang]").forEach((x) => { x.textContent = lang() === "ar" ? "ع" : "EN"; x.setAttribute("aria-pressed", lang() === "ar" ? "true" : "false"); }); }
   function markConf() { if (root) root.querySelectorAll("[data-conf]").forEach((x) => x.setAttribute("aria-pressed", x.dataset.conf === conf ? "true" : "false")); }
   function setBusy(on) { if (sendBtn) sendBtn.textContent = on ? "Stop" : "Send"; }
   const VBADGE = { correct: "✅ Right", partly: "🟡 Partly", wrong: "❌ Not yet" };
@@ -256,7 +294,7 @@
   function open() {
     build();
     if (mockRunning()) { renderLog(); addMsg("tutor", "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."); root.classList.add("on"); return; }
-    root.classList.add("on"); renderLog(); sub();
+    root.classList.add("on"); renderLog(); sub(); markLang();
     if (!ls.get(KEY, "")) openSetup();
     else setTimeout(() => input && input.focus(), 50);
   }
@@ -363,7 +401,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY };
+  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, mockRunning, openSetup: (n) => openSetup(n) };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();
