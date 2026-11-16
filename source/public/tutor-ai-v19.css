@@ -40,3 +40,9 @@
 .ixTwarn{color:#ffc58a!important;font-weight:700}
 @media(max-width:600px){.ixTbox{width:100%}.ixTtab{top:auto;bottom:calc(150px + env(safe-area-inset-bottom));padding:8px 12px}}
 .ixTwhy{position:fixed;z-index:75;display:none;width:96px;height:40px;border-radius:999px;border:0;background:#ffd36e;color:#1a1205;font-weight:900;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.4);cursor:pointer}
+.ixTconf{display:flex;align-items:center;gap:6px;padding:6px 14px 0;font-size:12.5px;color:#9aa6c0;flex-wrap:wrap}
+.ixTconf button{min-height:34px;padding:0 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:#dfe7ff;font-weight:700;font-size:12.5px;cursor:pointer}
+.ixTconf button[aria-pressed="true"]{background:#ffd36e;color:#1a1205;border-color:#ffd36e}
+.ixTverdict{display:inline-block;margin:0 0 6px;padding:2px 9px;border-radius:999px;font-size:12.5px;font-weight:800}
+.ixTverdict.v-correct{background:rgba(79,209,181,.2);color:#9fe6c9}.ixTverdict.v-partly{background:rgba(255,211,110,.2);color:#ffd36e}.ixTverdict.v-wrong{background:rgba(240,122,149,.2);color:#ffb3c4}
+.ixTmodes button[data-mode="loop"]{background:#ffd36e;color:#1a1205;border-color:#ffd36e}

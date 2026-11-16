@@ -91,6 +91,11 @@
     "Kasr Al Ainy exams: MCQs (often clinical or 'all except'), written essays (lists, comparisons, draw-and-label), practical (identify on a slide or specimen). Point out exam traps.",
     "The student has ADHD: short chunks, one idea per line, bold the key words, no walls of text, and make it vivid.",
     "If the lecture notes below disagree with general textbooks, follow the lecture notes and say so. If you are not sure of a fact, say you are not sure; never invent page numbers, sources or 'the doctor said'.",
+    "PEDAGOGY (follow always): make the student do the thinking (active learning); one idea at a time (cognitive load); adapt to what the student just showed (adaptivity); open with a puzzle or surprise when you can (curiosity); ask how sure they are and what they would check (metacognition).",
+    "ATTEMPT FIRST: never give the answer to a question you asked before the student has tried. If they are stuck, give a hint ladder, one rung per turn: 1) a nudge, 2) a narrower question, 3) one worked step. Only after an attempt, give the full answer.",
+    "Ground every fact in the screen, the lecture notes or the past-paper data given below; when a fact comes from general knowledge and not from those, add '(not in your notes)'.",
+    "When you judge an answer the student gave to your question, start your reply with exactly one tag: [[correct]] or [[partly]] or [[wrong]]. Use no tag otherwise.",
+    "The student may say how sure they were (guessing / unsure / sure). A sure but wrong answer is the most valuable moment: name the exact false belief and contrast it with the truth in one line.",
   ].join("\n");
 
   function context(extra) {
@@ -101,6 +106,21 @@
     return c;
   }
 
+  /* ───── how sure vs how right (calibration), and the sure-but-wrong list (his traps) ───── */
+  const CAL = "ix_tutor_calib_v1", TRAPS = "ix_tutor_traps_v1";
+  let conf = null;
+  const jget = (k) => { try { const v = JSON.parse(ls.get(k, "[]")); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
+  function record(verdict, lastQ) {
+    if (!conf) return;
+    const c = jget(CAL); c.push({ conf, verdict, at: Date.now() }); ls.set(CAL, JSON.stringify(c.slice(-400)));
+    if (conf === "sure" && verdict !== "correct") { const t = jget(TRAPS); t.push({ q: String(lastQ || "").slice(0, 400), at: Date.now(), topic: topicKey() }); ls.set(TRAPS, JSON.stringify(t.slice(-80))); }
+  }
+  function calibration() {
+    const c = jget(CAL), sure = c.filter((x) => x.conf === "sure"), right = sure.filter((x) => x.verdict === "correct").length;
+    return { n: c.length, sure: sure.length, sureRight: right, traps: jget(TRAPS).length };
+  }
+  const TAG = /^\s*\[\[(correct|partly|wrong)\]\]\s*/i;
+
   /* ───── OpenRouter ───── */
   let busy = null;
   async function ask(userText, mode, extraContext) {
@@ -108,6 +128,10 @@
     if (!key) { openSetup("Add your key first."); return; }
     if (mockRunning()) { addMsg("tutor", "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."); return; }
     const history = chat().slice(-12).map((m) => ({ role: m.who === "me" ? "user" : "assistant", content: m.text }));
+    const lastTutor = (chat().filter((m) => m.who === "tutor").pop() || {}).text || "";
+    const myConf = conf;
+    if (myConf) userText = userText + "\n(confidence: " + (myConf === "guess" ? "guessing" : myConf) + ")";
+    if (mode === "classmate" || mode === "traps") extraContext = (extraContext ? extraContext + "\n\n" : "") + "THE STUDENT'S OWN TRAPS (questions they were sure about and got wrong):\n- " + (jget(TRAPS).slice(-12).map((t) => t.q.replace(/\s+/g, " ").slice(0, 220)).join("\n- ") || "(none yet: use the classic traps of this topic)");
     const sys = SYSTEM + "\n\n" + context((MODES[mode] ? MODES[mode].brief : "") + (extraContext ? "\n\n" + extraContext : ""));
     const model = MODES[mode] && MODES[mode].pro ? ls.get(MODEL_PRO, DEFAULT_PRO) : ls.get(MODEL, DEFAULT_MODEL);
     addMsg("me", userText);
@@ -145,11 +169,26 @@
       text = (text ? text + "\n\n" : "") + (e.name === "AbortError" ? "(stopped)" : "⚠️ " + e.message);
     } finally {
       busy = null; setBusy(false);
+      const m = TAG.exec(text);
+      if (m) { conf = myConf; record(m[1].toLowerCase(), lastTutor); out.classList.add("v-" + m[1].toLowerCase()); }
+      conf = null; markConf();
       paint(out, text); out.classList.remove("live");
-      const c = chat(); c.push({ who: "tutor", text, at: Date.now() }); saveChat(c);
+      const c = chat(); c.push({ who: "tutor", text, at: Date.now() }); saveChat(c); sub();
     }
   }
   const MODES = {
+    loop: { label: "▶ Learn this", pro: true, prompt: "Teach me this topic with the full loop, one step at a time.", brief: "TASK: run the full learning loop on the open topic, ONE step per turn, waiting for the student each time: (1) TRY FIRST: two short questions they probably cannot answer yet (productive failure; say that being wrong here is the point). (2) TEACH the core in 5-8 short lines from the mechanism, linking to their attempts. (3) WORKED EXAMPLE: solve one exam-style item aloud, then give a similar one with the last step left for them (faded example). (4) NEW QUESTION, clinical or 'all except'. (5) TEACH-BACK: they explain it in 3 lines; you grade it. (6) one-line summary of what to review tomorrow. Say which step you are on." },
+    tryfirst: { label: "Try first", prompt: "Before you teach me, give me 2 questions on this topic to try. I will probably get them wrong; that is fine.", brief: "TASK: pretest / productive failure. Ask TWO short questions on the open topic that they likely cannot answer yet, one at a time. After each attempt, do not lecture: give the key idea in 2 lines and what their attempt got right." },
+    worked: { label: "Show me how", pro: true, prompt: "Solve one exam question on this topic step by step, then give me a similar one where I do the last steps.", brief: "TASK: worked example then fading. Solve one exam-style question aloud (each step and why). Then give a near-identical one with the last steps blank for the student. If they do it, fade more next time." },
+    apart: { label: "Tell them apart", prompt: "Test me on the things in this topic that students confuse with each other.", brief: "TASK: interleaving of look-alikes. Pick the 2-3 things in this topic most often confused (e.g. ICA vs ECA, UMN vs LMN). Give a quick mixed set: one item at a time, the student says which one it is and the single feature that decides it." },
+    case: { label: "Patient case", pro: true, prompt: "Give me a short patient case on this topic. I will interpret each finding first.", brief: "TASK: clinical case. Present a 3-line patient. Reveal findings one at a time; the student interprets each finding BEFORE you add anything. Then ask for the lesion / diagnosis / mechanism. Never interpret a finding before the student does." },
+    classmate: { label: "Fix my classmate", prompt: "Show me a classmate's answer on this topic with mistakes in it. I'll find and fix them.", brief: "TASK: teachable agent with planted errors. Write a short 'classmate' answer (4-6 lines) on the open topic containing exactly 2 mistakes, built from the student's own traps below when they fit, otherwise from classic traps. The student must find and fix both. Then reveal which they missed." },
+    map: { label: "Connect it", prompt: "Ask me to connect this topic to 4 things I already know, then check my links.", brief: "TASK: concept mapping. Name the central idea and ask the student to link it to 4 other ideas (structure, function, lesion, exam fact), each as 'A → B because …'. Check every link; fix wrong ones." },
+    traps: { label: "My traps", prompt: "Drill me on my traps: the things I was sure about and got wrong.", brief: "TASK: review the student's own traps below. One at a time: ask a fresh question on the same false belief (not the same wording), wait, then contrast the belief and the truth in one line." },
+    draw: { label: "Draw it", prompt: "Make me draw this from memory, then help me check my drawing.", brief: "TASK: drawing to learn. Ask the student to draw the key structure or pathway of the open topic FROM MEMORY on paper (60-90 seconds), naming exactly which 5-7 labels it must have. Wait. Then they list or describe what they drew; check each label and relation against the course (Dr Doss drawing if the topic has one), name what is missing or misplaced, and tell them to look at the reference drawing now and redraw only the wrong part. Do not claim you can see the paper." },
+    palace: { label: "Memory hook", prompt: "This list will not stick. Build me a memory hook for it.", brief: "TASK: mnemonics for arbitrary lists only (branches, contents, order). First say in one line whether this needs a hook or is better understood from the mechanism. If a hook fits: build a short memory palace (5-7 places along a route the student knows, e.g. home to college) or an acronym, one vivid odd image per item, then make them recall it back once now. Keep every fact exactly as the course states it." },
+    plan: { label: "Plan today", prompt: "Help me plan today's study in 2 minutes.", brief: "TASK: WOOP plus an implementation intention, in at most 4 short turns. Ask: Wish (what to finish today, small), Outcome (how it feels), Obstacle (the inner one, e.g. phone, starting), Plan: write ONE 'If [obstacle], then I will [action]' and ONE 'When [time/place], I will start [first 2-minute step]'. End with the two lines only, so they can screenshot them." },
+    outline: { label: "Blank page", pro: true, prompt: "Give me a written-exam question on this topic; I will write the outline from a blank page and you grade it.", brief: "TASK: written-exam retrieval. Give one likely essay question on the open topic. The student writes the outline (headings and key points) from memory. Grade against what a Kasr Al Ainy examiner rewards: list each point present, each missing point, and an estimated mark range (not one number; say grading by AI is a coach, not the examiner). Then give the 3 missing points to rewrite tomorrow." },
     why: { label: "Why?", pro: true, hidden: true, brief: "TASK: the student tapped WHY on the text in SELECTED. Answer in exactly these parts, each short:\n**🧠 Why** — the mechanism behind it, from first principles, 3-5 short lines.\n**👁 Picture it** — one vivid image, analogy or everyday comparison.\n**🔒 Lock it in** — one memory hook or mnemonic, and what to link it to that they already know.\n**🎯 In the exam** — use EXAM RELEVANCE honestly: how often and how it was asked, the classic trap, and whether it is a written-exam point too. If the data shows no past question, say that plainly.\n**✅ Check** — one question that needs understanding. Then wait." },
     explain: { pro: true, label: "Explain this", prompt: "Explain what I am looking at now, simply, from the mechanism. Then check me.", brief: "TASK: explain the open topic from first principles, then ask one understanding check." },
     quiz: { label: "New exam question", prompt: "Give me ONE new exam-style MCQ on this topic (not a copy of a question on my screen), with 4 or 5 options. Do not give the answer until I reply.", brief: "TASK: write ONE new Kasr Al Ainy style MCQ on the open topic that tests understanding (clinical or mechanism), different from any question on screen. 4-5 options a-e. Wait for the student's answer, then explain every option." },
@@ -172,6 +211,7 @@
       '<div class="ixTbox"><div class="ixThd"><b>🧠 Tutor</b><span class="ixTsub" id="ixTsub"></span><button type="button" data-t="notes" title="My lecture notes for this topic">📝</button><button type="button" data-t="setup" title="Key and model">⚙︎</button><button type="button" data-t="close" aria-label="Close">✕</button></div>' +
       '<div class="ixTmodes">' + Object.keys(MODES).filter((k) => !MODES[k].hidden).map((k) => '<button type="button" data-mode="' + k + '">' + MODES[k].label + "</button>").join("") + "</div>" +
       '<div class="ixTlog" id="ixTlog"></div>' +
+      '<div class="ixTconf" role="group" aria-label="How sure are you?"><span>How sure?</span><button type="button" data-conf="guess">😬 Guessing</button><button type="button" data-conf="unsure">🤔 Unsure</button><button type="button" data-conf="sure">😎 Sure</button></div>' +
       '<form class="ixTin"><textarea rows="2" placeholder="Ask anything about this topic…" id="ixTq"></textarea><button type="submit" class="primary" id="ixTsend">Send</button></form></div>';
     document.body.appendChild(root);
     log = root.querySelector("#ixTlog"); input = root.querySelector("#ixTq"); sendBtn = root.querySelector("#ixTsend");
@@ -181,6 +221,7 @@
       else if (b.dataset.t === "setup") openSetup();
       else if (b.dataset.t === "notes") openNotes();
       else if (b.dataset.t === "clear") { saveChat([]); renderLog(); }
+      else if (b.dataset.conf) { conf = conf === b.dataset.conf ? null : b.dataset.conf; markConf(); }
       else if (b.dataset.mode && !busy) ask(MODES[b.dataset.mode].prompt, b.dataset.mode);
     });
     root.querySelector("form").addEventListener("submit", (e) => {
@@ -190,8 +231,14 @@
     });
     input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); root.querySelector("form").requestSubmit(); } });
   }
+  function markConf() { if (root) root.querySelectorAll("[data-conf]").forEach((x) => x.setAttribute("aria-pressed", x.dataset.conf === conf ? "true" : "false")); }
   function setBusy(on) { if (sendBtn) sendBtn.textContent = on ? "Stop" : "Send"; }
-  function paint(el, text) { el.querySelector(".ixTtxt").innerHTML = md(text) || "<p class='ixTdots'>…</p>"; log.scrollTop = log.scrollHeight; }
+  const VBADGE = { correct: "✅ Right", partly: "🟡 Partly", wrong: "❌ Not yet" };
+  function paint(el, text) {
+    const m = TAG.exec(text), body = m ? text.replace(TAG, "") : text;
+    el.querySelector(".ixTtxt").innerHTML = (m ? '<span class="ixTverdict v-' + m[1].toLowerCase() + '">' + VBADGE[m[1].toLowerCase()] + "</span>" : "") + (md(body) || "<p class='ixTdots'>…</p>");
+    log.scrollTop = log.scrollHeight;
+  }
   function addMsg(who, text, live) {
     if (who === "me") { const c = chat(); c.push({ who, text, at: Date.now() }); saveChat(c); }
     const el = document.createElement("div"); el.className = "ixTm " + who + (live ? " live" : "");
@@ -201,11 +248,11 @@
     log.innerHTML = "";
     const c = chat();
     if (!c.length) log.innerHTML = '<div class="ixTempty"><p><b>Ask about whatever is on your screen.</b> The tutor sees the lesson or question you have open, and your lecture notes for it (📝).</p><p>Try <b>Explain this</b>, then <b>New exam question</b>: it writes questions that are not in the bank, so you practise understanding, not remembering.</p></div>';
-    c.slice(-30).forEach((m) => { const el = document.createElement("div"); el.className = "ixTm " + m.who; el.innerHTML = '<div class="ixTtxt">' + md(m.text) + "</div>"; log.appendChild(el); });
+    c.slice(-30).forEach((m) => { const el = document.createElement("div"); el.className = "ixTm " + m.who; el.innerHTML = '<div class="ixTtxt"></div>'; log.appendChild(el); paint(el, m.text); });
     if (c.length) { const b = document.createElement("button"); b.type = "button"; b.className = "ixTclear"; b.dataset.t = "clear"; b.textContent = "Clear the conversation"; log.prepend(b); }
     log.scrollTop = log.scrollHeight;
   }
-  function sub() { const el = root && root.querySelector("#ixTsub"); if (el) { const n = notesFor(topicKey()); el.textContent = (topicKey() === "general" ? "" : topicKey().slice(0, 40)) + (n ? " · notes ✓" : ""); } }
+  function sub() { const el = root && root.querySelector("#ixTsub"); if (el) { const n = notesFor(topicKey()); const k = calibration(); el.textContent = (topicKey() === "general" ? "" : topicKey().slice(0, 32)) + (n ? " · notes ✓" : "") + (k.sure ? " · sure & right " + k.sureRight + "/" + k.sure : "") + (k.traps ? " · traps " + k.traps : ""); } }
   function open() {
     build();
     if (mockRunning()) { renderLog(); addMsg("tutor", "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."); root.classList.add("on"); return; }
@@ -316,7 +363,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY };
+  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();

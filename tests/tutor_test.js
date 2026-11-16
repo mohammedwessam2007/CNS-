@@ -14,7 +14,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
     const u = r.request().url();
     if (u.endsWith('/key')) return r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ data: { limit: 5, usage: 0.12 } }) });
     const body = JSON.parse(r.request().postData() || '{}'); sent.push({ auth: r.request().headers().authorization, body });
-    const words = ['The ', '**pretracheal** ', 'fascia ', 'moves ', 'with ', 'swallowing.'];
+    const words = globalThis.__reply || ['The ', '**pretracheal** ', 'fascia ', 'moves ', 'with ', 'swallowing.'];
     const sse = words.map((w) => 'data: ' + JSON.stringify({ choices: [{ delta: { content: w } }] }) + '\n\n').join('') + 'data: [DONE]\n\n';
     return r.fulfill({ status: 200, contentType: 'text/event-stream', body: sse });
   });
@@ -61,7 +61,22 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const last = sent[sent.length - 1], sys3 = last ? last.body.messages[0].content : '';
   const leaked = probe.held.filter((st) => st.length > 30 && sys3.includes(st)).length;
   check('T6', 'Why? on a tapped line asks the professor model with exam relevance, and no held-out item travels', bub && sent.length === n1 + 1 && last.body.model === 'openai/gpt-6.1-terra' && /EXAM RELEVANCE/.test(sys3) && /about \d+ past questions/.test(sys3) && leaked === 0, { bub, model: last && last.body.model, leaked, rel: (sys3.match(/about \d+ past questions[^\n]*/) || [''])[0].slice(0, 90) });
+  // T7 sure-but-wrong: the verdict tag is hidden, a badge shows, calibration counts it and the question joins his traps
+  globalThis.__reply = ['[[wrong]] ', 'Not quite: ', 'the ECA is outside the sheath.'];
+  await p.evaluate(() => { localStorage.removeItem('ix_tutor_calib_v1'); localStorage.removeItem('ix_tutor_traps_v1'); IX_TUTOR.open(); IX_TUTOR.setConf('sure'); });
+  await p.evaluate(() => IX_TUTOR.ask('The ECA is in the carotid sheath', null)); await p.waitForTimeout(1200);
+  const v = await p.evaluate(() => { const m = [...document.querySelectorAll('.ixTm.tutor')].pop(); return { txt: m.innerText, badge: !!m.querySelector('.ixTverdict.v-wrong'), cal: IX_TUTOR.calibration(), sentConf: null }; });
+  const lastUser = sent[sent.length - 1].body.messages.slice(-1)[0].content;
+  check('T7', 'A sure-but-wrong answer shows a badge, hides the tag, and becomes one of his traps', v.badge && !/\[\[wrong\]\]/.test(v.txt) && v.cal.sure === 1 && v.cal.sureRight === 0 && v.cal.traps === 1 && /confidence: sure/.test(lastUser), { badge: v.badge, cal: v.cal });
+  globalThis.__reply = null;
+  // T8 the new learning modes are on the chip row, and Plan today sends the WOOP / if-then brief
+  const chips = await p.evaluate(() => [...document.querySelectorAll('.ixTmodes button')].map((b) => b.dataset.mode));
+  const nP = sent.length;
+  await p.click('.ixTmodes button[data-mode="plan"]'); await p.waitForTimeout(1200);
+  const sys4 = sent.length > nP ? sent[sent.length - 1].body.messages[0].content : '';
+  const need = ['loop', 'tryfirst', 'worked', 'apart', 'case', 'classmate', 'map', 'traps', 'draw', 'palace', 'plan', 'outline'];
+  check('T8', 'All learning modes are on the chip row; Plan today sends the WOOP and if-then brief', need.every((k) => chips.includes(k)) && !chips.includes('why') && /WOOP/.test(sys4) && /If \[obstacle\]/.test(sys4), { missing: need.filter((k) => !chips.includes(k)), woop: /WOOP/.test(sys4) });
   await b.close();
-  console.log(fails ? fails + ' FAILED' : '6/6 TUTOR checks passed');
+  console.log(fails ? fails + ' FAILED' : '8/8 TUTOR checks passed');
   process.exit(fails ? 1 : 0);
 })();

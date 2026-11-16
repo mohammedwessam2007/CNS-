@@ -62,3 +62,37 @@ What the newest evidence adds, and the design move each one forces. Evidence str
 5. **Guardrails**: grounding, attempt-first, AI-off measurement, held-out firewall, weekly cost cap, offline fallback.
 
 Further sources: Gemini Guided Learning RCT (https://storage.googleapis.com/deepmind-media/LearnLM/learnLM_sierraleone_may26.pdf); EyeRAG (https://www.nature.com/articles/s41746-026-02860-7); Hyper-RAG (https://pubmed.ncbi.nlm.nih.gov/42045193/); MCQ meta-analysis (https://www.tandfonline.com/doi/full/10.1080/0142159X.2026.2691072); LLM essay grading (https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2026.1904452/full); LLM patient simulation RCT (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11605890/); multi-agent simulator (https://dx.doi.org/10.1515/dx-2026-0069); LLM protégés (https://aclanthology.org/2025.bea-1.19/); metacognitive laziness / offloading review (https://www.uts.edu.au/news/2026/03/experts-warn-unstructured-ai-use-in-schools-risks-cognitive-atrophy/contentassets/ai-cognitive-offloading-and-implications-for-education.pdf); TMR meta-analysis (https://www.semanticscholar.org/paper/Promoting-memory-consolidation-during-sleep:-A-of-Hu-Cheng/e09e67cffbea7be63d2c494490ca0347b0330275).
+
+## v20.2: the learning-science map (second research pass, 16 Nov 2026)
+
+Every method below is either built into the professor (a mode in the tutor drawer), planned for the engine, or rejected. Evidence strength in brackets; caveats are kept.
+
+| Method | Evidence | Where it lives |
+|---|---|---|
+| Retrieval practice | Strong. Residents tested on a topic kept more 6 months later than residents who restudied it (Larsen, Butler & Roediger, *Med Educ* 2009, RCT) | Every mode ends in a question; **Blank page** for written answers |
+| Spaced repetition | Strong for retention; Anki use correlates with Step 1 scores in surveys (Lu 2021, Wothe), one null (Cooper 2023): correlational | Memory engine (FSRS), planned; **My traps** comes back on later days |
+| Pretesting / productive failure | Moderate (g ≈ 0.36) | **Try first**, step 1 of **▶ Learn this** |
+| Worked examples, then fading | Strong for novices | **Show me how**, step 3 of the loop |
+| Interleaving | Moderate (g ≈ 0.42), best for look-alikes | **Tell them apart** |
+| Elaborative interrogation / self-explanation | Moderate | **Why?** bubble on any line; **I'll explain it** |
+| Teaching a flawed agent | Small LLM studies + classic protégé RCTs | **Fix my classmate**, built from his own traps |
+| Concept mapping | Moderate | **Connect it** |
+| Drawing to learn | Beats summarising, but only with support; drawing then studying the expert visual transfers better (Fiorella & Zhang 2018; 2025 meta-analysis of supported drawing) | **Draw it**: draw from memory, then compare with the Dr Doss drawing and redraw the wrong part. The AI does not grade the photo: multimodal models lag humans at grading hand drawings (SketchJudge 2026); a reference diagram helps |
+| Calibration and hypercorrection | Sure-but-wrong errors are corrected best in the lab (Butterfield & Metcalfe 2001); the gain did not transfer to a later classroom test (Corral & Carpenter 2022) | Confidence chips, verdict badge, calibration count; traps re-tested with **new** wording, not the same item |
+| Method of loci | 6 weeks of training gave durable memories in naive learners (Wagner et al., *Sci Adv* 2021); for arbitrary lists only | **Memory hook**: says first whether a hook is needed or the mechanism is better |
+| 3D / XR anatomy | SMD 0.40 vs traditional, best as a supplement (García-Robles 2024); AR alone unclear (Bölek 2021) | The 3D neck and Doss preview stay a supplement, not the core |
+| Implementation intentions, WOOP | d ≈ 0.65 (2006 review, likely inflated); MCII g ≈ 0.34 (2021 meta-analysis); one small RCT raised students' study hours | **Plan today**: one "If obstacle, then…" and one "When…, I will start…" line |
+| Wakeful rest and napping | Quiet rest after learning, g ≈ 0.45, lasting 7 days (2025 meta-analysis); naps help, smaller in young adults | Coach: 10 minutes eyes-closed, no phone, after a hard block; sleep protected |
+| Exercise before encoding | Small (d ≈ 0.23) | Coach suggests a brisk 10-minute walk before the hardest block |
+| Lecture video at 2x | Little comprehension cost in studies | Watch at 2x in the college app while dictating key points into 📝 |
+| AI voice tutor | No causal learning evidence yet (2026 trials small or correlational) | Not built |
+| Pomodoro | Not tested in trials; short work-rest cycles in general are reasonable | Flexible block length, no fixed 25/5 |
+| Gamification | Mixed effects | Kept minimal (no streak pressure) |
+
+### Built in v20.2 (tests `tests/tutor_test.js`, 8/8 against a fake OpenRouter)
+
+- Modes: ▶ Learn this (6-step loop) · Try first · Show me how · Tell them apart · Patient case · Fix my classmate · Connect it · My traps · **Draw it** · **Memory hook** · **Plan today** · **Blank page** · Explain · New exam question · I'll explain it · Why was I wrong? · Written answer.
+- T7: a sure-but-wrong reply shows the badge, hides the `[[wrong]]` tag, and adds a trap. T8: every mode is on the chip row; Plan today sends the WOOP brief.
+- Not yet verified with a real OpenRouter key or on the live Pages site.
+
+Sources for this pass: Larsen 2009 (https://www.gwern.net/docs/spaced-repetition/2013-larsen.pdf, https://learningscientists.org/blog/2023/3/30); Anki and Step 1 (https://pmc.ncbi.nlm.nih.gov/articles/PMC8651966, https://pmc.ncbi.nlm.nih.gov/articles/PMC10176558); drawing (https://link.springer.com/article/10.1007/s10648-025-10067-7, https://ecrhub.org/publications/drawing-boundary-conditions-learning-drawing); SketchJudge (https://arxiv.org/abs/2601.06944v1); hypercorrection (https://learningscientists.org/blog/2023/8/3-1); method of loci (https://www.pubmed.gov/33658191/); XR anatomy (https://aminer.org/pub/65cbd89f939a5f40827389cf, https://pmc.ncbi.nlm.nih.gov/articles/PMC8316386); MCII (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8149892/, https://researchers.mq.edu.au/en/publications/mental-contrasting-with-implementation-intentions-increases-study/); wakeful rest (https://www.epistemonikos.org/pt/documents/84bd5a512c1e88fe13e2b867c467d39d67fbb3ac); voice tutors (https://brookings.edu/articles/what-the-research-shows-about-generative-ai-in-tutoring).

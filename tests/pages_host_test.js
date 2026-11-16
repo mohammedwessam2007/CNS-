@@ -11,7 +11,7 @@ const KEY = 'intellectuality_v41_launch_state';
 let fails = 0;
 const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + id.padEnd(4) + ' ' + what + '  · ' + JSON.stringify(info).slice(0, 400)); if (!ok) fails++; };
 (async () => {
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const b = await chromium.launch().catch(() => chromium.launch({ executablePath: '/opt/pw-browsers/chromium' }));
   const ctx = await b.newContext({ viewport: { width: 1180, height: 820 } });
   const page = await ctx.newPage();
   const bad = [], errs = [];
@@ -20,7 +20,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await page.goto(BASE);
   await page.waitForTimeout(6000);
   const t = await page.title();
-  check('P1', 'The app opens with no failed request and no page error', /v18\.14\.2/.test(t) && !bad.length && !errs.length, { t, bad: bad.slice(0, 5), errs: errs.slice(0, 3) });
+  check('P1', 'The app opens with no failed request and no page error', /INTELLECTUALITY CNS v\d/.test(t) && !bad.length && !errs.length, { t, bad: bad.slice(0, 5), errs: errs.slice(0, 3) });
 
   const scope = await page.evaluate(() => navigator.serviceWorker.ready.then((r) => r.scope));
   await page.reload(); await page.waitForTimeout(3000); // the worker now controls the page and keeps a copy
@@ -28,7 +28,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await page.reload(); await page.waitForTimeout(5000);
   const off = await page.evaluate(() => ({ title: document.title, s: typeof S === 'object' && !!S }));
   await ctx.setOffline(false);
-  check('P2', 'The offline worker installs for /cns-/ and the app opens with the network off', /\/cns-\/$/.test(scope) && /v18\.14\.2/.test(off.title) && off.s, { scope, off });
+  check('P2', 'The offline worker installs for /cns-/ and the app opens with the network off', /\/cns-\/$/.test(scope) && /INTELLECTUALITY CNS v\d/.test(off.title) && off.s, { scope, off });
 
   const before = await page.evaluate((k) => localStorage.getItem(k), KEY);
   const st = JSON.parse(before || '{}'); st.importMark = 'from-vercel-copy';
