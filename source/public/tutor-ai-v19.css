@@ -1,0 +1,41 @@
+/* v19 AI tutor: a drawer on the right (full screen on a phone) and a tab on the screen edge */
+.ixTtab{position:fixed;right:0;top:46%;z-index:60;transform:translateX(34%) rotate(-90deg);transform-origin:center;padding:9px 14px;border:1px solid rgba(255,255,255,.18);border-bottom:0;border-radius:12px 12px 0 0;background:#1b2440;color:#fff;font-weight:800;font-size:13px;letter-spacing:.02em;box-shadow:0 6px 20px rgba(0,0,0,.35);cursor:pointer}
+.ixT{position:fixed;inset:0;z-index:80;display:none;background:rgba(4,7,14,.45)}
+.ixT.on{display:block}
+.ixTbox{position:absolute;top:0;right:0;bottom:0;width:min(460px,100%);display:flex;flex-direction:column;background:#0f1526;color:#eef2fb;border-left:1px solid rgba(255,255,255,.1);box-shadow:-20px 0 60px rgba(0,0,0,.45);padding-bottom:env(safe-area-inset-bottom)}
+.ixThd{display:flex;align-items:center;gap:8px;padding:14px 14px 10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ixThd b{font-size:17px}
+.ixTsub{flex:1;min-width:0;font-size:12px;color:#9aa6c0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ixThd button{min-width:40px;min-height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#eef2fb;font-size:16px;cursor:pointer}
+.ixTmodes{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;scrollbar-width:none}
+.ixTmodes::-webkit-scrollbar{display:none}
+.ixTmodes button{flex:none;min-height:38px;padding:0 12px;border-radius:999px;border:1px solid rgba(126,166,255,.4);background:rgba(126,166,255,.1);color:#dfe7ff;font-weight:700;font-size:13px;cursor:pointer}
+.ixTlog{flex:1;overflow-y:auto;padding:8px 14px 14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+.ixTm{max-width:92%;padding:10px 13px;border-radius:14px;font-size:15px;line-height:1.55}
+.ixTm.me{align-self:flex-end;background:#2a3b6e}
+.ixTm.tutor{align-self:flex-start;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
+.ixTm p{margin:0 0 7px}.ixTm p:last-child{margin-bottom:0}
+.ixTm ul{margin:4px 0 8px;padding-left:20px}.ixTm li{margin:2px 0}
+.ixTm h4{margin:6px 0 4px;font-size:15px}
+.ixTm code{background:rgba(255,255,255,.1);padding:0 4px;border-radius:4px}
+.ixTm.live .ixTtxt::after{content:"▍";opacity:.6;animation:ixTblink 1s steps(1) infinite}
+@keyframes ixTblink{50%{opacity:0}}
+.ixTdots{color:#9aa6c0}
+.ixTempty{color:#b7c1d8;font-size:14.5px;line-height:1.55;padding:6px 2px}
+.ixTclear{align-self:center;background:none;border:0;color:#7f8aa6;font-size:12px;text-decoration:underline;cursor:pointer}
+.ixTin{display:flex;gap:8px;padding:10px 14px 14px;border-top:1px solid rgba(255,255,255,.08)}
+.ixTin textarea{flex:1;resize:none;min-height:44px;max-height:140px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:#141c33;color:#fff;font:inherit;font-size:16px;padding:10px 12px}
+.ixTin button{min-width:72px;border-radius:12px;font-weight:800}
+.ixTsheet{position:absolute;inset:0;background:#0f1526;overflow-y:auto;padding:18px}
+.ixTsheetIn{display:grid;gap:12px;font-size:15px;line-height:1.5}
+.ixTsheetIn h3{margin:0;font-size:19px}
+.ixTsheetIn p{margin:0;color:#c7d0e4}
+.ixTsheetIn label{display:grid;gap:6px;font-weight:700}
+.ixTsheetIn input,.ixTsheetIn textarea{width:100%;box-sizing:border-box;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#141c33;color:#fff;font:inherit;font-size:16px;padding:11px 12px}
+.ixTsteps{margin:0;padding-left:20px;color:#c7d0e4}
+.ixTsmall{font-size:12.5px!important;color:#8e99b5!important}
+.ixTrow{display:flex;gap:8px;flex-wrap:wrap}
+.ixTrow button{min-height:44px;padding:0 16px;border-radius:12px;font-weight:800;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}
+.ixTstatus{min-height:20px;font-weight:700;color:#9fe6c9!important}
+.ixTwarn{color:#ffc58a!important;font-weight:700}
+@media(max-width:600px){.ixTbox{width:100%}.ixTtab{top:auto;bottom:calc(150px + env(safe-area-inset-bottom));padding:8px 12px}}
