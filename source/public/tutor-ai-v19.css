@@ -61,3 +61,6 @@
 .ixAiFig .ixAiBar{margin-top:4px}
 .ixAiOut .ixTtxt :is(p,h4),.ixTm .ixTtxt :is(p,h4){unicode-bidi:plaintext;text-align:start}
 .ixAiOut[dir=rtl] ul,.ixAiOut[dir=rtl] li{direction:rtl;text-align:right}
+.ixTfile{display:grid;gap:6px;font-weight:700;padding:10px;border:1px dashed rgba(255,255,255,.25);border-radius:12px}
+.ixTfile input{font-size:14px}
+.ixTgrade b{font-size:26px;color:#ffd36e}.ixTgrade span{color:#9aa6c0;font-size:13px}

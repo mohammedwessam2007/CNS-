@@ -161,7 +161,7 @@ function masterySnapshot(){
 }
 function brainHTML(){
  const pred=predictedScore(),weak=masterySnapshot().slice(0,7),errors=Object.entries(V().errorGenome).sort((a,b)=>b[1].n-a[1].n).slice(0,6),cf=refreshCounterfactual(),twin=V().twin||buildTwin();
- return '<div class="v12Panel"><div class="v12Hero"><div><small>PERSONAL MASTERY BRAIN</small><b>'+(pred==null?'Learning…':Math.round(pred*100)+'%')+'</b></div><div><small>Evidence atoms</small><b>'+V().evidence.length+'</b></div><div><small>Mode</small><b>'+(examMode()?'EXAM':'NORMAL')+'</b></div></div>'+
+ return '<div class="v12Panel"><div class="v12Hero"><div><small>PAST-PAPER MASTERY (not the real exam)</small><b>'+(pred==null?'Learning…':Math.round(pred*100)+'%')+'</b></div><div><small>Evidence atoms</small><b>'+V().evidence.length+'</b></div><div><small>Mode</small><b>'+(examMode()?'EXAM':'NORMAL')+'</b></div></div>'+
  '<h3>Lowest-confidence concepts</h3>'+(weak.length?weak.map(x=>'<div class="v12Row"><span>'+esc12(x.topic)+'</span><b>'+Math.round(x.p*100)+'%</b><small>±'+Math.round(x.u*100)+' · retention '+Math.round(x.ret*100)+'%</small></div>').join(''):'<div class="source">Use the course. The model will calibrate from real evidence.</div>')+
  '<h3>Error genome</h3>'+(errors.length?errors.map(([k,x])=>'<div class="v12Row"><span>'+esc12(k)+'</span><b>'+x.n+'</b><small>'+x.confidentWrong+' confident wrong</small></div>').join(''):'<div class="source">No error lineage yet.</div>')+
  '<h3>Counterfactual scheduler</h3>'+(cf.length?cf.slice(0,4).map((x,i)=>'<div class="v12Row"><span>'+(i+1)+'. '+esc12(x.topic)+'</span><b>'+x.roi.toFixed(2)+'</b><small>mark-gain/min proxy</small></div>').join(''):'<div class="source">No review debt worth buying.</div>')+

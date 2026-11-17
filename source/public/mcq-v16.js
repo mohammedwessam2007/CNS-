@@ -623,12 +623,20 @@
       dueTomorrow = all.filter((s) => s.d <= t + 1 && s.d > t).length;
     return { total, done, mastered, dueTomorrow, pred: prediction() };
   }
+  // v21: after the 16 Nov exam (bank mocks said "very good", the exam gave about half), the bank number is shown as
+  // what it is, with the real gap once a real exam result has been entered (post-mortem / post-exam calibration)
+  function realGapText() {
+    const outs = ((S.v12 && S.v12.outcomes) || []).filter((o) => Number.isFinite(o.actualPct) && Number.isFinite(o.predictedPct));
+    if (!outs.length) return " · the real exam also asks the lectures: expect lower";
+    const g = Math.round(outs.reduce((t, o) => t + (o.predictedPct - o.actualPct), 0) / outs.length);
+    return g > 0 ? " · your last real exam came " + g + " points lower than this" : " · your last real exam matched this";
+  }
   function strip() {
     const s = stats(),
       p = s.pred;
     return (
       '<div class="v16Strip"><span><b>' + s.done + "</b> / " + s.total.toLocaleString("en") + " past-paper MCQs done</span><span><b>" + s.mastered + "</b> solid</span>" +
-      (p.p != null ? '<span class="v16Pred">Predicted <b>' + Math.round(p.p * 100) + "%</b> (" + Math.round(p.lo * 100) + "–" + Math.round(p.hi * 100) + "%)</span>" : "") +
+      (p.p != null ? '<span class="v16Pred" title="Measured on past-paper items you had not seen. The real exam also asks lecture content the bank never asked, so it scores lower.">Past-paper mocks <b>' + Math.round(p.p * 100) + "%</b> (" + Math.round(p.lo * 100) + "–" + Math.round(p.hi * 100) + "%)" + realGapText() + "</span>" : "") +
       "</div>"
     );
   }

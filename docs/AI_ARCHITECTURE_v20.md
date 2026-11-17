@@ -115,3 +115,16 @@ Owner: "everything powered by AI, insert the AI assistant in everything". `ai-ev
 Every bar has **ع / EN**: Egyptian Arabic explanations with the exam's English terms, or plain English. Held-out firewall: an MCQ bar appears only for practice items, or held-out items already used in a finished mock (the same rule as `consumedSet()`).
 
 Tests `tests/ai_everywhere_test.js` 8/8 on the real course flow against a fake OpenRouter; screenshot `docs/ai-everywhere-phone.png`. Not yet verified with a real key.
+
+## v21: upgrade in every way (17 Nov 2026)
+
+- **Honest readiness**: the MCQ strip says "Past-paper mocks X% (range)" and, once a real mark exists, "your last real exam came N points lower"; the dashboard says "PAST-PAPER MASTERY (not the real exam)".
+- **Memory engine**: every wrong or partly-right judged answer becomes a card (spaced 1, 3, 7, 16, 35 days; a miss resets it); review asks the same idea in new wording; solid after 3 steps. `▶ Today · N to review` on every screen.
+- **Examiner check**: every generated MCQ (New exam question, Twin question) is read by a second model for item-writing flaws, without revealing the answer.
+- **Essay grader**: 📝 Grade my essay marks 3 times on the department's way of marking, shows median and spread; missing points become cards.
+- **Lecture import**: 📝 notes take a slide PDF (pdf.js, fetched the first time), a text file, or a photo of his own notes or handout (vision model transcribes).
+- **Post-mortem**: 🩻 sorts remembered exam questions against the bank (in past papers / new angle / lecture-only) and stores the real mark, which then corrects the readiness strip.
+- **Cost guard**: each answer's cost is counted (OpenRouter usage); weekly cap (default $2) in ⚙︎; the subtitle shows "$x/wk".
+- **Weekly report**: 📈 My week, built from the device's real stats only.
+
+Tests: `tests/v21_test.js` 10/10 on the real app, fake OpenRouter. Ratings before and after: `docs/VERSION_RATINGS.md`.

@@ -101,10 +101,16 @@
   }
 
   /* ── screens ── */
+  // v21 zero-decision start: what is due from the memory deck first, then this page's learning loop
+  function today(host) {
+    const m = T().memory ? T().memory() : { due: 0 };
+    return { label: m.due ? "▶ Today · " + m.due + " to review" : "▶ Learn this with me", main: true,
+      run: () => m.due ? go(host, "Start my day: review what is due.", "review") : go(host, "Teach me this with the full loop, one step at a time.", "loop") };
+  }
   function lesson(stage) {
     const chips = stage.querySelector(":scope > .chips");
     bar(stage, "lesson", [
-      { label: "▶ Learn this with me", main: true, run: () => go(stage, "Teach me this lesson with the full loop, one step at a time.", "loop") },
+      today(stage),
       { label: "Try first", run: () => go(stage, "Before I read, give me 2 questions on this lesson to try.", "tryfirst") },
       { label: "Plan today", run: () => go(stage, "Help me plan today's study in 2 minutes.", "plan") },
     ], chips ? { after: chips } : "start");
@@ -155,7 +161,7 @@
   function generic(host, id) {
     const page = () => "PAGE TEXT:\n" + cap(host.innerText, 3000) + "\n\n" + T().relevanceText(((document.getElementById("title") || {}).innerText || "") + " " + host.innerText.slice(0, 500));
     bar(host, id, [
-      { label: "▶ Learn this with me", main: true, run: () => go(host, "Teach me this with the full loop, one step at a time.", "loop") },
+      today(host),
       { label: "🤯 Simpler", run: () => go(host, "Explain what I am looking at, simpler.", "simple", page()) },
       { label: "❓ Quiz me", run: () => go(host, "Quiz me on this page.", "secquiz", page()) },
       { label: "🔒 Memory hook", run: () => go(host, "Give me a memory hook for this.", "palace", page()) },
