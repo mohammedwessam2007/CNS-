@@ -20,7 +20,7 @@
   const qById = (id) => bank().find((q) => q.id === id);
   const cap = (s, n) => { s = String(s || "").replace(/\n{3,}/g, "\n\n").trim(); return s.length > n ? s.slice(0, n) + "\n…" : s; };
   const st = () => { try { return typeof S !== "undefined" ? S : null; } catch (e) { return null; } };
-  const mock = () => { const t = T(); return !!(t && t.mockRunning && t.mockRunning()); };
+  const mock = () => { const t = T(); return !!(t && ((t.mockRunning && t.mockRunning()) || (t.blindOn && t.blindOn()))); };
 
   // a held-out item may go to the AI only after it was used in a finished mock (it is then just a reviewed item)
   function sendable(q) {
@@ -103,8 +103,9 @@
   /* ── screens ── */
   // v21 zero-decision start: what is due from the memory deck first, then this page's learning loop
   function today(host) {
-    const m = T().memory ? T().memory() : { due: 0 };
-    return { label: m.due ? "▶ Today · " + m.due + " to review" : "▶ Learn this with me", main: true,
+    const m = T().memory ? T().memory() : { due: 0 }, d = T().dayState ? T().dayState() : { left: 60, gate: null };
+    if (d.gate) return { label: "✅ Done for today", main: true, run: () => go(host, "Am I done for today?", "plan", "", { force: false }) };
+    return { label: (m.due ? "▶ Today · " + m.due + " to review" : "▶ Learn this with me") + " · " + d.left + " min left", main: true,
       run: () => m.due ? go(host, "Start my day: review what is due.", "review") : go(host, "Teach me this with the full loop, one step at a time.", "loop") };
   }
   function lesson(stage) {

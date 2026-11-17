@@ -19,7 +19,7 @@ const LEARN_NEXT = '#player [data-act="visual-hide"], #player [data-act="v15-nex
     const words = ['**Mechanism** ', 'first: ', 'the dorsal root carries sensation in.'];
     return r.fulfill({ status: 200, contentType: 'text/event-stream', body: words.map((w) => 'data: ' + JSON.stringify({ choices: [{ delta: { content: w } }] }) + '\n\n').join('') + 'data: [DONE]\n\n' });
   });
-  await p.evaluate(() => { localStorage.setItem('ix_tutor_key_v1', 'sk-or-v1-TESTKEY123'); localStorage.setItem('ix_tutor_lang_v1', 'en'); });
+  await p.evaluate(() => { localStorage.setItem('ix_tutor_key_v1', 'sk-or-v1-TESTKEY123'); localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 600, stop: '23:59', off: -1 })); localStorage.setItem('ix_tutor_lang_v1', 'en'); });
   await tick(p, 2500);
   const sysOf = (b) => b.messages[0].content;
   const userOf = (b) => b.messages[b.messages.length - 1].content;

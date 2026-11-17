@@ -75,11 +75,24 @@
     return { n: top.length, sources: Array.from(src).slice(0, 8), chapters: Object.entries(ch).sort((a, b) => b[1] - a[1]).slice(0, 3).map((x) => x[0]),
       examples: top.slice(0, 3).map(([, q]) => q.stem + " → " + (q.answerText || "")) };
   }
+  // how these examiners ask: from the practice half of the bank, per chapter
+  let STYLE = null;
+  function examinerStyle() {
+    if (STYLE) return STYLE;
+    STYLE = {};
+    for (const q of (window.EHSAN_QBANK && window.EHSAN_QBANK.questions) || []) {
+      if (q.split !== "practice") continue;
+      const k = q.chapter || "?", o = STYLE[k] || (STYLE[k] = { n: 0, except: 0, clinical: 0, subject: q.subject });
+      o.n++; if (/\b(except|not|false|least)\b/i.test(q.stem)) o.except++; if (/\b(year[- ]old|patient|presents?|complain|lesion of|injury|damage|man|woman|child)\b/i.test(q.stem)) o.clinical++;
+    }
+    return STYLE;
+  }
   function relevanceText(text) {
     const r = relevance(text);
     if (!r) return "EXAM RELEVANCE: not known (no past-paper data).";
     if (!r.n) return "EXAM RELEVANCE (past-paper bank we have): no past question matches this closely. Say so honestly: it may still come from the lectures, but it has not been a classic past-paper point.";
-    return "EXAM RELEVANCE (from the practice half of the student's past-paper bank, by matching words, so approximate): about " + r.n + " past questions touch this" + (r.sources.length ? " (sources: " + r.sources.join(", ") + ")" : "") + (r.chapters.length ? "; chapters: " + r.chapters.join(", ") : "") + ".\nExamples of how it was asked:\n- " + r.examples.join("\n- ");
+    return "EXAM RELEVANCE (from the practice half of the student's past-paper bank, by matching words, so approximate): about " + r.n + " past questions touch this" + (r.sources.length ? " (sources: " + r.sources.join(", ") + ")" : "") + (r.chapters.length ? "; chapters: " + r.chapters.join(", ") : "") + ".\nExamples of how it was asked:\n- " + r.examples.join("\n- ") +
+      "\nEXAMINER STYLE in these chapters: " + r.chapters.map((c) => { const o = examinerStyle()[c]; return o ? c + ": " + o.n + " past questions, " + Math.round((100 * o.except) / o.n) + "% negative ('except/not'), " + Math.round((100 * o.clinical) / o.n) + "% clinical" : c; }).join("; ") + ". Ask in that style.";
   }
 
   const SYSTEM = [
@@ -94,6 +107,7 @@
     "PEDAGOGY (follow always): make the student do the thinking (active learning); one idea at a time (cognitive load); adapt to what the student just showed (adaptivity); open with a puzzle or surprise when you can (curiosity); ask how sure they are and what they would check (metacognition).",
     "ATTEMPT FIRST: never give the answer to a question you asked before the student has tried. If they are stuck, give a hint ladder, one rung per turn: 1) a nudge, 2) a narrower question, 3) one worked step. Only after an attempt, give the full answer.",
     "Ground every fact in the screen, the lecture notes or the past-paper data given below; when a fact comes from general knowledge and not from those, add '(not in your notes)'.",
+    "When the verdict is [[wrong]] or [[partly]], put right after it ONE error-type tag: [[type:unknown]] (never learned it), [[type:misread]] (missed a word such as except/not/most), [[type:confused]] (mixed up look-alikes), [[type:reasoning]] (knew the facts, wrong logic). Name the type in plain words in your first line and give the matching fix.",
     "When you judge an answer the student gave to your question, start your reply with exactly one tag: [[correct]] or [[partly]] or [[wrong]]. Use no tag otherwise.",
     "The student may say how sure they were (guessing / unsure / sure). A sure but wrong answer is the most valuable moment: name the exact false belief and contrast it with the truth in one line.",
   ].join("\n");
@@ -115,11 +129,22 @@
     const c = jget(CAL); c.push({ conf, verdict, at: Date.now() }); ls.set(CAL, JSON.stringify(c.slice(-400)));
     if (conf === "sure" && verdict !== "correct") { const t = jget(TRAPS); t.push({ q: String(lastQ || "").slice(0, 400), at: Date.now(), topic: topicKey() }); ls.set(TRAPS, JSON.stringify(t.slice(-80))); }
   }
+  // certainty-based marking (as in UK medical schools): sure and right +3, sure and wrong −6; a guess risks nothing.
+  // It rewards knowing what you know, which is the exact skill the 16 Nov forecast lacked.
+  const CBM = { guess: [1, 0.5, 0], unsure: [2, 1, -2], sure: [3, 1, -6] };
+  function cbmOf(x) { const r = CBM[x.conf]; return r ? r[x.verdict === "correct" ? 0 : x.verdict === "partly" ? 1 : 2] : 0; }
   function calibration() {
     const c = jget(CAL), sure = c.filter((x) => x.conf === "sure"), right = sure.filter((x) => x.verdict === "correct").length;
-    return { n: c.length, sure: sure.length, sureRight: right, traps: jget(TRAPS).length };
+    const last = c.slice(-40), cbm = last.length ? +(last.reduce((t, x) => t + cbmOf(x), 0) / last.length).toFixed(2) : null;
+    return { n: c.length, sure: sure.length, sureRight: right, traps: jget(TRAPS).length, cbm };
   }
-  const TAG = /^\s*\[\[(correct|partly|wrong)\]\]\s*/i;
+  const TAG = /^\s*\[\[(correct|partly|wrong)\]\]\s*/i, TYPE = /\[\[type:(unknown|misread|confused|reasoning)\]\]\s*/i;
+  const ERRS = "ix_tutor_errtypes_v1", TYPE_NAME = { unknown: "📕 never learned", misread: "👓 misread the stem", confused: "🔀 look-alikes", reasoning: "🧩 reasoning" };
+  function errTypes() { const o = {}; jget(ERRS).forEach((x) => { o[x.t] = (o[x.t] || 0) + 1; }); return o; }
+  function badge(text) {
+    const m = TAG.exec(text), t = TYPE.exec(text), body = text.replace(TAG, "").replace(TYPE, "");
+    return (m ? '<span class="ixTverdict v-' + m[1].toLowerCase() + '">' + VBADGE[m[1].toLowerCase()] + "</span>" : "") + (t ? '<span class="ixTverdict v-type">' + TYPE_NAME[t[1].toLowerCase()] + "</span>" : "") + (md(body) || "<p class='ixTdots'>…</p>");
+  }
 
   /* ───── language: plain English, or Egyptian Arabic with the exam's English terms ───── */
   const LANG = "ix_tutor_lang_v1";
@@ -140,9 +165,26 @@
     return c;
   }
   function inlinePaint(c, text) {
-    const m = TAG.exec(text), body = m ? text.replace(TAG, "") : text;
-    c.querySelector(".ixTtxt").innerHTML = (m ? '<span class="ixTverdict v-' + m[1].toLowerCase() + '">' + VBADGE[m[1].toLowerCase()] + "</span>" : "") + (md(body) || "<p class='ixTdots'>…</p>");
+    c.querySelector(".ixTtxt").innerHTML = badge(text);
   }
+
+  /* ───── v22 WORK LESS, LIVE MORE: study is a fixed daily budget, life is the default ───── */
+  const LIFE = "ix_life_v1", DAYK = "ix_day_v1";
+  function life() { let o = {}; try { o = JSON.parse(ls.get(LIFE, "{}")) || {}; } catch (e) {} return { mins: o.mins || 60, stop: o.stop || "22:30", off: o.off == null ? 5 : o.off }; }
+  function setLife(o) { ls.set(LIFE, JSON.stringify(Object.assign(life(), o))); }
+  const ymd = (d) => { d = d || new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); };
+  function day() { let o = {}; try { o = JSON.parse(ls.get(DAYK, "{}")) || {}; } catch (e) {} if (o.d !== ymd()) o = { d: ymd(), used: 0, extra: 0, last: 0 }; return o; }
+  function tickDay() { const o = day(), now = Date.now(); if (o.last && now - o.last < 6 * 60e3) o.used += (now - o.last) / 60e3; else o.used += 1; o.last = now; ls.set(DAYK, JSON.stringify(o)); return o; }
+  function extend(min) { const o = day(); o.extra += min || 10; ls.set(DAYK, JSON.stringify(o)); }
+  function lifeGate() {
+    const L = life(), now = new Date(), o = day();
+    if (L.off >= 0 && now.getDay() === L.off) return "Today is your day off. Live. 🌿 (Reviews wait for tomorrow; nothing is lost. To study anyway: ⏱ → +10 min.)";
+    const [h, m] = L.stop.split(":").map(Number);
+    if (Number.isFinite(h) && now.getHours() * 60 + now.getMinutes() >= h * 60 + (m || 0) && !o.extra) return "It is past your stop time (" + L.stop + "). Sleep is when today's learning is stored. Done for today ✅ (⏱ → +10 min if you really must).";
+    if (o.used >= L.mins + o.extra) return "✅ Done for today: " + Math.round(o.used) + " focused minutes. That was the plan; the rest of the day is yours. (⏱ → +10 min to finish something.)";
+    return null;
+  }
+  function dayState() { const L = life(), o = day(); return { used: Math.round(o.used), budget: L.mins + o.extra, left: Math.max(0, Math.round(L.mins + o.extra - o.used)), gate: lifeGate() }; }
 
   /* ───── v21 cost guard: what this week's answers cost, and a weekly cap the owner sets ───── */
   const SPEND = "ix_tutor_spend_v1", CAPK = "ix_tutor_cap_v1", DEFAULT_CAP = 2;
@@ -185,11 +227,27 @@
     } catch (e) { return null; }
   }
 
+  function triageText() {
+    const st = examinerStyle(), rows = Object.entries(st).sort((a, b) => b[1].n - a[1].n);
+    const tot = rows.reduce((t, r) => t + r[1].n, 0);
+    return "CHAPTER WEIGHT (practice half of the past-paper bank; share of all past questions):\n" + rows.map(([c, o]) => "- " + c + " (" + o.subject + "): " + o.n + " = " + ((100 * o.n) / tot).toFixed(1) + "%").join("\n") +
+      "\nERROR TYPES so far: " + JSON.stringify(errTypes()) + "\nDAILY BUDGET: " + life().mins + " min, day off weekday " + life().off;
+  }
+  function blindRange() {
+    const b = jget(BLIND); let n = 0, k = 0; b.forEach((x) => { n += x.n; k += x.k; });
+    if (n < 5) return { n, k, p: null };
+    const z = 1.2816, ph = k / n, den = 1 + (z * z) / n, c = (ph + (z * z) / (2 * n)) / den, h = (z * Math.sqrt((ph * (1 - ph)) / n + (z * z) / (4 * n * n))) / den;
+    return { n, k, p: ph, lo: Math.max(0, c - h), hi: Math.min(1, c + h) };
+  }
   function statsText() {
     const c = jget(CAL), wk = c.filter((x) => x.at > Date.now() - 7 * DAY), k = calibration(), m = memory(), sp = spend();
     const cnt = (v) => wk.filter((x) => x.verdict === v).length;
     return "STATS (last 7 days, from this device):\n- judged answers: " + wk.length + " (right " + cnt("correct") + ", partly " + cnt("partly") + ", wrong " + cnt("wrong") + ")\n- said 'sure': " + k.sure + " times, right " + k.sureRight + " (all time); traps: " + k.traps +
       "\n- memory deck: " + m.total + " ideas, " + m.due + " due now, " + m.solid + " solid\n- AI spend this week: $" + sp.usd.toFixed(2) + " of $" + cap().toFixed(2) + " (" + sp.calls + " calls)" +
+      "\n- certainty-based score (last 40, range −6 to +3; above 1.5 means you know what you know): " + (k.cbm == null ? "not enough yet" : k.cbm) +
+      "\n- error types: " + JSON.stringify(errTypes()) +
+      "\n- blind checks (new questions, AI off): " + (blindRange().p == null ? "fewer than 5 answered" : Math.round(blindRange().p * 100) + "% (" + Math.round(blindRange().lo * 100) + "–" + Math.round(blindRange().hi * 100) + "%) on " + blindRange().n) +
+      "\n- today: " + dayState().used + " of " + dayState().budget + " planned minutes" +
       "\n- topics with traps: " + Array.from(new Set(jget(TRAPS).map((t) => t.topic))).slice(-6).join("; ");
   }
   /* ───── OpenRouter ───── */
@@ -198,9 +256,15 @@
     opts = opts || {}; build();
     const key = ls.get(KEY, "");
     if (!key) { openSetup("Add your key first."); return; }
+    if (blindOn) { const t0 = "A blind check is running: the AI is off until you finish it."; build(); addMsg("tutor", t0); if (opts.inline) inlinePaint(inlineCard(opts.inline), t0); return; }
     if (mockRunning()) { const lockT = "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."; addMsg("tutor", lockT); if (opts.inline) inlinePaint(inlineCard(opts.inline), lockT); return; }
     const sp = spend();
     if (sp.usd >= cap()) { const capT = "This week's AI budget ($" + cap().toFixed(2) + ") is used up ($" + sp.usd.toFixed(2) + "). It resets on Monday, or raise it in ⚙︎. Everything else in the app still works."; build(); addMsg("tutor", capT); if (opts.inline) inlinePaint(inlineCard(opts.inline), capT); return; }
+    const LIGHT = { week: 1, examday: 1, triage: 1, plan: 1 };
+    const gate = !LIGHT[mode] && !opts.force ? lifeGate() : null;
+    if (gate) { addMsg("tutor", gate); if (opts.inline) inlinePaint(inlineCard(opts.inline), gate); sub(); return; }
+    tickDay();
+    if (mode === "triage") extraContext = (extraContext ? extraContext + "\n\n" : "") + triageText();
     if (mode === "week") extraContext = (extraContext ? extraContext + "\n\n" : "") + statsText();
     if (mode === "review") {
       const due = dueCards();
@@ -257,6 +321,7 @@
       if (m) {
         const vd = m[1].toLowerCase();
         conf = myConf; record(vd, lastTutor); out.classList.add("v-" + vd);
+        const ty = TYPE.exec(text); if (ty) { const e = jget(ERRS); e.push({ t: ty[1].toLowerCase(), at: Date.now(), topic: topicKey() }); ls.set(ERRS, JSON.stringify(e.slice(-300))); }
         if (activeCard && mode !== "review") { reschedule(activeCard, vd); activeCard = null; }
         else if (vd !== "correct") addCard(lastTutor.slice(-400), userText);
       }
@@ -292,6 +357,10 @@
     today: { label: "▶ Today", hidden: true, brief: "TASK: zero-decision daily session coach. TODAY gives what is due and the open lesson. In at most 4 short lines say the order for today (reviews first, then the lesson loop, then stop), the minutes, and the exact stop point ('done for today' after it). Then start step 1 immediately." },
     week: { label: "📈 My week", prompt: "Give me my honest weekly report.", brief: "TASK: honest weekly report from STATS only (never invent numbers). 6 short lines: what went well, the weakest pattern (sure-but-wrong, topics), memory deck (due/solid), AI spend, and ONE change for next week. No grade words, no flattery." },
     essay: { label: "📝 Grade my essay", sheet: true, brief: "" },
+    blind: { label: "🧪 Blind check", sheet: true, brief: "" },
+    viva: { label: "🎙 Viva", pro: true, prompt: "Examine me like the oral exam on this topic.", brief: "TASK: oral (viva) examiner. One question at a time, in this order: identify/describe a structure, its function, a lesion and what the patient shows, then 'why?'. Wait after each. Judge with tags. Be brisk and fair like a Kasr Al Ainy examiner; push one level deeper when they are right." },
+    examday: { label: "🎯 Exam-day plan", prompt: "Give me my exam-day protocol.", brief: "TASK: exam-day protocol for a Kasr Al Ainy MCQ or written paper, max 10 short lines: minutes per question (from the number of questions and time if the student gives them; otherwise ask), first pass answer what you know and mark the rest, underline except/not/most, change an answer only with a concrete reason, written: outline first then fill, draw-and-label where possible, last 5 minutes check every question answered. Then: sleep and food the night before; no new topics in the last 24 hours." },
+    triage: { label: "✂️ What to drop", pro: true, prompt: "If time is short, what should I skip?", brief: "TASK: honest triage. Using CHAPTER WEIGHT, pick the lowest-yield 15-20% of chapters the student can skip or only skim if time is short, and the top chapters that must be solid. Say roughly what share of past questions the skipped part held. Then fit the rest into DAILY BUDGET. Never suggest more daily minutes; cut scope instead." },
     postmortem: { label: "🩻 Post-mortem", pro: true, sheet: true, brief: "TASK: exam post-mortem. EXAM QUESTIONS holds what the student remembers from the real exam, each with how often the past-paper bank asked something close. Label each one: (A) was in past papers, known but missed; (B) in the topic but asked a new way; (C) never in the bank: lecture-only content. Then count A/B/C, say what that means for the NEXT exam's study (e.g. many C = lectures matter more than the bank), and give a 3-line plan. Honest, no blame." },
     import: { label: "Notes from photo", pro: true, hidden: true, brief: "TASK: transcribe the attached photo of the student's own notes or handout into clean study notes: headings and short bullet points, every fact exactly as written, nothing added. If something is unreadable write [unclear]. No commentary." },
     why: { label: "Why?", pro: true, hidden: true, brief: "TASK: the student tapped WHY on the text in SELECTED. Answer in exactly these parts, each short:\n**🧠 Why** — the mechanism behind it, from first principles, 3-5 short lines.\n**👁 Picture it** — one vivid image, analogy or everyday comparison.\n**🔒 Lock it in** — one memory hook or mnemonic, and what to link it to that they already know.\n**🎯 In the exam** — use EXAM RELEVANCE honestly: how often and how it was asked, the classic trap, and whether it is a written-exam point too. If the data shows no past question, say that plainly.\n**✅ Check** — one question that needs understanding. Then wait." },
@@ -313,7 +382,7 @@
     root = document.createElement("div");
     root.className = "ixT"; root.setAttribute("role", "dialog"); root.setAttribute("aria-label", "AI tutor");
     root.innerHTML =
-      '<div class="ixTbox"><div class="ixThd"><b>🧠 Tutor</b><span class="ixTsub" id="ixTsub"></span><button type="button" data-t="lang" title="Explain in Egyptian Arabic / English" id="ixTlang"></button><button type="button" data-t="notes" title="My lecture notes for this topic">📝</button><button type="button" data-t="setup" title="Key and model">⚙︎</button><button type="button" data-t="close" aria-label="Close">✕</button></div>' +
+      '<div class="ixTbox"><div class="ixThd"><b>🧠 Tutor</b><span class="ixTsub" id="ixTsub"></span><button type="button" data-t="life" title="My day: study budget, stop time, day off">⏱</button><button type="button" data-t="lang" title="Explain in Egyptian Arabic / English" id="ixTlang"></button><button type="button" data-t="notes" title="My lecture notes for this topic">📝</button><button type="button" data-t="setup" title="Key and model">⚙︎</button><button type="button" data-t="close" aria-label="Close">✕</button></div>' +
       '<div class="ixTmodes">' + Object.keys(MODES).filter((k) => !MODES[k].hidden).map((k) => '<button type="button" data-mode="' + k + '">' + MODES[k].label + "</button>").join("") + "</div>" +
       '<div class="ixTlog" id="ixTlog"></div>' +
       '<div class="ixTconf" role="group" aria-label="How sure are you?"><span>How sure?</span><button type="button" data-conf="guess">😬 Guessing</button><button type="button" data-conf="unsure">🤔 Unsure</button><button type="button" data-conf="sure">😎 Sure</button></div>' +
@@ -330,6 +399,8 @@
       else if (b.dataset.conf) { conf = conf === b.dataset.conf ? null : b.dataset.conf; markConf(); }
       else if (b.dataset.mode === "postmortem") openPostmortem();
       else if (b.dataset.mode === "essay") openEssay();
+      else if (b.dataset.mode === "blind") openBlind();
+      else if (b.dataset.t === "life") openLife();
       else if (b.dataset.mode && !busy) ask(MODES[b.dataset.mode].prompt, b.dataset.mode);
     });
     root.querySelector("form").addEventListener("submit", (e) => {
@@ -344,8 +415,7 @@
   function setBusy(on) { if (sendBtn) sendBtn.textContent = on ? "Stop" : "Send"; }
   const VBADGE = { correct: "✅ Right", partly: "🟡 Partly", wrong: "❌ Not yet" };
   function paint(el, text) {
-    const m = TAG.exec(text), body = m ? text.replace(TAG, "") : text;
-    el.querySelector(".ixTtxt").innerHTML = (m ? '<span class="ixTverdict v-' + m[1].toLowerCase() + '">' + VBADGE[m[1].toLowerCase()] + "</span>" : "") + (md(body) || "<p class='ixTdots'>…</p>");
+    el.querySelector(".ixTtxt").innerHTML = badge(text);
     log.scrollTop = log.scrollHeight;
   }
   function addMsg(who, text, live) {
@@ -361,7 +431,7 @@
     if (c.length) { const b = document.createElement("button"); b.type = "button"; b.className = "ixTclear"; b.dataset.t = "clear"; b.textContent = "Clear the conversation"; log.prepend(b); }
     log.scrollTop = log.scrollHeight;
   }
-  function sub() { const el = root && root.querySelector("#ixTsub"); if (el) { const n = notesFor(topicKey()); const k = calibration(); el.textContent = (topicKey() === "general" ? "" : topicKey().slice(0, 32)) + (n ? " · notes ✓" : "") + (k.sure ? " · sure & right " + k.sureRight + "/" + k.sure : "") + (k.traps ? " · traps " + k.traps : "") + (memory().due ? " · 🔁 " + memory().due + " due" : "") + " · $" + spend().usd.toFixed(2) + "/wk"; } }
+  function sub() { const el = root && root.querySelector("#ixTsub"); if (el) { const n = notesFor(topicKey()); const k = calibration(); el.textContent = (topicKey() === "general" ? "" : topicKey().slice(0, 32)) + (n ? " · notes ✓" : "") + (k.sure ? " · sure & right " + k.sureRight + "/" + k.sure : "") + (k.traps ? " · traps " + k.traps : "") + (memory().due ? " · 🔁 " + memory().due + " due" : "") + (k.cbm != null ? " · CBM " + k.cbm : "") + " · ⏱ " + dayState().used + "/" + dayState().budget + "m · $" + spend().usd.toFixed(2) + "/wk"; } }
   function open() {
     build();
     if (mockRunning()) { renderLog(); addMsg("tutor", "A mock exam is running. The tutor comes back when you submit it, so the mock stays a real test."); root.classList.add("on"); return; }
@@ -456,6 +526,75 @@
       } catch (e) { st.textContent = "Could not mark it: " + e.message; }
     };
   }
+  function openLife() {
+    build(); root.classList.add("on");
+    const L = life(), d = dayState(), days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const s = sheet(
+      "<h3>⏱ My day</h3><p><b>Work less, live more.</b> You choose the minutes; the app fits the exam into them and cuts the lowest-yield topics openly (✂️ What to drop), never the other way round. When the minutes are used, the day is done.</p>" +
+      "<p>Today: <b>" + d.used + " of " + d.budget + " min</b>" + (d.gate ? " · " + E(d.gate.split(".")[0]) : "") + "</p>" +
+      '<label>Focused study minutes per day<input type="number" id="ixLmin" min="15" max="300" step="5" value="' + L.mins + '"></label>' +
+      '<label>Stop time (no studying after it: sleep stores what you learned)<input type="time" id="ixLstop" value="' + E(L.stop) + '"></label>' +
+      '<label>Day off every week<select id="ixLoff">' + ['<option value="-1">none</option>'].concat(days.map((n, i) => '<option value="' + i + '"' + (L.off === i ? " selected" : "") + ">" + n + "</option>")).join("") + "</select></label>" +
+      '<div class="ixTrow"><button type="button" class="primary" id="ixLsave">Save</button><button type="button" id="ixLplus">+10 min today</button><button type="button" data-x>Close</button></div><p class="ixTstatus" id="ixLst"></p>'
+    );
+    s.querySelector("#ixLsave").onclick = () => { setLife({ mins: Math.max(15, +s.querySelector("#ixLmin").value || 60), stop: s.querySelector("#ixLstop").value || "22:30", off: +s.querySelector("#ixLoff").value }); s.querySelector("#ixLst").textContent = "✓ Saved."; sub(); };
+    s.querySelector("#ixLplus").onclick = () => { extend(10); s.querySelector("#ixLst").textContent = "+10 minutes for today. Finish one thing, then stop."; sub(); };
+  }
+
+  /* ───── v22 blind check: new questions from the professor, checked by a second model, answered with the AI OFF;
+     the only readiness number that counts ───── */
+  const BLIND = "ix_tutor_blind_v1";
+  let blindOn = false;
+  async function makeBlind(key) {
+    const sys = "You write Kasr Al Ainy exam MCQs. From the topic and notes below, write 6 NEW single-best-answer MCQs that test understanding (mechanism, clinical, lesion, 'except'), not copies of anything shown. Reply ONLY with JSON: {\"items\":[{\"stem\":\"...\",\"options\":{\"a\":\"...\",\"b\":\"...\",\"c\":\"...\",\"d\":\"...\",\"e\":\"...\"},\"key\":\"a\",\"why\":\"one line\"}]}\n\n" + context(relevanceText(screen().title + " " + screen().body.slice(0, 600)));
+    const r = await fetch(API + "/chat/completions", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
+      body: JSON.stringify({ model: ls.get(MODEL_PRO, DEFAULT_PRO), max_tokens: 2500, usage: { include: true }, messages: [{ role: "system", content: sys }, { role: "user", content: "Write the 6 questions." }] }) });
+    if (!r.ok) throw new Error("OpenRouter answered " + r.status);
+    const j = await r.json(); if (j.usage && j.usage.cost) addSpend(j.usage.cost);
+    const t = (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || "";
+    const items = (JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1)).items || []).filter((x) => x && x.stem && x.options && x.options[x.key]);
+    const checks = await Promise.all(items.map((x) => verify(x.stem + "\n" + Object.entries(x.options).map(([k, v]) => k + ") " + v).join("\n"), key)));
+    return items.filter((x, i) => !(checks[i] && /^⚠️/.test(checks[i])));  // drop only the items the checker flagged
+  }
+  function openBlind() {
+    build(); root.classList.add("on");
+    const key = ls.get(KEY, ""); if (!key) { openSetup("Add your key first."); return; }
+    const g = lifeGate(); if (g) { addMsg("tutor", g); return; }
+    if (spend().usd >= cap()) { addMsg("tutor", "This week's AI budget is used up."); return; }
+    const s = sheet("<h3>🧪 Blind check</h3><p>New questions you have never seen, written from this topic and checked by a second model. <b>The AI is off until you finish.</b> Say how sure you are on each: a confident wrong answer costs more than a guess.</p><div id=\"ixBq\"><p class=\"ixTstatus\">Writing your questions…</p></div>");
+    const box = s.querySelector("#ixBq"), topic = topicKey();
+    makeBlind(key).then((items) => {
+      if (!items.length) { box.innerHTML = "<p>No clean questions came back. Try again.</p><button type='button' data-x>Close</button>"; return; }
+      blindOn = true; document.documentElement.classList.add("ixBlind");
+      let i = 0, k = 0, cbm = 0; const wrong = [];
+      const show = () => {
+        if (i >= items.length) {
+          blindOn = false; document.documentElement.classList.remove("ixBlind");
+          const b = jget(BLIND); b.push({ topic, n: items.length, k, cbm, at: Date.now() }); ls.set(BLIND, JSON.stringify(b.slice(-200)));
+          wrong.forEach((x) => addCard("Blind check: " + x.stem + " → " + x.options[x.key], ""));
+          const br = blindRange();
+          box.innerHTML = "<div class='ixTgrade'><b>" + k + " / " + items.length + "</b> <span>certainty score " + cbm + "</span></div>" +
+            (br.p != null ? "<p>All blind checks so far: <b>" + Math.round(br.p * 100) + "%</b> (" + Math.round(br.lo * 100) + "–" + Math.round(br.hi * 100) + "%) on " + br.n + " new questions. This is the number to trust.</p>" : "<p>A few more blind checks and this becomes your real readiness range.</p>") +
+            (wrong.length ? "<p>The " + wrong.length + " you missed are now memory cards.</p>" : "") + "<div class='ixTrow'><button type='button' data-x class='primary'>Close</button></div>";
+          sub(); return;
+        }
+        const x = items[i];
+        box.innerHTML = "<p class='ixTsmall'>" + (i + 1) + " / " + items.length + "</p><p><b>" + E(x.stem) + "</b></p>" +
+          Object.entries(x.options).map(([kk, v]) => "<label class='ixBopt'><input type='radio' name='ixBo' value='" + E(kk) + "'> " + E(kk.toUpperCase() + ") " + v) + "</label>").join("") +
+          "<div class='ixTrow'><button type='button' data-c='guess'>😬 Guess</button><button type='button' data-c='unsure'>🤔 Unsure</button><button type='button' data-c='sure'>😎 Sure</button></div>";
+        box.querySelectorAll("[data-c]").forEach((btn) => { btn.onclick = () => {
+          const pick = (box.querySelector("input[name=ixBo]:checked") || {}).value; if (!pick) return;
+          const ok = pick === x.key; if (ok) k++; else wrong.push(x);
+          cbm += CBM[btn.dataset.c][ok ? 0 : 2];
+          const c = jget(CAL); c.push({ conf: btn.dataset.c, verdict: ok ? "correct" : "wrong", at: Date.now(), blind: 1 }); ls.set(CAL, JSON.stringify(c.slice(-400)));
+          box.innerHTML = "<p>" + (ok ? "✅ Right." : "❌ It was " + E(x.key.toUpperCase()) + ".") + " " + E(x.why || "") + "</p><div class='ixTrow'><button type='button' class='primary' id='ixBn'>Next</button></div>";
+          box.querySelector("#ixBn").onclick = () => { i++; show(); };
+        }; });
+      };
+      show();
+    }).catch((e) => { box.innerHTML = "<p>Could not write the questions: " + E(e.message) + "</p><button type='button' data-x>Close</button>"; });
+  }
+
   function openPostmortem() {
     build(); root.classList.add("on");
     const s = sheet(
@@ -492,6 +631,7 @@
       "<h3>My lecture notes</h3><p>For: <b>" + E(k) + "</b></p>" +
       "<p>Paste the slides' text, or type what the doctor stressed while you watch the lecture (dictation works). The tutor treats these as the most important source for this topic, so what was taught in the lecture is taught here too.</p>" +
       '<textarea id="ixTnotes" rows="12" placeholder="Paste or type the lecture points here…">' + E(notesFor(k)) + "</textarea>" +
+      '<div class="ixTrow"><button type="button" id="ixTdiff">🔍 What the past papers never asked</button></div><div id="ixTdiffOut" class="ixTsmall"></div>' +
       '<label class="ixTfile">📥 Add from a file: slides PDF, text, or a photo of your notes or handout<input type="file" id="ixTfile" accept=".pdf,.txt,.md,image/*"></label><p class="ixTstatus" id="ixTfst"></p>' +
       '<div class="ixTrow"><button type="button" class="primary" id="ixTnsave">Save</button><button type="button" data-x>Close</button></div><p class="ixTstatus" id="ixTnst"></p>'
     );
@@ -504,6 +644,16 @@
         ta.value = (ta.value.trim() ? ta.value.trim() + "\n\n" : "") + "— from " + f.name + " —\n" + txt.trim();
         st.textContent = "✓ Added " + txt.trim().length.toLocaleString("en") + " characters. Check them, then Save.";
       } catch (err) { st.textContent = "Could not read it: " + err.message; }
+    };
+    s.querySelector("#ixTdiff").onclick = () => {
+      const lines = s.querySelector("#ixTnotes").value.split(/\n+|(?<=[.;])\s+/).map((x) => x.replace(/^[-•*\d.)\s]+/, "").trim()).filter((x) => x.length > 25 && !/^—/.test(x));
+      const only = lines.filter((l) => !((relevance(l) || {}).n));
+      const out = s.querySelector("#ixTdiffOut");
+      if (!lines.length) { out.textContent = "Add the lecture's points first."; return; }
+      out.innerHTML = "<p><b>" + only.length + " of " + lines.length + "</b> lecture points have no close past-paper question. These are where the bank cannot prepare you (the 16 Nov lesson):</p><ul>" + only.slice(0, 20).map((l) => "<li>" + E(l.slice(0, 160)) + "</li>").join("") + "</ul>" +
+        (only.length ? "<button type='button' id='ixTdiffCards'>Make them memory cards</button>" : "");
+      const b = out.querySelector("#ixTdiffCards");
+      if (b) b.onclick = () => { only.slice(0, 25).forEach((l) => addCard("LECTURE-ONLY (no past paper asked it): " + l, "")); b.textContent = "✓ " + Math.min(25, only.length) + " cards made"; b.disabled = true; };
     };
     s.querySelector("#ixTnsave").onclick = () => {
       const ok = saveNotes(k, s.querySelector("#ixTnotes").value);
@@ -583,7 +733,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), gradeEssay, openEssay: () => openEssay(), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
+  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: () => openEssay(), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();

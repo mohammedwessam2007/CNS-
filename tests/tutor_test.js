@@ -20,7 +20,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   });
   const p = await ctx.newPage(); const errs = [];
   p.on('pageerror', (e) => errs.push(e.message));
-  await p.goto(BASE); await p.waitForTimeout(5000);
+  await p.goto(BASE); await p.evaluate(() => localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 600, stop: '23:59', off: -1 }))); await p.waitForTimeout(5000);
   const has = await p.evaluate(() => ({ tab: !!document.getElementById('ixTtab'), menu: !!document.getElementById('tutorBtn'), api: !!window.IX_TUTOR }));
   check('T1', 'The tutor tab and menu button appear, no page errors', has.tab && has.api && !errs.length, { has, errs: errs.slice(0, 3) });
 

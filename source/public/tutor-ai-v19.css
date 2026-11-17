@@ -64,3 +64,9 @@
 .ixTfile{display:grid;gap:6px;font-weight:700;padding:10px;border:1px dashed rgba(255,255,255,.25);border-radius:12px}
 .ixTfile input{font-size:14px}
 .ixTgrade b{font-size:26px;color:#ffd36e}.ixTgrade span{color:#9aa6c0;font-size:13px}
+/* v22 work less, live more */
+.ixTverdict.v-type{background:rgba(126,166,255,.18);color:#c9d8ff;margin-left:6px}
+.ixBopt{display:flex!important;gap:8px;align-items:flex-start;font-weight:600!important;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:10px;cursor:pointer}
+.ixBopt input{width:auto!important;margin-top:4px}
+html.ixBlind .ixAiBar,html.ixBlind .ixAiFig,html.ixBlind .ixTwhy,html.ixBlind .ixTtab{display:none!important}
+.ixTsheetIn select{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#141c33;color:#fff;font:inherit;font-size:16px;padding:11px 12px}

@@ -29,7 +29,7 @@ const LEARN_NEXT = '#player [data-act="visual-hide"], #player [data-act="v15-nex
     const sse = reply.map((w) => 'data: ' + JSON.stringify({ choices: [{ delta: { content: w } }] }) + '\n\n').join('') + 'data: ' + JSON.stringify({ choices: [{ delta: {} }], usage: { cost: 0.0123 } }) + '\n\ndata: [DONE]\n\n';
     return r.fulfill({ status: 200, contentType: 'text/event-stream', body: sse });
   });
-  await p.evaluate(() => { localStorage.setItem('ix_tutor_key_v1', 'sk-or-v1-TESTKEY123'); ['ix_tutor_cards_v1', 'ix_tutor_spend_v1', 'ix_tutor_cap_v1', 'ix_tutor_chat_v1'].forEach((k) => localStorage.removeItem(k)); });
+  await p.evaluate(() => { localStorage.setItem('ix_tutor_key_v1', 'sk-or-v1-TESTKEY123'); localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 600, stop: '23:59', off: -1 })); ['ix_tutor_cards_v1', 'ix_tutor_spend_v1', 'ix_tutor_cap_v1', 'ix_tutor_chat_v1'].forEach((k) => localStorage.removeItem(k)); });
   const sysOf = (b) => b.messages[0].content;
 
   // V3 cost counted
