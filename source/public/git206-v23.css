@@ -43,3 +43,14 @@
 .ixHgate{padding:10px 12px;border-radius:12px;background:rgba(79,209,181,.12);border:1px solid rgba(79,209,181,.4);margin:8px 0}
 html.ixHmock .ixTtab,html.ixHmock .ixHtab,html.ixHmock .ixTwhy,html.ixHmock .ixHq .ixAiBar{display:none!important}
 @media(max-width:600px){.ixHtab{top:auto;bottom:calc(210px + env(safe-area-inset-bottom));padding:8px 12px}}
+/* v24 exam plan */
+.ixPexams{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 4px}
+.ixPexams div{padding:10px;border-radius:12px;background:rgba(255,211,110,.08);border:1px solid rgba(255,211,110,.3);text-align:center}
+.ixPexams b{display:block;font-size:28px;color:#ffd36e}.ixPexams span{font-size:12.5px;color:#c7d0e4}
+.ixPsteps{display:grid;gap:8px}
+.ixPstep{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04)}
+.ixPstep div{flex:1;min-width:0}.ixPstep b{display:block;font-size:14.5px}.ixPstep span{font-size:12.5px;color:#9aa6c0}
+.ixPstep input{width:24px;height:24px;accent-color:#4fd1b5}
+.ixPstep.done{opacity:.6}.ixPstep.done b{text-decoration:line-through}
+.ixPweek{padding-left:18px}.ixPweek li{margin:4px 0}
+.ixPsheet{white-space:pre-wrap;font:inherit;font-size:14px;background:rgba(255,255,255,.04);padding:10px;border-radius:10px}

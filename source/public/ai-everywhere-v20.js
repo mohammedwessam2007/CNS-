@@ -104,7 +104,10 @@
   // v21 zero-decision start: what is due from the memory deck first, then this page's learning loop
   function today(host) {
     const m = T().memory ? T().memory() : { due: 0 }, d = T().dayState ? T().dayState() : { left: 60, gate: null };
-    if (d.gate) return { label: "✅ Done for today", main: true, run: () => go(host, "Am I done for today?", "plan", "", { force: false }) };
+    if (d.gate) return { label: "✅ Done for today", main: true, run: () => (window.IX_PLAN ? IX_PLAN.open() : go(host, "Am I done for today?", "plan", "", { force: false })) };
+    // v24: the exam plan decides what "today" is
+    const ns = window.IX_PLAN && IX_PLAN.nextStep ? IX_PLAN.nextStep() : null;
+    if (ns) return { label: "▶ Today: " + ns.step.label.replace(/^(Learn with the professor|10 MCQs|Write from a blank page|Blind check \(new questions, AI off\)): /, "").slice(0, 34) + " · " + d.left + " min left", main: true, run: () => IX_PLAN.runStep(ns.step) };
     return { label: (m.due ? "▶ Today · " + m.due + " to review" : "▶ Learn this with me") + " · " + d.left + " min left", main: true,
       run: () => m.due ? go(host, "Start my day: review what is due.", "review") : go(host, "Teach me this with the full loop, one step at a time.", "loop") };
   }

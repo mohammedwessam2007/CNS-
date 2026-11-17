@@ -29,3 +29,14 @@ Scored out of 10 by the person who built it, judged against one goal: **the most
 - LLM essay grading is unstable between runs (weighted kappa ~0.72) (hence three examiners and the median).
 - Retrieval practice and spacing: Larsen et al. 2009; spaced repetition in medical education, SMD 0.78.
 - Full list: `docs/AI_ARCHITECTURE_v20.md`.
+
+## v22 → v24 (18 Nov 2026)
+
+| Dimension | v21 | v22 (live more) | v23 (GIT 206) | **v24 (exam plan)** |
+|---|---|---|---|---|
+| Teaches what the exams ask | 6 | 6 | 8: 641 GIT MCQs, 159 written questions ranked | **8.5**: every GIT unit scheduled; CNS written ranked by weight |
+| Honest readiness | 7 | 8.5: blind checks | 9: GIT papers as AI-off mocks | **9** |
+| ADHD: no decisions | 8 | 8.5 | 8.5 | **9.5**: ▶ Today is the plan's next step, everywhere |
+| Work less, live more | 6 | 9 | 9 | **9.5**: the plan fits the minutes, Fridays off, light days |
+| Verified for real | 5 | 5 | 5 | **5**: still only a fake OpenRouter; live site not checked |
+| **Overall** | 7.5 | 8 | 8.5 | **9** (10 needs: your real-key run, CNS past written questions) |

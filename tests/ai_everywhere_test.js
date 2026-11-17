@@ -27,9 +27,10 @@ const LEARN_NEXT = '#player [data-act="visual-hide"], #player [data-act="v15-nex
   // A1 step screen
   const a1bar = await p.evaluate(() => { const b = document.querySelector('#player .ixAiBar'); return b ? b.innerText.replace(/\s+/g, ' ') : ''; });
   let n = sent.length;
-  await p.click('#player .ixAiBar button.main'); await tick(p, 1500);
+  // v24: the main button follows the exam plan; the inline answer is checked with 🤯 Simpler
+  await p.click('#player .ixAiBar button:has-text("Simpler")'); await tick(p, 1500);
   const a1 = await p.evaluate(() => { const o = document.querySelector('#player .ixAiOut'); return o ? o.innerText : ''; });
-  check('A1', 'A step screen has the professor bar; ▶ Learn this answers inside the page', /Learn this/.test(a1bar) && /Quiz me/.test(a1bar) && sent.length === n + 1 && /full learning loop/.test(sysOf(sent[n])) && /Mechanism/.test(a1), { a1bar: a1bar.slice(0, 90), inline: a1.slice(0, 50) });
+  check('A1', 'A step screen has the professor bar (▶ Today from the plan); Simpler answers inside the page', /Today|Learn this/.test(a1bar) && /Quiz me/.test(a1bar) && sent.length === n + 1 && /PAGE TEXT/.test(sysOf(sent[n])) && /Mechanism/.test(a1), { a1bar: a1bar.slice(0, 90), inline: a1.slice(0, 50) });
 
   // A2 a picture
   await tick(p, 2500);

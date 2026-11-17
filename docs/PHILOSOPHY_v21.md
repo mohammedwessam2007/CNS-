@@ -24,7 +24,7 @@
 | | v18 (before 16 Nov) | v21 | **v22 (now)** |
 |---|---|---|---|
 | The philosophy itself | 3 | 7 | **10**: one clear idea, ten rules, each with evidence and an enforcing feature |
-| How much of it is live in the app | 3 | 6 | **8.5**: every rule has its feature; two wait on you |
+| How much of it is live in the app | 3 | 6 | **9** (v24): every rule has its feature, the GIT material is in, and the whole course to the three exams runs as a day-by-day plan |
 
 The two parts that wait on you (they cannot be built from here):
 1. **Your slides**: rules 2 and 7 work best when blind checks and lecture-only points come from the real lectures.
@@ -33,3 +33,20 @@ The two parts that wait on you (they cannot be built from here):
 ## Not built, on purpose
 
 Fixed Pomodoro, voice tutor, more 3D, streak pressure, heavy gamification: weak evidence or few marks per hour. Every one of them would cost study time, which rule 1 forbids.
+
+## The brainstorm, done (v24)
+
+| Idea | Where it lives |
+|---|---|
+| Lecture vs bank diff | 📝 notes → 🔍 What the past papers never asked |
+| Readiness you cannot fool | 🧪 Blind check; GIT past papers as AI-off mocks |
+| Examiner modelling | Examiner style per chapter in every explanation; GIT written ranked by frequency and recency |
+| Certainty-based marking | Confidence on every answer (+3 / −6) |
+| Error types | Never learned / misread / look-alikes / reasoning |
+| Forgetting forecast | 📅 plan page: what falls due before each exam |
+| Exam-day protocol | 🎯 mode; a step on every light day and exam day |
+| One-page sheets | 📝 grader → Save as my one-page sheet; the light days open them |
+| Viva | 🎙 mode |
+| Protected life | ⏱ minutes, stop time, Fridays off; the plan cuts scope, not rest |
+
+What still waits on the owner: the CNS past written questions, a physiology MCQ set for 206, and one run with the real key.

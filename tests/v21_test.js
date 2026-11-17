@@ -61,7 +61,7 @@ const LEARN_NEXT = '#player [data-act="visual-hide"], #player [data-act="v15-nex
   await p.evaluate(() => IX_TUTOR.ask('dorsal column', null)); await tick(p, 1200);
   const c2 = await p.evaluate(() => JSON.parse(localStorage.getItem('ix_tutor_cards_v1') || '[]').map((c) => Object.assign(c, { later: c.due > Date.now() + 864e5 * 0.9 })));
   check('V4', 'A wrong answer becomes a card; when due, ▶ Today reviews it re-worded; right pushes it out',
-    c1.length === 1 && c1[0].future && /fine touch/.test(c1[0].idea) && /1 to review/.test(todayLbl) && /CARD/.test(revSys) && /NEW wording/.test(revSys) && c2[0].step === 1 && c2[0].later,
+    c1.length === 1 && c1[0].future && /fine touch/.test(c1[0].idea) && /review/i.test(todayLbl) && /CARD/.test(revSys) && /NEW wording/.test(revSys) && c2[0].step === 1 && c2[0].later,
     { cards: c1.length, idea: c1[0] && c1[0].idea, due1: c1[0] && c1[0].future, card: /CARD/.test(revSys), nw: /NEW wording/.test(revSys), dueOk: c2[0] && c2[0].later });
 
   // V5 second-model check on a generated MCQ

@@ -527,7 +527,9 @@
         const g = await gradeEssay(q, a);
         st.innerHTML = '<div class="ixTgrade"><b>' + g.median + " / 10</b> <span>(examiners gave " + g.lo + "–" + g.hi + (g.n < 3 ? ", " + g.n + " of 3 answered" : "") + ")</span></div>" +
           (g.good.length ? "<p>✅ " + g.good.map(E).join(" · ") + "</p>" : "") + (g.missing.length ? "<p><b>Missing or wrong:</b></p><ul>" + g.missing.map((x) => "<li>" + E(x) + "</li>").join("") + "</ul>" : "") +
-          '<p class="ixTsmall">A coach\'s estimate, not the real examiner. Rewrite only the missing points tomorrow, from memory.</p>';
+          '<p class="ixTsmall">A coach\'s estimate, not the real examiner. Rewrite only the missing points tomorrow, from memory.</p>' +
+          (window.IX_PLAN ? '<div class="ixTrow"><button type="button" id="ixTsheetSave">📄 Save as my one-page sheet</button></div>' : "");
+        const sv = st.querySelector("#ixTsheetSave"); if (sv) sv.onclick = () => { IX_PLAN.saveSheet(q, a, g.median); sv.textContent = "✓ Saved to your sheets"; sv.disabled = true; };
         g.missing.slice(0, 3).forEach((m) => addCard("Written answer to '" + q + "': include " + m, a.slice(0, 120)));
       } catch (e) { st.textContent = "Could not mark it: " + e.message; }
     };

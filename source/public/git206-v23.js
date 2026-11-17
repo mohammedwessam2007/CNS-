@@ -272,5 +272,13 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1500);
-  window.IX_GIT = { open, close, readiness, practicePool, papers: PAPERS, state: st };
+  // the exam plan starts rounds and mocks from outside the hub
+  function startCustom(title, pred, n) {
+    build(); root.classList.add("on");
+    if (T() && T().dayState && T().dayState().gate) { tab = "mcq"; render(); return 0; }
+    const qs = pick(practicePool().filter(pred), n || 10); if (!qs.length) return 0;
+    run = { qs, i: 0, k: 0, cbm: 0, mock: false, title }; showQ(); return qs.length;
+  }
+  function mockPaper(src) { build(); root.classList.add("on"); tab = "papers"; startMock(src); }
+  window.IX_GIT = { open, close, readiness, practicePool, papers: PAPERS, state: st, startCustom, mockPaper, mocked };
 })();
