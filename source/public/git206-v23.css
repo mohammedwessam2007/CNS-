@@ -1,0 +1,45 @@
+/* v23 GIT 206 hub */
+.ixHtab{position:fixed;right:0;top:calc(46% - 130px);z-index:61;transform:translateX(34%) rotate(-90deg);transform-origin:center;padding:9px 14px;border:1px solid rgba(255,255,255,.18);border-bottom:0;border-radius:12px 12px 0 0;background:#3b2a12;color:#ffd36e;font-weight:800;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.35);cursor:pointer;min-height:44px}
+.ixH{position:fixed;inset:0;z-index:78;display:none;background:rgba(4,7,14,.55)}
+.ixH.on{display:block}
+.ixHbox{position:absolute;inset:0;margin:auto;max-width:860px;display:flex;flex-direction:column;background:#0f1526;color:#eef2fb;padding-bottom:env(safe-area-inset-bottom)}
+.ixHhd{display:flex;align-items:center;gap:8px;padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ixHhd b{font-size:18px}
+.ixHsub{flex:1;min-width:0;font-size:12.5px;color:#9aa6c0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ixHhd button{min-width:44px;min-height:44px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#eef2fb;font-size:16px;cursor:pointer}
+.ixHtabs{display:flex;gap:6px;padding:10px 16px;overflow-x:auto}
+.ixHtabs button{flex:none;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,211,110,.35);background:rgba(255,211,110,.08);color:#ffe9b8;font-weight:800;cursor:pointer}
+.ixHtabs button[aria-selected="true"]{background:#ffd36e;color:#1a1205}
+.ixHbody{flex:1;overflow-y:auto;padding:6px 16px 24px;font-size:15px;line-height:1.55}
+.ixHbody h3{margin:16px 0 8px;font-size:16px}
+.ixHbody button{min-height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;font:inherit;font-weight:700;padding:0 14px;cursor:pointer}
+.ixHbody button.primary{background:#ffd36e;color:#1a1205;border-color:#ffd36e}
+.ixHrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.ixHchs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.ixHch{display:flex!important;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;padding:10px 12px!important;gap:2px}
+.ixHch span{font-size:12.5px;color:#9aa6c0;font-weight:600}
+.ixHq h3{font-size:17px;line-height:1.5}
+.ixHmeta{display:flex;flex-wrap:wrap;gap:10px;font-size:12.5px;color:#9aa6c0}
+.ixHoff{color:#ffb3c4;font-weight:800}.ixHclock{color:#ffd36e;font-weight:800}
+.ixHopts{display:grid;gap:8px}
+.ixHopt{text-align:left;padding:10px 12px!important;font-weight:600!important;line-height:1.45}
+.ixHopt b{display:inline-block;min-width:22px;color:#9fc1ff}
+.ixHopt.good{background:rgba(79,209,181,.18)!important;border-color:#4fd1b5!important}
+.ixHopt.bad{background:rgba(240,122,149,.18)!important;border-color:#f07a95!important}
+.ixHopt.mine{border-color:#ffd36e!important}
+.ixHconf{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:10px 0;font-size:13px;color:#9aa6c0}
+.ixHconf button[aria-pressed="true"]{background:#ffd36e;color:#1a1205}
+.ixHverdict{font-weight:800;margin:10px 0}.ixHverdict.good{color:#9fe6c9}.ixHverdict.bad{color:#ffb3c4}
+.ixHsmall{font-size:12.5px;color:#9aa6c0}
+.ixHlink{min-height:32px!important;padding:0 8px!important;font-size:12.5px!important}
+.ixHdone{text-align:center;padding:24px 0}.ixHbig{font-size:44px;font-weight:900;color:#ffd36e}
+.ixHpaper{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.ixHpaper span{display:block;font-size:12.5px;color:#9aa6c0}
+.ixHw{border-bottom:1px solid rgba(255,255,255,.08);padding:8px 0}
+.ixHw summary{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;cursor:pointer;min-height:44px;align-content:center}
+.ixHw summary span:last-child{font-size:12.5px;color:#9aa6c0;width:100%;padding-left:34px}
+.ixHrank{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:50%;background:#ffd36e;color:#1a1205;font-weight:900;font-size:12.5px}
+.ixHwq{padding:6px 0 6px 34px}.ixHwq p{margin:4px 0}
+.ixHgate{padding:10px 12px;border-radius:12px;background:rgba(79,209,181,.12);border:1px solid rgba(79,209,181,.4);margin:8px 0}
+html.ixHmock .ixTtab,html.ixHmock .ixHtab,html.ixHmock .ixTwhy,html.ixHmock .ixHq .ixAiBar{display:none!important}
+@media(max-width:600px){.ixHtab{top:auto;bottom:calc(210px + env(safe-area-inset-bottom));padding:8px 12px}}

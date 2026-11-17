@@ -43,8 +43,11 @@
   }
 
   /* ───── what the student is looking at ───── */
-  const mockRunning = () => { try { return !!(typeof S !== "undefined" && S && S.v16 && S.v16.mock); } catch (e) { return false; } };
+  const mockRunning = () => { try { return document.documentElement.classList.contains("ixHmock") || !!(typeof S !== "undefined" && S && S.v16 && S.v16.mock); } catch (e) { return false; } };
   function screen() {
+    // a screen outside #player (the GIT 206 hub) can say what the student is looking at
+    const ov = window.IX_SCREEN_OVERRIDE;
+    if (ov && ov.title) return { title: String(ov.title), eyebrow: String(ov.eyebrow || ""), body: String(ov.body || "").slice(0, 5000) };
     const t = (id) => { const el = document.getElementById(id); return el ? (el.innerText || "").trim() : ""; };
     const title = t("title"), eyebrow = t("eyebrow");
     let body = t("player").replace(/\n{3,}/g, "\n\n");
@@ -60,7 +63,8 @@
   const STOP = new Set("the and for with from that this which what when where into onto than then they them their there these those have has had been were was are is its it's not but all any each other such only also more most less very just about above below between through during after before under over same some both either neither nor can may might must should would could will shall our your his her him she he you who whom whose why how one two three four five first second third part parts type types called known form forms found make makes made used uses using cause causes caused lead leads due following true false except correct regarding".split(" "));
   function words(t) { return Array.from(new Set(String(t || "").toLowerCase().replace(/[^a-z0-9 -]/g, " ").split(/\s+/).filter((w) => w.length > 3 && !STOP.has(w)))); }
   function relevance(text) {
-    const bank = (window.EHSAN_QBANK && window.EHSAN_QBANK.questions) || [];
+    // CNS practice half + the DIG-206 bank's keyed items (it has no held-out half; its sealed check is the blind check)
+    const bank = ((window.EHSAN_QBANK && window.EHSAN_QBANK.questions) || []).concat(((window.IX_GIT206 && window.IX_GIT206.mcq) || []).filter((q) => q.answerKeys && q.answerKeys.length).map((q) => ({ split: "practice", stem: q.stem, options: q.options, answerText: (q.options.find((o) => o.key === q.answerKeys[0]) || {}).text, sourceTag: q.source, chapter: q.chapter })));
     const ws = words(text).slice(0, 24); if (!ws.length || !bank.length) return null;
     const hits = [];
     for (const q of bank) {
@@ -80,7 +84,8 @@
   function examinerStyle() {
     if (STYLE) return STYLE;
     STYLE = {};
-    for (const q of (window.EHSAN_QBANK && window.EHSAN_QBANK.questions) || []) {
+    const git = ((window.IX_GIT206 && window.IX_GIT206.mcq) || []).map((q) => ({ split: "practice", stem: q.stem, chapter: q.chapter, subject: "DIG-206 " + q.subject }));
+    for (const q of ((window.EHSAN_QBANK && window.EHSAN_QBANK.questions) || []).concat(git)) {
       if (q.split !== "practice") continue;
       const k = q.chapter || "?", o = STYLE[k] || (STYLE[k] = { n: 0, except: 0, clinical: 0, subject: q.subject });
       o.n++; if (/\b(except|not|false|least)\b/i.test(q.stem)) o.except++; if (/\b(year[- ]old|patient|presents?|complain|lesion of|injury|damage|man|woman|child)\b/i.test(q.stem)) o.clinical++;
@@ -505,7 +510,7 @@
     const tally = (k) => { const m = new Map(); runs.forEach((x) => x[k].forEach((t) => { const kk = String(t).toLowerCase().slice(0, 40); m.set(kk, (m.get(kk) || [0, t])); m.get(kk)[0]++; })); return [...m.values()].sort((x, y) => y[0] - x[0]).map((x) => x[1]); };
     return { median: med, lo: sc[0], hi: sc[sc.length - 1], n: runs.length, missing: tally("missing").slice(0, 5), good: tally("good").slice(0, 2) };
   }
-  function openEssay() {
+  function openEssay(preQ) {
     build(); root.classList.add("on");
     const s = sheet(
       "<h3>📝 Grade my essay</h3><p>Write your answer <b>from a blank page</b> first (paper is fine; type it here after). The professor marks it three times like an examiner and shows the middle mark and the spread, so one lucky or harsh run does not decide.</p>" +
@@ -513,6 +518,7 @@
       '<label>My answer<textarea id="ixTea" rows="10" placeholder="Headings and points as you would write them in the exam…"></textarea></label>' +
       '<div class="ixTrow"><button type="button" class="primary" id="ixTego">Mark it (3 examiners)</button><button type="button" data-x>Close</button></div><div class="ixTstatus" id="ixTest"></div>'
     );
+    if (preQ) s.querySelector("#ixTeq").value = preQ;
     s.querySelector("#ixTego").onclick = async () => {
       const q = s.querySelector("#ixTeq").value.trim(), a = s.querySelector("#ixTea").value.trim(), st = s.querySelector("#ixTest");
       if (!q || a.length < 20) { st.textContent = "Write the question and your answer first."; return; }
@@ -733,7 +739,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: () => openEssay(), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
+  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();
