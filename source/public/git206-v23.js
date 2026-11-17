@@ -115,7 +115,7 @@
     if (!q) return finish();
     window.IX_SCREEN_OVERRIDE = run.mock ? { title: "MOCK", body: "" } : { title: "GIT 206 · " + q.chapter, eyebrow: "DIG-206 " + q.subject, body: qText(q, false) };
     header();
-    body.innerHTML = '<div class="ixHq"><div class="ixHmeta"><span>' + E(run.title) + " · " + (run.i + 1) + " / " + run.qs.length + "</span>" + (run.mock ? '<span class="ixHclock" id="ixHclock"></span><span class="ixHoff">AI off</span>' : "") + '<span>' + E(q.source) + (q.ocr ? " · scanned" : "") + "</span></div>" +
+    body.innerHTML = '<div class="ixHq" data-qid="' + E(q.id) + '"><div class="ixHmeta"><span>' + E(run.title) + " · " + (run.i + 1) + " / " + run.qs.length + "</span>" + (run.mock ? '<span class="ixHclock" id="ixHclock"></span><span class="ixHoff">AI off</span>' : "") + '<span>' + E(q.source) + (q.ocr ? " · scanned" : "") + "</span></div>" +
       "<h3>" + E(q.stem) + "</h3><div class='ixHopts'>" + q.options.map((o) => '<button type="button" class="ixHopt" data-k="' + E(o.key) + '"><b>' + E(o.key.toUpperCase()) + "</b> " + E(o.text) + "</button>").join("") + "</div>" +
       "<div class='ixHconf'><span>How sure?</span><button type='button' data-c='guess'>😬 Guess</button><button type='button' data-c='unsure' aria-pressed='true'>🤔 Unsure</button><button type='button' data-c='sure'>😎 Sure</button></div>" +
       (!run.mock && !keyed(q) ? "<p class='ixHsmall'>Unsolved paper: after you answer, the professor gives his answer (his, not the official key).</p>" : "") +

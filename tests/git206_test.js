@@ -45,7 +45,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.click('#ixHbody .ixAiBar button'); await tick(p, 900);
   const hintSys = sent[n] ? sysOf(sent[n]) : '';
   check('G4', 'The hint before answering carries the question, never the key', /QUESTION \(DIG-206/.test(hintSys) && !/\nKEY:/.test(hintSys) && /NEVER say or hint/.test(hintSys), { has: /QUESTION/.test(hintSys) });
-  const q1 = await p.evaluate(() => { const st = IX_GIT.state(); const stem = document.querySelector('.ixHq h3').innerText; const q = IX_GIT206.mcq.find((x) => x.stem === stem); return { id: q.id, wrong: q.options.find((o) => !q.answerKeys.includes(o.key)).key }; });
+  const q1 = await p.evaluate(() => { const st = IX_GIT.state(); const q = IX_GIT206.mcq.find((x) => x.id === document.querySelector('.ixHq').dataset.qid); return { id: q.id, wrong: q.options.find((o) => !q.answerKeys.includes(o.key)).key }; });
   await p.click('[data-c="sure"]'); await p.click('.ixHopt[data-k="' + q1.wrong + '"]'); await tick(p, 400);
   n = sent.length;
   await p.click('.ixHfb .ixAiBar button.main'); await tick(p, 900);
