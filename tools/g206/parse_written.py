@@ -56,7 +56,12 @@ for subj, q in [
     ("Histology", "Compare between PCT and DCT (table) {3 marks}"),
     ("Histology", "Compare between oxyntic (peptic) cell and Paneth cell (table) {8 marks}"),
     ("Histology", "Liver acinus: definition and significance (table)"),
-]: add(subj, q, ["Final 198"], src="EOY 198 paper")
+    ]: add(subj, q, ["Final 198"], src="EOY 198 paper")
+# 4) the batch 197 written paper (scanned; only the questions OCR read cleanly)
+for subj, q in [("Physiology", "Explain the site and mechanism of glucose reabsorption by the nephrons of the kidney"),
+                ("Anatomy", "List the stomach bed")]: add(subj, q, ["Final 197"], src="Final 197 paper (OCR)")
+if False: [
+]
 json.dump(items, open(out, "w"), ensure_ascii=False, indent=0)
 import collections
 print(len(items), "written questions;", collections.Counter(i["subject"] for i in items))
