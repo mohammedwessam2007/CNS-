@@ -101,7 +101,7 @@ const LEARN_NEXT = '#player [data-act="visual-hide"], #player [data-act="v15-nex
   await p.setInputFiles('#ixTfile', pngF); await tick(p, 1200);
   const ta = await p.evaluate(() => document.getElementById('ixTnotes').value);
   const imgReq = sent.slice(n).find((b) => Array.isArray(b.messages[1].content));
-  check('V7', 'A text file and a photo of notes both land in the topic\'s notes (the photo via the vision model)', /Brown-Sequard/.test(ta) && /Brachial plexus/.test(ta) && !!imgReq && imgReq.model === 'openai/gpt-6.1-terra', { len: ta.length, img: !!imgReq });
+  check('V7', 'A text file and a photo of notes both land in the topic\'s notes (the photo via the vision model)', /Brown-Sequard/.test(ta) && /Brachial plexus/.test(ta) && !!imgReq && imgReq.model === 'openai/gpt-6.2-sol-pro', { len: ta.length, img: !!imgReq });
   await p.evaluate(() => document.querySelector('.ixTsheet [data-x]').click());
 
   // V8 weekly report

@@ -47,6 +47,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const sys2 = sent[sent.length - 1].body.messages[0].content;
   check('T5', 'Lecture notes for the open topic reach the tutor', /DOCTOR SAID/.test(sys2), { has: /LECTURE NOTES/.test(sys2) });
   // T6 Why?: a tapped line opens the professor with how the exam asks it; held-out items never travel
+  await p.evaluate(() => { if (window.IX_HOME) IX_HOME.cns(true); }); await p.waitForTimeout(600);   // exam season: the probe goes into the CNS course page
   const probe = await p.evaluate(() => {
     const q = EHSAN_QBANK.questions.find((x) => x.split === 'practice' && /carotid sheath/i.test(x.stem));
     const el = document.createElement('p'); el.id = 'whyProbe'; el.textContent = 'The external carotid artery is not a content of the carotid sheath; the internal carotid is.';
@@ -60,7 +61,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.click('.ixTwhy'); await p.waitForTimeout(1500);
   const last = sent[sent.length - 1], sys3 = last ? last.body.messages[0].content : '';
   const leaked = probe.held.filter((st) => st.length > 30 && sys3.includes(st)).length;
-  check('T6', 'Why? on a tapped line asks the professor model with exam relevance, and no held-out item travels', bub && sent.length === n1 + 1 && last.body.model === 'openai/gpt-6.1-terra' && /EXAM RELEVANCE/.test(sys3) && /about \d+ past questions/.test(sys3) && leaked === 0, { bub, model: last && last.body.model, leaked, rel: (sys3.match(/about \d+ past questions[^\n]*/) || [''])[0].slice(0, 90) });
+  check('T6', 'Why? on a tapped line asks the professor model with exam relevance, and no held-out item travels', bub && sent.length === n1 + 1 && last.body.model === 'openai/gpt-6.2-sol-pro' && /EXAM RELEVANCE/.test(sys3) && /about \d+ past questions/.test(sys3) && leaked === 0, { bub, model: last && last.body.model, leaked, rel: (sys3.match(/about \d+ past questions[^\n]*/) || [''])[0].slice(0, 90) });
   // T7 sure-but-wrong: the verdict tag is hidden, a badge shows, calibration counts it and the question joins his traps
   globalThis.__reply = ['[[wrong]] ', 'Not quite: ', 'the ECA is outside the sheath.'];
   await p.evaluate(() => { localStorage.removeItem('ix_tutor_calib_v1'); localStorage.removeItem('ix_tutor_traps_v1'); IX_TUTOR.open(); IX_TUTOR.setConf('sure'); });

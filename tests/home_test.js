@@ -27,12 +27,15 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => IX_TUTOR.ask('hello', null)); await tick(p, 900);
   const sys = sent.length ? sent[sent.length - 1].messages[0].content : '';
   check('H5', "The professor's prompt has its sections and knows where he is in the plan", /# WHO YOU ARE/.test(sys) && /# HOW KASR AL AINY EXAMS WORK/.test(sys) && /WHERE HE IS IN THE PLAN: 2026-11-21 · GIT MCQ/.test(sys), { len: sys.length });
+  await p.evaluate(() => IX_TUTOR.ask('teach me', 'loop')); await tick(p, 900);
+  const last = sent[sent.length - 1], sys7 = last.messages[0].content;
+  check('H7', 'Every call carries the examiner profile and the whole syllabus with his state; pro tasks go to the new professor model', /EXAMINER PROFILE/.test(sys7) && /HOW THESE EXAMINERS THINK/.test(sys7) && /THE SYLLABUS \(DIG-206 units/.test(sys7) && /Oesophagus and stomach: lectured/.test(sys7) && last.model === 'openai/gpt-6.2-sol-pro' && /Step n\/6/.test(sys7), { model: last.model, len: sys7.length });
   check('H6', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 3));
   await s.close();
   const s2 = await open({ v16: true, time: '2026-09-23T10:00:00+03:00', state: null, settle: 2500, viewport: { width: 1180, height: 900 } });
   const h4 = await s2.page.evaluate(() => ({ home: document.documentElement.classList.contains('ixXHome'), eyebrow: document.getElementById('eyebrow').innerText }));
   check('H4', 'Before the season (September) the old course is untouched', !h4.home && /DAY \d+\/148/.test(h4.eyebrow), h4);
   await s2.close();
-  console.log(fails ? fails + ' FAILED' : '6/6 HOME checks passed');
+  console.log(fails ? fails + ' FAILED' : '7/7 HOME checks passed');
   process.exit(fails ? 1 : 0);
 })();

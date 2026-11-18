@@ -39,7 +39,7 @@ const LEARN_NEXT = '#player [data-act="visual-hide"], #player [data-act="v15-nex
   if (fig) { await fig.click(); await tick(p, 2000); }
   const b2 = sent[n], u2 = b2 ? userOf(b2) : null;
   const imgPart = Array.isArray(u2) ? u2.find((x) => x.type === 'image_url') : null;
-  check('A2', 'A picture gets Explain/Quiz, and the picture itself is sent to the professor model', !!fig && !!imgPart && /^(https:|data:image\/jpeg)/.test(imgPart.image_url.url) && /demonstrator/.test(sysOf(b2)) && b2.model === 'openai/gpt-6.1-terra', { fig: !!fig, img: imgPart && imgPart.image_url.url.slice(0, 60), model: b2 && b2.model });
+  check('A2', 'A picture gets Explain/Quiz, and the picture itself is sent to the professor model', !!fig && !!imgPart && /^(https:|data:image\/jpeg)/.test(imgPart.image_url.url) && /demonstrator/.test(sysOf(b2)) && b2.model === 'openai/gpt-6.2-sol-pro', { fig: !!fig, img: imgPart && imgPart.image_url.url.slice(0, 60), model: b2 && b2.model });
 
   // walk the real course to the first MCQ block
   let c;

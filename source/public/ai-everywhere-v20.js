@@ -43,9 +43,13 @@
   }
 
   function bar(host, id, buttons, where) {
-    if (!host || host.querySelector(':scope > .ixAiBar[data-ai="' + id + '"]')) return null;
+    if (!host) return null;
+    // a bar whose main button has gone stale (the plan moved on) is drawn again
+    const main = (buttons.find((x) => x.main) || {}).label || "", old = host.querySelector(':scope > .ixAiBar[data-ai="' + id + '"]');
+    if (old && old.dataset.main === main) return null;
+    if (old) old.remove();
     const b = document.createElement("div");
-    b.className = "ixAiBar"; b.dataset.ai = id; b.setAttribute("role", "group"); b.setAttribute("aria-label", "Ask the professor");
+    b.className = "ixAiBar"; b.dataset.ai = id; b.dataset.main = main; b.setAttribute("role", "group"); b.setAttribute("aria-label", "Ask the professor");
     b.innerHTML = '<span class="ixAiMark">🧠</span>' + buttons.map((x, i) => '<button type="button" data-i="' + i + '"' + (x.main ? ' class="main"' : "") + ">" + x.label + "</button>").join("") + '<button type="button" class="ixAiLang" data-ai-lang title="Explain in Egyptian Arabic or English"></button>';
     b.addEventListener("click", (e) => {
       const k = e.target.closest("button"); if (!k) return;

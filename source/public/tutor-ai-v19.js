@@ -16,9 +16,12 @@
   const KEY = "ix_tutor_key_v1", MODEL = "ix_tutor_model_v1", MODEL_PRO = "ix_tutor_model_pro_v1", CHAT = "ix_tutor_chat_v1", NOTES = "ix_tutor_notes_v1";
   // two tiers (OpenRouter list prices read on 16 Nov 2026, per million tokens in/out): a fast, cheap model for chat
   // and quizzes, and a stronger "professor" for Why? and explanations. Both can be changed in ⚙︎.
-  const DEFAULT_MODEL = "anthropic/claude-haiku-5.5", DEFAULT_PRO = "openai/gpt-6.1-terra";
+  const DEFAULT_MODEL = "anthropic/claude-haiku-5.5", DEFAULT_PRO = "openai/gpt-6.2-sol-pro";
+  // v26: the professor moved to the newest model at the $2/$10 tier (read from OpenRouter on 18 Nov 2026); a device
+  // still on the old default is moved with it, a model the owner chose himself is kept
+  try { if (localStorage.getItem(MODEL_PRO) === "openai/gpt-6.1-terra") localStorage.setItem(MODEL_PRO, DEFAULT_PRO); } catch (e) {}
   const PRESETS = [["anthropic/claude-haiku-5.5", "Fast · $0.10 / $0.50"], ["openai/gpt-6-luna", "Fast · $0.10 / $0.50"], ["deepseek/deepseek-v4.1-flash", "Fast · $0.14 / $0.42"],
-    ["openai/gpt-6.1-terra", "Professor · $1 / $5"], ["anthropic/claude-sonnet-5.5", "Professor+ · $2 / $10"], ["google/gemini-3.8-flash", "Professor · $0.83 / $4.12"]];
+    ["openai/gpt-6.2-sol-pro", "Professor (default) · $2 / $10"], ["anthropic/claude-sonnet-5.5", "Professor · $2 / $10"], ["google/gemini-4-carbon", "Professor · $2 / $10"], ["openai/gpt-6.1-terra", "Cheaper professor · $1 / $5"], ["anthropic/claude-fable-5.2", "Top tier · $8 / $40 (expensive)"]];
   const API = "https://openrouter.ai/api/v1";
   const ls = {
     get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } },
@@ -143,6 +146,17 @@
     const s = screen(), k = topicKey(), n = notesFor(k);
     let c = "WHAT THE STUDENT IS LOOKING AT IN THE APP" + (s.eyebrow ? " (" + s.eyebrow + ")" : "") + ":\n" + (s.title ? "Title: " + s.title + "\n" : "") + (s.body || "(nothing open)");
     if (n) c += "\n\nTHE STUDENT'S OWN LECTURE NOTES FOR THIS TOPIC (most important source):\n" + n;
+    try {
+      // the examiners' habits for the module he is on (built from the past papers: examiner-profile.js)
+      const X = window.IX_EXAMINER, cnsNow = /CNS|NEU-205/i.test((s.eyebrow || "") + " " + (s.title || "")) || (window.IX_PLAN && (IX_PLAN.today().day || {}).phase === "CNS written");
+      if (X && !mockRunning()) c += "\n\nEXAMINER PROFILE (use it: ask, explain and mark the way these examiners do):\n" + (cnsNow ? X.cns : X.git);
+      // the whole syllabus and where he stands in it (the professor orchestrates; it never teaches blind)
+      if (window.IX_PLAN && !mockRunning() && !cnsNow) {
+        const sp = IX_PLAN.span(), now = new Date().toISOString().slice(0, 10), g = window.IX_GIT && IX_GIT.state ? IX_GIT.state().q : {}, B = window.IX_GIT206 ? IX_GIT206.mcq : [];
+        const lines = IX_PLAN.units().map((u) => { const x = sp[u.id], qs = B.filter((q) => g[q.id] && u.pred(q)), ok = qs.filter((q) => g[q.id].ok).length; return "- " + u.subject + " · " + u.name + ": " + (!x ? "no lecture" : x.first > now ? "lectured from " + x.first : x.last >= now ? "lectures running" : "lectured") + (qs.length ? ", " + ok + "/" + qs.length + " right" + (qs.length >= 5 && ok / qs.length < 0.6 ? " (WEAK)" : "") : ""); });
+        c += "\n\nTHE SYLLABUS (DIG-206 units, his state in each; link new ideas to units already lectured, never assume an unlectured unit is known):\n" + lines.join("\n");
+      }
+    } catch (e) {}
     try { if (window.IX_PLAN && !mockRunning()) { const t = IX_PLAN.today(), d = t.day, ex = IX_PLAN.exams.find((x) => x.date >= new Date().toISOString().slice(0, 10)); if (d) c += "\n\nWHERE HE IS IN THE PLAN: " + d.date + " · " + d.phase + (ex ? " · next exam " + ex.name + " on " + ex.date : "") + (d.title ? " · today: " + d.title : "") + ". Keep answers useful for that exam."; } } catch (e) {}
     if (extra) c += "\n\n" + extra;
     return c;
@@ -215,7 +229,7 @@
   function dayState() { const L = life(), o = day(); return { used: Math.round(o.used), budget: L.mins + o.extra, left: Math.max(0, Math.round(L.mins + o.extra - o.used)), gate: lifeGate() }; }
 
   /* ───── v21 cost guard: what this week's answers cost, and a weekly cap the owner sets ───── */
-  const SPEND = "ix_tutor_spend_v1", CAPK = "ix_tutor_cap_v1", DEFAULT_CAP = 2;
+  const SPEND = "ix_tutor_spend_v1", CAPK = "ix_tutor_cap_v1", DEFAULT_CAP = 4;
   function weekId(d) { d = new Date(d || Date.now()); const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return t.getUTCFullYear() + "-W" + Math.ceil(((t - y) / 864e5 + 1) / 7); }
   function spend() { let o = {}; try { o = JSON.parse(ls.get(SPEND, "{}")) || {}; } catch (e) {} if (o.week !== weekId()) o = { week: weekId(), usd: 0, calls: 0 }; return o; }
   function addSpend(usd) { const o = spend(); o.usd = +(o.usd + (usd || 0)).toFixed(5); o.calls++; ls.set(SPEND, JSON.stringify(o)); }
@@ -401,6 +415,34 @@
     wrong: { label: "Why was I wrong?", prompt: "I got the question on my screen wrong. Find the exact misunderstanding behind my mistake and fix it.", brief: "TASK: the student just answered the question on screen wrongly. Diagnose the likely misunderstanding (not just restate the key), fix it with the mechanism, then give a NEW question on the same idea." },
     written: { label: "Written answer", pro: true, prompt: "Give me the written-exam question most likely on this topic, then the model answer as the department wants it.", brief: "TASK: written exam model answer. Give the most likely essay question on this topic (or use the one given), its usual marks, then the MODEL ANSWER exactly as a Kasr Al Ainy examiner wants it: the structure the verb demands (see HOW KASR AL AINY EXAMS WORK), numbered points, a table when comparing, what to draw and label. Build it from the reference answer and his notes when given. After it: the 3 points examiners most often see missing, and one line: 'Now write it from a blank page and tap 📝 to get it marked.'" },
   };
+
+  // v26: the teaching methods, rewritten in full. Each brief = the method's steps + the examiner's angle + what not to do.
+  const BRIEF = {
+    loop: "TASK: the full learning loop on the open topic, ONE step per turn, waiting for him each time; say 'Step n/6' at the top.\n1) TRY FIRST (productive failure): two short questions he probably cannot answer yet, one about the mechanism, one exam-style; say that being wrong here makes the learning stick.\n2) TEACH the core in 5-8 lines from the mechanism (cause → mechanism → effect → exam fact), built on what his attempts showed; one picture to hold in mind.\n3) WORKED EXAMPLE then FADING: solve one past-paper-style item aloud (why each option is in or out), then a near-identical one with the last step left to him.\n4) EXAMINER'S ANGLE: one NEW question the way these examiners would ask it (negative stem or clinical, per EXAMINER PROFILE); tag your judgement.\n5) TEACH-BACK: he explains it in 3 lines as if to a classmate; mark it /10 for understanding and name what was missing.\n6) CLOSE: the one-line summary, the trap to remember, and 'This comes back tomorrow as a review'.",
+    tryfirst: "TASK: pretest (productive failure). Two short questions on the open topic he is unlikely to answer yet, one at a time: one 'why/what happens if', one past-paper style. After each attempt: what his attempt got right, then the key idea in 2 lines. No lecturing.",
+    worked: "TASK: worked example → fading. Solve one exam-style question aloud: read the stem like an examiner (underline the negative word, find the clinical clue), then each option in or out with its reason. Then give a near-identical question with the last 1-2 steps blank for him; if he succeeds, fade more next time.",
+    apart: "TASK: interleaving of look-alikes (the examiners' favourite distractors). Pick the 2-3 things in this topic most often confused (e.g. ICA vs ECA, PCT vs DCT, UMN vs LMN). A quick mixed set, one item at a time: he names which one it is and the ONE feature that decides it. Tag each answer. End with a 2-row table of the deciding features.",
+    case: "TASK: clinical case the way Kasr writes them. A 3-line patient (age, complaint, one sign). Reveal the findings one at a time; he interprets EACH finding (finding → structure → mechanism) BEFORE you add anything. Then he names the lesion / diagnosis / mechanism. Tag each step. Finish with how this case would appear as an MCQ and as a written 'comment on' question.",
+    classmate: "TASK: teachable agent with planted errors. Write a short 'classmate' answer (4-6 lines) on the open topic with exactly 2 mistakes, taken from HIS OWN TRAPS below when they fit, otherwise from the classic examiner traps for this topic. He must find and fix both. Then reveal any he missed and why it is a trap.",
+    map: "TASK: concept mapping. Name the central idea; he links it to 4 others (structure → function → lesion → exam fact), each written 'A → B because …'. Check every link: correct, incomplete or wrong; fix the wrong ones with the mechanism. End with the map as 5 short lines.",
+    traps: "TASK: his own traps (sure-but-wrong) below. One at a time: a FRESH question on the same false belief (new wording, new angle, never the old item), wait, judge with tags, then contrast his belief and the truth in one line.",
+    draw: "TASK: drawing to learn. He draws the key structure, section or pathway of the open topic FROM MEMORY on paper (60-90 seconds); name exactly the 5-7 labels it must have. Wait. He lists or describes what he drew (or sends a photo via 📝). Check each label and relation against the course (Dr Doss drawing if the topic has one); name what is missing or misplaced; tell him to look at the reference drawing now and redraw only the wrong part. Note what an examiner wants labelled in a 'draw and label' question.",
+    palace: "TASK: mnemonics for ARBITRARY lists only (branches, contents, order, boundaries). First say in one line whether this needs a hook or is better understood from the mechanism. If a hook fits: a short memory palace (5-7 places along a route he knows, e.g. home → college) or an acronym, one vivid odd image per item, built from HIS INTERESTS when given; make him recall it back once now. Facts exactly as the course states them; the list count must match what the examiners ask.",
+    why: "TASK: he tapped WHY on the text in SELECTED. Answer in exactly these parts, each short:\n**🧠 Why** — the mechanism behind it from first principles, as a causal chain (3-5 lines).\n**👁 Picture it** — one vivid image, analogy or everyday comparison.\n**🔒 Lock it in** — one memory hook, and what to link it to that he already knows.\n**🎯 In the exam** — use EXAM RELEVANCE and the EXAMINER PROFILE honestly: how often and how it was asked (MCQ stem type, written verb), the classic trap, and whether it is a written point. If the data shows no past question, say so plainly.\n**✅ Check** — one question that needs understanding. Then wait.",
+    explain: "TASK: explain the open topic from first principles: cause → mechanism → effect → exam fact, one picture, one clinical consequence, the classic trap. Then ONE understanding check.",
+    quiz: "TASK: write ONE new MCQ on the open topic exactly as these examiners write them (EXAMINER PROFILE): single best answer, 4-5 options a-e, plausible distractors from neighbouring look-alikes, a negative or clinical stem when that topic is usually asked that way; no clues in grammar or length; never a copy of a question on screen. Do not give the answer until he replies; then judge with tags and explain every option in one line each.",
+    twin: "TASK: ONE new MCQ that tests the same idea as QUESTION from a different angle (clinical case, 'all except', or a lesion), never the same wording, 4-5 options a-e, distractors the examiners would use. No answer until he replies; then tag your judgement and explain every option.",
+    teach: "TASK: teach-back (the protégé effect). Ask him to explain the topic in his own words as if to a classmate who missed the lecture. Then mark it /10 for understanding: what was right, what was missing or wrong (the exact point), and one follow-up question that goes one level deeper.",
+    wrong: "TASK: he answered the question on screen wrongly. Diagnose the exact misunderstanding (which false belief makes his option look right), fix it with the mechanism, name the error type, then give a NEW question on the same idea from another angle.",
+    hint: "TASK: he is stuck on the MCQ in QUESTION and has NOT answered. NEVER say or hint which option is right, never eliminate options by letter. Rung 1 only: one short nudge toward the mechanism or the key word in the stem (an EXCEPT, a side, a level) in 2-3 lines. If he asks again, rung 2: a narrower question that makes him reason. Stop there.",
+    optwhy: "TASK: he just answered the MCQ in QUESTION (his choice and the key are given). If wrong: name the exact false belief that makes his option look right, then the mechanism that makes the key right, in under 8 lines, and the error type. If right: say what he must have understood, and the one change to the stem that would flip the answer (that is how examiners write the next variant). End with one new check question on the same idea, not the same wording.",
+    optall: "TASK: for the MCQ in QUESTION, EVERY option in one line each: right or wrong and why, and when it WOULD be the answer (the stem change that makes it right). Then one line: the trap the examiner built into this question.",
+    simple: "TASK: he did not get the part in SECTION. Re-explain it as to a smart 14-year-old: the mechanism in 4-6 short lines, one everyday analogy, then the exam fact in bold and the one trap. End with one check question.",
+    secquiz: "TASK: THREE quick questions on SECTION only, one at a time, waiting each time (attempt first): one 'why', one 'what happens if it is cut/blocked', one past-paper trap in the examiners' style. Tag each judgement.",
+    viva: "TASK: the oral examiner (viva). One question at a time in this order: identify/describe the structure, its function, a lesion and what the patient shows, then 'why?'. Wait after each; tag your judgement. Be brisk and fair like a Kasr Al Ainy examiner; when he is right push one level deeper; when he is wrong give a short prompt before the answer.",
+    lesion: "TASK: lesion lab. Give a patient's findings (3-5 signs: side of weakness, sensory loss, cranial nerve signs, reflexes, or for the abdomen: pain site, referred pain, a mass). He localises the lesion: level, side, and the structure or tract for each sign. Wait. Judge each sign with a tag, then the one-line rule that localises it (e.g. crossed signs = brain stem; referred pain follows the segment). Then a harder one.",
+  };
+  Object.keys(BRIEF).forEach((k) => { if (MODES[k]) MODES[k].brief = BRIEF[k]; });
 
   /* ───── chat store ───── */
   function chat() { try { const c = JSON.parse(ls.get(CHAT, "[]")); return Array.isArray(c) ? c : []; } catch (e) { return []; } }

@@ -39,12 +39,12 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   check('P10', 'The IPKA timetable: units follow their lectures; weekly AI-off checks on Saturdays; lecture days carry a 2-minute notes step', !P10.bad.length && P10.checks.join() === '2026-11-28,2026-12-05,2026-12-12' && P10.lec === 3 && P10.notes, P10);
   // P3
   await p.evaluate(() => IX_PLAN.open()); await tick(p, 400);
-  const page = await p.evaluate(() => ({ h: document.querySelector('.ixPlan h3').innerText, steps: [...document.querySelectorAll('.ixPstep b')].map((b) => b.innerText) }));
+  const page = await p.evaluate(() => ({ h: document.querySelector('.ixPlan h3').innerText, steps: [...document.querySelectorAll('.ixPlan .ixPstep b')].map((b) => b.innerText) }));
   let n = sent.length;
-  await p.click('.ixPstep >> nth=0 >> [data-go]'); await tick(p, 900);
+  await p.click('.ixPlan .ixPstep >> nth=0 >> [data-go]'); await tick(p, 900);
   const lbl0 = await p.evaluate(() => (document.querySelector('#player .ixAiBar button.main') || {}).innerText || '');
   await p.evaluate(() => IX_PLAN.open()); await tick(p, 300);
-  await p.check('.ixPstep >> nth=0 >> input'); await tick(p, 400);
+  await p.check('.ixPlan .ixPstep >> nth=0 >> input'); await tick(p, 400);
   await p.evaluate(() => IX_PLAN.close()); await p.evaluate(() => render()); await tick(p, 900);
   const lbl1 = await p.evaluate(() => (document.querySelector('#player .ixAiBar button.main') || {}).innerText || '');
   check('P3', "Today's list: Start runs reviews; ticking the step moves ▶ Today to the next one", /Today/.test(page.h) && /Oesophagus and stomach/.test(page.h) && page.steps.length === 4 && /Reviews/.test(lbl0) && /Oesophagus and stomach/.test(lbl1), { h: page.h, lbl0, lbl1 });
