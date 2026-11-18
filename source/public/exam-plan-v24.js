@@ -19,7 +19,7 @@
     { id: "gitw", name: "GIT written", date: "2027-01-05" },
     { id: "cnsw", name: "CNS written", date: "2027-01-12" },
   ];
-  const DAY = 864e5;
+  const DAY = 864e5, START = "2026-11-21";
   const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   const at = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
   const nice = (s) => at(s).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
@@ -68,7 +68,8 @@
     return out;
   }
   function build() {
-    const mins = life().mins, start = at(iso(new Date())), days = [];
+    // the owner starts on Saturday 21 Nov 2026; before that the plan waits (nothing is due early)
+    const mins = life().mins, now0 = at(iso(new Date())), start = now0 < at(START) ? at(START) : now0, days = [];
     const mcqDate = at(EXAMS[0].date), gwDate = at(EXAMS[1].date), cwDate = at(EXAMS[2].date);
     const mockPlan = ["Exam 195 (2023)", "Final 196 (2024)", "Final 197 (Jan 2025)", "EOM 2026 (198)"];
     // Phase A days (until the day before the GIT MCQ)
@@ -80,7 +81,15 @@
     // the units that fit: each unit day needs reviews 10 + learn 15 + MCQs 12 + written 15 minutes
     const unitDays = studyA.filter((d) => !mockDays.has(iso(d)) && !last.includes(d));
     const perUnit = 52, perDay = Math.max(1, Math.floor((mins - 0) / perUnit)) || 1;
-    const units = interleave(gitUnits()), fit = units.slice(0, unitDays.length * perDay), dropped = units.slice(fit.length);
+    // more units than days: the two lightest units share one day (shorter steps, no written step) before any
+    // unit is dropped; what still does not fit is dropped openly
+    const units = interleave(gitUnits()), groups = units.map((u) => [u]), cap = unitDays.length * perDay;
+    while (groups.length > cap) {
+      const singles = groups.filter((g) => g.length === 1).sort((a, b) => a[0].weight - b[0].weight);
+      if (singles.length < 2) break;
+      const [g1, g2] = singles; g1.push(g2[0]); groups.splice(groups.indexOf(g2), 1);
+    }
+    const fitG = groups.slice(0, cap), fit = [].concat(...fitG), dropped = [].concat(...groups.slice(cap));
     let ui = 0;
     A.forEach((d) => {
       const k = iso(d);
@@ -92,14 +101,15 @@
           ? [step("review", "Reviews due", 15), step("traps", "My traps, re-worded", 15), step("examday", "Exam-day protocol", 5), step("rest", "Stop by evening. Sleep is part of the plan.", 0)]
           : [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15), step("traps", "My traps, re-worded", 10)] });
       }
-      const todays = fit.slice(ui, ui + perDay); ui += todays.length;
+      const todays = [].concat(...fitG.slice(ui, ui + perDay)); ui += Math.min(perDay, Math.max(0, fitG.length - ui));
+      const paired = todays.length > perDay;
       if (!todays.length) return days.push({ date: k, phase: "GIT MCQ", title: "Spare day: weak spots, mixed", steps: [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15)] });
       const steps = [step("review", "Reviews due (memory cards)", 10)];
       // rule 1: a small budget cuts steps, never adds minutes: written goes first (phase B covers it), then teaching
       todays.forEach((u) => {
-        if (mins >= 37) steps.push(step("learn", "Learn with the professor: " + u.name, 15, { unit: u.id }));
-        steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, 12, { unit: u.id }));
-        if (mins >= 52 && u.written.length) steps.push(step("written", "Write from a blank page: " + u.written[0].questions[0].q.slice(0, 90), 15, { unit: u.id, q: u.written[0].questions[0].q }));
+        if (mins >= 37) steps.push(step("learn", "Learn with the professor: " + u.name, paired ? 10 : 15, { unit: u.id }));
+        steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, paired ? 10 : 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, paired ? 10 : 12, { unit: u.id }));
+        if (!paired && mins >= 52 && u.written.length) steps.push(step("written", "Write from a blank page: " + u.written[0].questions[0].q.slice(0, 90), 15, { unit: u.id, q: u.written[0].questions[0].q }));
       });
       days.push({ date: k, phase: "GIT MCQ", title: todays.map((u) => u.subject + " · " + u.name).join(" + ") || "Mixed review", steps });
     });
@@ -138,7 +148,7 @@
   function st() { let s = null; try { s = typeof S !== "undefined" ? S : null; } catch (e) {} const h = s || (window.__ixPlanLocal = window.__ixPlanLocal || {}); h.examPlan = h.examPlan || { done: {} }; return h.examPlan; }
   function persist() { try { if (typeof save === "function") save(); } catch (e) {} }
   function today() { const P = build(), k = iso(new Date()); return { P, day: P.days.find((d) => d.date === k) || P.days.find((d) => d.date > k) }; }
-  function nextStep() { const { day } = today(); if (!day || day.off) return null; const s = day.steps.find((x) => !st().done[x.id] && x.kind !== "rest"); return s ? { day, step: s } : null; }
+  function nextStep() { const { day } = today(); if (!day || day.off || day.date !== iso(new Date())) return null; /* nothing early: before 21 Nov ▶ Today stays free */ const s = day.steps.find((x) => !st().done[x.id] && x.kind !== "rest"); return s ? { day, step: s } : null; }
 
   /* ── running a step ── */
   function unitById(id) { return gitUnits().find((u) => u.id === id); }
@@ -206,6 +216,7 @@
     body.innerHTML =
       '<div class="ixPexams">' + EXAMS.map((x) => '<div><b>' + left(x) + "</b><span>days to " + E(x.name) + "<br>" + E(nice(x.date)) + "</span></div>").join("") + "</div>" +
       (d && d.gate ? '<div class="ixHgate">' + E(d.gate) + "</div>" : "") +
+      (k < START ? "<p><b>The plan starts on Saturday 21 November.</b> Until then nothing is due: live. 🌿 (If you want, set your minutes and Friday off in ⏱ and add your key in ⚙︎.)</p>" : "") +
       (day ? "<h3>" + (day.date === k ? "Today" : "Next: " + E(nice(day.date))) + " · " + E(day.phase) + (day.title ? " · " + E(day.title) : "") + "</h3>" +
         (day.off ? "<p>Day off. Live. 🌿</p>" : day.exam ? "<p><b>Exam day: " + E(day.exam.name) + ".</b> Protocol, breakfast, go. Good luck, inshallah.</p>" : "") +
         '<div class="ixPsteps">' + day.steps.map((s) => '<div class="ixPstep' + (done(s) ? " done" : "") + '"><label><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + "></label><div><b>" + E(s.label) + "</b><span>" + (s.min ? s.min + " min" : "") + "</span></div>" + (s.kind !== "rest" ? '<button type="button" data-go="' + E(s.id) + '">' + (st().done[s.id] ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" +
