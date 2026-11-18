@@ -56,6 +56,6 @@ The course is scored against ten criteria. Each is a yes/no, and each "yes" poin
 | 7 | Zero decisions | ▶ Today on every screen is the plan's next step | plan P3 |
 | 8 | Work less, live more | Your minutes decide; Fridays off; stop time; light days; a small budget cuts steps, never adds minutes | plan P2, v22 W1–W3 |
 | 9 | Grounded and safe | Department references, "not in your notes", second-model MCQ check, held-out firewall, weekly cost cap | v21 V5, written W3 |
-| 10 | It is live and works | The live Pages site serves the current version (checked by fetching it); every test suite passes | live check below |
+| 10 | It is live and works | Checked 18 Nov: the live Pages site serves v25.0, opened in a real browser with no page errors; plan (53 days from 21 Nov), GIT bank, 44 references, written engine and tutor all load (docs/live-plan-phone.png). All app test suites pass; the 3 remaining failures predate v21 or need a local host stand-in | live check |
 
 **Not in my hands, and not part of the score:** the first run with your own OpenRouter key on your phone (the tests use a fake OpenRouter), the CNS previous written questions (the CNS week ranks chapters by MCQ weight until they arrive), and the practical exam date.

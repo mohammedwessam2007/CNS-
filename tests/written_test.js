@@ -39,7 +39,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const verb = await p.evaluate(() => document.getElementById('ixTverb').innerText);
   await p.fill('#ixTea', '1. Lower end of oesophagus 2. Anal canal 3. Umbilicus 4. Bare area of liver 5. Retroperitoneal');
   let n = sent.length;
-  await p.click('#ixTego'); await tick(p, 1500);
+  await p.click('#ixTego'); await p.waitForFunction(() => /\/ 10/.test((document.getElementById('ixTest') || {}).innerText || ''), null, { timeout: 20000 }).catch(() => {}); await tick(p, 300);
   const g3 = sent.slice(n).filter((b) => /written-exam examiner/.test(sysOf(b)));
   const out3 = await p.evaluate(() => document.getElementById('ixTest').innerText);
   check('W3', 'The grader: 3 examiners, against the reference and the verb structure; the result says so', g3.length === 3 && g3.every((b) => /REFERENCE ANSWER/.test(userText(b)) && /STRUCTURE THIS VERB NEEDS/.test(userText(b))) && /6 \/ 10/.test(out3) && /department-style answer/.test(out3) && /Structure/.test(out3) && /ENUMERATE/.test(verb), { n: g3.length, out3: out3.slice(0, 90) });
@@ -51,7 +51,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.fill('#ixTea', '');
   await p.setInputFiles('#ixTeimg', png);
   n = sent.length;
-  await p.click('#ixTego'); await tick(p, 1800);
+  await p.click('#ixTego'); await p.waitForFunction(() => /Read from your photo/.test((document.getElementById('ixTest') || {}).innerText || ''), null, { timeout: 20000 }).catch(() => {}); await tick(p, 300);
   const g4 = sent.slice(n).filter((b) => /written-exam examiner/.test(sysOf(b)));
   const out4 = await p.evaluate(() => document.getElementById('ixTest').innerText);
   check('W4', 'A photo of a handwritten answer goes to the examiners (vision) and the page they read is shown', g4.length === 3 && g4.every((b) => Array.isArray(b.messages[1].content) && b.messages[1].content[1].type === 'image_url') && /Read from your photo/.test(out4), { n: g4.length });
@@ -74,7 +74,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => IX_TUTOR.ask('help', null)); await tick(p, 300);
   const sentDuring = sent.length - n;
   for (let i = 0; i < 6; i++) { await p.fill('#ixWma', 'Answer ' + (i + 1) + ': headings and points written from memory.'); await p.click(i < 5 ? '#ixWnextq' : '#ixWsubmit'); await tick(p, 150); }
-  await tick(p, 2500);
+  await p.waitForFunction(() => !!document.querySelector('.ixW .ixHbig'), null, { timeout: 30000 }).catch(() => {}); await tick(p, 300);
   const w6 = await p.evaluate(() => ({ big: (document.querySelector('.ixW .ixHbig') || {}).innerText, hist: IX_WRITTEN.history().length, mockCls: document.documentElement.classList.contains('ixHmock') }));
   const graded = sent.slice(n).filter((b) => /written-exam examiner/.test(sysOf(b))).length;
   check('W6', 'GIT written mock: AI off while writing (nothing sent), 6 real questions, each marked by 3 examiners, total stored', during.mock && sentDuring === 0 && graded === 18 && /36 \/ 60/.test(w6.big) && w6.hist === 1 && !w6.mockCls, { during, sentDuring, graded, w6 });
