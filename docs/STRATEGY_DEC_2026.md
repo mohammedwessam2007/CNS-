@@ -3,18 +3,22 @@
 Exams (from the owner): **GIT MCQ Wed 30 Dec 2026 · GIT written Tue 5 Jan 2027 · CNS written Tue 12 Jan 2027.**
 The whole course runs inside the app: 📅 **My exam plan** (side menu) and **▶ Today** on every screen. Code: `source/public/exam-plan-v24.js`; tests `tests/plan_test.js`.
 
-## The shape
+## The shape (v24.1: follows the official IPKA timetable for DIG 206)
 
-| Dates | Phase | Each study day |
+| Dates | Phase | What happens |
 |---|---|---|
-| Sat 21 Nov – 29 Dec | GIT MCQ | Reviews due → learn one unit with the professor → 10 MCQs on it (or a blind check where the bank is thin) → one past written question from a blank page |
-| Sat 5, 12, 19, 26 Dec | Mocks | A real past paper, AI off: 195 → 196 → 197 → 198 (newest last), then the misses with the professor |
-| 27–28 Dec | Weak spots | Misses first, all chapters mixed; blind check on the weakest chapter; my traps |
-| 29 Dec | Light | Reviews, traps, exam-day protocol, early night |
-| 31 Dec – 4 Jan | GIT written | The top-ranked written topics, four a day: write from a blank page → three examiners → save as a one-page sheet. 4 Jan: read the sheets |
-| 6 – 11 Jan | CNS written | CNS chapters by weight, three a day: the professor's likely essay → write it → mark it → sheet. 11 Jan: read the sheets |
-
-Fridays are off. The daily minutes are the owner's (⏱, default 60). A smaller budget cuts steps (written first, then teaching), never adds minutes; what does not fit is listed on the plan page.
+| Sat 21 Nov – Thu 24 Dec | GIT MCQ, with the lectures | Each unit is studied the **day after its last lecture** (lecture = first exposure, the app = second). Unit day: 📝 2 min on what the doctors stressed → reviews → learn with the professor → 10 MCQs or a blind check → one past written question. If a unit's lectures are still running, the day says so. |
+| Sat 28 Nov, 5 Dec, 12 Dec | Weekly checks | AI off: 10 questions from what has been lectured, a blind check on the weakest unit, my traps |
+| Sat 19 Dec · Sat 26 Dec · Mon 28 Dec | Full past papers | Only once (almost) everything has been lectured: 195 + 196 → 197 → 198 (the newest last) |
+| 23–24 Dec | College revision days | Attend; the evening has the last two units each (the last lectures end on 22 Dec) |
+| Sun 27 Dec | Weak spots | Misses first, all mixed |
+| Tue 29 Dec | Light | Reviews, traps, exam-day protocol, early night |
+| **Wed 30 Dec** | **GIT MCQ (End-Module Exam)** | |
+| 31 Dec – 4 Jan | GIT written | The top-ranked written topics; **Sat 2 Jan: the college final revision** (attend) + two topics; 4 Jan: read your sheets |
+| **Tue 5 Jan** | **GIT written** | |
+| 6 – 11 Jan | CNS written | CNS chapters by weight; 11 Jan: read your sheets |
+| **Tue 12 Jan** | **CNS written** | |
+| 13–14 Jan | College practical revision | The practical exam date is not on the timetable: send it and it goes in |
 
 ## The 28 GIT units (ordered by weight, subjects interleaved)
 

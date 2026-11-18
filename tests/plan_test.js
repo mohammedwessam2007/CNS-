@@ -25,10 +25,18 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
     return { exams: D.filter((d) => d.exam).map((d) => d.date), mocks, offOk: fridays.every((d) => d.off || d.exam), empty: D.filter((d) => !d.off && !d.exam && d.steps.length < 2).map((d) => d.date), fit: P.unitsFit, all: P.unitsAll,
       light: ['2026-12-29', '2027-01-04', '2027-01-11'].map((d) => (get(d) || {}).title || ''), first: (get('2026-11-18') || {}).title };
   });
-  check('P1', 'The calendar: 3 exams, Fridays off, mocks on 4 Saturdays oldest→newest, light days, no empty days, every GIT unit fits',
-    P1.exams.join() === '2026-12-30,2027-01-05,2027-01-12' && P1.mocks.length === 4 && P1.mocks.every((m) => m[1] === 6) && /195/.test(P1.mocks[0][2]) && /198/.test(P1.mocks[3][2]) && P1.offOk && !P1.empty.length && P1.fit === P1.all && P1.light.every((t) => /Light/.test(t)), P1);
+  check('P1', 'The calendar: 3 exams, Fridays off, full papers only after the lectures (19, 26, 28 Dec, oldest→newest), light days, every GIT unit fits',
+    P1.exams.join() === '2026-12-30,2027-01-05,2027-01-12' && P1.mocks.length === 3 && P1.mocks.every((m) => m[0] >= '2026-12-19') && /195/.test(P1.mocks[0][2]) && /198/.test(P1.mocks[2][2]) && P1.offOk && !P1.empty.length && P1.fit === P1.all && P1.light.every((t) => /Light/.test(t)), P1);
   const P2 = await p.evaluate(() => { localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 30, stop: '23:59', off: 5 })); const D = IX_PLAN.build().days.filter((d) => d.phase === 'GIT MCQ' && d.steps.some((x) => x.unit)); localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 60, stop: '23:59', off: 5 })); return { max: Math.max(...D.map((d) => d.steps.reduce((t, x) => t + x.min, 0))), written: D.some((d) => d.steps.some((x) => x.kind === 'written')) }; });
   check('P2', 'A 30-minute budget cuts steps (no written, no teaching on unit days), never adds minutes', P2.max <= 30 && !P2.written, P2);
+  // P10 the timetable: every unit comes after its first lecture, and after its last unless it says so
+  const P10 = await p.evaluate(() => {
+    const P = IX_PLAN.build(), bad = [];
+    P.days.forEach((d) => d.steps.filter((x) => x.kind === 'learn').forEach((x) => { const sp = IX_PLAN.span()[x.unit]; if (!sp) return; if (d.date <= sp.first) bad.push(d.date + ' before ' + x.unit); else if (d.date <= sp.last && !/still running/.test(d.title)) bad.push(d.date + ' early ' + x.unit); }));
+    const lec = P.days.find((d) => d.date === '2026-11-22');
+    return { bad, checks: P.days.filter((d) => /Weekly check/.test(d.title || '')).map((d) => d.date), lec: lec && lec.lectures.length, notes: lec && lec.steps.some((x) => x.kind === 'notes') };
+  });
+  check('P10', 'The IPKA timetable: units follow their lectures; weekly AI-off checks on Saturdays; lecture days carry a 2-minute notes step', !P10.bad.length && P10.checks.join() === '2026-11-28,2026-12-05,2026-12-12' && P10.lec === 3 && P10.notes, P10);
   // P3
   await p.evaluate(() => IX_PLAN.open()); await tick(p, 400);
   const page = await p.evaluate(() => ({ h: document.querySelector('.ixPlan h3').innerText, steps: [...document.querySelectorAll('.ixPstep b')].map((b) => b.innerText) }));
@@ -39,7 +47,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.check('.ixPstep >> nth=0 >> input'); await tick(p, 400);
   await p.evaluate(() => IX_PLAN.close()); await p.evaluate(() => render()); await tick(p, 900);
   const lbl1 = await p.evaluate(() => (document.querySelector('#player .ixAiBar button.main') || {}).innerText || '');
-  check('P3', "Today's list: Start runs reviews; ticking the step moves ▶ Today to the next one", /Today/.test(page.h) && /Anterior abdominal wall/.test(page.h) && page.steps.length === 4 && /Reviews/.test(lbl0) && /Anterior abdominal wall/.test(lbl1), { h: page.h, lbl0, lbl1 });
+  check('P3', "Today's list: Start runs reviews; ticking the step moves ▶ Today to the next one", /Today/.test(page.h) && /Oesophagus and stomach/.test(page.h) && page.steps.length === 4 && /Reviews/.test(lbl0) && /Oesophagus and stomach/.test(lbl1), { h: page.h, lbl0, lbl1 });
   // P4 mock step (the first Saturday)
   const mockOk = await p.evaluate(() => { const d = IX_PLAN.build().days.find((x) => x.steps.some((y) => y.kind === 'mock')); IX_PLAN.runStep(d.steps.find((y) => y.kind === 'mock')); return document.documentElement.classList.contains('ixHmock') && !!document.querySelector('.ixHoff'); });
   n = sent.length; await p.evaluate(() => IX_TUTOR.ask('answer?', null)); await tick(p, 300);
@@ -67,6 +75,6 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
     check('P9', 'Before Saturday 21 Nov the plan waits: it starts on the 21st and ▶ Today asks for nothing', r.first === '2026-11-21' && r.next === null && /starts on Saturday 21 November/.test(r.txt), r);
     await s2.close();
   }
-  console.log(fails ? fails + ' FAILED' : '9/9 PLAN checks passed');
+  console.log(fails ? fails + ' FAILED' : '10/10 PLAN checks passed');
   process.exit(fails ? 1 : 0);
 })();

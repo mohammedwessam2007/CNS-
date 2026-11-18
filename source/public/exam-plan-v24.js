@@ -58,6 +58,69 @@
     return Object.entries(c).sort((a, b) => b[1] - a[1]).map(([k, n]) => { const [s, ch] = k.split("|"); return { subject: s.charAt(0) + s.slice(1).toLowerCase(), name: ch, n }; });
   }
 
+  /* ── the official IPKA timetable for DIG 206 (lectures only; labs left out). [date, subject, title, units] ── */
+  const LECT = [
+    ["2026-11-17", "Anatomy", "Skin, fascia and muscles of the anterolateral abdominal wall", ["A:Anterior abdominal wall"]],
+    ["2026-11-17", "Physiology", "Intro + nervous regulation of GIT function", ["P:Pancreas, bile and GI hormones"]],
+    ["2026-11-17", "Histology", "Oral cavity, palate, pharynx", ["H:Oral cavity, tongue and salivary glands"]],
+    ["2026-11-18", "Anatomy", "Fascia transversalis, rectus abdominis, pyramidalis, rectus sheath", ["A:Anterior abdominal wall"]],
+    ["2026-11-18", "Physiology", "Hormonal regulation of GIT function", ["P:Pancreas, bile and GI hormones"]],
+    ["2026-11-18", "Histology", "Oesophagus and stomach", ["H:Oesophagus and stomach"]],
+    ["2026-11-19", "Histology", "Small intestine", ["H:Small and large intestine, appendix"]],
+    ["2026-11-19", "Physiology", "Salivary secretion + gastric secretion 1", ["P:Saliva, swallowing and the oesophagus", "P:Stomach: acid secretion, motility, vomiting"]],
+    ["2026-11-19", "Anatomy", "Blood, nerve supply and lymph of the anterolateral abdominal wall", ["A:Anterior abdominal wall"]],
+    ["2026-11-22", "Anatomy", "Inguinal region (groin)", ["A:Anterior abdominal wall"]],
+    ["2026-11-22", "Physiology", "Gastric secretion 2", ["P:Stomach: acid secretion, motility, vomiting"]],
+    ["2026-11-22", "Histology", "Large intestine and anal canal", ["H:Small and large intestine, appendix"]],
+    ["2026-11-23", "Physiology", "Pancreatic and small intestinal secretions", ["P:Pancreas, bile and GI hormones"]],
+    ["2026-11-23", "Biochemistry", "Digestion and absorption of carbohydrates, lipids and protein 1", []],
+    ["2026-11-23", "Histology", "Salivary glands", ["H:Oral cavity, tongue and salivary glands"]],
+    ["2026-11-26", "Anatomy", "Male genitalia", ["A:Testis and spermatic cord"]],
+    ["2026-11-26", "Physiology", "Liver and biliary system + GIT motility", ["P:Pancreas, bile and GI hormones", "P:Intestinal motility, absorption, defecation"]],
+    ["2026-11-26", "Histology", "Pancreas", ["H:Liver, gall bladder and pancreas"]],
+    ["2026-11-26", "Biochemistry", "Digestion and absorption 2", []],
+    ["2026-11-30", "Physiology", "Deglutition and oesophagus + gastric motility 1", ["P:Saliva, swallowing and the oesophagus", "P:Stomach: acid secretion, motility, vomiting"]],
+    ["2026-11-30", "Anatomy", "Abdominal regions, peritoneum", ["A:Abdominal cavity and peritoneum"]],
+    ["2026-11-30", "Histology", "Liver and gall bladder", ["H:Liver, gall bladder and pancreas"]],
+    ["2026-11-30", "Biochemistry", "Biochemistry of the large intestine", []],
+    ["2026-12-02", "Physiology", "Gastric motility 2 + small intestinal motility", ["P:Stomach: acid secretion, motility, vomiting", "P:Intestinal motility, absorption, defecation"]],
+    ["2026-12-02", "Anatomy", "Stomach, peritoneal folds of the stomach", ["A:Stomach"]],
+    ["2026-12-02", "Histology", "Intro to the kidney, renal corpuscle", ["H:Kidney and urinary passages"]],
+    ["2026-12-03", "Physiology", "Colon and rectum", ["P:Intestinal motility, absorption, defecation"]],
+    ["2026-12-03", "Histology", "Convoluted tubules, loop of Henle, collecting tubules", ["H:Kidney and urinary passages"]],
+    ["2026-12-03", "Anatomy", "Duodenum, jejunum, ileum", ["A:Small intestine"]],
+    ["2026-12-06", "Physiology", "Basic concepts of metabolism and RQ", ["P:Metabolism: RQ, BMR, temperature, food intake"]],
+    ["2026-12-07", "Biochemistry", "Liver metabolism and fatty liver", ["B:Liver biochemistry: detoxification, lipoproteins, fatty liver"]],
+    ["2026-12-07", "Physiology", "Control of food intake", ["P:Metabolism: RQ, BMR, temperature, food intake"]],
+    ["2026-12-07", "Anatomy", "Large intestine: caecum, appendix, colon, peritoneal relations", ["A:Large intestine"]],
+    ["2026-12-09", "Anatomy", "Liver I and II, subphrenic spaces, biliary passages, gall bladder", ["A:Liver and biliary system"]],
+    ["2026-12-09", "Physiology", "Body temperature regulation", ["P:Metabolism: RQ, BMR, temperature, food intake"]],
+    ["2026-12-09", "Histology", "Juxtaglomerular apparatus, blood supply, urinary passages", ["H:Kidney and urinary passages"]],
+    ["2026-12-10", "Physiology", "Intro to renal physiology, renal blood flow, GFR 1", ["P:GFR, renal blood flow and its autoregulation"]],
+    ["2026-12-10", "Anatomy", "Arteries of the gut, portal vein, portosystemic anastomosis", ["A:Vessels of gut"]],
+    ["2026-12-13", "Physiology", "Glomerular filtration 2", ["P:GFR, renal blood flow and its autoregulation"]],
+    ["2026-12-14", "Anatomy", "Pancreas, spleen, kidney, abdominal ureter", ["A:Pancreas", "A:Spleen", "A:Kidney, ureter and suprarenal glands"]],
+    ["2026-12-14", "Physiology", "Tubular processing + Na handling 1 and 2", ["P:Tubular transport: glucose, Na+, K+, clearance"]],
+    ["2026-12-15", "Anatomy", "Suprarenal, psoas, quadratus lumborum, lumbar fascia", ["A:Kidney, ureter and suprarenal glands", "A:Posterior abdominal wall"]],
+    ["2026-12-16", "Anatomy", "Abdominal aorta, iliac arteries, IVC, lumbar plexus", ["A:Posterior abdominal wall"]],
+    ["2026-12-16", "Physiology", "Handling of glucose and K+, concentration of urine 1", ["P:Tubular transport: glucose, Na+, K+, clearance", "P:Urine concentration, ADH and thirst"]],
+    ["2026-12-17", "Anatomy", "Lumbar sympathetic chain, plexuses, lymph; development of foregut, liver, biliary system", ["A:Posterior abdominal wall", "A:Gut development"]],
+    ["2026-12-17", "Physiology", "Concentration of urine 2, urea, HCO3- and H+ 1 and 2", ["P:Urine concentration, ADH and thirst", "P:Renal acid-base balance"]],
+    ["2026-12-21", "Anatomy", "Development of midgut and hindgut", ["A:Gut development"]],
+    ["2026-12-22", "Physiology", "Acid-base balance", ["P:Renal acid-base balance"]],
+    ["2026-12-22", "Anatomy", "Development of kidney, ureter, testis, external genitalia", ["A:Gut development"]],
+    ["2026-12-23", "College", "Revision: histology, anatomy 1, physiology 1, biochemistry", []],
+    ["2026-12-24", "College", "Revision: anatomy 2 and 3, physiology 2 and 3", []],
+    ["2027-01-02", "College", "Final revision: histology, anatomy, biochemistry, physiology", []],
+    ["2027-01-13", "College", "Practical revision: physiology, anatomy, histology labs", []],
+    ["2027-01-14", "College", "Practical revision: physiology, anatomy, biochemistry, histology labs", []],
+  ];
+  function lectureSpan() {
+    const o = {};
+    LECT.forEach(([d, , , us]) => us.forEach((u) => { const x = o[u] || (o[u] = { first: d, last: d }); if (d < x.first) x.first = d; if (d > x.last) x.last = d; }));
+    return o;
+  }
+
   /* ── the schedule ── */
   function life() { return T() && T().life ? T().life() : { mins: 60, off: 5 }; }
   const isOff = (d) => life().off >= 0 && d.getDay() === life().off;
@@ -71,47 +134,48 @@
     // the owner starts on Saturday 21 Nov 2026; before that the plan waits (nothing is due early)
     const mins = life().mins, now0 = at(iso(new Date())), start = now0 < at(START) ? at(START) : now0, days = [];
     const mcqDate = at(EXAMS[0].date), gwDate = at(EXAMS[1].date), cwDate = at(EXAMS[2].date);
-    const mockPlan = ["Exam 195 (2023)", "Final 196 (2024)", "Final 197 (Jan 2025)", "EOM 2026 (198)"];
-    // Phase A days (until the day before the GIT MCQ)
+    // Phase A follows the official IPKA timetable: a unit is studied the day after its last lecture
+    // (the lecture is the first exposure, the app the second); full past papers only once the lectures are done
     const A = []; for (let d = new Date(start); d < mcqDate; d = new Date(d.getTime() + DAY)) A.push(new Date(d));
-    const studyA = A.filter((d) => !isOff(d));
-    const last = studyA.slice(-3);                              // weak-spot days and the light day
-    const sats = studyA.filter((d) => d.getDay() === 6 && !last.includes(d)).slice(-mockPlan.length);
-    const mockDays = new Map(); sats.forEach((d, i) => mockDays.set(iso(d), mockPlan[mockPlan.length - sats.length + i]));
-    // the units that fit: each unit day needs reviews 10 + learn 15 + MCQs 12 + written 15 minutes
-    const unitDays = studyA.filter((d) => !mockDays.has(iso(d)) && !last.includes(d));
-    const perUnit = 52, perDay = Math.max(1, Math.floor((mins - 0) / perUnit)) || 1;
-    // more units than days: the two lightest units share one day (shorter steps, no written step) before any
-    // unit is dropped; what still does not fit is dropped openly
-    const units = interleave(gitUnits()), groups = units.map((u) => [u]), cap = unitDays.length * perDay;
-    while (groups.length > cap) {
-      const singles = groups.filter((g) => g.length === 1).sort((a, b) => a[0].weight - b[0].weight);
-      if (singles.length < 2) break;
-      const [g1, g2] = singles; g1.push(g2[0]); groups.splice(groups.indexOf(g2), 1);
-    }
-    const fitG = groups.slice(0, cap), fit = [].concat(...fitG), dropped = [].concat(...groups.slice(cap));
-    let ui = 0;
+    const FULL = { "2026-12-19": ["Exam 195 (2023)", "Final 196 (2024)"], "2026-12-26": ["Final 197 (Jan 2025)"], "2026-12-28": ["EOM 2026 (198)"] };
+    const CHECKS = ["2026-11-28", "2026-12-05", "2026-12-12"];
+    const WEAK = ["2026-12-27"], LIGHT = "2026-12-29";
+    const units = interleave(gitUnits()), span = lectureSpan(), plan = new Map();
+    const free = (d) => !isOff(d) && !FULL[iso(d)] && !CHECKS.includes(iso(d)) && !WEAK.includes(iso(d)) && iso(d) !== LIGHT;
+    const left = units.slice();
+    A.filter(free).forEach((d) => {
+      const k = iso(d), ready = (u) => span[u.id] && span[u.id].last < k, started = (u) => span[u.id] && span[u.id].first < k;
+      // the unit whose lectures finished longest ago goes first (closest to its lecture); weight breaks ties
+      let pick = left.filter(ready).sort((a, b) => (span[a.id].last < span[b.id].last ? -1 : span[a.id].last > span[b.id].last ? 1 : b.weight - a.weight))[0], partial = false;
+      if (!pick) { pick = left.filter(started).sort((a, b) => b.weight - a.weight)[0]; partial = !!pick; }
+      if (pick) { left.splice(left.indexOf(pick), 1); plan.set(k, { units: [pick], partial }); }
+    });
+    // anything left (late lectures) shares a day with the lightest unit already placed after its lectures
+    left.slice().forEach((u) => {
+      const k0 = span[u.id] ? span[u.id].last : "";
+      const slot = Array.from(plan.entries()).filter(([k, v]) => k > k0 && v.units.length === 1).sort((a, b) => a[1].units[0].weight - b[1].units[0].weight)[0];
+      if (slot) { slot[1].units.push(u); left.splice(left.indexOf(u), 1); }
+    });
+    const dropped = left, fit = [].concat(...Array.from(plan.values()).map((v) => v.units));
     A.forEach((d) => {
-      const k = iso(d);
-      if (isOff(d)) return days.push({ date: k, phase: "GIT MCQ", off: true, steps: [] });
-      if (mockDays.has(k)) return days.push({ date: k, phase: "GIT MCQ", title: "Past paper as a real mock", steps: [step("review", "Reviews due (memory cards)", 10), step("mock", "Mock: " + mockDays.get(k) + " · AI off", 45, { src: mockDays.get(k) }), step("misses", "Review the misses with the professor", 15, { src: mockDays.get(k) })] });
-      if (last.includes(d)) {
-        const lightDay = d === last[last.length - 1];
-        return days.push({ date: k, phase: "GIT MCQ", title: lightDay ? "Light day before the exam" : "Weak spots only, mixed", steps: lightDay
-          ? [step("review", "Reviews due", 15), step("traps", "My traps, re-worded", 15), step("examday", "Exam-day protocol", 5), step("rest", "Stop by evening. Sleep is part of the plan.", 0)]
-          : [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15), step("traps", "My traps, re-worded", 10)] });
-      }
-      const todays = [].concat(...fitG.slice(ui, ui + perDay)); ui += Math.min(perDay, Math.max(0, fitG.length - ui));
-      const paired = todays.length > perDay;
-      if (!todays.length) return days.push({ date: k, phase: "GIT MCQ", title: "Spare day: weak spots, mixed", steps: [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15)] });
-      const steps = [step("review", "Reviews due (memory cards)", 10)];
+      const k = iso(d), lec = LECT.filter((l) => l[0] === k);
+      const lecSteps = lec.length ? [step("notes", "📝 2 min after the lectures: what the doctors stressed (" + lec.map((l) => l[2]).slice(0, 2).join("; ").slice(0, 70) + ")", 2, { lect: k })] : [];
+      const base = { date: k, phase: "GIT MCQ", lectures: lec.map((l) => l[1] + ": " + l[2]) };
+      if (isOff(d)) return days.push(Object.assign(base, { off: true, steps: [] }));
+      if (FULL[k]) return days.push(Object.assign(base, { title: "Full past paper" + (FULL[k].length > 1 ? "s" : "") + " as a real mock", steps: [step("review", "Reviews due (memory cards)", 10)].concat(FULL[k].map((src) => step("mock", "Mock: " + src + " · AI off", 30, { src })), [step("misses", "Review the misses with the professor", 15)]) }));
+      if (CHECKS.includes(k)) return days.push(Object.assign(base, { title: "Weekly check on what was lectured so far (AI off)", steps: [step("review", "Reviews due (memory cards)", 10), step("week", "Today's 10 from this week's units, misses first", 15), step("blindmix", "Blind check on your weakest unit", 15), step("traps", "My traps, re-worded", 10)] }));
+      if (WEAK.includes(k)) return days.push(Object.assign(base, { title: "Weak spots only, mixed", steps: [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15), step("traps", "My traps, re-worded", 10)] }));
+      if (k === LIGHT) return days.push(Object.assign(base, { title: "Light day before the exam", steps: [step("review", "Reviews due", 15), step("traps", "My traps, re-worded", 15), step("examday", "Exam-day protocol", 5), step("rest", "Stop by evening. Sleep is part of the plan.", 0)] }));
+      const pl = plan.get(k);
+      if (!pl) return days.push(Object.assign(base, { title: "Review day (nothing new is ready from the lectures)", steps: lecSteps.concat([step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters taught so far", 15)]) }));
+      const paired = pl.units.length > 1, steps = lecSteps.concat([step("review", "Reviews due (memory cards)", 10)]);
       // rule 1: a small budget cuts steps, never adds minutes: written goes first (phase B covers it), then teaching
-      todays.forEach((u) => {
+      pl.units.forEach((u) => {
         if (mins >= 37) steps.push(step("learn", "Learn with the professor: " + u.name, paired ? 10 : 15, { unit: u.id }));
         steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, paired ? 10 : 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, paired ? 10 : 12, { unit: u.id }));
         if (!paired && mins >= 52 && u.written.length) steps.push(step("written", "Write from a blank page: " + u.written[0].questions[0].q.slice(0, 90), 15, { unit: u.id, q: u.written[0].questions[0].q }));
       });
-      days.push({ date: k, phase: "GIT MCQ", title: todays.map((u) => u.subject + " · " + u.name).join(" + ") || "Mixed review", steps });
+      days.push(Object.assign(base, { title: pl.units.map((u) => u.subject + " · " + u.name).join(" + ") + (pl.partial ? " (its lectures are still running)" : ""), steps }));
     });
     days.push({ date: EXAMS[0].date, phase: "GIT MCQ", exam: EXAMS[0], steps: [step("examday", "Exam-day protocol, then go", 5)] });
     // Phase B: GIT written — the ranked topics, written from memory and marked by three examiners
@@ -124,6 +188,8 @@
       if (isOff(d)) return days.push({ date: k, phase: "GIT written", off: true, steps: [] });
       if (d === studyB[studyB.length - 1]) return days.push({ date: k, phase: "GIT written", title: "Light day: your own one-page sheets", steps: [step("review", "Reviews due", 10), step("sheets", "Read your sheets once; rewrite only what was missing", 30), step("examday", "Written-exam protocol", 5)] });
       const t = wPlan.slice(wi, wi + perB); wi += t.length;
+      const col = LECT.filter((l) => l[0] === k && l[1] === "College");
+      if (col.length) return days.push({ date: k, phase: "GIT written", title: "College final revision + " + t.slice(0, 2).map((w) => w.topic).join(" · "), lectures: col.map((l) => l[2]), steps: [step("college", "Attend: " + col[0][2], 0), step("review", "Reviews due", 10)].concat(t.slice(0, 2).map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q }))) });
       days.push({ date: k, phase: "GIT written", title: t.map((w) => w.topic).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q })) ) });
     });
     days.push({ date: EXAMS[1].date, phase: "GIT written", exam: EXAMS[1], steps: [step("examday", "Written-exam protocol, then go", 5)] });
@@ -139,6 +205,8 @@
       days.push({ date: k, phase: "CNS written", title: t.map((c) => c.name).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((c) => step("cns", "CNS " + c.subject + ": " + c.name + " — likely essay, then write it", 20, { ch: c.name, sub: c.subject }))) });
     });
     days.push({ date: EXAMS[2].date, phase: "CNS written", exam: EXAMS[2], steps: [step("examday", "Written-exam protocol, then go", 5)] });
+    // rule 1, enforced at the end: a day over the owner's minutes shortens its review step (to 5 at least)
+    days.forEach((d) => { const tot = d.steps.reduce((t, x) => t + x.min, 0), r = d.steps.find((x) => x.kind === "review"); if (r && tot > mins) r.min = Math.max(5, r.min - (tot - mins)); });
     days.forEach((d) => d.steps.forEach((s, i) => (s.id = d.date + ":" + i + ":" + s.kind)));
     return { days, dropped, unitsFit: fit.length, unitsAll: units.length, wDropped: W.slice(wPlan.length), cDropped: cnsChapters().slice(cPlan.length, cPlan.length + 12), mins };
   }
@@ -165,6 +233,13 @@
     else if (s.kind === "written") { close(); override("GIT 206 written", "Written question: " + s.q); t.openEssay(s.q); }
     else if (s.kind === "mock") { close(); G().mockPaper(s.src); }
     else if (s.kind === "misses" || s.kind === "weak") { close(); G().startCustom("Misses first, mixed", () => true, 10) || G().open("mcq"); }
+    else if (s.kind === "notes") {
+      // the notes are keyed by the screen title, the same title the learn step uses, so what the doctor stressed
+      // reaches the professor when the unit is studied
+      const l = LECT.find((x) => x[0] === s.lect && x[3].length), un = l ? unitById(l[3][0]) : null;
+      close(); override(un ? "GIT 206 · " + un.name : "GIT 206 · lectures " + s.lect, "Lectures today: " + LECT.filter((x) => x[0] === s.lect).map((x) => x[1] + ": " + x[2]).join("; ")); t.openNotes();
+    }
+    else if (s.kind === "week") { const span = lectureSpan(), k = iso(new Date()), done = gitUnits().filter((u) => span[u.id] && span[u.id].first < k); close(); G().startCustom("This week's check", (q) => done.some((u) => u.pred(q)), 10) || G().open("mcq"); }
     else if (s.kind === "traps") { close(); t.open(); t.ask("Drill me on my traps: the things I was sure about and got wrong.", "traps"); }
     else if (s.kind === "examday") { close(); t.open(); t.ask("Give me my exam-day protocol.", "examday"); }
     else if (s.kind === "sheets") { openSheets(); }
@@ -218,10 +293,11 @@
       (d && d.gate ? '<div class="ixHgate">' + E(d.gate) + "</div>" : "") +
       (k < START ? "<p><b>The plan starts on Saturday 21 November.</b> Until then nothing is due: live. 🌿 (If you want, set your minutes and Friday off in ⏱ and add your key in ⚙︎.)</p>" : "") +
       (day ? "<h3>" + (day.date === k ? "Today" : "Next: " + E(nice(day.date))) + " · " + E(day.phase) + (day.title ? " · " + E(day.title) : "") + "</h3>" +
+        (day.lectures && day.lectures.length ? "<p class='ixHsmall'>📚 Lectures " + (day.date === k ? "today" : "that day") + ": " + day.lectures.map(E).join(" · ") + "</p>" : "") +
         (day.off ? "<p>Day off. Live. 🌿</p>" : day.exam ? "<p><b>Exam day: " + E(day.exam.name) + ".</b> Protocol, breakfast, go. Good luck, inshallah.</p>" : "") +
         '<div class="ixPsteps">' + day.steps.map((s) => '<div class="ixPstep' + (done(s) ? " done" : "") + '"><label><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + "></label><div><b>" + E(s.label) + "</b><span>" + (s.min ? s.min + " min" : "") + "</span></div>" + (s.kind !== "rest" ? '<button type="button" data-go="' + E(s.id) + '">' + (st().done[s.id] ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" +
         (day.steps.length ? "<p class='ixHsmall'>About " + day.steps.reduce((t, s) => t + s.min, 0) + " minutes of your " + P.mins + ". Tick a step when it is done; the day ends when the list does.</p>" : "") : "<p>All three exams are done. Rest. 🌿</p>") +
-      "<h3>Next 7 days</h3><ul class='ixPweek'>" + week.map((x) => "<li><b>" + E(nice(x.date)) + "</b> " + (x.off ? "day off" : x.exam ? "🎯 " + E(x.exam.name) : E(x.title || "")) + "</li>").join("") + "</ul>" +
+      "<h3>Next 7 days</h3><ul class='ixPweek'>" + week.map((x) => "<li><b>" + E(nice(x.date)) + "</b> " + (x.off ? "day off" : x.exam ? "🎯 " + E(x.exam.name) : E(x.title || "")) + (x.lectures && x.lectures.length ? " <small>· " + x.lectures.length + " lectures</small>" : "") + "</li>").join("") + "</ul>" +
       "<h3>What the minutes cannot fit (dropped openly)</h3>" +
       (P.dropped.length ? "<p>GIT units: " + P.dropped.map((u) => E(u.name) + " (" + u.subject + ")").join(", ") + ". Raise the minutes in ⏱ only if you want them back; otherwise they are skimmed in the last review days.</p>" : "<p>Every GIT unit fits (" + P.unitsFit + " units).</p>") +
       (P.wDropped.length ? "<p>GIT written topics after the top " + (GB().written.filter((w) => !/: other$/.test(w.topic)).length - P.wDropped.length) + ": " + P.wDropped.slice(0, 10).map((w) => E(w.topic)).join(", ") + (P.wDropped.length > 10 ? "…" : "") + "</p>" : "") +
@@ -237,5 +313,5 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1800);
-  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets };
+  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT };
 })();

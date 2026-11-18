@@ -741,7 +741,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
+  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), openNotes: () => { build(); root.classList.add("on"); renderLog(); openNotes(); }, addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();
