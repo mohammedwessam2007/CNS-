@@ -298,10 +298,12 @@
   }
   function open() { if (T()) T().close(); if (G()) G().close(); shell(); root.classList.add("on"); render(); }
   function close() { if (root) root.classList.remove("on"); }
-  function render() {
+  // render into the overlay, or into any element (the home screen mounts it there)
+  function render(target) {
+    const body = target || (shell(), document.getElementById("ixPbody"));
     const { P, day } = today(), k = iso(new Date()), d = T() && T().dayState ? T().dayState() : null;
     const left = (x) => Math.round((at(x.date) - at(k)) / DAY);
-    root.querySelector("#ixPsub").textContent = EXAMS.map((x) => x.name + " in " + left(x) + "d").join(" · ");
+    if (!target) root.querySelector("#ixPsub").textContent = EXAMS.map((x) => x.name + " in " + left(x) + "d").join(" · ");
     const done = (s) => st().done[s.id] === true;
     const week = P.days.filter((x) => x.date > k).slice(0, 7);
     body.innerHTML =
@@ -321,7 +323,7 @@
       "<p>CNS written: no past written list is loaded yet, so chapters are ranked by MCQ weight. Send the CNS previous written questions (Telegram) and the ranking becomes exact.</p>" +
       "<h3>Forgetting forecast</h3><ul>" + forecast().map((f) => "<li>Before " + E(f.exam) + ": " + f.cards + " memory cards and " + f.misses + " GIT misses fall due. The daily reviews keep them; skip them and they fade.</li>").join("") + "</ul>";
     body.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => { const s = day.steps.find((x) => x.id === b.dataset.go); if (s) runStep(s); }));
-    body.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); render(); }));
+    body.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); render(target); if (target && typeof window.render === "function") window.render(); }));
   }
 
   function install() {
@@ -330,5 +332,5 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1800);
-  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT };
+  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT, mount: (el) => render(el), today, START };
 })();
