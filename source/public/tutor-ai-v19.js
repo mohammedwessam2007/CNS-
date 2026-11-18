@@ -269,6 +269,8 @@
     const gate = !LIGHT[mode] && !opts.force ? lifeGate() : null;
     if (gate) { addMsg("tutor", gate); if (opts.inline) inlinePaint(inlineCard(opts.inline), gate); sub(); return; }
     tickDay();
+    const interests = ls.get("ix_tutor_interests_v1", "").trim();
+    if (interests && (mode === "palace" || mode === "why" || mode === "case")) extraContext = (extraContext ? extraContext + "\n\n" : "") + "THE STUDENT'S INTERESTS (use them to frame hooks and cases; never change a fact): " + interests.slice(0, 300);
     if (mode === "triage") extraContext = (extraContext ? extraContext + "\n\n" : "") + triageText();
     if (mode === "week") extraContext = (extraContext ? extraContext + "\n\n" : "") + statsText();
     if (mode === "review") {
@@ -345,7 +347,7 @@
     map: { label: "Connect it", prompt: "Ask me to connect this topic to 4 things I already know, then check my links.", brief: "TASK: concept mapping. Name the central idea and ask the student to link it to 4 other ideas (structure, function, lesion, exam fact), each as 'A → B because …'. Check every link; fix wrong ones." },
     traps: { label: "My traps", prompt: "Drill me on my traps: the things I was sure about and got wrong.", brief: "TASK: review the student's own traps below. One at a time: ask a fresh question on the same false belief (not the same wording), wait, then contrast the belief and the truth in one line." },
     draw: { label: "Draw it", prompt: "Make me draw this from memory, then help me check my drawing.", brief: "TASK: drawing to learn. Ask the student to draw the key structure or pathway of the open topic FROM MEMORY on paper (60-90 seconds), naming exactly which 5-7 labels it must have. Wait. Then they list or describe what they drew; check each label and relation against the course (Dr Doss drawing if the topic has one), name what is missing or misplaced, and tell them to look at the reference drawing now and redraw only the wrong part. Do not claim you can see the paper." },
-    palace: { label: "Memory hook", prompt: "This list will not stick. Build me a memory hook for it.", brief: "TASK: mnemonics for arbitrary lists only (branches, contents, order). First say in one line whether this needs a hook or is better understood from the mechanism. If a hook fits: build a short memory palace (5-7 places along a route the student knows, e.g. home to college) or an acronym, one vivid odd image per item, then make them recall it back once now. Keep every fact exactly as the course states it." },
+    palace: { label: "Memory hook", prompt: "This list will not stick. Build me a memory hook for it.", brief: "TASK: mnemonics for arbitrary lists only (branches, contents, order). First say in one line whether this needs a hook or is better understood from the mechanism. If a hook fits: build a short memory palace (5-7 places along a route the student knows, e.g. home to college) or an acronym, one vivid odd image per item, built from THE STUDENT'S INTERESTS when given (never changing the facts), then make them recall it back once now. Keep every fact exactly as the course states it." },
     plan: { label: "Plan today", prompt: "Help me plan today's study in 2 minutes.", brief: "TASK: WOOP plus an implementation intention, in at most 4 short turns. Ask: Wish (what to finish today, small), Outcome (how it feels), Obstacle (the inner one, e.g. phone, starting), Plan: write ONE 'If [obstacle], then I will [action]' and ONE 'When [time/place], I will start [first 2-minute step]'. End with the two lines only, so they can screenshot them." },
     outline: { label: "Blank page", pro: true, prompt: "Give me a written-exam question on this topic; I will write the outline from a blank page and you grade it.", brief: "TASK: written-exam retrieval. Give one likely essay question on the open topic. The student writes the outline (headings and key points) from memory. Grade against what a Kasr Al Ainy examiner rewards: list each point present, each missing point, and an estimated mark range (not one number; say grading by AI is a coach, not the examiner). Then give the 3 missing points to rewrite tomorrow." },
     hint: { label: "Hint", hidden: true, brief: "TASK: the student is stuck on the MCQ in QUESTION and has NOT answered. NEVER say or hint which option is right, never eliminate options by letter. Give rung 1 of the hint ladder only: one short nudge that points to the mechanism or the key word in the stem (2-3 lines). If they ask again, give rung 2: a narrower question that makes them reason. Stop there." },
@@ -363,6 +365,7 @@
     week: { label: "📈 My week", prompt: "Give me my honest weekly report.", brief: "TASK: honest weekly report from STATS only (never invent numbers). 6 short lines: what went well, the weakest pattern (sure-but-wrong, topics), memory deck (due/solid), AI spend, and ONE change for next week. No grade words, no flattery." },
     essay: { label: "📝 Grade my essay", sheet: true, brief: "" },
     blind: { label: "🧪 Blind check", sheet: true, brief: "" },
+    lesion: { label: "🧭 Lesion lab", pro: true, prompt: "Give me a lesion case to localise.", brief: "TASK: lesion lab (CNS). Give a patient's findings (3-5 signs, e.g. side of weakness, sensory loss, cranial nerve signs, reflexes). The student localises the lesion: level (cortex / internal capsule / brain stem level / cord segment / nerve), side, and the tract or nucleus for each sign. Wait. Judge each sign with a tag, then show the one-line rule that localises it (e.g. crossed signs = brain stem). Then a harder one." },
     viva: { label: "🎙 Viva", pro: true, prompt: "Examine me like the oral exam on this topic.", brief: "TASK: oral (viva) examiner. One question at a time, in this order: identify/describe a structure, its function, a lesion and what the patient shows, then 'why?'. Wait after each. Judge with tags. Be brisk and fair like a Kasr Al Ainy examiner; push one level deeper when they are right." },
     examday: { label: "🎯 Exam-day plan", prompt: "Give me my exam-day protocol.", brief: "TASK: exam-day protocol for a Kasr Al Ainy MCQ or written paper, max 10 short lines: minutes per question (from the number of questions and time if the student gives them; otherwise ask), first pass answer what you know and mark the rest, underline except/not/most, change an answer only with a concrete reason, written: outline first then fill, draw-and-label where possible, last 5 minutes check every question answered. Then: sleep and food the night before; no new topics in the last 24 hours." },
     triage: { label: "✂️ What to drop", pro: true, prompt: "If time is short, what should I skip?", brief: "TASK: honest triage. Using CHAPTER WEIGHT, pick the lowest-yield 15-20% of chapters the student can skip or only skim if time is short, and the top chapters that must be solid. Say roughly what share of past questions the skipped part held. Then fit the rest into DAILY BUDGET. Never suggest more daily minutes; cut scope instead." },
@@ -462,6 +465,7 @@
       '<label>Key<input type="password" id="ixTkey" autocomplete="off" spellcheck="false" placeholder="' + (has ? "saved · paste a new one to replace it" : "sk-or-v1-…") + '"></label>' +
       '<label>Professor model <small>(Why?, Explain this, Written answer)</small><input type="text" id="ixTpro" spellcheck="false" list="ixTlist" value="' + E(ls.get(MODEL_PRO, DEFAULT_PRO)) + '"></label>' +
       '<label>Fast model <small>(chat, quizzes, teach-back)</small><input type="text" id="ixTmodel" spellcheck="false" list="ixTlist" value="' + E(ls.get(MODEL, DEFAULT_MODEL)) + '"></label>' +
+      '<label>My interests <small>(memory hooks and cases are framed around them; e.g. football, gaming, cars)</small><input type="text" id="ixTint" value="' + E(ls.get("ix_tutor_interests_v1", "")) + '"></label>' +
       '<label>Weekly AI budget (US$) <small>(the tutor stops for the week when it is reached)</small><input type="number" id="ixTcap" min="0.2" step="0.5" value="' + cap() + '"></label>' +
       '<p class="ixTsmall">This week so far: $' + spend().usd.toFixed(2) + " in " + spend().calls + " answers.</p>" +
       '<datalist id="ixTlist">' + PRESETS.map((p) => '<option value="' + p[0] + '">' + p[1] + "</option>").join("") + "</datalist>" +
@@ -473,6 +477,7 @@
       const k = s.querySelector("#ixTkey").value.trim(), m = s.querySelector("#ixTmodel").value.trim() || DEFAULT_MODEL;
       ls.set(MODEL, m); ls.set(MODEL_PRO, s.querySelector("#ixTpro").value.trim() || DEFAULT_PRO);
       const cv = parseFloat(s.querySelector("#ixTcap").value); if (Number.isFinite(cv) && cv > 0) ls.set(CAPK, String(cv));
+      ls.set("ix_tutor_interests_v1", s.querySelector("#ixTint").value.trim().slice(0, 300));
       if (k) { if (!/^sk-or-/.test(k)) { st.textContent = "That does not look like an OpenRouter key (it starts with sk-or-)."; return; } ls.set(KEY, k); }
       const key = ls.get(KEY, ""); if (!key) { st.textContent = "Paste your key first."; return; }
       st.textContent = "Testing…";
@@ -490,47 +495,78 @@
   }
   /* ───── v21 written-answer grader: one LLM grade is unstable (kappa ~0.72, varies run to run), so it grades
      three times and reports the median and the spread; it coaches, the examiner decides ───── */
-  async function gradeOnce(q, a, key) {
+  /* v25: answer the verb. Kasr written questions are marked on structure as much as content */
+  function verbTemplate(q) {
+    const t = String(q || "").toLowerCase();
+    if (/compar|differen|versus|\bvs\b|table/.test(t)) return "COMPARE → a table: one column per item, one row per feature asked (site, structure, function, …); one closing line on the key difference.";
+    if (/\bcase\b|year[s]?[- ]old|patient|comment on/.test(t)) return "CASE → comment on every finding in order: finding → its mechanism → what it tells you; then the diagnosis or lesion; one line per finding.";
+    if (/develop|anomal|congenital/.test(t)) return "DEVELOPMENT → stages in time order (source → changes → final form), then each anomaly with its cause.";
+    if (/relation|related/.test(t)) return "RELATIONS → by surface: anterior, posterior, then medial/lateral or superior/inferior; a short list under each.";
+    if (/explain|mechanism|discuss|regulat|how/.test(t)) return "EXPLAIN / MECHANISM → numbered steps in causal order (stimulus → mechanism → effect), arrows allowed; a labelled diagram if it helps; end with the significance.";
+    if (/enumerat|\blist\b|\bname\b|mention|give|sites? of|contents?/.test(t)) return "ENUMERATE / MENTION → a numbered list, exactly what is asked, one line each; no paragraphs.";
+    if (/define|definition/.test(t)) return "DEFINE → one exact sentence, then the 2–3 points that make it complete.";
+    if (/draw|label|diagram/.test(t)) return "DRAW → a large labelled drawing with a title; every label a straight line.";
+    return "DESCRIBE → headings in order: definition/site → parts/structure → relations/supply → function → one clinical note.";
+  }
+  // the department's own answer for this question, when the GIT 206 reference set has one (IX_REF_FOR, git206-v23.js)
+  const refFor = (q) => { try { return window.IX_REF_FOR ? window.IX_REF_FOR(q) : ""; } catch (e) { return ""; } };
+  async function gradeOnce(q, a, key, img) {
+    const ref = refFor(q), notes = notesFor(topicKey());
+    const text = "QUESTION:\n" + q + "\n\nTHE STRUCTURE THIS VERB NEEDS:\n" + verbTemplate(q) + (a ? "\n\nSTUDENT ANSWER (typed):\n" + a : "\n\nSTUDENT ANSWER: in the attached photo of their handwritten page; read it carefully first.") +
+      (ref ? "\n\nREFERENCE ANSWER (department-style revision notes; mark against it, it is the standard):\n" + ref.slice(0, 5000) : "") + (notes ? "\n\nLECTURE NOTES:\n" + notes.slice(0, 4000) : "");
     const r = await fetch(API + "/chat/completions", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
-      body: JSON.stringify({ model: ls.get(MODEL_PRO, DEFAULT_PRO), max_tokens: 500, temperature: 0.7, usage: { include: true }, messages: [
-        { role: "system", content: "You are a Kasr Al Ainy CNS written-exam examiner. Mark the student's answer out of 10 the way the department marks: required headings/points present and correct, correct order, a labelled diagram where expected. Use the lecture notes if given. Reply ONLY with JSON: {\"score\": number, \"missing\": [up to 4 short missing or wrong points], \"good\": [up to 2 short strengths]}" },
-        { role: "user", content: "QUESTION:\n" + q + "\n\nSTUDENT ANSWER:\n" + a + (notesFor(topicKey()) ? "\n\nLECTURE NOTES:\n" + notesFor(topicKey()).slice(0, 6000) : "") }] }) });
+      body: JSON.stringify({ model: ls.get(MODEL_PRO, DEFAULT_PRO), max_tokens: 600, temperature: 0.7, usage: { include: true }, messages: [
+        { role: "system", content: "You are a Kasr Al Ainy written-exam examiner for this module. Mark the student's answer out of 10 the way the department marks: the points in the reference answer (if given) present and correct, the structure the question's verb demands, correct order and terms, a labelled diagram where expected. Do not reward length. Reply ONLY with JSON: {\"score\": number, \"missing\": [up to 4 short missing or wrong points], \"good\": [up to 2 short strengths], \"structure\": \"one short line: did it follow the verb's structure, and what to change\", \"read\": \"if a photo was given, the first 200 characters you read from it, else empty\"}" },
+        { role: "user", content: img ? [{ type: "text", text }, { type: "image_url", image_url: { url: img } }] : text }] }) });
     if (!r.ok) throw new Error(r.status === 401 ? "the key was refused" : "OpenRouter answered " + r.status);
     const j = await r.json(); if (j.usage && j.usage.cost) addSpend(j.usage.cost);
     const t = ((j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || "").replace(/^```(json)?|```$/g, "");
     const o = JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1));
-    return { score: Math.max(0, Math.min(10, +o.score)), missing: o.missing || [], good: o.good || [] };
+    return { score: Math.max(0, Math.min(10, +o.score)), missing: o.missing || [], good: o.good || [], structure: o.structure || "", read: o.read || "" };
   }
-  async function gradeEssay(q, a) {
+  async function gradeEssay(q, a, img) {
     const key = ls.get(KEY, ""); if (!key) throw new Error("add your key first");
     if (spend().usd >= cap()) throw new Error("this week's AI budget is used up");
-    const runs = (await Promise.allSettled([0, 1, 2].map(() => gradeOnce(q, a, key)))).filter((x) => x.status === "fulfilled").map((x) => x.value).filter((x) => Number.isFinite(x.score));
+    const runs = (await Promise.allSettled([0, 1, 2].map(() => gradeOnce(q, a, key, img)))).filter((x) => x.status === "fulfilled").map((x) => x.value).filter((x) => Number.isFinite(x.score));
     if (!runs.length) throw new Error("no grade came back; try again");
     const sc = runs.map((x) => x.score).sort((x, y) => x - y), med = sc[Math.floor(sc.length / 2)];
     const tally = (k) => { const m = new Map(); runs.forEach((x) => x[k].forEach((t) => { const kk = String(t).toLowerCase().slice(0, 40); m.set(kk, (m.get(kk) || [0, t])); m.get(kk)[0]++; })); return [...m.values()].sort((x, y) => y[0] - x[0]).map((x) => x[1]); };
-    return { median: med, lo: sc[0], hi: sc[sc.length - 1], n: runs.length, missing: tally("missing").slice(0, 5), good: tally("good").slice(0, 2) };
+    return { median: med, lo: sc[0], hi: sc[sc.length - 1], n: runs.length, missing: tally("missing").slice(0, 5), good: tally("good").slice(0, 2), structure: (runs.find((x) => x.structure) || {}).structure || "", read: (runs.find((x) => x.read) || {}).read || "", grounded: !!refFor(q) };
+  }
+  function photoURL(f) { return new Promise((ok, no) => { const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { const k = Math.min(1, 1400 / Math.max(im.width, im.height)), c = document.createElement("canvas"); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext("2d").drawImage(im, 0, 0, c.width, c.height); ok(c.toDataURL("image/jpeg", 0.85)); }; im.onerror = () => ok(r.result); im.src = r.result; }; r.onerror = () => no(new Error("the photo could not be read")); r.readAsDataURL(f); }); }
+  function gradeHTML(g, q) {
+    return '<div class="ixTgrade"><b>' + g.median + " / 10</b> <span>(examiners gave " + g.lo + "–" + g.hi + (g.n < 3 ? ", " + g.n + " of 3 answered" : "") + (g.grounded ? " · marked against the department-style answer" : "") + ")</span></div>" +
+      (g.read ? '<p class="ixTsmall">Read from your photo: “' + E(g.read.slice(0, 160)) + '…” If that is wrong, type the answer instead.</p>' : "") +
+      (g.structure ? "<p>🧱 <b>Structure:</b> " + E(g.structure) + "</p>" : "") +
+      (g.good.length ? "<p>✅ " + g.good.map(E).join(" · ") + "</p>" : "") + (g.missing.length ? "<p><b>Missing or wrong:</b></p><ul>" + g.missing.map((x) => "<li>" + E(x) + "</li>").join("") + "</ul>" : "") +
+      '<p class="ixTsmall">A coach\'s estimate, not the real examiner. Rewrite only the missing points tomorrow, from memory.</p>';
   }
   function openEssay(preQ) {
     build(); root.classList.add("on");
     const s = sheet(
-      "<h3>📝 Grade my essay</h3><p>Write your answer <b>from a blank page</b> first (paper is fine; type it here after). The professor marks it three times like an examiner and shows the middle mark and the spread, so one lucky or harsh run does not decide.</p>" +
-      '<label>Question<input type="text" id="ixTeq" placeholder="e.g. Describe the course and lesions of the optic pathway"></label>' +
-      '<label>My answer<textarea id="ixTea" rows="10" placeholder="Headings and points as you would write them in the exam…"></textarea></label>' +
+      "<h3>📝 Grade my essay</h3><p>Write it <b>from a blank page</b>, on paper like the exam if you can, then photograph it or type it. Three examiners mark it and you see the middle mark and the spread.</p>" +
+      '<label>Question<input type="text" id="ixTeq" placeholder="e.g. Mention the sites of portosystemic anastomosis"></label>' +
+      '<p class="ixTverb" id="ixTverb"></p>' +
+      '<label>My answer (typed)<textarea id="ixTea" rows="9" placeholder="Headings and points as you would write them in the exam…"></textarea></label>' +
+      '<label class="ixTfile">📷 or a photo of my handwritten answer<input type="file" id="ixTeimg" accept="image/*" capture="environment"></label>' +
       '<div class="ixTrow"><button type="button" class="primary" id="ixTego">Mark it (3 examiners)</button><button type="button" data-x>Close</button></div><div class="ixTstatus" id="ixTest"></div>'
     );
-    if (preQ) s.querySelector("#ixTeq").value = preQ;
+    const qi = s.querySelector("#ixTeq"), vb = s.querySelector("#ixTverb");
+    const showVerb = () => { vb.textContent = qi.value.trim() ? "How to answer it: " + verbTemplate(qi.value) : ""; };
+    qi.addEventListener("input", showVerb);
+    if (preQ) qi.value = preQ;
+    showVerb();
     s.querySelector("#ixTego").onclick = async () => {
-      const q = s.querySelector("#ixTeq").value.trim(), a = s.querySelector("#ixTea").value.trim(), st = s.querySelector("#ixTest");
-      if (!q || a.length < 20) { st.textContent = "Write the question and your answer first."; return; }
-      st.textContent = "Three examiners are marking…";
+      const q = qi.value.trim(), a = s.querySelector("#ixTea").value.trim(), st = s.querySelector("#ixTest"), f = s.querySelector("#ixTeimg").files[0];
+      if (!q || (a.length < 20 && !f)) { st.textContent = "Write the question and your answer (typed or a photo) first."; return; }
+      st.textContent = f ? "Reading your page, then three examiners are marking…" : "Three examiners are marking…";
       try {
-        const g = await gradeEssay(q, a);
-        st.innerHTML = '<div class="ixTgrade"><b>' + g.median + " / 10</b> <span>(examiners gave " + g.lo + "–" + g.hi + (g.n < 3 ? ", " + g.n + " of 3 answered" : "") + ")</span></div>" +
-          (g.good.length ? "<p>✅ " + g.good.map(E).join(" · ") + "</p>" : "") + (g.missing.length ? "<p><b>Missing or wrong:</b></p><ul>" + g.missing.map((x) => "<li>" + E(x) + "</li>").join("") + "</ul>" : "") +
-          '<p class="ixTsmall">A coach\'s estimate, not the real examiner. Rewrite only the missing points tomorrow, from memory.</p>' +
-          (window.IX_PLAN ? '<div class="ixTrow"><button type="button" id="ixTsheetSave">📄 Save as my one-page sheet</button></div>' : "");
-        const sv = st.querySelector("#ixTsheetSave"); if (sv) sv.onclick = () => { IX_PLAN.saveSheet(q, a, g.median); sv.textContent = "✓ Saved to your sheets"; sv.disabled = true; };
-        g.missing.slice(0, 3).forEach((m) => addCard("Written answer to '" + q + "': include " + m, a.slice(0, 120)));
+        const img = f ? await photoURL(f) : null;
+        const g = await gradeEssay(q, a, img);
+        st.innerHTML = gradeHTML(g, q) + (window.IX_PLAN ? '<div class="ixTrow"><button type="button" id="ixTsheetSave">📄 Save as my one-page sheet</button></div>' : "");
+        const sv = st.querySelector("#ixTsheetSave"); if (sv) sv.onclick = () => { IX_PLAN.saveSheet(q, a || g.read || "(handwritten, photographed)", g.median); sv.textContent = "✓ Saved to your sheets"; sv.disabled = true; };
+        g.missing.slice(0, 3).forEach((m) => addCard("Written answer to '" + q + "': include " + m, (a || "").slice(0, 120)));
+        if (window.IX_WRITTEN && IX_WRITTEN.scheduleOutline) IX_WRITTEN.scheduleOutline(q, g.median);
       } catch (e) { st.textContent = "Could not mark it: " + e.message; }
     };
   }
@@ -741,7 +777,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), openNotes: () => { build(); root.classList.add("on"); renderLog(); openNotes(); }, addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
+  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), verbTemplate, gradeHTML, photoURL, refFor, openNotes: () => { build(); root.classList.add("on"); renderLog(); openNotes(); }, addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();

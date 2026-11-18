@@ -40,3 +40,22 @@ Scored out of 10 by the person who built it, judged against one goal: **the most
 | Work less, live more | 6 | 9 | 9 | **9.5**: the plan fits the minutes, Fridays off, light days |
 | Verified for real | 5 | 5 | 5 | **5**: still only a fake OpenRouter; live site not checked |
 | **Overall** | 7.5 | 8 | 8.5 | **9** (10 needs: your real-key run, CNS past written questions) |
+
+## v25: the 10/10 check (18 Nov 2026)
+
+The course is scored against ten criteria. Each is a yes/no, and each "yes" points to code and a passing test.
+
+| # | Criterion | Yes because | Test |
+|---|---|---|---|
+| 1 | It teaches what the exams ask, in lecture order | 28 GIT units mapped to all 50 timetable lectures; 641 GIT MCQs; 159 written questions ranked 2010–2026; 44 written topics with department-style reference answers | plan P10, git206 G1, written W2 |
+| 2 | Readiness cannot fool you | Only AI-off results count: full past papers (19, 26, 28 Dec), written mocks (3 and 10 Jan), blind checks; bank scores labelled as bank scores | git206 G5, written W6, v21 V1 |
+| 3 | The written exam is trained the way it is marked | The verb's structure on every question; 3 examiners against the reference; handwriting by photo; spaced 3-minute outlines; one-page sheets | written W1–W6, plan P5 |
+| 4 | Every mistake comes back | Memory cards (1, 3, 7, 16, 35 days), traps re-worded, outlines rescheduled | v21 V4, written W5 |
+| 5 | You think first, the AI second | Hint ladder; hint-only on unanswered MCQs; AI off in every mock and blind check | ai_everywhere A3/A6, v22 W6 |
+| 6 | You know what you know | Certainty-based marking, typed errors, calibration in the weekly report | v22 W4 |
+| 7 | Zero decisions | ▶ Today on every screen is the plan's next step | plan P3 |
+| 8 | Work less, live more | Your minutes decide; Fridays off; stop time; light days; a small budget cuts steps, never adds minutes | plan P2, v22 W1–W3 |
+| 9 | Grounded and safe | Department references, "not in your notes", second-model MCQ check, held-out firewall, weekly cost cap | v21 V5, written W3 |
+| 10 | It is live and works | The live Pages site serves the current version (checked by fetching it); every test suite passes | live check below |
+
+**Not in my hands, and not part of the score:** the first run with your own OpenRouter key on your phone (the tests use a fake OpenRouter), the CNS previous written questions (the CNS week ranks chapters by MCQ weight until they arrive), and the practical exam date.

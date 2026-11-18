@@ -54,3 +54,8 @@ html.ixHmock .ixTtab,html.ixHmock .ixHtab,html.ixHmock .ixTwhy,html.ixHmock .ixH
 .ixPstep.done{opacity:.6}.ixPstep.done b{text-decoration:line-through}
 .ixPweek{padding-left:18px}.ixPweek li{margin:4px 0}
 .ixPsheet{white-space:pre-wrap;font:inherit;font-size:14px;background:rgba(255,255,255,.04);padding:10px;border-radius:10px}
+/* v25 written */
+.ixWta{width:100%;box-sizing:border-box;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#141c33;color:#fff;font:inherit;font-size:16px;padding:10px 12px;margin:8px 0}
+.ixW .ixTverb{margin:6px 0}
+.ixWr{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.ixW .ixTfile{display:grid;gap:6px;font-weight:700;padding:10px;border:1px dashed rgba(255,255,255,.25);border-radius:12px;margin:6px 0}

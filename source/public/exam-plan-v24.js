@@ -163,7 +163,7 @@
       const base = { date: k, phase: "GIT MCQ", lectures: lec.map((l) => l[1] + ": " + l[2]) };
       if (isOff(d)) return days.push(Object.assign(base, { off: true, steps: [] }));
       if (FULL[k]) return days.push(Object.assign(base, { title: "Full past paper" + (FULL[k].length > 1 ? "s" : "") + " as a real mock", steps: [step("review", "Reviews due (memory cards)", 10)].concat(FULL[k].map((src) => step("mock", "Mock: " + src + " · AI off", 30, { src })), [step("misses", "Review the misses with the professor", 15)]) }));
-      if (CHECKS.includes(k)) return days.push(Object.assign(base, { title: "Weekly check on what was lectured so far (AI off)", steps: [step("review", "Reviews due (memory cards)", 10), step("week", "Today's 10 from this week's units, misses first", 15), step("blindmix", "Blind check on your weakest unit", 15), step("traps", "My traps, re-worded", 10)] }));
+      if (CHECKS.includes(k)) return days.push(Object.assign(base, { title: "Weekly check on what was lectured so far (AI off)", steps: [step("review", "Reviews due (memory cards)", 10), step("week", "Today's 10 from this week's units, misses first", 15), step("blindmix", "Blind check on your weakest unit", 15), step("traps", "My traps, re-worded", 10), step("outline", "⚡ 3-minute outlines due (written)", 10)] }));
       if (WEAK.includes(k)) return days.push(Object.assign(base, { title: "Weak spots only, mixed", steps: [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15), step("traps", "My traps, re-worded", 10)] }));
       if (k === LIGHT) return days.push(Object.assign(base, { title: "Light day before the exam", steps: [step("review", "Reviews due", 15), step("traps", "My traps, re-worded", 15), step("examday", "Exam-day protocol", 5), step("rest", "Stop by evening. Sleep is part of the plan.", 0)] }));
       const pl = plan.get(k);
@@ -181,28 +181,30 @@
     // Phase B: GIT written — the ranked topics, written from memory and marked by three examiners
     const W = GB().written.filter((w) => !/: other$/.test(w.topic));
     const B = []; for (let d = new Date(mcqDate.getTime() + DAY); d < gwDate; d = new Date(d.getTime() + DAY)) B.push(new Date(d));
-    const studyB = B.filter((d) => !isOff(d)), perB = Math.max(2, Math.floor(mins / 15)), wPlan = W.slice(0, Math.max(0, studyB.length - 1) * perB);
+    const studyB = B.filter((d) => !isOff(d)), perB = Math.max(2, Math.floor((mins - 15) / 15)), wPlan = W.slice(0, Math.max(0, studyB.length - 1) * perB);
     let wi = 0;
     B.forEach((d) => {
       const k = iso(d);
       if (isOff(d)) return days.push({ date: k, phase: "GIT written", off: true, steps: [] });
       if (d === studyB[studyB.length - 1]) return days.push({ date: k, phase: "GIT written", title: "Light day: your own one-page sheets", steps: [step("review", "Reviews due", 10), step("sheets", "Read your sheets once; rewrite only what was missing", 30), step("examday", "Written-exam protocol", 5)] });
+      if (k === "2027-01-03") return days.push({ date: k, phase: "GIT written", title: "GIT written mock (AI off) + outlines", steps: [step("wmock", "🧪 GIT written mock: 6 real questions, 45 min, AI off, then 3 examiners", 45, { exam: "git" }), step("outline", "⚡ 3-minute outlines due", 10)] });
       const t = wPlan.slice(wi, wi + perB); wi += t.length;
       const col = LECT.filter((l) => l[0] === k && l[1] === "College");
       if (col.length) return days.push({ date: k, phase: "GIT written", title: "College final revision + " + t.slice(0, 2).map((w) => w.topic).join(" · "), lectures: col.map((l) => l[2]), steps: [step("college", "Attend: " + col[0][2], 0), step("review", "Reviews due", 10)].concat(t.slice(0, 2).map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q }))) });
-      days.push({ date: k, phase: "GIT written", title: t.map((w) => w.topic).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q })) ) });
+      days.push({ date: k, phase: "GIT written", title: t.map((w) => w.topic).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q })), [step("outline", "⚡ 3-minute outlines due", 10)]) });
     });
     days.push({ date: EXAMS[1].date, phase: "GIT written", exam: EXAMS[1], steps: [step("examday", "Written-exam protocol, then go", 5)] });
     // Phase C: CNS written — chapters by weight; the professor's likely essay, then a blank page and three examiners
     const C = []; for (let d = new Date(gwDate.getTime() + DAY); d < cwDate; d = new Date(d.getTime() + DAY)) C.push(new Date(d));
-    const studyC = C.filter((d) => !isOff(d)), perC = Math.max(2, Math.floor(mins / 20)), cPlan = cnsChapters().slice(0, Math.max(0, studyC.length - 1) * perC);
+    const studyC = C.filter((d) => !isOff(d)), perC = Math.max(2, Math.floor((mins - 15) / 20)), cPlan = cnsChapters().slice(0, Math.max(0, studyC.length - 1) * perC);
     let ci = 0;
     C.forEach((d) => {
       const k = iso(d);
       if (isOff(d)) return days.push({ date: k, phase: "CNS written", off: true, steps: [] });
       if (d === studyC[studyC.length - 1]) return days.push({ date: k, phase: "CNS written", title: "Light day: your CNS sheets", steps: [step("review", "Reviews due", 10), step("sheets", "Read your sheets once; rewrite only what was missing", 30), step("examday", "Written-exam protocol", 5)] });
+      if (k === "2027-01-10") return days.push({ date: k, phase: "CNS written", title: "CNS written mock (AI off) + outlines", steps: [step("wmock", "🧪 CNS written mock: 6 likely questions, 45 min, AI off, then 3 examiners", 45, { exam: "cns" }), step("outline", "⚡ 3-minute outlines due", 10)] });
       const t = cPlan.slice(ci, ci + perC); ci += t.length;
-      days.push({ date: k, phase: "CNS written", title: t.map((c) => c.name).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((c) => step("cns", "CNS " + c.subject + ": " + c.name + " — likely essay, then write it", 20, { ch: c.name, sub: c.subject }))) });
+      days.push({ date: k, phase: "CNS written", title: t.map((c) => c.name).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((c) => step("cns", "CNS " + c.subject + ": " + c.name + " — likely essay, then write it", 20, { ch: c.name, sub: c.subject })), [step("outline", "⚡ 3-minute outlines due", 10)]) });
     });
     days.push({ date: EXAMS[2].date, phase: "CNS written", exam: EXAMS[2], steps: [step("examday", "Written-exam protocol, then go", 5)] });
     // rule 1, enforced at the end: a day over the owner's minutes shortens its review step (to 5 at least)
@@ -240,6 +242,8 @@
       close(); override(un ? "GIT 206 · " + un.name : "GIT 206 · lectures " + s.lect, "Lectures today: " + LECT.filter((x) => x[0] === s.lect).map((x) => x[1] + ": " + x[2]).join("; ")); t.openNotes();
     }
     else if (s.kind === "week") { const span = lectureSpan(), k = iso(new Date()), done = gitUnits().filter((u) => span[u.id] && span[u.id].first < k); close(); G().startCustom("This week's check", (q) => done.some((u) => u.pred(q)), 10) || G().open("mcq"); }
+    else if (s.kind === "outline") { close(); window.IX_WRITTEN && IX_WRITTEN.openDue(); }
+    else if (s.kind === "wmock") { close(); window.IX_WRITTEN && IX_WRITTEN.openMock(s.exam); }
     else if (s.kind === "traps") { close(); t.open(); t.ask("Drill me on my traps: the things I was sure about and got wrong.", "traps"); }
     else if (s.kind === "examday") { close(); t.open(); t.ask("Give me my exam-day protocol.", "examday"); }
     else if (s.kind === "sheets") { openSheets(); }
@@ -250,6 +254,18 @@
     GB().mcq.forEach((q) => { const r = g[q.id]; if (!r) return; const o = per[q.chapter] || (per[q.chapter] = [0, 0]); o[0]++; if (!r.ok) o[1]++; });
     const w = Object.entries(per).filter(([, v]) => v[0] >= 3).sort((a, b) => b[1][1] / b[1][0] - a[1][1] / a[1][0])[0];
     return w ? w[0] : "Liver and biliary system";
+  }
+
+  /* ── readiness: only AI-off results count (GIT past-paper mocks, written mocks, blind checks) ── */
+  function readinessHTML() {
+    const rows = [];
+    const g = window.IX_GIT && IX_GIT.readiness ? IX_GIT.readiness() : null;
+    rows.push("GIT MCQ (past papers, AI off): " + (g ? "<b>" + Math.round(g.p * 100) + "%</b> (" + Math.round(g.lo * 100) + "–" + Math.round(g.hi * 100) + "%) on " + g.n + " questions" : "after your first full paper (19 Dec)"));
+    const W = window.IX_WRITTEN ? IX_WRITTEN.history() : [];
+    ["git", "cns"].forEach((x) => { const m = W.filter((y) => y.exam === x).pop(); rows.push((x === "git" ? "GIT" : "CNS") + " written (mock, AI off): " + (m ? "<b>" + Math.round((100 * m.total) / m.out) + "%</b> (examiners " + Math.round((100 * m.lo) / m.out) + "–" + Math.round((100 * m.hi) / m.out) + "%)" : "after the mock on " + (x === "git" ? "3 Jan" : "10 Jan"))); });
+    const b = T() && T().blindRange ? T().blindRange() : null;
+    if (b && b.p != null) rows.push("Blind checks (new questions, AI off): <b>" + Math.round(b.p * 100) + "%</b> (" + Math.round(b.lo * 100) + "–" + Math.round(b.hi * 100) + "%)");
+    return "<h3>Readiness (only AI-off results count)</h3><ul>" + rows.map((r) => "<li>" + r + "</li>").join("") + "</ul>";
   }
 
   /* ── one-page sheets the owner writes himself (the last days before each written exam are spent on them) ── */
@@ -297,6 +313,7 @@
         (day.off ? "<p>Day off. Live. 🌿</p>" : day.exam ? "<p><b>Exam day: " + E(day.exam.name) + ".</b> Protocol, breakfast, go. Good luck, inshallah.</p>" : "") +
         '<div class="ixPsteps">' + day.steps.map((s) => '<div class="ixPstep' + (done(s) ? " done" : "") + '"><label><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + "></label><div><b>" + E(s.label) + "</b><span>" + (s.min ? s.min + " min" : "") + "</span></div>" + (s.kind !== "rest" ? '<button type="button" data-go="' + E(s.id) + '">' + (st().done[s.id] ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" +
         (day.steps.length ? "<p class='ixHsmall'>About " + day.steps.reduce((t, s) => t + s.min, 0) + " minutes of your " + P.mins + ". Tick a step when it is done; the day ends when the list does.</p>" : "") : "<p>All three exams are done. Rest. 🌿</p>") +
+      readinessHTML() +
       "<h3>Next 7 days</h3><ul class='ixPweek'>" + week.map((x) => "<li><b>" + E(nice(x.date)) + "</b> " + (x.off ? "day off" : x.exam ? "🎯 " + E(x.exam.name) : E(x.title || "")) + (x.lectures && x.lectures.length ? " <small>· " + x.lectures.length + " lectures</small>" : "") + "</li>").join("") + "</ul>" +
       "<h3>What the minutes cannot fit (dropped openly)</h3>" +
       (P.dropped.length ? "<p>GIT units: " + P.dropped.map((u) => E(u.name) + " (" + u.subject + ")").join(", ") + ". Raise the minutes in ⏱ only if you want them back; otherwise they are skimmed in the last review days.</p>" : "<p>Every GIT unit fits (" + P.unitsFit + " units).</p>") +

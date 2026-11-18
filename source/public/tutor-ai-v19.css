@@ -70,3 +70,4 @@
 .ixBopt input{width:auto!important;margin-top:4px}
 html.ixBlind .ixAiBar,html.ixBlind .ixAiFig,html.ixBlind .ixTwhy,html.ixBlind .ixTtab{display:none!important}
 .ixTsheetIn select{width:100%;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#141c33;color:#fff;font:inherit;font-size:16px;padding:11px 12px}
+.ixTverb{font-size:13px;color:#ffe9b8;background:rgba(255,211,110,.08);border:1px solid rgba(255,211,110,.3);border-radius:10px;padding:8px 10px;margin:0}.ixTverb:empty{display:none}

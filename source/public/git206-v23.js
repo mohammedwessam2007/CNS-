@@ -231,16 +231,21 @@
   let wsub = "All";
   function written() {
     const W = B().written.filter((w) => !/: other$/.test(w.topic) && (wsub === "All" || w.subject === wsub));
-    body.innerHTML = "<p>Previous written questions grouped by topic, <b>most likely first</b> (asked more often and more recently). Write from a blank page, then let the three examiners mark it.</p>" +
+    const od = window.IX_WRITTEN ? IX_WRITTEN.due().length : 0;
+    body.innerHTML = (window.IX_WRITTEN ? "<div class='ixHrow'><button type='button' class='primary' data-wm='git'>🧪 Written mock, AI off (45 min)</button><button type='button' data-wo>⚡ Outlines due: " + od + "</button></div>" : "") + "<p>Previous written questions grouped by topic, <b>most likely first</b> (asked more often and more recently). Write from a blank page, then let the three examiners mark it.</p>" +
       "<div class='ixHrow'>" + ["All", "Anatomy", "Physiology", "Histology"].map((x) => '<button type="button" data-ws="' + x + '"' + (x === wsub ? ' aria-pressed="true"' : "") + ">" + x + "</button>").join("") + "</div>" +
       W.map((w, i) => '<details class="ixHw"><summary><span class="ixHrank">' + (i + 1) + "</span><b>" + E(w.topic) + "</b><span>" + E(w.subject) + " · asked " + w.times + "× · last " + E(w.last) + "</span></summary>" +
-        w.questions.map((q, j) => '<div class="ixHwq"><p>' + E(q.q) + ' <small>(' + E(q.years.join(", ")) + ')</small></p><div class="ixHrow"><button type="button" data-w="grade" data-t="' + i + '" data-j="' + j + '">📝 Write it, get marked</button><button type="button" data-w="model" data-t="' + i + '" data-j="' + j + '">🧠 Model answer</button><button type="button" data-w="hook" data-t="' + i + '" data-j="' + j + '">🔒 Hook</button></div><div class="ixHhost"></div></div>').join("") + "</details>").join("");
+        w.questions.map((q, j) => '<div class="ixHwq"><p>' + E(q.q) + ' <small>(' + E(q.years.join(", ")) + ')</small></p><div class="ixHrow"><button type="button" data-w="grade" data-t="' + i + '" data-j="' + j + '">📝 Write it, get marked</button><button type="button" data-w="model" data-t="' + i + '" data-j="' + j + '">🧠 Model answer</button><button type="button" data-w="outline" data-t="' + i + '" data-j="' + j + '">⚡ 3-min outline</button><button type="button" data-w="hook" data-t="' + i + '" data-j="' + j + '">🔒 Hook</button></div><div class="ixHhost"></div></div>').join("") + "</details>").join("");
     body.querySelectorAll("[data-ws]").forEach((b) => (b.onclick = () => { wsub = b.dataset.ws; written(); }));
+    const wm = body.querySelector("[data-wm]"); if (wm) wm.onclick = () => { close(); IX_WRITTEN.openMock("git"); };
+    const wo = body.querySelector("[data-wo]"); if (wo) wo.onclick = () => { close(); IX_WRITTEN.openDue(); };
     body.querySelectorAll("[data-w]").forEach((b) => (b.onclick = () => {
       const w = W[+b.dataset.t], q = w.questions[+b.dataset.j].q, host = b.closest(".ixHwq").querySelector(".ixHhost");
       window.IX_SCREEN_OVERRIDE = { title: "GIT 206 written · " + w.topic, eyebrow: "DIG-206 " + w.subject, body: "Written question (asked " + w.times + " times, " + w.years.join(", ") + "): " + q };
       if (b.dataset.w === "grade") { close(); T().openEssay(q); return; }
-      if (b.dataset.w === "model") T().ask("Model answer for: " + q, "written", "This is a real previous DIG-206 written question (" + w.years.join(", ") + "). Answer it the way Kasr Al Ainy examiners mark, within the marks it usually carries.", { inline: host });
+      const ref = window.IX_REF_FOR(q);
+      if (b.dataset.w === "model") T().ask("Model answer for: " + q, "written", "This is a real previous DIG-206 written question (" + w.years.join(", ") + "). Answer it the way Kasr Al Ainy examiners mark, within the marks it usually carries. STRUCTURE: " + T().verbTemplate(q) + (ref ? "\nBuild the answer from this department-style reference (say so; add nothing it does not support unless marked '(not in your notes)'):\n" + ref.slice(0, 5000) : ""), { inline: host });
+      else if (b.dataset.w === "outline") { close(); window.IX_WRITTEN && IX_WRITTEN.openOutline(q); }
       else T().ask("Memory hook for: " + q, "palace", "", { inline: host });
     }));
   }
@@ -258,6 +263,19 @@
       T().openBlind();
     }));
   }
+
+  /* ── the department-style reference answer for a written question (git206-ref.js) ── */
+  function topicOf(q) {
+    const W = B().written, t = String(q || "").toLowerCase().slice(0, 80);
+    const hit = W.find((w) => w.questions.some((x) => x.q.toLowerCase().slice(0, 80) === t || t.includes(x.q.toLowerCase().slice(0, 50))));
+    if (hit) return hit.topic;
+    const R = window.IX_GIT206_REF || {}, words = new Set(t.match(/[a-z]{5,}/g) || []);
+    let best = null, bs = 1;
+    Object.entries(R).forEach(([topic, refs]) => { const hay = (topic + " " + refs.map((r) => r.head).join(" ")).toLowerCase(); let n = 0; words.forEach((w) => { if (hay.includes(w)) n++; }); if (n > bs) { bs = n; best = topic; } });
+    return best;
+  }
+  window.IX_REF_FOR = (q) => { const tp = topicOf(q), R = (window.IX_GIT206_REF || {})[tp]; return R && R.length ? R.map((r) => "[" + r.src + "] " + r.head + "\n" + r.text).join("\n\n") : ""; };
+  window.IX_TOPIC_OF = topicOf;
 
   /* ── doors: a button in the side menu and a tab on the screen edge ── */
   function install() {
