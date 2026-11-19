@@ -209,6 +209,8 @@
       days.push({ date: k, phase: "CNS written", title: t.map((c) => c.name).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((c) => step("cns", "CNS " + c.subject + ": " + c.name + " — likely essay, then write it", 20, { ch: c.name, sub: c.subject })), [step("outline", "⚡ 3-minute outlines due", 10)]) });
     });
     days.push({ date: EXAMS[2].date, phase: "CNS written", exam: EXAMS[2], steps: [step("examday", "Written-exam protocol, then go", 5)] });
+    // Phase D: practical revision at college (13-14 Jan); the practical's own date is not announced yet
+    [["2027-01-13", "GIT"], ["2027-01-14", "CNS"]].forEach(([k, x]) => days.push({ date: k, phase: "Practical", title: "Practical revision at college + spot drill", steps: [step("college", "Attend the practical revision at college (" + x + " focus)", 0), step("spot", "🎯 Spot drill: 6 drawings, name each, then the professor quizzes you", 20), step("review", "Reviews due", 10)] }));
     // rule 1, enforced at the end: a day over the owner's minutes shortens its review step (to 5 at least)
     days.forEach((d) => { const tot = d.steps.reduce((t, x) => t + x.min, 0), r = d.steps.find((x) => x.kind === "review"); if (r && tot > mins) r.min = Math.max(5, r.min - (tot - mins)); });
     days.forEach((d) => d.steps.forEach((s, i) => (s.id = d.date + ":" + i + ":" + s.kind)));
@@ -269,6 +271,7 @@
     else if (s.kind === "traps") { close(); t.open(); t.ask("Drill me on my traps: the things I was sure about and got wrong.", "traps"); }
     else if (s.kind === "examday") { close(); t.open(); t.ask("Give me my exam-day protocol.", "examday"); }
     else if (s.kind === "sheets") { openSheets(); }
+    else if (s.kind === "spot" && window.IX_HY) { close(); IX_HY.spot(6); }
     else if (s.kind === "cns" && window.IX_HY) { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch); IX_HY.open("CNS:" + s.ch); }
     else if (s.kind === "cns") { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch + ". No past written list is loaded for CNS: use the course content and the MCQ bank's weight for this chapter."); t.open(); t.ask("Give me the most likely written-exam question on " + s.ch + " and the model answer, then I will write it from a blank page.", "written"); }
   }

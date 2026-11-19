@@ -1,6 +1,6 @@
 // v28 the course runs itself: pacing, the full map, drawings.
 // C1 missed steps from earlier days come first today, oldest first, within the minutes; the rest moves to tomorrow
-// C2 a step that was started is not carried again · C3 the full map: every day to 12 Jan with its status; a day opens
+// C2 a step that was started is not carried again · C3 the full map: every day to 14 Jan (practical revision) with its status; a day opens
 //    and can be read ahead · C4 the Map button and the side-rail days open the map / the day
 // C5 drawings: Gray's plates in a unit's high-yield sheet and after a GIT MCQ · C6 no page errors
 const { open, tick } = require('./harness');
@@ -23,7 +23,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const c3 = await p.evaluate(() => ({ days: document.querySelectorAll('.ixPday').length, today: document.querySelectorAll('.ixPday.today').length, behind: document.querySelectorAll('.ixPday.behind, .ixPday.part').length, exams: document.querySelectorAll('.ixPday.exam').length, off: document.querySelectorAll('.ixPday.off').length }));
   await p.click('.ixPday[data-day="2026-12-02"]'); await tick(p, 300);
   const c3b = await p.evaluate(() => ({ h: document.querySelector('.ixPlan h3').innerText, steps: document.querySelectorAll('.ixPlan .ixPstep').length, ahead: /Reading ahead/.test(document.querySelector('.ixPlan .ixHbody').innerText) }));
-  check('C3', 'The full map: every day 21 Nov - 12 Jan with its status (today, carried, off, 3 exams); a future day opens to read ahead', c3.days === 53 && c3.today === 1 && c3.behind >= 1 && c3.exams === 3 && c3.off >= 7 && /2 Dec/.test(c3b.h) && c3b.steps >= 4 && c3b.ahead, { c3, c3b });
+  check('C3', 'The full map: every day 21 Nov - 14 Jan with its status (today, carried, off, 3 exams); a future day opens to read ahead', c3.days === 55 && c3.today === 1 && c3.behind >= 1 && c3.exams === 3 && c3.off >= 7 && /2 Dec/.test(c3b.h) && c3b.steps >= 4 && c3b.ahead, { c3, c3b });
   await p.evaluate(() => IX_PLAN.close());
   // C4 doors
   await p.click('.ixMpRail'); await tick(p, 300);
@@ -31,7 +31,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => IX_PLAN.close());
   await p.click('.ixXRd[data-xday="2026-11-24"]'); await tick(p, 300);
   const c4b = await p.evaluate(() => (document.querySelector('.ixPlan.on h3') || {}).innerText || '');
-  check('C4', 'The Map button opens the map; a day in the side rail opens that day', c4a === 53 && /24 Nov/.test(c4b), { c4a, c4b });
+  check('C4', 'The Map button opens the map; a day in the side rail opens that day', c4a === 55 && /24 Nov/.test(c4b), { c4a, c4b });
   await p.evaluate(() => IX_PLAN.close());
   // C5 drawings
   await p.evaluate(() => IX_HY.open('A:Kidney, ureter and suprarenal glands')); await tick(p, 400);

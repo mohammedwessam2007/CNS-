@@ -104,8 +104,35 @@
   }
 
   // drawings: Gray's Anatomy plates (public domain) for the unit; each gets 👁 Explain / 🎯 Quiz from the professor
+  // units without stored plates: the phone looks on Wikimedia Commons once (Gray's plates whose own caption names the
+  // unit), and keeps what it finds
+  const FIND = { "A:Spleen": ["spleen", "spleen|splenic"], "A:Liver and biliary system": ["liver", "liver|hepatic|gall"], "A:Vessels of gut": ["celiac artery", "celiac|coeliac|mesenteric|portal"],
+    "H:Oesophagus and stomach": ["gastric glands", "gastric|stomach|oesophag|esophag|fundus|pyloric"], "H:Oral cavity, tongue and salivary glands": ["tongue", "tongue|papilla|salivary|parotid|submaxillary|sublingual"],
+    "P:Saliva, swallowing and the oesophagus": ["pharynx", "pharynx|esophag|oesophag|deglut"], "P:Stomach: acid secretion, motility, vomiting": ["stomach", "stomach|gastric"],
+    "P:Pancreas, bile and GI hormones": ["pancreas", "pancrea|bile|gall"], "P:Intestinal motility, absorption, defecation": ["villus", "villus|intestin|colon|rectum"],
+    "A:Testis and spermatic cord": ["testis", "testis|spermatic|scrotum"], "B:Liver biochemistry: detoxification, lipoproteins, fatty liver": ["liver lobule", "liver|hepatic|lobule"],
+    "P:Renal acid-base balance": ["kidney tubule", "tubul|kidney|renal"], "P:Metabolism: RQ, BMR, temperature, food intake": ["hypothalamus", "hypothalam"] };
+  const FIGC = "ix_hy_figs_v1";
+  async function findFigs(id) {
+    const f = FIND[id]; if (!f) return [];
+    let C = {}; try { C = JSON.parse(localStorage.getItem(FIGC) || "{}"); } catch (e) {}
+    if (C[id]) return C[id];
+    const u = "https://commons.wikimedia.org/w/api.php?origin=*&format=json&action=query&generator=search&gsrnamespace=6&gsrlimit=20&gsrsearch=" + encodeURIComponent('intitle:Gray "' + f[0] + '"') + "&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=640";
+    try {
+      const j = await (await fetch(u)).json(), rx = new RegExp(f[1], "i"), out = [];
+      Object.values((j.query && j.query.pages) || {}).forEach((p) => {
+        const ii = p.imageinfo && p.imageinfo[0], md = (ii && ii.extmetadata) || {}, cap = String((md.ImageDescription || {}).value || "").replace(/<[^>]+>/g, "").trim();
+        const lic = String((md.LicenseShortName || {}).value || "");
+        if (ii && /^File:Gray\d+\.(png|jpg)$/i.test(p.title) && rx.test(cap) && /public domain/i.test(lic)) out.push({ src: (ii.thumburl || ii.url).split("?")[0], cap: cap.slice(0, 160), page: ii.descriptionurl, fig: "Gray's Anatomy (1918), " + p.title.replace(/^File:|\.(png|jpg)$/gi, "") });
+      });
+      C[id] = out.slice(0, 4); try { localStorage.setItem(FIGC, JSON.stringify(C)); } catch (e) {}
+      return C[id];
+    } catch (e) { return []; }
+  }
+  function figHTML(F) { return "<h3>🖼 Drawings</h3><div class='ixYfigs'>" + F.map((f) => "<figure class='ixYfig'><img loading='lazy' src='" + E(f.src) + "' alt='" + E(f.cap) + "'><figcaption>" + E(f.cap) + " <small>· " + E(f.fig) + ", public domain</small></figcaption></figure>").join("") + "</div>"; }
   function figsHTML(id) {
-    const F = (window.IX_GIT206_FIGS || {})[id]; if (!F || !F.length) return "";
+    const F = (window.IX_GIT206_FIGS || {})[id];
+    if (!F || !F.length) { let C = {}; try { C = JSON.parse(localStorage.getItem(FIGC) || "{}"); } catch (e) {} return C[id] && C[id].length ? figHTML(C[id]) : FIND[id] ? "<div id='ixYfigs' data-find='" + E(id) + "'></div>" : ""; }
     return "<h3>🖼 Drawings</h3><div class='ixYfigs'>" + F.map((f) => "<figure class='ixYfig'><img loading='lazy' src='" + E(f.src) + "' alt='" + E(f.cap) + "'><figcaption>" + E(f.cap) + " <small>· " + E(f.fig) + ", public domain</small></figcaption></figure>").join("") + "</div>";
   }
 
@@ -126,10 +153,12 @@
     shell(); root.querySelector("#ixYt").textContent = "📘 High-yield sheets";
     const U = window.IX_PLAN ? IX_PLAN.units() : [], C = cache();
     const cns = window.IX_PLAN ? IX_PLAN.cns().slice(0, 16) : [];
-    body.innerHTML = "<p>One sheet per unit: what the examiners keep asking (from the past papers), then the professor's sheet (story, whiteboard, mechanisms, tables, mnemonics, clinical hooks, rapid recall, written skeletons). Written once, kept on this phone.</p><h3>DIG-206</h3><div class='ixHchs'>" +
+    body.innerHTML = "<p>One sheet per unit: what the examiners keep asking (from the past papers), then the professor's sheet (story, whiteboard, mechanisms, tables, mnemonics, clinical hooks, rapid recall, written skeletons). Written once, kept on this phone.</p><div class='ixHrow'><button type='button' class='primary' id='ixYall'>✨ Prepare everything (" + allIds().filter((i) => !C[i]).length + " sheets left, about " + (allIds().filter((i) => !C[i]).length * 2) + " US cents)</button></div><p class='ixHsmall' id='ixYallp'></p><h3>DIG-206</h3><div class='ixHchs'>" +
       U.map((u) => '<button type="button" class="ixHch" data-u="' + E(u.id) + '"><b>' + E(u.name) + "</b><span>" + E(u.subject) + (C[u.id] ? " · sheet ✓" : "") + "</span></button>").join("") + "</div><h3>NEU-205 (for the CNS written)</h3><div class='ixHchs'>" +
       cns.map((c) => '<button type="button" class="ixHch" data-u="CNS:' + E(c.name) + '"><b>' + E(c.name) + "</b><span>" + E(c.subject) + " · " + c.n + " past MCQs" + (C["CNS:" + c.name] ? " · sheet ✓" : "") + "</span></button>").join("") + "</div>";
     body.querySelectorAll("[data-u]").forEach((b) => (b.onclick = () => open(b.dataset.u)));
+    const ab = body.querySelector("#ixYall"), ap = body.querySelector("#ixYallp");
+    ab.onclick = () => { ab.disabled = true; prepareAll((ok, tot, name, err) => { if (!ap.isConnected) return; ap.textContent = name ? "Writing " + (ok + 1) + " of " + tot + ": " + name + "… (you can close this; keep the app open)" : err ? "Stopped after " + ok + " of " + tot + ": " + err + ". Tap again to carry on." : "Done: " + ok + " sheets written. Everything is ready offline."; if (!name && !err && root.classList.contains("on")) setTimeout(() => { if (ap.isConnected) list(); }, 1500); }); };
   }
   function open(id) {
     const u = unit(id); if (!u) return list();
@@ -152,9 +181,48 @@
       catch (e) { sh.innerHTML = "<p>Could not write it: " + E(e.message) + "</p><div class='ixHrow'><button type='button' class='primary' id='ixYgen2'>Try again</button></div>"; sh.querySelector("#ixYgen2").onclick = gen; }
     };
     if (c) show(c.text); else body.querySelector("#ixYgen").onclick = gen;
+    const ff = body.querySelector("#ixYfigs[data-find]"); if (ff) findFigs(id).then((F) => { if (F.length && ff.isConnected) ff.outerHTML = figHTML(F); });
     body.querySelector("[data-back]").onclick = list;
     const es = body.querySelector("[data-essay]"); if (es) es.onclick = () => { close(); window.IX_SCREEN_OVERRIDE = { title: "CNS · " + u.name, eyebrow: "NEU-205 " + u.subject, body: "CNS written. Past-paper facts of this chapter:\n" + F.slice(0, 12).map((f) => "- " + f.key).join("\n") }; T().open(); T().ask("Give me the most likely written-exam question on " + u.name + " and the model answer, then I will write it from a blank page.", "written"); };
     const lb = body.querySelector("[data-learn]"); if (lb) lb.onclick = () => { close(); window.IX_SCREEN_OVERRIDE = { title: "GIT 206 · " + u.name, eyebrow: "DIG-206 " + u.subject, body: "High-yield facts:\n" + F.slice(0, 12).map((f) => "- " + f.key + " (" + f.stem.slice(0, 80) + ")").join("\n") }; T().open(); T().ask("Teach me " + u.name + " with the full loop, one step at a time.", "loop"); };
   }
-  window.IX_HY = { open, list, facts: (id) => facts(unit(id)), unit, md, close, figsHTML };
+  // ✨ Prepare everything: every sheet written once, one after another, skipping the ones already on this phone; stops at
+  // the week's budget. Resumable: tap it again and it carries on where it stopped.
+  const allIds = () => (window.IX_PLAN ? IX_PLAN.units().map((u) => u.id).concat(IX_PLAN.cns().slice(0, 16).map((c) => "CNS:" + c.name)) : []);
+  let preparing = false;
+  async function prepareAll(onp) {
+    if (preparing) return { busy: true }; preparing = true;
+    const ids = allIds().filter((id) => !cache()[id]), tot = ids.length; let ok = 0, err = "";
+    try {
+      for (const id of ids) {
+        const u = unit(id); if (!u) continue;
+        if (onp) onp(ok, tot, u.name);
+        try { const t = await generate(u); if (t.trim()) { putCache(id, t); ok++; } } catch (e) { err = e.message; break; }
+      }
+    } finally { preparing = false; }
+    if (onp) onp(ok, tot, null, err);
+    return { ok, tot, err };
+  }
+  // in the background, the sheets of the next 3 plan days are written before they are needed (only with a key, at most 3)
+  async function prefetch() {
+    if (!localStorage.getItem("ix_tutor_key_v1") || !window.IX_PLAN || preparing) return 0;
+    const k = new Date(), lim = new Date(k.getTime() + 3 * 864e5), f = (d) => d.toISOString().slice(0, 10);
+    const ids = []; IX_PLAN.build().days.forEach((d) => { if (d.date >= f(k) && d.date <= f(lim)) d.steps.forEach((x) => { const id = x.kind === "learn" ? x.unit : x.kind === "cns" ? "CNS:" + x.ch : null; if (id && !cache()[id] && ids.indexOf(id) < 0) ids.push(id); }); });
+    let n = 0; preparing = true;
+    try { for (const id of ids.slice(0, 3)) { const u = unit(id); if (!u) continue; try { const t = await generate(u); if (t.trim()) { putCache(id, t); n++; } } catch (e) { break; } } } finally { preparing = false; }
+    return n;
+  }
+  if (!navigator.webdriver) setTimeout(() => { prefetch().catch(() => {}); }, 8000);   // automated test browsers call it themselves
+  // 🎯 Spot drill (practical revision): 6 drawings from the whole course, shuffled, names hidden; 🎯 Quiz me on each
+  function spot(n) {
+    let C = {}; try { C = JSON.parse(localStorage.getItem(FIGC) || "{}"); } catch (e) {}
+    const all = []; [window.IX_GIT206_FIGS || {}, C].forEach((M) => Object.keys(M).forEach((id) => (M[id] || []).forEach((f) => all.push(Object.assign({ unit: id }, f)))));
+    for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
+    const pick = all.slice(0, n || 6);
+    shell(); root.querySelector("#ixYt").textContent = "🎯 Spot drill"; root.querySelector("#ixYsub").textContent = "Practical revision · " + all.length + " drawings in the course";
+    body.innerHTML = "<p>Like the practical: look, name it, then tap the grey bar to check. Tap 🎯 Quiz me under a drawing and the professor points at structures one by one.</p>" + (pick.length ? "<div class='ixYfigs'>" + pick.map((f, i) => "<figure class='ixYfig ixYspot'><img loading='lazy' src='" + E(f.src) + "' alt='Spot " + (i + 1) + "'><figcaption><b>Spot " + (i + 1) + "</b> <span class='ixYspoil' tabindex='0'>" + E(f.cap) + " · " + E(String(f.unit).replace(/^[A-Z]:/, "")) + "</span></figcaption></figure>").join("") + "</div>" : "<p>No drawings on this phone yet.</p>") + "<div class='ixHrow'><button type='button' class='primary' id='ixYspot2'>↻ 6 new spots</button></div>";
+    body.querySelector("#ixYspot2").onclick = () => spot(n);
+    return pick.length;
+  }
+  window.IX_HY = { spot, prepareAll, prefetch, allIds, open, list, facts: (id) => facts(unit(id)), unit, md, close, figsHTML, findFigs, generate: (id) => generate(unit(id)), cached: (id) => !!cache()[id], put: putCache };
 })();

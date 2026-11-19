@@ -13,7 +13,7 @@
   const E = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
   const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   let cnsMode = false;                               // for this visit only: the old CNS course is the home
-  const season = () => { const k = iso(new Date()); return !!P() && k >= "2026-11-18" && k <= "2027-01-12"; };
+  const season = () => { const k = iso(new Date()); return !!P() && k >= "2026-11-18" && k <= "2027-01-14"; };
   const active = () => season() && !cnsMode && !(typeof S !== "undefined" && S && S.v16 && S.v16.mock);
   function set(id, html) { const el = document.getElementById(id); if (el && el.innerHTML !== html) el.innerHTML = html; }
   function paint() {
