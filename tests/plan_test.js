@@ -28,15 +28,15 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   check('P1', 'The calendar: 3 exams, Fridays off, full papers only after the lectures (19, 26, 28 Dec, oldest→newest), light days, every GIT unit fits',
     P1.exams.join() === '2026-12-30,2027-01-05,2027-01-12' && P1.mocks.length === 3 && P1.mocks.every((m) => m[0] >= '2026-12-19') && /195/.test(P1.mocks[0][2]) && /198/.test(P1.mocks[2][2]) && P1.offOk && !P1.empty.length && P1.fit === P1.all && P1.light.every((t) => /Light/.test(t)), P1);
   const P2 = await p.evaluate(() => { localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 30, stop: '23:59', off: 5 })); const D = IX_PLAN.build().days.filter((d) => d.phase === 'GIT MCQ' && d.steps.some((x) => x.unit)); localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 60, stop: '23:59', off: 5 })); return { max: Math.max(...D.map((d) => d.steps.reduce((t, x) => t + x.min, 0))), written: D.some((d) => d.steps.some((x) => x.kind === 'written')) }; });
-  check('P2', 'A 30-minute budget cuts steps (no written, no teaching on unit days), never adds minutes', P2.max <= 30 && !P2.written, P2);
+  check('P2', 'A 30-minute budget cuts steps (no written; lessons first, practice waits), never adds minutes', P2.max <= 30 && !P2.written, P2);
   // P10 the timetable: every unit comes after its first lecture, and after its last unless it says so
   const P10 = await p.evaluate(() => {
     const P = IX_PLAN.build(), bad = [];
-    P.days.forEach((d) => d.steps.filter((x) => x.kind === 'learn').forEach((x) => { const sp = IX_PLAN.span()[x.unit]; if (!sp) return; if (d.date <= sp.first) bad.push(d.date + ' before ' + x.unit); else if (d.date <= sp.last && !/still running/.test(d.title)) bad.push(d.date + ' early ' + x.unit); }));
+    P.days.forEach((d) => d.steps.filter((x) => x.kind === 'learn' || x.kind === 'lesson').forEach((x) => { const sp = IX_PLAN.span()[x.unit]; if (!sp) return; if (d.date <= sp.first) bad.push(d.date + ' before ' + x.unit); else if (d.date <= sp.last && !/still running/.test(d.title)) bad.push(d.date + ' early ' + x.unit); }));
     const lec = P.days.find((d) => d.date === '2026-11-22');
-    return { bad, checks: P.days.filter((d) => /Weekly check/.test(d.title || '')).map((d) => d.date), lec: lec && lec.lectures.length, notes: lec && lec.steps.some((x) => x.kind === 'notes') };
+    return { bad, checks: P.days.filter((d) => /Weekly check/.test(d.title || '')).map((d) => d.date), lec: lec && lec.lectures.length, notes: lec && !lec.steps.some((x) => x.kind === 'notes') && P.days.some((d) => d.steps.some((x) => x.kind === 'lesson')) };
   });
-  check('P10', 'The IPKA timetable: units follow their lectures; weekly AI-off checks on Saturdays; lecture days carry a 2-minute notes step', !P10.bad.length && P10.checks.join() === '2026-11-28,2026-12-05,2026-12-12' && P10.lec === 3 && P10.notes, P10);
+  check('P10', 'The IPKA timetable: units follow their lectures; weekly AI-off checks on Saturdays; lectures are taught as lessons (no notes-after-the-lecture step)', !P10.bad.length && P10.checks.join() === '2026-11-28,2026-12-05,2026-12-12' && P10.lec === 3 && P10.notes, P10);
   // P3
   await p.evaluate(() => IX_PLAN.open()); await tick(p, 400);
   const page = await p.evaluate(() => ({ h: document.querySelector('.ixPlan h3').innerText, steps: [...document.querySelectorAll('.ixPlan .ixPstep b')].map((b) => b.innerText) }));

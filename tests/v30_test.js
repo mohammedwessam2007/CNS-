@@ -17,10 +17,10 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   check('S1', "The home's big button opens today's session: one step, what to do, its minutes", s1.on && /Step \d of \d/.test(s1.step) && s1.title.length > 5 && s1.how >= 2 && s1.dots >= 3, s1);
   const first = s1.title;
   await p.click('.ixS [data-s="open"]'); await tick(p, 800);
-  const s2 = await p.evaluate(() => { const b = document.querySelector('.ixSbar'); return { screen: document.querySelector('.ixS').classList.contains('on'), bar: b.classList.contains('on'), txt: b.innerText, overlay: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on, .ixPlan.on'), z: +getComputedStyle(b).zIndex }; });
+  const s2 = await p.evaluate(() => { const b = document.querySelector('.ixSbar'); return { screen: document.querySelector('.ixS').classList.contains('on'), bar: b.classList.contains('on'), txt: b.innerText, overlay: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on, .ixPlan.on, .ixL.on'), z: +getComputedStyle(b).zIndex }; });
   check('S2', 'Open it runs the step; a bar stays on top of it: step, timer, ✓ Done', !s2.screen && s2.bar && s2.overlay && /Step \d\/\d/i.test(s2.txt) && /\d:\d\d/.test(s2.txt) && /Done/.test(s2.txt) && s2.z > 100, s2);
   await p.click('.ixSbar [data-s="done"]'); await tick(p, 500);
-  const s3 = await p.evaluate((first) => { const P = IX_PLAN.today().day; const st = IX_PLAN.state().done; return { on: document.querySelector('.ixS').classList.contains('on'), title: (document.querySelector('.ixStitle') || {}).textContent, ticked: P.steps.filter((x) => st[x.id] === true).map((x) => x.label), first, dot: document.querySelectorAll('.ixSdots i.d').length, overlays: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on') }; }, first);
+  const s3 = await p.evaluate((first) => { const P = IX_PLAN.today().day; const st = IX_PLAN.state().done; return { on: document.querySelector('.ixS').classList.contains('on'), title: (document.querySelector('.ixStitle') || {}).textContent, ticked: P.steps.filter((x) => st[x.id] === true).map((x) => x.label), first, dot: document.querySelectorAll('.ixSdots i.d').length, overlays: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on, .ixL.on') }; }, first);
   check('S3', '✓ Done ticks the step in the plan, closes what was open and brings the next step', s3.on && s3.title !== first && s3.ticked.includes(first) && s3.dot >= 1 && !s3.overlays, s3);
   const before = s3.title;
   await p.click('.ixS [data-s="skip"]'); await tick(p, 300);

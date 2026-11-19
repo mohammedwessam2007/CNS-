@@ -1,0 +1,177 @@
+/* INTELLECTUALITY v31 · the course: every lecture of the DIG-206 timetable becomes a lesson you understand, so no lecture
+ * has to be attended (owner, 19 Nov 2026: "we also need to understand not memorize · full course · no lectures needed").
+ *  - one lesson per lecture (the IPKA timetable), taught by the professor model, understanding first: why it matters →
+ *    the big picture → built up piece by piece with the mechanism and the "because" → a reasoning question after each
+ *    part → where people get confused → how it links → only then what the exam does with it → say it back
+ *  - grounded in what this app holds: the past-paper facts of the unit, the department-style references, the examiner
+ *    profile and the student's own notes; written once and kept on the phone
+ *  - read one part at a time (ADHD): Next / Back, "🤔 Explain it another way" on every part, "🗣 Teach it back" at the end
+ *  - the daily plan teaches each unit's lessons on its day; 📚 The course lists them all */
+(function () {
+  "use strict";
+  if (window.IX_LESSON) return;
+  const E = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
+  const P = () => window.IX_PLAN, T = () => window.IX_TUTOR, HY = () => window.IX_HY;
+  const CACHE = "ix_lesson_v1", DONE = "ix_lesson_done_v1", VER = 1;
+  const get = (k) => { try { return JSON.parse(localStorage.getItem(k) || "{}") || {}; } catch (e) { return {}; } };
+  const put = (k, o) => { try { localStorage.setItem(k, JSON.stringify(o)); return true; } catch (e) { return false; } };
+  const slug = (t) => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+
+  /* ── the course: lectures grouped by unit (each lecture belongs to its first unit; biochemistry to the biochemistry unit) ── */
+  function course() {
+    const L = (P() && P().lectures) || [], U = (P() && P().units()) || [], byId = {};
+    U.forEach((u) => (byId[u.id] = { unit: u, lessons: [] }));
+    const bio = U.find((u) => u.subject === "Biochemistry");
+    const seen = {};
+    L.forEach((l) => {
+      if (l[1] === "College") return;
+      const id = (l[3] && l[3][0]) || (l[1] === "Biochemistry" && bio ? bio.id : null);
+      if (!id || !byId[id] || seen[l[2]]) return; seen[l[2]] = 1;
+      byId[id].lessons.push({ key: slug(l[2]), title: l[2], subject: l[1], date: l[0], unit: id, also: (l[3] || []).slice(1) });
+    });
+    // a unit with no lecture of its own still gets one lesson on the whole unit
+    U.forEach((u) => { if (!byId[u.id].lessons.length) byId[u.id].lessons.push({ key: slug(u.name), title: u.name, subject: u.subject, date: "", unit: u.id, also: [] }); });
+    return U.map((u) => byId[u.id]);
+  }
+  const lessonsOf = (unitId) => { const c = course().find((x) => x.unit.id === unitId); return c ? c.lessons : []; };
+  const all = () => [].concat(...course().map((c) => c.lessons));
+  const find = (key) => all().find((l) => l.key === key);
+  const isDone = (key) => !!get(DONE)[key];
+  const cached = (key) => { const c = get(CACHE)[key]; return c && c.v === VER ? c : null; };
+
+  /* ── the professor's brief: understanding first ── */
+  const STYLE = [
+    "You are the best teacher this 2nd-year Kasr Al Ainy medical student has ever had. This lesson REPLACES the lecture: he will not attend it, so nothing the lecture would cover may be missing, and he must UNDERSTAND it, not memorise it.",
+    "He has ADHD: short paragraphs (2-4 lines), plain English, one idea at a time, concrete images. Bold only the 1-3 words per part that carry the idea.",
+    "Teach like the best YouTube teachers (Ninja Nerd's build-up on a whiteboard, Osmosis's clarity, Armando's drawings): start from what he already knows, build each new idea on the last, and always give the MECHANISM: the 'because'. Never list a fact without why it is so, unless it is truly arbitrary (then say so and give a hook).",
+    "Anatomy: explain position and relations by development, function and what would go wrong; walk him through it as if he is holding the specimen. Physiology: cause → mechanism → effect chains and graphs described in words. Histology: structure because of function; how to recognise it under the microscope. Biochemistry: what the pathway is FOR, then the steps, then regulation and disease.",
+    "Write it in Markdown with this exact shape (each part starts with '## '):",
+    "## 1. Why you should care — a patient or everyday situation (3-5 lines) that this lecture explains.",
+    "## 2. The big picture — the whole lecture in 4-6 lines, then '✏️ Draw this:' with 4-8 numbered drawing steps for one diagram that holds it all.",
+    "## 3. … ## N. — 4 to 7 parts that build the lecture up in a logical order, every topic the lecture would cover. Each part: the idea in plain words → the mechanism / the reason → an analogy if it helps → what it explains clinically. End EVERY part with a line '> 🤔 Think: <one question that needs reasoning, not recall> ||<the answer with the reason>||'.",
+    "## Where people get confused — the 3-5 classic confusions, each with the one sentence that ends it.",
+    "## How it links — 3-5 links to other topics (earlier lectures, other subjects, the clinic).",
+    "## What the exam does with it — from the past-paper facts given: how Kasr Al Ainy asks this (MCQ traps and the written questions), now that he understands it. Mnemonics go here, only for truly arbitrary lists.",
+    "## Say it back — the whole lecture in 5 numbered lines he could say out loud.",
+    "Facts must match the Kasr Al Ainy course as given in the references and past-paper keys; where they differ from other textbooks, follow the course and say so in a few words. If you are not sure of a detail, say it plainly rather than invent it. No introduction, no closing remarks.",
+  ].join("\n");
+
+  async function generate(les) {
+    const key = localStorage.getItem("ix_tutor_key_v1"); if (!key) throw new Error("add your OpenRouter key in 🧠 Tutor → ⚙︎ first");
+    const t = T(); if (t && t.spend && t.cap && t.spend().usd >= t.cap()) throw new Error("this week's AI budget is used up (⚙︎ to raise it)");
+    const hy = HY(), u = hy && hy.unit ? hy.unit(les.unit) : null;
+    const facts = hy && hy.facts ? (hy.facts(les.unit) || []).slice(0, 25) : [];
+    const sib = lessonsOf(les.unit).map((x) => x.title);
+    const notes = t && t.notesFor ? t.notesFor("GIT 206 · " + (u ? u.name : les.title)) : "";
+    const X = window.IX_EXAMINER ? IX_EXAMINER.git : "";
+    let refs = "";
+    try { const R = window.IX_GIT206_REF || {}, out = []; ((u && u.written) || []).forEach((w) => (R[w.topic] || []).forEach((r) => out.push(r))); refs = out.slice(0, 3).map((r) => "[" + r.src + "] " + r.head + "\n" + String(r.text).slice(0, 1600)).join("\n\n"); } catch (e) {}
+    const user = "LECTURE TO TEACH: " + les.subject + " · \"" + les.title + "\"" + (les.date ? " (DIG-206, Kasr Al Ainy, given " + les.date + ")" : "") +
+      "\nUNIT: " + (u ? u.module + " · " + u.subject + " · " + u.name : les.unit) +
+      (les.also && les.also.length ? "\nThis lecture also covers: " + les.also.map((x) => x.replace(/^[A-Z]:/, "")).join(", ") : "") +
+      (sib.length > 1 ? "\nThe unit's lectures, in order (teach only THIS one, link to the others): " + sib.join(" | ") : "") +
+      (facts.length ? "\n\nPAST-PAPER FACTS ON THIS UNIT (key answers the examiners test; n = papers):\n" + facts.map((f) => "- [n=" + f.n + "] " + String(f.stem).slice(0, 150) + " → " + f.key).join("\n") : "") +
+      (u && u.written && u.written.length ? "\n\nWRITTEN QUESTIONS ASKED ON THIS UNIT:\n" + u.written.slice(0, 6).map((w) => "- " + w.questions[0].q + " (" + w.times + "×)").join("\n") : "") +
+      (refs ? "\n\nDEPARTMENT-STYLE REFERENCES:\n" + refs : "") + (notes ? "\n\nHIS NOTES:\n" + notes.slice(0, 2000) : "") + (X ? "\n\n" + X : "");
+    const r = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
+      body: JSON.stringify({ model: localStorage.getItem("ix_tutor_model_pro_v1") || "openai/gpt-6.2-sol-pro", max_tokens: 6000, usage: { include: true }, messages: [{ role: "system", content: STYLE }, { role: "user", content: user }] }) });
+    if (!r.ok) throw new Error(r.status === 401 ? "the key was refused" : r.status === 402 ? "the OpenRouter balance is used up" : "OpenRouter answered " + r.status);
+    const j = await r.json();
+    try { if (j.usage && j.usage.cost && t && t._addSpend) t._addSpend(j.usage.cost); } catch (e) {}
+    const text = (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || "";
+    if (!text.trim()) throw new Error("no lesson came back");
+    const c = get(CACHE); c[les.key] = { v: VER, text, at: Date.now() };
+    if (!put(CACHE, c)) { const o = get(CACHE); Object.keys(o).sort((a, b) => o[a].at - o[b].at).slice(0, 5).forEach((k) => delete o[k]); o[les.key] = c[les.key]; put(CACHE, o); }
+    return text;
+  }
+  function parts(text) {
+    const out = []; let cur = null;
+    String(text).split("\n").forEach((l) => { if (/^##\s/.test(l)) { cur = { h: l.replace(/^##\s+/, ""), body: [] }; out.push(cur); } else if (cur) cur.body.push(l); });
+    return out.length ? out.map((p) => ({ h: p.h, md: p.body.join("\n").trim() })) : [{ h: "Lesson", md: String(text) }];
+  }
+  const md = (s) => (HY() && HY().md ? HY().md(String(s).replace(/^>\s?/gm, "")) : "<p>" + E(s) + "</p>");
+
+  /* ── the reader ── */
+  let root = null, body = null;
+  function shell() {
+    if (root) return;
+    root = document.createElement("div"); root.className = "ixL"; root.setAttribute("role", "dialog"); root.setAttribute("aria-label", "Lesson");
+    root.innerHTML = '<div class="ixLtop"><button type="button" class="ixLx" data-l="close">✕</button><div class="ixLt"><small id="ixLsub"></small><b id="ixLtitle"></b></div></div><div class="ixLbody" id="ixLbody"></div>';
+    document.body.appendChild(root); body = root.querySelector("#ixLbody");
+    root.addEventListener("click", (e) => { const b = e.target.closest("[data-l]"); if (b && b.dataset.l === "close") close(); });
+  }
+  function close() { if (root) root.classList.remove("on"); document.documentElement.classList.remove("ixLon"); }
+  function head(les, sub) { shell(); root.classList.add("on"); document.documentElement.classList.add("ixLon"); root.querySelector("#ixLtitle").textContent = les ? les.title : "📚 The course"; root.querySelector("#ixLsub").textContent = sub || ""; body.scrollTop = 0; }
+
+  function open(key, at) {
+    const les = typeof key === "object" ? key : find(key); if (!les) return index();
+    const u = HY() && HY().unit ? HY().unit(les.unit) : null;
+    head(les, les.subject + " · " + (u ? u.name : "") + (les.date ? " · lecture of " + new Date(les.date + "T12:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : ""));
+    const c = cached(les.key);
+    if (!c) {
+      body.innerHTML = '<div class="ixLwait"><p>This lesson replaces the lecture <b>' + E(les.title) + "</b>. The professor writes it once (about 4 US cents, a minute or two), built to make you understand: why it matters, the mechanism, a question after each part.</p>" +
+        '<button type="button" class="ixLmain" id="ixLgen">✨ Write my lesson</button><p class="ixLsmall" id="ixLmsg"></p></div>';
+      body.querySelector("#ixLgen").onclick = async () => {
+        const b = body.querySelector("#ixLgen"), m = body.querySelector("#ixLmsg"); b.disabled = true; m.textContent = "The professor is writing your lesson…";
+        try { await generate(les); open(les.key, 0); } catch (e) { b.disabled = false; m.textContent = "Could not write it: " + e.message; }
+      };
+      return;
+    }
+    const ps = parts(c.text); let i = Math.max(0, Math.min(ps.length - 1, at || 0));
+    const show = () => {
+      const p = ps[i], last = i === ps.length - 1;
+      body.innerHTML = '<div class="ixLprog">' + ps.map((_, j) => '<i class="' + (j < i ? "d" : j === i ? "c" : "") + '"></i>').join("") + '</div><div class="ixLpart"><small>Part ' + (i + 1) + " of " + ps.length + "</small><h2>" + E(p.h.replace(/^\d+\.\s*/, "")) + '</h2><div class="ixLmd">' + md(p.md) + "</div>" + (/\|\|.+?\|\|/.test(p.md) ? '<p class="ixLsmall">🤔 Answer it in your head first, then tap the grey bar.</p>' : "") + "</div>" +
+        '<div class="ixLask"><button type="button" data-a="simple">🤔 Explain it another way</button><button type="button" data-a="why">❓ Ask about this</button></div>' +
+        '<div class="ixLnav">' + (i ? '<button type="button" data-a="back">← Back</button>' : "<span></span>") + (last ? '<button type="button" class="ixLmain" data-a="finish">✓ I understand it</button>' : '<button type="button" class="ixLmain" data-a="next">Next →</button>') + "</div>" +
+        (last ? '<div class="ixLend"><button type="button" data-a="teach">🗣 Teach it back to the professor</button><button type="button" data-a="sheet">📘 The exam sheet for this unit</button></div>' : "");
+      body.scrollTop = 0; root.scrollTop = 0;
+      const ctx = "LESSON: " + les.title + " (" + les.subject + ")\nTHE PART HE IS READING: " + p.h + "\n" + p.md.slice(0, 2500);
+      body.querySelectorAll("[data-a]").forEach((b) => (b.onclick = () => {
+        const a = b.dataset.a;
+        if (a === "next") { i++; show(); }
+        else if (a === "back") { i--; show(); }
+        else if (a === "finish") { const d = get(DONE); d[les.key] = Date.now(); put(DONE, d); index(les.unit, les.key); }
+        else if (a === "simple" || a === "why") { window.IX_SCREEN_OVERRIDE = { title: "Lesson · " + les.title, eyebrow: "DIG-206 " + les.subject, body: ctx }; T() && (T().open(), a === "simple" ? T().ask("I did not get this part: \"" + p.h + "\". Explain it another way: a different analogy, smaller steps, then check I got it with one question.", "simple", ctx) : null); }
+        else if (a === "teach") { close(); window.IX_SCREEN_OVERRIDE = { title: "Lesson · " + les.title, eyebrow: "DIG-206 " + les.subject, body: c.text.slice(0, 5000) }; T() && (T().open(), T().ask("I just learned \"" + les.title + "\". Let me teach it back to you; ask me to start, then find the gaps in my understanding.", "classmate")); }
+        else if (a === "sheet") { close(); HY() && HY().open(les.unit); }
+      }));
+    };
+    show();
+  }
+  // the course index (or one unit's lessons)
+  function index(unitId, justDone) {
+    head(null, unitId ? "" : "Every DIG-206 lecture, as a lesson you understand · " + all().filter((l) => isDone(l.key)).length + " of " + all().length + " done");
+    const C = course().filter((c) => !unitId || c.unit.id === unitId);
+    if (unitId) root.querySelector("#ixLtitle").textContent = "📚 " + C[0].unit.name;
+    const row = (l) => '<button type="button" class="ixLrow' + (isDone(l.key) ? " done" : "") + '" data-k="' + E(l.key) + '"><span class="ixLck">' + (isDone(l.key) ? "✓" : cached(l.key) ? "●" : "○") + "</span><span><b>" + E(l.title) + "</b><small>" + E(l.subject) + (l.date ? " · lecture " + new Date(l.date + "T12:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "") + (cached(l.key) && !isDone(l.key) ? " · ready" : "") + "</small></span></button>";
+    const nextUp = unitId && C[0].lessons.find((l) => !isDone(l.key));
+    body.innerHTML = (justDone ? '<div class="ixLok">✓ Lesson done. ' + (nextUp ? "Next one below." : "That was the last lesson of this unit: the exam sheet and the questions come next.") + "</div>" : "") +
+      (unitId ? "" : '<div class="ixLrow2"><button type="button" class="ixLmain" id="ixLall">✨ Write every lesson now (' + all().filter((l) => !cached(l.key)).length + " left, about $" + Math.max(1, Math.round(all().filter((l) => !cached(l.key)).length * 0.04)) + ')</button><p class="ixLsmall" id="ixLallp"></p></div>') +
+      C.map((c) => (unitId ? "" : '<h3 class="ixLh">' + E(c.unit.subject) + " · " + E(c.unit.name) + "</h3>") + '<div class="ixLlist">' + c.lessons.map(row).join("") + "</div>").join("") +
+      (unitId ? '<div class="ixLnav"><button type="button" data-u="all">📚 All lessons</button>' + (nextUp ? '<button type="button" class="ixLmain" data-k="' + E(nextUp.key) + '">▶ ' + E(nextUp.title) + "</button>" : '<button type="button" class="ixLmain" data-u="sheet">📘 The exam sheet</button>') + "</div>" : "");
+    body.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => open(b.dataset.k)));
+    const ua = body.querySelector("[data-u=all]"); if (ua) ua.onclick = () => index();
+    const us = body.querySelector("[data-u=sheet]"); if (us) us.onclick = () => { close(); HY() && HY().open(unitId); };
+    const ab = body.querySelector("#ixLall");
+    if (ab) ab.onclick = async () => {
+      ab.disabled = true; const m = body.querySelector("#ixLallp"), todo = all().filter((l) => !cached(l.key)); let n = 0;
+      for (const l of todo) { if (!m.isConnected) break; m.textContent = "Writing " + (n + 1) + " of " + todo.length + ": " + l.title + "… (keep the app open)"; try { await generate(l); n++; } catch (e) { m.textContent = "Stopped after " + n + ": " + e.message + ". Tap again to carry on."; ab.disabled = false; return; } }
+      if (m.isConnected) index();
+    };
+    return C.length;
+  }
+  // the next days' lessons are written in the background, before they are needed (with a key; at most 3 at a time)
+  let busy = false;
+  async function prefetch() {
+    if (busy || !localStorage.getItem("ix_tutor_key_v1") || !P()) return 0; busy = true; let n = 0;
+    try {
+      const k = new Date(), f = (d) => d.toISOString().slice(0, 10), lim = f(new Date(k.getTime() + 3 * 864e5));
+      const keys = []; P().build().days.forEach((d) => { if (d.date >= f(k) && d.date <= lim) d.steps.forEach((x) => { if (x.kind === "lesson" && !cached(x.key) && keys.indexOf(x.key) < 0) keys.push(x.key); }); });
+      for (const key of keys.slice(0, 3)) { const l = find(key); if (!l) continue; try { await generate(l); n++; } catch (e) { break; } }
+    } finally { busy = false; }
+    return n;
+  }
+  if (!navigator.webdriver) setTimeout(() => { prefetch().catch(() => {}); }, 15000);
+
+  window.IX_LESSON = { course, lessonsOf, all, find, open, index, close, generate, parts, isDone, cached, prefetch, STYLE };
+})();

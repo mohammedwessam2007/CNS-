@@ -162,7 +162,8 @@
     const dropped = left, fit = [].concat(...Array.from(plan.values()).map((v) => v.units));
     A.forEach((d) => {
       const k = iso(d), lec = LECT.filter((l) => l[0] === k);
-      const lecSteps = lec.length ? [step("notes", "📝 2 min after the lectures: what the doctors stressed (" + lec.map((l) => l[2]).slice(0, 2).join("; ").slice(0, 70) + ")", 2, { lect: k })] : [];
+      // v31: lectures are taught by the lessons, so there is no "after the lecture" notes step any more
+      const lecSteps = false && lec.length ? [step("notes", "📝 2 min after the lectures: what the doctors stressed (" + lec.map((l) => l[2]).slice(0, 2).join("; ").slice(0, 70) + ")", 2, { lect: k })] : [];
       const base = { date: k, phase: "GIT MCQ", lectures: lec.map((l) => l[1] + ": " + l[2]) };
       if (isOff(d)) return days.push(Object.assign(base, { off: true, steps: [] }));
       if (FULL[k]) return days.push(Object.assign(base, { title: "Full past paper" + (FULL[k].length > 1 ? "s" : "") + " as a real mock", steps: [step("review", "Reviews due (memory cards)", 10)].concat(FULL[k].map((src) => step("mock", "Mock: " + src + " · AI off", 30, { src })), [step("misses", "Review the misses with the professor", 15)]) }));
@@ -173,10 +174,17 @@
       if (!pl) return days.push(Object.assign(base, { title: "Review day (nothing new is ready from the lectures)", steps: lecSteps.concat([step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters taught so far", 15)]) }));
       const paired = pl.units.length > 1, steps = lecSteps.concat([step("review", "Reviews due (memory cards)", 10)]);
       // rule 1: a small budget cuts steps, never adds minutes: written goes first (phase B covers it), then teaching
+      const nLes = window.IX_LESSON ? pl.units.reduce((t, u) => t + IX_LESSON.lessonsOf(u.id).length, 0) : 0;
+      const per = nLes ? Math.max(5, Math.min(20, Math.floor((mins - 5 - (paired ? 20 : 12)) / nLes))) : 0;
+      // rule 1 on a small budget: the lessons (the course) come first; the practice step waits for a roomier day
+      const roomy = !nLes || 5 + per * nLes + (paired ? 20 : 12) <= mins;
       pl.units.forEach((u) => {
-        if (mins >= 37) steps.push(step("learn", "📘 High-yield sheet, then learn with the professor: " + u.name, paired ? 10 : 15, { unit: u.id }));
-        steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, paired ? 10 : 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, paired ? 10 : 12, { unit: u.id }));
-        if (!paired && mins >= 52 && u.written.length) steps.push(step("written", "Write from a blank page: " + cut(u.written[0].questions[0].q, 80), 15, { unit: u.id, q: u.written[0].questions[0].q }));
+        // v31: the unit's lectures are taught as lessons (no lecture needs attending); the lessons share what the minutes allow
+        const L = window.IX_LESSON ? IX_LESSON.lessonsOf(u.id) : [];
+        if (L.length && mins >= 30) { L.forEach((l) => steps.push(step("lesson", "📖 Lesson: " + l.title, per, { unit: u.id, key: l.key }))); }
+        else if (mins >= 37) steps.push(step("learn", "📘 High-yield sheet, then learn with the professor: " + u.name, paired ? 10 : 15, { unit: u.id }));
+        if (roomy) steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, paired ? 10 : 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, paired ? 10 : 12, { unit: u.id }));
+        if (!paired && mins >= 52 && u.written.length && steps.reduce((t, x) => t + x.min, 0) + 15 <= mins + 5) steps.push(step("written", "Write from a blank page: " + cut(u.written[0].questions[0].q, 80), 15, { unit: u.id, q: u.written[0].questions[0].q }));
       });
       days.push(Object.assign(base, { title: pl.units.map((u) => u.subject + " · " + u.name).join(" + ") + (pl.partial ? " (its lectures are still running)" : ""), steps }));
     });
@@ -228,7 +236,7 @@
   const doneish = (id) => !!st().done[id];
   function owed(P, k) {
     const out = [];
-    P.days.forEach((d) => { if (d.date >= k || d.off || d.exam) return; d.steps.forEach((x) => { if ((x.unit && (x.kind === "learn" || x.kind === "mcq" || x.kind === "blind")) || x.kind === "mock" || x.kind === "wmock") { if (!doneish(x.id)) out.push(Object.assign({}, x, { from: d.date })); } }); });
+    P.days.forEach((d) => { if (d.date >= k || d.off || d.exam) return; d.steps.forEach((x) => { if ((x.unit && (x.kind === "learn" || x.kind === "lesson" || x.kind === "mcq" || x.kind === "blind")) || x.kind === "mock" || x.kind === "wmock") { if (!doneish(x.id)) out.push(Object.assign({}, x, { from: d.date })); } }); });
     return out;
   }
   function paced(P, day, k) {
@@ -272,6 +280,7 @@
     else if (s.kind === "traps") { close(); t.open(); t.ask("Drill me on my traps: the things I was sure about and got wrong.", "traps"); }
     else if (s.kind === "examday") { close(); t.open(); t.ask("Give me my exam-day protocol.", "examday"); }
     else if (s.kind === "sheets") { openSheets(); }
+    else if (s.kind === "lesson" && window.IX_LESSON) { close(); IX_LESSON.open(s.key); }
     else if (s.kind === "spot" && window.IX_HY) { close(); IX_HY.spot(6); }
     else if (s.kind === "cns" && window.IX_HY) { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch); IX_HY.open("CNS:" + s.ch); }
     else if (s.kind === "cns") { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch + ". No past written list is loaded for CNS: use the course content and the MCQ bank's weight for this chapter."); t.open(); t.ask("Give me the most likely written-exam question on " + s.ch + " and the model answer, then I will write it from a blank page.", "written"); }
@@ -423,7 +432,7 @@
       (steps.length ? '<h3 class="ixZh">' + (pre ? "Saturday's steps" : "Today's steps") + " <small>" + mins + " of your " + P.mins + " min</small></h3>" +
         '<div class="ixPsteps ixZsteps">' + steps.map((s, i) => '<div class="ixPstep' + (done(s) ? " done" : "") + '"><label class="ixZchk"><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + '><span>' + (done(s) ? "✓" : i + 1) + "</span></label><div><b>" + E(lab(s)) + "</b><span>" + (empty(s) ? "✓ nothing to review today" : s.min ? s.min + " min" : "at college") + "</span></div>" + (s.kind !== "college" && !empty(s) ? '<button type="button" data-go="' + E(s.id) + '">' + (done(s) ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" : "") +
       '<h3 class="ixZh">Coming up</h3><div class="ixZweek">' + week.map((x) => '<button type="button" class="ixZday' + (x.off ? " off" : x.exam ? " exam" : "") + '" data-day="' + x.date + '"><span class="ixZd"><small>' + E(short(x.date)) + "</small><b>" + dnum(x.date) + "</b><small>" + E(mon(x.date)) + '</small></span><span class="ixZt">' + E(x.off ? "Day off 🌿" : x.exam ? "🎯 " + x.exam.name : clean(x.title)) + "</span></button>").join("") + "</div>" +
-      '<div class="ixZbtns"><button type="button" data-openmap>🗺️ Whole plan</button><button type="button" data-life>⏱ My minutes</button><button type="button" data-hy>📘 Sheets</button><button type="button" data-git>🫃 GIT 206</button></div>' +
+      '<div class="ixZbtns"><button type="button" data-openmap>🗺️ Whole plan</button><button type="button" data-life>⏱ My minutes</button><button type="button" data-course>📚 The course</button><button type="button" data-hy>📘 Sheets</button><button type="button" data-git>🫃 GIT 206</button></div>' +
       '<details class="ixZmore"><summary>Plan details (readiness, what does not fit)</summary>' + readinessHTML() +
         (P.dropped.length ? "<p>GIT units that do not fit your minutes: " + P.dropped.map((u) => E(u.name)).join(", ") + ".</p>" : "<p>Every GIT unit fits (" + P.unitsFit + " units).</p>") +
         (P.wDropped.length ? "<p>GIT written topics after the top ones: " + P.wDropped.slice(0, 8).map((w) => E(w.topic)).join(", ") + (P.wDropped.length > 8 ? "…" : "") + "</p>" : "") +
@@ -432,6 +441,7 @@
     el.querySelectorAll("[data-day]").forEach((b) => (b.onclick = () => openDay(b.dataset.day)));
     el.querySelector("[data-openmap]").onclick = openMap;
     el.querySelector("[data-life]").onclick = () => T() && T().openLife && T().openLife();
+    el.querySelector("[data-course]").onclick = () => window.IX_LESSON && IX_LESSON.index();
     el.querySelector("[data-hy]").onclick = () => window.IX_HY && IX_HY.list();
     el.querySelector("[data-git]").onclick = () => G() && G().open();
     el.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); home(el); if (typeof window.render === "function") window.render(); }));

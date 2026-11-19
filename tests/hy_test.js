@@ -33,7 +33,7 @@ const SHEET = '## 🎯 The point\nThe wall holds the gut in.\n## 📋 Must-know 
   check('Y5', 'Watch at 2x: YouTube search links for the unit on three channels', links.length === 3 && links.every((h) => /youtube\.com\/results\?search_query=/.test(h)) && /Ninja/.test(decodeURIComponent(links[0])), { links: links.length });
   // Y4 plan learn step
   await p.evaluate(() => IX_HY.close());
-  const y4 = await p.evaluate(() => { const d = IX_PLAN.build().days.find((x) => x.steps.some((y) => y.kind === 'learn' && y.unit === 'A:Anterior abdominal wall')); IX_PLAN.runStep(d.steps.find((y) => y.kind === 'learn')); return { on: document.querySelector('.ixY').classList.contains('on'), t: document.getElementById('ixYt').innerText }; });
+  const y4 = await p.evaluate(() => { IX_PLAN.runStep({ id: 'x:learn', kind: 'learn', unit: 'A:Anterior abdominal wall', label: 'learn', min: 15 }); return { on: document.querySelector('.ixY').classList.contains('on'), t: document.getElementById('ixYt').innerText }; });
   n = sent.length;
   await p.click('[data-learn]'); await tick(p, 900);
   const loop = sent.slice(n).find((b) => b.stream);

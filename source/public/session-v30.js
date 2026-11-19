@@ -22,6 +22,7 @@
   // what to do, in plain words, for every kind of step
   const HOW = {
     review: ["The professor shows what is due. Answer each one out loud first, then check.", "Rate yourself honestly. When the list ends, you are done."],
+    lesson: ["This lesson replaces the lecture. Read it one part at a time and answer each 🤔 question in your head before you reveal it.", "Stuck on a part? Tap 🤔 Explain it another way. At the end tap ✓ I understand it."],
     learn: ["Read the sheet top to bottom: story → whiteboard → tables → what examiners ask.", "Then tap ▶ Learn it with the professor for the 6 short steps. Draw the whiteboard on paper."],
     mcq: ["10 past-paper questions on this unit.", "Choose how sure you are before you answer. Read every wrong answer's why."],
     blind: ["AI off. New questions, answer from memory only.", "This is the honest check: no hints, no peeking."],
@@ -93,7 +94,7 @@
     if (bar.innerHTML !== html) bar.innerHTML = html;
     bar.classList.add("on"); document.documentElement.classList.add("ixSbarOn");
   }
-  function closeOverlays() { try { window.IX_HY && IX_HY.close(); } catch (e) {} try { window.IX_GIT && IX_GIT.close(); } catch (e) {} try { window.IX_TUTOR && IX_TUTOR.close(); } catch (e) {} try { P().close(); } catch (e) {} try { window.IX_WRITTEN && IX_WRITTEN.close && IX_WRITTEN.close(); } catch (e) {} }
+  function closeOverlays() { try { window.IX_LESSON && IX_LESSON.close(); } catch (e) {} try { window.IX_HY && IX_HY.close(); } catch (e) {} try { window.IX_GIT && IX_GIT.close(); } catch (e) {} try { window.IX_TUTOR && IX_TUTOR.close(); } catch (e) {} try { P().close(); } catch (e) {} try { window.IX_WRITTEN && IX_WRITTEN.close && IX_WRITTEN.close(); } catch (e) {} }
   function hide() { if (root) root.classList.remove("on"); document.documentElement.classList.remove("ixSon"); }
   function onClick(e) {
     const b = e.target.closest("[data-s]"); if (!b) return;

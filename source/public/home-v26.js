@@ -39,7 +39,7 @@
       '<div class="ixXMstat"><span>Next exam</span><b>' + E(next.name) + " · " + left(next) + " days</b></div>" +
       '<button type="button" class="primary wide" data-xm="today">▶ ' + (k < P().START ? "See Saturday's first day" : "Today's steps") + "</button>" +
       '<div class="ixXRail"><b>Next days</b>' + week.map((x) => '<div class="ixXRd' + (x.date === k ? " now" : "") + '" data-xday="' + x.date + '"><span>' + E(fm(x.date)) + "</span>" + E(x.off ? "day off" : x.exam ? "🎯 " + x.exam.name : (x.title || "").replace(/ \(its lectures are still running\)/, "")) + "</div>").join("") + "</div>" +
-      '<div class="ixXMbtns"><button type="button" data-xm="map">🗺️ The whole plan, day by day</button><button type="button" data-xm="git">🫃 GIT 206 · MCQs, papers, written</button><button type="button" data-xm="hy">📘 High-yield sheets (every unit)</button><button type="button" data-xm="lib">📖 CNS lesson library (for the CNS written)</button><button type="button" data-xm="tutor">🧠 AI professor</button><button type="button" data-xm="life">⏱ My minutes and day off</button></div>';
+      '<div class="ixXMbtns"><button type="button" data-xm="map">🗺️ The whole plan, day by day</button><button type="button" data-xm="course">📚 The course: every lecture as a lesson</button><button type="button" data-xm="git">🫃 GIT 206 · MCQs, papers, written</button><button type="button" data-xm="hy">📘 High-yield sheets (every unit)</button><button type="button" data-xm="lib">📖 CNS lesson library (for the CNS written)</button><button type="button" data-xm="tutor">🧠 AI professor</button><button type="button" data-xm="life">⏱ My minutes and day off</button></div>';
     if (m.innerHTML !== html) m.innerHTML = html;
   }
   function paint() {
@@ -91,6 +91,7 @@
     if (xm) { e.preventDefault(); shut();
       if (xm === "today") { const n = P().nextStep && P().nextStep(); if (n) P().runStep(n); else P().openDay(P().START > iso(new Date()) ? P().START : iso(new Date())); }
       else if (xm === "map") P().openMap();
+      else if (xm === "course") window.IX_LESSON && IX_LESSON.index();
       else if (xm === "git") window.IX_GIT && IX_GIT.open();
       else if (xm === "hy") window.IX_HY && IX_HY.list();
       else if (xm === "lib") window.IX_HY && IX_HY.lessons();

@@ -209,7 +209,7 @@
   async function prefetch() {
     if (!localStorage.getItem("ix_tutor_key_v1") || !window.IX_PLAN || preparing) return 0;
     const k = new Date(), lim = new Date(k.getTime() + 3 * 864e5), f = (d) => d.toISOString().slice(0, 10);
-    const ids = []; IX_PLAN.build().days.forEach((d) => { if (d.date >= f(k) && d.date <= f(lim)) d.steps.forEach((x) => { const id = x.kind === "learn" ? x.unit : x.kind === "cns" ? "CNS:" + x.ch : null; if (id && !cache()[id] && ids.indexOf(id) < 0) ids.push(id); }); });
+    const ids = []; IX_PLAN.build().days.forEach((d) => { if (d.date >= f(k) && d.date <= f(lim)) d.steps.forEach((x) => { const id = x.kind === "learn" || x.kind === "lesson" ? x.unit : x.kind === "cns" ? "CNS:" + x.ch : null; if (id && !cache()[id] && ids.indexOf(id) < 0) ids.push(id); }); });
     let n = 0; preparing = true;
     try { for (const id of ids.slice(0, 3)) { const u = unit(id); if (!u) continue; try { const t = await generate(u); if (t.trim()) { putCache(id, t); n++; } } catch (e) { break; } } } finally { preparing = false; }
     return n;
