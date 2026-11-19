@@ -13,7 +13,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => { localStorage.setItem('ix_tutor_key_v1', 'sk-or-v1-TESTKEY123'); localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 60, stop: '23:59', off: 5 })); render(); });
   await tick(p, 1200);
   const h1 = await p.evaluate(() => ({ title: document.getElementById('title').innerText, eyebrow: document.getElementById('eyebrow').innerText, box: !!document.querySelector('#player .ixXHomeBox .ixPstep'), steps: document.querySelectorAll('#player .ixPstep').length, oldBanner: [...document.querySelectorAll('.v14Carryover')].some((e) => e.offsetParent !== null), rail: (document.querySelector('.ixMpRail') || {}).innerText }));
-  check('H1', 'On Sat 21 Nov the home is the plan: today\'s unit, countdowns, steps; no old course banner', /Oesophagus and stomach/.test(h1.title) && /DAYS TO GIT MCQ/.test(h1.eyebrow) && h1.box && h1.steps === 4 && !h1.oldBanner && !/148/.test(h1.eyebrow), h1);
+  check('H1', 'On Sat 21 Nov the home is the plan: today\'s unit, countdowns, steps; no old course banner', /Oesophagus and stomach/.test(h1.title) && /DAYS TO GIT MCQ/i.test(h1.eyebrow) && h1.box && h1.steps === 4 && !h1.oldBanner && !/148/.test(h1.eyebrow), h1);
   await p.click('.ixXMenu [data-xm="map"]'); await tick(p, 400);
   const h2 = await p.evaluate(() => ({ plan: !!document.querySelector('.ixPlan.on'), oldMap: !!document.querySelector('.ixMp.on, .ixMpOv.on') }));
   check('H2', 'The map buttons open the exam plan', h2.plan, h2);

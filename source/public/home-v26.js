@@ -64,7 +64,7 @@
     set("modeChip", "EXAM SEASON");
     const pl = document.getElementById("player");
     if (pl && !pl.querySelector(":scope > .ixXHomeBox")) {
-      pl.innerHTML = '<div class="stage ixXHomeBox"><div class="ixXBody" id="ixXBody"></div><div class="ixXFoot"><button type="button" data-xhome="lib">📖 CNS lesson library (for the CNS written)</button><button type="button" data-xhome="git">🫃 GIT 206 hub</button></div></div>';
+      pl.innerHTML = '<div class="ixXHomeBox"><div class="ixXBody" id="ixXBody"></div><div class="ixXFoot"><button type="button" data-xhome="lib">📖 CNS lesson library (for the CNS written)</button></div></div>';
     }
     const b = document.getElementById("ixXBody"); if (b) P().mount(b);
     // top bar and side rail

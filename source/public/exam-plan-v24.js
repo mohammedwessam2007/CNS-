@@ -22,6 +22,7 @@
   const DAY = 864e5, START = "2026-11-21";
   const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   const at = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+  const cut = (t, n) => { t = String(t || "").replace(/\s+/g, " ").trim(); if (t.length <= n) return t; const c = t.slice(0, n); return c.slice(0, Math.max(c.lastIndexOf(" "), n - 20)).replace(/[,:;(\s]+$/, "") + "…"; };
   const nice = (s) => at(s).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 
   /* ── GIT units: Jalal's 13 anatomy chapters + physiology, histology and biochemistry units ── */
@@ -175,7 +176,7 @@
       pl.units.forEach((u) => {
         if (mins >= 37) steps.push(step("learn", "📘 High-yield sheet, then learn with the professor: " + u.name, paired ? 10 : 15, { unit: u.id }));
         steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, paired ? 10 : 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, paired ? 10 : 12, { unit: u.id }));
-        if (!paired && mins >= 52 && u.written.length) steps.push(step("written", "Write from a blank page: " + u.written[0].questions[0].q.slice(0, 90), 15, { unit: u.id, q: u.written[0].questions[0].q }));
+        if (!paired && mins >= 52 && u.written.length) steps.push(step("written", "Write from a blank page: " + cut(u.written[0].questions[0].q, 80), 15, { unit: u.id, q: u.written[0].questions[0].q }));
       });
       days.push(Object.assign(base, { title: pl.units.map((u) => u.subject + " · " + u.name).join(" + ") + (pl.partial ? " (its lectures are still running)" : ""), steps }));
     });
@@ -308,7 +309,7 @@
       (d.lectures && d.lectures.length ? "<p class='ixHsmall'>📚 Lectures: " + d.lectures.map(E).join(" · ") + "</p>" : "") +
       (d.off ? "<p>Day off. Live. 🌿</p>" : d.exam ? "<p><b>Exam day: " + E(d.exam.name) + ".</b></p>" : "") +
       (date > k && d.steps.length ? "<p class='ixHsmall'>Reading ahead is fine: anything you do now counts, and that day will be lighter.</p>" : "") +
-      '<div class="ixPsteps">' + d.steps.map((x) => '<div class="ixPstep' + (st().done[x.id] === true ? " done" : "") + '"><label><input type="checkbox" data-done="' + E(x.id) + '"' + (st().done[x.id] === true ? " checked" : "") + "></label><div><b>" + E(x.label) + "</b><span>" + (x.min ? x.min + " min" : "") + "</span></div>" + (x.kind !== "rest" && x.kind !== "college" ? '<button type="button" data-go="' + E(x.id) + '">' + (st().done[x.id] ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>";
+      '<div class="ixPsteps ixZsteps">' + d.steps.map((x, i) => '<div class="ixPstep' + (st().done[x.id] === true ? " done" : "") + '"><label class="ixZchk"><input type="checkbox" data-done="' + E(x.id) + '"' + (st().done[x.id] === true ? " checked" : "") + "><span>" + (st().done[x.id] === true ? "✓" : i + 1) + "</span></label><div><b>" + E(x.label) + "</b><span>" + (x.min ? x.min + " min" : "") + "</span></div>" + (x.kind !== "rest" && x.kind !== "college" ? '<button type="button" data-go="' + E(x.id) + '">' + (st().done[x.id] ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>";
     body.querySelector("[data-map]").onclick = openMap;
     body.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => { const x = d.steps.find((y) => y.id === b.dataset.go); if (x) runStep(x); }));
     body.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); openDay(date); }));
@@ -388,6 +389,54 @@
     body.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); render(target); if (target && typeof window.render === "function") window.render(); }));
   }
 
+  /* v30 · the home screen, built for a phone: one hero card (where you are + the next step), three countdown chips,
+   * today's checklist, the next days, two buttons; the planning details fold away */
+  function home(el) {
+    const { P, day } = today(), k = iso(new Date()), pre = k < START;
+    const left = (x) => Math.round((at(x.date) - at(k)) / DAY);
+    // a review with nothing due yet (no memory cards, no outlines) is shown as done instead of being the first thing to do
+    const nothingDue = (() => { try { return !(T() && T().dueCards && T().dueCards().length) && !(window.IX_WRITTEN && IX_WRITTEN.due && IX_WRITTEN.due().length); } catch (e) { return false; } })();
+    const empty = (s) => s.kind === "review" && nothingDue && st().done[s.id] !== true;
+    const done = (s) => st().done[s.id] === true || empty(s);
+    const lab = (s) => (empty(s) ? "Reviews: nothing due yet" : s.label);
+    const steps = day ? day.steps.filter((s) => s.kind !== "rest") : [];
+    const nd = steps.filter(done).length, mins = steps.reduce((t, s) => t + s.min, 0), minsLeft = steps.filter((s) => !done(s)).reduce((t, s) => t + s.min, 0);
+    const nextS = steps.find((s) => !done(s) && s.kind !== "college");
+    const dayNo = day ? P.days.filter((x) => x.date <= day.date && !x.off && !x.exam).length : 0, dayAll = P.days.filter((x) => !x.off && !x.exam).length;
+    const subj = day && day.title && /^(Anatomy|Physiology|Histology|Biochemistry) · /.test(day.title) ? day.title.split(" · ")[0] : "";
+    const name = day ? (day.exam ? day.exam.name + " today" : day.off ? "Day off" : subj ? day.title.slice(subj.length + 3) : day.title || "") : "All exams done";
+    const week = P.days.filter((x) => x.date > (day ? day.date : k)).slice(0, 6);
+    const clean = (t) => String(t || "").replace(/ \(its lectures are still running\)/, "");
+    const short = (d) => at(d).toLocaleDateString("en-GB", { weekday: "short" }), dnum = (d) => at(d).getDate(), mon = (d) => at(d).toLocaleDateString("en-GB", { month: "short" });
+    el.innerHTML =
+      '<section class="ixZhero">' +
+        '<div class="ixZkick">' + (pre ? "Starts Saturday · preview" : day && day.date === k ? "Today · " + E(nice(k)) : "Next · " + E(nice(day ? day.date : k))) + (day && !day.off && !day.exam ? " · day " + dayNo + " of " + dayAll : "") + "</div>" +
+        (subj ? '<span class="ixZsubj ixZs-' + subj.toLowerCase() + '">' + E(subj) + "</span>" : day ? '<span class="ixZsubj">' + E(day.phase) + "</span>" : "") +
+        '<h2 class="ixZname">' + E(clean(name)) + "</h2>" +
+        (day && day.lectures && day.lectures.length ? '<div class="ixZlect">📚 ' + E(day.lectures.length + " lecture" + (day.lectures.length > 1 ? "s" : "") + " " + (day.date === k ? "today" : "that day")) + "</div>" : "") +
+        (day && day.off ? '<p class="ixZcalm">Nothing to do. Live. 🌿</p>' : day && day.exam ? '<p class="ixZcalm">Protocol, breakfast, go. Good luck, inshallah.</p>' : steps.length ?
+          '<div class="ixZbar"><i style="width:' + Math.round((100 * nd) / steps.length) + '%"></i></div><div class="ixZbarT"><span>' + nd + " of " + steps.length + " done</span><span>" + (nd === steps.length ? "Done for today 🌿" : "~" + minsLeft + " min left") + "</span></div>" +
+          (nextS ? '<button type="button" class="ixZgo" data-go="' + E(nextS.id) + '"><small>' + (pre ? "Try it now (counts for Saturday)" : "Next step") + "</small>▶ " + E(nextS.label) + "</button>" : "") : "") +
+      "</section>" +
+      (day && day.behind ? '<div class="ixZnote">↩ ' + day.behind + " step" + (day.behind > 1 ? "s" : "") + " from earlier days are in today's list. Nothing is lost.</div>" : "") +
+      '<div class="ixZexams">' + EXAMS.map((x) => '<div class="ixZex' + (left(x) <= 7 ? " soon" : "") + '"><b>' + Math.max(0, left(x)) + "</b><span>days</span><em>" + E(x.name) + "</em><small>" + E(nice(x.date)) + "</small></div>").join("") + "</div>" +
+      (steps.length ? '<h3 class="ixZh">' + (pre ? "Saturday's steps" : "Today's steps") + " <small>" + mins + " of your " + P.mins + " min</small></h3>" +
+        '<div class="ixPsteps ixZsteps">' + steps.map((s, i) => '<div class="ixPstep' + (done(s) ? " done" : "") + '"><label class="ixZchk"><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + '><span>' + (done(s) ? "✓" : i + 1) + "</span></label><div><b>" + E(lab(s)) + "</b><span>" + (empty(s) ? "✓ nothing to review today" : s.min ? s.min + " min" : "at college") + "</span></div>" + (s.kind !== "college" && !empty(s) ? '<button type="button" data-go="' + E(s.id) + '">' + (done(s) ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" : "") +
+      '<h3 class="ixZh">Coming up</h3><div class="ixZweek">' + week.map((x) => '<button type="button" class="ixZday' + (x.off ? " off" : x.exam ? " exam" : "") + '" data-day="' + x.date + '"><span class="ixZd"><small>' + E(short(x.date)) + "</small><b>" + dnum(x.date) + "</b><small>" + E(mon(x.date)) + '</small></span><span class="ixZt">' + E(x.off ? "Day off 🌿" : x.exam ? "🎯 " + x.exam.name : clean(x.title)) + "</span></button>").join("") + "</div>" +
+      '<div class="ixZbtns"><button type="button" data-openmap>🗺️ Whole plan</button><button type="button" data-life>⏱ My minutes</button><button type="button" data-hy>📘 Sheets</button><button type="button" data-git>🫃 GIT 206</button></div>' +
+      '<details class="ixZmore"><summary>Plan details (readiness, what does not fit)</summary>' + readinessHTML() +
+        (P.dropped.length ? "<p>GIT units that do not fit your minutes: " + P.dropped.map((u) => E(u.name)).join(", ") + ".</p>" : "<p>Every GIT unit fits (" + P.unitsFit + " units).</p>") +
+        (P.wDropped.length ? "<p>GIT written topics after the top ones: " + P.wDropped.slice(0, 8).map((w) => E(w.topic)).join(", ") + (P.wDropped.length > 8 ? "…" : "") + "</p>" : "") +
+        "<p>CNS written: chapters are ranked by MCQ weight until the CNS previous written questions are added.</p></details>";
+    el.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => { const s = day.steps.find((x) => x.id === b.dataset.go); if (s) runStep(s); }));
+    el.querySelectorAll("[data-day]").forEach((b) => (b.onclick = () => openDay(b.dataset.day)));
+    el.querySelector("[data-openmap]").onclick = openMap;
+    el.querySelector("[data-life]").onclick = () => T() && T().openLife && T().openLife();
+    el.querySelector("[data-hy]").onclick = () => window.IX_HY && IX_HY.list();
+    el.querySelector("[data-git]").onclick = () => G() && G().open();
+    el.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); home(el); if (typeof window.render === "function") window.render(); }));
+  }
+
   function install() {
     const anchor = document.getElementById("gitBtn") || document.getElementById("tutorBtn");
     if (anchor && !document.getElementById("planBtn")) { const b = anchor.cloneNode(false); b.id = "planBtn"; b.textContent = "📅 My exam plan (30 Dec · 5 Jan · 12 Jan)"; b.removeAttribute("onclick"); b.onclick = (e) => { e.preventDefault(); open(); }; anchor.before(b); }
@@ -395,5 +444,5 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1800);
-  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT, mount: (el) => render(el), today, START, openMap, openDay, owed: () => { const P = build(); return owed(P, iso(new Date())); } };
+  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT, mount: (el) => home(el), renderInto: (el) => render(el), today, START, openMap, openDay, owed: () => { const P = build(); return owed(P, iso(new Date())); } };
 })();

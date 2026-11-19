@@ -42,12 +42,12 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const page = await p.evaluate(() => ({ h: document.querySelector('.ixPlan h3').innerText, steps: [...document.querySelectorAll('.ixPlan .ixPstep b')].map((b) => b.innerText) }));
   let n = sent.length;
   await p.click('.ixPlan .ixPstep >> nth=0 >> [data-go]'); await tick(p, 900);
-  const lbl0 = await p.evaluate(() => (document.querySelector('#player .ixAiBar button.main') || {}).innerText || '');
+  const lbl0 = await p.evaluate(() => document.querySelector('.ixT.on') ? 'Reviews started' : '');
   await p.evaluate(() => IX_PLAN.open()); await tick(p, 300);
   await p.check('.ixPlan .ixPstep >> nth=0 >> input'); await tick(p, 400);
   await p.evaluate(() => IX_PLAN.close()); await p.evaluate(() => render()); await tick(p, 900);
-  const lbl1 = await p.evaluate(() => (document.querySelector('#player .ixAiBar button.main') || {}).innerText || '');
-  check('P3', "Today's list: Start runs reviews; ticking the step moves ▶ Today to the next one", /Today/.test(page.h) && /Oesophagus and stomach/.test(page.h) && page.steps.length === 4 && /Reviews/.test(lbl0) && /Oesophagus and stomach/.test(lbl1), { h: page.h, lbl0, lbl1 });
+  const lbl1 = await p.evaluate(() => (document.querySelector('#player .ixZgo') || {}).innerText || '');
+  check('P3', "Today's list: Start runs reviews; ticking the step moves the home's ▶ Next step to the next one", /Today/.test(page.h) && /Oesophagus and stomach/.test(page.h) && page.steps.length === 4 && /Reviews/.test(lbl0) && /Oesophagus and stomach/.test(lbl1), { h: page.h, lbl0, lbl1 });
   // P4 mock step (the first Saturday)
   const mockOk = await p.evaluate(() => { const d = IX_PLAN.build().days.find((x) => x.steps.some((y) => y.kind === 'mock')); IX_PLAN.runStep(d.steps.find((y) => y.kind === 'mock')); return document.documentElement.classList.contains('ixHmock') && !!document.querySelector('.ixHoff'); });
   n = sent.length; await p.evaluate(() => IX_TUTOR.ask('answer?', null)); await tick(p, 300);
