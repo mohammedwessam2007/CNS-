@@ -16,12 +16,24 @@
   const season = () => { const k = iso(new Date()); return !!P() && k >= "2026-11-18" && k <= "2027-01-14"; };
   const active = () => season() && !cnsMode && !(typeof S !== "undefined" && S && S.v16 && S.v16.mock);
   function set(id, html) { const el = document.getElementById(id); if (el && el.innerHTML !== html) el.innerHTML = html; }
+  // the old CNS course (dated from Mon 21 Sep for the CNS MCQ, which is over) is a date-free lesson library during the
+  // season: no "Day 1/148", no "behind", no catch-up banner; its lessons are read for the CNS written
+  function library() {
+    const ey = document.getElementById("eyebrow"), lab = document.querySelector("#railToday .railLabel");
+    const k = iso(new Date()), cw = Math.round((new Date("2027-01-12T12:00") - new Date(k + "T12:00")) / 864e5);
+    const t = "CNS LESSON LIBRARY · FOR THE CNS WRITTEN (TUE 12 JAN" + (cw > 0 ? ", " + cw + " DAYS" : "") + ")" + (k < "2026-11-21" ? " · THE PLAN STARTS SAT 21 NOV" : " · TODAY'S STEPS ARE ON THE PLAN");
+    if (ey && ey.textContent !== t) ey.textContent = t;
+    if (lab && lab.textContent !== "📖 CNS lesson library · no dates, read any lesson") lab.textContent = "📖 CNS lesson library · no dates, read any lesson";
+    document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sat 21 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
+  }
   function paint() {
     const root = document.documentElement;
+    root.classList.toggle("ixXSeason", season());
     if (!active()) {
       root.classList.remove("ixXHome");
+      if (season()) library();
       const pl = document.getElementById("player");
-      if (pl && season() && cnsMode && !pl.querySelector(".ixXBack")) pl.insertAdjacentHTML("afterbegin", '<button type="button" class="ixXBack" data-xhome="plan">📅 Back to the exam plan</button>');
+      if (pl && season() && cnsMode && !pl.querySelector(".ixXBack")) pl.insertAdjacentHTML("afterbegin", '<button type="button" class="ixXBack" data-xhome="plan">📅 Back to the exam plan (from Sat 21 Nov)</button>');
       return;
     }
     root.classList.add("ixXHome");
@@ -36,7 +48,7 @@
     set("modeChip", "EXAM SEASON");
     const pl = document.getElementById("player");
     if (pl && !pl.querySelector(":scope > .ixXHomeBox")) {
-      pl.innerHTML = '<div class="stage ixXHomeBox"><div class="ixXBody" id="ixXBody"></div><div class="ixXFoot"><button type="button" data-xhome="cns">🧠 Open the CNS course (lessons, atlas, figures)</button><button type="button" data-xhome="git">🫃 GIT 206 hub</button></div></div>';
+      pl.innerHTML = '<div class="stage ixXHomeBox"><div class="ixXBody" id="ixXBody"></div><div class="ixXFoot"><button type="button" data-xhome="cns">📖 CNS lesson library (lessons, atlas, figures · no dates)</button><button type="button" data-xhome="git">🫃 GIT 206 hub</button></div></div>';
     }
     const b = document.getElementById("ixXBody"); if (b) P().mount(b);
     // top bar and side rail
@@ -60,17 +72,17 @@
     if (t.dataset.xhome === "plan") { cnsMode = false; if (typeof render === "function") render(); paint(); return; }
     if (t.dataset.xhome === "git") { window.IX_GIT && IX_GIT.open(); return; }
     if (t.dataset.xday) { P().openDay(t.dataset.xday); return; }
-    if (t.hasAttribute("data-ixmp-open") && active()) { e.preventDefault(); e.stopImmediatePropagation(); P().openMap(); }
+    if (t.hasAttribute("data-ixmp-open") && season()) { e.preventDefault(); e.stopImmediatePropagation(); P().openMap(); }
   }, true);
   function boot() {
     if (typeof render !== "function" || !P()) return void setTimeout(boot, 80);
     const base = render;
     window.render = render = function () { const out = active() ? null : base.apply(this, arguments); try { paint(); } catch (e) { console.warn("[home]", e); } return out; };
     let q = false;
-    new MutationObserver(() => { if (q || !active()) return; q = true; requestAnimationFrame(() => { q = false; try { const pl = document.getElementById("player"); if (pl && !pl.querySelector(":scope > .ixXHomeBox")) paint(); const tt = document.querySelector("#courseTopbar .ixXTop"); if (!tt) paint(); } catch (e) {} }); })
+    new MutationObserver(() => { if (q || !season()) return; q = true; requestAnimationFrame(() => { q = false; try { if (!active()) return void library(); const pl = document.getElementById("player"); if (pl && !pl.querySelector(":scope > .ixXHomeBox")) paint(); const tt = document.querySelector("#courseTopbar .ixXTop"); if (!tt) paint(); } catch (e) {} }); })
       .observe(document.body, { childList: true, subtree: true });
     paint();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
-  window.IX_HOME = { paint, active, cns: (on) => { cnsMode = !!on; if (typeof render === "function") render(); } };
+  window.IX_HOME = { paint, active, season, cns: (on) => { cnsMode = !!on; if (typeof render === "function") render(); } };
 })();

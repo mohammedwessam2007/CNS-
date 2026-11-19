@@ -154,9 +154,10 @@
     const U = window.IX_PLAN ? IX_PLAN.units() : [], C = cache();
     const cns = window.IX_PLAN ? IX_PLAN.cns().slice(0, 16) : [];
     body.innerHTML = "<p>One sheet per unit: what the examiners keep asking (from the past papers), then the professor's sheet (story, whiteboard, mechanisms, tables, mnemonics, clinical hooks, rapid recall, written skeletons). Written once, kept on this phone.</p><div class='ixHrow'><button type='button' class='primary' id='ixYall'>✨ Prepare everything (" + allIds().filter((i) => !C[i]).length + " sheets left, about " + (allIds().filter((i) => !C[i]).length * 2) + " US cents)</button></div><p class='ixHsmall' id='ixYallp'></p><h3>DIG-206</h3><div class='ixHchs'>" +
-      U.map((u) => '<button type="button" class="ixHch" data-u="' + E(u.id) + '"><b>' + E(u.name) + "</b><span>" + E(u.subject) + (C[u.id] ? " · sheet ✓" : "") + "</span></button>").join("") + "</div><h3>NEU-205 (for the CNS written)</h3><div class='ixHchs'>" +
+      U.map((u) => '<button type="button" class="ixHch" data-u="' + E(u.id) + '"><b>' + E(u.name) + "</b><span>" + E(u.subject) + (C[u.id] ? " · sheet ✓" : "") + "</span></button>").join("") + "</div><h3>NEU-205 (for the CNS written)</h3><div class='ixHrow'><button type='button' id='ixYlib'>📖 The CNS lesson library (no dates)</button></div><div class='ixHchs'>" +
       cns.map((c) => '<button type="button" class="ixHch" data-u="CNS:' + E(c.name) + '"><b>' + E(c.name) + "</b><span>" + E(c.subject) + " · " + c.n + " past MCQs" + (C["CNS:" + c.name] ? " · sheet ✓" : "") + "</span></button>").join("") + "</div>";
     body.querySelectorAll("[data-u]").forEach((b) => (b.onclick = () => open(b.dataset.u)));
+    body.querySelector("#ixYlib").onclick = lessons;
     const ab = body.querySelector("#ixYall"), ap = body.querySelector("#ixYallp");
     ab.onclick = () => { ab.disabled = true; prepareAll((ok, tot, name, err) => { if (!ap.isConnected) return; ap.textContent = name ? "Writing " + (ok + 1) + " of " + tot + ": " + name + "… (you can close this; keep the app open)" : err ? "Stopped after " + ok + " of " + tot + ": " + err + ". Tap again to carry on." : "Done: " + ok + " sheets written. Everything is ready offline."; if (!name && !err && root.classList.contains("on")) setTimeout(() => { if (ap.isConnected) list(); }, 1500); }); };
   }
@@ -168,6 +169,7 @@
     const ch = ["Ninja Nerd", "Osmosis", "Armando Hasudungan"];
     body.innerHTML = "<div class='ixHrow'><button type='button' data-back>← All sheets</button>" + (window.IX_PLAN && !/^CNS:/.test(id) ? "<button type='button' class='primary' data-learn>▶ Learn it with the professor</button>" : "<button type='button' class='primary' data-essay>📝 Most likely essay, then write it</button>") + "</div>" +
       figsHTML(id) +
+      (/^CNS:/.test(id) && lessonsFor(u.name).length ? "<h3>📖 The course lessons on this</h3><div class='ixYles'>" + lessonsFor(u.name).map(lesBtn).join("") + "</div>" : "") +
       "<h3>🔥 What the examiners keep asking</h3>" + (F.length ? "<ol class='ixYf'>" + F.slice(0, 15).map((f) => "<li><b>" + E(f.key) + "</b><span>" + E(f.stem.slice(0, 140)) + "</span><small>" + (f.n > 1 ? "asked " + f.n + "× · " : "") + E(f.sources.slice(0, 3).join(", ")) + "</small></li>").join("") + "</ol>" : "<p class='ixHsmall'>No keyed past MCQs in this unit: the sheet is built from the references and the course.</p>") +
       ((u.written || []).length ? "<h3>📝 Written questions on this unit</h3><ul>" + u.written.map((w) => "<li>" + E(w.questions[0].q) + " <small>(asked " + w.times + "×: " + E(w.years.join(", ")) + ")</small></li>").join("") + "</ul>" : "") +
       (R.length ? "<p class='ixHsmall'>Department-style references used: " + R.map((r) => E(r.src + ": " + r.head.slice(0, 50))).join(" · ") + "</p>" : "") +
@@ -182,7 +184,7 @@
     };
     if (c) show(c.text); else body.querySelector("#ixYgen").onclick = gen;
     const ff = body.querySelector("#ixYfigs[data-find]"); if (ff) findFigs(id).then((F) => { if (F.length && ff.isConnected) ff.outerHTML = figHTML(F); });
-    body.querySelector("[data-back]").onclick = list;
+    body.querySelector("[data-back]").onclick = list; wireLes(body);
     const es = body.querySelector("[data-essay]"); if (es) es.onclick = () => { close(); window.IX_SCREEN_OVERRIDE = { title: "CNS · " + u.name, eyebrow: "NEU-205 " + u.subject, body: "CNS written. Past-paper facts of this chapter:\n" + F.slice(0, 12).map((f) => "- " + f.key).join("\n") }; T().open(); T().ask("Give me the most likely written-exam question on " + u.name + " and the model answer, then I will write it from a blank page.", "written"); };
     const lb = body.querySelector("[data-learn]"); if (lb) lb.onclick = () => { close(); window.IX_SCREEN_OVERRIDE = { title: "GIT 206 · " + u.name, eyebrow: "DIG-206 " + u.subject, body: "High-yield facts:\n" + F.slice(0, 12).map((f) => "- " + f.key + " (" + f.stem.slice(0, 80) + ")").join("\n") }; T().open(); T().ask("Teach me " + u.name + " with the full loop, one step at a time.", "loop"); };
   }
@@ -224,5 +226,24 @@
     body.querySelector("#ixYspot2").onclick = () => spot(n);
     return pick.length;
   }
-  window.IX_HY = { spot, prepareAll, prefetch, allIds, open, list, facts: (id) => facts(unit(id)), unit, md, close, figsHTML, findFigs, generate: (id) => generate(unit(id)), cached: (id) => !!cache()[id], put: putCache };
+  // 📖 the CNS course's lessons, without dates (the CNS MCQ course ran from 21 Sep; for the written they are a library)
+  function allLessons() {
+    const seen = {}, out = [];
+    ((typeof C !== "undefined" && C.days) || []).forEach((d) => (d.lessons || []).forEach((l) => { if (!seen[l.id] && l.topic) { seen[l.id] = 1; out.push({ day: d.day, id: l.id, topic: l.topic, subject: l.subject }); } }));
+    return out;
+  }
+  const STOP = /^(and|the|of|in|a|to|its|on|system|i|ii|iii|&)$/i;
+  function lessonsFor(name) {
+    const w = String(name).toLowerCase().replace(/\(.*?\)/g, "").split(/[^a-z0-9]+/).filter((x) => x.length > 2 && !STOP.test(x));
+    return allLessons().map((l) => ({ l, n: w.filter((x) => l.topic.toLowerCase().indexOf(x.replace(/s$/, "")) >= 0).length })).filter((x) => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 4).map((x) => x.l);
+  }
+  const lesBtn = (l) => "<button type='button' data-les='" + l.day + "|" + E(l.id) + "'>📖 " + E(l.topic) + " <small>· " + E(String(l.subject || "").toLowerCase()) + "</small></button>";
+  function wireLes(el) { el.querySelectorAll("[data-les]").forEach((b) => (b.onclick = () => { const [d, id] = b.dataset.les.split("|"); if (window.INTELLECTUALITY_MAP && INTELLECTUALITY_MAP.reader) INTELLECTUALITY_MAP.reader(Number(d), id); })); }
+  function lessons() {
+    shell(); root.querySelector("#ixYt").textContent = "📖 CNS lesson library"; root.querySelector("#ixYsub").textContent = "No dates: read any lesson, any time, for the CNS written";
+    const L = allLessons(), g = {}; L.forEach((l) => (g[l.subject] = g[l.subject] || []).push(l));
+    body.innerHTML = "<p>The CNS course's " + L.length + " lessons (notes, live diagrams, pictures). The plan sends you here from each CNS written day; you never need to follow the old dates.</p>" + Object.keys(g).map((k) => "<h3>" + E(k.charAt(0) + k.slice(1).toLowerCase()) + "</h3><div class='ixYles'>" + g[k].map(lesBtn).join("") + "</div>").join("");
+    wireLes(body); return L.length;
+  }
+  window.IX_HY = { lessons, lessonsFor, spot, prepareAll, prefetch, allIds, open, list, facts: (id) => facts(unit(id)), unit, md, close, figsHTML, findFigs, generate: (id) => generate(unit(id)), cached: (id) => !!cache()[id], put: putCache };
 })();

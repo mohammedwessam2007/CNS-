@@ -480,7 +480,7 @@
     o.setAttribute("role", "dialog");
     o.setAttribute("aria-label", "Lesson notes");
     o.innerHTML =
-      '<div class="ixMpHead"><div class="ixMpHeadL"><div class="ixMpKick"><span class="ixMpTag" style="--c:' + col + '">' + E(tag) + "</span> 📖 " + E(fmt(d.date)) + " · Day " + d.day + '</div><div class="ixMpH1">' + E(l.topic) + '</div><div class="ixMpH2">' + secs.length + " sections · " + (ms.n ? ms.a + "/" + ms.n + " past papers done" : "no past papers") + (s.teach ? " · already learned" : "") + "</div></div>" +
+      '<div class="ixMpHead"><div class="ixMpHeadL"><div class="ixMpKick"><span class="ixMpTag" style="--c:' + col + '">' + E(tag) + "</span> 📖 " + (window.IX_HOME && IX_HOME.season && IX_HOME.season() ? "CNS lesson library" : E(fmt(d.date)) + " · Day " + d.day) + '</div><div class="ixMpH1">' + E(l.topic) + '</div><div class="ixMpH2">' + secs.length + " sections · " + (ms.n ? ms.a + "/" + ms.n + " past papers done" : "no past papers") + (s.teach ? " · already learned" : "") + "</div></div>" +
       '<button type="button" class="ixMpX" data-ixmp="closeRead" aria-label="Back to the map">✕</button></div>' +
       '<div class="ixMpScroll ixMpReadBody">' +
       (secs.length
@@ -499,7 +499,7 @@
             })
             .join("")
         : '<div class="ixMpNote">This lesson has no written note sections; its steps are the visual map and the teaching video.</div>') +
-      '<div class="ixMpRow">' + (canLearn ? '<button type="button" class="ixMpBtn" data-ixmp="learn" data-d="' + d.day + '" data-l="' + E(l.id) + '">✓ Mark learned</button><span class="ixMpHint">its past-paper block still comes on ' + E(fmt(d.date)) + "</span>" : "") + '<button type="button" class="ixMpBtn ghost" data-ixmp="closeRead">← Back to the map</button></div></div>';
+      '<div class="ixMpRow">' + (canLearn && !(window.IX_HOME && IX_HOME.season && IX_HOME.season()) ? '<button type="button" class="ixMpBtn" data-ixmp="learn" data-d="' + d.day + '" data-l="' + E(l.id) + '">✓ Mark learned</button><span class="ixMpHint">its past-paper block still comes on ' + E(fmt(d.date)) + "</span>" : "") + '<button type="button" class="ixMpBtn ghost" data-ixmp="closeRead">← Back to the map</button></div></div>';
     document.body.appendChild(o);
     // live diagrams and pictures, as in the lesson
     safe(() => {

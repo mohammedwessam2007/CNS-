@@ -45,6 +45,15 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const z6 = await p.evaluate(() => ({ figs: [...document.querySelectorAll('.ixYfig img')].map((i) => i.getAttribute('src')), kept: JSON.parse(localStorage.getItem('ix_hy_figs_v1') || '{}')['A:Spleen'] }));
   const c1 = commons; await p.evaluate(() => { IX_HY.close(); IX_HY.open('A:Spleen'); }); await tick(p, 500);
   check('Z6', "A unit with no stored plate finds Gray's plates on Commons (only captions that name it), keeps them", z6.figs.length === 1 && /Gray1188/.test(z6.figs[0]) && z6.kept && z6.kept.length === 1 && commons === c1, { z6, again: commons - c1 });
+  // Z8 the old CNS course has no September calendar during the season; its lessons are a date-free library, linked from each CNS sheet
+  await p.evaluate(() => { IX_HY.close(); document.querySelector('[data-xhome="cns"]').click(); }); await tick(p, 1500);
+  const z8 = await p.evaluate(() => { const vis = []; document.querySelectorAll('body *').forEach((e) => { if (e.children.length <= 1 && e.offsetParent && /\bSep\b|September|\b148\b|catch-up|CATCH-UP/.test(e.textContent) && e.textContent.length < 300) vis.push(e.textContent.trim().slice(0, 80)); }); return { vis, ey: document.getElementById('eyebrow').textContent }; });
+  await p.evaluate(() => document.querySelector('[data-ixmp-open]').click()); await tick(p, 800);
+  const mapIsPlan = await p.evaluate(() => !document.querySelector('.ixMpDay') || !document.querySelector('.ixMpDay').offsetParent);
+  await p.evaluate(() => { IX_PLAN.close(); IX_HY.open('CNS:Brain stem'); }); await tick(p, 500);
+  const les = await p.evaluate(() => [...document.querySelectorAll('.ixY [data-les]')].map((b) => b.textContent));
+  const nlib = await p.evaluate(() => IX_HY.lessons());
+  check('Z8', 'Old CNS course: no September dates, no catch-up; the map is the plan; CNS sheets link the course lessons; a library of all lessons', z8.vis.length === 0 && /LESSON LIBRARY/.test(z8.ey) && mapIsPlan && les.some((t) => /Brainstem/.test(t)) && nlib > 50, { z8, mapIsPlan, les, nlib });
   check('Z7', 'No page errors', errs.length === 0, errs.slice(0, 3));
   await s.close(); console.log(fails ? fails + ' FAILED' : 'ALL PASS'); process.exit(fails ? 1 : 0);
 })().catch((e) => { console.error(e); process.exit(1); });

@@ -100,3 +100,7 @@ html.ixXHome #player > :not(.ixXHomeBox):not(.ixAiBar):not(.ixAiOut):not(.ixAiFi
 .ixYfig img{display:block;width:100%;height:auto;max-height:360px;object-fit:contain;background:#fff}
 .ixYfig figcaption{background:#141c33;color:#dfe7ff;font-size:12.5px;padding:8px 10px;line-height:1.4}
 .ixYfig small{color:#9aa6c0}
+/* v29.1 season: the old CNS course is a date-free lesson library (no catch-up / behind banners) */
+html.ixXSeason .v14Carryover,html.ixXSeason .v14ProgressTruth,html.ixXSeason .v14SkipStep,html.ixXSeason .v14SpreadBanner,html.ixXSeason .v14RailFrom,html.ixXSeason .v14Calendar{display:none!important}
+.ixYles{display:grid;gap:6px}.ixYles button{text-align:left}
+html:not(.ixXHome) .ixXTop{display:none}
