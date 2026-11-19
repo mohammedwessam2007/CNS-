@@ -104,3 +104,10 @@ html.ixXHome #player > :not(.ixXHomeBox):not(.ixAiBar):not(.ixAiOut):not(.ixAiFi
 html.ixXSeason .v14Carryover,html.ixXSeason .v14ProgressTruth,html.ixXSeason .v14SkipStep,html.ixXSeason .v14SpreadBanner,html.ixXSeason .v14RailFrom,html.ixXSeason .v14Calendar{display:none!important}
 .ixYles{display:grid;gap:6px}.ixYles button{text-align:left}
 html:not(.ixXHome) .ixXTop{display:none}
+/* v29.2 season: the side menu is the plan's; the CNS MCQ course (dated from 21 Sep), its game bar and tools are gone */
+html.ixXSeason .ixXRailHost > :not(.ixXMenu):not(#railFooter){display:none!important}
+html.ixXSeason #railFooter > :not(#cloudBtn):not(#shareProgressBtn){display:none!important}
+html.ixXSeason #ixGame{display:none!important}
+.ixXMenu{display:grid;gap:10px;padding:4px 0 12px}.ixXMbrand{font-weight:800;letter-spacing:.04em;font-size:17px}.ixXMbrand span{color:#ffd36b}.ixXMsub{opacity:.75;font-size:13px}
+.ixXMstat{display:flex;justify-content:space-between;gap:8px;font-size:14px;opacity:.9}.ixXMstat b{color:#ffd36b}
+.ixXMbtns{display:grid;gap:8px}.ixXMbtns button{text-align:left}

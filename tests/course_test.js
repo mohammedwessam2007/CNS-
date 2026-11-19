@@ -26,7 +26,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   check('C3', 'The full map: every day 21 Nov - 14 Jan with its status (today, carried, off, 3 exams); a future day opens to read ahead', c3.days === 55 && c3.today === 1 && c3.behind >= 1 && c3.exams === 3 && c3.off >= 7 && /2 Dec/.test(c3b.h) && c3b.steps >= 4 && c3b.ahead, { c3, c3b });
   await p.evaluate(() => IX_PLAN.close());
   // C4 doors
-  await p.click('.ixMpRail'); await tick(p, 300);
+  await p.click('.ixXMenu [data-xm="map"]'); await tick(p, 300);
   const c4a = await p.evaluate(() => document.querySelectorAll('.ixPlan.on .ixPday').length);
   await p.evaluate(() => IX_PLAN.close());
   await p.click('.ixXRd[data-xday="2026-11-24"]'); await tick(p, 300);

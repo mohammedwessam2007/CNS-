@@ -14,15 +14,14 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await tick(p, 1200);
   const h1 = await p.evaluate(() => ({ title: document.getElementById('title').innerText, eyebrow: document.getElementById('eyebrow').innerText, box: !!document.querySelector('#player .ixXHomeBox .ixPstep'), steps: document.querySelectorAll('#player .ixPstep').length, oldBanner: [...document.querySelectorAll('.v14Carryover')].some((e) => e.offsetParent !== null), rail: (document.querySelector('.ixMpRail') || {}).innerText }));
   check('H1', 'On Sat 21 Nov the home is the plan: today\'s unit, countdowns, steps; no old course banner', /Oesophagus and stomach/.test(h1.title) && /DAYS TO GIT MCQ/.test(h1.eyebrow) && h1.box && h1.steps === 4 && !h1.oldBanner && !/148/.test(h1.eyebrow), h1);
-  await p.click('.ixMpRail'); await tick(p, 400);
+  await p.click('.ixXMenu [data-xm="map"]'); await tick(p, 400);
   const h2 = await p.evaluate(() => ({ plan: !!document.querySelector('.ixPlan.on'), oldMap: !!document.querySelector('.ixMp.on, .ixMpOv.on') }));
   check('H2', 'The map buttons open the exam plan', h2.plan, h2);
   await p.evaluate(() => IX_PLAN.close());
-  await p.click('[data-xhome="cns"]'); await tick(p, 800);
-  const h3a = await p.evaluate(() => ({ back: !!document.querySelector('.ixXBack'), home: document.documentElement.classList.contains('ixXHome'), title: document.getElementById('title').innerText }));
-  await p.click('.ixXBack'); await tick(p, 800);
-  const h3b = await p.evaluate(() => ({ home: document.documentElement.classList.contains('ixXHome'), box: !!document.querySelector('#player .ixXHomeBox') }));
-  check('H3', '"Open the CNS course" shows the old course with a way back; "Back" returns to the plan', h3a.back && !h3a.home && !/Oesophagus/.test(h3a.title) && h3b.home && h3b.box, { h3a, h3b });
+  await p.click('[data-xhome="lib"]'); await tick(p, 800);
+  const h3 = await p.evaluate(() => ({ lib: document.querySelector('.ixY').classList.contains('on') && /lesson library/.test(document.getElementById('ixYt').textContent), home: document.documentElement.classList.contains('ixXHome'), box: !!document.querySelector('#player .ixXHomeBox'), oldCourse: !!document.querySelector('[data-xhome="cns"]') }));
+  await p.evaluate(() => IX_HY.close());
+  check('H3', 'The CNS MCQ course is gone from the home: 📖 opens the date-free lesson library and the plan stays home', h3.lib && h3.home && h3.box && !h3.oldCourse, h3);
   // H5 prompt
   await p.evaluate(() => IX_TUTOR.ask('hello', null)); await tick(p, 900);
   const sys = sent.length ? sent[sent.length - 1].messages[0].content : '';
