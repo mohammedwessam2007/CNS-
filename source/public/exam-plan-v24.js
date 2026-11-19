@@ -416,7 +416,7 @@
         (day && day.lectures && day.lectures.length ? '<div class="ixZlect">📚 ' + E(day.lectures.length + " lecture" + (day.lectures.length > 1 ? "s" : "") + " " + (day.date === k ? "today" : "that day")) + "</div>" : "") +
         (day && day.off ? '<p class="ixZcalm">Nothing to do. Live. 🌿</p>' : day && day.exam ? '<p class="ixZcalm">Protocol, breakfast, go. Good luck, inshallah.</p>' : steps.length ?
           '<div class="ixZbar"><i style="width:' + Math.round((100 * nd) / steps.length) + '%"></i></div><div class="ixZbarT"><span>' + nd + " of " + steps.length + " done</span><span>" + (nd === steps.length ? "Done for today 🌿" : "~" + minsLeft + " min left") + "</span></div>" +
-          (nextS ? '<button type="button" class="ixZgo" data-go="' + E(nextS.id) + '"><small>' + (pre ? "Try it now (counts for Saturday)" : "Next step") + "</small>▶ " + E(nextS.label) + "</button>" : "") : "") +
+          (nextS ? '<button type="button" class="ixZgo" data-go="' + E(nextS.id) + '"><small>' + (pre ? "Saturday's session · try it now" : steps.some((x) => st().done[x.id] === true) ? "Continue today's session" : "Start today's session") + " · " + (steps.length - nd) + " step" + (steps.length - nd > 1 ? "s" : "") + " · ~" + minsLeft + " min</small>▶ " + E(nextS.label) + "</button>" : "") : "") +
       "</section>" +
       (day && day.behind ? '<div class="ixZnote">↩ ' + day.behind + " step" + (day.behind > 1 ? "s" : "") + " from earlier days are in today's list. Nothing is lost.</div>" : "") +
       '<div class="ixZexams">' + EXAMS.map((x) => '<div class="ixZex' + (left(x) <= 7 ? " soon" : "") + '"><b>' + Math.max(0, left(x)) + "</b><span>days</span><em>" + E(x.name) + "</em><small>" + E(nice(x.date)) + "</small></div>").join("") + "</div>" +

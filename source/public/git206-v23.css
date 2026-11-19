@@ -150,3 +150,28 @@ html.ixXHome #ixTtab{top:auto!important;bottom:calc(18px + env(safe-area-inset-b
 .ixZbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}.ixZbtns button{border-radius:14px;padding:12px;font-weight:700;background:#1a2138;color:#e8edff;border:1px solid rgba(255,255,255,.08)}
 .ixZmore{margin-top:16px;background:#111627;border-radius:14px;padding:10px 14px;color:#b9c3dd;font-size:14px}.ixZmore summary{cursor:pointer;font-weight:700;color:#9fb0d6}
 .ixXFoot{margin-top:10px}.ixXFoot button{width:100%;border-radius:14px;padding:12px;background:transparent;border:1px dashed rgba(255,255,255,.15);color:#9fb0d6}
+/* ───────── v30.1 · the daily session: one step at a time, a bar while it is open ───────── */
+.ixS{position:fixed;inset:0;z-index:9000;display:none;background:radial-gradient(120% 80% at 50% 0%,#1d2847 0%,#0b0f1a 65%);color:#eef2ff;overflow:auto}
+.ixS.on{display:block}html.ixSon body{overflow:hidden}
+.ixSin{max-width:560px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));min-height:100%;display:flex;flex-direction:column}
+.ixStop{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:#9fb0d6;letter-spacing:.04em;text-transform:uppercase}
+.ixSx{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#cfd8f5;border-radius:999px;padding:8px 14px;font-weight:700;text-transform:none;letter-spacing:0}
+.ixSdots{display:flex;gap:6px;margin:16px 0 0}.ixSdots i{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.1)}.ixSdots i.d{background:#4fd1b5}.ixSdots i.c{background:#ffd36b}
+.ixSmin{margin-top:28px;display:inline-block;align-self:flex-start;font-size:13px;font-weight:800;padding:5px 12px;border-radius:999px;background:rgba(255,211,107,.14);color:#ffd36b}
+.ixStitle{font-size:25px;line-height:1.25;margin:12px 0 0;font-weight:800;letter-spacing:-.01em}
+.ixShow{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:10px}.ixShow li{position:relative;padding:12px 14px 12px 38px;background:rgba(255,255,255,.05);border-radius:14px;font-size:15.5px;line-height:1.45;color:#d7def5}
+.ixShow li:before{content:"";position:absolute;left:15px;top:19px;width:8px;height:8px;border-radius:50%;background:#4fd1b5}
+.ixSmain{margin-top:auto;width:100%;border:0;border-radius:18px;padding:18px;font-size:18px;font-weight:800;background:#ffd36b;color:#1a1405;box-shadow:0 8px 24px rgba(255,211,107,.25);cursor:pointer}
+.ixSin > .ixSmain{margin-top:28px}
+.ixSrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.ixSrow button{border-radius:14px;padding:14px;font-weight:800;font-size:15px;background:#1a2138;color:#e8edff;border:1px solid rgba(255,255,255,.1)}
+.ixSrow button[data-s=done]{background:rgba(79,209,181,.15);color:#9fe6c9;border-color:rgba(79,209,181,.35)}
+.ixSsmall{text-align:center;color:#7f8aa8;font-size:13px;margin-top:14px}
+.ixSdone{text-align:center;justify-content:center}.ixSbig{font-size:56px}.ixSdone h2{font-size:28px;margin:8px 0}.ixSdone p{color:#b9c3dd;font-size:16px;line-height:1.5}
+.ixSnext{margin:22px 0;padding:14px;border-radius:16px;background:rgba(255,255,255,.05);display:grid;gap:4px}.ixSnext small{color:#8a97b8;text-transform:uppercase;font-size:11px;letter-spacing:.06em}.ixSnext span{color:#cfd8f5}
+.ixSbar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:9001;display:none;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:18px;background:rgba(20,26,44,.96);border:1px solid rgba(255,211,107,.35);box-shadow:0 10px 30px rgba(0,0,0,.5);backdrop-filter:blur(8px);max-width:620px;margin:0 auto}
+.ixSbar.on{display:flex}
+.ixSbI{flex:1;min-width:0;text-align:left;background:none;border:0;color:#eef2ff;padding:0;cursor:pointer}.ixSbI small{display:block;font-size:11px;font-weight:800;color:#ffd36b;letter-spacing:.05em;text-transform:uppercase}.ixSbI b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ixSbT{font-variant-numeric:tabular-nums;font-weight:800;color:#9fb0d6;font-size:14px}.ixSbT.over{color:#ff9f8f}
+.ixSbD{border:0;border-radius:12px;padding:11px 14px;font-weight:800;background:#4fd1b5;color:#08201a;white-space:nowrap}
+html.ixSbarOn #ixTtab{bottom:calc(84px + env(safe-area-inset-bottom))!important}
+html.ixSbarOn .ixHbody,html.ixSbarOn .ixTbox{padding-bottom:80px}
