@@ -47,19 +47,20 @@
     if (rail) {
       let r = rail.querySelector(".ixXRail"); if (!r) { rail.insertAdjacentHTML("beforeend", '<div class="ixXRail"></div>'); r = rail.querySelector(".ixXRail"); }
       const week = plan.days.filter((x) => x.date >= k).slice(0, 8);
-      const html = "<b>Next days</b>" + week.map((x) => '<div class="ixXRd' + (x.date === k ? " now" : "") + '"><span>' + E(new Date(x.date + "T12:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })) + "</span>" + E(x.off ? "day off" : x.exam ? "🎯 " + x.exam.name : (x.title || "").replace(/ \(its lectures are still running\)/, "")) + "</div>").join("");
+      const html = "<b>Next days</b>" + week.map((x) => '<div class="ixXRd' + (x.date === k ? " now" : "") + '" data-xday="' + x.date + '"><span>' + E(new Date(x.date + "T12:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })) + "</span>" + E(x.off ? "day off" : x.exam ? "🎯 " + x.exam.name : (x.title || "").replace(/ \(its lectures are still running\)/, "")) + "</div>").join("");
       if (r.innerHTML !== html) r.innerHTML = html;
     }
     document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sat 21 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
   }
   // the map buttons open the exam plan during the season (the old map is still behind "Open the CNS course")
   document.addEventListener("click", (e) => {
-    const t = e.target.closest && e.target.closest("[data-xhome], [data-ixmp-open]");
+    const t = e.target.closest && e.target.closest("[data-xhome], [data-ixmp-open], [data-xday]");
     if (!t) return;
     if (t.dataset.xhome === "cns") { cnsMode = true; document.documentElement.classList.remove("ixXHome"); const pl = document.getElementById("player"); if (pl) pl.innerHTML = ""; if (typeof render === "function") render(); return; }
     if (t.dataset.xhome === "plan") { cnsMode = false; if (typeof render === "function") render(); paint(); return; }
     if (t.dataset.xhome === "git") { window.IX_GIT && IX_GIT.open(); return; }
-    if (t.hasAttribute("data-ixmp-open") && active()) { e.preventDefault(); e.stopImmediatePropagation(); P().open(); }
+    if (t.dataset.xday) { P().openDay(t.dataset.xday); return; }
+    if (t.hasAttribute("data-ixmp-open") && active()) { e.preventDefault(); e.stopImmediatePropagation(); P().openMap(); }
   }, true);
   function boot() {
     if (typeof render !== "function" || !P()) return void setTimeout(boot, 80);

@@ -155,7 +155,7 @@
     const fb = document.createElement("div"); fb.className = "ixHfb";
     fb.innerHTML = (keyed(q) ? '<div class="ixHverdict ' + (ok ? "good" : "bad") + '">' + (ok ? "✓ Right" : "✗ It is " + E(keyTxt)) + (conf === "sure" && !ok ? " · you were sure: this is a trap worth fixing" : "") + "</div>" : "<div class='ixHverdict'>No official key for this one.</div>") +
       (q.ocr ? '<p class="ixHsmall">From a scanned solved paper. If the key looks wrong, <button type="button" class="ixHlink" data-flag>⚑ hide this question</button>.</p>' : "") +
-      '<div class="ixHhost" id="ixHai"></div><div class="ixHrow"><button type="button" class="primary" data-next>Next →</button></div>';
+      unitFig(q) + '<div class="ixHhost" id="ixHai"></div><div class="ixHrow"><button type="button" class="primary" data-next>Next →</button></div>';
     body.querySelector(".ixHq").appendChild(fb);
     const host = fb.querySelector("#ixHai");
     if (T()) {
@@ -168,6 +168,14 @@
     }
     const fl = fb.querySelector("[data-flag]"); if (fl) fl.onclick = () => { st().hidden.push(q.id); persist(); fl.replaceWith(document.createTextNode("hidden ✓")); };
     fb.querySelector("[data-next]").onclick = () => { run.i++; showQ(); };
+  }
+  function unitFig(q) {
+    try {
+      const u = window.IX_PLAN && IX_PLAN.units().find((x) => x.pred(q)), F = u && (window.IX_GIT206_FIGS || {})[u.id];
+      if (!F || !F.length) return "";
+      const f = F[Math.abs(q.id.split("").reduce((t, c) => t + c.charCodeAt(0), 0)) % F.length];
+      return "<figure class='ixYfig'><img loading='lazy' src='" + E(f.src) + "' alt='" + E(f.cap) + "'><figcaption>" + E(f.cap) + " <small>· " + E(f.fig) + "</small></figcaption></figure>";
+    } catch (e) { return ""; }
   }
   function finish() {
     const r = run; run = null;

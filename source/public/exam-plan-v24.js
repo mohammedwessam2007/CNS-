@@ -132,7 +132,9 @@
   }
   function build() {
     // the owner starts on Saturday 21 Nov 2026; before that the plan waits (nothing is due early)
-    const mins = life().mins, now0 = at(iso(new Date())), start = now0 < at(START) ? at(START) : now0, days = [];
+    // the schedule is FIXED from the start date (21 Nov): ticks are tied to dates, and missed work is carried forward
+    // by the pacing engine (paced()), never by re-planning from today (that would lose what was already done)
+    const mins = life().mins, start = at(START), days = [];
     const mcqDate = at(EXAMS[0].date), gwDate = at(EXAMS[1].date), cwDate = at(EXAMS[2].date);
     // Phase A follows the official IPKA timetable: a unit is studied the day after its last lecture
     // (the lecture is the first exposure, the app the second); full past papers only once the lectures are done
@@ -217,7 +219,27 @@
   /* ── state ── */
   function st() { let s = null; try { s = typeof S !== "undefined" ? S : null; } catch (e) {} const h = s || (window.__ixPlanLocal = window.__ixPlanLocal || {}); h.examPlan = h.examPlan || { done: {} }; return h.examPlan; }
   function persist() { try { if (typeof save === "function") save(); } catch (e) {} }
-  function today() { const P = build(), k = iso(new Date()); return { P, day: P.days.find((d) => d.date === k) || P.days.find((d) => d.date > k) }; }
+  /* ── v28 pacing: nothing is lost and nothing piles up. A unit step (learn, MCQs, blind check) or a mock from a past
+     day that was not done comes first today, oldest first; today still fits the owner's minutes; what does not fit
+     moves to tomorrow and is listed. A step that was started counts as done. Days off stay off. ── */
+  const doneish = (id) => !!st().done[id];
+  function owed(P, k) {
+    const out = [];
+    P.days.forEach((d) => { if (d.date >= k || d.off || d.exam) return; d.steps.forEach((x) => { if ((x.unit && (x.kind === "learn" || x.kind === "mcq" || x.kind === "blind")) || x.kind === "mock" || x.kind === "wmock") { if (!doneish(x.id)) out.push(Object.assign({}, x, { from: d.date })); } }); });
+    return out;
+  }
+  function paced(P, day, k) {
+    if (!day || day.date !== k || day.off || day.exam) return { day, moved: [], carried: [] };
+    const o = owed(P, k); if (!o.length) return { day, moved: [], carried: [] };
+    const mins = P.mins, review = day.steps.filter((x) => x.kind === "review" || x.kind === "notes" || x.kind === "college");
+    const rest = day.steps.filter((x) => !review.includes(x));
+    // carried steps are shortened (no written step travels; phase B covers it) and come first, oldest first
+    const carried = o.map((x) => Object.assign({}, x, { label: "↩ from " + new Date(x.from + "T12:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }) + ": " + x.label, min: x.kind === "mock" || x.kind === "wmock" ? x.min : Math.min(x.min, 10), carried: true }));
+    const out = review.slice(), moved = []; let used = review.reduce((t, x) => t + x.min, 0);
+    carried.concat(rest).forEach((x) => { if (used + x.min <= mins || x.kind === "rest") { out.push(x); used += x.min; } else moved.push(x); });
+    return { day: Object.assign({}, day, { steps: out, behind: o.length, moved: moved.map((x) => x.label) }), moved, carried };
+  }
+  function today() { const P = build(), k = iso(new Date()), raw = P.days.find((d) => d.date === k) || P.days.find((d) => d.date > k); return { P, day: paced(P, raw, k).day }; }
   function nextStep() { const { day } = today(); if (!day || day.off || day.date !== iso(new Date())) return null; /* nothing early: before 21 Nov ▶ Today stays free */ const s = day.steps.find((x) => !st().done[x.id] && x.kind !== "rest"); return s ? { day, step: s } : null; }
 
   /* ── running a step ── */
@@ -255,6 +277,38 @@
     GB().mcq.forEach((q) => { const r = g[q.id]; if (!r) return; const o = per[q.chapter] || (per[q.chapter] = [0, 0]); o[0]++; if (!r.ok) o[1]++; });
     const w = Object.entries(per).filter(([, v]) => v[0] >= 3).sort((a, b) => b[1][1] / b[1][0] - a[1][1] / a[1][0])[0];
     return w ? w[0] : "Liver and biliary system";
+  }
+
+  /* ── v28 the full map: every day to the last exam, with its status; any day opens (read ahead allowed) ── */
+  function dayStatus(d, k) {
+    if (d.off) return ["off", "🌿 off"]; if (d.exam) return ["exam", "🎯 exam"];
+    const real = d.steps.filter((x) => x.kind !== "rest" && x.kind !== "college");
+    const n = real.filter((x) => doneish(x.id)).length;
+    if (d.date === k) return ["today", "● today"];
+    if (d.date > k) return [n ? "part" : "ahead", n ? "◐ started" : "ahead"];
+    return n === real.length ? ["done", "✓ done"] : n ? ["part", "◐ partly"] : ["behind", "↩ carried"];
+  }
+  function openMap() {
+    shell(); root.classList.add("on");
+    const P = build(), k = iso(new Date()), body = document.getElementById("ixPbody");
+    const weeks = []; P.days.forEach((d) => { const dt = new Date(d.date + "T12:00"), wk = Math.floor((dt - new Date("2026-11-21T12:00")) / (7 * DAY)); (weeks[wk] = weeks[wk] || []).push(d); });
+    body.innerHTML = '<div class="ixHrow"><button type="button" data-back>← Today</button></div><h3>🗺️ The whole course, day by day</h3><p class="ixHsmall">Tap a day to open it. Past days that were not done are carried to today automatically.</p>' +
+      weeks.filter(Boolean).map((w, i) => "<div class='ixPwk'><b>Week " + (i + 1) + " · " + E(w[0].phase) + "</b>" + w.map((d) => { const [cls, lab] = dayStatus(d, k); return '<button type="button" class="ixPday ' + cls + '" data-day="' + d.date + '"><span class="d">' + E(nice(d.date)) + '</span><span class="t">' + E(d.off ? "Day off" : d.exam ? d.exam.name : (d.title || "").replace(/ \(its lectures are still running\)/, "")) + (d.lectures && d.lectures.length ? " <small>· " + d.lectures.length + " lectures</small>" : "") + '</span><span class="s">' + lab + "</span></button>"; }).join("") + "</div>").join("");
+    body.querySelector("[data-back]").onclick = () => render();
+    body.querySelectorAll("[data-day]").forEach((b) => (b.onclick = () => openDay(b.dataset.day)));
+  }
+  function openDay(date) {
+    shell(); root.classList.add("on");
+    const P = build(), k = iso(new Date()), d0 = P.days.find((x) => x.date === date); if (!d0) return openMap();
+    const d = date === k ? paced(P, d0, k).day : d0, body = document.getElementById("ixPbody");
+    body.innerHTML = '<div class="ixHrow"><button type="button" data-map>← Map</button></div><h3>' + E(nice(date)) + " · " + E(d.phase) + (d.title ? " · " + E(d.title) : "") + "</h3>" +
+      (d.lectures && d.lectures.length ? "<p class='ixHsmall'>📚 Lectures: " + d.lectures.map(E).join(" · ") + "</p>" : "") +
+      (d.off ? "<p>Day off. Live. 🌿</p>" : d.exam ? "<p><b>Exam day: " + E(d.exam.name) + ".</b></p>" : "") +
+      (date > k && d.steps.length ? "<p class='ixHsmall'>Reading ahead is fine: anything you do now counts, and that day will be lighter.</p>" : "") +
+      '<div class="ixPsteps">' + d.steps.map((x) => '<div class="ixPstep' + (st().done[x.id] === true ? " done" : "") + '"><label><input type="checkbox" data-done="' + E(x.id) + '"' + (st().done[x.id] === true ? " checked" : "") + "></label><div><b>" + E(x.label) + "</b><span>" + (x.min ? x.min + " min" : "") + "</span></div>" + (x.kind !== "rest" && x.kind !== "college" ? '<button type="button" data-go="' + E(x.id) + '">' + (st().done[x.id] ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>";
+    body.querySelector("[data-map]").onclick = openMap;
+    body.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => { const x = d.steps.find((y) => y.id === b.dataset.go); if (x) runStep(x); }));
+    body.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); openDay(date); }));
   }
 
   /* ── readiness: only AI-off results count (GIT past-paper mocks, written mocks, blind checks) ── */
@@ -312,18 +366,22 @@
       (d && d.gate ? '<div class="ixHgate">' + E(d.gate) + "</div>" : "") +
       (k < START ? "<p><b>The plan starts on Saturday 21 November.</b> Until then nothing is due: live. 🌿 (If you want, set your minutes and Friday off in ⏱ and add your key in ⚙︎.)</p>" : "") +
       (day ? "<h3>" + (day.date === k ? "Today" : "Next: " + E(nice(day.date))) + " · " + E(day.phase) + (day.title ? " · " + E(day.title) : "") + "</h3>" +
-        (day.lectures && day.lectures.length ? "<p class='ixHsmall'>📚 Lectures " + (day.date === k ? "today" : "that day") + ": " + day.lectures.map(E).join(" · ") + "</p>" : "") +
+        (day.behind ? "<div class='ixHgate'>↩ " + day.behind + " step" + (day.behind > 1 ? "s" : "") + " from earlier days come first today, oldest first. Nothing is lost." + (day.moved && day.moved.length ? " Moved to tomorrow to keep your minutes: " + day.moved.map(E).join("; ") + "." : "") + "</div>" : "") +
+      (day.lectures && day.lectures.length ? "<p class='ixHsmall'>📚 Lectures " + (day.date === k ? "today" : "that day") + ": " + day.lectures.map(E).join(" · ") + "</p>" : "") +
         (day.off ? "<p>Day off. Live. 🌿</p>" : day.exam ? "<p><b>Exam day: " + E(day.exam.name) + ".</b> Protocol, breakfast, go. Good luck, inshallah.</p>" : "") +
         '<div class="ixPsteps">' + day.steps.map((s) => '<div class="ixPstep' + (done(s) ? " done" : "") + '"><label><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + "></label><div><b>" + E(s.label) + "</b><span>" + (s.min ? s.min + " min" : "") + "</span></div>" + (s.kind !== "rest" ? '<button type="button" data-go="' + E(s.id) + '">' + (st().done[s.id] ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" +
         (day.steps.length ? "<p class='ixHsmall'>About " + day.steps.reduce((t, s) => t + s.min, 0) + " minutes of your " + P.mins + ". Tick a step when it is done; the day ends when the list does.</p>" : "") : "<p>All three exams are done. Rest. 🌿</p>") +
       readinessHTML() +
-      "<h3>Next 7 days</h3><ul class='ixPweek'>" + week.map((x) => "<li><b>" + E(nice(x.date)) + "</b> " + (x.off ? "day off" : x.exam ? "🎯 " + E(x.exam.name) : E(x.title || "")) + (x.lectures && x.lectures.length ? " <small>· " + x.lectures.length + " lectures</small>" : "") + "</li>").join("") + "</ul>" +
+      "<div class='ixHrow'><button type='button' class='primary' data-openmap>🗺️ The whole course, day by day</button></div>" +
+      "<h3>Next 7 days</h3><ul class='ixPweek'>" + week.map((x) => "<li data-day='" + x.date + "'><b>" + E(nice(x.date)) + "</b> " + (x.off ? "day off" : x.exam ? "🎯 " + E(x.exam.name) : E(x.title || "")) + (x.lectures && x.lectures.length ? " <small>· " + x.lectures.length + " lectures</small>" : "") + "</li>").join("") + "</ul>" +
       "<h3>What the minutes cannot fit (dropped openly)</h3>" +
       (P.dropped.length ? "<p>GIT units: " + P.dropped.map((u) => E(u.name) + " (" + u.subject + ")").join(", ") + ". Raise the minutes in ⏱ only if you want them back; otherwise they are skimmed in the last review days.</p>" : "<p>Every GIT unit fits (" + P.unitsFit + " units).</p>") +
       (P.wDropped.length ? "<p>GIT written topics after the top " + (GB().written.filter((w) => !/: other$/.test(w.topic)).length - P.wDropped.length) + ": " + P.wDropped.slice(0, 10).map((w) => E(w.topic)).join(", ") + (P.wDropped.length > 10 ? "…" : "") + "</p>" : "") +
       "<p>CNS written: no past written list is loaded yet, so chapters are ranked by MCQ weight. Send the CNS previous written questions (Telegram) and the ranking becomes exact.</p>" +
       "<h3>Forgetting forecast</h3><ul>" + forecast().map((f) => "<li>Before " + E(f.exam) + ": " + f.cards + " memory cards and " + f.misses + " GIT misses fall due. The daily reviews keep them; skip them and they fade.</li>").join("") + "</ul>";
     body.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => { const s = day.steps.find((x) => x.id === b.dataset.go); if (s) runStep(s); }));
+    const om = body.querySelector("[data-openmap]"); if (om) om.onclick = openMap;
+    body.querySelectorAll(".ixPweek [data-day]").forEach((li) => (li.onclick = () => openDay(li.dataset.day)));
     body.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); render(target); if (target && typeof window.render === "function") window.render(); }));
   }
 
@@ -334,5 +392,5 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1800);
-  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT, mount: (el) => render(el), today, START };
+  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT, mount: (el) => render(el), today, START, openMap, openDay, owed: () => { const P = build(); return owed(P, iso(new Date())); } };
 })();

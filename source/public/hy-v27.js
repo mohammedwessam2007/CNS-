@@ -103,6 +103,12 @@
     flush(); return out.join("");
   }
 
+  // drawings: Gray's Anatomy plates (public domain) for the unit; each gets 👁 Explain / 🎯 Quiz from the professor
+  function figsHTML(id) {
+    const F = (window.IX_GIT206_FIGS || {})[id]; if (!F || !F.length) return "";
+    return "<h3>🖼 Drawings</h3><div class='ixYfigs'>" + F.map((f) => "<figure class='ixYfig'><img loading='lazy' src='" + E(f.src) + "' alt='" + E(f.cap) + "'><figcaption>" + E(f.cap) + " <small>· " + E(f.fig) + ", public domain</small></figcaption></figure>").join("") + "</div>";
+  }
+
   /* ── the page ── */
   let root, body;
   function shell() {
@@ -132,6 +138,7 @@
     root.querySelector("#ixYsub").textContent = u.module + " · " + u.subject + " · " + u.qs.length + " past questions";
     const ch = ["Ninja Nerd", "Osmosis", "Armando Hasudungan"];
     body.innerHTML = "<div class='ixHrow'><button type='button' data-back>← All sheets</button>" + (window.IX_PLAN && !/^CNS:/.test(id) ? "<button type='button' class='primary' data-learn>▶ Learn it with the professor</button>" : "<button type='button' class='primary' data-essay>📝 Most likely essay, then write it</button>") + "</div>" +
+      figsHTML(id) +
       "<h3>🔥 What the examiners keep asking</h3>" + (F.length ? "<ol class='ixYf'>" + F.slice(0, 15).map((f) => "<li><b>" + E(f.key) + "</b><span>" + E(f.stem.slice(0, 140)) + "</span><small>" + (f.n > 1 ? "asked " + f.n + "× · " : "") + E(f.sources.slice(0, 3).join(", ")) + "</small></li>").join("") + "</ol>" : "<p class='ixHsmall'>No keyed past MCQs in this unit: the sheet is built from the references and the course.</p>") +
       ((u.written || []).length ? "<h3>📝 Written questions on this unit</h3><ul>" + u.written.map((w) => "<li>" + E(w.questions[0].q) + " <small>(asked " + w.times + "×: " + E(w.years.join(", ")) + ")</small></li>").join("") + "</ul>" : "") +
       (R.length ? "<p class='ixHsmall'>Department-style references used: " + R.map((r) => E(r.src + ": " + r.head.slice(0, 50))).join(" · ") + "</p>" : "") +
@@ -149,5 +156,5 @@
     const es = body.querySelector("[data-essay]"); if (es) es.onclick = () => { close(); window.IX_SCREEN_OVERRIDE = { title: "CNS · " + u.name, eyebrow: "NEU-205 " + u.subject, body: "CNS written. Past-paper facts of this chapter:\n" + F.slice(0, 12).map((f) => "- " + f.key).join("\n") }; T().open(); T().ask("Give me the most likely written-exam question on " + u.name + " and the model answer, then I will write it from a blank page.", "written"); };
     const lb = body.querySelector("[data-learn]"); if (lb) lb.onclick = () => { close(); window.IX_SCREEN_OVERRIDE = { title: "GIT 206 · " + u.name, eyebrow: "DIG-206 " + u.subject, body: "High-yield facts:\n" + F.slice(0, 12).map((f) => "- " + f.key + " (" + f.stem.slice(0, 80) + ")").join("\n") }; T().open(); T().ask("Teach me " + u.name + " with the full loop, one step at a time.", "loop"); };
   }
-  window.IX_HY = { open, list, facts: (id) => facts(unit(id)), unit, md, close };
+  window.IX_HY = { open, list, facts: (id) => facts(unit(id)), unit, md, close, figsHTML };
 })();

@@ -85,3 +85,18 @@ html.ixXHome #player > :not(.ixXHomeBox):not(.ixAiBar):not(.ixAiOut):not(.ixAiFi
 .ixYspoil.on{background:rgba(79,209,181,.18);color:#9fe6c9}
 .ixYf{padding-left:22px}.ixYf li{margin:6px 0}.ixYf b{display:block}.ixYf span{display:block;font-size:13px;color:#c7d0e4}.ixYf small{color:#9aa6c0}
 .ixYlink{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:inherit;text-decoration:none;font-weight:700}
+/* v28 the full map */
+.ixPwk{display:grid;gap:6px;margin:12px 0}
+.ixPwk > b{font-size:13px;color:#9aa6c0;text-transform:uppercase;letter-spacing:.04em}
+.ixPday{display:grid!important;grid-template-columns:86px 1fr auto;gap:8px;align-items:center;text-align:left;padding:8px 10px!important;min-height:48px}
+.ixPday .d{font-size:12.5px;color:#c7d0e4;font-weight:800}.ixPday .t{font-weight:600;font-size:13.5px}.ixPday .s{font-size:12px;white-space:nowrap}
+.ixPday.done{border-color:rgba(79,209,181,.5)!important}.ixPday.done .s{color:#9fe6c9}
+.ixPday.today{border-color:#ffd36e!important;background:rgba(255,211,110,.1)!important}.ixPday.today .s{color:#ffd36e}
+.ixPday.behind .s{color:#ffb3c4}.ixPday.part .s{color:#ffd36e}.ixPday.off{opacity:.55}.ixPday.exam{border-color:#f07a95!important}
+.ixPweek li[data-day]{cursor:pointer}
+/* v28 drawings */
+.ixYfigs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.ixYfig{margin:8px 0;background:#fff;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+.ixYfig img{display:block;width:100%;height:auto;max-height:360px;object-fit:contain;background:#fff}
+.ixYfig figcaption{background:#141c33;color:#dfe7ff;font-size:12.5px;padding:8px 10px;line-height:1.4}
+.ixYfig small{color:#9aa6c0}

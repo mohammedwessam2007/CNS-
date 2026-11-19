@@ -192,6 +192,7 @@
         player.querySelectorAll(PICS).forEach(figureBar);
       }
     }
+    document.querySelectorAll(".ixH.on .ixHbody figure").forEach(figureBar);
     const drawer = document.getElementById("drawerBody");
     if (drawer && !mock() && drawer.innerText.trim().length > 40) {
       generic(drawer, "drawer");
@@ -203,6 +204,8 @@
   function start() {
     const mo = new MutationObserver((list) => { for (const m of list) { if (m.target.closest && m.target.closest(".ixAiBar, .ixAiOut, .ixAiFig")) continue; later(); return; } });
     ["player", "drawerBody"].forEach((id) => { const el = document.getElementById(id); if (el) mo.observe(el, { childList: true, subtree: true }); });
+    // the overlays (high-yield sheets, GIT hub, plan) live outside #player: watch their bodies as well
+    new MutationObserver((list) => { for (const m of list) { const t = m.target; if (t.closest && t.closest(".ixHbody") && !t.closest(".ixAiBar, .ixAiOut, .ixAiFig")) { later(); return; } } }).observe(document.body, { childList: true, subtree: true });
     // a picture that finishes loading changes nothing in the page structure, so it is watched on its own
     document.addEventListener("load", (e) => { if (e.target && e.target.tagName === "IMG") later(); }, true);
     later();
