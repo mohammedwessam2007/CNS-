@@ -171,7 +171,7 @@
       const paired = pl.units.length > 1, steps = lecSteps.concat([step("review", "Reviews due (memory cards)", 10)]);
       // rule 1: a small budget cuts steps, never adds minutes: written goes first (phase B covers it), then teaching
       pl.units.forEach((u) => {
-        if (mins >= 37) steps.push(step("learn", "Learn with the professor: " + u.name, paired ? 10 : 15, { unit: u.id }));
+        if (mins >= 37) steps.push(step("learn", "📘 High-yield sheet, then learn with the professor: " + u.name, paired ? 10 : 15, { unit: u.id }));
         steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, paired ? 10 : 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, paired ? 10 : 12, { unit: u.id }));
         if (!paired && mins >= 52 && u.written.length) steps.push(step("written", "Write from a blank page: " + u.written[0].questions[0].q.slice(0, 90), 15, { unit: u.id, q: u.written[0].questions[0].q }));
       });
@@ -229,7 +229,7 @@
     const u = s.unit ? unitById(s.unit) : null;
     const ctx = u ? "Unit: " + u.subject + " · " + u.name + " (DIG-206).\nHow the past papers ask it:\n" + GB().mcq.filter(u.pred).slice(0, 8).map((q) => "- " + q.stem).join("\n") + (u.written.length ? "\nWritten questions asked on it: " + u.written.map((w) => w.topic + " (" + w.years.join(", ") + ")").join("; ") : "") : "";
     if (s.kind === "review") { close(); t.open(); t.ask("Start my day: review what is due.", "review"); }
-    else if (s.kind === "learn") { close(); override("GIT 206 · " + u.name, ctx); t.open(); t.ask("Teach me " + u.name + " with the full loop, one step at a time.", "loop"); }
+    else if (s.kind === "learn") { close(); override("GIT 206 · " + u.name, ctx); if (window.IX_HY) IX_HY.open(u.id); else { t.open(); t.ask("Teach me " + u.name + " with the full loop, one step at a time.", "loop"); } }
     else if (s.kind === "mcq") { close(); override("GIT 206 · " + u.name, ctx); if (!G().startCustom(u.name, u.pred, 10)) { t.open(); t.ask("Quiz me on " + u.name + ".", "secquiz", ctx); } }
     else if (s.kind === "blind" || s.kind === "blindmix") { close(); override("GIT 206 · " + (u ? u.name : weakest()), ctx || "Chapter: " + weakest()); t.openBlind(); }
     else if (s.kind === "written") { close(); override("GIT 206 written", "Written question: " + s.q); t.openEssay(s.q); }
@@ -247,6 +247,7 @@
     else if (s.kind === "traps") { close(); t.open(); t.ask("Drill me on my traps: the things I was sure about and got wrong.", "traps"); }
     else if (s.kind === "examday") { close(); t.open(); t.ask("Give me my exam-day protocol.", "examday"); }
     else if (s.kind === "sheets") { openSheets(); }
+    else if (s.kind === "cns" && window.IX_HY) { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch); IX_HY.open("CNS:" + s.ch); }
     else if (s.kind === "cns") { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch + ". No past written list is loaded for CNS: use the course content and the MCQ bank's weight for this chapter."); t.open(); t.ask("Give me the most likely written-exam question on " + s.ch + " and the model answer, then I will write it from a blank page.", "written"); }
   }
   function weakest() {
@@ -329,6 +330,7 @@
   function install() {
     const anchor = document.getElementById("gitBtn") || document.getElementById("tutorBtn");
     if (anchor && !document.getElementById("planBtn")) { const b = anchor.cloneNode(false); b.id = "planBtn"; b.textContent = "📅 My exam plan (30 Dec · 5 Jan · 12 Jan)"; b.removeAttribute("onclick"); b.onclick = (e) => { e.preventDefault(); open(); }; anchor.before(b); }
+    if (anchor && !document.getElementById("hyBtn")) { const b = anchor.cloneNode(false); b.id = "hyBtn"; b.textContent = "📘 High-yield sheets (every unit)"; b.removeAttribute("onclick"); b.onclick = (e) => { e.preventDefault(); window.IX_HY && IX_HY.list(); }; anchor.before(b); }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1800);

@@ -46,7 +46,7 @@
     if (root) return;
     root = document.createElement("div"); root.className = "ixH"; root.setAttribute("role", "dialog"); root.setAttribute("aria-label", "GIT 206");
     root.innerHTML = '<div class="ixHbox"><div class="ixHhd"><b>🫃 GIT 206</b><span class="ixHsub" id="ixHsub"></span><button type="button" data-g="close" aria-label="Close">✕</button></div>' +
-      '<div class="ixHtabs" role="tablist"><button data-tab="mcq">MCQ practice</button><button data-tab="papers">Past papers</button><button data-tab="written">Written</button><button data-tab="blind">Blind check</button></div><div class="ixHbody" id="ixHbody"></div></div>';
+      '<div class="ixHtabs" role="tablist"><button data-tab="mcq">MCQ practice</button><button data-tab="papers">Past papers</button><button data-tab="written">Written</button><button data-tab="blind">Blind check</button><button data-tab="hy">📘 High-yield</button></div><div class="ixHbody" id="ixHbody"></div></div>';
     document.body.appendChild(root); body = root.querySelector("#ixHbody");
     root.addEventListener("click", (e) => {
       const b = e.target.closest("button"); if (!b) return;
@@ -73,6 +73,7 @@
     if (tab === "mcq") return chapters();
     if (tab === "papers") return papers();
     if (tab === "written") return written();
+    if (tab === "hy") { tab = "mcq"; close(); return window.IX_HY && IX_HY.list(); }
     return blind();
   }
 
