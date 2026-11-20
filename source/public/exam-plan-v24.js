@@ -417,30 +417,43 @@
     const week = P.days.filter((x) => x.date > (day ? day.date : k)).slice(0, 6);
     const clean = (t) => String(t || "").replace(/ \(its lectures are still running\)/, "");
     const short = (d) => at(d).toLocaleDateString("en-GB", { weekday: "short" }), dnum = (d) => at(d).getDate(), mon = (d) => at(d).toLocaleDateString("en-GB", { month: "short" });
+    const COL = { Anatomy: "#ff5d8f", Physiology: "#22d3ee", Histology: "#a78bfa", Biochemistry: "#fbbf24" };
+    const sc = (t) => { const m = /^(Anatomy|Physiology|Histology|Biochemistry)/.exec(t || ""); return m ? COL[m[1]] : "#7dd3fc"; };
+    const hr = new Date().getHours(), greet = hr < 12 ? "Good morning" : hr < 18 ? "Good afternoon" : "Good evening";
+    const pct = steps.length ? nd / steps.length : 0, R = 52, C = 2 * Math.PI * R;
+    const started = steps.some((x) => st().done[x.id] === true);
+    const icon = { review: "🔁", lesson: "📖", learn: "📘", mcq: "🎯", blind: "🙈", blindmix: "🙈", written: "✍️", mock: "⏱", misses: "🩹", weak: "🩹", traps: "🪤", week: "📅", examday: "🎓", sheets: "🗂", outline: "⚡", wmock: "🧪", cns: "🧠", spot: "🔬", college: "🏫", notes: "📝" };
+    const noEmo = (t) => String(t).replace(/^[\u{1F300}-\u{1FAFF}\u2600-\u27BF\uFE0F\s]+/u, "");
+    const clock = (m) => (m >= 60 ? Math.floor(m / 60) + "h " + (m % 60 ? (m % 60) + "m" : "") : m + " min");
     el.innerHTML =
-      '<section class="ixZhero">' +
-        '<div class="ixZkick">' + (pre ? "Starts Saturday · preview" : day && day.date === k ? "Today · " + E(nice(k)) : "Next · " + E(nice(day ? day.date : k))) + (day && !day.off && !day.exam ? " · day " + dayNo + " of " + dayAll : "") + "</div>" +
-        (subj ? '<span class="ixZsubj ixZs-' + subj.toLowerCase() + '">' + E(subj) + "</span>" : day ? '<span class="ixZsubj">' + E(day.phase) + "</span>" : "") +
-        '<h2 class="ixZname">' + E(clean(name)) + "</h2>" +
-        (day && day.lectures && day.lectures.length ? '<div class="ixZlect">📚 ' + E(day.lectures.length + " lecture" + (day.lectures.length > 1 ? "s" : "") + " " + (day.date === k ? "today" : "that day")) + "</div>" : "") +
-        (day && day.off ? '<p class="ixZcalm">Nothing to do. Live. 🌿</p>' : day && day.exam ? '<p class="ixZcalm">Protocol, breakfast, go. Good luck, inshallah.</p>' : steps.length ?
-          '<div class="ixZbar"><i style="width:' + Math.round((100 * nd) / steps.length) + '%"></i></div><div class="ixZbarT"><span>' + nd + " of " + steps.length + " done</span><span>" + (nd === steps.length ? "Done for today 🌿" : "~" + minsLeft + " min left") + "</span></div>" +
-          (nextS ? '<button type="button" class="ixZgo" data-go="' + E(nextS.id) + '"><small>' + (pre ? "Saturday's session · try it now" : steps.some((x) => st().done[x.id] === true) ? "Continue today's session" : "Start today's session") + " · " + (steps.length - nd) + " step" + (steps.length - nd > 1 ? "s" : "") + " · ~" + minsLeft + " min</small>▶ " + E(nextS.label) + "</button>" : "") : "") +
+      '<div class="ixQ" style="--sub:' + sc(day && day.title) + '">' +
+      '<header class="ixQtop"><div><small>' + E(at(day ? day.date : k).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" })) + " · " + (pre ? "starts Saturday" : greet) + "</small><b>" + (day && !day.off && !day.exam ? "Day " + dayNo + "<i> of " + dayAll + "</i>" : day && day.off ? "Day off" : "Exam day") + '</b></div><button type="button" class="ixQpill" data-life>⏱ ' + P.mins + " min/day</button></header>" +
+      '<section class="ixZhero ixQhero">' +
+        '<div class="ixQglow"></div>' +
+        '<div class="ixQrow">' +
+          (steps.length ? '<div class="ixQring"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="ixQg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--sub)"/><stop offset="1" stop-color="#fde68a"/></linearGradient></defs><circle cx="60" cy="60" r="' + R + '" class="ixQtrack"/><circle cx="60" cy="60" r="' + R + '" class="ixQarc" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - pct)).toFixed(1) + '"/></svg><div class="ixQin"><b>' + nd + "<i>/" + steps.length + "</i></b><small>steps</small></div></div>" : '<div class="ixQring ixQring0"><div class="ixQin"><b>' + (day && day.off ? "🌿" : "🎯") + "</b></div></div>") +
+          '<div class="ixQhead">' + (subj ? '<span class="ixZsubj ixQsub">' + E(subj) + "</span>" : day ? '<span class="ixZsubj ixQsub">' + E(day.phase) + "</span>" : "") +
+            '<h2 class="ixZname">' + E(clean(name)) + "</h2>" +
+            (day && day.off ? '<p class="ixZcalm">Nothing to do. Live. 🌿</p>' : day && day.exam ? '<p class="ixZcalm">Protocol, breakfast, go. Good luck, inshallah.</p>' : steps.length ? '<div class="ixZbarT"><span>' + nd + " of " + steps.length + " done</span><span>" + (nd === steps.length ? "Done for today 🌿" : "~" + clock(minsLeft) + " left") + "</span></div>" : "") +
+          "</div>" +
+        "</div>" +
+        (nextS ? '<button type="button" class="ixZgo ixQgo" data-go="' + E(nextS.id) + '"><span class="ixQgoI">' + (icon[nextS.kind] || "▶") + '</span><span class="ixQgoT"><small>' + (pre ? "Saturday's session · try it now" : started ? "Continue today's session" : "Start today's session") + " · " + (steps.length - nd) + " step" + (steps.length - nd > 1 ? "s" : "") + "</small>" + E(noEmo(nextS.label)) + '</span><span class="ixQgoA">→</span></button>' : "") +
       "</section>" +
       (day && day.behind ? '<div class="ixZnote">↩ ' + day.behind + " step" + (day.behind > 1 ? "s" : "") + " from earlier days are in today's list. Nothing is lost.</div>" : "") +
-      '<div class="ixZexams">' + EXAMS.map((x) => '<div class="ixZex' + (left(x) <= 7 ? " soon" : "") + '"><b>' + Math.max(0, left(x)) + "</b><span>days</span><em>" + E(x.name) + "</em><small>" + E(nice(x.date)) + "</small></div>").join("") + "</div>" +
-      (steps.length ? '<h3 class="ixZh">' + (pre ? "Saturday's steps" : "Today's steps") + " <small>" + mins + " of your " + P.mins + " min</small></h3>" +
-        '<div class="ixPsteps ixZsteps">' + steps.map((s, i) => '<div class="ixPstep' + (done(s) ? " done" : "") + '"><label class="ixZchk"><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + '><span>' + (done(s) ? "✓" : i + 1) + "</span></label><div><b>" + E(lab(s)) + "</b><span>" + (empty(s) ? "✓ nothing to review today" : s.min ? s.min + " min" : "at college") + "</span></div>" + (s.kind !== "college" && !empty(s) ? '<button type="button" data-go="' + E(s.id) + '">' + (done(s) ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" : "") +
-      '<h3 class="ixZh">Coming up</h3><div class="ixZweek">' + week.map((x) => '<button type="button" class="ixZday' + (x.off ? " off" : x.exam ? " exam" : "") + '" data-day="' + x.date + '"><span class="ixZd"><small>' + E(short(x.date)) + "</small><b>" + dnum(x.date) + "</b><small>" + E(mon(x.date)) + '</small></span><span class="ixZt">' + E(x.off ? "Day off 🌿" : x.exam ? "🎯 " + x.exam.name : clean(x.title)) + "</span></button>").join("") + "</div>" +
-      '<div class="ixZbtns"><button type="button" data-openmap>🗺️ Whole plan</button><button type="button" data-life>⏱ My minutes</button><button type="button" data-course>📚 The course</button><button type="button" data-hy>📘 Sheets</button><button type="button" data-git>🫃 GIT 206</button></div>' +
+      '<div class="ixZexams">' + EXAMS.map((x, i) => '<div class="ixZex ixQex' + (left(x) <= 7 ? " soon" : "") + '" style="--d:' + i + '"><b>' + Math.max(0, left(x)) + "</b><span>days to</span><em>" + E(x.name) + "</em><small>" + E(nice(x.date)) + "</small></div>").join("") + "</div>" +
+      (steps.length ? '<h3 class="ixZh">' + (pre ? "Saturday's path" : "Today's path") + " <small>" + clock(mins) + " of your " + clock(P.mins) + "</small></h3>" +
+        '<div class="ixPsteps ixZsteps ixQpath">' + steps.map((s, i) => '<div class="ixPstep' + (done(s) ? " done" : "") + (nextS && s.id === nextS.id ? " next" : "") + '" style="--d:' + i + '"><label class="ixZchk"><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + "><span>" + (done(s) ? "✓" : icon[s.kind] || i + 1) + "</span></label><div><b>" + E(noEmo(lab(s))) + "</b><span>" + (empty(s) ? "✓ nothing to review today" : s.min ? s.min + " min" : "at college") + "</span></div>" + (s.kind !== "college" && !empty(s) ? '<button type="button" data-go="' + E(s.id) + '">' + (done(s) ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" : "") +
+      '<h3 class="ixZh">Coming up <small>swipe →</small></h3><div class="ixZweek ixQweek">' + week.map((x) => '<button type="button" class="ixZday' + (x.off ? " off" : x.exam ? " exam" : "") + '" data-day="' + x.date + '" style="--c:' + (x.off ? "#475569" : x.exam ? "#fbbf24" : sc(x.title)) + '"><span class="ixZd"><small>' + E(short(x.date)) + "</small><b>" + dnum(x.date) + "</b><small>" + E(mon(x.date)) + '</small></span><span class="ixZt">' + E(x.off ? "Day off 🌿" : x.exam ? "🎯 " + x.exam.name : clean(x.title)) + "</span></button>").join("") + "</div>" +
+      '<div class="ixZbtns ixQbento"><button type="button" data-course><i>📚</i><b>The course</b><small>every lecture as a lesson</small></button><button type="button" data-openmap><i>🗺️</i><b>Whole plan</b><small>day by day to 14 Jan</small></button><button type="button" data-git><i>🎯</i><b>Questions</b><small>641 past-paper MCQs</small></button><button type="button" data-hy><i>📘</i><b>Sheets</b><small>high-yield per unit</small></button><button type="button" data-life><i>⏱</i><b>My minutes</b><small>' + clock(P.mins) + ' a day</small></button></div>' +
       '<details class="ixZmore"><summary>Plan details (readiness, what does not fit)</summary>' + readinessHTML() +
         (P.dropped.length ? "<p>GIT units that do not fit your minutes: " + P.dropped.map((u) => E(u.name)).join(", ") + ".</p>" : "<p>Every GIT unit fits (" + P.unitsFit + " units).</p>") +
         (P.wDropped.length ? "<p>GIT written topics after the top ones: " + P.wDropped.slice(0, 8).map((w) => E(w.topic)).join(", ") + (P.wDropped.length > 8 ? "…" : "") + "</p>" : "") +
-        "<p>CNS written: chapters are ranked by MCQ weight until the CNS previous written questions are added.</p></details>";
+        "<p>CNS written: chapters are ranked by MCQ weight until the CNS previous written questions are added.</p></details></div>";
+    try { document.documentElement.style.setProperty("--room", sc(day && day.title)); } catch (e) {}
     el.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => { const s = day.steps.find((x) => x.id === b.dataset.go); if (s) runStep(s); }));
     el.querySelectorAll("[data-day]").forEach((b) => (b.onclick = () => openDay(b.dataset.day)));
     el.querySelector("[data-openmap]").onclick = openMap;
-    el.querySelector("[data-life]").onclick = () => T() && T().openLife && T().openLife();
+    el.querySelectorAll("[data-life]").forEach((b) => (b.onclick = () => T() && T().openLife && T().openLife()));
     el.querySelector("[data-course]").onclick = () => window.IX_LESSON && IX_LESSON.index();
     el.querySelector("[data-hy]").onclick = () => window.IX_HY && IX_HY.list();
     el.querySelector("[data-git]").onclick = () => G() && G().open();

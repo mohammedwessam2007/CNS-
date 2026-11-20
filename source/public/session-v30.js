@@ -72,7 +72,7 @@
       root.innerHTML = '<div class="ixSin ixSdone"><div class="ixSbig">🌿</div><h2>Done for today.</h2><p>' + all.length + " steps, about " + mins + " minutes. Stop here: the rest of the day is yours.</p>" +
         (nxt ? '<div class="ixSnext"><small>Next study day</small><b>' + E(new Date(nxt.date + "T12:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" })) + "</b><span>" + E((nxt.title || "").replace(/ \(its lectures are still running\)/, "")) + "</span></div>" : "") +
         '<button type="button" class="ixSmain" data-s="close">Close</button></div>';
-      keep(null); return;
+      keep(null); confetti(); return;
     }
     const i = idx(all, s), h = how(s), left = remaining(ss, s);
     root.innerHTML = '<div class="ixSin">' +
@@ -84,6 +84,15 @@
       '<button type="button" class="ixSmain" data-s="open">▶ ' + (ss.open && ss.open.id === s.id ? "Continue" : "Open it") + "</button>" +
       '<div class="ixSrow"><button type="button" data-s="done">✓ It is done</button><button type="button" data-s="skip">Later today</button></div>' +
       '<p class="ixSsmall">' + n + " of " + all.length + " done · Pause any time: it waits here.</p></div>";
+  }
+  // a short burst of colour when the day is done (once per day)
+  function confetti() {
+    try {
+      const k = "ix_conf_" + iso(new Date()); if (localStorage.getItem(k) || matchMedia("(prefers-reduced-motion: reduce)").matches) return; localStorage.setItem(k, "1");
+      const c = document.createElement("div"), col = ["#ffcf5a", "#34e0b4", "#a78bfa", "#ff5d8f", "#22d3ee"]; c.className = "ixConf";
+      c.innerHTML = Array.from({ length: 90 }, (_, i) => '<i style="left:' + Math.random() * 100 + "%;background:" + col[i % 5] + ";--x:" + (Math.random() * 160 - 80) + "px;--r:" + Math.random() * 900 + "deg;animation-delay:" + Math.random() * 0.5 + 's"></i>').join("");
+      document.body.appendChild(c); setTimeout(() => c.remove(), 3400);
+    } catch (e) {}
   }
   function showBar() {
     shell(); const all = order(), s = current(), ss = load();

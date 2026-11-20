@@ -24,7 +24,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const has = await p.evaluate(() => ({ tab: !!document.getElementById('ixTtab'), menu: !!document.getElementById('tutorBtn'), api: !!window.IX_TUTOR }));
   check('T1', 'The tutor tab and menu button appear, no page errors', has.tab && has.api && !errs.length, { has, errs: errs.slice(0, 3) });
 
-  await p.click('#ixTtab'); await p.waitForTimeout(400);
+  await p.locator('#ixNav [data-xm="tutor"]:visible, #ixTtab:visible').first().click(); await p.waitForTimeout(400);
   await p.fill('#ixTkey', 'sk-or-v1-TESTKEY123'); await p.click('#ixTsave'); await p.waitForTimeout(2200);
   const st = await p.evaluate(() => { try { save(); } catch (e) {} const raw = localStorage.getItem('intellectuality_v41_launch_state') || ''; return { dev: localStorage.getItem('ix_tutor_key_v1'), inState: JSON.stringify(typeof S === 'object' ? S : {}).includes('TESTKEY'), inSaved: raw.includes('TESTKEY') }; });
   check('T2', 'The key is kept on the device only, never in the progress or its saved copy', st.dev === 'sk-or-v1-TESTKEY123' && !st.inState && !st.inSaved, st);

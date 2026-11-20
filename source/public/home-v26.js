@@ -42,9 +42,18 @@
       '<div class="ixXMbtns"><button type="button" data-xm="map">🗺️ The whole plan, day by day</button><button type="button" data-xm="course">📚 The course: every lecture as a lesson</button><button type="button" data-xm="git">🫃 GIT 206 · MCQs, papers, written</button><button type="button" data-xm="hy">📘 High-yield sheets (every unit)</button><button type="button" data-xm="lib">📖 CNS lesson library (for the CNS written)</button><button type="button" data-xm="tutor">🧠 AI professor</button><button type="button" data-xm="life">⏱ My minutes and day off</button></div>';
     if (m.innerHTML !== html) m.innerHTML = html;
   }
+  // v33: an app tab bar during the season: Today · Course · Questions · Professor · More
+  function nav() {
+    let n = document.getElementById("ixNav");
+    if (!season()) { if (n) n.remove(); return; }
+    if (n) return;
+    n = document.createElement("nav"); n.id = "ixNav"; n.className = "ixNav"; n.setAttribute("aria-label", "Main");
+    n.innerHTML = [["home", "◉", "Today"], ["course", "📚", "Course"], ["git", "🎯", "Questions"], ["tutor", "🧠", "Professor"], ["more", "☰", "More"]].map((x) => '<button type="button" data-xm="' + x[0] + '"><i>' + x[1] + "</i><span>" + x[2] + "</span></button>").join("");
+    document.body.appendChild(n);
+  }
   function paint() {
     const root = document.documentElement;
-    root.classList.toggle("ixXSeason", season());
+    root.classList.toggle("ixXSeason", season()); try { nav(); } catch (e) {}
     if (!active()) {
       root.classList.remove("ixXHome");
       if (season()) library();
@@ -89,7 +98,9 @@
     const shut = () => { try { if (typeof toggleRail === "function") toggleRail(false); else { const sc = document.getElementById("railScrim"); if (sc) sc.click(); } } catch (er) {} };
     const xm = t.dataset.xm || (t.dataset.xhome === "lib" ? "lib" : "");
     if (xm) { e.preventDefault(); shut();
-      if (xm === "today") { const n = P().nextStep && P().nextStep(); if (n) P().runStep(n); else P().openDay(P().START > iso(new Date()) ? P().START : iso(new Date())); }
+      if (xm === "home") { try { window.IX_LESSON && IX_LESSON.close(); window.IX_HY && IX_HY.close(); window.IX_GIT && IX_GIT.close(); window.IX_TUTOR && IX_TUTOR.close(); P().close(); window.IX_SESSION && IX_SESSION.hide(); } catch (er) {} if (cnsMode) { cnsMode = false; if (typeof render === "function") render(); } window.scrollTo({ top: 0, behavior: "smooth" }); paint(); }
+      else if (xm === "more") { try { if (typeof toggleRail === "function") toggleRail(true); } catch (er) {} }
+      else if (xm === "today") { const n = P().nextStep && P().nextStep(); if (n) P().runStep(n); else P().openDay(P().START > iso(new Date()) ? P().START : iso(new Date())); }
       else if (xm === "map") P().openMap();
       else if (xm === "course") window.IX_LESSON && IX_LESSON.index();
       else if (xm === "git") window.IX_GIT && IX_GIT.open();

@@ -1,0 +1,136 @@
+/* INTELLECTUALITY v33 · the skin (owner, 20 Nov 2026: "too ugly, make it insane").
+ * Art direction: a night-time study room. Deep ink background lit by a slow aurora in the subject's colour; glass cards
+ * with hairline borders; one warm accent (sunrise gold) for "do this now"; a progress ring like a fitness app; editorial
+ * display type (Bricolage Grotesque) over a calm reading face (Manrope); everything enters with a short stagger. */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap");
+:root{--ink:#070a12;--ink2:#0c1120;--glass:rgba(255,255,255,.055);--glass2:rgba(255,255,255,.085);--line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+  --txt:#eef2ff;--mut:#97a3c2;--dim:#6b7694;--gold:#ffcf5a;--gold2:#ffb347;--mint:#34e0b4;--disp:"Bricolage Grotesque","Manrope",ui-sans-serif,system-ui,sans-serif;--body:"Manrope",ui-sans-serif,system-ui,sans-serif}
+
+/* ── the room ── */
+html.ixXSeason body{background:var(--ink)!important;color:var(--txt);overflow-x:clip}
+html.ixXSeason body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(40vmax 30vmax at 12% 8%,color-mix(in srgb,var(--room,#22d3ee) 28%,transparent),transparent 70%),
+             radial-gradient(38vmax 30vmax at 92% 18%,rgba(167,139,250,.20),transparent 70%),
+             radial-gradient(50vmax 40vmax at 50% 110%,rgba(255,93,143,.14),transparent 70%),var(--ink);
+  animation:ixAur 26s ease-in-out infinite alternate;filter:saturate(1.1)}
+@keyframes ixAur{0%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(2vmax,-1.5vmax,0) rotate(4deg)}100%{transform:translate3d(-2vmax,1vmax,0) rotate(-3deg)}}
+html.ixXSeason .shell,html.ixXSeason main,html.ixXSeason section.hero,html.ixXSeason #player,html.ixXSeason .player{background:transparent!important;border:0!important;box-shadow:none!important}
+html.ixXHome #courseTopbar{display:none!important}
+html.ixXHome #ixTtab,html.ixXSeason #ixHtab{display:none!important}
+html.ixXHome .ixXHomeBox{padding:0 4px 120px;max-width:660px}
+
+/* ── home ── */
+.ixQ{font-family:var(--body);color:var(--txt)}
+.ixQtop{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 4px 14px}
+.ixQtop small{display:block;color:var(--mut);font-size:12.5px;font-weight:700;letter-spacing:.02em}
+.ixQtop b{font-family:var(--disp);font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05}.ixQtop b i{font-style:normal;color:var(--dim);font-weight:600;font-size:20px}
+.ixQpill{border-radius:999px;padding:9px 13px;font-weight:800;font-size:12.5px;background:var(--glass);color:var(--txt);border:1px solid var(--line);backdrop-filter:blur(10px);white-space:nowrap}
+.ixQhero{position:relative;overflow:hidden;border-radius:28px!important;padding:20px!important;background:linear-gradient(155deg,color-mix(in srgb,var(--sub) 22%,#121a33) 0%,#0d1326 55%,#0a0f1e 100%)!important;border:1px solid color-mix(in srgb,var(--sub) 35%,transparent)!important;box-shadow:0 30px 60px -25px color-mix(in srgb,var(--sub) 55%,transparent),inset 0 1px 0 rgba(255,255,255,.08)!important;animation:ixIn .5s cubic-bezier(.2,.8,.2,1) both}
+.ixQglow{position:absolute;width:260px;height:260px;right:-80px;top:-110px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--sub) 60%,transparent),transparent);filter:blur(10px);opacity:.8;pointer-events:none;animation:ixPulse 6s ease-in-out infinite}
+@keyframes ixPulse{50%{transform:scale(1.15);opacity:.55}}
+.ixQrow{position:relative;display:flex;gap:16px;align-items:center}
+.ixQring{position:relative;flex:none;width:112px;height:112px}
+.ixQring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ixQtrack{fill:none;stroke:rgba(255,255,255,.09);stroke-width:11}
+.ixQarc{fill:none;stroke:url(#ixQg);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 0 8px color-mix(in srgb,var(--sub) 70%,transparent))}
+.ixQin{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ixQin b{font-family:var(--disp);font-size:34px;font-weight:800;line-height:1}.ixQin b i{font-style:normal;font-size:18px;color:var(--mut)}.ixQin small{font-size:11px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.ixQring0{border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.ixQhead{min-width:0}
+.ixQsub{background:color-mix(in srgb,var(--sub) 22%,transparent)!important;color:color-mix(in srgb,var(--sub) 60%,#fff)!important;border:1px solid color-mix(in srgb,var(--sub) 40%,transparent);margin-top:0!important}
+.ixQhero .ixZname{font-family:var(--disp);font-size:clamp(25px,7vw,34px);font-weight:800;letter-spacing:-.025em;line-height:1.02;margin:10px 0 8px;text-wrap:balance}
+.ixQhero .ixZbarT{margin:0;gap:10px;font-weight:700;font-size:13px}
+.ixQgo{position:relative;display:flex!important;align-items:center;gap:12px;margin-top:18px!important;padding:14px 16px!important;border-radius:20px!important;background:linear-gradient(135deg,var(--gold),var(--gold2))!important;color:#201400!important;box-shadow:0 14px 30px -10px rgba(255,190,80,.6),inset 0 1px 0 rgba(255,255,255,.6)!important;overflow:hidden;transition:transform .15s}
+.ixQgo:active{transform:scale(.98)}
+.ixQgo:after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-100%);animation:ixShine 3.6s ease-in-out 1s infinite}
+@keyframes ixShine{0%,60%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.ixQgoI{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:22px;background:rgba(255,255,255,.45)}
+.ixQgoT{flex:1;min-width:0;font-family:var(--disp);font-size:17px;font-weight:800;line-height:1.2;text-align:left}
+.ixQgoT small{display:block;font-family:var(--body);font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.75;margin-bottom:3px}
+.ixQgoA{font-size:22px;font-weight:800}
+.ixQex{background:var(--glass)!important;border:1px solid var(--line)!important;border-radius:20px!important;backdrop-filter:blur(12px);padding:14px 6px 12px!important;animation:ixIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.08s + var(--d) * .06s)}
+.ixQex b{font-family:var(--disp);font-size:34px!important;background:linear-gradient(180deg,#fff,#c7d2fe);-webkit-background-clip:text;background-clip:text;color:transparent!important;letter-spacing:-.03em}
+.ixQex.soon b{background:linear-gradient(180deg,#fff3c4,var(--gold));-webkit-background-clip:text;background-clip:text}
+.ixQex span{display:block;font-size:10.5px!important;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.ixQ .ixZh{font-family:var(--disp);font-size:21px;font-weight:800;letter-spacing:-.015em;margin:28px 4px 12px}
+.ixQ .ixZh small{font-family:var(--body)}
+/* the path: a timeline */
+.ixQpath{position:relative;gap:10px!important}
+.ixQpath:before{content:"";position:absolute;left:30px;top:18px;bottom:18px;width:2px;background:linear-gradient(var(--line2),transparent)}
+.ixQpath .ixPstep{position:relative;background:var(--glass)!important;border:1px solid var(--line)!important;border-radius:20px!important;padding:14px 12px!important;backdrop-filter:blur(12px);animation:ixIn .45s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.15s + var(--d) * .06s)}
+.ixQpath .ixPstep.next{border-color:color-mix(in srgb,var(--sub) 55%,transparent)!important;background:linear-gradient(135deg,color-mix(in srgb,var(--sub) 14%,transparent),var(--glass))!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--sub) 10%,transparent)}
+.ixQpath .ixZchk span{width:36px;height:36px;font-size:16px;background:#0d1326;border-color:var(--line2)}
+.ixQpath .ixZchk{width:36px;height:36px}
+.ixQpath .ixPstep.next .ixZchk span{border-color:var(--sub);box-shadow:0 0 14px color-mix(in srgb,var(--sub) 60%,transparent)}
+.ixQpath .ixPstep.done .ixZchk span{background:var(--mint);border-color:var(--mint);color:#032018}
+.ixQpath .ixPstep b{font-size:15px!important;font-weight:700!important}
+.ixQpath .ixPstep > button{border-radius:14px!important;background:rgba(255,255,255,.08)!important;border:1px solid var(--line2)!important;font-weight:800}
+.ixQpath .ixPstep.next > button{background:var(--sub)!important;color:#05101a!important;border-color:transparent!important}
+/* coming up: a swipeable strip */
+.ixQweek{display:flex!important;gap:10px!important;overflow-x:auto;scroll-snap-type:x mandatory;margin:0;padding:2px 0 8px;scrollbar-width:none}
+.ixQweek::-webkit-scrollbar{display:none}
+.ixQweek .ixZday{flex:none;width:148px;min-height:150px;scroll-snap-align:start;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px!important;border-radius:22px!important;background:linear-gradient(170deg,color-mix(in srgb,var(--c) 22%,#111830),#0c1222)!important;border:1px solid color-mix(in srgb,var(--c) 35%,transparent)!important}
+.ixQweek .ixZd{display:flex;align-items:baseline;gap:6px;justify-items:start}.ixQweek .ixZd b{font-family:var(--disp);font-size:30px}.ixQweek .ixZd small{font-size:11px;font-weight:800}
+.ixQweek .ixZt{font-size:13.5px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.ixQweek .ixZday.off{opacity:.65}
+/* bento */
+.ixQbento{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin-top:26px!important}
+.ixQbento button{display:grid!important;justify-items:start;gap:2px;text-align:left;padding:16px!important;border-radius:22px!important;background:var(--glass)!important;border:1px solid var(--line)!important;backdrop-filter:blur(12px);min-height:110px;transition:transform .15s,border-color .2s}
+.ixQbento button:active{transform:scale(.97)}
+.ixQbento button:first-child{grid-column:1 / -1;min-height:96px;background:linear-gradient(135deg,rgba(167,139,250,.22),rgba(34,211,238,.12))!important;border-color:rgba(167,139,250,.35)!important}
+.ixQbento i{font-style:normal;font-size:26px;margin-bottom:6px}.ixQbento b{font-family:var(--disp);font-size:17px;font-weight:800;color:var(--txt)}.ixQbento small{font-size:12px;color:var(--mut);font-weight:600}
+.ixQ .ixZmore{background:var(--glass);border:1px solid var(--line);border-radius:18px}
+html.ixXHome .ixXFoot button{border-radius:18px;border:1px dashed var(--line2);color:var(--mut);font-weight:700}
+@keyframes ixIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){html.ixXSeason body:before,.ixQglow,.ixQgo:after{animation:none}.ixQhero,.ixQex,.ixQpath .ixPstep{animation:none}}
+
+/* ── the tab bar ── */
+.ixNav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));z-index:8600;display:flex;gap:2px;padding:6px;border-radius:24px;background:rgba(14,19,36,.78);border:1px solid var(--line2);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 20px 40px -10px rgba(0,0,0,.7);width:min(440px,calc(100% - 20px));font-family:var(--body)}
+.ixNav button{flex:1;display:grid;justify-items:center;gap:2px;padding:7px 2px;border:0;border-radius:18px;background:none;color:var(--mut);font-size:10.5px;font-weight:800;letter-spacing:.02em}
+.ixNav button i{font-style:normal;font-size:19px;line-height:1.1}
+.ixNav button[data-xm=home]{color:var(--txt);background:rgba(255,255,255,.08)}
+.ixNav button[data-xm=home] i{color:var(--gold);font-size:20px}
+.ixNav button:active{transform:scale(.94)}
+html.ixSbarOn .ixNav{display:none}
+html.ixSon .ixNav,html.ixLon .ixNav{display:none}
+
+/* ── session ── */
+.ixS{font-family:var(--body);background:radial-gradient(90% 60% at 50% -10%,color-mix(in srgb,var(--room,#22d3ee) 35%,transparent),transparent 70%),radial-gradient(70% 50% at 100% 100%,rgba(167,139,250,.18),transparent 70%),var(--ink)!important}
+.ixStitle{font-family:var(--disp)!important;font-size:clamp(26px,7.5vw,36px)!important;letter-spacing:-.025em;line-height:1.08!important}
+.ixSdots i{height:7px!important}.ixSdots i.c{background:linear-gradient(90deg,var(--gold),var(--gold2))!important;box-shadow:0 0 12px rgba(255,200,90,.6)}
+.ixShow li{background:var(--glass)!important;border:1px solid var(--line);border-radius:18px!important;font-size:16px!important}
+.ixSmain{border-radius:22px!important;background:linear-gradient(135deg,var(--gold),var(--gold2))!important;box-shadow:0 18px 36px -12px rgba(255,190,80,.6)!important;font-family:var(--disp);font-size:20px!important}
+.ixSrow button{border-radius:18px!important;background:var(--glass)!important;border:1px solid var(--line2)!important}
+.ixSrow button[data-s=done]{background:rgba(52,224,180,.14)!important;border-color:rgba(52,224,180,.4)!important;color:#7ff0d0!important}
+.ixSdone h2{font-family:var(--disp);font-size:40px!important;letter-spacing:-.03em}
+.ixSbar{border-radius:22px!important;background:rgba(14,19,36,.85)!important;backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,207,90,.4)!important;font-family:var(--body)}
+.ixSbD{border-radius:16px!important;background:linear-gradient(135deg,#5ef0c6,var(--mint))!important}
+.ixConf{position:fixed;inset:0;pointer-events:none;z-index:9500;overflow:hidden}
+.ixConf i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:ixFall 2.4s cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes ixFall{to{transform:translate3d(var(--x),105vh,0) rotate(var(--r));opacity:.9}}
+
+/* ── lessons ── */
+.ixL{font-family:var(--body);background:var(--ink)!important}
+.ixL:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(70% 40% at 50% 0%,rgba(167,139,250,.16),transparent 70%)}
+.ixLtop{position:relative;background:rgba(10,14,26,.8)!important;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)!important}
+.ixLbody{position:relative}
+.ixLpart h2{font-family:var(--disp);font-size:clamp(27px,7.6vw,38px)!important;letter-spacing:-.03em;line-height:1.05!important;text-wrap:balance}
+.ixLpart > small{background:linear-gradient(90deg,var(--gold),#ff8a65);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.ixLmd{font-size:17px!important;line-height:1.72!important}
+.ixLmd > p b,.ixLmd li b{color:#fff;background:linear-gradient(transparent 62%,rgba(255,207,90,.28) 62%);padding:0 2px}
+.ixLmd blockquote,.ixLmd p:has(.ixYspoil){background:linear-gradient(135deg,rgba(34,211,238,.10),rgba(167,139,250,.10));border:1px solid rgba(125,211,252,.25);border-radius:18px;padding:14px 16px}
+.ixLprog i{height:6px!important}.ixLprog i.c{background:linear-gradient(90deg,var(--gold),var(--gold2))!important}
+.ixLask button,.ixLend button{border-radius:18px!important;background:var(--glass)!important;border:1px solid var(--line2)!important}
+.ixLnav button{border-radius:20px!important}
+.ixLmain{border-radius:20px!important;background:linear-gradient(135deg,var(--gold),var(--gold2))!important;box-shadow:0 16px 32px -12px rgba(255,190,80,.55);font-family:var(--disp)}
+.ixLrow{border-radius:18px!important;background:var(--glass)!important;border:1px solid var(--line)!important}
+.ixLpart{animation:ixIn .4s cubic-bezier(.2,.8,.2,1) both}
+
+/* ── drawings ── */
+.ixFg{border-radius:22px!important;border:1px solid var(--line2)!important;box-shadow:0 24px 50px -20px rgba(0,0,0,.8)!important}
+.ixFg figcaption{background:linear-gradient(180deg,#121a30,#0e1427)!important}
+.ixFg figcaption b{font-family:var(--disp);font-size:16px!important;letter-spacing:-.01em}
+.ixFgAsk{background:#0e1427!important}.ixFgAsk button{border-radius:14px!important;background:var(--glass2)!important}
+
+/* ── sheets, plan and hub overlays share the room ── */
+html.ixXSeason .ixH.on,html.ixXSeason .ixY.on{font-family:var(--body)}
