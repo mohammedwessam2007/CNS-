@@ -47,7 +47,7 @@
     "Anatomy: explain position and relations by development, function and what would go wrong; walk him through it as if he is holding the specimen. Physiology: cause → mechanism → effect chains and graphs described in words. Histology: structure because of function; how to recognise it under the microscope. Biochemistry: what the pathway is FOR, then the steps, then regulation and disease.",
     "Write it in Markdown with this exact shape (each part starts with '## '):",
     "## 1. Why you should care — a patient or everyday situation (3-5 lines) that this lecture explains.",
-    "## 2. The big picture — the whole lecture in 4-6 lines, then '✏️ Draw this:' with 4-8 numbered drawing steps for one diagram that holds it all.",
+    "## 2. The big picture — the whole lecture in 4-6 lines; show the best drawing here with [[fig:ID]] if one is given; then '✏️ Draw it yourself:' with 4-8 numbered steps for the simple diagram he should be able to draw in the exam.",
     "## 3. … ## N. — 4 to 7 parts that build the lecture up in a logical order, every topic the lecture would cover. Each part: the idea in plain words → the mechanism / the reason → an analogy if it helps → what it explains clinically. End EVERY part with a line '> 🤔 Think: <one question that needs reasoning, not recall> ||<the answer with the reason>||'.",
     "## Where people get confused — the 3-5 classic confusions, each with the one sentence that ends it.",
     "## How it links — 3-5 links to other topics (earlier lectures, other subjects, the clinic).",
@@ -66,13 +66,14 @@
     const X = window.IX_EXAMINER ? IX_EXAMINER.git : "";
     let refs = "";
     try { const R = window.IX_GIT206_REF || {}, out = []; ((u && u.written) || []).forEach((w) => (R[w.topic] || []).forEach((r) => out.push(r))); refs = out.slice(0, 3).map((r) => "[" + r.src + "] " + r.head + "\n" + String(r.text).slice(0, 1600)).join("\n\n"); } catch (e) {}
+    const FG = window.IX_FIG, figs = FG ? FG.forUnit(les.unit).concat(...(les.also || []).map((x) => FG.forUnit(x))) : [];
     const user = "LECTURE TO TEACH: " + les.subject + " · \"" + les.title + "\"" + (les.date ? " (DIG-206, Kasr Al Ainy, given " + les.date + ")" : "") +
       "\nUNIT: " + (u ? u.module + " · " + u.subject + " · " + u.name : les.unit) +
       (les.also && les.also.length ? "\nThis lecture also covers: " + les.also.map((x) => x.replace(/^[A-Z]:/, "")).join(", ") : "") +
       (sib.length > 1 ? "\nThe unit's lectures, in order (teach only THIS one, link to the others): " + sib.join(" | ") : "") +
       (facts.length ? "\n\nPAST-PAPER FACTS ON THIS UNIT (key answers the examiners test; n = papers):\n" + facts.map((f) => "- [n=" + f.n + "] " + String(f.stem).slice(0, 150) + " → " + f.key).join("\n") : "") +
       (u && u.written && u.written.length ? "\n\nWRITTEN QUESTIONS ASKED ON THIS UNIT:\n" + u.written.slice(0, 6).map((w) => "- " + w.questions[0].q + " (" + w.times + "×)").join("\n") : "") +
-      (refs ? "\n\nDEPARTMENT-STYLE REFERENCES:\n" + refs : "") + (notes ? "\n\nHIS NOTES:\n" + notes.slice(0, 2000) : "") + (X ? "\n\n" + X : "");
+      (figs.length ? "\n\nDRAWINGS THE APP WILL SHOW (full-colour labelled textbook figures). Teach WITH them: put [[fig:ID]] on its own line in the part where he should look at it, then tell him what to look at in it (\"in the drawing, find…\"). Use each at most once; use only the ones that fit this lecture:\n" + figs.map((f) => "- " + f.id + ": " + FG.title(f) + " — " + String(f.alt || f.cap).slice(0, 160)).join("\n") : "") + (refs ? "\n\nDEPARTMENT-STYLE REFERENCES:\n" + refs : "") + (notes ? "\n\nHIS NOTES:\n" + notes.slice(0, 2000) : "") + (X ? "\n\n" + X : "");
     const r = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
       body: JSON.stringify({ model: localStorage.getItem("ix_tutor_model_pro_v1") || "openai/gpt-6.2-sol-pro", max_tokens: 6000, usage: { include: true }, messages: [{ role: "system", content: STYLE }, { role: "user", content: user }] }) });
     if (!r.ok) throw new Error(r.status === 401 ? "the key was refused" : r.status === 402 ? "the OpenRouter balance is used up" : "OpenRouter answered " + r.status);
@@ -118,9 +119,16 @@
       return;
     }
     const ps = parts(c.text); let i = Math.max(0, Math.min(ps.length - 1, at || 0));
+    // v32: drawings in the parts. The professor's [[fig:ID]] marks first; a part without one gets the unused drawing whose
+    // labels fit it best; the big picture gets the unit's main drawing if nothing else claimed it
+    const FG = window.IX_FIG, pool = FG ? FG.forUnit(les.unit).concat(...(les.also || []).map((x) => FG.forUnit(x))) : [], used = new Set();
+    ps.forEach((p) => { p.md = p.md.replace(/\[\[fig:([a-z0-9_]+)\]\]/gi, (m, id) => { const f = FG && FG.get(id); if (!f || used.has(id)) return ""; used.add(id); return "\n@@FIG:" + id + "@@\n"; }); });
+    ps.forEach((p, j) => { if (!FG || /@@FIG:/.test(p.md) || /confused|links|exam does|say it back/i.test(p.h)) return; const b = FG.best(pool.filter((f) => !used.has(f.id)), p.h + " " + p.md, 3) || FG.best(FG.all().filter((f) => !used.has(f.id)), p.h + " " + p.md, 4); if (b) { used.add(b.id); p.md += "\n@@FIG:" + b.id + "@@"; } });
+    const bp = ps.find((p) => /big picture/i.test(p.h)) || ps[1]; const first = pool.find((f) => !used.has(f.id)); if (bp && first && !/@@FIG:/.test(bp.md)) { used.add(first.id); bp.md = bp.md.replace(/(✏️|Draw it yourself|Draw this)/, "@@FIG:" + first.id + "@@\n$1"); if (!/@@FIG:/.test(bp.md)) bp.md += "\n@@FIG:" + first.id + "@@"; }
+    const render = (src) => md(src).replace(/<p>@@FIG:([a-z0-9_]+)@@<\/p>|@@FIG:([a-z0-9_]+)@@/g, (m, a, b) => { const f = FG.get(a || b); return f ? FG.html(f) : ""; });
     const show = () => {
       const p = ps[i], last = i === ps.length - 1;
-      body.innerHTML = '<div class="ixLprog">' + ps.map((_, j) => '<i class="' + (j < i ? "d" : j === i ? "c" : "") + '"></i>').join("") + '</div><div class="ixLpart"><small>Part ' + (i + 1) + " of " + ps.length + "</small><h2>" + E(p.h.replace(/^\d+\.\s*/, "")) + '</h2><div class="ixLmd">' + md(p.md) + "</div>" + (/\|\|.+?\|\|/.test(p.md) ? '<p class="ixLsmall">🤔 Answer it in your head first, then tap the grey bar.</p>' : "") + "</div>" +
+      body.innerHTML = '<div class="ixLprog">' + ps.map((_, j) => '<i class="' + (j < i ? "d" : j === i ? "c" : "") + '"></i>').join("") + '</div><div class="ixLpart"><small>Part ' + (i + 1) + " of " + ps.length + "</small><h2>" + E(p.h.replace(/^\d+\.\s*/, "")) + '</h2><div class="ixLmd">' + render(p.md) + "</div>" + (/\|\|.+?\|\|/.test(p.md) ? '<p class="ixLsmall">🤔 Answer it in your head first, then tap the grey bar.</p>' : "") + "</div>" +
         '<div class="ixLask"><button type="button" data-a="simple">🤔 Explain it another way</button><button type="button" data-a="why">❓ Ask about this</button></div>' +
         '<div class="ixLnav">' + (i ? '<button type="button" data-a="back">← Back</button>' : "<span></span>") + (last ? '<button type="button" class="ixLmain" data-a="finish">✓ I understand it</button>' : '<button type="button" class="ixLmain" data-a="next">Next →</button>') + "</div>" +
         (last ? '<div class="ixLend"><button type="button" data-a="teach">🗣 Teach it back to the professor</button><button type="button" data-a="sheet">📘 The exam sheet for this unit</button></div>' : "");

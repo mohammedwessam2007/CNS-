@@ -171,7 +171,10 @@
   }
   function unitFig(q) {
     try {
-      const u = window.IX_PLAN && IX_PLAN.units().find((x) => x.pred(q)), F = u && (window.IX_GIT206_FIGS || {})[u.id];
+      const u = window.IX_PLAN && IX_PLAN.units().find((x) => x.pred(q));
+      // v32: the OpenStax drawing that fits the question best (by its labels), else the unit's first one; Gray's plate as a fallback
+      if (u && window.IX_FIG) { const O = IX_FIG.forUnit(u.id); const b = IX_FIG.best(O, q.stem + " " + (q.options || []).join(" "), 1) || O[0]; if (b) return IX_FIG.html(b, { short: true }); }
+      const F = u && (window.IX_GIT206_FIGS || {})[u.id];
       if (!F || !F.length) return "";
       const f = F[Math.abs(q.id.split("").reduce((t, c) => t + c.charCodeAt(0), 0)) % F.length];
       return "<figure class='ixYfig'><img loading='lazy' src='" + E(f.src) + "' alt='" + E(f.cap) + "'><figcaption>" + E(f.cap) + " <small>· " + E(f.fig) + "</small></figcaption></figure>";
@@ -307,5 +310,5 @@
     run = { qs, i: 0, k: 0, cbm: 0, mock: false, title }; showQ(); return qs.length;
   }
   function mockPaper(src) { build(); root.classList.add("on"); tab = "papers"; startMock(src); }
-  window.IX_GIT = { open, close, readiness, practicePool, papers: PAPERS, state: st, startCustom, mockPaper, mocked };
+  window.IX_GIT = { open, close, readiness, practicePool, papers: PAPERS, state: st, startCustom, mockPaper, mocked, _unitFig: unitFig };
 })();

@@ -130,7 +130,14 @@
     } catch (e) { return []; }
   }
   function figHTML(F) { return "<h3>🖼 Drawings</h3><div class='ixYfigs'>" + F.map((f) => "<figure class='ixYfig'><img loading='lazy' src='" + E(f.src) + "' alt='" + E(f.cap) + "'><figcaption>" + E(f.cap) + " <small>· " + E(f.fig) + ", public domain</small></figcaption></figure>").join("") + "</div>"; }
+  // v32: the OpenStax drawings first (modern, labelled, colour), Gray's 1918 plates after them as the classic layer
   function figsHTML(id) {
+    const FG = window.IX_FIG, O = FG ? (/^CNS:/.test(id) ? FG.forCns(id.slice(4)) : FG.forUnit(id)) : [];
+    const os = O.length ? "<h3>🎨 Drawings</h3><div class='ixFgs'>" + O.map((f) => FG.html(f)).join("") + "</div>" : "";
+    const g = grayHTML(id);
+    return os + (g ? (os ? g.replace("<h3>🖼 Drawings</h3>", "<h3>🖼 Classic plates (Gray's Anatomy, 1918)</h3>") : g) : "");
+  }
+  function grayHTML(id) {
     const F = (window.IX_GIT206_FIGS || {})[id];
     if (!F || !F.length) { let C = {}; try { C = JSON.parse(localStorage.getItem(FIGC) || "{}"); } catch (e) {} return C[id] && C[id].length ? figHTML(C[id]) : FIND[id] ? "<div id='ixYfigs' data-find='" + E(id) + "'></div>" : ""; }
     return "<h3>🖼 Drawings</h3><div class='ixYfigs'>" + F.map((f) => "<figure class='ixYfig'><img loading='lazy' src='" + E(f.src) + "' alt='" + E(f.cap) + "'><figcaption>" + E(f.cap) + " <small>· " + E(f.fig) + ", public domain</small></figcaption></figure>").join("") + "</div>";
@@ -219,6 +226,7 @@
   function spot(n) {
     let C = {}; try { C = JSON.parse(localStorage.getItem(FIGC) || "{}"); } catch (e) {}
     const all = []; [window.IX_GIT206_FIGS || {}, C].forEach((M) => Object.keys(M).forEach((id) => (M[id] || []).forEach((f) => all.push(Object.assign({ unit: id }, f)))));
+    if (window.IX_OSTX) Object.keys(IX_OSTX.units).forEach((u) => IX_OSTX.units[u].forEach((fid) => { const f = IX_FIG.get(fid); if (f && !all.some((x) => x.id === fid)) all.push(Object.assign({ unit: u, ostx: true }, f)); }));
     for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
     const pick = all.slice(0, n || 6);
     shell(); root.querySelector("#ixYt").textContent = "🎯 Spot drill"; root.querySelector("#ixYsub").textContent = "Practical revision · " + all.length + " drawings in the course";

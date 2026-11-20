@@ -40,8 +40,8 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => IX_HY.close());
   await p.evaluate(() => { const q = IX_GIT206.mcq.find((x) => x.chapter === 'Stomach' && x.answerKeys.length); IX_GIT.startCustom('t', (x) => x.id === q.id, 1); }); await tick(p, 300);
   await p.click('.ixHopt >> nth=0'); await tick(p, 400);
-  const c5b = await p.evaluate(() => (document.querySelector('.ixHfb .ixYfig img') || {}).src || '');
-  check('C5', "Drawings: Gray's plates (Wikimedia, public domain) in the unit's sheet with captions, and after a GIT MCQ", c5a.length >= 4 && c5a.every((u) => /^https:\/\/upload\.wikimedia\.org\//.test(u)) && /kidney/i.test(c5cap) && /upload\.wikimedia\.org.*Gray10(46|47|50|52)\.png/.test(c5b), { n: c5a.length, c5cap: c5cap.slice(0, 60), c5b: c5b.slice(-14) });
+  const c5b = await p.evaluate(() => (document.querySelector('.ixHfb .ixFg img, .ixHfb .ixYfig img') || {}).src || '');
+  check('C5', "Drawings: Gray's plates (Wikimedia, public domain) in the unit's sheet with captions, and after a GIT MCQ the textbook drawing that fits", c5a.length >= 4 && c5a.every((u) => /^https:\/\/upload\.wikimedia\.org\//.test(u)) && /kidney/i.test(c5cap) && /fig\/ostx\/os23_(15|4)\.webp|upload\.wikimedia\.org.*Gray10(46|47|50|52)\.png/.test(c5b), { n: c5a.length, c5cap: c5cap.slice(0, 60), c5b: c5b.slice(-14) });
   check('C6', 'No page errors', errs.length === 0 && s.log.errors.length === 0, { errs: errs.concat(s.log.errors).slice(0, 3) });
   await s.close();
   console.log(fails ? fails + ' FAILED' : '6/6 COURSE checks passed');
