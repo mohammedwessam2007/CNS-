@@ -269,6 +269,7 @@
     shell(); root.querySelector("#ixYt").textContent = "📖 CNS lesson library"; root.querySelector("#ixYsub").textContent = "No dates: read any lesson, any time, for the CNS written";
     const L = allLessons(), g = {}; L.forEach((l) => (g[l.subject] = g[l.subject] || []).push(l));
     body.innerHTML = "<p>The CNS course's " + L.length + " lessons (notes, live diagrams, pictures). The plan sends you here from each CNS written day; you never need to follow the old dates.</p>" + Object.keys(g).map((k) => "<h3>" + E(k.charAt(0) + k.slice(1).toLowerCase()) + "</h3><div class='ixYles'>" + g[k].map(lesBtn).join("") + "</div>").join("");
+    if (window.IX_CNS) { body.insertAdjacentHTML("afterbegin", "<div class='ixDbtns'><button type='button' class='ixDbtn' id='ixYcnsq'>⚡ The " + IX_CNS.list().length + " likely CNS written questions (app prediction): outline each, then see the full-mark skeleton</button></div>"); body.querySelector("#ixYcnsq").onclick = () => { close(); IX_CNS.quick(IX_CNS.list().map((x) => x.q)); }; }
     wireLes(body); return L.length;
   }
   window.IX_HY = { lessons, lessonsFor, spot, prepareAll, prefetch, allIds, open, list, facts: (id) => facts(unit(id)), unit, md, close, figsHTML, findFigs, generate: (id) => generate(unit(id)), cached: (id) => !!cache()[id], put: putCache };

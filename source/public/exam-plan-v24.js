@@ -132,6 +132,7 @@
     return out;
   }
   function build() {
+    const cnsUsed = new Set();   // v34: CNS written questions already placed (warm-ups in December, then the CNS days)
     // the owner starts on Saturday 21 Nov 2026; before that the plan waits (nothing is due early)
     // the schedule is FIXED from the start date (21 Nov): ticks are tied to dates, and missed work is carried forward
     // by the pacing engine (paced()), never by re-planning from today (that would lose what was already done)
@@ -171,7 +172,8 @@
       if (WEAK.includes(k)) return days.push(Object.assign(base, { title: "Weak spots only, mixed", steps: [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15), step("traps", "My traps, re-worded", 10)] }));
       if (k === LIGHT) return days.push(Object.assign(base, { title: "Light day before the exam", steps: [step("review", "Reviews due", 15), step("traps", "My traps, re-worded", 15), step("examday", "Exam-day protocol", 5), step("rest", "Stop by evening. Sleep is part of the plan.", 0)] }));
       const pl = plan.get(k);
-      if (!pl) return days.push(Object.assign(base, { title: "Review day (nothing new is ready from the lectures)", steps: lecSteps.concat([step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters taught so far", 15)]) }));
+      if (!pl) { const cq = (window.IX_CNS_WRITTEN || []).slice().reverse().find((x) => !cnsUsed.has(x.q)); if (cq && mins >= 45) cnsUsed.add(cq.q); }
+      if (!pl) return days.push(Object.assign(base, { title: "Review day (nothing new is ready from the lectures)", steps: lecSteps.concat(Array.from(cnsUsed).slice(-1).filter(() => mins >= 45).map((q) => { const x = window.IX_CNS.find(q); return step("cns", "CNS written warm-up · " + q, 13, { ch: x.ch, sub: x.sub, q }); }), [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters taught so far", 15)]) }));
       const paired = pl.units.length > 1, steps = lecSteps.concat([step("review", "Reviews due (memory cards)", 10)]);
       // rule 1: a small budget cuts steps, never adds minutes: written goes first (phase B covers it), then teaching
       const nLes = window.IX_LESSON ? pl.units.reduce((t, u) => t + IX_LESSON.lessonsOf(u.id).length, 0) : 0;
@@ -207,15 +209,20 @@
     days.push({ date: EXAMS[1].date, phase: "GIT written", exam: EXAMS[1], steps: [step("examday", "Written-exam protocol, then go", 5)] });
     // Phase C: CNS written — chapters by weight; the professor's likely essay, then a blank page and three examiners
     const C = []; for (let d = new Date(gwDate.getTime() + DAY); d < cwDate; d = new Date(d.getTime() + DAY)) C.push(new Date(d));
-    const studyC = C.filter((d) => !isOff(d)), perC = Math.max(2, Math.floor((mins - 15) / 20)), cPlan = cnsChapters().slice(0, Math.max(0, studyC.length - 1) * perC);
-    let ci = 0;
+    // v34: the CNS days work through the ranked likely-question list (cns-written-v34.js), a question per step written
+    // from a blank page and marked against its skeleton; without the list, chapters by MCQ weight as before
+    const CWQ = (window.IX_CNS_WRITTEN || []).filter((x) => !cnsUsed.has(x.q));
+    const studyC = C.filter((d) => !isOff(d)), perC = CWQ.length ? Math.max(2, Math.floor((mins - 28) / 13)) : Math.max(2, Math.floor((mins - 15) / 20)), perQ = CWQ.length && mins >= 50 ? 6 : 0;
+    const cPlan = (CWQ.length ? CWQ.map((x) => ({ name: x.ch, subject: x.sub, q: x.q })) : cnsChapters()).slice(0, Math.max(0, studyC.length - 1) * perC);
+    let ci = 0, qi = 0;
     C.forEach((d) => {
       const k = iso(d);
       if (isOff(d)) return days.push({ date: k, phase: "CNS written", off: true, steps: [] });
-      if (d === studyC[studyC.length - 1]) return days.push({ date: k, phase: "CNS written", title: "Light day: your CNS sheets", steps: [step("review", "Reviews due", 10), step("sheets", "Read your sheets once; rewrite only what was missing", 30), step("examday", "Written-exam protocol", 5)] });
+      if (d === studyC[studyC.length - 1]) { const last = CWQ.slice(cPlan.length + qi, cPlan.length + qi + 6); return days.push({ date: k, phase: "CNS written", title: "Light day: your CNS sheets", steps: [step("review", "Reviews due", 10)].concat(last.length && perQ ? [step("cnsquick", "⚡ CNS: outline " + last.length + " more likely questions (3 min each)", last.length * 3, { qs: last.map((x) => x.q) })] : [], [step("sheets", "Read your sheets once; rewrite only what was missing", last.length && perQ ? 15 : 30), step("examday", "Written-exam protocol", 5)]) }); }
       if (k === "2027-01-10") return days.push({ date: k, phase: "CNS written", title: "CNS written mock (AI off) + outlines", steps: [step("wmock", "🧪 CNS written mock: 6 likely questions, 45 min, AI off, then 3 examiners", 45, { exam: "cns" }), step("outline", "⚡ 3-minute outlines due", 10)] });
       const t = cPlan.slice(ci, ci + perC); ci += t.length;
-      days.push({ date: k, phase: "CNS written", title: t.map((c) => c.name).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((c) => step("cns", "CNS " + c.subject + ": " + c.name + " — likely essay, then write it", 20, { ch: c.name, sub: c.subject })), [step("outline", "⚡ 3-minute outlines due", 10)]) });
+      const qk = perQ ? CWQ.slice(cPlan.length + qi, cPlan.length + qi + perQ) : []; qi += qk.length;
+      days.push({ date: k, phase: "CNS written", title: t.map((c) => c.name).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((c) => c.q ? step("cns", "CNS written · " + c.q, 13, { ch: c.name, sub: c.subject, q: c.q }) : step("cns", "CNS " + c.subject + ": " + c.name + " — likely essay, then write it", 20, { ch: c.name, sub: c.subject })), qk.length ? [step("cnsquick", "⚡ CNS: outline " + qk.length + " likely questions from memory (3 min each), then check the skeletons", qk.length * 3, { qs: qk.map((x) => x.q) })] : [step("outline", "⚡ 3-minute outlines due", 10)]) });
     });
     days.push({ date: EXAMS[2].date, phase: "CNS written", exam: EXAMS[2], steps: [step("examday", "Written-exam protocol, then go", 5)] });
     // Phase D: practical revision at college (13-14 Jan); the practical's own date is not announced yet
@@ -298,6 +305,8 @@
     else if (s.kind === "sheets") { openSheets(); }
     else if (s.kind === "lesson" && window.IX_LESSON) { close(); IX_LESSON.open(s.key); }
     else if (s.kind === "spot" && window.IX_HY) { close(); IX_HY.spot(6); }
+    else if (s.kind === "cnsquick" && window.IX_CNS) { close(); IX_CNS.quick(s.qs || []); }
+    else if (s.kind === "cns" && s.q) { close(); override("CNS written · " + s.ch, "NEU-205 written (" + s.sub + " · " + s.ch + "). App prediction, not a past paper. Question: " + s.q); t.openEssay(s.q); }
     else if (s.kind === "cns" && window.IX_HY) { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch); IX_HY.open("CNS:" + s.ch); }
     else if (s.kind === "cns") { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch + ". No past written list is loaded for CNS: use the course content and the MCQ bank's weight for this chapter."); t.open(); t.ask("Give me the most likely written-exam question on " + s.ch + " and the model answer, then I will write it from a blank page.", "written"); }
   }

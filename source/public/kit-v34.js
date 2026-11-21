@@ -92,6 +92,7 @@
     const R = window.IX_GIT206_REF || {}; Object.keys(R).forEach((topic) => R[topic].forEach((r) => { if (hit(topic + " " + r.head + " " + r.text)) out.push({ kind: "Reference answer", title: r.head, snip: r.text, ref: r }); }));
     ((window.IX_GIT206 || {}).mcq || []).forEach((m) => { const opts = m.options.map((o) => o.text).join(" "); if (hit(m.stem + " " + opts)) out.push({ kind: "Past-paper MCQ", title: m.stem, snip: (m.answerKeys || []).length ? "Key: " + m.options.filter((o) => m.answerKeys.includes(o.key)).map((o) => o.text).join(" / ") + (m.keyBy === "app" ? " (app key)" : "") : "No key", mcq: m }); });
     if (window.IX_DRAW) IX_DRAW.ids().forEach((id) => { const d = IX_DRAW.get(id); if (hit(d.title + " " + d.steps.map((s) => s[0]).join(" "))) out.push({ kind: "Exam drawing", title: d.title, snip: d.steps.map((s) => s[0]).join(" "), open: () => IX_DRAW.open(id) }); });
+    (window.IX_CNS_WRITTEN || []).forEach((x, i) => { if (hit(x.q + " " + x.ch + " " + x.skel)) out.push({ kind: "CNS written (likely)", title: x.q, snip: x.skel, open: () => IX_CNS.quick(IX_CNS_WRITTEN.map((y) => y.q), i) }); });
     NUMBERS.concat(MNEMONICS).forEach((n) => { if (hit(n[0] + " " + n[1])) out.push({ kind: "Revision fact", title: n[0], snip: n[1] }); });
     const head = (r) => (hit(r.title) ? 0 : 1) + (r.kind === "Lesson" ? 0 : r.kind === "Reference answer" ? 0.2 : 0.5);
     return out.map((r, i) => [head(r), i, r]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map((x) => x[2]).slice(0, 60);

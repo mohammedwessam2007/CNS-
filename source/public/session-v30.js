@@ -22,6 +22,7 @@
   // what to do, in plain words, for every kind of step
   const HOW = {
     review: ["The professor shows what is due. Answer each one out loud first, then check.", "Rate yourself honestly. When the list ends, you are done."],
+    cnsquick: ["CNS written: 3 minutes per question, write only the headings and key points from memory.", "Then reveal the full-mark skeleton and see what you missed. Tap Write it fully for any you want marked."],
     lesson: ["Read one part at a time and answer the reasoning question before revealing it.", "Study the labelled diagrams. At the end, tap I understand it."],
     learn: ["Read the sheet top to bottom: story → whiteboard → tables → what examiners ask.", "Then tap ▶ Learn it with the professor for the 6 short steps. Draw the whiteboard on paper."],
     mcq: ["10 past-paper questions on this unit.", "Choose how sure you are before you answer. Read every wrong answer's why."],
