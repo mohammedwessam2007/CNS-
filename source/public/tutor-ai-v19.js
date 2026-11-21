@@ -549,7 +549,7 @@
     for (const [name, model] of [["Fast model", ls.get(MODEL, DEFAULT_MODEL)], ["Professor model", ls.get(MODEL_PRO, DEFAULT_PRO)]]) {
       try {
         const r = await fetch(API + "/chat/completions", { method: "POST", headers: H, body: JSON.stringify({ model, max_tokens: 5, messages: [{ role: "user", content: "Reply with the word OK." }], usage: { include: true } }) });
-        if (r.ok) { const j = await r.json(); try { if (j.usage && j.usage.cost) addSpend(j.usage.cost); } catch (e) {} lines.push("✓ " + name + " answers (" + model + ")."); }
+        if (r.ok) { try { const j = await r.json(); if (j.usage && j.usage.cost) addSpend(j.usage.cost); } catch (e) {} lines.push("✓ " + name + " answers (" + model + ")."); }
         else { ok = false; const t = await r.text().catch(() => ""); lines.push("✗ " + name + " (" + model + "): " + (r.status === 402 ? "no credit left: add credits on openrouter.ai." : r.status === 404 || /not a valid model|No endpoints/i.test(t) ? "this model name is not available: reset it to " + (name === "Fast model" ? DEFAULT_MODEL : DEFAULT_PRO) + " in ⚙︎." : r.status === 429 ? "busy right now (rate limit): try again in a minute." : r.status === 403 ? "refused for this key/region (" + t.slice(0, 80) + ")." : "OpenRouter answered " + r.status + ".")); }
       } catch (e) { ok = false; lines.push("✗ " + name + ": could not reach openrouter.ai."); }
     }
@@ -585,7 +585,7 @@
       st.textContent = "Testing the key, the balance and both models…";
       const res = await checkKey(key);
       st.innerHTML = res.lines.map((l) => "<div>" + E(l) + "</div>").join("");
-      if (res.ok) setTimeout(() => { s.remove(); renderLog(); input && input.focus(); }, 2600);
+      if (res.ok) setTimeout(() => { s.remove(); renderLog(); input && input.focus(); }, 1400);
     };
     const f = s.querySelector("#ixTforget");
     if (f) f.onclick = () => { ls.del(KEY); st.textContent = "Key removed from this device."; f.remove(); };
