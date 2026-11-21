@@ -20,7 +20,7 @@ const LESSON = '## 1. Why you should care\nA man with a **hernia**.\n> 🤔 Thin
   const l2 = await p.evaluate(() => { const P = IX_PLAN.build(), days = P.days.filter((d) => d.phase === 'GIT MCQ' && !d.off && !d.exam), taught = new Set(); let over = 0; days.forEach((d) => { d.steps.forEach((x) => x.kind === 'lesson' && taught.add(x.key)); if (!d.steps.some((x) => x.kind === 'mock') && d.steps.reduce((t, x) => t + x.min, 0) > P.mins + 5) over++; }); const all = IX_LESSON.all().map((l) => l.key); const fitUnits = new Set([].concat(...days.map((d) => d.steps.filter((x) => x.kind === 'lesson').map((x) => x.unit)))); return { taught: taught.size, all: all.length, missing: IX_LESSON.all().filter((l) => !taught.has(l.key) && fitUnits.has(l.unit)).map((l) => l.title), over, first: (P.days.find((d) => d.date === '2026-11-21') || { steps: [] }).steps.map((x) => x.kind), attend: days.some((d) => d.steps.some((x) => /Attend/.test(x.label))) }; });
   check('L2', "The plan teaches every lesson of each unit on that unit's day, inside the minutes; no lecture to attend", l2.missing.length === 0 && l2.taught >= l2.all - 6 && l2.over === 0 && l2.first.includes('lesson') && !l2.attend, l2);
   const key = await p.evaluate(() => IX_LESSON.lessonsOf('A:Anterior abdominal wall')[0].key);
-  await p.evaluate((k) => IX_LESSON.open(k), key); await tick(p, 300);
+  await p.evaluate((k) => { delete IX_LESSON_TEXT[k]; IX_LESSON.open(k); }, key); await tick(p, 300);
   let n = sent.length; await p.click('#ixLgen'); await tick(p, 1200);
   const req = sent[n], sys = req ? req.messages[0].content : '', usr = req ? req.messages[1].content : '';
   check('L3', 'Understanding first (replaces the lecture, mechanism, a reasoning question per part), grounded in past papers + references', req && req.model === 'openai/gpt-6.2-sol-pro' && /REPLACES the lecture/.test(sys) && /UNDERSTAND/.test(sys) && /MECHANISM/.test(sys) && /🤔 Think/.test(sys) && /LECTURE TO TEACH/.test(usr) && /PAST-PAPER FACTS/.test(usr) && /EXAMINERS|examiner/i.test(usr), { model: req && req.model, len: usr.length });
@@ -43,7 +43,7 @@ const LESSON = '## 1. Why you should care\nA man with a **hernia**.\n> 🤔 Thin
   await p.evaluate(() => IX_LESSON.close()); await tick(p, 200);
   await p.click('.ixZbtns [data-course]'); await tick(p, 300);
   const l7 = await p.evaluate(() => ({ rows: document.querySelectorAll('.ixLrow').length, done: document.querySelectorAll('.ixLrow.done').length, all: !!document.getElementById('ixLall'), sub: document.getElementById('ixLsub').textContent }));
-  check('L7', '📚 The course (from the home) lists every lesson with its state, and can write them all', l7.rows >= 40 && l7.done === 1 && l7.all && /1 of \d+ done/.test(l7.sub), l7);
+  check('L7', '📚 The course (from the home) lists every lesson with its state; all are built in, so nothing is left to write', l7.rows >= 40 && l7.done === 1 && !l7.all && /1 of \d+ done/.test(l7.sub), l7);
   const wide = await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1);
   check('L8', 'No page errors; nothing scrolls sideways', errs.length === 0 && wide, errs.slice(0, 3));
   await s.close(); console.log(fails ? fails + ' FAILED' : 'ALL PASS'); process.exit(fails ? 1 : 0);

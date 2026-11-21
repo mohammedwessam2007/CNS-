@@ -37,7 +37,9 @@
   const all = () => [].concat(...course().map((c) => c.lessons));
   const find = (key) => all().find((l) => l.key === key);
   const isDone = (key) => !!get(DONE)[key];
-  const cached = (key) => { const c = get(CACHE)[key]; return c && c.v === VER ? c : null; };
+  // v34: every lesson is written into the app (lessons-text-*.js): shown at once, offline, no AI needed. A version the
+  // professor wrote on this phone (older builds) still wins if present.
+  const cached = (key) => { const c = get(CACHE)[key]; if (c && c.v === VER) return c; const t = (window.IX_LESSON_TEXT || {})[key]; return t ? { v: VER, text: t, at: 0, builtin: true } : null; };
 
   /* ── the professor's brief: understanding first ── */
   const STYLE = [
@@ -154,7 +156,7 @@
     const row = (l) => '<button type="button" class="ixLrow' + (isDone(l.key) ? " done" : "") + '" data-k="' + E(l.key) + '"><span class="ixLck">' + (isDone(l.key) ? "✓" : cached(l.key) ? "●" : "○") + "</span><span><b>" + E(l.title) + "</b><small>" + E(l.subject) + (l.date ? " · lecture " + new Date(l.date + "T12:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "") + (cached(l.key) && !isDone(l.key) ? " · ready" : "") + "</small></span></button>";
     const nextUp = unitId && C[0].lessons.find((l) => !isDone(l.key));
     body.innerHTML = (justDone ? '<div class="ixLok">✓ Lesson done. ' + (nextUp ? "Next one below." : "That was the last lesson of this unit: the exam sheet and the questions come next.") + "</div>" : "") +
-      (unitId ? "" : '<div class="ixLrow2"><button type="button" class="ixLmain" id="ixLall">✨ Write every lesson now (' + all().filter((l) => !cached(l.key)).length + " left, about $" + Math.max(1, Math.round(all().filter((l) => !cached(l.key)).length * 0.04)) + ')</button><p class="ixLsmall" id="ixLallp"></p></div>') +
+      (unitId || !all().some((l) => !cached(l.key)) ? "" : '<div class="ixLrow2"><button type="button" class="ixLmain" id="ixLall">✨ Write every lesson now (' + all().filter((l) => !cached(l.key)).length + " left, about $" + Math.max(1, Math.round(all().filter((l) => !cached(l.key)).length * 0.04)) + ')</button><p class="ixLsmall" id="ixLallp"></p></div>') +
       C.map((c) => (unitId ? "" : '<h3 class="ixLh">' + E(c.unit.subject) + " · " + E(c.unit.name) + "</h3>") + '<div class="ixLlist">' + c.lessons.map(row).join("") + "</div>").join("") +
       (unitId ? '<div class="ixLnav"><button type="button" data-u="all">📚 All lessons</button>' + (nextUp ? '<button type="button" class="ixLmain" data-k="' + E(nextUp.key) + '">▶ ' + E(nextUp.title) + "</button>" : '<button type="button" class="ixLmain" data-u="sheet">📘 The exam sheet</button>') + "</div>" : "");
     body.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => open(b.dataset.k)));

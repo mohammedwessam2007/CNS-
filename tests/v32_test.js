@@ -22,7 +22,7 @@ const LESSON = '## 1. Why you should care\nAn ulcer.\n## 2. The big picture\nFou
   check('D3', "A sheet shows the OpenStax drawings first, Gray's after as classic plates", d3.first >= 0 && d3.n >= 2 && (d3.classic < 0 || d3.classic > d3.first), d3);
   await p.evaluate(() => IX_HY.close());
   const key = await p.evaluate(() => IX_LESSON.lessonsOf('H:Oesophagus and stomach')[0].key);
-  await p.evaluate((k) => IX_LESSON.open(k), key); await tick(p, 300);
+  await p.evaluate((k) => { delete IX_LESSON_TEXT[k]; IX_LESSON.open(k); }, key); await tick(p, 300);
   let n = sent.length; await p.click('#ixLgen'); await tick(p, 1200);
   const usr = sent[n] ? sent[n].messages[1].content : '';
   const seen = [];
