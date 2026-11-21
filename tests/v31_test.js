@@ -29,7 +29,7 @@ const LESSON = '## 1. Why you should care\nA man with a **hernia**.\n> 🤔 Thin
   const l4b = await p.evaluate(() => document.querySelector('.ixLpart h2').textContent);
   n = sent.length; await p.click('.ixL [data-a="simple"]'); await tick(p, 900);
   const ask = sent.slice(n).find((b) => b.stream), askTxt = ask ? JSON.stringify(ask.messages) : '';
-  check('L4', 'One part at a time; answers hidden; Explain it another way asks the professor about that part', /Part 1 of 5/.test(l4a.part) && /Why you should care/.test(l4a.h) && l4a.spoil && l4a.dots === 5 && /big picture/i.test(l4b) && /did not get this part/.test(askTxt) && /The big picture/.test(askTxt), { l4a, l4b });
+  check('L4', 'One part at a time; answers hidden; Explain it another way asks the professor about that part', /Part 1 of (5|6|7)/.test(l4a.part) && /Why you should care/.test(l4a.h) && l4a.spoil && l4a.dots >= 5 /* v38 adds a worked case and a brain dump */ && /big picture/i.test(l4b) && /did not get this part/.test(askTxt) && /The big picture/.test(askTxt), { l4a, l4b });
   await p.evaluate(() => IX_TUTOR.close());
   for (let i = 0; i < 6; i++) { const nx = await p.$('.ixL [data-a="next"]'); if (!nx) break; await nx.click(); await tick(p, 100); }
   await p.click('.ixL [data-a="finish"]'); await tick(p, 300);

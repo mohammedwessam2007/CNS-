@@ -165,14 +165,14 @@
       wireGenerate();
       return;
     }
-    const ps = parts(c.text); let i = Math.max(0, Math.min(ps.length - 1, at || 0));
+    const ps = parts(c.text); if (window.IX_ENGINE) IX_ENGINE.extendParts(les, ps); let i = Math.max(0, Math.min(ps.length - 1, at || 0));
     // v32: drawings in the parts. The professor's [[fig:ID]] marks first; a part without one gets the unused drawing whose
     // labels fit it best; the big picture gets the unit's main drawing if nothing else claimed it
     const FG = window.IX_FIG, pool = FG ? FG.forUnit(les.unit).concat(...(les.also || []).map((x) => FG.forUnit(x))) : [], used = new Set();
     ps.forEach((p) => { p.md = p.md.replace(/\[\[fig:([a-z0-9_]+)\]\]/gi, (m, id) => { const f = FG && FG.get(id); if (!f || used.has(id)) return ""; used.add(id); return "\n@@FIG:" + id + "@@\n"; }); });
     if (!c.reading) {
-      ps.forEach((p) => { if (!FG || /@@FIG:/.test(p.md) || /confused|links|exam does|say it back/i.test(p.h)) return; const b = FG.best(pool.filter((f) => !used.has(f.id)), p.h + " " + p.md, 3) || FG.best(FG.all().filter((f) => !used.has(f.id)), p.h + " " + p.md, 4); if (b) { used.add(b.id); p.md += "\n@@FIG:" + b.id + "@@"; } });
-      const bp = ps.find((p) => /big picture/i.test(p.h)) || ps[1]; const first = pool.find((f) => !used.has(f.id)); if (bp && first && !/@@FIG:/.test(bp.md)) { used.add(first.id); bp.md = bp.md.replace(/(✏️|Draw it yourself|Draw this)/, "@@FIG:" + first.id + "@@\n$1"); if (!/@@FIG:/.test(bp.md)) bp.md += "\n@@FIG:" + first.id + "@@"; }
+      ps.forEach((p) => { if (!FG || p.engine || /@@FIG:/.test(p.md) || /confused|links|exam does|say it back/i.test(p.h)) return; const b = FG.best(pool.filter((f) => !used.has(f.id)), p.h + " " + p.md, 3) || FG.best(FG.all().filter((f) => !used.has(f.id)), p.h + " " + p.md, 4); if (b) { used.add(b.id); p.md += "\n@@FIG:" + b.id + "@@"; } });
+      const bp = ps.find((p) => /big picture/i.test(p.h)) || ps.find((p, k) => k > 0 && !p.engine); const first = pool.find((f) => !used.has(f.id)); if (bp && first && !/@@FIG:/.test(bp.md)) { used.add(first.id); bp.md = bp.md.replace(/(✏️|Draw it yourself|Draw this)/, "@@FIG:" + first.id + "@@\n$1"); if (!/@@FIG:/.test(bp.md)) bp.md += "\n@@FIG:" + first.id + "@@"; }
     }
     const render = (src) => md(src).replace(/<p>@@FIG:([a-z0-9_]+)@@<\/p>|@@FIG:([a-z0-9_]+)@@/g, (m, a, b) => { const f = FG.get(a || b); return f ? FG.html(f, { eager: true }) : ""; });
     const show = () => {
@@ -184,6 +184,7 @@
         (last ? '<div class="ixLend"><button type="button" data-a="teach">🗣 Teach it back to the professor</button><button type="button" data-a="sheet">📘 The exam sheet for this unit</button></div>' : "") +
         (c.reading && i === 0 && T() && T().hasKey() ? '<div class="ixLask">' + generateButton("Generate a custom version") + '</div>' : "");
       wireGenerate();
+      try { if (window.IX_ENGINE) IX_ENGINE.enhance(body, { les, p, i }); } catch (e) { console.warn("[engine]", e); }
       body.scrollTop = 0; root.scrollTop = 0;
       body.querySelector(".ixLpart h2").focus({ preventScroll: true });
       const ctx = "LESSON: " + les.title + " (" + les.subject + ")\nTHE PART HE IS READING: " + p.h + "\n" + p.md.slice(0, 2500);

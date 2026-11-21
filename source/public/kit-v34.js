@@ -23,13 +23,22 @@
       let n = 0;
       String(t).replace(/🤔 Think:\s*(.+?)\s*\|\|(.+?)\|\|/g, (m, q, a) => { out.push({ id: les.key + "#" + n++, lesson: les.key, unit: les.unit, subject: les.subject, title: les.title, q: q.trim().replace(/^./, (x) => x.toUpperCase()), a: a.trim().replace(/^./, (x) => x.toUpperCase()) }); return m; });
     });
+    // v38: cards the learning engine made (missed brain-dump points, questions answered wrong)
+    try { Object.values(JSON.parse(localStorage.getItem("ix_fc_custom_v1") || "{}")).forEach((c) => out.push(c)); } catch (e) {}
     return out;
   }
-  const deckOf = () => { const S = get(), done = (k) => L() && L().isDone(k); return cards().filter((c) => S[c.id] || done(c.lesson)); };
+  const deckOf = () => { const S = get(), done = (k) => L() && L().isDone(k); return cards().filter((c) => S[c.id] || c.at || done(c.lesson)); };
   // a finished lesson's cards first come back the next day (spacing), never on the day it was learned
   const doneAt = (k) => { try { const d = JSON.parse(localStorage.getItem("ix_lesson_done_v1") || "{}")[k]; return typeof d === "number" ? d : d ? Date.now() - DAY : 0; } catch (e) { return 0; } };
   const startOfTomorrow = (t) => { const d = new Date(t); d.setHours(24, 0, 0, 0); return d.getTime(); };
-  function due(now) { now = now || Date.now(); const S = get(); return deckOf().filter((c) => (S[c.id] ? S[c.id].due : startOfTomorrow(doneAt(c.lesson))) <= now); }
+  // v38: interleaved — due cards are dealt round-robin across units, so topics mix (the brain must pick the right idea)
+  function due(now) {
+    now = now || Date.now(); const S = get();
+    const D = deckOf().filter((c) => (S[c.id] ? S[c.id].due : startOfTomorrow(c.at || doneAt(c.lesson))) <= now), by = {}, order = [];
+    D.forEach((c) => { if (!by[c.unit]) { by[c.unit] = []; order.push(c.unit); } by[c.unit].push(c); });
+    const out = []; for (let r = 0; out.length < D.length; r++) order.forEach((u) => { if (by[u][r]) out.push(by[u][r]); });
+    return out;
+  }
   function grade(id, g) {
     const S = get(), s = S[id] || { step: -1, due: 0 };
     if (g === "again") { s.step = -1; s.due = Date.now() + 10 * 60e3; }

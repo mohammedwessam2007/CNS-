@@ -39,7 +39,7 @@ const { open } = require("./harness");
     await page.keyboard.press("Escape");
     assert.equal(await drawing.evaluate((b) => b === document.activeElement), true);
 
-    for (let part = 0; part < 5; part++) await page.locator(".ixL [data-a=next]").click();
+    while (await page.locator(".ixL [data-a=next]").count()) await page.locator(".ixL [data-a=next]").click();   // v38: the lesson also ends with a worked case and a brain dump
     await page.locator(".ixL [data-a=finish]").click();   // finishing the lesson ticks it and opens the next item
     await page.getByRole("heading", { name: "Lesson knowledge check" }).waitFor();
     assert.match(await page.locator(".ixSbar").innerText(), /step 2\/3/i);

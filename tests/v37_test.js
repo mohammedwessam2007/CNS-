@@ -29,8 +29,10 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   mode = 'badmodel'; await p.evaluate(() => localStorage.setItem('ix_tutor_model_pro_v1', 'openai/x')); const a4 = await p.evaluate(() => IX_TUTOR.checkKey());
   check('A4', 'A wrong professor model name says to reset it to the default', !a4.ok && /reset it to openai\/gpt-6\.2-sol-pro/.test(a4.lines.join()), a4.lines);
   mode = 'good'; await p.evaluate(() => localStorage.removeItem('ix_tutor_model_pro_v1'));
-  await p.evaluate(() => { const b = document.querySelector('[data-xm="keycheck"]'); if (b) b.click(); else IX_TUTOR.checkAI(); }); await tick(p, 1500);
-  const a5 = await p.evaluate(() => ({ txt: (document.querySelector('.ixTstatus, #ixTst, [id^="ixTst"]') || document.body).innerText, menu: !!document.querySelector('[data-xm="keycheck"]') }));
+  await p.evaluate(() => { const b = document.querySelector('[data-xm="keycheck"]'); if (b) b.click(); else IX_TUTOR.checkAI(); });
+  // the setup closes itself 1.4 s after "All good", so watch for the text instead of sleeping a fixed time
+  const seen = await p.waitForFunction(() => /All good/.test(document.body.innerText), null, { timeout: 15000, polling: 50 }).then(() => true, () => false);
+  const a5 = { txt: seen ? 'All good' : '', menu: await p.evaluate(() => !!document.querySelector('[data-xm="keycheck"]')) };
   check('A5', 'The menu item runs the full check in one tap', a5.menu && /All good/.test(a5.txt), { menu: a5.menu, ok: /All good/.test(a5.txt) });
   check('A6', 'The key is only ever sent to openrouter.ai', [...hosts].every((h) => h === 'openrouter.ai') && hosts.size === 1, [...hosts]);
   check('A7', 'No page errors', !errs.length, errs.slice(0, 3));
