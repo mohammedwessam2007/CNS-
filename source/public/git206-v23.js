@@ -109,7 +109,7 @@
   }
   function qText(q, withKey, sel) {
     return "QUESTION (DIG-206 " + q.subject + " · " + q.chapter + " · " + q.source + (q.ocr ? ", read from a scanned paper" : "") + "):\n" + q.stem + "\n" + q.options.map((o) => o.key + ") " + o.text).join("\n") +
-      (withKey ? (keyed(q) ? "\nKEY: " + q.answerKeys.join(", ") : "\nKEY: none (unsolved paper: give YOUR answer and say it is yours, not the official key)") + (sel ? "\nSTUDENT CHOSE: " + sel : "") : "");
+      (withKey ? (keyed(q) ? "\nKEY: " + q.answerKeys.join(", ") + (q.keyBy === "app" ? " (written by the app, not an official key: check it and say so if it looks wrong)" : "") : "\nKEY: none (unsolved paper: give YOUR answer and say it is yours, not the official key)") + (sel ? "\nSTUDENT CHOSE: " + sel : "") : "");
   }
   function showQ() {
     const q = run.qs[run.i];
@@ -154,6 +154,7 @@
     window.IX_SCREEN_OVERRIDE = { title: "GIT 206 · " + q.chapter, eyebrow: "DIG-206 " + q.subject, body: qText(q, true, sel) };
     const fb = document.createElement("div"); fb.className = "ixHfb";
     fb.innerHTML = (keyed(q) ? '<div class="ixHverdict ' + (ok ? "good" : "bad") + '">' + (ok ? "✓ Right" : "✗ It is " + E(keyTxt)) + (conf === "sure" && !ok ? " · you were sure: this is a trap worth fixing" : "") + "</div>" : "<div class='ixHverdict'>No official key for this one.</div>") +
+      (q.keyBy === "app" ? '<p class="ixHsmall">This key was written by the app (the paper had no key). If your notes say otherwise, your notes win. <button type="button" class="ixHlink" data-flag>⚑ hide this question</button></p>' : "") +
       (q.ocr ? '<p class="ixHsmall">From a scanned solved paper. If the key looks wrong, <button type="button" class="ixHlink" data-flag>⚑ hide this question</button>.</p>' : "") +
       unitFig(q) + '<div class="ixHhost" id="ixHai"></div><div class="ixHrow"><button type="button" class="primary" data-next>Next →</button></div>';
     body.querySelector(".ixHq").appendChild(fb);
