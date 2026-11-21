@@ -526,6 +526,37 @@
     s.addEventListener("click", (e) => { if (e.target.closest("[data-x]")) s.remove(); });
     return s;
   }
+  /* v37 · the full key check: (1) the key is accepted, (2) money is left (key limit and account credits), (3) the fast
+   * model and (4) the professor model each answer a 1-word test (costs well under 0.01 cent). Every line says what to do
+   * if it fails. The key is only ever sent to openrouter.ai. */
+  async function checkKey(key) {
+    key = key || ls.get(KEY, ""); const lines = []; let ok = true;
+    if (!key) return { ok: false, lines: ["✗ No key on this device. Paste it in 🧠 → ⚙︎."] };
+    if (!/^sk-or-/.test(key)) return { ok: false, lines: ["✗ That is not an OpenRouter key (it starts with sk-or-)."] };
+    const H = { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" };
+    try {
+      const r = await fetch(API + "/key", { headers: H });
+      if (!r.ok) return { ok: false, lines: [r.status === 401 ? "✗ OpenRouter refused this key (deleted or mistyped). Make a new one on openrouter.ai → Keys and paste it." : "✗ OpenRouter answered " + r.status + " when checking the key."] };
+      const d = (await r.json()).data || {};
+      lines.push("✓ Key accepted" + (d.label ? " (" + d.label + ")" : "") + ".");
+      if (d.limit != null) { const rem = d.limit_remaining != null ? d.limit_remaining : d.limit - (d.usage || 0); lines.push((rem > 0.05 ? "✓" : "✗") + " Key limit $" + d.limit + ", used $" + (d.usage || 0).toFixed(2) + ", left $" + Math.max(0, rem).toFixed(2) + (rem > 0.05 ? "." : ": raise the key's limit on openrouter.ai → Keys.")); if (rem <= 0.05) ok = false; }
+      else lines.push("• No spending limit on this key (you can set one on openrouter.ai → Keys).");
+    } catch (e) { return { ok: false, lines: ["✗ Could not reach openrouter.ai. Check the internet and try again."] }; }
+    try {
+      const r = await fetch(API + "/credits", { headers: H });
+      if (r.ok) { const c = (await r.json()).data || {}; const bal = (c.total_credits || 0) - (c.total_usage || 0); lines.push((bal > 0.05 ? "✓" : "✗") + " Account balance $" + bal.toFixed(2) + (bal > 0.05 ? "." : ": add credits on openrouter.ai → Credits (the AI stops at $0).")); if (bal <= 0.05) ok = false; }
+    } catch (e) {}
+    for (const [name, model] of [["Fast model", ls.get(MODEL, DEFAULT_MODEL)], ["Professor model", ls.get(MODEL_PRO, DEFAULT_PRO)]]) {
+      try {
+        const r = await fetch(API + "/chat/completions", { method: "POST", headers: H, body: JSON.stringify({ model, max_tokens: 5, messages: [{ role: "user", content: "Reply with the word OK." }], usage: { include: true } }) });
+        if (r.ok) { const j = await r.json(); try { if (j.usage && j.usage.cost) addSpend(j.usage.cost); } catch (e) {} lines.push("✓ " + name + " answers (" + model + ")."); }
+        else { ok = false; const t = await r.text().catch(() => ""); lines.push("✗ " + name + " (" + model + "): " + (r.status === 402 ? "no credit left: add credits on openrouter.ai." : r.status === 404 || /not a valid model|No endpoints/i.test(t) ? "this model name is not available: reset it to " + (name === "Fast model" ? DEFAULT_MODEL : DEFAULT_PRO) + " in ⚙︎." : r.status === 429 ? "busy right now (rate limit): try again in a minute." : r.status === 403 ? "refused for this key/region (" + t.slice(0, 80) + ")." : "OpenRouter answered " + r.status + ".")); }
+      } catch (e) { ok = false; lines.push("✗ " + name + ": could not reach openrouter.ai."); }
+    }
+    lines.push(ok ? "All good: the AI professor is ready." : "Fix the ✗ line above, then tap Save and test again.");
+    try { ls.set("ix_tutor_keycheck_v1", JSON.stringify({ at: Date.now(), ok })); } catch (e) {}
+    return { ok, lines };
+  }
   function openSetup(note) {
     build(); root.classList.add("on");
     const has = !!ls.get(KEY, "");
@@ -551,15 +582,10 @@
       ls.set("ix_tutor_interests_v1", s.querySelector("#ixTint").value.trim().slice(0, 300));
       if (k) { if (!/^sk-or-/.test(k)) { st.textContent = "That does not look like an OpenRouter key (it starts with sk-or-)."; return; } ls.set(KEY, k); }
       const key = ls.get(KEY, ""); if (!key) { st.textContent = "Paste your key first."; return; }
-      st.textContent = "Testing…";
-      try {
-        const r = await fetch(API + "/key", { headers: { Authorization: "Bearer " + key } });
-        if (!r.ok) { st.textContent = r.status === 401 ? "OpenRouter refused this key. Copy it again." : "OpenRouter answered " + r.status + "."; return; }
-        const d = (await r.json()).data || {};
-        const left = d.limit != null ? " · limit $" + d.limit + ", used $" + (d.usage || 0).toFixed(2) : " · no limit set on this key: set one on openrouter.ai";
-        st.textContent = "✓ Key works" + left + ".";
-        setTimeout(() => { s.remove(); renderLog(); input && input.focus(); }, 1400);
-      } catch (e) { st.textContent = "Could not reach openrouter.ai. Check the internet."; }
+      st.textContent = "Testing the key, the balance and both models…";
+      const res = await checkKey(key);
+      st.innerHTML = res.lines.map((l) => "<div>" + E(l) + "</div>").join("");
+      if (res.ok) setTimeout(() => { s.remove(); renderLog(); input && input.focus(); }, 2600);
     };
     const f = s.querySelector("#ixTforget");
     if (f) f.onclick = () => { ls.del(KEY); st.textContent = "Key removed from this device."; f.remove(); };
@@ -887,7 +913,9 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind, openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), _addSpend: (u) => addSpend(u), verbTemplate, gradeHTML, photoURL, refFor, openNotes: () => { build(); root.classList.add("on"); renderLog(); openNotes(); }, addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
+  // one tap from the menu: open the key screen and run the full check with the saved key
+  function checkAI() { openSetup(ls.get(KEY, "") ? "Checking your key, balance and both models…" : ""); setTimeout(() => { const b = document.getElementById("ixTsave"); if (b && ls.get(KEY, "")) b.click(); }, 60); }
+  window.IX_TUTOR = { checkKey, checkAI, open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind, openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), _addSpend: (u) => addSpend(u), verbTemplate, gradeHTML, photoURL, refFor, openNotes: () => { build(); root.classList.add("on"); renderLog(); openNotes(); }, addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();

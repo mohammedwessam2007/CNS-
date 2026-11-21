@@ -40,6 +40,7 @@
       ["lib", "◈", "CNS library"],
       ["tutor", "✧", "Professor"],
       ["life", "◷", "Study settings"],
+      ["keycheck", "✓", "Check my AI key"],
     ];
     host.insertAdjacentHTML("afterbegin", '<div class="ixXMenu"><div class="ixXMheader"><button type="button" class="ixXMbrand" data-xm="home"><span class="ixXMmark" aria-hidden="true">✦</span><span>Intellectuality<small>NOVEMBER EXAM PLAN</small></span></button><button type="button" class="ixXmRailClose" data-xm="close" aria-label="Close navigation">×</button></div><nav class="ixXMbtns" aria-label="Course navigation">' +
       items.map(([key, icon, label]) => '<button type="button" data-xm="' + key + '"' + (key === "home" ? ' aria-current="page"' : "") + '><span aria-hidden="true">' + icon + '</span>' + label + '</button>').join("") + '</nav></div>');
@@ -107,6 +108,7 @@
       else if (xm === "lib") window.IX_HY && IX_HY.lessons();
       else if (xm === "tutor") window.IX_TUTOR && IX_TUTOR.open();
       else if (xm === "life") window.IX_TUTOR && IX_TUTOR.openLife && IX_TUTOR.openLife();
+      else if (xm === "keycheck") window.IX_TUTOR && IX_TUTOR.checkAI();
       return; }
     if (t.dataset.xhome === "cns") { cnsMode = true; document.documentElement.classList.remove("ixXHome"); const pl = document.getElementById("player"); if (pl) pl.innerHTML = ""; if (typeof render === "function") render(); return; }
     if (t.dataset.xhome === "plan") { cnsMode = false; if (typeof render === "function") render(); paint(); return; }
