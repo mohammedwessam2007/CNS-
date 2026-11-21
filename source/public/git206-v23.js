@@ -139,6 +139,7 @@
       h.before(bb);
     }
     if (run.mock) tickClock();
+    else if (window.IX_AIX) { IX_AIX.prefetch(q); IX_AIX.prefetch(run.qs[run.i + 1]); }   // v40: drawn and explained while you think
     body.querySelectorAll(".ixHopt").forEach((b) => (b.onclick = () => answer(q, b.dataset.k, conf)));
   }
   function answer(q, sel, conf) {
@@ -167,10 +168,12 @@
     fb.innerHTML = (keyed(q) ? '<div class="ixHverdict ' + (ok ? "good" : "bad") + '">' + (ok ? "✓ Right" : "✗ It is " + E(keyTxt)) + (conf === "sure" && !ok ? " · you were sure: this is a trap worth fixing" : "") + "</div>" : "<div class='ixHverdict'>No official key for this one.</div>") +
       (q.keyBy === "app" ? '<p class="ixHsmall">This key was written by the app (the paper had no key). If your notes say otherwise, your notes win. <button type="button" class="ixHlink" data-flag>⚑ hide this question</button></p>' : "") +
       (q.ocr ? '<p class="ixHsmall">From a scanned solved paper. If the key looks wrong, <button type="button" class="ixHlink" data-flag>⚑ hide this question</button>.</p>' : "") +
+      '<div class="ixHhost" id="ixAxHost"></div>' +
       (keyed(q) && !ok && g.q[q.id] && g.q[q.id].twin ? '<p class="ixHsmall">🔁 Tomorrow a changed question on this same fact; this exact one in 3 days.</p>' : "") +
       (keyed(q) && window.IX_TEACH ? IX_TEACH.html(q) : "") + unitFig(q) + '<div class="ixHhost" id="ixHai"></div><div class="ixHrow"><button type="button" class="primary" data-next>Next →</button></div>';
     body.querySelector(".ixHq").appendChild(fb);
     if (window.IX_TEACH) IX_TEACH.wire(fb);
+    if (window.IX_AIX) IX_AIX.mountExplain(fb.querySelector("#ixAxHost"), q, sel);   // v40: every option explained + a drawing for this answer
     const host = fb.querySelector("#ixHai");
     if (T()) {
       const bb = document.createElement("div"); bb.className = "ixAiBar";

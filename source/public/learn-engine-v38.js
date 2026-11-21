@@ -129,6 +129,10 @@
     if (p.engine === "dump" && mdBox) mdBox.innerHTML = dumpHTML(les);
     if (i === 0 && mdBox) mdBox.insertAdjacentHTML("beforebegin", firstScreen(les));
     if (mdBox) mdBox.insertAdjacentHTML("afterend", partTools(les, p, i));
+    // v40: the professor's own drawing of this topic, in the big-picture part (cached after the first time)
+    if (window.IX_AIX && !p.engine && (/big picture/i.test(p.h) || i === 1) && !body.querySelector(".ixAxTopic")) {
+      const th = document.createElement("div"); th.className = "ixAxTopic"; const md0 = body.querySelector(".ixLmd"); if (md0) { md0.after(th); IX_AIX.mountTopic(th, les, (window.IX_LESSON_TEXT || {})[les.key] || p.md); }
+    }
     armThinks(body, les);
     body.querySelectorAll("[data-e]").forEach((b) => {
       const a = b.dataset.e;
