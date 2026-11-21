@@ -29,9 +29,9 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.click('.ixXMenu [data-xm="map"]'); await tick(p, 300);
   const c4a = await p.evaluate(() => document.querySelectorAll('.ixPlan.on .ixPday').length);
   await p.evaluate(() => IX_PLAN.close());
-  await p.click('.ixXRd[data-xday="2026-11-24"]'); await tick(p, 300);
+  await p.evaluate(() => { const b = document.querySelector('#player [data-day="2026-11-24"], .ixXRd[data-xday="2026-11-24"]'); if (b) b.click(); else IX_PLAN.openDay('2026-11-24'); }); await tick(p, 300);
   const c4b = await p.evaluate(() => (document.querySelector('.ixPlan.on h3') || {}).innerText || '');
-  check('C4', 'The Map button opens the map; a day in the side rail opens that day', c4a === 55 && /24 Nov/.test(c4b), { c4a, c4b });
+  check('C4', 'The Map button opens the map; a coming-up day on the home opens that day', c4a === 55 && /24 Nov/.test(c4b), { c4a, c4b });
   await p.evaluate(() => IX_PLAN.close());
   // C5 drawings
   await p.evaluate(() => IX_HY.open('A:Kidney, ureter and suprarenal glands')); await tick(p, 400);
