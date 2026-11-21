@@ -13,7 +13,7 @@
   const E = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
   const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   let cnsMode = false;                               // for this visit only: the old CNS course is the home
-  const season = () => { const k = iso(new Date()); return !!P() && k >= "2026-11-18" && k <= "2027-01-14"; };
+  const season = () => !!P() && iso(new Date()) >= "2026-11-18";
   const active = () => season() && !cnsMode;   // v29.2: the CNS MCQ is over (an old CNS mock no longer takes the home); cnsMode is only reachable from code
   function set(id, html) { const el = document.getElementById(id); if (el && el.innerHTML !== html) el.innerHTML = html; }
   // the old CNS course (dated from Mon 21 Sep for the CNS MCQ, which is over) is a date-free lesson library during the
@@ -26,21 +26,23 @@
     if (lab && lab.textContent !== "📖 CNS lesson library · no dates, read any lesson") lab.textContent = "📖 CNS lesson library · no dates, read any lesson";
     document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sat 21 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
   }
-  function menu(plan, day, k, next, left) {
-    const rt = document.getElementById("railToday"), host = rt && rt.parentElement; if (!host) return;
+  function menu() {
+    const rt = document.getElementById("railToday"), host = rt && rt.parentElement;
+    if (!host) return;
     host.classList.add("ixXRailHost");
-    let m = host.querySelector(":scope > .ixXMenu");
-    if (!m) { host.insertAdjacentHTML("afterbegin", '<div class="ixXMenu"></div>'); m = host.querySelector(":scope > .ixXMenu"); }
-    const dn = day ? day.steps.filter((x) => P().state().done[x.id] === true).length : 0, tot = day ? day.steps.length : 0;
-    const week = plan.days.filter((x) => x.date >= k).slice(0, 7);
-    const fm = (x) => new Date(x + "T12:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
-    const html = '<div class="ixXMbrand">INTELLECTUALITY · <span>EXAM PLAN</span></div><div class="ixXMsub">GIT 206 + CNS written · day by day from Sat 21 Nov</div>' +
-      '<div class="ixXMstat"><span>Today</span><b>' + (day && !day.off && tot ? dn + " / " + tot + " steps" : k < P().START ? "starts Sat 21 Nov" : "nothing due") + "</b></div>" +
-      '<div class="ixXMstat"><span>Next exam</span><b>' + E(next.name) + " · " + left(next) + " days</b></div>" +
-      '<button type="button" class="primary wide" data-xm="today">▶ ' + (k < P().START ? "See Saturday's first day" : "Today's steps") + "</button>" +
-      '<div class="ixXRail"><b>Next days</b>' + week.map((x) => '<div class="ixXRd' + (x.date === k ? " now" : "") + '" data-xday="' + x.date + '"><span>' + E(fm(x.date)) + "</span>" + E(x.off ? "day off" : x.exam ? "🎯 " + x.exam.name : (x.title || "").replace(/ \(its lectures are still running\)/, "")) + "</div>").join("") + "</div>" +
-      '<div class="ixXMbtns"><button type="button" data-xm="map">🗺️ The whole plan, day by day</button><button type="button" data-xm="course">📚 The course: every lecture as a lesson</button><button type="button" data-xm="git">🫃 GIT 206 · MCQs, papers, written</button><button type="button" data-xm="hy">📘 High-yield sheets (every unit)</button><button type="button" data-xm="lib">📖 CNS lesson library (for the CNS written)</button><button type="button" data-xm="tutor">🧠 AI professor</button><button type="button" data-xm="life">⏱ My minutes and day off</button></div>';
-    if (m.innerHTML !== html) m.innerHTML = html;
+    if (host.querySelector(":scope > .ixXMenu")) return;
+    const items = [
+      ["home", "⌂", "Dashboard"],
+      ["map", "▤", "Schedule"],
+      ["course", "◫", "Lessons"],
+      ["git", "◎", "Question bank"],
+      ["hy", "◇", "High-yield sheets"],
+      ["lib", "◈", "CNS library"],
+      ["tutor", "✧", "Professor"],
+      ["life", "◷", "Study settings"],
+    ];
+    host.insertAdjacentHTML("afterbegin", '<div class="ixXMenu"><div class="ixXMheader"><button type="button" class="ixXMbrand" data-xm="home"><span class="ixXMmark" aria-hidden="true">✦</span><span>Intellectuality<small>NOVEMBER EXAM PLAN</small></span></button><button type="button" class="ixXmRailClose" data-xm="close" aria-label="Close navigation">×</button></div><nav class="ixXMbtns" aria-label="Course navigation">' +
+      items.map(([key, icon, label]) => '<button type="button" data-xm="' + key + '"' + (key === "home" ? ' aria-current="page"' : "") + '><span aria-hidden="true">' + icon + '</span>' + label + '</button>').join("") + '</nav></div>');
   }
   // v33: an app tab bar during the season: Today · Course · Questions · Professor · More
   function nav() {
@@ -48,7 +50,7 @@
     if (!season()) { if (n) n.remove(); return; }
     if (n) return;
     n = document.createElement("nav"); n.id = "ixNav"; n.className = "ixNav"; n.setAttribute("aria-label", "Main");
-    n.innerHTML = [["home", "◉", "Today"], ["course", "📚", "Course"], ["git", "🎯", "Questions"], ["tutor", "🧠", "Professor"], ["more", "☰", "More"]].map((x) => '<button type="button" data-xm="' + x[0] + '"><i>' + x[1] + "</i><span>" + x[2] + "</span></button>").join("");
+    n.innerHTML = [["home", "⌂", "Today"], ["course", "◫", "Lessons"], ["git", "◎", "Questions"], ["tutor", "✧", "Professor"], ["more", "☰", "More"]].map((x) => '<button type="button" data-xm="' + x[0] + '"><i aria-hidden="true">' + x[1] + "</i><span>" + x[2] + "</span></button>").join("");
     document.body.appendChild(n);
   }
   function paint() {
@@ -73,33 +75,30 @@
     set("modeChip", "EXAM SEASON");
     const pl = document.getElementById("player");
     if (pl && !pl.querySelector(":scope > .ixXHomeBox")) {
-      pl.innerHTML = '<div class="ixXHomeBox"><div class="ixXBody" id="ixXBody"></div><div class="ixXFoot"><button type="button" data-xhome="lib">📖 CNS lesson library (for the CNS written)</button></div></div>';
+      pl.innerHTML = '<div class="ixXHomeBox"><div class="ixXBody" id="ixXBody"></div></div>';
     }
     const b = document.getElementById("ixXBody"); if (b) P().mount(b);
     // top bar and side rail
     const top = document.getElementById("courseTopbar");
     if (top && !top.querySelector(".ixXTop")) top.insertAdjacentHTML("beforeend", '<span class="ixXTop"></span>');
     const tt = top && top.querySelector(".ixXTop"); if (tt) tt.textContent = "📅 " + (pre ? "Starts Sat 21 Nov" : (day ? day.phase : "")) + " · " + left(next) + "d to " + next.name;
-    try { menu(plan, day, k, next, left); } catch (e) { console.warn("[home menu]", e); }
-    if (document.title.indexOf("EXAM PLAN") < 0) document.title = "INTELLECTUALITY · EXAM PLAN (GIT 206 + CNS written)";
-    const rail = null;
-    if (rail) {
-      let r = rail.querySelector(".ixXRail"); if (!r) { rail.insertAdjacentHTML("beforeend", '<div class="ixXRail"></div>'); r = rail.querySelector(".ixXRail"); }
-      const week = plan.days.filter((x) => x.date >= k).slice(0, 8);
-      const html = "<b>Next days</b>" + week.map((x) => '<div class="ixXRd' + (x.date === k ? " now" : "") + '" data-xday="' + x.date + '"><span>' + E(new Date(x.date + "T12:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })) + "</span>" + E(x.off ? "day off" : x.exam ? "🎯 " + x.exam.name : (x.title || "").replace(/ \(its lectures are still running\)/, "")) + "</div>").join("");
-      if (r.innerHTML !== html) r.innerHTML = html;
-    }
+    try { menu(); } catch (e) { console.warn("[home menu]", e); }
+    document.title = "Intellectuality · NOVEMBER EXAM PLAN";
     document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sat 21 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
   }
   // the map buttons open the exam plan during the season (the old map is still behind "Open the CNS course")
   document.addEventListener("click", (e) => {
     const t = e.target.closest && e.target.closest("[data-xhome], [data-ixmp-open], [data-xday], [data-xm]");
     if (!t) return;
-    const shut = () => { try { if (typeof toggleRail === "function") toggleRail(false); else { const sc = document.getElementById("railScrim"); if (sc) sc.click(); } } catch (er) {} };
+    const toggleRail = window.INTELLECTUALITY_TOGGLE_RAIL;
     const xm = t.dataset.xm || (t.dataset.xhome === "lib" ? "lib" : "");
-    if (xm) { e.preventDefault(); shut();
-      if (xm === "home") { try { window.IX_LESSON && IX_LESSON.close(); window.IX_HY && IX_HY.close(); window.IX_GIT && IX_GIT.close(); window.IX_TUTOR && IX_TUTOR.close(); P().close(); window.IX_SESSION && IX_SESSION.hide(); } catch (er) {} if (cnsMode) { cnsMode = false; if (typeof render === "function") render(); } window.scrollTo({ top: 0, behavior: "smooth" }); paint(); }
-      else if (xm === "more") { try { if (typeof toggleRail === "function") toggleRail(true); } catch (er) {} }
+    if (xm) { e.preventDefault(); if (toggleRail) toggleRail(xm === "more");
+      if (xm === "home") { try { window.IX_LESSON && IX_LESSON.close(); window.IX_HY && IX_HY.close(); window.IX_GIT && IX_GIT.close(); window.IX_TUTOR && IX_TUTOR.close(); P().close(); window.IX_SESSION && IX_SESSION.hide(); } catch (er) {} if (cnsMode) { cnsMode = false; if (typeof render === "function") render(); } window.scrollTo({ top: 0, behavior: "instant" }); paint(); }
+      else if (xm === "more") {
+        const close = document.querySelector(".ixXmRailClose");
+        if (close) close.focus({ preventScroll: true });
+      }
+      else if (xm === "close") document.querySelector("#ixNav [data-xm=more]")?.focus();
       else if (xm === "today") { const n = P().nextStep && P().nextStep(); if (n) P().runStep(n); else P().openDay(P().START > iso(new Date()) ? P().START : iso(new Date())); }
       else if (xm === "map") P().openMap();
       else if (xm === "course") window.IX_LESSON && IX_LESSON.index();

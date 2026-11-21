@@ -22,12 +22,12 @@
   // what to do, in plain words, for every kind of step
   const HOW = {
     review: ["The professor shows what is due. Answer each one out loud first, then check.", "Rate yourself honestly. When the list ends, you are done."],
-    lesson: ["This lesson replaces the lecture. Read it one part at a time and answer each 🤔 question in your head before you reveal it.", "Stuck on a part? Tap 🤔 Explain it another way. At the end tap ✓ I understand it."],
+    lesson: ["Read one part at a time and answer the reasoning question before revealing it.", "Study the labelled diagrams. At the end, tap I understand it."],
     learn: ["Read the sheet top to bottom: story → whiteboard → tables → what examiners ask.", "Then tap ▶ Learn it with the professor for the 6 short steps. Draw the whiteboard on paper."],
     mcq: ["10 past-paper questions on this unit.", "Choose how sure you are before you answer. Read every wrong answer's why."],
     blind: ["AI off. New questions, answer from memory only.", "This is the honest check: no hints, no peeking."],
     blindmix: ["AI off. Mixed questions from everything lectured so far.", "Answer from memory only."],
-    written: ["Blank page, 15 minutes. Write the answer (type it or photograph your paper).", "Three examiners grade it and show what was missing."],
+    written: ["Write from a blank page before you look anything up.", "Check the reference answer, or use the Professor for feedback if connected."],
     notes: ["2 minutes: what did the doctors stress in today's lectures?", "Type or dictate it; the professor uses it."],
     outline: ["3-minute outlines of topics you wrote before: headings and key points only.", "The professor checks what you forgot."],
     mock: ["Full past paper, timed, AI off. Phone on silent.", "Do it in one sitting; the review comes after."],
@@ -95,36 +95,57 @@
     } catch (e) {}
   }
   function showBar() {
-    shell(); const all = order(), s = current(), ss = load();
-    if (!s || !ss || !ss.open || ss.date !== iso(new Date())) { bar.classList.remove("on"); document.documentElement.classList.remove("ixSbarOn"); return; }
+    shell();
+    const ss = load();
+    if (!ss || !ss.open || ss.paused || ss.date !== iso(new Date())) return hideBar();
+    const all = order(), s = current();
+    if (!s || s.id !== ss.open.id) return hideBar();
     const i = idx(all, s), left = remaining(ss, s);
-    const html = '<button type="button" class="ixSbI" data-s="screen" aria-label="Back to today\'s session"><small>Step ' + (i + 1) + "/" + all.length + "</small><b>" + E(s.label) + "</b></button>" +
-      '<span class="ixSbT' + (left < 0 ? " over" : "") + '">' + mmss(left) + "</span>" + '<button type="button" class="ixSbD" data-s="done">✓ Done</button>';
-    if (bar.innerHTML !== html) bar.innerHTML = html;
+    const position = s.id + "/" + i + "/" + all.length;
+    if (bar.dataset.position !== position) {
+      bar.innerHTML = '<button type="button" class="ixSbI" data-s="screen" aria-label="Back to today\'s session"><small>Step ' + (i + 1) + "/" + all.length + "</small><b>" + E(s.label) + "</b></button>" +
+        '<span class="ixSbT"></span><button type="button" class="ixSbD" data-s="done">✓ Done</button>';
+      bar.dataset.position = position;
+    }
+    const time = bar.querySelector(".ixSbT");
+    time.textContent = mmss(left);
+    time.classList.toggle("over", left < 0);
     bar.classList.add("on"); document.documentElement.classList.add("ixSbarOn");
   }
+  function hideBar() { bar.classList.remove("on"); document.documentElement.classList.remove("ixSbarOn"); }
   function closeOverlays() { try { window.IX_LESSON && IX_LESSON.close(); } catch (e) {} try { window.IX_HY && IX_HY.close(); } catch (e) {} try { window.IX_GIT && IX_GIT.close(); } catch (e) {} try { window.IX_TUTOR && IX_TUTOR.close(); } catch (e) {} try { P().close(); } catch (e) {} try { window.IX_WRITTEN && IX_WRITTEN.close && IX_WRITTEN.close(); } catch (e) {} }
   function hide() { if (root) root.classList.remove("on"); document.documentElement.classList.remove("ixSon"); }
   function onClick(e) {
     const b = e.target.closest("[data-s]"); if (!b) return;
     const a = b.dataset.s, s = current(), k = iso(new Date());
     let ss = load(); if (!ss || ss.date !== k) ss = { date: k, skip: [] };
-    if (a === "close") { hide(); keep(ss.open || (ss.skip && ss.skip.length) ? ss : null); repaint(); return; }
+    if (a === "close") { hide(); ss.paused = Date.now(); keep(ss.open || (ss.skip && ss.skip.length) ? ss : null); showBar(); repaint(); return; }
     if (a === "screen") { closeOverlays(); screen(); return; }
     if (!s) return screen();
     if (a === "open") { ss.open = { id: s.id, at: ss.open && ss.open.id === s.id ? ss.open.at : Date.now() }; keep(ss); hide(); P().runStep(s); showBar(); return; }
     if (a === "done") { P().state().done[s.id] = true; persist(); ss.open = null; keep(ss); closeOverlays(); screen(); repaint(); return; }
     if (a === "skip") { ss.skip = (ss.skip || []).filter((x) => x !== s.id).concat([s.id]); ss.open = null; keep(ss); screen(); return; }
   }
-  function repaint() { try { if (typeof window.render === "function") window.render(); } catch (e) {} try { window.IX_HOME && IX_HOME.paint(); } catch (e) {} }
-  function start() { if (!P()) return; const k = iso(new Date()), ss = load(); if (!ss || ss.date !== k) keep({ date: k, skip: [] }); closeOverlays(); screen(); }
+  function repaint() { if (typeof window.render === "function") window.render(); }
+  function start() {
+    if (!P()) return;
+    const k = iso(new Date());
+    if (k < P().START) return P().openDay(P().START);
+    const saved = load();
+    const ss = saved && saved.date === k ? saved : { date: k, skip: [] };
+    if (ss.paused && ss.open) ss.open.at += Date.now() - ss.paused;
+    delete ss.paused;
+    keep(ss);
+    closeOverlays();
+    screen();
+  }
 
   // the home's big ▶ button starts the session (a step's own Start still opens that step alone)
   document.addEventListener("click", (e) => {
     const g = e.target.closest && e.target.closest(".ixZgo, [data-xm='today']");
     if (!g || !P()) return;
     e.preventDefault(); e.stopImmediatePropagation();
-    try { if (typeof toggleRail === "function") toggleRail(false); } catch (er) {}
+    window.INTELLECTUALITY_TOGGLE_RAIL?.(false);
     start();
   }, true);
   // a tick in the plan's own lists keeps the bar honest

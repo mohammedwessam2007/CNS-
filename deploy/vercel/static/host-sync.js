@@ -93,11 +93,17 @@
   }
   function learnKey(s) {
     if (!s) return "";
-    return [s.day || 0, n(s.segments), n(s.answers), n(s.errors), n(s.reviews), a(s.doneDays), a(s.mockHistory), n(s.qbank && s.qbank.results), s.xp || 0, a(s.v12 && s.v12.evidence)].join(".");
+    var core = [s.day || 0, n(s.segments), n(s.answers), n(s.errors), n(s.reviews), a(s.doneDays), a(s.mockHistory), n(s.qbank && s.qbank.results), s.xp || 0, a(s.v12 && s.v12.evidence)].join(".");
+    var steps = completedPlanSteps(s);
+    return steps.length ? core + "|" + steps.join(",") : core;
+  }
+  function completedPlanSteps(s) {
+    var done = s.examPlan && s.examPlan.done || {};
+    return Object.keys(done).filter(function (id) { return done[id] === true; }).sort();
   }
   function learnMass(s) {
     if (!s) return 0;
-    return n(s.segments) * 3 + n(s.answers) * 2 + n(s.errors) + n(s.reviews) + a(s.doneDays) * 10 + a(s.mockHistory) * 5 + n(s.qbank && s.qbank.results) * 2 + (s.xp || 0) / 10 + a(s.v12 && s.v12.evidence);
+    return n(s.segments) * 3 + n(s.answers) * 2 + n(s.errors) + n(s.reviews) + a(s.doneDays) * 10 + a(s.mockHistory) * 5 + n(s.qbank && s.qbank.results) * 2 + (s.xp || 0) / 10 + a(s.v12 && s.v12.evidence) + completedPlanSteps(s).length * 3;
   }
   function localState() {
     return jget(STATE_KEY);
@@ -331,7 +337,7 @@
     if (method === "GET") {
       // The app's startup read. The decision is made here (by version and learning); the app only
       // ever sees a timestamp that makes it keep its copy and save.
-      return nativeFetch("/api/state", { method: "GET", headers: headers(), cache: "no-store" }).then(function (r) {
+      return nativeFetch("/api/state", { method: "GET", headers: headers({ "x-ix-bootstrap": "1" }), cache: "no-store" }).then(function (r) {
         return r
           .clone()
           .json()
@@ -339,8 +345,10 @@
             return null;
           })
           .then(function (j) {
-            if (j && j.error === "cloud_not_configured") {
+            if (j && (j.cloudAvailable === false || j.error === "cloud_not_configured")) {
               cloudOff = true;
+              var link = document.getElementById("ixSyncLink");
+              if (link) link.remove();
               [60, 400].forEach(function (ms) {
                 setTimeout(function () {
                   label("☁ SAVED ON THIS DEVICE");
@@ -402,6 +410,13 @@
     "click",
     function (e) {
       var t = e.target && e.target.closest ? e.target.closest("#cloudBtn") : null;
+      if (t && cloudOff) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var backup = document.getElementById("shareProgressBtn");
+        if (backup) backup.click();
+        return;
+      }
       if (t)
         setTimeout(function () {
           if (held) release();
@@ -414,7 +429,7 @@
   // A small, calm entry point to the sync-code page, under the cloud button.
   function addSyncLink() {
     var b = document.getElementById("cloudBtn");
-    if (!b || document.getElementById("ixSyncLink")) return;
+    if (!b || cloudOff || document.getElementById("ixSyncLink")) return;
     var el = document.createElement("a");
     el.id = "ixSyncLink";
     el.href = "/login?next=/";

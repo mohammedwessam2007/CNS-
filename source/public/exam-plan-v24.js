@@ -252,6 +252,15 @@
   }
   function today() { const P = build(), k = iso(new Date()), raw = P.days.find((d) => d.date === k) || P.days.find((d) => d.date > k); return { P, day: paced(P, raw, k).day }; }
   function nextStep() { const { day } = today(); if (!day || day.off || day.date !== iso(new Date())) return null; /* nothing early: before 21 Nov ▶ Today stays free */ const s = day.steps.find((x) => !st().done[x.id] && x.kind !== "rest"); return s ? { day, step: s } : null; }
+  function completeLesson(key) {
+    const { day } = today();
+    if (!day || day.date !== iso(new Date())) return;
+    const match = day.steps.find((s) => s.kind === "lesson" && s.key === key);
+    if (!match) return;
+    st().done[match.id] = true;
+    persist();
+    if (window.IX_HOME && IX_HOME.active()) IX_HOME.paint();
+  }
 
   /* ── running a step ── */
   function unitById(id) { return gitUnits().find((u) => u.id === id); }
@@ -264,7 +273,14 @@
     if (s.kind === "review") { close(); t.open(); t.ask("Start my day: review what is due.", "review"); }
     else if (s.kind === "learn") { close(); override("GIT 206 · " + u.name, ctx); if (window.IX_HY) IX_HY.open(u.id); else { t.open(); t.ask("Teach me " + u.name + " with the full loop, one step at a time.", "loop"); } }
     else if (s.kind === "mcq") { close(); override("GIT 206 · " + u.name, ctx); if (!G().startCustom(u.name, u.pred, 10)) { t.open(); t.ask("Quiz me on " + u.name + ".", "secquiz", ctx); } }
-    else if (s.kind === "blind" || s.kind === "blindmix") { close(); override("GIT 206 · " + (u ? u.name : weakest()), ctx || "Chapter: " + weakest()); t.openBlind(); }
+    else if (s.kind === "blind" || s.kind === "blindmix") {
+      close();
+      override("GIT 206 · " + (u ? u.name : weakest()), ctx || "Chapter: " + weakest());
+      const coreLesson = u && window.IX_LESSON && IX_LESSON.lessonsOf(u.id).find((l) => (window.IX_NOVEMBER_LESSONS || {})[l.key]);
+      if (coreLesson) t.openBlind(IX_NOVEMBER_LESSONS[coreLesson.key].check);
+      else if (t.hasKey()) t.openBlind();
+      else if (!G().startCustom("Past-paper practice · " + (u ? u.name : weakest()), u ? u.pred : () => true, 6)) G().open("mcq");
+    }
     else if (s.kind === "written") { close(); override("GIT 206 written", "Written question: " + s.q); t.openEssay(s.q); }
     else if (s.kind === "mock") { close(); G().mockPaper(s.src); }
     else if (s.kind === "misses" || s.kind === "weak") { close(); G().startCustom("Misses first, mixed", () => true, 10) || G().open("mcq"); }
@@ -398,66 +414,94 @@
     body.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); render(target); if (target && typeof window.render === "function") window.render(); }));
   }
 
-  /* v30 · the home screen, built for a phone: one hero card (where you are + the next step), three countdown chips,
-   * today's checklist, the next days, two buttons; the planning details fold away */
   function home(el) {
-    const { P, day } = today(), k = iso(new Date()), pre = k < START;
-    const left = (x) => Math.round((at(x.date) - at(k)) / DAY);
-    // a review with nothing due yet (no memory cards, no outlines) is shown as done instead of being the first thing to do
-    const nothingDue = (() => { try { return !(T() && T().dueCards && T().dueCards().length) && !(window.IX_WRITTEN && IX_WRITTEN.due && IX_WRITTEN.due().length); } catch (e) { return false; } })();
+    const { P, day } = today(), key = iso(new Date()), pre = key < START;
+    const dates = (date, options) => at(date).toLocaleDateString("en-GB", options);
+    const dayCount = P.days.filter((d) => !d.off && !d.exam);
+    const dayNumber = day ? dayCount.filter((d) => d.date <= day.date).length : 0;
+    const clean = (title) => String(title || "").replace(/ \(its lectures are still running\)/g, "");
+    const subject = /^(Anatomy|Physiology|Histology|Biochemistry) · /.exec(day && day.title || "");
+    const name = day ? day.exam ? day.exam.name : day.off ? "Day off" : clean(day.title).replace(subject ? subject[0] : /^$/, "") : "Course complete";
+    const cns = day && day.phase === "CNS written";
+    const steps = day ? day.steps.filter((step) => step.kind !== "rest") : [];
+    const nothingDue = !((T() && T().dueCards && T().dueCards().length) || (window.IX_WRITTEN && IX_WRITTEN.due && IX_WRITTEN.due().length));
     const empty = (s) => s.kind === "review" && nothingDue && st().done[s.id] !== true;
     const done = (s) => st().done[s.id] === true || empty(s);
-    const lab = (s) => (empty(s) ? "Reviews: nothing due yet" : s.label);
-    const steps = day ? day.steps.filter((s) => s.kind !== "rest") : [];
-    const nd = steps.filter(done).length, mins = steps.reduce((t, s) => t + s.min, 0), minsLeft = steps.filter((s) => !done(s)).reduce((t, s) => t + s.min, 0);
-    const nextS = steps.find((s) => !done(s) && s.kind !== "college");
-    const dayNo = day ? P.days.filter((x) => x.date <= day.date && !x.off && !x.exam).length : 0, dayAll = P.days.filter((x) => !x.off && !x.exam).length;
-    const subj = day && day.title && /^(Anatomy|Physiology|Histology|Biochemistry) · /.test(day.title) ? day.title.split(" · ")[0] : "";
-    const name = day ? (day.exam ? day.exam.name + " today" : day.off ? "Day off" : subj ? day.title.slice(subj.length + 3) : day.title || "") : "All exams done";
-    const week = P.days.filter((x) => x.date > (day ? day.date : k)).slice(0, 6);
-    const clean = (t) => String(t || "").replace(/ \(its lectures are still running\)/, "");
-    const short = (d) => at(d).toLocaleDateString("en-GB", { weekday: "short" }), dnum = (d) => at(d).getDate(), mon = (d) => at(d).toLocaleDateString("en-GB", { month: "short" });
-    const COL = { Anatomy: "#ff5d8f", Physiology: "#22d3ee", Histology: "#a78bfa", Biochemistry: "#fbbf24" };
-    const sc = (t) => { const m = /^(Anatomy|Physiology|Histology|Biochemistry)/.exec(t || ""); return m ? COL[m[1]] : "#7dd3fc"; };
-    const hr = new Date().getHours(), greet = hr < 12 ? "Good morning" : hr < 18 ? "Good afternoon" : "Good evening";
-    const pct = steps.length ? nd / steps.length : 0, R = 52, C = 2 * Math.PI * R;
-    const started = steps.some((x) => st().done[x.id] === true);
-    const icon = { review: "🔁", lesson: "📖", learn: "📘", mcq: "🎯", blind: "🙈", blindmix: "🙈", written: "✍️", mock: "⏱", misses: "🩹", weak: "🩹", traps: "🪤", week: "📅", examday: "🎓", sheets: "🗂", outline: "⚡", wmock: "🧪", cns: "🧠", spot: "🔬", college: "🏫", notes: "📝" };
-    const noEmo = (t) => String(t).replace(/^[\u{1F300}-\u{1FAFF}\u2600-\u27BF\uFE0F\s]+/u, "");
-    const clock = (m) => (m >= 60 ? Math.floor(m / 60) + "h " + (m % 60 ? (m % 60) + "m" : "") : m + " min");
+    const actionable = steps.filter((step) => !empty(step));
+    const completed = actionable.filter(done).length;
+    const mins = steps.filter((s) => !done(s)).reduce((total, s) => total + s.min, 0);
+    const next = steps.find((s) => !done(s) && s.kind !== "college");
+    const started = steps.some((s) => Boolean(st().done[s.id]));
+    const progress = actionable.length ? Math.round(completed / actionable.length * 100) : 0;
+    const types = { review: "Review", lesson: "Lesson", learn: "Study", mcq: "Practice", blind: "Knowledge check", blindmix: "Knowledge check", written: "Written practice", mock: "Mock exam", wmock: "Written mock", outline: "Recall", cns: "Lesson", spot: "Spot drill", college: "At college" };
+    const label = (s) => String(s.label).replace(/^[\u{1F300}-\u{1FAFF}\u2600-\u27BF\uFE0F\s]+/u, "")
+      .replace(/^(Lesson|Blind check \(new questions, AI off\)|Write from a blank page): /, "");
+    const week = P.days.filter((d) => d.date > (day ? day.date : key)).slice(0, 6);
+    const examName = ["Multiple choice", "Written exam", "Written exam"];
+    const courses = ["DIG 206", "DIG 206", "NEU 205"];
+    const exams = EXAMS.map((exam, index) => {
+      const left = Math.round((at(exam.date) - at(key)) / DAY);
+      const countdown = left > 0 ? '<strong>' + left + '</strong><span>days</span>' : '<b>' + (!left ? "Today" : "Past") + '</b>';
+      return '<button type="button" class="ixQexam" data-day="' + exam.date + '"><span><small>' + courses[index] + '</small><b>' + examName[index] + '</b><time datetime="' + exam.date + '">' + E(nice(exam.date)) + '</time></span><span class="ixQcount">' + countdown + '</span></button>';
+    }).join("");
+    const checklist = steps.map((s) => {
+      const complete = done(s), current = next && s.id === next.id;
+      return '<div class="ixPstep' + (complete ? " done" : "") + (current ? " next" : "") + '">' +
+        '<label class="ixZchk"><input type="checkbox" data-done="' + E(s.id) + '" aria-label="Mark ' + E(label(s)) + ' complete"' + (complete ? " checked" : "") + (empty(s) ? " disabled" : "") + '><span aria-hidden="true">' + (complete ? "✓" : "") + '</span></label>' +
+        '<div><span class="ixQkind">' + E(types[s.kind] || "Study") + (s.min && !empty(s) ? " · " + s.min + " min" : "") + '</span><b>' + E(empty(s) ? "No reviews due" : label(s)) + '</b></div>' +
+        (s.kind !== "college" && !empty(s) ? '<button type="button" data-go="' + E(s.id) + '" aria-label="' + (complete ? "Repeat " : "Open ") + E(label(s)) + '">' + (complete ? "Again" : "Open") + ' <span aria-hidden="true">↗</span></button>' : "") + '</div>';
+    }).join("");
+    const coming = week.map((d) => {
+      const match = /^(Anatomy|Physiology|Histology|Biochemistry) · /.exec(d.title || "");
+      return '<button type="button" class="ixQdate" data-day="' + d.date + '"><time datetime="' + d.date + '">' + E(nice(d.date)) + '</time><span><small>' + E(match ? match[1] : d.phase) + '</small><b>' + E(d.off ? "Day off" : d.exam ? d.exam.name : clean(d.title).replace(match ? match[0] : /^$/, "")) + '</b></span><span aria-hidden="true">›</span></button>';
+    }).join("");
+    const focus = el.contains(document.activeElement) ? document.activeElement.dataset.done : null;
+    const detailsOpen = Boolean(el.querySelector(".ixZmore[open]"));
     el.innerHTML =
-      '<div class="ixQ" style="--sub:' + sc(day && day.title) + '">' +
-      '<header class="ixQtop"><div><small>' + E(at(day ? day.date : k).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" })) + " · " + (pre ? "starts Saturday" : greet) + "</small><b>" + (day && !day.off && !day.exam ? "Day " + dayNo + "<i> of " + dayAll + "</i>" : day && day.off ? "Day off" : "Exam day") + '</b></div><button type="button" class="ixQpill" data-life>⏱ ' + P.mins + " min/day</button></header>" +
-      '<section class="ixZhero ixQhero">' +
-        '<div class="ixQglow"></div>' +
-        '<div class="ixQrow">' +
-          (steps.length ? '<div class="ixQring"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="ixQg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--sub)"/><stop offset="1" stop-color="#fde68a"/></linearGradient></defs><circle cx="60" cy="60" r="' + R + '" class="ixQtrack"/><circle cx="60" cy="60" r="' + R + '" class="ixQarc" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - pct)).toFixed(1) + '"/></svg><div class="ixQin"><b>' + nd + "<i>/" + steps.length + "</i></b><small>steps</small></div></div>" : '<div class="ixQring ixQring0"><div class="ixQin"><b>' + (day && day.off ? "🌿" : "🎯") + "</b></div></div>") +
-          '<div class="ixQhead">' + (subj ? '<span class="ixZsubj ixQsub">' + E(subj) + "</span>" : day ? '<span class="ixZsubj ixQsub">' + E(day.phase) + "</span>" : "") +
-            '<h2 class="ixZname">' + E(clean(name)) + "</h2>" +
-            (day && day.off ? '<p class="ixZcalm">Nothing to do. Live. 🌿</p>' : day && day.exam ? '<p class="ixZcalm">Protocol, breakfast, go. Good luck, inshallah.</p>' : steps.length ? '<div class="ixZbarT"><span>' + nd + " of " + steps.length + " done</span><span>" + (nd === steps.length ? "Done for today 🌿" : "~" + clock(minsLeft) + " left") + "</span></div>" : "") +
-          "</div>" +
-        "</div>" +
-        (nextS ? '<button type="button" class="ixZgo ixQgo" data-go="' + E(nextS.id) + '"><span class="ixQgoI">' + (icon[nextS.kind] || "▶") + '</span><span class="ixQgoT"><small>' + (pre ? "Saturday's session · try it now" : started ? "Continue today's session" : "Start today's session") + " · " + (steps.length - nd) + " step" + (steps.length - nd > 1 ? "s" : "") + "</small>" + E(noEmo(nextS.label)) + '</span><span class="ixQgoA">→</span></button>' : "") +
-      "</section>" +
-      (day && day.behind ? '<div class="ixZnote">↩ ' + day.behind + " step" + (day.behind > 1 ? "s" : "") + " from earlier days are in today's list. Nothing is lost.</div>" : "") +
-      '<div class="ixZexams">' + EXAMS.map((x, i) => '<div class="ixZex ixQex' + (left(x) <= 7 ? " soon" : "") + '" style="--d:' + i + '"><b>' + Math.max(0, left(x)) + "</b><span>days to</span><em>" + E(x.name) + "</em><small>" + E(nice(x.date)) + "</small></div>").join("") + "</div>" +
-      (steps.length ? '<h3 class="ixZh">' + (pre ? "Saturday's path" : "Today's path") + " <small>" + clock(mins) + " of your " + clock(P.mins) + "</small></h3>" +
-        '<div class="ixPsteps ixZsteps ixQpath">' + steps.map((s, i) => '<div class="ixPstep' + (done(s) ? " done" : "") + (nextS && s.id === nextS.id ? " next" : "") + '" style="--d:' + i + '"><label class="ixZchk"><input type="checkbox" data-done="' + E(s.id) + '"' + (done(s) ? " checked" : "") + "><span>" + (done(s) ? "✓" : icon[s.kind] || i + 1) + "</span></label><div><b>" + E(noEmo(lab(s))) + "</b><span>" + (empty(s) ? "✓ nothing to review today" : s.min ? s.min + " min" : "at college") + "</span></div>" + (s.kind !== "college" && !empty(s) ? '<button type="button" data-go="' + E(s.id) + '">' + (done(s) ? "Again" : "Start") + "</button>" : "") + "</div>").join("") + "</div>" : "") +
-      '<h3 class="ixZh">Coming up <small>swipe →</small></h3><div class="ixZweek ixQweek">' + week.map((x) => '<button type="button" class="ixZday' + (x.off ? " off" : x.exam ? " exam" : "") + '" data-day="' + x.date + '" style="--c:' + (x.off ? "#475569" : x.exam ? "#fbbf24" : sc(x.title)) + '"><span class="ixZd"><small>' + E(short(x.date)) + "</small><b>" + dnum(x.date) + "</b><small>" + E(mon(x.date)) + '</small></span><span class="ixZt">' + E(x.off ? "Day off 🌿" : x.exam ? "🎯 " + x.exam.name : clean(x.title)) + "</span></button>").join("") + "</div>" +
-      '<div class="ixZbtns ixQbento"><button type="button" data-course><i>📚</i><b>The course</b><small>every lecture as a lesson</small></button><button type="button" data-openmap><i>🗺️</i><b>Whole plan</b><small>day by day to 14 Jan</small></button><button type="button" data-git><i>🎯</i><b>Questions</b><small>641 past-paper MCQs</small></button><button type="button" data-hy><i>📘</i><b>Sheets</b><small>high-yield per unit</small></button><button type="button" data-life><i>⏱</i><b>My minutes</b><small>' + clock(P.mins) + ' a day</small></button></div>' +
-      '<details class="ixZmore"><summary>Plan details (readiness, what does not fit)</summary>' + readinessHTML() +
-        (P.dropped.length ? "<p>GIT units that do not fit your minutes: " + P.dropped.map((u) => E(u.name)).join(", ") + ".</p>" : "<p>Every GIT unit fits (" + P.unitsFit + " units).</p>") +
-        (P.wDropped.length ? "<p>GIT written topics after the top ones: " + P.wDropped.slice(0, 8).map((w) => E(w.topic)).join(", ") + (P.wDropped.length > 8 ? "…" : "") + "</p>" : "") +
-        "<p>CNS written: chapters are ranked by MCQ weight until the CNS previous written questions are added.</p></details></div>";
-    try { document.documentElement.style.setProperty("--room", sc(day && day.title)); } catch (e) {}
-    el.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => { const s = day.steps.find((x) => x.id === b.dataset.go); if (s) runStep(s); }));
-    el.querySelectorAll("[data-day]").forEach((b) => (b.onclick = () => openDay(b.dataset.day)));
-    el.querySelector("[data-openmap]").onclick = openMap;
-    el.querySelectorAll("[data-life]").forEach((b) => (b.onclick = () => T() && T().openLife && T().openLife()));
+      '<div class="ixQ">' +
+        '<header class="ixQtop"><div><time datetime="' + E(key) + '">' + E(dates(key, { weekday: "long", day: "numeric", month: "long" })) + '</time><h1>Study dashboard</h1></div><button type="button" class="ixQpill" data-life>' + P.mins + ' min / day <span aria-hidden="true">↗</span></button></header>' +
+        '<section class="ixZhero ixQhero' + (cns ? " ixQheroCns" : "") + '" aria-labelledby="ixQtitle">' +
+          '<div class="ixQhead"><p class="ixQeyebrow">' + (cns ? "NEU 205" : "DIG 206") + (subject ? " <span></span> " + E(subject[1]) : "") + '</p>' +
+          '<h2 class="ixZname" id="ixQtitle">' + E(name || "Study session") + '</h2>' +
+          '<p class="ixQlead">' + (pre ? "Your first session opens Saturday, 21 November." : !day ? "Revisit any lesson, question set, or study day." : day.off ? "Your next study day is in the schedule below." : day.exam ? "Open your exam-day plan." : "Day " + dayNumber + " of " + dayCount.length + (mins ? " · " + mins + " min planned" : "")) + '</p>' +
+          (next ? '<button type="button" class="ixZgo ixQgo" data-go="' + E(next.id) + '">' + (pre ? "Preview Day 1" : started ? "Continue session" : "Start session") + '<span aria-hidden="true">↗</span></button>' : '<button type="button" class="ixQgo" data-openmap>Open schedule <span aria-hidden="true">↗</span></button>') + '</div>' +
+          (actionable.length && !pre ? '<div class="ixQprogress"><div><span>Session progress</span><b>' + progress + '%</b></div><progress value="' + completed + '" max="' + actionable.length + '" aria-label="Session progress"></progress><div class="ixZbarT">' + completed + ' of ' + actionable.length + ' steps · ' + (completed === actionable.length ? "Done for today" : mins + " min left") + '</div></div>' : "") +
+        '</section>' +
+        '<div class="ixQwork"><section class="ixQpath" aria-labelledby="ixQpathTitle"><div class="ixQheading"><h2 id="ixQpathTitle">' + (pre ? "Day 1 plan" : "Today’s plan") + '</h2><span>' + (actionable.length ? actionable.length + " steps" : "No steps due") + '</span></div>' +
+          (checklist ? '<div class="ixPsteps ixZsteps">' + checklist + '</div>' : "") +
+          (day && day.behind ? '<p class="ixQnote">Includes ' + day.behind + ' unfinished ' + (day.behind === 1 ? "step" : "steps") + ' from earlier November course dates.</p>' : "") +
+        '</section><section class="ixQexams" aria-labelledby="ixQexamsTitle"><div class="ixQheading"><h2 id="ixQexamsTitle">Exams</h2></div><div>' + exams + '</div></section></div>' +
+        (coming ? '<section class="ixQcalendar" aria-labelledby="ixQcalendarTitle"><div class="ixQheading"><h2 id="ixQcalendarTitle">Coming up</h2><button type="button" class="ixQtext" data-openmap>Full schedule <span aria-hidden="true">↗</span></button></div><div class="ixQdates">' + coming + '</div></section>' : "") +
+        '<section class="ixQtools" aria-labelledby="ixQtoolsTitle"><div class="ixQheading"><h2 id="ixQtoolsTitle">Study resources</h2></div><div class="ixZbtns ixQbento">' +
+          '<button type="button" data-course><b>Lesson library</b><small>' + (window.IX_LESSON ? IX_LESSON.all().length + " DIG 206 lessons" : "DIG 206") + '</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-git><b>Question bank</b><small>' + GB().mcq.length + ' past-paper questions</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-hy><b>High-yield sheets</b><small>Diagrams and exam references</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-xhome="lib"><b>CNS library</b><small>NEU 205 written preparation</small><span aria-hidden="true">↗</span></button></div></section>' +
+        '<details class="ixZmore"' + (detailsOpen ? " open" : "") + '><summary>Readiness and plan coverage</summary>' + readinessHTML() +
+          (P.dropped.length ? "<p>Units outside your study budget: " + P.dropped.map((u) => E(u.name)).join(", ") + ".</p>" : "<p>All " + P.unitsFit + " DIG 206 units fit your budget.</p>") +
+        '</details></div>';
+    el.querySelectorAll("[data-go]").forEach((button) => {
+      button.onclick = () => {
+        if (pre) return openDay(START);
+        const selected = steps.find((step) => step.id === button.dataset.go);
+        if (selected) runStep(selected);
+      };
+    });
+    el.querySelectorAll("[data-day]").forEach((button) => { button.onclick = () => openDay(button.dataset.day); });
+    el.querySelectorAll("[data-openmap]").forEach((button) => { button.onclick = openMap; });
+    el.querySelector("[data-life]").onclick = () => T() && T().openLife();
     el.querySelector("[data-course]").onclick = () => window.IX_LESSON && IX_LESSON.index();
     el.querySelector("[data-hy]").onclick = () => window.IX_HY && IX_HY.list();
     el.querySelector("[data-git]").onclick = () => G() && G().open();
-    el.querySelectorAll("[data-done]").forEach((c) => (c.onchange = () => { st().done[c.dataset.done] = c.checked ? true : "started"; persist(); home(el); if (typeof window.render === "function") window.render(); }));
+    el.querySelectorAll("[data-done]").forEach((control) => {
+      control.onchange = () => {
+        st().done[control.dataset.done] = control.checked ? true : "started";
+        persist();
+        if (typeof window.render === "function" && window.IX_HOME && IX_HOME.active()) window.render();
+        else home(el);
+      };
+      if (control.dataset.done === focus) control.focus({ preventScroll: true });
+    });
   }
 
   function install() {
@@ -467,5 +511,5 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1800);
-  window.IX_PLAN = { open, close, build, nextStep, runStep, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT, mount: (el) => home(el), renderInto: (el) => render(el), today, START, openMap, openDay, owed: () => { const P = build(); return owed(P, iso(new Date())); } };
+  window.IX_PLAN = { open, close, build, nextStep, runStep, completeLesson, forecast, exams: EXAMS, units: gitUnits, cns: cnsChapters, state: st, sheets, saveSheet, openSheets, span: lectureSpan, lectures: LECT, mount: (el) => home(el), renderInto: (el) => render(el), today, START, openMap, openDay, owed: () => { const P = build(); return owed(P, iso(new Date())); } };
 })();

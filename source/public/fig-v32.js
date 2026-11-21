@@ -29,23 +29,49 @@
       (opts.noAsk ? "" : '<div class="ixFgAsk"><button type="button" data-fask="picture">👁 Explain it</button><button type="button" data-fask="picquiz">🎯 Quiz me on it</button></div>') + "</figure>";
   }
   // full-screen viewer with pinch / double-tap zoom
-  let zv = null;
-  function zoom(src, cap) {
+  let zv = null, previousFocus = null;
+  function zoom(src, cap, alt) {
     if (!zv) {
-      zv = document.createElement("div"); zv.className = "ixFz"; zv.innerHTML = '<button type="button" class="ixFzX" aria-label="Close">✕</button><div class="ixFzS"><img alt=""></div><div class="ixFzC"></div>';
+      zv = document.createElement("div");
+      zv.className = "ixFz";
+      zv.setAttribute("role", "dialog");
+      zv.setAttribute("aria-modal", "true");
+      zv.setAttribute("aria-labelledby", "ixFigureCaption");
+      zv.innerHTML = '<button type="button" class="ixFzX" aria-label="Close figure">✕</button><button type="button" class="ixFzToggle" aria-pressed="false">Zoom in</button><div class="ixFzS"><img alt=""></div><div class="ixFzC" id="ixFigureCaption"></div>';
       document.body.appendChild(zv);
-      zv.querySelector(".ixFzX").onclick = () => zv.classList.remove("on");
-      const im = zv.querySelector("img"); im.onclick = () => im.classList.toggle("big");
+      const exit = zv.querySelector(".ixFzX"), control = zv.querySelector(".ixFzToggle");
+      const close = () => {
+        zv.classList.remove("on");
+        if (previousFocus && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
+      };
+      exit.onclick = close;
+      const im = zv.querySelector("img");
+      control.onclick = im.onclick = () => {
+        const big = im.classList.toggle("big");
+        control.setAttribute("aria-pressed", String(big));
+        control.textContent = big ? "Zoom out" : "Zoom in";
+        im.parentElement.scrollTo(0, 0);
+      };
+      zv.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") { event.preventDefault(); close(); }
+        if (event.key === "Tab") { event.preventDefault(); (document.activeElement === exit ? control : exit).focus(); }
+      });
     }
-    const im = zv.querySelector("img"); im.classList.remove("big"); im.src = src; zv.querySelector(".ixFzC").textContent = (cap || "") + "  ·  tap to zoom in or out, pinch to zoom";
+    previousFocus = document.activeElement;
+    const im = zv.querySelector("img"), control = zv.querySelector(".ixFzToggle");
+    im.classList.remove("big"); im.src = src; im.alt = alt || cap || "Course illustration";
+    im.parentElement.scrollTo(0, 0);
+    control.textContent = "Zoom in"; control.setAttribute("aria-pressed", "false");
+    zv.querySelector(".ixFzC").textContent = cap || "Course illustration";
     zv.classList.add("on");
+    zv.querySelector(".ixFzX").focus();
   }
   async function snap(img) {
     try { const c = document.createElement("canvas"), s = Math.min(1, 1100 / (img.naturalWidth || 1100)); c.width = Math.round((img.naturalWidth || 800) * s); c.height = Math.round((img.naturalHeight || 600) * s); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); return c.toDataURL("image/jpeg", 0.85); } catch (e) { return null; }
   }
   document.addEventListener("click", async (e) => {
     const z = e.target.closest && e.target.closest(".ixFg [data-zoom]");
-    if (z) { e.preventDefault(); const fg = z.closest(".ixFg"), f = get(fg.dataset.fig); return zoom(z.dataset.zoom, f ? title(f) + " · OpenStax A&P 2e Fig. " + f.num + " · CC BY 4.0" : ""); }
+    if (z) { e.preventDefault(); const fg = z.closest(".ixFg"), f = get(fg.dataset.fig); return zoom(z.dataset.zoom, f ? title(f) + " · OpenStax A&P 2e Fig. " + f.num + " · CC BY 4.0" : "", z.querySelector("img")?.alt); }
     const a = e.target.closest && e.target.closest(".ixFg [data-fask]");
     if (a && window.IX_TUTOR) {
       const fg = a.closest(".ixFg"), f = get(fg.dataset.fig) || {}, img = fg.querySelector("img"), shot = img ? await snap(img) : null;

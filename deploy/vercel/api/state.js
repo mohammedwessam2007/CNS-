@@ -25,8 +25,14 @@ function conflict(res, current) {
 export default async function handler(req, res) {
   res.setHeader("cache-control", "no-store");
   // No Blob store connected to this project yet: say so plainly (the app keeps saving on the device).
-  if (process.env.IX_MEMORY_STORE !== "1" && !process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_STORE_ID)
+  const configured = process.env.IX_MEMORY_STORE === "1" || process.env.BLOB_READ_WRITE_TOKEN ||
+    (process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN);
+  if (!configured) {
+    if (req.method === "GET" && req.headers["x-ix-bootstrap"] === "1") {
+      return res.status(200).json({ exists: false, cloudAvailable: false });
+    }
     return res.status(503).json({ error: "cloud_not_configured", message: "Cloud backup is not connected on this host yet. Progress is saved on this device." });
+  }
   const path = learnerPath(req);
   if (!path) return res.status(401).json({ error: "sync_code_required" });
 

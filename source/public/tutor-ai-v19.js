@@ -512,7 +512,12 @@
     if (!ls.get(KEY, "")) openSetup();
     else setTimeout(() => input && input.focus(), 50);
   }
-  function close() { if (root) root.classList.remove("on"); }
+  function close() {
+    if (!root) return;
+    root.classList.remove("on");
+    blindOn = false;
+    document.documentElement.classList.remove("ixBlind");
+  }
 
   function sheet(html) {
     const s = document.createElement("div"); s.className = "ixTsheet"; s.innerHTML = '<div class="ixTsheetIn">' + html + "</div>";
@@ -608,22 +613,53 @@
   }
   function openEssay(preQ) {
     build(); root.classList.add("on");
+    const canGrade = Boolean(ls.get(KEY, ""));
     const s = sheet(
-      "<h3>📝 Grade my essay</h3><p>Write it <b>from a blank page</b>, on paper like the exam if you can, then photograph it or type it. Three examiners mark it and you see the middle mark and the spread.</p>" +
+      "<h3>Written practice</h3><p>Write from memory, then check the reference answer." + (canGrade ? " You can also submit a typed or photographed answer for AI feedback." : " Typed answers are saved as a draft on this device.") + "</p>" +
       '<label>Question<input type="text" id="ixTeq" placeholder="e.g. Mention the sites of portosystemic anastomosis"></label>' +
       '<p class="ixTverb" id="ixTverb"></p>' +
       '<label>My answer (typed)<textarea id="ixTea" rows="9" placeholder="Headings and points as you would write them in the exam…"></textarea></label>' +
-      '<label class="ixTfile">📷 or a photo of my handwritten answer<input type="file" id="ixTeimg" accept="image/*" capture="environment"></label>' +
-      '<div class="ixTrow"><button type="button" class="primary" id="ixTego">Mark it (3 examiners)</button><button type="button" data-x>Close</button></div><div class="ixTstatus" id="ixTest"></div>'
+      (canGrade ? '<label class="ixTfile">Photo of my handwritten answer<input type="file" id="ixTeimg" accept="image/*" capture="environment"></label>' : "") +
+      '<div class="ixTrow"><button type="button" class="primary" id="ixTref" hidden>Show reference answer</button>' + (canGrade ? '<button type="button" id="ixTego">Mark it (3 examiners)</button>' : "") +
+      '<button type="button" data-x>Close</button></div><div class="ixTstatus" id="ixTest" role="status"></div>'
     );
-    const qi = s.querySelector("#ixTeq"), vb = s.querySelector("#ixTverb");
-    const showVerb = () => { vb.textContent = qi.value.trim() ? "How to answer it: " + verbTemplate(qi.value) : ""; };
+    const qi = s.querySelector("#ixTeq"), vb = s.querySelector("#ixTverb"), answer = s.querySelector("#ixTea"),
+      reference = s.querySelector("#ixTref"), result = s.querySelector("#ixTest"), draftKey = "ix_written_drafts_v1";
+    const showVerb = () => {
+      vb.textContent = qi.value.trim() ? "How to answer it: " + verbTemplate(qi.value) : "";
+      reference.hidden = !qi.value.trim() || !refFor(qi.value.trim());
+      reference.textContent = "Show reference answer";
+      result.replaceChildren();
+    };
     qi.addEventListener("input", showVerb);
-    if (preQ) qi.value = preQ;
+    if (preQ) {
+      qi.value = preQ;
+      const drafts = jget(draftKey);
+      const previous = drafts.find((draft) => draft.question === preQ);
+      if (previous) answer.value = previous.answer;
+      answer.addEventListener("input", () => {
+        if (qi.value !== preQ) return;
+        const others = jget(draftKey).filter((draft) => draft.question !== preQ);
+        ls.set(draftKey, JSON.stringify([{ question: preQ, answer: answer.value.slice(0, 12000) }, ...others].slice(0, 12)));
+      });
+    }
     showVerb();
-    s.querySelector("#ixTego").onclick = async () => {
-      const q = qi.value.trim(), a = s.querySelector("#ixTea").value.trim(), st = s.querySelector("#ixTest"), f = s.querySelector("#ixTeimg").files[0];
+    reference.onclick = () => {
+      const visible = Boolean(result.querySelector(".ixTreference"));
+      result.replaceChildren();
+      reference.textContent = visible ? "Show reference answer" : "Hide reference answer";
+      if (visible) return;
+      const section = document.createElement("div");
+      section.className = "ixTreference";
+      section.textContent = refFor(qi.value.trim());
+      result.appendChild(section);
+    };
+    const grade = s.querySelector("#ixTego");
+    if (!grade) return;
+    grade.onclick = async () => {
+      const q = qi.value.trim(), a = answer.value.trim(), st = result, f = s.querySelector("#ixTeimg").files[0];
       if (!q || (a.length < 20 && !f)) { st.textContent = "Write the question and your answer (typed or a photo) first."; return; }
+      grade.disabled = true;
       st.textContent = f ? "Reading your page, then three examiners are marking…" : "Three examiners are marking…";
       try {
         const img = f ? await photoURL(f) : null;
@@ -633,6 +669,7 @@
         g.missing.slice(0, 3).forEach((m) => addCard("Written answer to '" + q + "': include " + m, (a || "").slice(0, 120)));
         if (window.IX_WRITTEN && IX_WRITTEN.scheduleOutline) IX_WRITTEN.scheduleOutline(q, g.median);
       } catch (e) { st.textContent = "Could not mark it: " + e.message; }
+      finally { grade.disabled = false; }
     };
   }
   function openLife() {
@@ -665,25 +702,29 @@
     const checks = await Promise.all(items.map((x) => verify(x.stem + "\n" + Object.entries(x.options).map(([k, v]) => k + ") " + v).join("\n"), key)));
     return items.filter((x, i) => !(checks[i] && /^⚠️/.test(checks[i])));  // drop only the items the checker flagged
   }
-  function openBlind() {
+  function openBlind(prepared) {
     build(); root.classList.add("on");
-    const key = ls.get(KEY, ""); if (!key) { openSetup("Add your key first."); return; }
+    const key = ls.get(KEY, ""); if (!prepared && !key) { openSetup("Add your key first."); return; }
     const g = lifeGate(); if (g) { addMsg("tutor", g); return; }
-    if (spend().usd >= cap()) { addMsg("tutor", "This week's AI budget is used up."); return; }
-    const s = sheet("<h3>🧪 Blind check</h3><p>New questions you have never seen, written from this topic and checked by a second model. <b>The AI is off until you finish.</b> Say how sure you are on each: a confident wrong answer costs more than a guess.</p><div id=\"ixBq\"><p class=\"ixTstatus\">Writing your questions…</p></div>");
+    if (!prepared && spend().usd >= cap()) { addMsg("tutor", "This week's AI budget is used up."); return; }
+    const intro = prepared ? "Answer the lesson's questions from memory. Choose how sure you are before checking each answer." : "These questions are generated for this topic and checked by a second model. Answer from memory and choose how sure you are.";
+    const s = sheet("<h3>" + (prepared ? "Lesson knowledge check" : "Blind check") + "</h3><p>" + intro + "</p><div id=\"ixBq\"><p class=\"ixTstatus\">Loading questions…</p></div>");
     const box = s.querySelector("#ixBq"), topic = topicKey();
-    makeBlind(key).then((items) => {
+    (prepared ? Promise.resolve(prepared) : makeBlind(key)).then((items) => {
+      if (!box.isConnected || !root.classList.contains("on")) return;
       if (!items.length) { box.innerHTML = "<p>No clean questions came back. Try again.</p><button type='button' data-x>Close</button>"; return; }
       blindOn = true; document.documentElement.classList.add("ixBlind");
       let i = 0, k = 0, cbm = 0; const wrong = [];
       const show = () => {
         if (i >= items.length) {
           blindOn = false; document.documentElement.classList.remove("ixBlind");
-          const b = jget(BLIND); b.push({ topic, n: items.length, k, cbm, at: Date.now() }); ls.set(BLIND, JSON.stringify(b.slice(-200)));
+          if (!prepared) {
+            const b = jget(BLIND); b.push({ topic, n: items.length, k, cbm, at: Date.now() }); ls.set(BLIND, JSON.stringify(b.slice(-200)));
+          }
           wrong.forEach((x) => addCard("Blind check: " + x.stem + " → " + x.options[x.key], ""));
           const br = blindRange();
           box.innerHTML = "<div class='ixTgrade'><b>" + k + " / " + items.length + "</b> <span>certainty score " + cbm + "</span></div>" +
-            (br.p != null ? "<p>All blind checks so far: <b>" + Math.round(br.p * 100) + "%</b> (" + Math.round(br.lo * 100) + "–" + Math.round(br.hi * 100) + "%) on " + br.n + " new questions. This is the number to trust.</p>" : "<p>A few more blind checks and this becomes your real readiness range.</p>") +
+            (prepared ? "" : br.p != null ? "<p>All blind checks so far: <b>" + Math.round(br.p * 100) + "%</b> (" + Math.round(br.lo * 100) + "–" + Math.round(br.hi * 100) + "%) on " + br.n + " new questions.</p>" : "<p>More blind checks will establish your readiness range.</p>") +
             (wrong.length ? "<p>The " + wrong.length + " you missed are now memory cards.</p>" : "") + "<div class='ixTrow'><button type='button' data-x class='primary'>Close</button></div>";
           sub(); return;
         }
@@ -842,7 +883,7 @@
       document.getElementById("tutorBtn").onclick = open;
     }
   }
-  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind: () => openBlind(), openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), _addSpend: (u) => addSpend(u), verbTemplate, gradeHTML, photoURL, refFor, openNotes: () => { build(); root.classList.add("on"); renderLog(); openNotes(); }, addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
+  window.IX_TUTOR = { open, close, ask, why, relevance, calibration, setConf: (c) => { conf = c; markConf(); }, context, screen, notesFor, saveNotes, hasKey: () => !!ls.get(KEY, ""), _keyName: KEY, lang, markLang, relevanceText, memory, dueCards, spend, cap, statsText, openPostmortem: () => openPostmortem(), life, setLife, dayState, extend, tickDay: () => tickDay(), CBM, errTypes, examinerStyle, blindRange, openBlind, openLife: () => openLife(), blindOn: () => blindOn, gradeEssay, openEssay: (q) => openEssay(q), _addSpend: (u) => addSpend(u), verbTemplate, gradeHTML, photoURL, refFor, openNotes: () => { build(); root.classList.add("on"); renderLog(); openNotes(); }, addCard: (idea, ans) => addCard(idea, ans), importFile, _addCard: addCard, mockRunning, openSetup: (n) => openSetup(n) };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", install); else install();
   setTimeout(install, 1600);
 })();
