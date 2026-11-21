@@ -75,7 +75,7 @@ window.IX_CNS_WRITTEN = [
       '<div class="ixKcard"><p class="ixKq2">' + E(x.q) + '</p><p class="ixKsmall">3 minutes: write only the headings and key points you would use.</p><textarea class="ixCqT" rows="6" placeholder="Your outline…"></textarea><button type="button" class="ixKmain" data-c="show">Show the full-mark skeleton</button><div class="ixKa" hidden><p>' + x.skel.split(" · ").map(E).join("<br>• ") + '</p><div class="ixKg"><button type="button" data-c="write">✍️ Write it fully</button><button type="button" data-c="next">' + (last ? "Done ✓" : "Next →") + "</button></div></div></div></div>";
     root.querySelector("[data-c=close]").onclick = close;
     root.querySelector("[data-c=show]").onclick = (e) => { e.target.hidden = true; root.querySelector(".ixKa").hidden = false; };
-    root.querySelector("[data-c=next]").onclick = () => (last ? close() : quick(qs, i + 1));
+    root.querySelector("[data-c=next]").onclick = () => { if (last) { close(); document.dispatchEvent(new CustomEvent("ix:done", { detail: { kind: "cnsquick" } })); } else quick(qs, i + 1); };
     root.querySelector("[data-c=write]").onclick = () => { close(); if (window.IX_TUTOR && IX_TUTOR.openEssay) IX_TUTOR.openEssay(x.q); };
     return L.length;
   }

@@ -12,26 +12,27 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.context().route('https://openrouter.ai/**', (r) => r.fulfill({ status: 200, contentType: 'text/event-stream', body: 'data: ' + JSON.stringify({ choices: [{ delta: { content: 'ok' } }] }) + '\n\ndata: [DONE]\n\n' }));
   await p.evaluate(() => { localStorage.setItem('ix_tutor_key_v1', 'sk-or-v1-TESTKEY123'); localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 60, stop: '23:59', off: 5 })); localStorage.removeItem('ix_session_v1'); render(); });
   await tick(p, 600);
-  await p.click('.ixZgo'); await tick(p, 400);
-  const s1 = await p.evaluate(() => ({ on: document.querySelector('.ixS').classList.contains('on'), step: document.querySelector('.ixStop span').textContent, title: document.querySelector('.ixStitle').textContent, how: document.querySelectorAll('.ixShow li').length, dots: document.querySelectorAll('.ixSdots i').length }));
-  check('S1', "The home's big button opens today's session: one step, what to do, its minutes", s1.on && /Step \d of \d/.test(s1.step) && s1.title.length > 5 && s1.how >= 2 && s1.dots >= 3, s1);
-  const first = s1.title;
-  await p.click('.ixS [data-s="open"]'); await tick(p, 800);
-  const s2 = await p.evaluate(() => { const b = document.querySelector('.ixSbar'); return { screen: document.querySelector('.ixS').classList.contains('on'), bar: b.classList.contains('on'), txt: b.innerText, overlay: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on, .ixPlan.on, .ixL.on'), z: +getComputedStyle(b).zIndex }; });
-  check('S2', 'Open it runs the step; a bar stays on top of it: step, timer, ✓ Done', !s2.screen && s2.bar && s2.overlay && /Step \d\/\d/i.test(s2.txt) && /\d:\d\d/.test(s2.txt) && /Done/.test(s2.txt) && s2.z > 100, s2);
-  await p.click('.ixSbar [data-s="done"]'); await tick(p, 500);
-  const s3 = await p.evaluate((first) => { const P = IX_PLAN.today().day; const st = IX_PLAN.state().done; return { on: document.querySelector('.ixS').classList.contains('on'), title: (document.querySelector('.ixStitle') || {}).textContent, ticked: P.steps.filter((x) => st[x.id] === true).map((x) => x.label), first, dot: document.querySelectorAll('.ixSdots i.d').length, overlays: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on, .ixL.on') }; }, first);
-  check('S3', '✓ Done ticks the step in the plan, closes what was open and brings the next step', s3.on && s3.title !== first && s3.ticked.includes(first) && s3.dot >= 1 && !s3.overlays, s3);
-  const before = s3.title;
-  await p.click('.ixS [data-s="skip"]'); await tick(p, 300);
-  const s4 = await p.evaluate(() => ({ title: document.querySelector('.ixStitle').textContent, last: IX_SESSION.order().slice(-1)[0].label }));
-  check('S4', 'Later today moves the step to the end of the list', s4.title !== before && s4.last === before, s4);
-  await p.click('.ixS [data-s="open"]'); await tick(p, 500);
+  await p.click('.ixZgo'); await tick(p, 900);
+  const s1 = await p.evaluate(() => { const b = document.querySelector('.ixSbar'); return { screen: document.querySelector('.ixS').classList.contains('on'), overlay: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on, .ixPlan.on, .ixL.on, .ixK.on'), bar: b.classList.contains('on'), txt: b.innerText, pct: !!b.querySelector('.ixSbP i'), z: +getComputedStyle(b).zIndex, open: IX_SESSION.state().open && IX_SESSION.state().open.id, cur: IX_SESSION.current().id }; });
+  check('S1', "One tap on the home opens today's first item directly, with the course bar: progress, step, timer, Done · next", !s1.screen && s1.overlay && s1.bar && s1.pct && /step 1\/\d/i.test(s1.txt) && /\d:\d\d/.test(s1.txt) && /Done/.test(s1.txt) && s1.z > 100 && s1.open === s1.cur, s1);
+  await p.click('.ixSbar [data-s="outline"]'); await tick(p, 300);
+  const s2 = await p.evaluate(() => ({ items: document.querySelectorAll('.ixSout .ixSoutI').length, cur: document.querySelectorAll('.ixSout .ixSoutI.c').length, all: IX_SESSION.order().length }));
+  check('S2', "☰ shows today's outline like a course: every item, the current one marked", s2.items === s2.all && s2.items >= 3 && s2.cur === 1, s2);
+  await p.click('.ixSout [data-o]'); await tick(p, 200);
+  const first = await p.evaluate(() => IX_SESSION.current().label);
+  await p.click('.ixSbar [data-s="done"]'); await tick(p, 900);
+  const s3 = await p.evaluate((first) => { const st = IX_PLAN.state().done, d = IX_PLAN.today().day; return { ticked: d.steps.filter((x) => st[x.id] === true).map((x) => x.label), first, screen: document.querySelector('.ixS').classList.contains('on'), bar: document.querySelector('.ixSbar').innerText, open: IX_SESSION.state().open && IX_SESSION.state().open.id, cur: IX_SESSION.current().id, overlay: !!document.querySelector('.ixY.on, .ixT.on, .ixH.on, .ixPlan.on, .ixL.on, .ixK.on') }; }, first);
+  check('S3', '✓ Done ticks the item and opens the next one straight away (no screen in between)', s3.ticked.includes(first) && !s3.screen && /step 2\//i.test(s3.bar) && s3.open === s3.cur && s3.overlay, s3);
+  await p.click('.ixSbar [data-s="outline"]'); await tick(p, 200);
+  const target = await p.evaluate(() => { const L = [...document.querySelectorAll('.ixSout .ixSoutI:not(.d):not(.c)')]; const t = L[L.length - 1]; return t ? t.dataset.id : null; });
+  if (target) await p.click('.ixSout [data-id="' + target + '"]'); await tick(p, 600);
+  const s4 = await p.evaluate((t) => ({ open: IX_SESSION.state().open && IX_SESSION.state().open.id, t }), target);
+  check('S4', 'Tapping an item in the outline jumps to it', !!target && s4.open === target, s4);
   await p.reload(); await tick(p, 3500);
   const s5 = await p.evaluate(() => ({ bar: document.querySelector('.ixSbar').classList.contains('on'), txt: document.querySelector('.ixSbar').innerText }));
   check('S5', 'Closing the app keeps the session: the bar is back after a reload', s5.bar && /Step/i.test(s5.txt), s5);
   // finish everything
-  for (let i = 0; i < 8; i++) { const more = await p.evaluate(() => !!IX_SESSION.current()); if (!more) break; await p.evaluate(() => { IX_SESSION.screen(); document.querySelector('.ixS [data-s="done"]').click(); }); await tick(p, 300); }
+  for (let i = 0; i < 8; i++) { const more = await p.evaluate(() => !!IX_SESSION.current()); if (!more) break; await p.evaluate(() => IX_SESSION.complete(IX_SESSION.current())); await tick(p, 300); }
   const s6 = await p.evaluate(() => ({ txt: document.querySelector('.ixS').innerText, home: (document.querySelector('.ixZbarT') || {}).innerText }));
   check('S6', 'The last ✓ ends the day: "Done for today", the next study day, stop here', /Done for today/.test(s6.txt) && /Next study day/i.test(s6.txt), s6);
   await p.click('.ixS [data-s="close"]'); await tick(p, 400);

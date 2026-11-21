@@ -191,7 +191,7 @@
         const a = b.dataset.a;
         if (a === "next") { i++; show(); }
         else if (a === "back") { i--; show(); }
-        else if (a === "finish") { const d = get(DONE); d[les.key] = Date.now(); put(DONE, d); P().completeLesson(les.key); index(les.unit, les.key); }
+        else if (a === "finish") { const d = get(DONE); d[les.key] = Date.now(); put(DONE, d); P().completeLesson(les.key); index(les.unit, les.key); document.dispatchEvent(new CustomEvent("ix:done", { detail: { kind: "lesson", key: les.key } })); }
         else if (a === "simple" || a === "why") { window.IX_SCREEN_OVERRIDE = { title: "Lesson · " + les.title, eyebrow: "DIG-206 " + les.subject, body: ctx }; T() && (T().open(), a === "simple" ? T().ask("I did not get this part: \"" + p.h + "\". Explain it another way: a different analogy, smaller steps, then check I got it with one question.", "simple", ctx) : null); }
         else if (a === "teach") { close(); window.IX_SCREEN_OVERRIDE = { title: "Lesson · " + les.title, eyebrow: "DIG-206 " + les.subject, body: c.text.slice(0, 5000) }; T() && (T().open(), T().ask("I just learned \"" + les.title + "\". Let me teach it back to you; ask me to start, then find the gaps in my understanding.", "classmate")); }
         else if (a === "sheet") { close(); HY() && HY().open(les.unit); }

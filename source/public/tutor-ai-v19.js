@@ -729,6 +729,7 @@
           box.innerHTML = "<div class='ixTgrade'><b>" + k + " / " + items.length + "</b> <span>certainty score " + cbm + "</span></div>" +
             (prepared ? "" : br.p != null ? "<p>All blind checks so far: <b>" + Math.round(br.p * 100) + "%</b> (" + Math.round(br.lo * 100) + "–" + Math.round(br.hi * 100) + "%) on " + br.n + " new questions.</p>" : "<p>More blind checks will establish your readiness range.</p>") +
             (wrong.length ? "<p>The " + wrong.length + " you missed are now memory cards.</p>" : "") + "<div class='ixTrow'><button type='button' data-x class='primary'>Close</button></div>";
+          { const xb = box.querySelector("[data-x]"); if (xb) xb.addEventListener("click", () => document.dispatchEvent(new CustomEvent("ix:done", { detail: { kind: "check" } }))); }
           sub(); return;
         }
         const x = items[i];

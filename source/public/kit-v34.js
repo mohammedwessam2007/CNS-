@@ -132,7 +132,7 @@
     const c = D[0];
     body.innerHTML = "<div class='ixKcard'><small>" + E(c.subject + " · " + c.title) + " · " + D.length + " due</small><p class='ixKq2'>" + E(c.q) + "</p><button type='button' class='ixKmain' data-show>Show the answer</button><div class='ixKa' hidden><p>" + E(c.a) + "</p><div class='ixKg'><button type='button' data-g='again'>Again</button><button type='button' data-g='hard'>Hard</button><button type='button' data-g='good'>Good</button><button type='button' data-g='easy'>Easy</button></div></div></div>";
     body.querySelector("[data-show]").onclick = (e) => { e.target.hidden = true; body.querySelector(".ixKa").hidden = false; };
-    body.querySelectorAll("[data-g]").forEach((b) => (b.onclick = () => { grade(c.id, b.dataset.g); review(); }));
+    body.querySelectorAll("[data-g]").forEach((b) => (b.onclick = () => { grade(c.id, b.dataset.g); if (!due().length) document.dispatchEvent(new CustomEvent("ix:done", { detail: { kind: "review" } })); review(); }));
   }
   document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-kit]"); if (b) { e.preventDefault(); e.stopPropagation(); open(b.dataset.kit); } }, true);
   window.IX_KIT = { open, close, cards, due, deck: deckOf, grade, search, onePager, NUMBERS, MNEMONICS };

@@ -46,7 +46,7 @@
   const how = (s) => HOW[s.kind] || ["Open it and follow the screen.", "Tick ✓ Done when it is finished."];
 
   function todayDay() { const t = P().today(); return t && t.day; }
-  function steps() { const d = todayDay(); return d ? d.steps.filter((s) => s.kind !== "rest") : []; }
+  function steps() { const d = todayDay(); return d ? d.steps.filter((s) => s.kind !== "rest" && !(s.kind === "review" && nothingDue() && P().state().done[s.id] !== true)) : []; }
   function order() {
     const all = steps(), ss = load(), skip = (ss && ss.date === iso(new Date()) && ss.skip) || [];
     return all.filter((s) => skip.indexOf(s.id) < 0).concat(all.filter((s) => skip.indexOf(s.id) >= 0));
@@ -99,13 +99,16 @@
     shell();
     const ss = load();
     if (!ss || !ss.open || ss.paused || ss.date !== iso(new Date())) return hideBar();
-    const all = order(), s = current();
-    if (!s || s.id !== ss.open.id) return hideBar();
+    const all = order(), s = all.find((x) => x.id === ss.open.id && !done(x));   // the item you opened (it may be a jump ahead)
+    if (!s) return hideBar();
     const i = idx(all, s), left = remaining(ss, s);
-    const position = s.id + "/" + i + "/" + all.length;
+    const nd = all.filter(done).length, pct = Math.round((100 * nd) / Math.max(1, all.length));
+    const position = s.id + "/" + i + "/" + all.length + "/" + nd;
     if (bar.dataset.position !== position) {
-      bar.innerHTML = '<button type="button" class="ixSbI" data-s="screen" aria-label="Back to today\'s session"><small>Step ' + (i + 1) + "/" + all.length + "</small><b>" + E(s.label) + "</b></button>" +
-        '<span class="ixSbT"></span><button type="button" class="ixSbD" data-s="done">✓ Done</button>';
+      bar.innerHTML = '<div class="ixSbP" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
+        '<button type="button" class="ixSbO" data-s="outline" aria-label="Today\'s outline">☰</button>' +
+        '<button type="button" class="ixSbI" data-s="resume" aria-label="Back to this step"><small>Today · ' + pct + "% · step " + (i + 1) + "/" + all.length + "</small><b>" + E(s.label) + "</b></button>" +
+        '<span class="ixSbT"></span><button type="button" class="ixSbD" data-s="done">' + (i === all.length - 1 || all.filter((x) => !done(x) && x.kind !== "college").length <= 1 ? "✓ Finish day" : "✓ Done · next →") + "</button>";
       bar.dataset.position = position;
     }
     const time = bar.querySelector(".ixSbT");
@@ -118,15 +121,46 @@
   function hide() { if (root) root.classList.remove("on"); document.documentElement.classList.remove("ixSon"); }
   function onClick(e) {
     const b = e.target.closest("[data-s]"); if (!b) return;
-    const a = b.dataset.s, s = current(), k = iso(new Date());
+    const a = b.dataset.s, k = iso(new Date());
     let ss = load(); if (!ss || ss.date !== k) ss = { date: k, skip: [] };
+    const s = (ss.open && order().find((x) => x.id === ss.open.id && !done(x))) || current();
     if (a === "close") { hide(); ss.paused = Date.now(); keep(ss.open || (ss.skip && ss.skip.length) ? ss : null); showBar(); repaint(); return; }
     if (a === "screen") { closeOverlays(); screen(); return; }
+    if (a === "outline") return outline();
+    if (a === "jump") { const t = order().find((x) => x.id === b.dataset.id); if (t) { ss.skip = (ss.skip || []).filter((x) => x !== t.id); keep(ss); openStep(t, true); } return; }
     if (!s) return screen();
+    if (a === "resume") return openStep(s);
     if (a === "open") { ss.open = { id: s.id, at: ss.open && ss.open.id === s.id ? ss.open.at : Date.now() }; keep(ss); hide(); P().runStep(s); showBar(); return; }
-    if (a === "done") { P().state().done[s.id] = true; persist(); ss.open = null; keep(ss); closeOverlays(); screen(); repaint(); return; }
+    if (a === "done") return complete(s);
     if (a === "skip") { ss.skip = (ss.skip || []).filter((x) => x !== s.id).concat([s.id]); ss.open = null; keep(ss); screen(); return; }
   }
+  // course mode: one tap opens the step's content straight away; Done ticks it and opens the next one
+  function openStep(s, force) {
+    let ss = load(); const k = iso(new Date()); if (!ss || ss.date !== k) ss = { date: k, skip: [] };
+    ss.open = { id: s.id, at: ss.open && ss.open.id === s.id ? ss.open.at : Date.now() }; delete ss.paused; keep(ss);
+    hide(); closeOverlays(); P().runStep(s); showBar(); try { if (outlineEl) outlineEl.remove(); } catch (e) {}
+  }
+  function complete(s) {
+    P().state().done[s.id] = true; persist();
+    const ss = load() || { date: iso(new Date()), skip: [] }; ss.open = null; keep(ss);
+    closeOverlays(); repaint();
+    const nx = current();
+    if (nx) { toast("✓ Done · next: " + nx.label); openStep(nx); } else { hideBar(); screen(); }
+  }
+  let outlineEl = null;
+  function outline() {
+    const all = order(), cur = current();
+    if (outlineEl) outlineEl.remove();
+    outlineEl = document.createElement("div"); outlineEl.className = "ixSout"; outlineEl.setAttribute("role", "dialog"); outlineEl.setAttribute("aria-label", "Today's outline");
+    const nd = all.filter(done).length;
+    outlineEl.innerHTML = '<div class="ixSoutIn"><div class="ixSoutH"><b>Today\'s course</b><span>' + nd + " of " + all.length + " done</span><button type=\"button\" data-o=\"x\" aria-label=\"Close\">✕</button></div><div class=\"ixSbP big\"><i style=\"width:" + Math.round((100 * nd) / Math.max(1, all.length)) + '%"></i></div>' +
+      all.map((x, i) => '<button type="button" class="ixSoutI' + (done(x) ? " d" : "") + (cur && x.id === cur.id ? " c" : "") + '" data-s="jump" data-id="' + E(x.id) + '"><span>' + (done(x) ? "✓" : i + 1) + "</span><b>" + E(x.label) + "</b><small>" + (x.min ? x.min + " min" : "") + "</small></button>").join("") + "</div>";
+    document.body.appendChild(outlineEl);
+    outlineEl.addEventListener("click", (e) => { const t = e.target.closest("[data-s], [data-o]"); if (!t) { if (e.target === outlineEl) outlineEl.remove(); return; } if (t.dataset.o) return outlineEl.remove(); onClick(e); });
+  }
+  function toast(t) { try { const d = document.createElement("div"); d.className = "ixStoast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); } catch (e) {} }
+  // items that know they are finished say so: a lesson finished with "I understand it" completes its step
+  document.addEventListener("ix:done", (e) => { const ss = load(); if (!ss || !ss.open) return; const s = order().find((x) => x.id === ss.open.id); if (!s) return; const d = e.detail || {}; const same = d.kind === s.kind || (d.kind === "check" && /^(blind|blindmix|week|weak|misses|traps)$/.test(s.kind)); if (same && (!d.key || d.key === s.key || d.key === s.unit)) setTimeout(() => complete(s), 350); });
   function repaint() { if (typeof window.render === "function") window.render(); }
   function start() {
     if (!P()) return;
@@ -138,7 +172,8 @@
     delete ss.paused;
     keep(ss);
     closeOverlays();
-    screen();
+    const s = current();
+    if (s) openStep(s); else screen();
   }
 
   // the home's big ▶ button starts the session (a step's own Start still opens that step alone)
@@ -160,5 +195,5 @@
     showBar();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
-  window.IX_SESSION = { start, screen, current, order, bar: showBar, hide, state: load };
+  window.IX_SESSION = { start, screen, current, order, bar: showBar, hide, state: load, openStep, complete, outline };
 })();
