@@ -15,7 +15,7 @@
   const keep = (x) => { try { x ? localStorage.setItem(KEY, JSON.stringify(x)) : localStorage.removeItem(KEY); } catch (e) {} };
   const persist = () => { try { if (typeof save === "function") save(); } catch (e) {} };
   // a review with nothing due (no memory cards, no outlines) counts as done, like on the home
-  const nothingDue = () => { try { return !(window.IX_TUTOR && IX_TUTOR.dueCards && IX_TUTOR.dueCards().length) && !(window.IX_WRITTEN && IX_WRITTEN.due && IX_WRITTEN.due().length); } catch (e) { return false; } };
+  const nothingDue = () => { try { return !(window.IX_TUTOR && IX_TUTOR.dueCards && IX_TUTOR.dueCards().length) && !(window.IX_WRITTEN && IX_WRITTEN.due && IX_WRITTEN.due().length) && !(window.IX_KIT && IX_KIT.due().length); } catch (e) { return false; } };
   const done = (s) => P().state().done[s.id] === true || (s.kind === "review" && nothingDue());
   const idx = (all, s) => all.findIndex((x) => x.id === s.id);
 
@@ -113,7 +113,7 @@
     bar.classList.add("on"); document.documentElement.classList.add("ixSbarOn");
   }
   function hideBar() { bar.classList.remove("on"); document.documentElement.classList.remove("ixSbarOn"); }
-  function closeOverlays() { try { window.IX_LESSON && IX_LESSON.close(); } catch (e) {} try { window.IX_HY && IX_HY.close(); } catch (e) {} try { window.IX_GIT && IX_GIT.close(); } catch (e) {} try { window.IX_TUTOR && IX_TUTOR.close(); } catch (e) {} try { P().close(); } catch (e) {} try { window.IX_WRITTEN && IX_WRITTEN.close && IX_WRITTEN.close(); } catch (e) {} }
+  function closeOverlays() { try { window.IX_LESSON && IX_LESSON.close(); } catch (e) {} try { window.IX_KIT && IX_KIT.close(); window.IX_DRAW && IX_DRAW.close(); } catch (e) {} try { window.IX_HY && IX_HY.close(); } catch (e) {} try { window.IX_GIT && IX_GIT.close(); } catch (e) {} try { window.IX_TUTOR && IX_TUTOR.close(); } catch (e) {} try { P().close(); } catch (e) {} try { window.IX_WRITTEN && IX_WRITTEN.close && IX_WRITTEN.close(); } catch (e) {} }
   function hide() { if (root) root.classList.remove("on"); document.documentElement.classList.remove("ixSon"); }
   function onClick(e) {
     const b = e.target.closest("[data-s]"); if (!b) return;

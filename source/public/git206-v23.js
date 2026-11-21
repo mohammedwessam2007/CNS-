@@ -27,10 +27,10 @@
   function persist() { try { if (typeof save === "function") save(); } catch (e) {} }
   const keyed = (q) => q.answerKeys && q.answerKeys.length;
   const visible = () => B().mcq.filter((q) => !st().hidden.includes(q.id));
-  const PAPERS = () => Array.from(new Set(B().mcq.filter((q) => q.ocr).map((q) => q.source)));
+  const PAPERS = () => Array.from(new Set(B().mcq.filter((q) => q.ocr && q.keyBy !== "app" && !/Zahra/i.test(q.source)).map((q) => q.source)));   // v34: Zahra is a compilation, not a paper
   const mocked = (src) => st().mocks.some((m) => m.src === src);
   // a solved paper stays out of practice until it has been taken as a mock: it is the honest test
-  const practicePool = () => visible().filter((q) => keyed(q) && (!q.ocr || mocked(q.source)));
+  const practicePool = () => visible().filter((q) => keyed(q) && (!q.ocr || q.keyBy === "app" || mocked(q.source)));
 
   /* ── readiness: only AI-off mocks on real papers count ── */
   function readiness() {

@@ -50,7 +50,7 @@
     const mcq = GB().mcq, units = [];
     ANAT.forEach((ch) => units.push({ id: "A:" + ch, subject: "Anatomy", name: ch, pred: (q) => q.chapter === ch, written: writtenFor(ANAT_W[ch] || []) }));
     OTHER.forEach((u) => units.push({ id: u.s[0] + ":" + u.name, subject: u.s, name: u.name, pred: (q) => q.subject === u.s && u.rx.test(q.stem + " " + q.options.map((o) => o.text).join(" ")), written: writtenFor(u.w) }));
-    units.forEach((u) => { u.nMcq = mcq.filter((q) => q.answerKeys.length && u.pred(q)).length; u.wTimes = u.written.reduce((t, w) => t + w.times, 0); u.weight = u.nMcq + 3 * u.wTimes; });
+    units.forEach((u) => { u.nMcq = mcq.filter((q) => q.answerKeys.length && q.keyBy !== "app" && u.pred(q)).length; u.wTimes = u.written.reduce((t, w) => t + w.times, 0); u.weight = u.nMcq + 3 * u.wTimes; });
     return units;
   }
   function cnsChapters() {
@@ -270,7 +270,7 @@
     st().done[s.id] = st().done[s.id] || "started"; persist();
     const u = s.unit ? unitById(s.unit) : null;
     const ctx = u ? "Unit: " + u.subject + " · " + u.name + " (DIG-206).\nHow the past papers ask it:\n" + GB().mcq.filter(u.pred).slice(0, 8).map((q) => "- " + q.stem).join("\n") + (u.written.length ? "\nWritten questions asked on it: " + u.written.map((w) => w.topic + " (" + w.years.join(", ") + ")").join("; ") : "") : "";
-    if (s.kind === "review") { close(); t.open(); t.ask("Start my day: review what is due.", "review"); }
+    if (s.kind === "review") { close(); if (window.IX_KIT && IX_KIT.due().length) IX_KIT.open("cards"); else { t.open(); t.ask("Start my day: review what is due.", "review"); } }
     else if (s.kind === "learn") { close(); override("GIT 206 · " + u.name, ctx); if (window.IX_HY) IX_HY.open(u.id); else { t.open(); t.ask("Teach me " + u.name + " with the full loop, one step at a time.", "loop"); } }
     else if (s.kind === "mcq") { close(); override("GIT 206 · " + u.name, ctx); if (!G().startCustom(u.name, u.pred, 10)) { t.open(); t.ask("Quiz me on " + u.name + ".", "secquiz", ctx); } }
     else if (s.kind === "blind" || s.kind === "blindmix") {
@@ -424,7 +424,7 @@
     const name = day ? day.exam ? day.exam.name : day.off ? "Day off" : clean(day.title).replace(subject ? subject[0] : /^$/, "") : "Course complete";
     const cns = day && day.phase === "CNS written";
     const steps = day ? day.steps.filter((step) => step.kind !== "rest") : [];
-    const nothingDue = !((T() && T().dueCards && T().dueCards().length) || (window.IX_WRITTEN && IX_WRITTEN.due && IX_WRITTEN.due().length));
+    const nothingDue = !((T() && T().dueCards && T().dueCards().length) || (window.IX_WRITTEN && IX_WRITTEN.due && IX_WRITTEN.due().length) || (window.IX_KIT && IX_KIT.due().length));
     const empty = (s) => s.kind === "review" && nothingDue && st().done[s.id] !== true;
     const done = (s) => st().done[s.id] === true || empty(s);
     const actionable = steps.filter((step) => !empty(step));
@@ -476,6 +476,10 @@
           '<button type="button" data-course><b>Lesson library</b><small>' + (window.IX_LESSON ? IX_LESSON.all().length + " DIG 206 lessons" : "DIG 206") + '</small><span aria-hidden="true">↗</span></button>' +
           '<button type="button" data-git><b>Question bank</b><small>' + GB().mcq.length + ' past-paper questions</small><span aria-hidden="true">↗</span></button>' +
           '<button type="button" data-hy><b>High-yield sheets</b><small>Diagrams and exam references</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-drawlist><b>Exam drawings</b><small>Draw it with me, then get graded</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-kit="cards"><b>Flashcards</b><small>' + (window.IX_KIT ? IX_KIT.due().length + " due · " + IX_KIT.cards().length + " in the course" : "Spaced repetition") + '</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-kit="search"><b>Search everything</b><small>Lessons, answers, questions</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-kit="one"><b>One-pagers</b><small>Numbers and mnemonics too</small><span aria-hidden="true">↗</span></button>' +
           '<button type="button" data-xhome="lib"><b>CNS library</b><small>NEU 205 written preparation</small><span aria-hidden="true">↗</span></button></div></section>' +
         '<details class="ixZmore"' + (detailsOpen ? " open" : "") + '><summary>Readiness and plan coverage</summary>' + readinessHTML() +
           (P.dropped.length ? "<p>Units outside your study budget: " + P.dropped.map((u) => E(u.name)).join(", ") + ".</p>" : "<p>All " + P.unitsFit + " DIG 206 units fit your budget.</p>") +

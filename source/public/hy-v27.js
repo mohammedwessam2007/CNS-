@@ -192,6 +192,7 @@
     root.querySelector("#ixYsub").textContent = u.module + " · " + u.subject + " · " + u.qs.length + " past questions";
     const ch = ["Ninja Nerd", "Osmosis", "Armando Hasudungan"];
     body.innerHTML = "<div class='ixHrow'><button type='button' data-back>← All sheets</button>" + (window.IX_PLAN && !/^CNS:/.test(id) ? "<button type='button' class='primary' data-learn>▶ Learn it with the professor</button>" : "<button type='button' class='primary' data-essay>📝 Most likely essay, then write it</button>") + "</div>" +
+      (window.IX_DRAW && !/^CNS:/.test(id) && IX_DRAW.forUnit(id).length ? "<div class='ixDbtns'>" + IX_DRAW.btn(id) + "</div>" : "") +
       figsHTML(id) +
       (/^CNS:/.test(id) && lessonsFor(u.name).length ? "<h3>📖 The course lessons on this</h3><div class='ixYles'>" + lessonsFor(u.name).map(lesBtn).join("") + "</div>" : "") +
       "<h3>🔥 What the examiners keep asking</h3>" + (F.length ? "<ol class='ixYf'>" + F.slice(0, 15).map((f) => "<li><b>" + E(f.key) + "</b><span>" + E(f.stem.slice(0, 140)) + "</span><small>" + (f.n > 1 ? "asked " + f.n + "× · " : "") + E(f.sources.slice(0, 3).join(", ")) + "</small></li>").join("") + "</ol>" : "<p class='ixHsmall'>No keyed past MCQs in this unit: the sheet is built from the references and the course.</p>") +
