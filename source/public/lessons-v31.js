@@ -37,9 +37,20 @@
   const all = () => [].concat(...course().map((c) => c.lessons));
   const find = (key) => all().find((l) => l.key === key);
   const isDone = (key) => !!get(DONE)[key];
-  // v34: every lesson is written into the app (lessons-text-*.js): shown at once, offline, no AI needed. A version the
-  // professor wrote on this phone (older builds) still wins if present.
+  // v34: every lesson is also written into the app (lessons-text-*.js): shown at once, offline, no AI needed; a version
+  // the professor wrote on this phone still wins if present
   const cached = (key) => { const c = get(CACHE)[key]; if (c && c.v === VER) return c; const t = (window.IX_LESSON_TEXT || {})[key]; return t ? { v: VER, text: t, at: 0, builtin: true } : null; };
+  const included = (key) => (window.IX_NOVEMBER_LESSONS || {})[key];
+  const ready = (key) => included(key) || cached(key);
+
+  function preview(les, unit) {
+    const refs = window.IX_GIT206_REF || {};
+    const readings = (unit && unit.written || []).flatMap((topic) => refs[topic.topic] || []).slice(0, 3);
+    const figures = window.IX_FIG ? IX_FIG.forUnit(les.unit).slice(0, 3) : [];
+    return '<div class="ixLintro"><h2>Start with the course materials</h2><p>Use the diagrams and exam references for this unit. You can also generate a lesson for this specific topic with the Professor.</p></div>' +
+      figures.map((figure) => IX_FIG.html(figure, { short: true })).join("") +
+      readings.map((ref) => '<details class="ixLreference"><summary>' + E(ref.head) + '</summary><p>' + E(ref.text) + '</p><small>' + E(ref.src) + '</small></details>').join("");
+  }
 
   /* ── the professor's brief: understanding first ── */
   const STYLE = [
@@ -95,29 +106,63 @@
   const md = (s) => (HY() && HY().md ? HY().md(String(s).replace(/^>\s?/gm, "")) : "<p>" + E(s) + "</p>");
 
   /* ── the reader ── */
-  let root = null, body = null;
+  let root = null, body = null, focusBefore = null;
   function shell() {
     if (root) return;
     root = document.createElement("div"); root.className = "ixL"; root.setAttribute("role", "dialog"); root.setAttribute("aria-label", "Lesson");
-    root.innerHTML = '<div class="ixLtop"><button type="button" class="ixLx" data-l="close">✕</button><div class="ixLt"><small id="ixLsub"></small><b id="ixLtitle"></b></div></div><div class="ixLbody" id="ixLbody"></div>';
+    root.innerHTML = '<div class="ixLtop"><button type="button" class="ixLx" data-l="close" aria-label="Close lesson">✕</button><div class="ixLt"><small id="ixLsub"></small><b id="ixLtitle"></b></div></div><div class="ixLbody" id="ixLbody"></div>';
     document.body.appendChild(root); body = root.querySelector("#ixLbody");
     root.addEventListener("click", (e) => { const b = e.target.closest("[data-l]"); if (b && b.dataset.l === "close") close(); });
+    root.addEventListener("keydown", (e) => { if (e.key === "Escape" && !e.defaultPrevented) close(); });
   }
-  function close() { if (root) root.classList.remove("on"); document.documentElement.classList.remove("ixLon"); }
-  function head(les, sub) { shell(); root.classList.add("on"); document.documentElement.classList.add("ixLon"); root.querySelector("#ixLtitle").textContent = les ? les.title : "📚 The course"; root.querySelector("#ixLsub").textContent = sub || ""; body.scrollTop = 0; }
+  function close() {
+    if (!root || !root.classList.contains("on")) return;
+    root.classList.remove("on");
+    document.documentElement.classList.remove("ixLon");
+    if (focusBefore && focusBefore.isConnected) focusBefore.focus({ preventScroll: true });
+    focusBefore = null;
+  }
+  function head(les, sub) {
+    shell();
+    if (!root.classList.contains("on")) focusBefore = document.activeElement;
+    root.classList.add("on");
+    document.documentElement.classList.add("ixLon");
+    root.querySelector("#ixLtitle").textContent = les ? les.title : "DIG 206 lessons";
+    root.querySelector("#ixLsub").textContent = sub || "";
+    root.querySelector(".ixLx").focus({ preventScroll: true });
+    body.scrollTop = 0;
+  }
 
-  function open(key, at) {
+  function open(key, at, generated) {
     const les = typeof key === "object" ? key : find(key); if (!les) return index();
     const u = HY() && HY().unit ? HY().unit(les.unit) : null;
-    head(les, les.subject + " · " + (u ? u.name : "") + (les.date ? " · lecture of " + new Date(les.date + "T12:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : ""));
-    const c = cached(les.key);
-    if (!c) {
-      body.innerHTML = '<div class="ixLwait"><p>This lesson replaces the lecture <b>' + E(les.title) + "</b>. The professor writes it once (about 4 US cents, a minute or two), built to make you understand: why it matters, the mechanism, a question after each part.</p>" +
-        '<button type="button" class="ixLmain" id="ixLgen">✨ Write my lesson</button><p class="ixLsmall" id="ixLmsg"></p></div>';
-      body.querySelector("#ixLgen").onclick = async () => {
-        const b = body.querySelector("#ixLgen"), m = body.querySelector("#ixLmsg"); b.disabled = true; m.textContent = "The professor is writing your lesson…";
-        try { await generate(les); open(les.key, 0); } catch (e) { b.disabled = false; m.textContent = "Could not write it: " + e.message; }
+    const published = included(les.key);
+    head(les, les.subject + (published ? " · Course lesson" : u && u.name !== les.title ? " · " + u.name : ""));
+    const local = get(CACHE)[les.key];
+    const c = generated || (local && local.v === VER ? local : null) || published || cached(les.key);   // the owner's November lesson wins over the built-in one
+    const generateButton = (label) => '<button type="button" id="ixLgen">' + label + '</button><p class="ixLsmall" id="ixLmsg" role="status"></p>';
+    const wireGenerate = () => {
+      const button = body.querySelector("#ixLgen");
+      if (!button) return;
+      const message = body.querySelector("#ixLmsg");
+      button.onclick = async () => {
+        if (T() && !T().hasKey()) return T().openSetup("Connect a key to generate a custom lesson.");
+        button.disabled = true;
+        message.textContent = "Writing the lesson…";
+        try {
+          const text = await generate(les);
+          if (button.isConnected && root.classList.contains("on")) open(les.key, 0, { text });
+        } catch (e) {
+          message.textContent = "Could not write it: " + e.message;
+        } finally {
+          button.disabled = false;
+        }
       };
+    };
+    if (!c) {
+      body.innerHTML = preview(les, u) + '<div class="ixLwait"><div class="ixLask"><button type="button" id="ixLsheet">Open unit sheet</button>' + generateButton("Write with Professor") + '</div></div>';
+      body.querySelector("#ixLsheet").onclick = () => { close(); if (HY()) HY().open(les.unit); };
+      wireGenerate();
       return;
     }
     const ps = parts(c.text); let i = Math.max(0, Math.min(ps.length - 1, at || 0));
@@ -125,22 +170,28 @@
     // labels fit it best; the big picture gets the unit's main drawing if nothing else claimed it
     const FG = window.IX_FIG, pool = FG ? FG.forUnit(les.unit).concat(...(les.also || []).map((x) => FG.forUnit(x))) : [], used = new Set();
     ps.forEach((p) => { p.md = p.md.replace(/\[\[fig:([a-z0-9_]+)\]\]/gi, (m, id) => { const f = FG && FG.get(id); if (!f || used.has(id)) return ""; used.add(id); return "\n@@FIG:" + id + "@@\n"; }); });
-    ps.forEach((p, j) => { if (!FG || /@@FIG:/.test(p.md) || /confused|links|exam does|say it back/i.test(p.h)) return; const b = FG.best(pool.filter((f) => !used.has(f.id)), p.h + " " + p.md, 3) || FG.best(FG.all().filter((f) => !used.has(f.id)), p.h + " " + p.md, 4); if (b) { used.add(b.id); p.md += "\n@@FIG:" + b.id + "@@"; } });
-    const bp = ps.find((p) => /big picture/i.test(p.h)) || ps[1]; const first = pool.find((f) => !used.has(f.id)); if (bp && first && !/@@FIG:/.test(bp.md)) { used.add(first.id); bp.md = bp.md.replace(/(✏️|Draw it yourself|Draw this)/, "@@FIG:" + first.id + "@@\n$1"); if (!/@@FIG:/.test(bp.md)) bp.md += "\n@@FIG:" + first.id + "@@"; }
-    const render = (src) => md(src).replace(/<p>@@FIG:([a-z0-9_]+)@@<\/p>|@@FIG:([a-z0-9_]+)@@/g, (m, a, b) => { const f = FG.get(a || b); return f ? FG.html(f) : ""; });
+    if (!c.reading) {
+      ps.forEach((p) => { if (!FG || /@@FIG:/.test(p.md) || /confused|links|exam does|say it back/i.test(p.h)) return; const b = FG.best(pool.filter((f) => !used.has(f.id)), p.h + " " + p.md, 3) || FG.best(FG.all().filter((f) => !used.has(f.id)), p.h + " " + p.md, 4); if (b) { used.add(b.id); p.md += "\n@@FIG:" + b.id + "@@"; } });
+      const bp = ps.find((p) => /big picture/i.test(p.h)) || ps[1]; const first = pool.find((f) => !used.has(f.id)); if (bp && first && !/@@FIG:/.test(bp.md)) { used.add(first.id); bp.md = bp.md.replace(/(✏️|Draw it yourself|Draw this)/, "@@FIG:" + first.id + "@@\n$1"); if (!/@@FIG:/.test(bp.md)) bp.md += "\n@@FIG:" + first.id + "@@"; }
+    }
+    const render = (src) => md(src).replace(/<p>@@FIG:([a-z0-9_]+)@@<\/p>|@@FIG:([a-z0-9_]+)@@/g, (m, a, b) => { const f = FG.get(a || b); return f ? FG.html(f, { eager: true }) : ""; });
     const show = () => {
       const p = ps[i], last = i === ps.length - 1;
-      body.innerHTML = '<div class="ixLprog">' + ps.map((_, j) => '<i class="' + (j < i ? "d" : j === i ? "c" : "") + '"></i>').join("") + '</div><div class="ixLpart"><small>Part ' + (i + 1) + " of " + ps.length + "</small><h2>" + E(p.h.replace(/^\d+\.\s*/, "")) + '</h2><div class="ixLmd">' + render(p.md) + "</div>" + (/\|\|.+?\|\|/.test(p.md) ? '<p class="ixLsmall">🤔 Answer it in your head first, then tap the grey bar.</p>' : "") + "</div>" +
+      body.innerHTML = '<div class="ixLprog" aria-hidden="true">' + ps.map((_, j) => '<i class="' + (j < i ? "d" : j === i ? "c" : "") + '"></i>').join("") + '</div><div class="ixLpart"><small>Part ' + (i + 1) + " of " + ps.length + '</small><h2 tabindex="-1">' + E(p.h.replace(/^\d+\.\s*/, "")) + '</h2><div class="ixLmd">' + render(p.md) + "</div>" +
+        (c.reading ? '<p class="ixLsource"><a href="' + E(c.reading) + '" target="_blank" rel="noopener">Further reading in OpenStax A&amp;P 2e ↗</a></p>' : "") + "</div>" +
         '<div class="ixLask"><button type="button" data-a="simple">🤔 Explain it another way</button><button type="button" data-a="why">❓ Ask about this</button></div>' +
         '<div class="ixLnav">' + (i ? '<button type="button" data-a="back">← Back</button>' : "<span></span>") + (last ? '<button type="button" class="ixLmain" data-a="finish">✓ I understand it</button>' : '<button type="button" class="ixLmain" data-a="next">Next →</button>') + "</div>" +
-        (last ? '<div class="ixLend"><button type="button" data-a="teach">🗣 Teach it back to the professor</button><button type="button" data-a="sheet">📘 The exam sheet for this unit</button></div>' : "");
+        (last ? '<div class="ixLend"><button type="button" data-a="teach">🗣 Teach it back to the professor</button><button type="button" data-a="sheet">📘 The exam sheet for this unit</button></div>' : "") +
+        (c.reading && i === 0 && T() && T().hasKey() ? '<div class="ixLask">' + generateButton("Generate a custom version") + '</div>' : "");
+      wireGenerate();
       body.scrollTop = 0; root.scrollTop = 0;
+      body.querySelector(".ixLpart h2").focus({ preventScroll: true });
       const ctx = "LESSON: " + les.title + " (" + les.subject + ")\nTHE PART HE IS READING: " + p.h + "\n" + p.md.slice(0, 2500);
       body.querySelectorAll("[data-a]").forEach((b) => (b.onclick = () => {
         const a = b.dataset.a;
         if (a === "next") { i++; show(); }
         else if (a === "back") { i--; show(); }
-        else if (a === "finish") { const d = get(DONE); d[les.key] = Date.now(); put(DONE, d); index(les.unit, les.key); }
+        else if (a === "finish") { const d = get(DONE); d[les.key] = Date.now(); put(DONE, d); P().completeLesson(les.key); index(les.unit, les.key); }
         else if (a === "simple" || a === "why") { window.IX_SCREEN_OVERRIDE = { title: "Lesson · " + les.title, eyebrow: "DIG-206 " + les.subject, body: ctx }; T() && (T().open(), a === "simple" ? T().ask("I did not get this part: \"" + p.h + "\". Explain it another way: a different analogy, smaller steps, then check I got it with one question.", "simple", ctx) : null); }
         else if (a === "teach") { close(); window.IX_SCREEN_OVERRIDE = { title: "Lesson · " + les.title, eyebrow: "DIG-206 " + les.subject, body: c.text.slice(0, 5000) }; T() && (T().open(), T().ask("I just learned \"" + les.title + "\". Let me teach it back to you; ask me to start, then find the gaps in my understanding.", "classmate")); }
         else if (a === "sheet") { close(); HY() && HY().open(les.unit); }
@@ -150,13 +201,16 @@
   }
   // the course index (or one unit's lessons)
   function index(unitId, justDone) {
-    head(null, unitId ? "" : "Every DIG-206 lecture, as a lesson you understand · " + all().filter((l) => isDone(l.key)).length + " of " + all().length + " done");
-    const C = course().filter((c) => !unitId || c.unit.id === unitId);
+    const courses = course(), lessons = courses.flatMap((c) => c.lessons);
+    const C = courses.filter((c) => !unitId || c.unit.id === unitId);
+    if (!C.length && unitId) return index();
+    head(null, unitId ? C[0].unit.subject : lessons.filter((l) => isDone(l.key)).length + " of " + lessons.length + " done");
     if (unitId) root.querySelector("#ixLtitle").textContent = "📚 " + C[0].unit.name;
-    const row = (l) => '<button type="button" class="ixLrow' + (isDone(l.key) ? " done" : "") + '" data-k="' + E(l.key) + '"><span class="ixLck">' + (isDone(l.key) ? "✓" : cached(l.key) ? "●" : "○") + "</span><span><b>" + E(l.title) + "</b><small>" + E(l.subject) + (l.date ? " · lecture " + new Date(l.date + "T12:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "") + (cached(l.key) && !isDone(l.key) ? " · ready" : "") + "</small></span></button>";
+    const row = (l) => '<button type="button" class="ixLrow' + (isDone(l.key) ? " done" : "") + '" data-k="' + E(l.key) + '"><span class="ixLck" aria-hidden="true">' + (isDone(l.key) ? "✓" : ready(l.key) ? "●" : "○") + "</span><span><b>" + E(l.title) + "</b><small>" + E(l.subject) + " · " + (isDone(l.key) ? "Completed" : ready(l.key) ? "Lesson ready" : "Study materials") + "</small></span></button>";
     const nextUp = unitId && C[0].lessons.find((l) => !isDone(l.key));
+    const pending = lessons.filter((l) => !ready(l.key));
     body.innerHTML = (justDone ? '<div class="ixLok">✓ Lesson done. ' + (nextUp ? "Next one below." : "That was the last lesson of this unit: the exam sheet and the questions come next.") + "</div>" : "") +
-      (unitId || !all().some((l) => !cached(l.key)) ? "" : '<div class="ixLrow2"><button type="button" class="ixLmain" id="ixLall">✨ Write every lesson now (' + all().filter((l) => !cached(l.key)).length + " left, about $" + Math.max(1, Math.round(all().filter((l) => !cached(l.key)).length * 0.04)) + ')</button><p class="ixLsmall" id="ixLallp"></p></div>') +
+      (unitId || !pending.length ? "" : '<details class="ixLbatch"><summary>Generate lessons with Professor</summary><div class="ixLrow2"><button type="button" class="ixLmain" id="ixLall">Write ' + pending.length + " lessons (est. $" + (pending.length * 0.04).toFixed(2) + ')</button><p class="ixLsmall" id="ixLallp" role="status"></p></div></details>') +
       C.map((c) => (unitId ? "" : '<h3 class="ixLh">' + E(c.unit.subject) + " · " + E(c.unit.name) + "</h3>") + '<div class="ixLlist">' + c.lessons.map(row).join("") + "</div>").join("") +
       (unitId ? '<div class="ixLnav"><button type="button" data-u="all">📚 All lessons</button>' + (nextUp ? '<button type="button" class="ixLmain" data-k="' + E(nextUp.key) + '">▶ ' + E(nextUp.title) + "</button>" : '<button type="button" class="ixLmain" data-u="sheet">📘 The exam sheet</button>') + "</div>" : "");
     body.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => open(b.dataset.k)));
@@ -164,7 +218,8 @@
     const us = body.querySelector("[data-u=sheet]"); if (us) us.onclick = () => { close(); HY() && HY().open(unitId); };
     const ab = body.querySelector("#ixLall");
     if (ab) ab.onclick = async () => {
-      ab.disabled = true; const m = body.querySelector("#ixLallp"), todo = all().filter((l) => !cached(l.key)); let n = 0;
+      if (T() && !T().hasKey()) return T().openSetup("Connect a key to generate lessons.");
+      ab.disabled = true; const m = body.querySelector("#ixLallp"), todo = pending.filter((l) => !ready(l.key)); let n = 0;
       for (const l of todo) { if (!m.isConnected) break; m.textContent = "Writing " + (n + 1) + " of " + todo.length + ": " + l.title + "… (keep the app open)"; try { await generate(l); n++; } catch (e) { m.textContent = "Stopped after " + n + ": " + e.message + ". Tap again to carry on."; ab.disabled = false; return; } }
       if (m.isConnected) index();
     };
@@ -176,7 +231,7 @@
     if (busy || !localStorage.getItem("ix_tutor_key_v1") || !P()) return 0; busy = true; let n = 0;
     try {
       const k = new Date(), f = (d) => d.toISOString().slice(0, 10), lim = f(new Date(k.getTime() + 3 * 864e5));
-      const keys = []; P().build().days.forEach((d) => { if (d.date >= f(k) && d.date <= lim) d.steps.forEach((x) => { if (x.kind === "lesson" && !cached(x.key) && keys.indexOf(x.key) < 0) keys.push(x.key); }); });
+      const keys = []; P().build().days.forEach((d) => { if (d.date >= f(k) && d.date <= lim) d.steps.forEach((x) => { if (x.kind === "lesson" && !ready(x.key) && keys.indexOf(x.key) < 0) keys.push(x.key); }); });
       for (const key of keys.slice(0, 3)) { const l = find(key); if (!l) continue; try { await generate(l); n++; } catch (e) { break; } }
     } finally { busy = false; }
     return n;

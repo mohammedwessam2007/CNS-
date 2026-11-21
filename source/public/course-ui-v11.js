@@ -73,5 +73,6 @@ function renderRail(){
  const sideCourse=document.querySelector('#sideCourse');if(sideCourse)sideCourse.textContent=cp+'%';
 }
 window.INTELLECTUALITY_COURSE_UI=function(){renderRail();};
+window.INTELLECTUALITY_TOGGLE_RAIL=toggleRail;
 window.addEventListener('resize',()=>{if(innerWidth>900&&railOpen)toggleRail(false)},{passive:true});
 })();

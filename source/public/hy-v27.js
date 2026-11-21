@@ -89,7 +89,7 @@
   /* ── a renderer with tables and hidden answers (||answer||) ── */
   function md(src) {
     const lines = String(src || "").split("\n"), out = []; let list = null, table = null;
-    const inline = (t) => E(t).replace(/\|\|(.+?)\|\|/g, '<span class="ixYspoil" tabindex="0">$1</span>').replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<i>$2</i>").replace(/`([^`]+)`/g, "<code>$1</code>");
+    const inline = (t) => E(t).replace(/\|\|(.+?)\|\|/g, '<button type="button" class="ixYspoil" aria-expanded="false"><span>Reveal answer</span><span hidden>$1</span></button>').replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<i>$2</i>").replace(/`([^`]+)`/g, "<code>$1</code>");
     const flush = () => { if (list) { out.push("<ul>" + list.join("") + "</ul>"); list = null; } if (table) { out.push('<div class="ixYtw"><table class="ixYt">' + table.map((r, i) => "<tr>" + r.map((c) => (i ? "<td>" : "<th>") + inline(c.trim()) + (i ? "</td>" : "</th>")).join("") + "</tr>").join("") + "</table></div>"); table = null; } };
     for (const raw of lines) {
       const l = raw.trimEnd();
@@ -102,6 +102,23 @@
     }
     flush(); return out.join("");
   }
+
+  document.addEventListener("click", (event) => {
+    const answer = event.target.closest && event.target.closest(".ixYspoil");
+    if (!answer) return;
+    const revealed = answer.classList.toggle("on");
+    if (answer.matches("button[aria-expanded]")) {
+      answer.setAttribute("aria-expanded", String(revealed));
+      answer.firstElementChild.hidden = revealed;
+      answer.lastElementChild.hidden = !revealed;
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if ((event.key === "Enter" || event.key === " ") && event.target.matches("span.ixYspoil")) {
+      event.preventDefault();
+      event.target.click();
+    }
+  });
 
   // drawings: Gray's Anatomy plates (public domain) for the unit; each gets 👁 Explain / 🎯 Quiz from the professor
   // units without stored plates: the phone looks on Wikimedia Commons once (Gray's plates whose own caption names the
@@ -150,7 +167,7 @@
       root = document.createElement("div"); root.className = "ixH ixY"; root.setAttribute("role", "dialog"); root.setAttribute("aria-label", "High-yield sheet");
       root.innerHTML = '<div class="ixHbox"><div class="ixHhd"><b id="ixYt">📘 High-yield</b><span class="ixHsub" id="ixYsub"></span><button type="button" data-y="close" aria-label="Close">✕</button></div><div class="ixHbody" id="ixYbody"></div></div>';
       document.body.appendChild(root); body = root.querySelector("#ixYbody");
-      root.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && b.dataset.y === "close") close(); const sp = e.target.closest(".ixYspoil"); if (sp) sp.classList.toggle("on"); });
+      root.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && b.dataset.y === "close") close(); });
     }
     if (T()) T().close(); if (window.IX_GIT) IX_GIT.close(); if (window.IX_PLAN) IX_PLAN.close();
     root.classList.add("on");
