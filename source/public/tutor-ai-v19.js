@@ -515,6 +515,7 @@
   function close() {
     if (!root) return;
     root.classList.remove("on");
+    root.querySelectorAll(".ixTactivity").forEach((activity) => activity.remove());
     blindOn = false;
     document.documentElement.classList.remove("ixBlind");
   }
@@ -623,6 +624,7 @@
       '<div class="ixTrow"><button type="button" class="primary" id="ixTref" hidden>Show reference answer</button>' + (canGrade ? '<button type="button" id="ixTego">Mark it (3 examiners)</button>' : "") +
       '<button type="button" data-x>Close</button></div><div class="ixTstatus" id="ixTest" role="status"></div>'
     );
+    s.classList.add("ixTactivity");
     const qi = s.querySelector("#ixTeq"), vb = s.querySelector("#ixTverb"), answer = s.querySelector("#ixTea"),
       reference = s.querySelector("#ixTref"), result = s.querySelector("#ixTest"), draftKey = "ix_written_drafts_v1";
     const showVerb = () => {
@@ -709,6 +711,7 @@
     if (!prepared && spend().usd >= cap()) { addMsg("tutor", "This week's AI budget is used up."); return; }
     const intro = prepared ? "Answer the lesson's questions from memory. Choose how sure you are before checking each answer." : "These questions are generated for this topic and checked by a second model. Answer from memory and choose how sure you are.";
     const s = sheet("<h3>" + (prepared ? "Lesson knowledge check" : "Blind check") + "</h3><p>" + intro + "</p><div id=\"ixBq\"><p class=\"ixTstatus\">Loading questions…</p></div>");
+    s.classList.add("ixTactivity", "ixTcheck");
     const box = s.querySelector("#ixBq"), topic = topicKey();
     (prepared ? Promise.resolve(prepared) : makeBlind(key)).then((items) => {
       if (!box.isConnected || !root.classList.contains("on")) return;

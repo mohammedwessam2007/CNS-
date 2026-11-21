@@ -335,7 +335,7 @@ html.ixXHome main .ixQtop h1 { margin: 6px 0 0; font: 800 clamp(23px, 3vw, 32px)
 
 .ixNav { display: none; }
 html.ixXHome .ixXmRailClose { display: none; }
-.ixS, .ixL, html.ixXSeason :is(.ixH, .ixY, .ixT, .ixW) {
+.ixS, .ixL, html.ixXSeason :is(.ixH, .ixY, .ixW) {
   font-family: var(--ix-sans);
   background: var(--ix-base);
   color: var(--ix-text);
@@ -402,6 +402,13 @@ html.ixXSeason .ixTsheet { background: var(--ix-panel); padding-bottom: 100px; }
 html.ixXSeason .ixTrow [hidden] { display: none !important; }
 html.ixXSeason :is(.ixHbody, .ixTsheetIn) > h3 { color: var(--ix-text); font: 400 29px/1.1 var(--ix-serif); }
 html.ixXSeason .ixHbody > :is(h3, .ixPmap, .ixPsteps) { color: var(--ix-text); }
+html.ixXSeason .ixT:has(.ixTactivity) { background: #080812c9; backdrop-filter: blur(7px); }
+.ixTactivity .ixTsheetIn > h3 { font-size: clamp(31px, 4vw, 48px); }
+.ixTcheck #ixBq > p:first-child { margin: 13px 0 8px; color: var(--ix-lilac); font-weight: 800; }
+.ixTcheck .ixBopt { display: flex; align-items: center; gap: 8px; min-height: 42px; margin-top: 5px; }
+.ixTcheck .ixBopt input { flex: none; width: auto; accent-color: var(--ix-lilac); }
+.ixTcheck .ixBopt:has(:checked) { background: #2c2340; border-color: #705a91; }
+.ixTcheck #ixBq .ixTrow { margin-top: 14px; }
 
 .ixConf { position: fixed; inset: 0; pointer-events: none; z-index: 9500; overflow: hidden; }
 .ixConf i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; animation: ixFall 2.4s cubic-bezier(.2,.6,.4,1) forwards; }
@@ -409,8 +416,24 @@ html.ixXSeason .ixHbody > :is(h3, .ixPmap, .ixPsteps) { color: var(--ix-text); }
 
 @media (min-width: 901px) {
   .ixLbody:has(.ixLpart) { max-width: 1050px; padding-inline: 26px; }
-  .ixLmd:has(.ixFg) { display: flow-root; }
-  .ixLmd .ixFg { float: right; width: min(49%, 440px); margin: 0 0 14px 24px; }
+  .ixLmd:has(> .ixFg):not(:has(> .ixFg ~ .ixFg)) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+    align-content: start;
+    column-gap: 24px;
+  }
+  .ixLmd > :not(.ixFg) { grid-column: 1; }
+  .ixLmd > .ixFg { grid-column: 2; grid-row: 1 / span 12; margin: 0; }
+  html.ixXSeason .ixT:has(.ixTactivity) .ixTbox {
+    inset: clamp(18px, 5vh, 64px) auto max(84px, calc(env(safe-area-inset-bottom) + 76px)) 50%;
+    transform: translateX(-50%);
+    width: min(655px, calc(100% - 36px));
+    border: 1px solid var(--ix-line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  html.ixXSeason .ixTactivity { padding: 25px; }
 }
 @media (max-width: 900px) {
   html.ixXHome main > .hero { padding: 18px 17px calc(95px + env(safe-area-inset-bottom)); }

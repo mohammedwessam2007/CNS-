@@ -171,7 +171,7 @@
       ps.forEach((p) => { if (!FG || /@@FIG:/.test(p.md) || /confused|links|exam does|say it back/i.test(p.h)) return; const b = FG.best(pool.filter((f) => !used.has(f.id)), p.h + " " + p.md, 3) || FG.best(FG.all().filter((f) => !used.has(f.id)), p.h + " " + p.md, 4); if (b) { used.add(b.id); p.md += "\n@@FIG:" + b.id + "@@"; } });
       const bp = ps.find((p) => /big picture/i.test(p.h)) || ps[1]; const first = pool.find((f) => !used.has(f.id)); if (bp && first && !/@@FIG:/.test(bp.md)) { used.add(first.id); bp.md = bp.md.replace(/(✏️|Draw it yourself|Draw this)/, "@@FIG:" + first.id + "@@\n$1"); if (!/@@FIG:/.test(bp.md)) bp.md += "\n@@FIG:" + first.id + "@@"; }
     }
-    const render = (src) => md(src).replace(/<p>@@FIG:([a-z0-9_]+)@@<\/p>|@@FIG:([a-z0-9_]+)@@/g, (m, a, b) => { const f = FG.get(a || b); return f ? FG.html(f) : ""; });
+    const render = (src) => md(src).replace(/<p>@@FIG:([a-z0-9_]+)@@<\/p>|@@FIG:([a-z0-9_]+)@@/g, (m, a, b) => { const f = FG.get(a || b); return f ? FG.html(f, { eager: true }) : ""; });
     const show = () => {
       const p = ps[i], last = i === ps.length - 1;
       body.innerHTML = '<div class="ixLprog" aria-hidden="true">' + ps.map((_, j) => '<i class="' + (j < i ? "d" : j === i ? "c" : "") + '"></i>').join("") + '</div><div class="ixLpart"><small>Part ' + (i + 1) + " of " + ps.length + '</small><h2 tabindex="-1">' + E(p.h.replace(/^\d+\.\s*/, "")) + '</h2><div class="ixLmd">' + render(p.md) + "</div>" +

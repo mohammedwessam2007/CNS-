@@ -24,7 +24,7 @@
   const title = (f) => (f.title || String(f.cap).split(" ").slice(0, 4).join(" ")).slice(0, 90);
   function html(f, opts) {
     opts = opts || {};
-    return '<figure class="ixFg" data-fig="' + E(f.id || "") + '"><button type="button" class="ixFgImg" data-zoom="' + E(f.src) + '" aria-label="Open the drawing full screen"><img loading="lazy" src="' + E(f.src) + '" alt="' + E(f.alt || f.cap) + '"' + (f.w ? ' width="' + f.w + '" height="' + f.h + '"' : "") + '><span class="ixFgZ">⤢</span></button>' +
+    return '<figure class="ixFg" data-fig="' + E(f.id || "") + '"><button type="button" class="ixFgImg" data-zoom="' + E(f.src) + '" aria-label="Open the drawing full screen"><img loading="' + (opts.eager ? "eager" : "lazy") + '" src="' + E(f.src) + '" alt="' + E(f.alt || f.cap) + '"' + (f.w ? ' width="' + f.w + '" height="' + f.h + '"' : "") + '><span class="ixFgZ">⤢</span></button>' +
       (opts.hideCap ? '<figcaption><span class="ixYspoil" tabindex="0">' + E(title(f)) + "</span></figcaption>" : '<figcaption><b>' + E(title(f)) + "</b>" + (opts.short || !f.body ? "" : "<span>" + E(String(f.body).length > 260 ? String(f.body).slice(0, 260).replace(/\s+\S*$/, "") + "…" : f.body) + "</span>") + '<small>OpenStax A&amp;P 2e · Fig. ' + E(f.num || "") + (f.credit ? " · " + E(f.credit.replace(/[()]/g, "")) : "") + " · CC BY 4.0</small></figcaption>") +
       (opts.noAsk ? "" : '<div class="ixFgAsk"><button type="button" data-fask="picture">👁 Explain it</button><button type="button" data-fask="picquiz">🎯 Quiz me on it</button></div>') + "</figure>";
   }
