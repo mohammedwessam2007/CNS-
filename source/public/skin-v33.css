@@ -567,3 +567,25 @@ html.ixXSeason .ixT:has(.ixTactivity) { background: #080812c9; backdrop-filter: 
 .ixEtick{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:6px 0;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:15px;line-height:1.45}.ixEtick input{margin-top:3px;width:18px;height:18px;flex:none}
 .ixEres{margin-top:12px;font-size:15px;line-height:1.6;color:#dbe2f7}
 .ixEnote{font-size:13px;color:#97a3c2;margin:0 0 14px}.ixEsmall{font-size:13px;color:#8a97b8}
+/* ── v39 · from the course ── */
+.ixTeach{margin:12px 0;padding:12px 14px;border-radius:16px;background:rgba(52,224,180,.07);border:1px solid rgba(52,224,180,.3)}
+.ixTeach b{font-size:13px;color:#9fe6c9;letter-spacing:.02em}.ixTeach p{margin:6px 0 8px;font-size:15px;line-height:1.55;color:#e6ebfa}
+/* ── v39 · practical room ── */
+.ixPr{position:fixed;inset:0;z-index:8700;display:none;overflow:auto;background:#0b0f1a;color:#eef2ff;font-family:var(--body,system-ui)}.ixPr.on{display:block}
+.ixPrbox{max-width:720px;margin:0 auto;padding:14px 16px 40px}
+.ixPrhd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0 12px}.ixPrhd b{font-size:17px}
+.ixPrhd button{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:16px}
+.ixPrtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}.ixPrtabs button{border-radius:999px;padding:9px 14px;font-weight:800;font-size:13px;background:rgba(255,255,255,.06);color:#dbe2f7;border:1px solid rgba(255,255,255,.14)}
+.ixPrtabs button[aria-pressed=true]{background:#a78bfa;color:#140b2e;border-color:transparent}
+.ixPrbody h3{font-size:19px;line-height:1.35;margin:6px 0 10px}.ixPrbody p{line-height:1.55}
+.ixPrsmall{font-size:13px;color:#97a3c2;font-weight:700}
+.ixPrfeat{margin:8px 0 14px;padding-left:20px;font-size:16px;line-height:1.55}.ixPrfeat li{margin:4px 0}
+.ixPropts{display:grid;gap:8px}.ixPropts button{text-align:left;border-radius:14px;padding:13px 14px;font-size:15px;font-weight:700;background:rgba(255,255,255,.05);color:#eef2ff;border:1px solid rgba(255,255,255,.14)}
+.ixPropts button.good{background:rgba(52,224,180,.16);border-color:#34e0b4}.ixPropts button.bad{background:rgba(255,93,143,.14);border-color:#ff5d8f}
+.ixPrfb{margin-top:12px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
+.ixPrmain{border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;background:linear-gradient(135deg,#ffcf5a,#ffb347);color:#201400;border:0;margin-top:8px}
+.ixPrtick{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;margin:6px 0;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:15px;line-height:1.45}.ixPrtick input{margin-top:3px;width:18px;height:18px;flex:none}
+.ixPrrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.ixPrrow input{flex:1;min-width:120px;border-radius:12px;padding:11px 12px;font-size:16px;background:#0d1326;border:1px solid rgba(255,255,255,.16);color:#fff}
+.ixPrrow button:not(.ixPrmain){border-radius:14px;padding:12px 16px;font-weight:800;background:rgba(255,255,255,.06);color:#eef2ff;border:1px solid rgba(255,255,255,.14);margin-top:8px}
+.ixPrbig{font-size:28px;font-weight:900}
+.ixHsealed{border-color:rgba(167,139,250,.45)!important}

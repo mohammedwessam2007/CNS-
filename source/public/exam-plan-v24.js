@@ -141,7 +141,7 @@
     // Phase A follows the official IPKA timetable: a unit is studied the day after its last lecture
     // (the lecture is the first exposure, the app the second); full past papers only once the lectures are done
     const A = []; for (let d = new Date(start); d < mcqDate; d = new Date(d.getTime() + DAY)) A.push(new Date(d));
-    const FULL = { "2026-12-19": ["Exam 195 (2023)", "Final 196 (2024)"], "2026-12-26": ["Final 197 (Jan 2025)"], "2026-12-28": ["EOM 2026 (198)"] };
+    const FULL = { "2026-12-19": ["Exam 195 (2023)", "Final 196 (2024)"], "2026-12-26": ["Final 197 (Jan 2025)", "Sealed mock 1"], "2026-12-28": ["EOM 2026 (198)", "Sealed mock 2"] };   // v39: two sealed mocks of never-seen questions
     const CHECKS = ["2026-11-28", "2026-12-05", "2026-12-12"];
     const WEAK = ["2026-12-27"], LIGHT = "2026-12-29";
     const units = interleave(gitUnits()), span = lectureSpan(), plan = new Map();
@@ -167,7 +167,7 @@
       const lecSteps = false && lec.length ? [step("notes", "📝 2 min after the lectures: what the doctors stressed (" + lec.map((l) => l[2]).slice(0, 2).join("; ").slice(0, 70) + ")", 2, { lect: k })] : [];
       const base = { date: k, phase: "GIT MCQ", lectures: lec.map((l) => l[1] + ": " + l[2]) };
       if (isOff(d)) return days.push(Object.assign(base, { off: true, steps: [] }));
-      if (FULL[k]) return days.push(Object.assign(base, { title: "Full past paper" + (FULL[k].length > 1 ? "s" : "") + " as a real mock", steps: [step("review", "Reviews due (memory cards)", 10)].concat(FULL[k].map((src) => step("mock", "Mock: " + src + " · AI off", 30, { src })), [step("misses", "Review the misses with the professor", 15)]) }));
+      if (FULL[k]) return days.push(Object.assign(base, { title: "Full past paper" + (FULL[k].length > 1 ? "s" : "") + " as a real mock" + (FULL[k].some((x) => /^Sealed/.test(x)) ? " + a sealed mock" : ""), steps: [step("review", "Reviews due (memory cards)", 10)].concat(FULL[k].map((src) => step("mock", "Mock: " + src + " · AI off", 30, { src })), [step("misses", "Review the misses with the professor", 15)]) }));
       if (CHECKS.includes(k)) return days.push(Object.assign(base, { title: "Weekly check on what was lectured so far (AI off)", steps: [step("review", "Reviews due (memory cards)", 10), step("week", "Today's 10 from this week's units, misses first", 15), step("blindmix", "Blind check on your weakest unit", 15), step("traps", "My traps, re-worded", 10), step("outline", "⚡ 3-minute outlines due (written)", 10)] }));
       if (WEAK.includes(k)) return days.push(Object.assign(base, { title: "Weak spots only, mixed", steps: [step("review", "Reviews due", 15), step("weak", "Today's 10: misses first, all chapters mixed", 15), step("blindmix", "Blind check on your weakest chapter", 15), step("traps", "My traps, re-worded", 10)] }));
       if (k === LIGHT) return days.push(Object.assign(base, { title: "Light day before the exam", steps: [step("review", "Reviews due", 15), step("traps", "My traps, re-worded", 15), step("examday", "Exam-day protocol", 5), step("rest", "Stop by evening. Sleep is part of the plan.", 0)] }));
@@ -177,7 +177,8 @@
       const paired = pl.units.length > 1, steps = lecSteps.concat([step("review", "Reviews due (memory cards)", 10)]);
       // rule 1: a small budget cuts steps, never adds minutes: written goes first (phase B covers it), then teaching
       const nLes = window.IX_LESSON ? pl.units.reduce((t, u) => t + IX_LESSON.lessonsOf(u.id).length, 0) : 0;
-      const per = nLes ? Math.max(5, Math.min(20, Math.floor((mins - 5 - (paired ? 20 : 12)) / nLes))) : 0;
+      const dg = window.IX_PRACT ? pl.units.filter((u) => u.subject === "Physiology" && IX_PRACT.diagramsFor(u.name).length).length * 6 : 0;   // v39: department diagrams share the lesson minutes
+      const per = nLes ? Math.max(5, Math.min(20, Math.floor((mins - 5 - dg - (paired ? 20 : 12)) / nLes))) : 0;
       // rule 1 on a small budget: the lessons (the course) come first; the practice step waits for a roomier day
       const roomy = !nLes || 5 + per * nLes + (paired ? 20 : 12) <= mins;
       pl.units.forEach((u) => {
@@ -188,6 +189,8 @@
         if (roomy) steps.push(u.nMcq >= 6 ? step("mcq", "10 MCQs: " + u.name, paired ? 10 : 12, { unit: u.id }) : step("blind", "Blind check (new questions, AI off): " + u.name, paired ? 10 : 12, { unit: u.id }));
         if (!paired && mins >= 52 && u.written.length && steps.reduce((t, x) => t + x.min, 0) + 15 <= mins + 5) steps.push(step("written", "Write from a blank page: " + cut(u.written[0].questions[0].q, 80), 15, { unit: u.id, q: u.written[0].questions[0].q }));
       });
+      // v39: the physiology department's diagrams for this unit, drawn from memory (8 min) when the budget allows
+      pl.units.filter((u) => u.subject === "Physiology").forEach((u) => { const dn = window.IX_PRACT ? IX_PRACT.diagramsFor(u.name).length : 0; if (dn && dg && steps.reduce((t, x) => t + x.min, 0) + 6 <= mins + 5) steps.push(step("pdiagram", "✏️ Department diagrams from memory: " + u.name, 6, { unit: u.id, uname: u.name })); });
       days.push(Object.assign(base, { title: pl.units.map((u) => u.subject + " · " + u.name).join(" + ") + (pl.partial ? " (its lectures are still running)" : ""), steps }));
     });
     days.push({ date: EXAMS[0].date, phase: "GIT MCQ", exam: EXAMS[0], steps: [step("examday", "Exam-day protocol, then go", 5)] });
@@ -204,7 +207,7 @@
       const t = wPlan.slice(wi, wi + perB); wi += t.length;
       const col = LECT.filter((l) => l[0] === k && l[1] === "College");
       if (col.length) return days.push({ date: k, phase: "GIT written", title: "College final revision + " + t.slice(0, 2).map((w) => w.topic).join(" · "), lectures: col.map((l) => l[2]), steps: [step("college", "Attend: " + col[0][2], 0), step("review", "Reviews due", 10)].concat(t.slice(0, 2).map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q }))) });
-      days.push({ date: k, phase: "GIT written", title: t.map((w) => w.topic).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q })), [step("outline", "⚡ 3-minute outlines due", 10)]) });
+      days.push({ date: k, phase: "GIT written", title: t.map((w) => w.topic).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((w) => step("written", w.subject + ": " + w.topic + " (asked " + w.times + "×)", 15, { q: w.questions[0].q })), [step("outline", "⚡ 3-minute outlines due", 10), step("pdiagram", "✏️ 2 physiology department diagrams from memory", 8)]) });
     });
     days.push({ date: EXAMS[1].date, phase: "GIT written", exam: EXAMS[1], steps: [step("examday", "Written-exam protocol, then go", 5)] });
     // Phase C: CNS written — chapters by weight; the professor's likely essay, then a blank page and three examiners
@@ -226,7 +229,7 @@
     });
     days.push({ date: EXAMS[2].date, phase: "CNS written", exam: EXAMS[2], steps: [step("examday", "Written-exam protocol, then go", 5)] });
     // Phase D: practical revision at college (13-14 Jan); the practical's own date is not announced yet
-    [["2027-01-13", "GIT"], ["2027-01-14", "CNS"]].forEach(([k, x]) => days.push({ date: k, phase: "Practical", title: "Practical revision at college + spot drill", steps: [step("college", "Attend the practical revision at college (" + x + " focus)", 0), step("spot", "🎯 Spot drill: 6 drawings, name each, then the professor quizzes you", 20), step("review", "Reviews due", 10)] }));
+    [["2027-01-13", "GIT"], ["2027-01-14", "CNS"]].forEach(([k, x]) => days.push({ date: k, phase: "Practical", title: "Practical revision at college + spot drill", steps: [step("college", "Attend the practical revision at college (" + x + " focus)", 0)].concat(x === "GIT" ? [step("practical", "🔬 Practical room: 8 histology slides, 4 diagrams, 4 calculations", 25)] : [], [step("spot", "🎯 Spot drill: 6 drawings, name each, then the professor quizzes you", 20), step("review", "Reviews due", 10)]) }));
     // rule 1, enforced at the end: a day over the owner's minutes shortens its review step (to 5 at least)
     days.forEach((d) => { const tot = d.steps.reduce((t, x) => t + x.min, 0), r = d.steps.find((x) => x.kind === "review"); if (r && tot > mins) r.min = Math.max(5, r.min - (tot - mins)); });
     days.forEach((d) => d.steps.forEach((s, i) => (s.id = d.date + ":" + i + ":" + s.kind)));
@@ -305,6 +308,8 @@
     else if (s.kind === "sheets") { openSheets(); }
     else if (s.kind === "lesson" && window.IX_LESSON) { close(); IX_LESSON.open(s.key); }
     else if (s.kind === "spot" && window.IX_HY) { close(); IX_HY.spot(6); }
+    else if (s.kind === "practical" && window.IX_PRACT) { close(); IX_PRACT.open("slides"); }
+    else if (s.kind === "pdiagram" && window.IX_PRACT) { close(); IX_PRACT.open("diagrams", s.uname); }
     else if (s.kind === "cnsquick" && window.IX_CNS) { close(); IX_CNS.quick(s.qs || []); }
     else if (s.kind === "cns" && s.q) { close(); override("CNS written · " + s.ch, "NEU-205 written (" + s.sub + " · " + s.ch + "). App prediction, not a past paper. Question: " + s.q); t.openEssay(s.q); }
     else if (s.kind === "cns" && window.IX_HY) { close(); override("CNS · " + s.ch, "CNS written, " + s.sub + " · " + s.ch); IX_HY.open("CNS:" + s.ch); }
@@ -488,6 +493,7 @@
           '<button type="button" data-drawlist><b>Exam drawings</b><small>Draw it with me, then get graded</small><span aria-hidden="true">↗</span></button>' +
           '<button type="button" data-kit="cards"><b>Flashcards</b><small>' + (window.IX_KIT ? IX_KIT.due().length + " due · " + IX_KIT.cards().length + " in the course" : "Spaced repetition") + '</small><span aria-hidden="true">↗</span></button>' +
           '<button type="button" data-kit="search"><b>Search everything</b><small>Lessons, answers, questions</small><span aria-hidden="true">↗</span></button>' +
+          '<button type="button" data-pract><b>Practical room</b><small>Slides, department diagrams, calculations</small><span aria-hidden="true">↗</span></button>' +
           '<button type="button" data-kit="one"><b>One-pagers</b><small>Numbers and mnemonics too</small><span aria-hidden="true">↗</span></button>' +
           '<button type="button" data-xhome="lib"><b>CNS library</b><small>NEU 205 written preparation</small><span aria-hidden="true">↗</span></button></div></section>' +
         '<details class="ixZmore"' + (detailsOpen ? " open" : "") + '><summary>Readiness and plan coverage</summary>' + readinessHTML() +

@@ -23,6 +23,8 @@
   const HOW = {
     review: ["The professor shows what is due. Answer each one out loud first, then check.", "Rate yourself honestly. When the list ends, you are done."],
     cnsquick: ["CNS written: 3 minutes per question, write only the headings and key points from memory.", "Then reveal the full-mark skeleton and see what you missed. Tap Write it fully for any you want marked."],
+    practical: ["Histology slides: name each from its features, then read what identifies it.", "Then 4 department diagrams from memory and 4 calculations. Misses become flashcards."],
+    pdiagram: ["Draw each physiology department diagram on paper from memory, fully labelled.", "Then tick the labels you drew. Missing labels become flashcards."],
     lesson: ["Read one part at a time and answer the reasoning question before revealing it.", "Study the labelled diagrams. At the end, tap I understand it."],
     learn: ["Read the sheet top to bottom: story → whiteboard → tables → what examiners ask.", "Then tap ▶ Learn it with the professor for the 6 short steps. Draw the whiteboard on paper."],
     mcq: ["10 past-paper questions on this unit.", "Choose how sure you are before you answer. Read every wrong answer's why."],
@@ -160,7 +162,7 @@
   }
   function toast(t) { try { const d = document.createElement("div"); d.className = "ixStoast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2600); } catch (e) {} }
   // items that know they are finished say so: a lesson finished with "I understand it" completes its step
-  document.addEventListener("ix:done", (e) => { const ss = load(); if (!ss || !ss.open) return; const s = order().find((x) => x.id === ss.open.id); if (!s) return; const d = e.detail || {}; const same = d.kind === s.kind || (d.kind === "check" && /^(blind|blindmix|week|weak|misses|traps)$/.test(s.kind)); if (same && (!d.key || d.key === s.key || d.key === s.unit)) setTimeout(() => complete(s), 350); });
+  document.addEventListener("ix:done", (e) => { const ss = load(); if (!ss || !ss.open) return; const s = order().find((x) => x.id === ss.open.id); if (!s) return; const d = e.detail || {}; const same = d.kind === s.kind || (d.kind === "check" && /^(blind|blindmix|week|weak|misses|traps)$/.test(s.kind)) || (d.kind === "practical" && /^(practical|pdiagram)$/.test(s.kind)); if (same && (!d.key || d.key === s.key || d.key === s.unit)) setTimeout(() => complete(s), 350); });
   function repaint() { if (typeof window.render === "function") window.render(); }
   function start() {
     if (!P()) return;

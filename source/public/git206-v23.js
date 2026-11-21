@@ -30,7 +30,14 @@
   const PAPERS = () => Array.from(new Set(B().mcq.filter((q) => q.ocr && q.keyBy !== "app" && !/Zahra/i.test(q.source)).map((q) => q.source)));   // v34: Zahra is a compilation, not a paper
   const mocked = (src) => st().mocks.some((m) => m.src === src);
   // a solved paper stays out of practice until it has been taken as a mock: it is the honest test
-  const practicePool = () => visible().filter((q) => keyed(q) && (!q.ocr || q.keyBy === "app" || mocked(q.source)));
+  // v39 · two SEALED mocks (the CNS course's honest test): ~1 in 9 keyed non-paper questions, chosen by a fixed hash of the
+  // id, are never shown in practice until their mock is taken, so the predicted score comes from questions never seen
+  const SEALED = ["Sealed mock 1", "Sealed mock 2"];
+  const hsh = (id) => { let h = 2166136261; for (let i = 0; i < id.length; i++) { h ^= id.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  let paperSet = null; const isPaper = (q) => (paperSet = paperSet || new Set(PAPERS())).has(q.source);
+  const sealedOf = (q) => (keyed(q) && !isPaper(q) && hsh(q.id) % 8 === 0 ? SEALED[(hsh(q.id) >>> 4) % 2] : null);
+  const sealedQs = (src) => visible().filter((q) => sealedOf(q) === src);
+  const practicePool = () => visible().filter((q) => keyed(q) && (!q.ocr || q.keyBy === "app" || mocked(q.source)) && (!sealedOf(q) || mocked(sealedOf(q))));
 
   /* ── readiness: only AI-off mocks on real papers count ── */
   function readiness() {
@@ -95,7 +102,9 @@
   let run = null;
   function pick(pool, n) {
     const g = st(), now = Date.now();
-    const dueWrong = pool.filter((q) => g.q[q.id] && !g.q[q.id].ok && g.q[q.id].due <= now);
+    // v39 retest law: a miss comes back tomorrow as a changed question on the same fact (then the exact one later)
+    const R = g.retest || {}, retest = pool.filter((q) => R[q.id] && R[q.id] <= now);
+    const dueWrong = retest.concat(pool.filter((q) => g.q[q.id] && !g.q[q.id].ok && g.q[q.id].due <= now && !R[q.id]));
     const unseen = pool.filter((q) => !g.q[q.id]).sort(() => Math.random() - 0.5);
     const old = pool.filter((q) => g.q[q.id] && g.q[q.id].ok).sort((a, b) => g.q[a.id].last - g.q[b.id].last);
     return dueWrong.concat(unseen, old).slice(0, n);
@@ -144,6 +153,8 @@
       const r = g.q[q.id] || { n: 0, right: 0 };
       r.n++; r.last = Date.now(); r.ok = ok; if (ok) r.right++;
       r.due = Date.now() + (ok ? [3, 7, 16, 35][Math.min(r.right - 1, 3)] : 1) * DAY;
+      if (g.retest && g.retest[q.id]) delete g.retest[q.id];
+      if (!ok && window.IX_TEACH) { const sib = IX_TEACH.sibling(q, practicePool().filter((x) => !(g.q[x.id] && g.q[x.id].ok))); if (sib) { (g.retest = g.retest || {})[sib.id] = Date.now() + DAY - 3600e3; r.due = Date.now() + 3 * DAY; r.twin = sib.id; } }
       g.q[q.id] = r; persist();
       if (ok) run.k++; run.cbm += (T() ? T().CBM[conf] || [0, 0, 0] : [0, 0, 0])[ok ? 0 : 2];
       try { const c = JSON.parse(localStorage.getItem("ix_tutor_calib_v1") || "[]"); c.push({ conf, verdict: ok ? "correct" : "wrong", at: Date.now(), git: 1 }); localStorage.setItem("ix_tutor_calib_v1", JSON.stringify(c.slice(-400))); } catch (e) {}
@@ -156,8 +167,10 @@
     fb.innerHTML = (keyed(q) ? '<div class="ixHverdict ' + (ok ? "good" : "bad") + '">' + (ok ? "✓ Right" : "✗ It is " + E(keyTxt)) + (conf === "sure" && !ok ? " · you were sure: this is a trap worth fixing" : "") + "</div>" : "<div class='ixHverdict'>No official key for this one.</div>") +
       (q.keyBy === "app" ? '<p class="ixHsmall">This key was written by the app (the paper had no key). If your notes say otherwise, your notes win. <button type="button" class="ixHlink" data-flag>⚑ hide this question</button></p>' : "") +
       (q.ocr ? '<p class="ixHsmall">From a scanned solved paper. If the key looks wrong, <button type="button" class="ixHlink" data-flag>⚑ hide this question</button>.</p>' : "") +
-      unitFig(q) + '<div class="ixHhost" id="ixHai"></div><div class="ixHrow"><button type="button" class="primary" data-next>Next →</button></div>';
+      (keyed(q) && !ok && g.q[q.id] && g.q[q.id].twin ? '<p class="ixHsmall">🔁 Tomorrow a changed question on this same fact; this exact one in 3 days.</p>' : "") +
+      (keyed(q) && window.IX_TEACH ? IX_TEACH.html(q) : "") + unitFig(q) + '<div class="ixHhost" id="ixHai"></div><div class="ixHrow"><button type="button" class="primary" data-next>Next →</button></div>';
     body.querySelector(".ixHq").appendChild(fb);
+    if (window.IX_TEACH) IX_TEACH.wire(fb);
     const host = fb.querySelector("#ixHai");
     if (T()) {
       const bb = document.createElement("div"); bb.className = "ixAiBar";
@@ -192,6 +205,8 @@
   /* ── past papers as real mocks ── */
   function papers() {
     body.innerHTML = gateHTML() + "<p>A real past paper, <b>AI off</b>, about one minute a question, no feedback until the end. This is the GIT readiness the app trusts.</p>" +
+      SEALED.map((src) => { const n = sealedQs(src).length, m = st().mocks.filter((x) => x.src === src).pop();
+        return '<div class="ixHpaper ixHsealed"><div><b>🔒 ' + E(src) + "</b><span>" + n + " questions you have never seen, all chapters" + (m ? " · mock " + m.k + "/" + m.n : " · sealed until you take it") + "</span></div>" + '<button type="button" ' + (m ? "" : 'class="primary" ') + 'data-mock="' + E(src) + '">' + (m ? "Retake" : "Take as mock") + "</button></div>"; }).join("") +
       PAPERS().map((src) => {
         const qs = visible().filter((q) => q.source === src), kq = qs.filter(keyed).length, m = st().mocks.filter((x) => x.src === src).pop();
         return '<div class="ixHpaper"><div><b>' + E(src) + "</b><span>" + qs.length + " questions" + (kq < qs.length ? " · " + (qs.length - kq) + " without a key" : "") + (m ? " · mock " + m.k + "/" + m.n : "") + "</span></div>" +
@@ -204,7 +219,7 @@
   let clockT = null;
   function startMock(src) {
     if (T() && T().dayState && T().dayState().gate) { render(); return; }
-    const qs = visible().filter((q) => q.source === src && keyed(q));
+    const qs = SEALED.includes(src) ? sealedQs(src).sort(() => Math.random() - 0.5) : visible().filter((q) => q.source === src && keyed(q));
     run = { qs, i: 0, k: 0, cbm: 0, mock: true, src, ans: [], t0: Date.now(), limit: qs.length * 60e3, title: "MOCK · " + src };
     document.documentElement.classList.add("ixHmock");
     showQ();
@@ -311,5 +326,5 @@
     run = { qs, i: 0, k: 0, cbm: 0, mock: false, title }; showQ(); return qs.length;
   }
   function mockPaper(src) { build(); root.classList.add("on"); tab = "papers"; startMock(src); }
-  window.IX_GIT = { open, close, readiness, practicePool, papers: PAPERS, state: st, startCustom, mockPaper, mocked, _unitFig: unitFig };
+  window.IX_GIT = { open, close, readiness, practicePool, papers: PAPERS, state: st, startCustom, mockPaper, mocked, _unitFig: unitFig, SEALED, sealedQs, sealedOf };
 })();
