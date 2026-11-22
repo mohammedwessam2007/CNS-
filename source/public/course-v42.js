@@ -82,15 +82,16 @@
     if (!host) return;
     const t = T(), has = window.IX_KEY ? IX_KEY.has() : !!(t && t.hasKey && t.hasKey());
     let sp = null, cap = 0; try { sp = t.spend(); cap = t.cap(); } catch (e) {}
+    const warn = window.IX_KEY && IX_KEY.inApp && IX_KEY.inApp() ? '<p class="ixCaiOff">⚠️ <b>You opened the course inside another app\'s browser.</b> It forgets everything (the key and your progress) when you close it. Open the link in <b>Safari</b> (or Chrome) and add it to the Home Screen.</p>' : "";
     if (!has) {
-      host.innerHTML = '<p class="ixCaiOff">🔑 <b>The AI is off on this phone.</b> Connect your OpenRouter key once: it stays saved here (two copies on the device), and a restore link brings it back if the phone ever clears it.</p><div class="ixCaiRow"><button type="button" data-caikey>Connect the key</button></div>';
+      host.innerHTML = warn + '<p class="ixCaiOff">🔑 <b>The AI is off on this phone.</b> Connect your OpenRouter key once: it stays saved here (two copies on the device), and a restore link brings it back if the phone ever clears it.</p><div class="ixCaiRow"><button type="button" data-caikey>Paste my key</button></div><p class="ixCaiMsg" role="status"></p>';
     } else if (sp && cap && sp.usd >= cap) {
       host.innerHTML = '<p class="ixCaiOff">⏸ <b>This week\'s AI budget ($' + cap.toFixed(2) + ') is used up</b>, so the AI is paused until Monday.</p><div class="ixCaiRow"><button type="button" data-caikey>Raise the budget</button></div>';
     } else {
-      host.innerHTML = '<p class="ixCaiOn">🧠 <b>The AI is on</b>' + (sp && cap ? " · $" + sp.usd.toFixed(2) + " of $" + cap.toFixed(2) + " this week" : "") + '</p><div class="ixCaiRow"><button type="button" data-caitest>Test it now</button><button type="button" data-cailink>📲 Copy my restore link</button></div><p class="ixCaiMsg" role="status"></p>';
+      host.innerHTML = warn + '<p class="ixCaiOn">🧠 <b>The AI is on</b>' + (sp && cap ? " · $" + sp.usd.toFixed(2) + " of $" + cap.toFixed(2) + " this week" : "") + '</p><div class="ixCaiRow"><button type="button" data-caitest>Test it now</button><button type="button" data-cailink>📲 Copy my restore link</button></div><p class="ixCaiMsg" role="status"></p>';
     }
     const q = (s) => host.querySelector(s), msg = (x) => { const m = q(".ixCaiMsg"); if (m) m.textContent = x; };
-    if (q("[data-caikey]")) q("[data-caikey]").onclick = () => { try { t.openSetup ? t.openSetup("Paste your OpenRouter key once. It stays on this phone.") : t.open(); } catch (e) {} };
+    if (q("[data-caikey]")) q("[data-caikey]").onclick = async () => { if (window.IX_KEY && IX_KEY.ask && !(sp && cap && sp.usd >= cap)) { const r = await IX_KEY.ask(); paintAI(host); const m = host.querySelector(".ixCaiMsg") || host.appendChild(Object.assign(document.createElement("p"), { className: "ixCaiMsg" })); m.textContent = (r.lines || []).join(" · "); return; } try { t.openSetup ? t.openSetup("Paste your OpenRouter key once. It stays on this phone.") : t.open(); } catch (e) {} };
     if (q("[data-caitest]")) q("[data-caitest]").onclick = async () => { msg("Testing the key, the credit and both models…"); try { const r = await t.checkKey(localStorage.getItem("ix_tutor_key_v1")); msg(r.lines.join(" · ")); } catch (e) { msg("Test failed: " + e.message); } };
     if (q("[data-cailink]")) q("[data-cailink]").onclick = async () => { const l = window.IX_KEY && IX_KEY.link(); if (!l) return; try { await navigator.clipboard.writeText(l); msg("Copied. Keep it in your Notes: if the AI ever says it is off, tap the link once and the key is back. It contains your key, so do not share it."); } catch (e) { prompt("Copy this link and keep it in your Notes (it contains your key: do not share it):", l); } };
   }

@@ -133,7 +133,7 @@
     if (sealed(q)) return;
     if (!T() || !T().hasKey || !T().hasKey()) {
       host.innerHTML = '<div class="ixAx ixAxOff"><p>🔑 Connect your OpenRouter key and every answer gets <b>its own drawing</b> and <b>why each option is right or wrong</b>, written by the professor.</p><button type="button" class="ixHlink" data-axsetup>Connect the key</button></div>';
-      const b = host.querySelector("[data-axsetup]"); if (b) b.onclick = () => { try { T().openSetup ? T().openSetup("Connect your key: every answer gets its own drawing and every option explained.") : T().open(); } catch (e) {} };
+      const b = host.querySelector("[data-axsetup]"); if (b) b.onclick = async () => { if (window.IX_KEY && IX_KEY.ask) { const r = await IX_KEY.ask(); if (IX_KEY.has()) mountExplain(host, q, sel); return r; } try { T().openSetup ? T().openSetup("Connect your key: every answer gets its own drawing and every option explained.") : T().open(); } catch (e) {} };
       return;
     }
     host.innerHTML = '<div class="ixAx ixAxWait"><span class="ixAxSpin" aria-hidden="true"></span> The professor is drawing this answer and explaining every option…</div>';

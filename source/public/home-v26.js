@@ -40,6 +40,7 @@
       ["lib", "◈", "CNS library"],
       ["tutor", "✧", "Professor"],
       ["life", "◷", "Study settings"],
+      ["keypaste", "🔑", "Paste my AI key"],
       ["keycheck", "✓", "Check my AI key"],
       ["theme", "◐", "Light / dark look"],
     ];
@@ -112,6 +113,7 @@
       else if (xm === "tutor") window.IX_TUTOR && IX_TUTOR.open();
       else if (xm === "life") window.IX_TUTOR && IX_TUTOR.openLife && IX_TUTOR.openLife();
       else if (xm === "keycheck") window.IX_TUTOR && IX_TUTOR.checkAI();
+      else if (xm === "keypaste") window.IX_KEY && IX_KEY.ask().then((r) => { if (r && r.lines && r.lines.length) alert(r.lines.join("\n")); });
       else if (xm === "theme") { let m = "light"; try { m = localStorage.getItem("ix_theme_v1") || "light"; localStorage.setItem("ix_theme_v1", m === "dark" ? "light" : "dark"); } catch (er) {} location.reload(); }
       return; }
     if (t.dataset.xhome === "cns") { cnsMode = true; document.documentElement.classList.remove("ixXHome"); const pl = document.getElementById("player"); if (pl) pl.innerHTML = ""; if (typeof render === "function") render(); return; }

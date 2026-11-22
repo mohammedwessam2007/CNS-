@@ -49,5 +49,19 @@
   } catch (e) {}
   const KEEP = { busy: false };
   const link = () => { const k = lsGet(); return ok(k) ? location.origin + location.pathname + "#k=" + k : ""; };
-  window.IX_KEY = { save, forget, link, has: () => ok(lsGet()), ready: boot() };
+  // in-app browsers (opened from Claude, Telegram, WhatsApp, Instagram, Facebook…) forget storage when closed
+  const inApp = () => /FBAN|FBAV|Instagram|Line\/|Telegram|WhatsApp|Snapchat|; wv\)|GSA\/|Claude|Electron/i.test(navigator.userAgent || "") || (/iPhone|iPad/.test(navigator.userAgent || "") && !/Safari\//.test(navigator.userAgent || "") && !navigator.standalone);
+  const installed = () => !!(navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches));
+  // one step: paste the key, save it, test it
+  async function ask() {
+    const k = (window.prompt("Paste your OpenRouter key (it starts with sk-or-). It stays on this phone.") || "").trim();
+    if (!k) return { ok: false, lines: [] };
+    if (!ok(k)) { alert("That does not look like an OpenRouter key: it should start with sk-or-"); return { ok: false, lines: ["Not an OpenRouter key."] }; }
+    await save(k);
+    let r = { ok: true, lines: ["Saved."] };
+    try { if (window.IX_TUTOR && IX_TUTOR.checkKey) r = await IX_TUTOR.checkKey(k); } catch (e) {}
+    try { document.dispatchEvent(new CustomEvent("ix:key", { detail: { on: true, test: r } })); } catch (e) {}
+    return r;
+  }
+  window.IX_KEY = { save, forget, link, ask, inApp, installed, has: () => ok(lsGet()), ready: boot() };
 })();
