@@ -1,0 +1,71 @@
+/* v47 · light, clean, readable (pairs with theme-v47.js). Base type, the page, the bottom bar, buttons, fields. */
+html.ixLT{--lt-bg:#f4f6f9;--lt-card:#fff;--lt-ink:#1b1f24;--lt-muted:#5b6470;--lt-line:#e2e6eb;--lt-acc:#0b57d0;--lt-acc-soft:#e8f0fe;--lt-good:#137333;--lt-good-soft:#e6f4ea;--lt-bad:#b3261e;--lt-bad-soft:#fce8e6;--lt-warn:#8a5300;--lt-warn-soft:#fef3d6;color-scheme:light}
+html.ixLT,html.ixLT body{background:var(--lt-bg)!important;color:var(--lt-ink)!important}
+html.ixLT body,html.ixLT button,html.ixLT input,html.ixLT textarea,html.ixLT select{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;-webkit-font-smoothing:antialiased}
+/* no decorative serif display type: clear headings */
+html.ixLT h1,html.ixLT h2,html.ixLT h3,html.ixLT .ixZname,html.ixLT .ixLpart h2{font-family:inherit!important;letter-spacing:-.01em!important;font-weight:750!important}
+html.ixLT .ixZname{font-size:28px!important;line-height:1.15!important}
+html.ixLT .ixLpart h2{font-size:24px!important;line-height:1.2!important}
+/* reading comfort in lessons */
+html.ixLT .ixLmd{font-size:17px!important;line-height:1.65!important}
+html.ixLT .ixLmd p,html.ixLT .ixLmd li{color:var(--lt-ink)!important}
+html.ixLT .ixLmd b,html.ixLT .ixLmd strong{color:#0b2a63!important}
+html.ixLT .ixLmd table{background:#fff!important;border-radius:12px;overflow:hidden}
+html.ixLT .ixLmd th{background:#f1f4f8!important}
+html.ixLT .ixLmd td,html.ixLT .ixLmd th{border-color:var(--lt-line)!important}
+/* the hero: no picture behind text */
+html.ixLT .ixZhero,html.ixLT .ixQhero{background:#fff!important;background-image:none!important;border:1px solid var(--lt-line)!important;box-shadow:0 1px 2px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.05)!important}
+html.ixLT .ixZhero::before,html.ixLT .ixZhero::after,html.ixLT .ixQhero::before,html.ixLT .ixQhero::after{display:none!important}
+html.ixLT .ixQhero img,html.ixLT .ixZhero img{display:none!important}
+/* primary actions: one blue */
+html.ixLT .ixZgo,html.ixLT .ixQgo,html.ixLT .ixLmain,html.ixLT [data-s=done]{background:var(--lt-acc)!important;color:#fff!important;border:0!important;box-shadow:0 1px 2px rgba(11,87,208,.3)!important}
+html.ixLT .ixZgo *,html.ixLT .ixQgo *{color:#fff!important}
+/* progress */
+html.ixLT progress{accent-color:var(--lt-acc)}
+html.ixLT .ixCbar,html.ixLT .ixLprog i{background:#e6eaf0!important}
+html.ixLT .ixCbar i{background:var(--lt-acc)!important}
+html.ixLT .ixLprog i.d{background:#7aa2e3!important}html.ixLT .ixLprog i.c{background:var(--lt-acc)!important}
+/* the bottom bar */
+html.ixLT .ixNav{background:rgba(255,255,255,.96)!important;border:1px solid var(--lt-line)!important;box-shadow:0 -1px 0 rgba(0,0,0,.02),0 8px 24px rgba(16,24,40,.12)!important;backdrop-filter:blur(12px)}
+html.ixLT .ixNav button{color:var(--lt-muted)!important;background:transparent!important}
+html.ixLT .ixNav button[aria-current="page"],html.ixLT .ixNav button.on,html.ixLT .ixNav button[aria-pressed="true"]{color:var(--lt-acc)!important;background:var(--lt-acc-soft)!important}
+/* fields */
+html.ixLT input[type=text],html.ixLT input:not([type]),html.ixLT textarea,html.ixLT input[inputmode]{background:#fff!important;color:var(--lt-ink)!important;border:1px solid #cfd5dd!important;border-radius:12px!important}
+html.ixLT input::placeholder,html.ixLT textarea::placeholder{color:#8a929c!important}
+html.ixLT input:focus,html.ixLT textarea:focus{outline:2px solid var(--lt-acc)!important;outline-offset:1px;border-color:transparent!important}
+/* answers: right / wrong */
+html.ixLT .ixHopt.good,html.ixLT .ixPropts .good,html.ixLT .ixAxOpts li.ok{background:var(--lt-good-soft)!important;border-color:#7cc69b!important}
+html.ixLT .ixHopt.bad,html.ixLT .ixPropts .bad,html.ixLT .ixAxOpts li.no.mine{background:var(--lt-bad-soft)!important;border-color:#f0a39c!important}
+html.ixLT .ixHverdict.good{color:var(--lt-good)!important}html.ixLT .ixHverdict.bad{color:var(--lt-bad)!important}
+/* the course list */
+html.ixLT .ixCday.today{border-color:#9db9ea!important;background:#f5f8ff!important}
+html.ixLT .ixCday.today>summary time{color:var(--lt-acc)!important}
+html.ixLT .ixCsub{color:#a3361a!important}
+/* tap targets */
+html.ixLT button{min-height:40px}
+html.ixLT .ixNav button{min-height:52px}
+/* the drawings sit on paper anyway: frame them */
+html.ixLT .ixAxDraw,html.ixLT figure img{border:1px solid var(--lt-line)}
+html.ixLT progress{-webkit-appearance:none;appearance:none;height:8px;border-radius:99px;overflow:hidden;background:#e6eaf0;border:0}
+html.ixLT progress::-webkit-progress-bar{background:#e6eaf0;border-radius:99px}
+html.ixLT progress::-webkit-progress-value{background:var(--lt-acc);border-radius:99px}
+html.ixLT progress::-moz-progress-bar{background:var(--lt-acc)}
+html.ixLT .ixQprogress{background:#f7f9fc!important;border:1px solid var(--lt-line)!important}
+html.ixLT .ixQeyebrow,html.ixLT .ixQeyebrow *{color:var(--lt-acc)!important}
+html.ixLT .ixZname{color:var(--lt-ink)!important}
+html.ixLT .ixQhero{min-height:0!important;align-content:start!important;gap:14px!important;padding:20px 18px 18px!important;border-radius:20px!important}
+html.ixLT .ixQhero .ixZname{font-size:30px!important}
+html.ixLT .ixQprogress{max-width:none!important}
+html.ixLT .ixCv{background:#fff!important;border:1px solid var(--lt-line)!important}
+html.ixLT .ixCvHd small{color:var(--lt-muted)!important}
+html.ixLT .ixCvMeta b{color:var(--lt-ink)!important}html.ixLT .ixCvMeta small{color:var(--lt-muted)!important}
+html.ixLT .ixCvAsk{background:var(--lt-acc-soft)!important;color:var(--lt-acc)!important;border:0!important}
+html.ixLT .ixPropts button{background:#fff!important;color:var(--lt-ink)!important;border:1px solid var(--lt-line)!important}
+html.ixLT .ixPropts button.good{background:var(--lt-good-soft)!important;border-color:#7cc69b!important}
+html.ixLT .ixPropts button.bad{background:var(--lt-bad-soft)!important;border-color:#f0a39c!important}
+html.ixLT .ixSbar{background:rgba(255,255,255,.97)!important;color:var(--lt-ink)!important;border:1px solid var(--lt-line)!important;box-shadow:0 8px 24px rgba(16,24,40,.14)!important;backdrop-filter:blur(12px)}
+html.ixLT .ixSbar *{color:var(--lt-ink)}
+html.ixLT .ixSbar small,html.ixLT .ixSbar .ixSbP{color:var(--lt-acc)!important}
+html.ixLT .ixSbar button{background:#f1f4f8!important;border:1px solid var(--lt-line)!important;color:var(--lt-ink)!important}
+html.ixLT .ixSbar [data-s=done]{background:var(--lt-acc)!important;color:#fff!important;border:0!important}
+html.ixLT .ixSbar [data-s=done] *{color:#fff!important}
