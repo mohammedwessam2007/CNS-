@@ -7,23 +7,23 @@ const { open, tick } = require('./harness');
 let fails = 0;
 const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + id.padEnd(3) + ' ' + what + '  · ' + JSON.stringify(info).slice(0, 300)); if (!ok) fails++; };
 (async () => {
-  const s = await open({ v16: true, time: '2026-11-23T09:00:00+02:00', state: null, settle: 3000, viewport: { width: 1180, height: 900 } });
+  const s = await open({ v16: true, time: '2026-11-24T09:00:00+02:00', state: null, settle: 3000, viewport: { width: 1180, height: 900 } });
   const p = s.page, errs = [];
   p.on('pageerror', (e) => errs.push(e.message));
   await p.evaluate(() => { localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 60, stop: '23:59', off: 5 })); render(); });
   await tick(p, 800);
   const c1 = await p.evaluate(() => { const { day } = IX_PLAN.today(); return { date: day.date, labels: day.steps.map((x) => x.label.slice(0, 60)), total: day.steps.reduce((t, x) => t + x.min, 0), behind: day.behind, moved: (day.moved || []).length }; });
-  const firstCarry = c1.labels.findIndex((l) => /^↩ from Sat 21 Nov/.test(l)), ownIdx = c1.labels.findIndex((l) => /Small and large intestine/.test(l) && !/^↩/.test(l));
-  check('C1', 'Missed steps (21-22 Nov) come first on 23 Nov, oldest first, within 60 min; what does not fit moves to tomorrow', c1.date === '2026-11-23' && c1.behind >= 4 && firstCarry > 0 && (ownIdx === -1 || ownIdx > firstCarry) && c1.total <= 60 && c1.moved > 0, c1);
+  const firstCarry = c1.labels.findIndex((l) => /^↩ from Sun 22 Nov/.test(l)), ownIdx = c1.labels.findIndex((l) => /Small and large intestine|Oral cavity|Stomach: acid/.test(l) && !/^↩/.test(l));
+  check('C1', 'Missed steps (22-23 Nov) come first on 24 Nov, oldest first, within 60 min; what does not fit moves to tomorrow', c1.date === '2026-11-24' && c1.behind >= 4 && firstCarry > 0 && (ownIdx === -1 || ownIdx > firstCarry) && c1.total <= 60 && c1.moved > 0, c1);
   // C2 start the carried steps of 21 Nov: they stop being carried
-  const c2 = await p.evaluate(() => { const st = IX_PLAN.state(), P = IX_PLAN.build(); P.days.find((d) => d.date === '2026-11-21').steps.forEach((x) => { st.done[x.id] = 'started'; }); const { day } = IX_PLAN.today(); return { carried21: day.steps.filter((x) => /from Sat 21 Nov/.test(x.label)).length, carried22: day.steps.filter((x) => /from Sun 22 Nov/.test(x.label)).length }; });
+  const c2 = await p.evaluate(() => { const st = IX_PLAN.state(), P = IX_PLAN.build(); P.days.find((d) => d.date === '2026-11-22').steps.forEach((x) => { st.done[x.id] = 'started'; }); const { day } = IX_PLAN.today(); return { carried21: day.steps.filter((x) => /from Sun 22 Nov/.test(x.label)).length, carried22: day.steps.filter((x) => /from Mon 23 Nov/.test(x.label)).length }; });
   check('C2', 'Steps that were started are not carried again; the next missed day moves up', c2.carried21 === 0 && c2.carried22 >= 1, c2);
   // C3 map
   await p.evaluate(() => IX_PLAN.openMap()); await tick(p, 300);
   const c3 = await p.evaluate(() => ({ days: document.querySelectorAll('.ixPday').length, today: document.querySelectorAll('.ixPday.today').length, behind: document.querySelectorAll('.ixPday.behind, .ixPday.part').length, exams: document.querySelectorAll('.ixPday.exam').length, off: document.querySelectorAll('.ixPday.off').length }));
   await p.click('.ixPday[data-day="2026-12-02"]'); await tick(p, 300);
   const c3b = await p.evaluate(() => ({ h: document.querySelector('.ixPlan h3').innerText, steps: document.querySelectorAll('.ixPlan .ixPstep').length, ahead: /Reading ahead/.test(document.querySelector('.ixPlan .ixHbody').innerText) }));
-  check('C3', 'The full map: every day 21 Nov - 14 Jan with its status (today, carried, off, 3 exams); a future day opens to read ahead', c3.days === 55 && c3.today === 1 && c3.behind >= 1 && c3.exams === 3 && c3.off >= 7 && /2 Dec/.test(c3b.h) && c3b.steps >= 4 && c3b.ahead, { c3, c3b });
+  check('C3', 'The full map: every day 22 Nov - 12 Jan with its status (today, carried, off, 3 exams); a future day opens to read ahead', c3.days === 52 && c3.today === 1 && c3.behind >= 1 && c3.exams === 3 && c3.off >= 7 && /2 Dec/.test(c3b.h) && c3b.steps >= 4 && c3b.ahead, { c3, c3b });
   await p.evaluate(() => IX_PLAN.close());
   // C4 doors
   await p.click('.ixXMenu [data-xm="map"]'); await tick(p, 300);
@@ -31,7 +31,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => IX_PLAN.close());
   await p.evaluate(() => { const b = document.querySelector('#player [data-day="2026-11-24"], .ixXRd[data-xday="2026-11-24"]'); if (b) b.click(); else IX_PLAN.openDay('2026-11-24'); }); await tick(p, 300);
   const c4b = await p.evaluate(() => (document.querySelector('.ixPlan.on h3') || {}).innerText || '');
-  check('C4', 'The Map button opens the map; a coming-up day on the home opens that day', c4a === 55 && /24 Nov/.test(c4b), { c4a, c4b });
+  check('C4', 'The Map button opens the map; a coming-up day on the home opens that day', c4a === 52 && /24 Nov/.test(c4b), { c4a, c4b });
   await p.evaluate(() => IX_PLAN.close());
   // C5 drawings
   await p.evaluate(() => IX_HY.open('A:Kidney, ureter and suprarenal glands')); await tick(p, 400);

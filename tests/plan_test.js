@@ -8,7 +8,7 @@ const { open, tick } = require('./harness');
 let fails = 0;
 const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + id.padEnd(3) + ' ' + what + '  · ' + JSON.stringify(info).slice(0, 300)); if (!ok) fails++; };
 (async () => {
-  const s = await open({ v16: true, time: '2026-11-21T09:00:00+02:00', state: null, settle: 2500, viewport: { width: 1180, height: 900 } });
+  const s = await open({ v16: true, time: '2026-11-22T09:00:00+02:00', state: null, settle: 2500, viewport: { width: 1180, height: 900 } });
   const p = s.page, sent = [], errs = [];
   p.on('pageerror', (e) => errs.push(e.message));
   await p.context().route('https://openrouter.ai/**', async (r) => {
@@ -77,7 +77,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   {
     const s2 = await open({ v16: true, time: '2026-11-18T09:00:00+02:00', state: null, settle: 2500, viewport: { width: 1180, height: 900 } });
     const r = await s2.page.evaluate(() => { localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 60, stop: '23:59', off: 5 })); IX_PLAN.open(); const P = IX_PLAN.build(); return { first: P.days[0].date, next: IX_PLAN.nextStep(), txt: document.querySelector('.ixPlan .ixHbody').innerText.slice(0, 220) }; });
-    check('P9', 'Before Saturday 21 Nov the plan waits: it starts on the 21st and ▶ Today asks for nothing', r.first === '2026-11-21' && r.next === null && /starts on Saturday 21 November/.test(r.txt), r);
+    check('P9', 'Before Sunday 22 Nov the plan waits: it starts on the 22nd (owner, 22 Nov) and ▶ Today asks for nothing', r.first === '2026-11-22' && r.next === null && /starts on Sunday 22 November/.test(r.txt), r);
     await s2.close();
   }
   console.log(fails ? fails + ' FAILED' : '10/10 PLAN checks passed');

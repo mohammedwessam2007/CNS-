@@ -19,7 +19,7 @@
     { id: "gitw", name: "GIT written", date: "2027-01-05" },
     { id: "cnsw", name: "CNS written", date: "2027-01-12" },
   ];
-  const DAY = 864e5, START = "2026-11-21";
+  const DAY = 864e5, START = "2026-11-22";
   const iso = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   const at = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
   const cut = (t, n) => { t = String(t || "").replace(/\s+/g, " ").trim(); if (t.length <= n) return t; const c = t.slice(0, n); return c.slice(0, Math.max(c.lastIndexOf(" "), n - 20)).replace(/[,:;(\s]+$/, "") + "…"; };
@@ -228,8 +228,8 @@
       days.push({ date: k, phase: "CNS written", title: t.map((c) => c.name).join(" · "), steps: [step("review", "Reviews due", 10)].concat(t.map((c) => c.q ? step("cns", "CNS written · " + c.q, 13, { ch: c.name, sub: c.subject, q: c.q }) : step("cns", "CNS " + c.subject + ": " + c.name + " — likely essay, then write it", 20, { ch: c.name, sub: c.subject })), qk.length ? [step("cnsquick", "⚡ CNS: outline " + qk.length + " likely questions from memory (3 min each), then check the skeletons", qk.length * 3, { qs: qk.map((x) => x.q) })] : [step("outline", "⚡ 3-minute outlines due", 10)]) });
     });
     days.push({ date: EXAMS[2].date, phase: "CNS written", exam: EXAMS[2], steps: [step("examday", "Written-exam protocol, then go", 5)] });
-    // Phase D: practical revision at college (13-14 Jan); the practical's own date is not announced yet
-    [["2027-01-13", "GIT"], ["2027-01-14", "CNS"]].forEach(([k, x]) => days.push({ date: k, phase: "Practical", title: "Practical revision at college + spot drill", steps: [step("college", "Attend the practical revision at college (" + x + " focus)", 0)].concat(x === "GIT" ? [step("practical", "🔬 Practical room: 8 histology slides, 4 diagrams, 4 calculations", 25)] : [], [step("spot", "🎯 Spot drill: 6 drawings, name each, then the professor quizzes you", 20), step("review", "Reviews due", 10)]) }));
+    // v42: the practicals are in February (owner, 22 Nov: "practical is still in february, don't stress"): no practical days now;
+    // the practical room stays open any time, and the practical gets its own short plan when its date is known
     // rule 1, enforced at the end: a day over the owner's minutes shortens its review step (to 5 at least)
     days.forEach((d) => { const tot = d.steps.reduce((t, x) => t + x.min, 0), r = d.steps.find((x) => x.kind === "review"); if (r && tot > mins) r.min = Math.max(5, r.min - (tot - mins)); });
     days.forEach((d) => d.steps.forEach((s, i) => (s.id = d.date + ":" + i + ":" + s.kind)));
@@ -334,7 +334,7 @@
   function openMap() {
     shell(); root.classList.add("on");
     const P = build(), k = iso(new Date()), body = document.getElementById("ixPbody");
-    const weeks = []; P.days.forEach((d) => { const dt = new Date(d.date + "T12:00"), wk = Math.floor((dt - new Date("2026-11-21T12:00")) / (7 * DAY)); (weeks[wk] = weeks[wk] || []).push(d); });
+    const weeks = []; P.days.forEach((d) => { const dt = new Date(d.date + "T12:00"), wk = Math.floor((dt - new Date(START + "T12:00")) / (7 * DAY)); (weeks[wk] = weeks[wk] || []).push(d); });
     body.innerHTML = '<div class="ixHrow"><button type="button" data-back>← Today</button></div><h3>🗺️ The whole course, day by day</h3><p class="ixHsmall">Tap a day to open it. Past days that were not done are carried to today automatically.</p>' +
       weeks.filter(Boolean).map((w, i) => "<div class='ixPwk'><b>Week " + (i + 1) + " · " + E(w[0].phase) + "</b>" + w.map((d) => { const [cls, lab] = dayStatus(d, k); return '<button type="button" class="ixPday ' + cls + '" data-day="' + d.date + '"><span class="d">' + E(nice(d.date)) + '</span><span class="t">' + E(d.off ? "Day off" : d.exam ? d.exam.name : (d.title || "").replace(/ \(its lectures are still running\)/, "")) + (d.lectures && d.lectures.length ? " <small>· " + d.lectures.length + " lectures</small>" : "") + '</span><span class="s">' + lab + "</span></button>"; }).join("") + "</div>").join("");
     body.querySelector("[data-back]").onclick = () => render();
@@ -407,7 +407,7 @@
     body.innerHTML =
       '<div class="ixPexams">' + EXAMS.map((x) => '<div><b>' + left(x) + "</b><span>days to " + E(x.name) + "<br>" + E(nice(x.date)) + "</span></div>").join("") + "</div>" +
       (d && d.gate ? '<div class="ixHgate">' + E(d.gate) + "</div>" : "") +
-      (k < START ? "<p><b>The plan starts on Saturday 21 November.</b> Until then nothing is due: live. 🌿 (If you want, set your minutes and Friday off in ⏱ and add your key in ⚙︎.)</p>" : "") +
+      (k < START ? "<p><b>The plan starts on Sunday 22 November.</b> Until then nothing is due: live. 🌿 (If you want, set your minutes and Friday off in ⏱ and add your key in ⚙︎.)</p>" : "") +
       (day ? "<h3>" + (day.date === k ? "Today" : "Next: " + E(nice(day.date))) + " · " + E(day.phase) + (day.title ? " · " + E(day.title) : "") + "</h3>" +
         (day.behind ? "<div class='ixHgate'>↩ " + day.behind + " step" + (day.behind > 1 ? "s" : "") + " from earlier days come first today, oldest first. Nothing is lost." + (day.moved && day.moved.length ? " Moved to tomorrow to keep your minutes: " + day.moved.map(E).join("; ") + "." : "") + "</div>" : "") +
       (day.lectures && day.lectures.length ? "<p class='ixHsmall'>📚 Lectures " + (day.date === k ? "today" : "that day") + ": " + day.lectures.map(E).join(" · ") + "</p>" : "") +
@@ -473,11 +473,11 @@
     const detailsOpen = Boolean(el.querySelector(".ixZmore[open]"));
     el.innerHTML =
       '<div class="ixQ">' +
-        '<header class="ixQtop"><div><time datetime="' + E(key) + '">' + E(dates(key, { weekday: "long", day: "numeric", month: "long" })) + '</time><h1>Study dashboard</h1></div><button type="button" class="ixQpill" data-life>' + P.mins + ' min / day <span aria-hidden="true">↗</span></button></header>' +
+        '<header class="ixQtop"><div><time datetime="' + E(key) + '">' + E(dates(key, { weekday: "long", day: "numeric", month: "long" })) + '</time><h1>Your course</h1></div><button type="button" class="ixQpill" data-life>' + P.mins + ' min / day <span aria-hidden="true">↗</span></button></header>' +
         '<section class="ixZhero ixQhero' + (cns ? " ixQheroCns" : "") + '" aria-labelledby="ixQtitle">' +
           '<div class="ixQhead"><p class="ixQeyebrow">' + (cns ? "NEU 205" : "DIG 206") + (subject ? " <span></span> " + E(subject[1]) : "") + '</p>' +
           '<h2 class="ixZname" id="ixQtitle">' + E(name || "Study session") + '</h2>' +
-          '<p class="ixQlead">' + (pre ? "Your first session opens Saturday, 21 November." : !day ? "Revisit any lesson, question set, or study day." : day.off ? "Your next study day is in the schedule below." : day.exam ? "Open your exam-day plan." : "Day " + dayNumber + " of " + dayCount.length + (mins ? " · " + mins + " min planned" : "")) + '</p>' +
+          '<p class="ixQlead">' + (pre ? "Your first session opens Sunday, 22 November." : !day ? "Revisit any lesson, question set, or study day." : day.off ? "Your next study day is in the schedule below." : day.exam ? "Open your exam-day plan." : "Day " + dayNumber + " of " + dayCount.length + (mins ? " · " + mins + " min planned" : "")) + '</p>' +
           (next ? '<button type="button" class="ixZgo ixQgo" data-go="' + E(next.id) + '">' + (pre ? "▶ Preview Day 1" : started ? "▶ Continue today's course" : "▶ Start today's course") + '<span aria-hidden="true">→</span></button>' : '<button type="button" class="ixQgo" data-openmap>Open schedule <span aria-hidden="true">↗</span></button>') + '</div>' +
           (actionable.length && !pre ? '<div class="ixQprogress"><div><span>Session progress</span><b>' + progress + '%</b></div><progress value="' + completed + '" max="' + actionable.length + '" aria-label="Session progress"></progress><div class="ixZbarT">' + completed + ' of ' + actionable.length + ' steps · ' + (completed === actionable.length ? "Done for today" : mins + " min left") + '</div></div>' : "") +
         '</section>' +
@@ -512,6 +512,8 @@
     el.querySelector("[data-course]").onclick = () => window.IX_LESSON && IX_LESSON.index();
     el.querySelector("[data-hy]").onclick = () => window.IX_HY && IX_HY.list();
     el.querySelector("[data-git]").onclick = () => G() && G().open();
+    // v42: the whole course as weeks → days → items (Coursera-style), the professor's box, and one Toolbox
+    try { if (window.IX_COURSE && !pre) IX_COURSE.mount(el, { P, done, key, runStep, openDay, start: START }); } catch (e) { console.warn("[course]", e); }
     el.querySelectorAll("[data-done]").forEach((control) => {
       control.onchange = () => {
         st().done[control.dataset.done] = control.checked ? true : "started";

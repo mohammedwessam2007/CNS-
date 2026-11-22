@@ -34,12 +34,11 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   check('Z3b', 'No key, no prefetch', pf0 === 0 && sent.length === n, { pf0 });
   // Z4 practical days
   const z4 = await p.evaluate(() => IX_PLAN.build().days.filter((d) => d.date === '2027-01-13' || d.date === '2027-01-14').map((d) => ({ date: d.date, phase: d.phase, kinds: d.steps.map((x) => x.kind) })));
-  check('Z4', 'Practical revision days on 13 and 14 Jan, each with college + a spot drill', z4.length === 2 && z4.every((d) => d.phase === 'Practical' && d.kinds.includes('college') && d.kinds.includes('spot')), z4);
-  // Z5 spot drill via the plan step
-  const z5 = await p.evaluate(() => { const d = IX_PLAN.build().days.find((x) => x.date === '2027-01-13'); IX_PLAN.runStep(d.steps.find((x) => x.kind === 'spot')); const figs = [...document.querySelectorAll('.ixYspot')]; return { on: document.querySelector('.ixY').classList.contains('on'), n: figs.length, hidden: figs.every((f) => f.querySelector('.ixYspoil')), t: document.getElementById('ixYt').innerText }; });
-  await tick(p, 600);
-  const quiz = await p.evaluate(() => [...document.querySelectorAll('.ixY .ixAiBar button, .ixY .ixAiFig button')].some((b) => /Quiz me/.test(b.textContent)));
-  check('Z5', 'The spot drill: 6 drawings from the whole course, names hidden until tapped', z5.on && z5.n === 6 && z5.hidden && /Spot drill/.test(z5.t), Object.assign(z5, { quiz }));
+  check('Z4', 'Practicals are in February (owner, 22 Nov): no practical days in the plan before then', z4.length === 0, z4);
+  // Z5 spot drill still opens on its own (the practical room's Spot tab)
+  const z5 = await p.evaluate(() => { IX_HY.spot(6); return document.querySelectorAll('.ixYspot').length; }); await tick(p, 300);
+  check('Z5', 'The spot drill opens on its own: 6 drawings, names hidden', z5 === 6, z5);
+  await p.evaluate(() => IX_HY.close && IX_HY.close());
   // Z6 Commons lookup
   await p.evaluate(() => IX_HY.open('A:Spleen')); await tick(p, 1200);
   const z6 = await p.evaluate(() => ({ figs: [...document.querySelectorAll('.ixYfig img')].map((i) => i.getAttribute('src')), kept: JSON.parse(localStorage.getItem('ix_hy_figs_v1') || '{}')['A:Spleen'] }));

@@ -5,7 +5,7 @@ const { open } = require("./harness");
 (async () => {
   const { page, log, close } = await open({
     v16: true,
-    time: "2026-11-21T09:00:00+02:00",
+    time: "2026-11-22T09:00:00+02:00",
     viewport: { width: 390, height: 844 },
     state: null,
     localStorage: { ix_life_v1: { mins: 60, stop: "23:59", off: 5 } },

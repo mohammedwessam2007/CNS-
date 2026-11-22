@@ -1,5 +1,5 @@
 /* INTELLECTUALITY v26 · the exam plan is the home screen (owner, 18 Nov 2026: "the map is not updated, we start from
- * Saturday"). The CNS MCQ is over; from Sat 21 Nov to the CNS written on 12 Jan the app opens on the plan, not on the
+ * Saturday"). The CNS MCQ is over; from Sun 22 Nov to the CNS written on 12 Jan the app opens on the plan, not on the
  * old 148-day CNS course. The old course (lessons, atlas, figures) stays one tap away, and is what the CNS written
  * week uses.
  *  - #player shows the plan: countdowns, today's steps with Start and ✓, the readiness, the next 7 days
@@ -21,10 +21,10 @@
   function library() {
     const ey = document.getElementById("eyebrow"), lab = document.querySelector("#railToday .railLabel");
     const k = iso(new Date()), cw = Math.round((new Date("2027-01-12T12:00") - new Date(k + "T12:00")) / 864e5);
-    const t = "CNS LESSON LIBRARY · FOR THE CNS WRITTEN (TUE 12 JAN" + (cw > 0 ? ", " + cw + " DAYS" : "") + ")" + (k < "2026-11-21" ? " · THE PLAN STARTS SAT 21 NOV" : " · TODAY'S STEPS ARE ON THE PLAN");
+    const t = "CNS LESSON LIBRARY · FOR THE CNS WRITTEN (TUE 12 JAN" + (cw > 0 ? ", " + cw + " DAYS" : "") + ")" + (k < "2026-11-22" ? " · THE PLAN STARTS SUN 22 NOV" : " · TODAY'S STEPS ARE ON THE PLAN");
     if (ey && ey.textContent !== t) ey.textContent = t;
     if (lab && lab.textContent !== "📖 CNS lesson library · no dates, read any lesson") lab.textContent = "📖 CNS lesson library · no dates, read any lesson";
-    document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sat 21 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
+    document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sun 22 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
   }
   function menu() {
     const rt = document.getElementById("railToday"), host = rt && rt.parentElement;
@@ -61,7 +61,7 @@
       root.classList.remove("ixXHome");
       if (season()) library();
       const pl = document.getElementById("player");
-      if (pl && season() && cnsMode && !pl.querySelector(".ixXBack")) pl.insertAdjacentHTML("afterbegin", '<button type="button" class="ixXBack" data-xhome="plan">📅 Back to the exam plan (from Sat 21 Nov)</button>');
+      if (pl && season() && cnsMode && !pl.querySelector(".ixXBack")) pl.insertAdjacentHTML("afterbegin", '<button type="button" class="ixXBack" data-xhome="plan">📅 Back to the exam plan (from Sun 22 Nov)</button>');
       return;
     }
     root.classList.add("ixXHome");
@@ -69,7 +69,7 @@
     const ex = P().exams, left = (x) => Math.round((new Date(x.date + "T12:00") - new Date(k + "T12:00")) / 864e5);
     const pre = k < P().START, next = ex.find((x) => x.date >= k) || ex[ex.length - 1];
     const dn = day ? day.steps.filter((x) => P().state().done[x.id] === true).length : 0, tot = day ? day.steps.length : 0;
-    set("title", E(pre ? "The plan starts Saturday 21 November" : day && day.exam ? day.exam.name + " today" : day && day.off ? "Day off" : (day && day.title) || "Exam plan"));
+    set("title", E(pre ? "The plan starts Sunday 22 November" : day && day.exam ? day.exam.name + " today" : day && day.off ? "Day off" : (day && day.title) || "Exam plan"));
     set("eyebrow", E((day ? day.phase : "Exam plan") + " · " + left(next) + " days to " + next.name + " · TODAY " + new Date().toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }).toUpperCase()));
     set("meta", E("Work less, live more · " + plan.mins + " min a day · " + (day && !day.off ? dn + " of " + tot + " steps done" : "nothing due")));
     set("dayText", E(ex.map((x) => x.name + " " + left(x) + "d").join(" · ")));
@@ -82,10 +82,10 @@
     // top bar and side rail
     const top = document.getElementById("courseTopbar");
     if (top && !top.querySelector(".ixXTop")) top.insertAdjacentHTML("beforeend", '<span class="ixXTop"></span>');
-    const tt = top && top.querySelector(".ixXTop"); if (tt) tt.textContent = "📅 " + (pre ? "Starts Sat 21 Nov" : (day ? day.phase : "")) + " · " + left(next) + "d to " + next.name;
+    const tt = top && top.querySelector(".ixXTop"); if (tt) tt.textContent = "📅 " + (pre ? "Starts Sun 22 Nov" : (day ? day.phase : "")) + " · " + left(next) + "d to " + next.name;
     try { menu(); } catch (e) { console.warn("[home menu]", e); }
     document.title = "Intellectuality · NOVEMBER EXAM PLAN";
-    document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sat 21 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
+    document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sun 22 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
   }
   // the map buttons open the exam plan during the season (the old map is still behind "Open the CNS course")
   document.addEventListener("click", (e) => {

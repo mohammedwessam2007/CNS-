@@ -7,7 +7,7 @@ const { open, tick } = require('./harness');
 let fails = 0;
 const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + id.padEnd(3) + ' ' + what + '  · ' + JSON.stringify(info).slice(0, 300)); if (!ok) fails++; };
 (async () => {
-  const s = await open({ v16: true, time: '2026-11-21T09:00:00+02:00', state: null, settle: 3000, viewport: { width: 1180, height: 900 } });
+  const s = await open({ v16: true, time: '2026-11-22T09:00:00+02:00', state: null, settle: 3000, viewport: { width: 1180, height: 900 } });
   const p = s.page, sent = [];
   await p.context().route('https://openrouter.ai/**', async (r) => { sent.push(JSON.parse(r.request().postData() || '{}')); return r.fulfill({ status: 200, contentType: 'text/event-stream', body: 'data: ' + JSON.stringify({ choices: [{ delta: { content: 'ok' } }] }) + '\n\ndata: [DONE]\n\n' }); });
   await p.evaluate(() => { localStorage.setItem('ix_tutor_key_v1', 'sk-or-v1-TESTKEY123'); localStorage.setItem('ix_life_v1', JSON.stringify({ mins: 60, stop: '23:59', off: 5 })); render(); });
@@ -18,6 +18,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const h2 = await p.evaluate(() => ({ plan: !!document.querySelector('.ixPlan.on'), oldMap: !!document.querySelector('.ixMp.on, .ixMpOv.on') }));
   check('H2', 'The map buttons open the exam plan', h2.plan, h2);
   await p.evaluate(() => IX_PLAN.close());
+  await p.evaluate(() => { const t = document.querySelector('details.ixCtool'); if (t) t.open = true; });   // v42: the tools live in one Toolbox
   await p.click('[data-xhome="lib"]'); await tick(p, 800);
   const h3 = await p.evaluate(() => ({ lib: document.querySelector('.ixY').classList.contains('on') && /lesson library/.test(document.getElementById('ixYt').textContent), home: document.documentElement.classList.contains('ixXHome'), box: !!document.querySelector('#player .ixXHomeBox'), oldCourse: !!document.querySelector('[data-xhome="cns"]') }));
   await p.evaluate(() => IX_HY.close());
@@ -25,7 +26,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   // H5 prompt
   await p.evaluate(() => IX_TUTOR.ask('hello', null)); await tick(p, 900);
   const sys = sent.length ? sent[sent.length - 1].messages[0].content : '';
-  check('H5', "The professor's prompt has its sections and knows where he is in the plan", /# WHO YOU ARE/.test(sys) && /# HOW KASR AL AINY EXAMS WORK/.test(sys) && /WHERE HE IS IN THE PLAN: 2026-11-21 · GIT MCQ/.test(sys), { len: sys.length });
+  check('H5', "The professor's prompt has its sections and knows where he is in the plan", /# WHO YOU ARE/.test(sys) && /# HOW KASR AL AINY EXAMS WORK/.test(sys) && /WHERE HE IS IN THE PLAN: 2026-11-22 · GIT MCQ/.test(sys), { len: sys.length });
   await p.evaluate(() => IX_TUTOR.ask('teach me', 'loop')); await tick(p, 900);
   const last = sent[sent.length - 1], sys7 = last.messages[0].content;
   check('H7', 'Every call carries the examiner profile and the whole syllabus with his state; pro tasks go to the new professor model', /EXAMINER PROFILE/.test(sys7) && /HOW THESE EXAMINERS THINK/.test(sys7) && /THE SYLLABUS \(DIG-206 units/.test(sys7) && /Oesophagus and stomach: lectured/.test(sys7) && last.model === 'openai/gpt-6.2-sol-pro' && /Step n\/6/.test(sys7), { model: last.model, len: sys7.length });

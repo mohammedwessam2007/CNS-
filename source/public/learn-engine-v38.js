@@ -133,6 +133,8 @@
     if (window.IX_AIX && !p.engine && (/big picture/i.test(p.h) || i === 1) && !body.querySelector(".ixAxTopic")) {
       const th = document.createElement("div"); th.className = "ixAxTopic"; const md0 = body.querySelector(".ixLmd"); if (md0) { md0.after(th); IX_AIX.mountTopic(th, les, (window.IX_LESSON_TEXT || {})[les.key] || p.md); }
     }
+    // v42: the lecture video opens the lesson (watch, then read)
+    if (window.IX_COURSE && i === 0 && !body.querySelector(".ixCv")) { const h2 = body.querySelector(".ixLpart h2"); const vb = IX_COURSE.videoBlock(les.key); if (h2 && vb) { h2.insertAdjacentHTML("afterend", vb); IX_COURSE.wireVideos(body, les); } }
     armThinks(body, les);
     body.querySelectorAll("[data-e]").forEach((b) => {
       const a = b.dataset.e;

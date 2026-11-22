@@ -53,7 +53,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.evaluate(() => IX_PRACT.close());
 
   const m6 = await p.evaluate(() => { const D = IX_PLAN.build().days; return { pract: D.filter((d) => d.steps.some((x) => x.kind === 'practical')).map((d) => d.date), dia: D.filter((d) => d.steps.some((x) => x.kind === 'pdiagram')).length, tile: !!document.querySelector('[data-pract]') }; });
-  check('M6', 'The plan has the practical room on 13 Jan and department diagrams on the written days; the home has the tile', m6.pract.includes('2027-01-13') && m6.dia >= 3 && m6.tile, m6);
+  check('M6', 'Practicals are in February (owner, 22 Nov): no practical days now; department diagrams on the physiology and written days; the home has the tile', !m6.pract.length && m6.dia >= 3 && m6.tile, m6);
   check('M7', 'No sideways scroll and no page errors', !wide && !errs.length, { wide, errs: errs.slice(0, 3) });
   await s.close(); console.log(fails ? fails + ' FAILED' : 'ALL PASS'); process.exit(fails ? 1 : 0);
 })().catch((e) => { console.error(e); process.exit(1); });
