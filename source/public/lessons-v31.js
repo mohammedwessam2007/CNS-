@@ -182,7 +182,7 @@
         '<div class="ixLask"><button type="button" data-a="simple">🤔 Explain it another way</button><button type="button" data-a="why">❓ Ask about this</button></div>' +
         '<div class="ixLnav">' + (i ? '<button type="button" data-a="back">← Back</button>' : "<span></span>") + (last ? '<button type="button" class="ixLmain" data-a="finish">✓ I understand it</button>' : '<button type="button" class="ixLmain" data-a="next">Next →</button>') + "</div>" +
         (last ? '<div class="ixLend"><button type="button" data-a="teach">🗣 Teach it back to the professor</button><button type="button" data-a="sheet">📘 The exam sheet for this unit</button></div>' : "") +
-        (c.reading && i === 0 && T() && T().hasKey() ? '<div class="ixLask">' + generateButton("Generate a custom version") + '</div>' : "");
+        (i === 0 && T() && T().hasKey() ? '<div class="ixLask">' + generateButton(c.builtin || c.reading ? "📚 Full lecture by the professor (~20 min read)" : "📚 Rewrite the full lecture") + '</div>' : "");
       wireGenerate();
       try { if (window.IX_ENGINE) IX_ENGINE.enhance(body, { les, p, i }); } catch (e) { console.warn("[engine]", e); }
       body.scrollTop = 0; root.scrollTop = 0;
