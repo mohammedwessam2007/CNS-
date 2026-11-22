@@ -29,7 +29,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   check('H5', "The professor's prompt has its sections and knows where he is in the plan", /# WHO YOU ARE/.test(sys) && /# HOW KASR AL AINY EXAMS WORK/.test(sys) && /WHERE HE IS IN THE PLAN: 2026-11-22 · GIT MCQ/.test(sys), { len: sys.length });
   await p.evaluate(() => IX_TUTOR.ask('teach me', 'loop')); await tick(p, 900);
   const last = sent[sent.length - 1], sys7 = last.messages[0].content;
-  check('H7', 'Every call carries the examiner profile and the whole syllabus with his state; pro tasks go to the new professor model', /EXAMINER PROFILE/.test(sys7) && /HOW THESE EXAMINERS THINK/.test(sys7) && /THE SYLLABUS \(DIG-206 units/.test(sys7) && /Oesophagus and stomach: lectured/.test(sys7) && last.model === 'openai/gpt-6.2-sol-pro' && /Step n\/6/.test(sys7), { model: last.model, len: sys7.length });
+  check('H7', 'Every call carries the examiner profile and the whole syllabus with his state; pro tasks go to the new professor model', /EXAMINER PROFILE/.test(sys7) && /HOW THESE EXAMINERS THINK/.test(sys7) && /THE SYLLABUS \(DIG-206 units/.test(sys7) && /Oesophagus and stomach: lectured/.test(sys7) && last.model === 'google/gemini-3.8-flash' && /Step n\/6/.test(sys7), { model: last.model, len: sys7.length });
   check('H6', 'No page errors', s.log.errors.length === 0, s.log.errors.slice(0, 3));
   await s.close();
   const s2 = await open({ v16: true, time: '2026-09-23T10:00:00+03:00', state: null, settle: 2500, viewport: { width: 1180, height: 900 } });

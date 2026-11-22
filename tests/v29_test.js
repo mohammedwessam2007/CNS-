@@ -24,7 +24,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   const allCached = await p.evaluate(() => IX_HY.allIds().every((i) => IX_HY.cached(i)));
   const n1 = sent.length; const r1b = await p.evaluate(() => IX_HY.prepareAll());
   check('Z2', 'A refused request (balance used up) stops the batch at once and says why', n2 === 1 && r2.ok === 0 && /balance/.test(r2.err), { n2, r2 });
-  check('Z1', 'Prepare everything writes every GIT and CNS sheet once; a second tap sends nothing', tot >= 40 && r1.ok === tot && allCached && sent.length === n1 && r1b.tot === 0 && sent.slice(n2).every((b) => b.model === 'openai/gpt-6.2-sol-pro'), { tot, r1, r1b });
+  check('Z1', 'Prepare everything writes every GIT and CNS sheet once; a second tap sends nothing', tot >= 40 && r1.ok === tot && allCached && sent.length === n1 && r1b.tot === 0 && sent.slice(n2).every((b) => b.model === 'google/gemini-3.8-flash'), { tot, r1, r1b });
   // Z3 prefetch
   await p.evaluate(() => localStorage.removeItem('ix_hy_v1')); let n = sent.length;
   const pf = await p.evaluate(() => IX_HY.prefetch());

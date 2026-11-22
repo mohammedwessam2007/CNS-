@@ -21,7 +21,7 @@ const SHEET = '## 🎯 The point\nThe wall holds the gut in.\n## 📋 Must-know 
   let n = sent.length;
   await p.click('#ixYgen'); await tick(p, 1200);
   const req = sent[n], sys = req ? req.messages[0].content : '', usr = req ? req.messages[1].content : '';
-  check('Y2', 'The sheet: professor model, teaching-method sections, grounded in facts, references, examiner profile', req && req.model === 'openai/gpt-6.2-sol-pro' && /Ninja Nerd/.test(sys) && /Osmosis/.test(sys) && /Sketchy/.test(sys) && /## ✏️ Whiteboard/.test(sys) && /PAST-PAPER FACTS/.test(usr) && /REFERENCE ANSWERS/.test(usr) && /EXAMINERS/.test(usr), { model: req && req.model });
+  check('Y2', 'The sheet: professor model, teaching-method sections, grounded in facts, references, examiner profile', req && req.model === 'google/gemini-3.8-flash' && /Ninja Nerd/.test(sys) && /Osmosis/.test(sys) && /Sketchy/.test(sys) && /## ✏️ Whiteboard/.test(sys) && /PAST-PAPER FACTS/.test(usr) && /REFERENCE ANSWERS/.test(usr) && /EXAMINERS/.test(usr), { model: req && req.model });
   const y3a = await p.evaluate(() => ({ table: !!document.querySelector('.ixYsheet table td'), spoil: !!document.querySelector('.ixYspoil') }));
   await p.click('.ixYspoil'); const revealed = await p.evaluate(() => document.querySelector('.ixYspoil').classList.contains('on'));
   await p.evaluate(() => IX_HY.close()); n = sent.length;

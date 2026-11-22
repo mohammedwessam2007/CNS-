@@ -23,7 +23,7 @@ const LESSON = '## 1. Why you should care\nA man with a **hernia**.\n> 🤔 Thin
   await p.evaluate((k) => { delete IX_LESSON_TEXT[k]; IX_LESSON.open(k); }, key); await tick(p, 300);
   let n = sent.length; await p.click('#ixLgen'); await tick(p, 1200);
   const req = sent[n], sys = req ? req.messages[0].content : '', usr = req ? req.messages[1].content : '';
-  check('L3', 'Understanding first (replaces the lecture, mechanism, a reasoning question per part), grounded in past papers + references', req && req.model === 'openai/gpt-6.2-sol-pro' && /REPLACES the lecture/.test(sys) && /UNDERSTAND/.test(sys) && /MECHANISM/.test(sys) && /🤔 Think/.test(sys) && /LECTURE TO TEACH/.test(usr) && /PAST-PAPER FACTS/.test(usr) && /EXAMINERS|examiner/i.test(usr), { model: req && req.model, len: usr.length });
+  check('L3', 'Understanding first (replaces the lecture, mechanism, a reasoning question per part), grounded in past papers + references', req && req.model === 'google/gemini-3.8-flash' && /REPLACES the lecture/.test(sys) && /UNDERSTAND/.test(sys) && /MECHANISM/.test(sys) && /🤔 Think/.test(sys) && /LECTURE TO TEACH/.test(usr) && /PAST-PAPER FACTS/.test(usr) && /EXAMINERS|examiner/i.test(usr), { model: req && req.model, len: usr.length });
   const l4a = await p.evaluate(() => ({ part: document.querySelector('.ixLpart small').textContent, h: document.querySelector('.ixLpart h2').textContent, spoil: !!document.querySelector('.ixLmd .ixYspoil'), dots: document.querySelectorAll('.ixLprog i').length }));
   await p.click('.ixL [data-a="next"]'); await tick(p, 200);
   const l4b = await p.evaluate(() => document.querySelector('.ixLpart h2').textContent);

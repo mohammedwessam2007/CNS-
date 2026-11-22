@@ -16,12 +16,12 @@
   const KEY = "ix_tutor_key_v1", MODEL = "ix_tutor_model_v1", MODEL_PRO = "ix_tutor_model_pro_v1", CHAT = "ix_tutor_chat_v1", NOTES = "ix_tutor_notes_v1";
   // two tiers (OpenRouter list prices read on 16 Nov 2026, per million tokens in/out): a fast, cheap model for chat
   // and quizzes, and a stronger "professor" for Why? and explanations. Both can be changed in ⚙︎.
-  const DEFAULT_MODEL = "anthropic/claude-haiku-5.5", DEFAULT_PRO = "openai/gpt-6.2-sol-pro";
+  const DEFAULT_MODEL = "anthropic/claude-haiku-5.5", DEFAULT_PRO = "google/gemini-3.8-flash";
   // v26: the professor moved to the newest model at the $2/$10 tier (read from OpenRouter on 18 Nov 2026); a device
   // still on the old default is moved with it, a model the owner chose himself is kept
   try { if (localStorage.getItem(MODEL_PRO) === "openai/gpt-6.1-terra") localStorage.setItem(MODEL_PRO, DEFAULT_PRO); } catch (e) {}
   const PRESETS = [["anthropic/claude-haiku-5.5", "Fast · $0.10 / $0.50"], ["openai/gpt-6-luna", "Fast · $0.10 / $0.50"], ["deepseek/deepseek-v4.1-flash", "Fast · $0.14 / $0.42"],
-    ["openai/gpt-6.2-sol-pro", "Professor (default) · $2 / $10"], ["anthropic/claude-sonnet-5.5", "Professor · $2 / $10"], ["google/gemini-4-carbon", "Professor · $2 / $10"], ["openai/gpt-6.1-terra", "Cheaper professor · $1 / $5"], ["anthropic/claude-fable-5.2", "Top tier · $8 / $40 (expensive)"]];
+    ["google/gemini-3.8-flash", "Professor (default) · $2 / $10"], ["anthropic/claude-sonnet-5.5", "Professor · $2 / $10"], ["google/gemini-4-carbon", "Professor · $2 / $10"], ["openai/gpt-6.1-terra", "Cheaper professor · $1 / $5"], ["anthropic/claude-fable-5.2", "Top tier · $8 / $40 (expensive)"]];
   const API = "https://openrouter.ai/api/v1";
   const ls = {
     get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } },

@@ -61,7 +61,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   await p.click('.ixTwhy'); await p.waitForTimeout(1500);
   const last = sent[sent.length - 1], sys3 = last ? last.body.messages[0].content : '';
   const leaked = probe.held.filter((st) => st.length > 30 && sys3.includes(st)).length;
-  check('T6', 'Why? on a tapped line asks the professor model with exam relevance, and no held-out item travels', bub && sent.length === n1 + 1 && last.body.model === 'openai/gpt-6.2-sol-pro' && /EXAM RELEVANCE/.test(sys3) && /about \d+ past questions/.test(sys3) && leaked === 0, { bub, model: last && last.body.model, leaked, rel: (sys3.match(/about \d+ past questions[^\n]*/) || [''])[0].slice(0, 90) });
+  check('T6', 'Why? on a tapped line asks the professor model with exam relevance, and no held-out item travels', bub && sent.length === n1 + 1 && last.body.model === 'google/gemini-3.8-flash' && /EXAM RELEVANCE/.test(sys3) && /about \d+ past questions/.test(sys3) && leaked === 0, { bub, model: last && last.body.model, leaked, rel: (sys3.match(/about \d+ past questions[^\n]*/) || [''])[0].slice(0, 90) });
   // T7 sure-but-wrong: the verdict tag is hidden, a badge shows, calibration counts it and the question joins his traps
   globalThis.__reply = ['[[wrong]] ', 'Not quite: ', 'the ECA is outside the sheath.'];
   await p.evaluate(() => { localStorage.removeItem('ix_tutor_calib_v1'); localStorage.removeItem('ix_tutor_traps_v1'); IX_TUTOR.open(); IX_TUTOR.setConf('sure'); });

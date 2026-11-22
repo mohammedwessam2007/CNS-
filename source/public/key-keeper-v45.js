@@ -27,6 +27,9 @@
     return good;
   }
   async function forget() { try { localStorage.removeItem(K); } catch (e) {} await idbSet(""); }
+  // v46: the professor model moved from GPT-6.2 Sol Pro to Gemini 3.8 Flash (owner: "a genius, but not so expensive");
+  // a phone that saved the old default switches once; a model he chose himself is left alone
+  try { const P = "ix_tutor_model_pro_v1", old = localStorage.getItem(P); if (!old || /^openai\/gpt-6\.2-sol(-pro)?$/.test(old)) localStorage.setItem(P, "google/gemini-3.8-flash"); } catch (e) {}
   async function boot() {
     // 1. a restore link (#k=…): save it and wipe it from the address bar
     const m = /[#&]k=(sk-or-[\w-]+)/.exec(location.hash || "");

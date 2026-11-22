@@ -27,7 +27,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   mode = 'refused'; const a3 = await p.evaluate(() => IX_TUTOR.checkKey());
   check('A3', 'A refused key says to make a new one', !a3.ok && /refused this key/.test(a3.lines.join()), a3.lines);
   mode = 'badmodel'; await p.evaluate(() => localStorage.setItem('ix_tutor_model_pro_v1', 'openai/x')); const a4 = await p.evaluate(() => IX_TUTOR.checkKey());
-  check('A4', 'A wrong professor model name says to reset it to the default', !a4.ok && /reset it to openai\/gpt-6\.2-sol-pro/.test(a4.lines.join()), a4.lines);
+  check('A4', 'A wrong professor model name says to reset it to the default', !a4.ok && /reset it to google\/gemini-3\.8-flash/.test(a4.lines.join()), a4.lines);
   mode = 'good'; await p.evaluate(() => localStorage.removeItem('ix_tutor_model_pro_v1'));
   await p.evaluate(() => { const b = document.querySelector('[data-xm="keycheck"]'); if (b) b.click(); else IX_TUTOR.checkAI(); });
   // the setup closes itself 1.4 s after "All good", so watch for the text instead of sleeping a fixed time

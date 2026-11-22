@@ -79,7 +79,7 @@
       (R.length ? "\n\nREFERENCE ANSWERS (department-style revision notes):\n" + R.slice(0, 4).map((r) => "[" + r.src + "] " + r.head + "\n" + r.text.slice(0, 1400)).join("\n\n") : "") +
       (notes ? "\n\nHIS LECTURE NOTES (what the doctors stressed):\n" + notes.slice(0, 3000) : "") + (X ? "\n\n" + X : "");
     const r = await fetch("https://openrouter.ai/api/v1/chat/completions", { method: "POST", headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
-      body: JSON.stringify({ model: localStorage.getItem("ix_tutor_model_pro_v1") || "openai/gpt-6.2-sol-pro", max_tokens: 3500, usage: { include: true }, messages: [{ role: "system", content: STYLE }, { role: "user", content: user }] }) });
+      body: JSON.stringify({ model: localStorage.getItem("ix_tutor_model_pro_v1") || "google/gemini-3.8-flash", max_tokens: 3500, usage: { include: true }, messages: [{ role: "system", content: STYLE }, { role: "user", content: user }] }) });
     if (!r.ok) throw new Error(r.status === 401 ? "the key was refused" : r.status === 402 ? "the OpenRouter balance is used up" : "OpenRouter answered " + r.status);
     const j = await r.json();
     try { if (j.usage && j.usage.cost && t && t._addSpend) t._addSpend(j.usage.cost); } catch (e) {}

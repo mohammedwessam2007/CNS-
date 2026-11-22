@@ -11,7 +11,7 @@
   if (window.IX_AIX) return;
   const T = () => window.IX_TUTOR;
   const E = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]);
-  const KEYN = "ix_tutor_key_v1", PRO = "ix_tutor_model_pro_v1", DEF = "openai/gpt-6.2-sol-pro";
+  const KEYN = "ix_tutor_key_v1", PRO = "ix_tutor_model_pro_v1", DEF = "google/gemini-3.8-flash";
 
   /* ── a tiny IndexedDB cache (localStorage is too small for hundreds of drawings) ── */
   const mem = {};
