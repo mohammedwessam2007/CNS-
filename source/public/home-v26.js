@@ -43,7 +43,7 @@
       ["keycheck", "✓", "Check my AI key"],
       ["theme", "◐", "Light / dark look"],
     ];
-    host.insertAdjacentHTML("afterbegin", '<div class="ixXMenu"><div class="ixXMheader"><button type="button" class="ixXMbrand" data-xm="home"><span class="ixXMmark" aria-hidden="true">✦</span><span>Intellectuality<small>DIG 206 · NEU 205</small></span></button><button type="button" class="ixXmRailClose" data-xm="close" aria-label="Close navigation">×</button></div><nav class="ixXMbtns" aria-label="Course navigation">' +
+    host.insertAdjacentHTML("afterbegin", '<div class="ixXMenu"><div class="ixXMheader"><button type="button" class="ixXMbrand" data-xm="home"><span class="ixXMmark" aria-hidden="true">✦</span><span>Intellectuality<small>EXAM PLAN · DIG 206 + NEU 205</small></span></button><button type="button" class="ixXmRailClose" data-xm="close" aria-label="Close navigation">×</button></div><nav class="ixXMbtns" aria-label="Course navigation">' +
       items.map(([key, icon, label]) => '<button type="button" data-xm="' + key + '"' + (key === "home" ? ' aria-current="page"' : "") + '><span aria-hidden="true">' + icon + '</span>' + label + '</button>').join("") + '</nav></div>');
   }
   // v33: an app tab bar during the season: Today · Course · Questions · Professor · More
@@ -85,7 +85,7 @@
     if (top && !top.querySelector(".ixXTop")) top.insertAdjacentHTML("beforeend", '<span class="ixXTop"></span>');
     const tt = top && top.querySelector(".ixXTop"); if (tt) tt.textContent = "📅 " + (pre ? "Starts Sun 22 Nov" : (day ? day.phase : "")) + " · " + left(next) + "d to " + next.name;
     try { menu(); } catch (e) { console.warn("[home menu]", e); }
-    document.title = "Intellectuality · DIG 206 · NEU 205";
+    document.title = "Intellectuality · EXAM PLAN · DIG 206 + NEU 205";
     document.querySelectorAll(".ixMpRail, .ixMpOpen span").forEach((x) => { const t = x.classList.contains("ixMpRail") ? "📅 Exam plan · from Sun 22 Nov" : "Plan"; if (x.textContent !== t) x.textContent = t; });
   }
   // the map buttons open the exam plan during the season (the old map is still behind "Open the CNS course")
