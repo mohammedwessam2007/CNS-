@@ -62,6 +62,7 @@
       return '<details class="ixCday' + (today ? " today" : "") + (it.length && n === it.length ? " full" : "") + (d.off ? " off" : "") + '"><summary><span><time datetime="' + d.date + '">' + E(nice(d.date)) + (today ? " · Today" : "") + "</time><b>" + E(d.exam ? d.exam.name : d.off ? "Day off" : String(d.title || d.phase).replace(/ \(its lectures are still running\)/g, "")) + "</b></span><em>" + status + "</em></summary>" + (list ? "<ol>" + list + "</ol>" : "") + "</details>";
     };
     const html = '<section class="ixC" aria-labelledby="ixCtitle"><div class="ixCtop"><h2 id="ixCtitle">Course content</h2><span>' + fin + " of " + all.length + ' items · ' + pct + '%</span></div><div class="ixCbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '" aria-label="Course progress"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="ixCai" data-cai></div>' +
       '<form class="ixCask" data-cask><label for="ixCaskIn">🧠 Ask the professor about anything in today\'s topic</label><div><input id="ixCaskIn" type="text" placeholder="e.g. why is the left testicular vein more prone to varicocele?" autocomplete="off"><button type="submit">Ask</button></div></form>' +
       weeks.map((w, i) => w ? '<details class="ixCweek"' + (i === curW ? " open" : "") + '><summary><b>Week ' + (i + 1) + "</b><span>" + E(nice(w[0].date, { day: "numeric", month: "short" })) + " – " + E(nice(w[w.length - 1].date, { day: "numeric", month: "short" })) + " · " + E(Array.from(new Set(w.map((d) => d.phase).filter(Boolean))).join(" / ")) + "</span><em>" + w.reduce((t, d) => t + items(d).filter(done).length, 0) + "/" + w.reduce((t, d) => t + items(d).length, 0) + "</em></summary>" + w.map(row).join("") + "</details>" : "").join("") +
       '<p class="ixCnote">🔬 The practicals are in February: their plan is added when the date is announced. The Practical room is open any time in the Toolbox.</p></section>';
@@ -73,7 +74,26 @@
     if (anchor && !anchor.closest("details.ixCtool")) { const d = document.createElement("details"); d.className = "ixCtool"; d.innerHTML = "<summary><b>🧰 Toolbox</b><small>Lesson library · question bank · sheets · drawings · flashcards · search · practical room</small></summary>"; anchor.before(d); d.appendChild(anchor); }
     node.querySelectorAll(".ixCday li").forEach((li) => (li.onclick = (e) => { if (e.target.closest("button")) return; const b = li.querySelector("[data-cgo]"); if (b) b.click(); }));
     node.querySelectorAll("[data-cgo]").forEach((b) => (b.onclick = () => { const d = P.days.find((x) => x.date === b.dataset.cday), s = d && d.steps.find((x) => x.id === b.dataset.cgo); if (s && runStep) runStep(s); }));
+    paintAI(node.querySelector("[data-cai]"));
     const f = node.querySelector("[data-cask]"); if (f) f.onsubmit = (e) => { e.preventDefault(); const q = f.querySelector("input").value.trim(); if (!q || !T()) return; const d = P.days.find((x) => x.date === key); T().open(); T().ask(q, "why", d ? "TODAY'S TOPIC: " + (d.title || d.phase) : ""); f.querySelector("input").value = ""; };
   }
+  /* ── the AI's state, always visible: on / off and why, the week's spend, a test, and the restore link ── */
+  function paintAI(host) {
+    if (!host) return;
+    const t = T(), has = window.IX_KEY ? IX_KEY.has() : !!(t && t.hasKey && t.hasKey());
+    let sp = null, cap = 0; try { sp = t.spend(); cap = t.cap(); } catch (e) {}
+    if (!has) {
+      host.innerHTML = '<p class="ixCaiOff">🔑 <b>The AI is off on this phone.</b> Connect your OpenRouter key once: it stays saved here (two copies on the device), and a restore link brings it back if the phone ever clears it.</p><div class="ixCaiRow"><button type="button" data-caikey>Connect the key</button></div>';
+    } else if (sp && cap && sp.usd >= cap) {
+      host.innerHTML = '<p class="ixCaiOff">⏸ <b>This week\'s AI budget ($' + cap.toFixed(2) + ') is used up</b>, so the AI is paused until Monday.</p><div class="ixCaiRow"><button type="button" data-caikey>Raise the budget</button></div>';
+    } else {
+      host.innerHTML = '<p class="ixCaiOn">🧠 <b>The AI is on</b>' + (sp && cap ? " · $" + sp.usd.toFixed(2) + " of $" + cap.toFixed(2) + " this week" : "") + '</p><div class="ixCaiRow"><button type="button" data-caitest>Test it now</button><button type="button" data-cailink>📲 Copy my restore link</button></div><p class="ixCaiMsg" role="status"></p>';
+    }
+    const q = (s) => host.querySelector(s), msg = (x) => { const m = q(".ixCaiMsg"); if (m) m.textContent = x; };
+    if (q("[data-caikey]")) q("[data-caikey]").onclick = () => { try { t.openSetup ? t.openSetup("Paste your OpenRouter key once. It stays on this phone.") : t.open(); } catch (e) {} };
+    if (q("[data-caitest]")) q("[data-caitest]").onclick = async () => { msg("Testing the key, the credit and both models…"); try { const r = await t.checkKey(localStorage.getItem("ix_tutor_key_v1")); msg(r.lines.join(" · ")); } catch (e) { msg("Test failed: " + e.message); } };
+    if (q("[data-cailink]")) q("[data-cailink]").onclick = async () => { const l = window.IX_KEY && IX_KEY.link(); if (!l) return; try { await navigator.clipboard.writeText(l); msg("Copied. Keep it in your Notes: if the AI ever says it is off, tap the link once and the key is back. It contains your key, so do not share it."); } catch (e) { prompt("Copy this link and keep it in your Notes (it contains your key: do not share it):", l); } };
+  }
+  document.addEventListener("ix:key", () => document.querySelectorAll("[data-cai]").forEach(paintAI));
   window.IX_COURSE = { mount, videoBlock, wireVideos, watched: () => load().watched || {} };
 })();

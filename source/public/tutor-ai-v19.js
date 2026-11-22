@@ -229,7 +229,7 @@
   function dayState() { const L = life(), o = day(); return { used: Math.round(o.used), budget: L.mins + o.extra, left: Math.max(0, Math.round(L.mins + o.extra - o.used)), gate: lifeGate() }; }
 
   /* ───── v21 cost guard: what this week's answers cost, and a weekly cap the owner sets ───── */
-  const SPEND = "ix_tutor_spend_v1", CAPK = "ix_tutor_cap_v1", DEFAULT_CAP = 4;
+  const SPEND = "ix_tutor_spend_v1", CAPK = "ix_tutor_cap_v1", DEFAULT_CAP = 10;   // v45: drawings and option-by-option explanations need more than $4 a week
   function weekId(d) { d = new Date(d || Date.now()); const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return t.getUTCFullYear() + "-W" + Math.ceil(((t - y) / 864e5 + 1) / 7); }
   function spend() { let o = {}; try { o = JSON.parse(ls.get(SPEND, "{}")) || {}; } catch (e) {} if (o.week !== weekId()) o = { week: weekId(), usd: 0, calls: 0 }; return o; }
   function addSpend(usd) { const o = spend(); o.usd = +(o.usd + (usd || 0)).toFixed(5); o.calls++; ls.set(SPEND, JSON.stringify(o)); }
@@ -580,7 +580,7 @@
       ls.set(MODEL, m); ls.set(MODEL_PRO, s.querySelector("#ixTpro").value.trim() || DEFAULT_PRO);
       const cv = parseFloat(s.querySelector("#ixTcap").value); if (Number.isFinite(cv) && cv > 0) ls.set(CAPK, String(cv));
       ls.set("ix_tutor_interests_v1", s.querySelector("#ixTint").value.trim().slice(0, 300));
-      if (k) { if (!/^sk-or-/.test(k)) { st.textContent = "That does not look like an OpenRouter key (it starts with sk-or-)."; return; } ls.set(KEY, k); }
+      if (k) { if (!/^sk-or-/.test(k)) { st.textContent = "That does not look like an OpenRouter key (it starts with sk-or-)."; return; } if (window.IX_KEY) { if (!(await IX_KEY.save(k))) { st.textContent = "This phone's storage for the app is full, so the key could not be saved. Open 📤 Share my progress, save the progress file, then free space and try again."; return; } } else ls.set(KEY, k); }
       const key = ls.get(KEY, ""); if (!key) { st.textContent = "Paste your key first."; return; }
       st.textContent = "Testing the key, the balance and both models…";
       const res = await checkKey(key);

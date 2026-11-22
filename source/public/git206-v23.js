@@ -148,7 +148,7 @@
       h.before(bb);
     }
     if (run.mock) tickClock();
-    else if (window.IX_AIX) { IX_AIX.prefetch(q); IX_AIX.prefetch(run.qs[run.i + 1]); }   // v40: drawn and explained while you think
+    else if (window.IX_AIX) { IX_AIX.prefetch(q); }   // v40: drawn and explained while you think
     body.querySelectorAll(".ixHopt").forEach((b) => (b.onclick = () => answer(q, b.dataset.k, conf)));
   }
   function answer(q, sel, conf) {

@@ -31,3 +31,7 @@ html.ixXSeason body{padding-bottom:env(safe-area-inset-bottom)}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 .ixHconf button,.ixErow button{border-radius:999px!important}
 .ixHconf button[aria-pressed="true"],.ixErow button.on{background:var(--ix-accent)!important;color:var(--ix-accent-ink)!important;border-color:transparent!important}
+.ixCai{margin:0 0 10px}.ixCai p{margin:0 0 8px;font-size:14px;line-height:1.5}.ixCaiOn{color:#b9f5df}.ixCaiOff{color:#ffd88a}
+.ixCaiRow{display:flex;gap:8px;flex-wrap:wrap}.ixCaiRow button{border-radius:12px;padding:9px 12px;font-weight:800;font-size:13px;background:rgba(255,255,255,.07);color:#eef2ff;border:1px solid var(--ix-line)}
+.ixCaiRow button:first-child{background:var(--ix-accent);color:var(--ix-accent-ink);border-color:transparent}
+.ixCaiMsg{font-size:12.5px!important;color:var(--ix-muted);margin-top:6px!important}
