@@ -35,9 +35,18 @@
   const SEALED = ["Sealed mock 1", "Sealed mock 2"];
   const hsh = (id) => { let h = 2166136261; for (let i = 0; i < id.length; i++) { h ^= id.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
   let paperSet = null; const isPaper = (q) => (paperSet = paperSet || new Set(PAPERS())).has(q.source);
-  const sealedOf = (q) => (keyed(q) && !isPaper(q) && hsh(q.id) % 8 === 0 ? SEALED[(hsh(q.id) >>> 4) % 2] : null);
+  // each sealed mock holds at most 45 questions (45 minutes); the hash order is fixed, so membership never shifts between visits
+  let sealMap = null, sealN = -1;
+  const sealIndex = () => {
+    const all = B().mcq; if (sealMap && sealN === all.length) return sealMap;
+    const c = all.filter((q) => keyed(q) && !isPaper(q) && hsh(q.id) % 8 === 0).sort((a, b) => hsh(a.id) - hsh(b.id));
+    sealMap = new Map(); const n = [0, 0];
+    c.forEach((q) => { const k = (hsh(q.id) >>> 4) % 2; if (n[k] < 45) { sealMap.set(q.id, SEALED[k]); n[k]++; } });
+    sealN = all.length; return sealMap;
+  };
+  const sealedOf = (q) => sealIndex().get(q.id) || null;
   const sealedQs = (src) => visible().filter((q) => sealedOf(q) === src);
-  const practicePool = () => visible().filter((q) => keyed(q) && (!q.ocr || q.keyBy === "app" || mocked(q.source)) && (!sealedOf(q) || mocked(sealedOf(q))));
+  const practicePool = () => visible().filter((q) => keyed(q) && (!isPaper(q) || mocked(q.source)) && (!sealedOf(q) || mocked(sealedOf(q))));   // v41: by paper, not by "scanned" (Zahra's scanned items now carry Ehsan's keys)
 
   /* ── readiness: only AI-off mocks on real papers count ── */
   function readiness() {
@@ -213,11 +222,11 @@
       PAPERS().map((src) => {
         const qs = visible().filter((q) => q.source === src), kq = qs.filter(keyed).length, m = st().mocks.filter((x) => x.src === src).pop();
         return '<div class="ixHpaper"><div><b>' + E(src) + "</b><span>" + qs.length + " questions" + (kq < qs.length ? " · " + (qs.length - kq) + " without a key" : "") + (m ? " · mock " + m.k + "/" + m.n : "") + "</span></div>" +
-          (kq ? '<button type="button" ' + (m ? "" : 'class="primary" ') + 'data-mock="' + E(src) + '">' + (m ? "Retake" : "Take as mock") + "</button>" : '<button type="button" data-prof="' + E(src) + '">Practise with the professor</button>') + "</div>";
+          (kq ? '<button type="button" ' + (m ? "" : 'class="primary" ') + 'data-mock="' + E(src) + '">' + (m ? "Retake" : "Take as mock") + "</button>" : "") + (kq < qs.length ? '<button type="button" data-prof="' + E(src) + '">' + (kq ? "Unkeyed ones with the professor" : "Practise with the professor") + "</button>" : "") + "</div>";
       }).join("") + (st().mocks.length ? "<h3>Your mocks</h3><ul>" + st().mocks.map((m) => "<li>" + E(m.src) + ": " + m.k + "/" + m.n + " · certainty " + m.cbm + " · " + new Date(m.at).toLocaleDateString() + "</li>").join("") + "</ul>" : "");
     wireGate();
     body.querySelectorAll("[data-mock]").forEach((b) => (b.onclick = () => startMock(b.dataset.mock)));
-    body.querySelectorAll("[data-prof]").forEach((b) => (b.onclick = () => { const qs = visible().filter((q) => q.source === b.dataset.prof).slice(0); run = { qs, i: 0, k: 0, cbm: 0, mock: false, title: b.dataset.prof }; showQ(); }));
+    body.querySelectorAll("[data-prof]").forEach((b) => (b.onclick = () => { const qs = visible().filter((q) => q.source === b.dataset.prof && !keyed(q)); run = { qs, i: 0, k: 0, cbm: 0, mock: false, title: b.dataset.prof }; showQ(); }));
   }
   let clockT = null;
   function startMock(src) {

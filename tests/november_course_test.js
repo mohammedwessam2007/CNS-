@@ -41,14 +41,17 @@ const { open } = require("./harness");
 
     while (await page.locator(".ixL [data-a=next]").count()) await page.locator(".ixL [data-a=next]").click();   // v38: the lesson also ends with a worked case and a brain dump
     await page.locator(".ixL [data-a=finish]").click();   // finishing the lesson ticks it and opens the next item
-    await page.getByRole("heading", { name: "Lesson knowledge check" }).waitFor();
+    // v41: with Team Ehsan's keyed histology questions the unit now has real past-paper MCQs, so step 2 is "10 MCQs"
+    await page.locator(".ixHq").waitFor();
     assert.match(await page.locator(".ixSbar").innerText(), /step 2\/3/i);
-    for (const correct of "bcadbc") {
-      await page.locator("#ixBq input[value=" + correct + "]").check();
-      await page.locator("#ixBq [data-c=sure]").click();
-      await page.locator("#ixBn").click();
+    for (let k = 0; k < 10 && await page.locator(".ixHq .ixHopt").count(); k++) {
+      const key = await page.evaluate(() => { const id = document.querySelector(".ixHq").dataset.qid; return IX_GIT206.mcq.find((q) => q.id === id).answerKeys[0]; });
+      await page.locator(".ixHq [data-c=sure]").click();
+      await page.locator('.ixHq .ixHopt[data-k="' + key + '"]').click();
+      assert.match(await page.locator(".ixHverdict").innerText(), /Right/);
+      await page.locator("[data-next]").click();
     }
-    assert.match(await page.locator("#ixBq").innerText(), /6 \/ 6/);
+    assert.match(await page.locator(".ixHbig").innerText(), /10 \/ 10/);
 
     await page.locator(".ixSbar [data-s=done]").click();   // Done opens the written step straight away
     const draft = "Chief cells sit in gastric glands.";

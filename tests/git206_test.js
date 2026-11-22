@@ -36,7 +36,7 @@ const check = (id, what, ok, info) => { console.log((ok ? 'PASS ' : 'FAIL ') + i
   // G2
   const doors = await p.evaluate(() => ({ tab: !!document.getElementById('ixHtab'), menu: !!document.getElementById('gitBtn') }));
   await p.click('#ixHtab'); await tick(p, 400);
-  const g2 = await p.evaluate(() => ({ on: document.querySelector('.ixH').classList.contains('on'), chips: document.querySelectorAll('.ixHch').length, paperInPool: IX_GIT.practicePool().some((q) => q.ocr && q.keyBy !== 'app') }));
+  const g2 = await p.evaluate(() => ({ on: document.querySelector('.ixH').classList.contains('on'), chips: document.querySelectorAll('.ixHch').length, paperInPool: IX_GIT.practicePool().some((q) => IX_GIT.papers().includes(q.source)) }));
   check('G2', 'The hub opens from the menu and the edge tab; solved papers stay out of practice until taken as a mock', doors.tab && doors.menu && g2.on && g2.chips >= 10 && !g2.paperInPool, { doors, g2 });
 
   // G3 + G4
