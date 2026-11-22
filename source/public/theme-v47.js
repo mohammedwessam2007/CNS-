@@ -11,17 +11,17 @@
   let mode = "light"; try { mode = localStorage.getItem("ix_theme_v1") || "light"; } catch (e) {}
   if (mode === "dark") return;
   const R = document.documentElement; R.classList.add("ixLT");
-  const BG = "#f4f6f9", CARD = "#ffffff", INK = "#1b1f24", MUTED = "#5b6470", LINE = "#e2e6eb", ACC = "#0b57d0";
+  const BG = "#faf9f5", CARD = "#ffffff", INK = "#1f1e1d", MUTED = "#6f6b63", LINE = "#e9e5dc", ACC = "#c96442";   // v48: warm, like the Claude desktop app
   const SKIP = new Set(["SVG", "IMG", "VIDEO", "IFRAME", "CANVAS", "PATH", "TEXT", "G", "SOURCE", "PICTURE", "SCRIPT", "STYLE", "LINK", "META", "BR", "HR"]);
   const parse = (c) => { const m = /rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/.exec(c || ""); return m ? [+m[1], +m[2], +m[3], m[4] == null ? 1 : +m[4]] : null; };
   const lum = (r, g, b) => (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
   function hsl(r, g, b) { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b); let h = 0, s = 0; const l = (mx + mn) / 2; if (mx !== mn) { const d = mx - mn; s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h /= 6; } return [h * 360, s, l]; }
-  const deep = (r, g, b, L) => { const [h, s] = hsl(r, g, b); return "hsl(" + Math.round(h) + "," + Math.round(Math.min(1, s * 1.1) * 100) + "%," + L + "%)"; };
+  const deep = (r, g, b, L) => { const [h, s] = hsl(r, g, b); if (L >= 85 && h >= 190 && h < 300) return "hsl(38,30%," + Math.min(97, L + 2) + "%)"; return "hsl(" + Math.round(h) + "," + Math.round(Math.min(1, s * 1.1) * 100) + "%," + L + "%)"; };
   const isBtn = (el) => el.tagName === "BUTTON" || el.getAttribute("role") === "button" || el.tagName === "A" && el.classList.length > 0;
   const set = (el, p, v) => { el.style.setProperty(p, v, "important"); (el.__lt = el.__lt || new Set()).add(p); };
   const clear = (el) => { if (el.__lt) { el.__lt.forEach((p) => el.style.removeProperty(p)); el.__lt.clear(); } };
   // parts the light stylesheet (skin-v47.css) styles itself
-  const OWN = ".ixSbar, .ixSbar *, .ixCv, .ixPropts button, .ixCvAsk, .ixZgo, .ixQgo, .ixLmain, [data-s=done], .ixNav, .ixNav *, .ixCbar, .ixCbar *, .ixCday.today, .ixLprog i, .ixHopt.good, .ixHopt.bad, .ixAxOpts li.ok, .ixAxOpts li.no.mine, .ixZhero, .ixQhero, progress";
+  const OWN = ".ixQprogress, .ixAx, .ixTeach, .ixSbar, .ixSbar *, .ixCv, .ixPropts button, .ixCvAsk, .ixZgo, .ixQgo, .ixLmain, [data-s=done], .ixNav, .ixNav *, .ixCbar, .ixCbar *, .ixCday.today, .ixLprog i, .ixHopt.good, .ixHopt.bad, .ixAxOpts li.ok, .ixAxOpts li.no.mine, .ixZhero, .ixQhero, progress";
   function inSvg(el) { return el.closest && (el.closest("svg, .ixAxDraw, [data-keep-theme]") || el.matches(OWN)); }
   function paint(el) {
     if (!el || el.nodeType !== 1 || SKIP.has(el.tagName.toUpperCase()) || inSvg(el)) return;
@@ -39,7 +39,7 @@
         const big = (cs.position === "fixed" || cs.position === "absolute") && el.offsetWidth > innerWidth * 0.6 && el.offsetHeight > innerHeight * 0.5;
         if (S > 0.35 && L > 0.15) { set(el, "background-color", deep(bg[0], bg[1], bg[2], 94)); }   // a dark coloured panel → its pale tint
         else set(el, "background-color", big || el === document.body ? BG : CARD);
-      } else if (bg[3] < 0.5 && L > 0.75) set(el, "background-color", "rgba(17,24,39," + Math.min(0.05, bg[3] * 0.6).toFixed(3) + ")");   // translucent white on dark → faint grey
+      } else if (bg[3] < 0.5 && L > 0.75) set(el, "background-color", "rgba(70,55,35," + Math.min(0.05, bg[3] * 0.6).toFixed(3) + ")");   // translucent white on dark → faint grey
       else if (bg[3] >= 0.5 && S > 0.35 && L > 0.4) {   // an opaque accent (lavender, gold, mint…)
         if (isBtn(el) || selected) { set(el, "background-color", ACC); set(el, "color", "#fff"); return; }
         set(el, "background-color", deep(bg[0], bg[1], bg[2], 92));

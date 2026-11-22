@@ -18,7 +18,7 @@ html.ixLT .ixZhero,html.ixLT .ixQhero{background:#fff!important;background-image
 html.ixLT .ixZhero::before,html.ixLT .ixZhero::after,html.ixLT .ixQhero::before,html.ixLT .ixQhero::after{display:none!important}
 html.ixLT .ixQhero img,html.ixLT .ixZhero img{display:none!important}
 /* primary actions: one blue */
-html.ixLT .ixZgo,html.ixLT .ixQgo,html.ixLT .ixLmain,html.ixLT [data-s=done]{background:var(--lt-acc)!important;color:#fff!important;border:0!important;box-shadow:0 1px 2px rgba(11,87,208,.3)!important}
+html.ixLT .ixZgo,html.ixLT .ixQgo,html.ixLT .ixLmain,html.ixLT [data-s=done]{background:var(--lt-acc)!important;color:#fff!important;border:0!important;box-shadow:0 1px 2px rgba(201,100,66,.3)!important}
 html.ixLT .ixZgo *,html.ixLT .ixQgo *{color:#fff!important}
 /* progress */
 html.ixLT progress{accent-color:var(--lt-acc)}
@@ -69,3 +69,43 @@ html.ixLT .ixSbar small,html.ixLT .ixSbar .ixSbP{color:var(--lt-acc)!important}
 html.ixLT .ixSbar button{background:#f1f4f8!important;border:1px solid var(--lt-line)!important;color:var(--lt-ink)!important}
 html.ixLT .ixSbar [data-s=done]{background:var(--lt-acc)!important;color:#fff!important;border:0!important}
 html.ixLT .ixSbar [data-s=done] *{color:#fff!important}
+/* ── v48 · warm and calm (like the Claude desktop app): paper background, coral accent, serif titles, gentle motion ── */
+html.ixLT{--lt-bg:#faf9f5;--lt-card:#fff;--lt-ink:#1f1e1d;--lt-muted:#6f6b63;--lt-line:#e9e5dc;--lt-acc:#c96442;--lt-acc-soft:#f8ece6;--lt-good:#2f6f3e;--lt-good-soft:#e9f3e8;--lt-bad:#a8322a;--lt-bad-soft:#fbe9e6;--lt-ease:cubic-bezier(.2,.8,.2,1)}
+html.ixLT h1,html.ixLT h2,html.ixLT .ixZname,html.ixLT .ixLpart h2,html.ixLT .ixCtop h2,html.ixLT .ixQheading h2{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif!important;font-weight:600!important;letter-spacing:-.005em!important}
+html.ixLT .ixLmd{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif!important;font-size:18px!important;line-height:1.7!important}
+html.ixLT .ixLmd b,html.ixLT .ixLmd strong{color:#5b2a17!important}
+html.ixLT .ixLmd blockquote,html.ixLT .ixLmd .ixYspoil{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif!important}
+html.ixLT .ixCday.today{border-color:#e7b9a4!important;background:#fdf4ef!important}
+html.ixLT .ixCsub{color:#9a4a2c!important}
+html.ixLT .ixNav{background:rgba(250,249,245,.94)!important}
+html.ixLT .ixSbar{background:rgba(250,249,245,.96)!important}
+html.ixLT .ixLprog i.d{background:#e3b4a0!important}
+/* motion: screens rise in, parts fade in, lists unfold, buttons press */
+@keyframes ixRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes ixFade{from{opacity:0}to{opacity:1}}
+@keyframes ixPulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
+@keyframes ixShimmer{from{background-position:-200% 0}to{background-position:200% 0}}
+html.ixLT :is(.ixH,.ixL,.ixK,.ixPr,.ixY,.ixT).on{animation:ixFade .18s var(--lt-ease) both}
+html.ixLT :is(.ixH,.ixL,.ixK,.ixPr,.ixY).on :is(.ixHbody,.ixLbody,.ixKbody,.ixPrbody,.ixYbody)>*{animation:ixRise .32s var(--lt-ease) both}
+html.ixLT .ixLpart{animation:ixRise .3s var(--lt-ease) both}
+html.ixLT .ixQ>*{animation:ixRise .4s var(--lt-ease) both}
+html.ixLT .ixQ>*:nth-child(2){animation-delay:.05s}html.ixLT .ixQ>*:nth-child(3){animation-delay:.1s}html.ixLT .ixQ>*:nth-child(4){animation-delay:.15s}html.ixLT .ixQ>*:nth-child(5){animation-delay:.2s}
+html.ixLT details[open]>:not(summary){animation:ixRise .25s var(--lt-ease) both}
+html.ixLT .ixCday li:nth-child(n){animation:ixRise .28s var(--lt-ease) both}
+html.ixLT .ixCday li:nth-child(2){animation-delay:.04s}html.ixLT .ixCday li:nth-child(3){animation-delay:.08s}html.ixLT .ixCday li:nth-child(4){animation-delay:.12s}
+html.ixLT button{transition:transform .12s var(--lt-ease),background-color .18s,box-shadow .18s,border-color .18s}
+html.ixLT button:active:not(:disabled){transform:scale(.97)}
+html.ixLT .ixCbar i,html.ixLT progress::-webkit-progress-value{transition:width .6s var(--lt-ease)}
+html.ixLT .ixHfb,html.ixLT .ixAx,html.ixLT .ixTeach,html.ixLT .ixPrfb,html.ixLT .ixEans,html.ixLT .ixEres{animation:ixRise .3s var(--lt-ease) both}
+/* the AI thinking: a pulsing spark and a shimmer, like a calm assistant */
+html.ixLT .ixAxWait{background:linear-gradient(90deg,#fff 0%,#f6ede7 50%,#fff 100%)!important;background-size:200% 100%!important;animation:ixShimmer 1.6s linear infinite;color:#8a4a2e!important;border-color:#efd9cd!important}
+html.ixLT .ixAxSpin{border:0!important;width:12px;height:12px;border-radius:50%;background:var(--lt-acc);animation:ixPulse 1.2s ease-in-out infinite!important}
+html.ixLT .ixCask{background:#fff!important;border:1px solid var(--lt-line)!important;box-shadow:0 1px 2px rgba(31,30,29,.04)}
+html.ixLT .ixCask input{border-radius:14px!important}
+html.ixLT .ixCask button{background:var(--lt-acc)!important;color:#fff!important;border-radius:14px!important}
+@media (prefers-reduced-motion:reduce){html.ixLT *{animation:none!important;transition:none!important}}
+html.ixLT .ixQprogress{background:#f5f1ea!important;border-color:var(--lt-line)!important}
+html.ixLT .ixAx{background:#fff!important;border:1px solid var(--lt-line)!important}
+html.ixLT .ixAxOff{background:#fdf6f1!important;border-color:#f0d9cb!important}
+html.ixLT .ixTeach{background:#f3f7f1!important;border-color:#d6e5d1!important}
+html.ixLT .ixTeach b{color:#2f6f3e!important}
