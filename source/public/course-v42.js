@@ -45,20 +45,21 @@
     if (!el || !ctx || !ctx.P) return;
     const { P, done, key, runStep, openDay } = ctx;
     const days = P.days.filter((d) => d.date >= ctx.start);
-    const items = (d) => d.steps.filter((s) => s.kind !== "rest" && s.kind !== "college");
+    // the daily review is not a course item (it lives in Today's plan); only real work counts toward progress
+    const items = (d) => d.steps.filter((s) => !/^(rest|college|review|examday)$/.test(s.kind));
     const all = [].concat(...days.map(items)), fin = all.filter(done).length, pct = all.length ? Math.round((100 * fin) / all.length) : 0;
     const weeks = []; days.forEach((d) => { const w = Math.floor((new Date(d.date + "T12:00") - new Date(ctx.start + "T12:00")) / (7 * 864e5)); (weeks[w] = weeks[w] || []).push(d); });
     const curW = Math.max(0, weeks.findIndex((w) => w && w.some((d) => d.date >= key)));
     const st = load(), watched = st.watched || {};
     const row = (d) => {
       const it = items(d), n = it.filter(done).length, today = d.date === key, past = d.date < key;
-      const status = d.exam ? "🏁 " + E(d.exam.name) : d.off ? "Day off" : it.length && n === it.length ? "✓ Complete" : today ? "Today" : past && n < it.length ? (n ? n + "/" + it.length : "Not started") : n + "/" + it.length;
+      const status = d.exam ? "🏁 Exam" : d.off ? "Off" : it.length && n === it.length ? "✓" : past && n < it.length ? (n ? n + "/" + it.length : "Missed") : n + "/" + it.length;
       const list = it.map((s) => {
         const les = s.kind === "lesson" && s.key ? V()[s.key] || [] : [];
         const sub = les.length ? '<small class="ixCsub">▶ ' + les.map((v) => E(v.ch) + " · " + E(v.len) + (watched[v.id] ? " ✓" : "")).join(" · ") + "</small>" : "";
         return '<li class="' + (done(s) ? "done" : "") + '"><span class="ixCico" aria-hidden="true">' + (done(s) ? "✓" : ICON[s.kind] || "•") + '</span><div><small>' + E(TYPE[s.kind] || "Study") + (s.min ? " · " + s.min + " min" : "") + "</small><b>" + E(String(s.label).replace(/^[\u{1F300}-\u{1FAFF}☀-➿️\s]+/u, "")) + "</b>" + sub + '</div><button type="button" data-cgo="' + E(s.id) + '" data-cday="' + E(d.date) + '">' + (done(s) ? "Again" : "Open") + "</button></li>";
       }).join("");
-      return '<details class="ixCday' + (today ? " today" : "") + (it.length && n === it.length ? " full" : "") + '"' + (today ? " open" : "") + '><summary><time datetime="' + d.date + '">' + E(nice(d.date)) + "</time><span><b>" + E(d.exam ? d.exam.name : d.off ? "Day off" : String(d.title || d.phase).replace(/ \(its lectures are still running\)/g, "")) + "</b><small>" + E(d.phase || "") + "</small></span><em>" + status + "</em></summary>" + (list ? "<ol>" + list + "</ol>" : "") + "</details>";
+      return '<details class="ixCday' + (today ? " today" : "") + (it.length && n === it.length ? " full" : "") + (d.off ? " off" : "") + '"><summary><span><time datetime="' + d.date + '">' + E(nice(d.date)) + (today ? " · Today" : "") + "</time><b>" + E(d.exam ? d.exam.name : d.off ? "Day off" : String(d.title || d.phase).replace(/ \(its lectures are still running\)/g, "")) + "</b></span><em>" + status + "</em></summary>" + (list ? "<ol>" + list + "</ol>" : "") + "</details>";
     };
     const html = '<section class="ixC" aria-labelledby="ixCtitle"><div class="ixCtop"><h2 id="ixCtitle">Course content</h2><span>' + fin + " of " + all.length + ' items · ' + pct + '%</span></div><div class="ixCbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '" aria-label="Course progress"><i style="width:' + pct + '%"></i></div>' +
       '<form class="ixCask" data-cask><label for="ixCaskIn">🧠 Ask the professor about anything in today\'s topic</label><div><input id="ixCaskIn" type="text" placeholder="e.g. why is the left testicular vein more prone to varicocele?" autocomplete="off"><button type="submit">Ask</button></div></form>' +
@@ -69,7 +70,8 @@
     if (work) work.after(node); else if (anchor) anchor.before(node); else (el.querySelector(".ixQ") || el).appendChild(node);
     const cal = el.querySelector(".ixQcalendar"); if (cal) cal.hidden = true;   // the syllabus replaces the "coming up" list
     // the scattered tools become one Toolbox
-    if (anchor && !anchor.closest("details.ixCtool")) { const d = document.createElement("details"); d.className = "ixCtool"; d.innerHTML = "<summary>🧰 Toolbox: lesson library, question bank, sheets, drawings, flashcards, search, practical room</summary>"; anchor.before(d); d.appendChild(anchor); }
+    if (anchor && !anchor.closest("details.ixCtool")) { const d = document.createElement("details"); d.className = "ixCtool"; d.innerHTML = "<summary><b>🧰 Toolbox</b><small>Lesson library · question bank · sheets · drawings · flashcards · search · practical room</small></summary>"; anchor.before(d); d.appendChild(anchor); }
+    node.querySelectorAll(".ixCday li").forEach((li) => (li.onclick = (e) => { if (e.target.closest("button")) return; const b = li.querySelector("[data-cgo]"); if (b) b.click(); }));
     node.querySelectorAll("[data-cgo]").forEach((b) => (b.onclick = () => { const d = P.days.find((x) => x.date === b.dataset.cday), s = d && d.steps.find((x) => x.id === b.dataset.cgo); if (s && runStep) runStep(s); }));
     const f = node.querySelector("[data-cask]"); if (f) f.onsubmit = (e) => { e.preventDefault(); const q = f.querySelector("input").value.trim(); if (!q || !T()) return; const d = P.days.find((x) => x.date === key); T().open(); T().ask(q, "why", d ? "TODAY'S TOPIC: " + (d.title || d.phase) : ""); f.querySelector("input").value = ""; };
   }

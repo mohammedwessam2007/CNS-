@@ -1,0 +1,33 @@
+/* v44 · one design across every screen (owner, 22 Nov: "the design is so ugly and buggy… you can do better").
+ * Same palette, tabs, buttons and headers in the course, the question bank, the kit, the practical room and the lessons. */
+:root{--ix-accent:#cdbcff;--ix-accent-ink:#1a1033;--ix-card:#141a2e;--ix-line:rgba(255,255,255,.09);--ix-good:#34e0b4;--ix-warn:#ffcf5a;--ix-text:#eef2ff;--ix-muted:#97a3c2}
+/* tabs: one pill style everywhere */
+.ixHtabs button,.ixKtabs button,.ixPrtabs button{min-height:40px!important;padding:0 14px!important;border-radius:999px!important;border:1px solid var(--ix-line)!important;background:rgba(255,255,255,.05)!important;color:#dbe2f7!important;font-weight:700!important;font-size:13.5px!important}
+.ixHtabs button[aria-selected="true"],.ixKtabs button[aria-selected="true"],.ixKtabs button[aria-pressed="true"],.ixKtabs button.on,.ixPrtabs button[aria-pressed="true"]{background:var(--ix-accent)!important;color:var(--ix-accent-ink)!important;border-color:transparent!important}
+.ixHtabs,.ixKtabs,.ixPrtabs{scrollbar-width:none}.ixHtabs::-webkit-scrollbar,.ixKtabs::-webkit-scrollbar{display:none}
+/* primary buttons: the course's lavender everywhere; gold stays for highlights only */
+.ixHrow .primary,.ixHq .primary,.ixPrmain,.ixEbtn:not(.ghost),.ixKbody .primary,.ixKbody button.ixKgo,.ixKmain,.ixYgo{background:var(--ix-accent)!important;color:var(--ix-accent-ink)!important;border:0!important;border-radius:14px!important;font-weight:800!important}
+/* headers of full-screen tools: sticky, blurred, one height */
+.ixHhd,.ixKtop,.ixPrhd{position:sticky;top:0;z-index:5;background:rgba(11,15,26,.86)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.ixHhd b,.ixKtop b{font-size:17px}
+.ixHsub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1;font-size:12px;color:var(--ix-muted)}
+/* cards: one radius and line */
+.ixHch,.ixHpaper,.ixAx,.ixTeach,.ixCv,.ixEcard,.ixPrfb,.ixPrtick,.ixEtick{border-radius:16px!important}
+.ixHch{border:1px solid var(--ix-line)!important;background:var(--ix-card)!important}
+/* question options: calmer, clearer states */
+.ixHopt{border-radius:14px!important;border:1px solid var(--ix-line)!important;background:var(--ix-card)!important;transition:border-color .15s,background .15s}
+.ixHopt:not(:disabled):active{border-color:var(--ix-accent)!important}
+.ixHopt.good{border-color:var(--ix-good)!important;background:rgba(52,224,180,.12)!important}
+.ixHopt.bad{border-color:#ff5d8f!important;background:rgba(255,93,143,.1)!important}
+.ixHverdict{font-size:16px!important}
+/* the rotated edge tabs are redundant with the bottom bar during the course */
+html.ixXSeason .ixHtab,html.ixXSeason .ixTtab{display:none!important}
+/* content never hides behind the bottom bar */
+html.ixXSeason .ixH.on,html.ixXSeason .ixK.on,html.ixXSeason .ixPr.on,html.ixXSeason .ixY.on{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+html.ixXSeason body{padding-bottom:env(safe-area-inset-bottom)}
+/* focus rings for keyboard users */
+:focus-visible{outline:2px solid var(--ix-accent);outline-offset:2px}
+/* motion respects the user's setting */
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.ixHconf button,.ixErow button{border-radius:999px!important}
+.ixHconf button[aria-pressed="true"],.ixErow button.on{background:var(--ix-accent)!important;color:var(--ix-accent-ink)!important;border-color:transparent!important}

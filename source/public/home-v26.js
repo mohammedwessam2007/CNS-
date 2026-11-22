@@ -102,7 +102,9 @@
       else if (xm === "close") document.querySelector("#ixNav [data-xm=more]")?.focus();
       else if (xm === "today") { const n = P().nextStep && P().nextStep(); if (n) P().runStep(n); else P().openDay(P().START > iso(new Date()) ? P().START : iso(new Date())); }
       else if (xm === "map") P().openMap();
-      else if (xm === "course") window.IX_LESSON && IX_LESSON.index();
+      // v44: one screen at a time — a tab closes whatever the other tabs had open
+      if (/^(course|git|tutor|hy|lib)$/.test(xm)) { try { if (xm !== "course") { window.IX_LESSON && IX_LESSON.close(); } if (xm !== "git") { window.IX_GIT && IX_GIT.close(); } if (xm !== "hy" && xm !== "lib") { window.IX_HY && IX_HY.close(); } if (xm !== "tutor") { window.IX_TUTOR && IX_TUTOR.close(); } window.IX_KIT && IX_KIT.close(); window.IX_PRACT && IX_PRACT.close(); } catch (er) {} }
+      if (xm === "course") window.IX_LESSON && IX_LESSON.index();
       else if (xm === "git") window.IX_GIT && IX_GIT.open();
       else if (xm === "hy") window.IX_HY && IX_HY.list();
       else if (xm === "lib") window.IX_HY && IX_HY.lessons();

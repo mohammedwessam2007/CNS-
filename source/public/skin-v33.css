@@ -639,3 +639,17 @@ html.ixXSeason .ixT:has(.ixTactivity) { background: #080812c9; backdrop-filter: 
 .ixCvFrame{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}.ixCvFrame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .ixCvMeta{margin-top:6px}.ixCvMeta b{display:block;font-size:14px;line-height:1.35}.ixCvMeta small{display:block;font-size:12px;color:#97a3c2}
 .ixCvAsk{margin-top:6px;border-radius:10px;padding:7px 10px;font-size:12.5px;font-weight:800;background:rgba(167,139,250,.14);color:#e3d9ff;border:1px solid rgba(167,139,250,.35)}
+/* ── v44 · cleaner course content ── */
+.ixCday>summary>span{display:flex;flex-direction:column;gap:2px}
+.ixCday>summary time{width:auto;font-size:11.5px;letter-spacing:.02em;text-transform:uppercase}
+.ixCday.today>summary time{color:#ffcf5a}
+.ixCday>summary b{font-size:15px}
+.ixCday>summary em{min-width:40px;text-align:right}
+.ixCday.off{opacity:.55}.ixCday.off ol{display:none}
+.ixCday>summary::after,.ixCweek>summary::after,.ixCtool>summary::after{content:"›";margin-left:6px;color:#97a3c2;font-size:20px;line-height:1;transition:transform .2s}
+.ixCday[open]>summary::after,.ixCweek[open]>summary::after,.ixCtool[open]>summary::after{transform:rotate(90deg)}
+.ixCday li{cursor:pointer}.ixCday li button{padding:7px 11px}
+.ixCtool>summary{display:flex;align-items:center;gap:8px;list-style:none;flex-wrap:wrap}.ixCtool>summary::-webkit-details-marker{display:none}
+.ixCtool>summary b{font-size:16px}.ixCtool>summary small{flex-basis:100%;order:3;font-weight:600;font-size:12.5px;color:#97a3c2}
+.ixCtool>summary::after{margin-left:auto}
+.ixZmore>summary{list-style:none}.ixZmore>summary::-webkit-details-marker{display:none}
