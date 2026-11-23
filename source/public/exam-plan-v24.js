@@ -46,7 +46,13 @@
     { s: "Biochemistry", name: "Liver biochemistry: detoxification, lipoproteins, fatty liver", rx: /./, w: [] },
   ];
   const writtenFor = (keys) => GB().written.filter((w) => keys.some((k) => w.topic.indexOf(k) === 0));
+  // v50: the units' counts are matched over 1,100+ questions; computed once per bank (it was every render)
+  let unitsCache = null, unitsKey = "";
   function gitUnits() {
+    const k = GB().mcq.length + ":" + GB().written.length; if (unitsCache && unitsKey === k) return unitsCache;
+    unitsKey = k; unitsCache = gitUnits0(); return unitsCache;
+  }
+  function gitUnits0() {
     const mcq = GB().mcq, units = [];
     ANAT.forEach((ch) => units.push({ id: "A:" + ch, subject: "Anatomy", name: ch, pred: (q) => q.chapter === ch, written: writtenFor(ANAT_W[ch] || []) }));
     OTHER.forEach((u) => units.push({ id: u.s[0] + ":" + u.name, subject: u.s, name: u.name, pred: (q) => q.subject === u.s && u.rx.test(q.stem + " " + q.options.map((o) => o.text).join(" ")), written: writtenFor(u.w) }));

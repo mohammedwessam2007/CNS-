@@ -62,15 +62,19 @@
     if (b && parseFloat(cs.borderTopWidth) > 0) { const L = lum(b[0], b[1], b[2]), [, S] = hsl(b[0], b[1], b[2]); if (S < 0.3 && (L > 0.5 || b[3] < 0.6) || L < 0.25) set(el, "border-color", LINE); else if (S >= 0.3 && L > 0.5) set(el, "border-color", deep(b[0], b[1], b[2], 70)); }
     if (darkSurface && /rgba\(0, 0, 0/.test(cs.boxShadow)) set(el, "box-shadow", "0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08)");
   }
-  function sweep(root) { if (!root || root.nodeType !== 1) return; paint(root); const all = root.getElementsByTagName("*"); for (let i = 0; i < all.length; i++) paint(all[i]); }
-  let queue = new Set(), raf = 0;
-  const flush = () => { raf = 0; const q = queue; queue = new Set(); q.forEach((el) => { if (el.isConnected) sweep(el); }); };
+  // v50: each element is painted once; a class change repaints only that element (not its whole subtree)
+  const seen = new WeakSet();
+  const once = (el) => { if (seen.has(el)) return; seen.add(el); paint(el); };
+  function sweep(root) { if (!root || root.nodeType !== 1) return; once(root); const all = root.getElementsByTagName("*"); for (let i = 0; i < all.length; i++) once(all[i]); }
+  let queue = new Set(), again = new Set(), raf = 0;
+  const flush = () => { raf = 0; const q = queue, a = again; queue = new Set(); again = new Set(); a.forEach((el) => { if (el.isConnected) paint(el); }); q.forEach((el) => { if (el.isConnected) sweep(el); }); };
   const later = (el) => { queue.add(el); if (!raf) raf = requestAnimationFrame(flush); };
+  const repaint = (el) => { again.add(el); if (!raf) raf = requestAnimationFrame(flush); };
   function start() {
     sweep(document.body);
     new MutationObserver((ms) => ms.forEach((m) => {
       if (m.type === "childList") m.addedNodes.forEach((n) => n.nodeType === 1 && later(n));
-      else if (m.type === "attributes" && m.target.nodeType === 1 && !inSvg(m.target)) { clear(m.target); later(m.target); }
+      else if (m.type === "attributes" && m.target.nodeType === 1 && !inSvg(m.target)) { clear(m.target); repaint(m.target); }
     })).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "aria-pressed", "aria-selected", "disabled", "hidden", "open"] });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(start, 0)); else setTimeout(start, 0);

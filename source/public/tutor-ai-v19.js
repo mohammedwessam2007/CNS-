@@ -303,7 +303,8 @@
     const sp = spend();
     if (sp.usd >= cap()) { const capT = "This week's AI budget ($" + cap().toFixed(2) + ") is used up ($" + sp.usd.toFixed(2) + "). It resets on Monday, or raise it in ⚙︎. Everything else in the app still works."; build(); addMsg("tutor", capT); if (opts.inline) inlinePaint(inlineCard(opts.inline), capT); return; }
     const LIGHT = { week: 1, examday: 1, triage: 1, plan: 1 };
-    const gate = !LIGHT[mode] && !opts.force ? lifeGate() : null;
+    // v50: the daily limit pauses the automatic study rounds only; a question he types or asks from a page is always answered
+    const gate = /^(loop|quiz|palace|case|twin|classmate|blind)$/.test(mode || "") && !LIGHT[mode] && !opts.force ? lifeGate() : null;
     if (gate) { addMsg("tutor", gate); if (opts.inline) inlinePaint(inlineCard(opts.inline), gate); sub(); return; }
     tickDay();
     const interests = ls.get("ix_tutor_interests_v1", "").trim();
@@ -328,7 +329,9 @@
     const card = opts.inline ? inlineCard(opts.inline) : null;
     const userContent = opts.images && opts.images.length ? [{ type: "text", text: userText }].concat(opts.images.map((u) => ({ type: "image_url", image_url: { url: u } }))) : userText;
     const ctrl = new AbortController(); busy = ctrl; setBusy(true);
-    let text = "";
+    let text = "", finish = "", last = Date.now();
+    // v50: a stalled connection never leaves the chat stuck "busy" (Send blocked): stop after 75 s of silence
+    const watchdog = setInterval(() => { if (Date.now() - last > 75000) { try { ctrl.abort(); } catch (e) {} } }, 5000);
     try {
       const r = await fetch(API + "/chat/completions", {
         method: "POST", signal: ctrl.signal,
@@ -344,6 +347,7 @@
       let buf = "";
       for (;;) {
         const { value, done } = await rd.read();
+        last = Date.now();
         if (done) break;
         buf += dec.decode(value, { stream: true });
         let i;
@@ -352,14 +356,26 @@
           if (!line.startsWith("data:")) continue;
           const d = line.slice(5).trim();
           if (d === "[DONE]") continue;
+          try { const j0 = JSON.parse(d); if (j0.error) throw new Error("OpenRouter: " + (j0.error.message || "the model stopped")); const fr = j0.choices && j0.choices[0] && j0.choices[0].finish_reason; if (fr) finish = fr; } catch (e) { if (/^OpenRouter:/.test(e.message)) throw e; }
           try { const j = JSON.parse(d), piece = j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content; if (j.usage && j.usage.cost) addSpend(j.usage.cost); if (piece) { text += piece; paint(out, text); if (card) inlinePaint(card, text); } } catch (e) {}
         }
+      }
+      // v50: an answer that ran out of room is finished, not left hanging
+      for (let k = 0; k < 2 && finish === "length" && text; k++) {
+        finish = "";
+        const r2 = await fetch(API + "/chat/completions", { method: "POST", signal: ctrl.signal, headers: { Authorization: "Bearer " + key, "Content-Type": "application/json", "HTTP-Referer": location.origin, "X-Title": "Intellectuality" },
+          body: JSON.stringify({ model, max_tokens: 2500, usage: { include: true }, messages: [{ role: "system", content: sys }].concat(history, [{ role: "user", content: userContent }, { role: "assistant", content: text }, { role: "user", content: "Continue exactly where you stopped, without repeating anything." }]) }) });
+        if (!r2.ok) break;
+        const j2 = await r2.json(); const more = (j2.choices && j2.choices[0] && j2.choices[0].message && j2.choices[0].message.content) || ""; finish = (j2.choices && j2.choices[0] && j2.choices[0].finish_reason) || "";
+        try { if (j2.usage && j2.usage.cost) addSpend(j2.usage.cost); } catch (e) {}
+        if (!more) break; text += more; paint(out, text); if (card) inlinePaint(card, text);
       }
       if (!text) text = "(No answer came back. Try again, or pick another model in ⚙︎.)";
       else if ((mode === "quiz" || mode === "twin") && /(^|\n)\s*\(?[a-eA-E][).]/.test(text)) { const v = await verify(text, key); if (v) text += "\n\n" + v; }
     } catch (e) {
       text = (text ? text + "\n\n" : "") + (e.name === "AbortError" ? "(stopped)" : "⚠️ " + e.message);
     } finally {
+      clearInterval(watchdog);
       busy = null; setBusy(false);
       const m = TAG.exec(text);
       if (m) {
