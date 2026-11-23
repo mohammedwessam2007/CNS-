@@ -54,7 +54,8 @@ if (pics && pics.stats.images > 0 && !html.includes(picTag)) {
 // remains the canonical Renaissance baseline; Vercel loads the observer after Renaissance.
 const axisTag = '<script defer src="/axis-forge-v1.js"></script>',
   axisAnchor = '<script defer src="/renaissance-v1.js"></script>';
-if (!html.includes(axisTag)) {
+// v50: index.html may load it itself, after Renaissance, from its idle loader list
+if (!html.includes(axisTag) && !html.includes('"axis-forge-v1.js"')) {
   if (html.split(axisAnchor).length !== 2) throw new Error("build: expected exactly one renaissance-v1.js tag in index.html");
   html = html.replace(axisAnchor, axisAnchor + axisTag);
 }
